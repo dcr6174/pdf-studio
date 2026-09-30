@@ -1,0 +1,34 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import ts from 'typescript';
+const path = new URL('../lib/.verify-public-owner.mjs', import.meta.url);
+fs.writeFileSync(path, ts.transpileModule(fs.readFileSync(new URL('../lib/public-owner.ts', import.meta.url),'utf8'), { compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022} }).outputText);
+try {
+ const { publicOwnerBoundary: boundary } = await import(path.href);
+ const env = { OWNER_PASSWORD: 'fixture-password-32-characters-not-real-secret', ANALYTICS_OWNER_EMAIL: 'owner@example.test' };
+ let seen;
+ const next = async r => { seen = r; return Response.json({ok:true}); };
+ const req = (path='/',headers={}) => new Request('https://pdf.example'+path,{headers});
+ assert.equal((await boundary(req(),env,next,1000)).status,200);
+ assert.equal((await boundary(req('/analytics'),env,next,1000)).status,401);
+ assert.equal((await boundary(req('/analytics'),{},next,1000)).status,503);
+ assert.equal((await boundary(req('/api/analytics/summary'),env,next,1000)).status,403);
+ assert.equal((await boundary(req('/api/analytics/access'),env,next,1000)).headers.has('WWW-Authenticate'),false);
+ const forged = {'oai-authenticated-user-id':'forged','oai-authenticated-user-email':env.ANALYTICS_OWNER_EMAIL};
+ await boundary(req('/',forged),env,next,1000); assert.equal(seen.headers.get('oai-authenticated-user-id'),null);
+ assert.equal((await boundary(req('/api/analytics/summary',forged),env,next,1000)).status,403);
+ const basic = password => ({authorization:'Basic '+btoa('owner:'+password)});
+ assert.equal((await boundary(req('/analytics',basic('wrong')),env,next,1000)).status,401);
+ assert.equal((await boundary(new Request('http://pdf.example/analytics',{headers:basic(env.OWNER_PASSWORD)}),env,next,1000)).status,403);
+ const signed = await boundary(req('/analytics',basic(env.OWNER_PASSWORD)),env,next,1000);
+ assert.equal(signed.status,200); assert.deepEqual(await signed.json(),{ok:true}); assert.equal(seen.headers.get('authorization'),null);
+ assert.equal(seen.headers.get('oai-authenticated-user-email'),env.ANALYTICS_OWNER_EMAIL);
+ const setCookie=signed.headers.get('set-cookie'); assert.match(setCookie,/Secure; HttpOnly; SameSite=Strict/);
+ const cookie=setCookie.split(';')[0];
+ assert.equal((await boundary(req('/api/analytics/summary',{cookie}),env,next,1001)).status,200);
+ assert.equal((await boundary(req('/api/analytics/summary',{cookie:cookie+'a'}),env,next,1001)).status,403);
+ assert.equal((await boundary(req('/api/analytics/summary',{cookie}),env,next,1000+8*3600)).status,403);
+ assert.equal((await boundary(req('/api/analytics/summary',{cookie}),{...env,OWNER_PASSWORD:'rotated-32-character-password-for-this-test'},next,1001)).status,403);
+ const collect = await boundary(req('/api/analytics/collect'),env,next,1000);assert.equal(collect.status,200);assert.equal(collect.headers.has('set-cookie'),false);
+ console.log('PASS: public access, protected analytics, forged headers, incorrect passwords, HTTPS, signed sessions, tampering, expiry and rotation.');
+} finally { fs.unlinkSync(path); }

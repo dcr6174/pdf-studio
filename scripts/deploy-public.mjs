@@ -1,0 +1,12 @@
+import fs from 'node:fs';
+import path from 'node:path';
+import {spawnSync} from 'node:child_process';
+const configPath = 'dist/server/wrangler.json';
+if (!fs.existsSync(configPath)) throw new Error('Run npm run build:public before deployment.');
+const config = JSON.parse(fs.readFileSync(configPath, 'utf8'));
+if (config.name !== 'pdf-studio' || path.basename(config.userConfigPath ?? '') !== 'wrangler.public.json') throw new Error('This is not the standalone public build. Run npm run build:public.');
+const id = config.d1_databases?.find(d => d.binding === 'DB')?.database_id;
+if (!id || id === '00000000-0000-4000-8000-000000000000') throw new Error('Configure your real D1 database ID, then rebuild before deployment.');
+const result = spawnSync(process.execPath, ['node_modules/wrangler/bin/wrangler.js', 'deploy', '--config', configPath], {stdio:'inherit'});
+if (result.error) throw result.error;
+process.exit(result.status ?? 1);
