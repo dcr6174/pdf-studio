@@ -28,3 +28,7 @@
 /public/cmaps/
 /public/standard_fonts/
 /public/pdf.worker.min.mjs
+
+/.text-check/
+/public/vendor/pdfium.wasm
+/public/vendor/PDFIUM-*-LICENSE.txt

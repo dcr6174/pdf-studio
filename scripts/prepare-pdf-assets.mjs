@@ -8,3 +8,7 @@ console.log('PDF.js worker, CMaps and standard fonts are ready.');
 
 // Allow a fresh checkout to run locally before a real D1 ID is configured.
 try { await access(new URL('wrangler.public.json',root)); } catch { await cp(new URL('wrangler.public.example.json',root),new URL('wrangler.public.json',root)); }
+await mkdir(new URL('public/vendor/',root),{recursive:true});
+await cp(new URL('node_modules/@embedpdf/pdfium/dist/pdfium.wasm',root),new URL('public/vendor/pdfium.wasm',root));
+await cp(new URL('node_modules/@embedpdf/pdfium/LICENSE',root),new URL('public/vendor/PDFIUM-WRAPPER-LICENSE.txt',root));
+await cp(new URL('node_modules/@embedpdf/pdfium/LICENSE.pdfium',root),new URL('public/vendor/PDFIUM-LICENSE.txt',root));
