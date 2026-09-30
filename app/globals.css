@@ -45,3 +45,5 @@
 [data-slot="switch"]:focus-visible{outline:3px solid #a78bfa;outline-offset:3px}
 [data-slot="switch"]:disabled{cursor:not-allowed;opacity:.55}
 .batch-choice{min-height:44px}.batch-choice b{color:var(--foreground);margin-left:5px}
+
+.seo-page{max-width:850px;margin:0 auto;padding:40px 24px;line-height:1.7}.seo-page h1{font-size:2.3rem;font-weight:700;margin:24px 0}.seo-page h2{font-size:1.3rem;font-weight:600;margin:28px 0 12px}.seo-page p{margin:16px 0}.seo-page ol{list-style:decimal;padding-left:24px}.seo-page .primary{display:inline-flex}.seo-page nav,.seo-links{display:flex;flex-wrap:wrap;gap:16px}.seo-links{padding:24px 0;font-size:.85rem}.seo-page a:not(.primary),.seo-links a{color:var(--primary);text-decoration:underline;text-underline-offset:3px}
