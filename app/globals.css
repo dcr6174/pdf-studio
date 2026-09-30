@@ -52,3 +52,5 @@ input.studio-option-checkbox{appearance:auto!important;width:24px!important;heig
 input.studio-option-checkbox:focus-visible{outline:3px solid #8b5cf6;outline-offset:4px}
 input.studio-option-checkbox:disabled{cursor:not-allowed;opacity:.6}
 .batch-choice,.tracking-choice{min-height:48px;cursor:pointer;gap:12px}
+
+.install-app{position:relative}.install-help{position:absolute;right:0;top:calc(100% + 8px);z-index:60;width:min(320px,80vw);padding:18px;background:var(--card);color:var(--foreground);border:1px solid var(--border);border-radius:12px;box-shadow:0 8px 30px #0002}.install-help p{font-size:.85rem;line-height:1.5;margin:10px 0}.install-help button{color:var(--primary);min-height:44px}.install-app>.source-top{min-height:44px}
