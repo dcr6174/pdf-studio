@@ -14,6 +14,7 @@ export const tools:Tool[] = [
 ['crop','Crop margins','Trim the edges of your pages.','Pages','crop','Cropping hides content outside the page boundary; it does not permanently remove it.'],
 ['resize','Resize to A4','Fit every page onto an A4 sheet.','Pages','crop'],
 ['flip','Mirror pages','Flip your document horizontally.','Pages','reverse'],
+['native-text','Replace existing text','Change supported original PDF text.','Edit & sign','text','Limited: English text in standard PDF fonts and single text operators. Replacement must fit the original width. No paragraph reflow, embedded fonts or scanned text. Inspect the exported result before use. Editing invalidates digital signatures; this is not secure redaction.'],
 ['edit','Edit PDF','Add text, images and highlights.','Edit & sign','edit','Adds new elements. Existing PDF text is not edited in place.'],
 ['sign','Sign PDF','Draw, type or upload a signature.','Edit & sign','pen','A visual signature, without a certificate or identity verification.'],
 ['redact','Redact PDF','Permanently remove chosen regions.','Edit & sign','shield','Export rebuilds all pages as images and removes original text, links, metadata and forms.'],

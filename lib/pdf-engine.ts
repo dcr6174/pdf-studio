@@ -1,3 +1,4 @@
+import {replaceExistingText} from './native-text';
 import { PDFDocument, StandardFonts, rgb, degrees, PDFTextField, PDFCheckBox, PDFDropdown, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray, type PDFPage } from 'pdf-lib';
 import JSZip from 'jszip';
 import {pageGeometry,displayPoint,safeLink} from './page-geometry';
@@ -31,6 +32,8 @@ export type Mark = {
     fontSize: number;
 };
 export type Options = {
+    findText?: string;
+    replaceText?: string;
     range: string;
     text: string;
     title: string;
@@ -284,6 +287,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
         throw new Error('Keep at least one page in your document.');
     if(order.length>400)throw new Error('This operation would exceed the 400-page workspace limit. Choose fewer pages.');
     const out = await assemble(files, order,signal);
+    if(id==='native-text'){await replaceExistingText(out,o.findText??'',o.replaceText??'');}
     if(id!=='form')await applyMarks(out,order,marks,signal);
     if (id === 'split-all') {
         const z = new JSZip();
