@@ -1,55 +1,30 @@
-# See https://help.github.com/articles/ignoring-files/ for more about ignoring files.
-
-# dependencies
-/node_modules
-/.pnp
-.pnp.*
-.yarn/*
-!.yarn/patches
-!.yarn/plugins
-!.yarn/releases
-!.yarn/versions
-
-# testing
-/coverage
-
-# next.js
+# Dependencies and generated output
+/node_modules/
+/dist/
 /.next/
 /.vinext/
-/out/
-
-# misc
-.DS_Store
-*.pem
-
-# debug
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
-
-# env files (can opt-in for committing if needed)
-.env*
-
-# vercel
-.vercel
-
-# typescript
-next-env.d.ts
-/dist/
 /.wrangler/
-# Checkout-local execution profile and tool state; never publish them.
+/coverage/
+/out/
+/work/
+/outputs/
+*.tsbuildinfo
+*.log
+.DS_Store
+
+# Local credentials and configuration
+.env*
+!.env.example
+.dev.vars*
+*.pem
+/wrangler.public.json
+/.openai/
 /.sites-runtime/
 /.agents/
 /.codex/
-/outputs/
-/work/
-
-/wrangler.public.json
-.dev.vars*
 /lib/.verify-*.mjs
 
-# Restored from pinned pdfjs-dist by postinstall.
+# PDF.js assets restored automatically from the pinned dependency
 /public/cmaps/
 /public/standard_fonts/
 /public/pdf.worker.min.mjs
