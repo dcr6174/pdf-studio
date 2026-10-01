@@ -18,3 +18,14 @@ assert.deepEqual(run({hash:'#shelf'}).calls,[['shelf',false]]);
 assert.deepEqual(run({hash:'#compress'}).calls,[],'same tool keeps current state');
 for(const state of [{busy:true},{loading:true},{view:'native-text',textDirty:true}]){const result=run({hash:'#merge',...state});assert.equal(result.calls.length,0);assert.equal(result.messages.length,1);assert.equal(result.pushes.length,1);}
 console.log('PASS: actual history handler preserves anchors, restores landing tool, handles home/tool/shelf and blocks busy or unsaved-text navigation. Browser focus/scroll remains unverified.');
+
+const routeEffect=source.match(/useEffect\(\(\)=>\{\n      if\(landingTool.current===initialTool\)return;([\s\S]*?)\n    \},\[initialTool,navigate\]\);/);
+assert.ok(routeEffect,'route changes synchronize the retained workspace');
+const toolIds=[...((await readFile('lib/tools.ts','utf8')).matchAll(/^\['([^']+)'/gm))].map(m=>m[1]);assert.equal(toolIds.length,56);
+for(const initialTool of [...toolIds,'home']){
+ const calls=[],callbacks=[],landingTool={current:'previous-tool'};
+ const cleanup=vm.runInNewContext(`(()=>{if(landingTool.current===initialTool)return;${routeEffect[1]}})()`,{initialTool,landingTool,queueMicrotask:fn=>callbacks.push(fn),navigate:(...args)=>calls.push(args)});
+ callbacks.forEach(fn=>fn());assert.deepEqual(calls,[[initialTool,false]]);assert.equal(landingTool.current,initialTool);assert.equal(typeof cleanup,'function');
+}
+{const calls=[],callbacks=[],landingTool={current:'previous-tool'};const cleanup=vm.runInNewContext(`(()=>{if(landingTool.current===initialTool)return;${routeEffect[1]}})()`,{initialTool:'merge',landingTool,queueMicrotask:fn=>callbacks.push(fn),navigate:(...args)=>calls.push(args)});cleanup();callbacks.forEach(fn=>fn());assert.deepEqual(calls,[],'cancel stale route effects');}
+console.log('PASS: retained workspace switches on landing-tool changes and cancels stale queued navigation.');
