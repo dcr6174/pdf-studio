@@ -32,3 +32,9 @@
 /.text-check/
 /public/vendor/pdfium.wasm
 /public/vendor/PDFIUM-*-LICENSE.txt
+
+
+/.extra-check/
+/.signature-check/
+
+/.seo-check/

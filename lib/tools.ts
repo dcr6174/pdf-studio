@@ -1,6 +1,11 @@
 export const groups = ['All tools','Pages','Edit & sign','Convert','Privacy','My files'];
 export type Tool = {id:string;name:string;description:string;group:string;icon:string;note?:string};
 export const tools:Tool[] = [
+['bookmarks','Add bookmarks','Create a clickable document outline.','Pages','book','One bookmark per line: page number followed by its title. Replaces the exported outline.'],
+['halve','Split pages in half','Separate left and right halves of each page.','Pages','scissors','Uses CropBox boundaries; content outside each visible half is hidden, not securely removed. Rotations are retained.'],
+['viewer','Reader layout','Choose single-page or two-column viewing.','Pages','book','Sets a PDF viewer preference. Some readers ignore it.'],
+['remove-annotations','Remove annotations','Remove comments, highlights, links and stamps.','Privacy','shield','Works on the original single PDF; preserves form widgets. Export other workspace changes first.'],
+['create-form','Create fillable form','Turn field labels into a new fillable PDF.','Edit & sign','edit','Creates English text fields on new A4 pages. This does not add arbitrary field types to an existing PDF.'],
 ['merge','Merge PDFs','Bring your documents together.','Pages','merge'],
 ['organize','Organize pages','Reorder, rotate and remove pages.','Pages','grid'],
 ['split','Split PDF','Extract the pages you need.','Pages','scissors'],
@@ -53,5 +58,6 @@ export const tools:Tool[] = [
 ['zip','Bundle PDFs','Put your PDF files in a ZIP.','Pages','layers'],
 ['repair','Resave PDF','Rebuild a readable PDF structure.','Privacy','file','Can resave PDFs that parse successfully. Severely damaged PDFs may not be recoverable.'],
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
-export function accepted(id:string){return id==='images'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown'].includes(id)?'.txt,.md':'.pdf';}
+export function accepted(id:string){return id==='images'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
 export function isMulti(id:string){return ['merge','organize','interleave','images','compare','zip'].includes(id);}
+

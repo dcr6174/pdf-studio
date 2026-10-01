@@ -51,7 +51,9 @@ Set owner credentials only as Cloudflare runtime secrets. Never commit passwords
 - Visual signatures are not certificate-based digital signatures.
 - Office/text conversions may reflow content and lose formatting.
 - Raster compression/redaction removes original text layers, forms and links.
-- Workspaces are limited to **150 MiB** and **400 pages** to protect browser memory.
+- Workspaces are limited to **157.3 MB total** and **400 pages** to protect browser memory.
+
+See the [combined competitor feature inventory](docs/FEATURE_PARITY.md) for current coverage and remaining gaps. Full combined parity is not complete.
 
 See the [feature matrix and research](docs/RESEARCH_AND_AUDIT.md) and [validation results](docs/VALIDATION.md). Live browser/mobile and OCR verification remains pending.
 
@@ -67,3 +69,10 @@ npx tsc --noEmit
 ## License
 
 **MIT** for application code. Dependencies and fonts retain their own licenses; see [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).
+
+
+## Current feature work
+
+Signatures expose name entry and image upload together, with previews and optional drawing. Existing-text editing uses browser PDFium. Page tools include blank insertion, bookmarks, page halving and reader-layout preferences. Basic new fillable text forms and original-document annotation removal are available.
+
+Additional checks: `node checks/verify-extra-pdf.mjs`, `node checks/verify-signatures.mjs`, `node checks/verify-online-text.mjs`, `node checks/verify-seo.mjs`, and `npm run verify:studio`. For raster tests, run `npm install --no-save --package-lock=false @napi-rs/canvas@0.1.80 @xmldom/xmldom@0.8.15` after `npm ci`. These packages are test helpers.

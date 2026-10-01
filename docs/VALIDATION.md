@@ -1,3 +1,5 @@
+> Historical baseline below. Current feature changes and exact checks are tracked in [FEATURE_PARITY.md](FEATURE_PARITY.md); this baseline does not certify every new tool or real browser interaction.
+
 # Validation - 30 September 2026
 
 ## Completed checks
@@ -46,3 +48,4 @@
 No fake processing or seeded usage is used. Unverified areas remain declared rather than represented as passing.
 
 Concurrent update reconciliation: preserved the independently added compact compression mode, search synonyms, up-front catalogue caveats and product review. The stronger shared-workspace/result-inspection journey replaces its earlier re-upload continuation.
+

@@ -1,3 +1,4 @@
+import {addBookmarks,removeAnnotations,halvePages,createForm} from './extra-pdf';
 import {replaceExistingText} from './native-text';
 import { PDFDocument, StandardFonts, rgb, degrees, PDFTextField, PDFCheckBox, PDFDropdown, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray, type PDFPage } from 'pdf-lib';
 import JSZip from 'jszip';
@@ -171,6 +172,8 @@ async function plainPDF(text: string, markdown = false) { const { jsPDF } = awai
 export async function processPDF(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number) => void, signal?:AbortSignal): Promise<Output> {
     signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
     let first = files[0];
+    if(id==='create-form'){const d=await createForm(o.text);return result(await d.save(),'fillable-form.pdf');}
+    if(id==='remove-annotations'){if(files.length!==1||marks.length||items.length!==first.pages||items.some((p,i)=>p.index!==i||p.rotation))throw new Error('Remove annotations on the original single PDF. Export other workspace changes first.');const d=await PDFDocument.load(first.bytes);const count=removeAnnotations(d);return result(await d.save(),'pdf-studio-clean-annotations.pdf',undefined,`${count} annotations removed. Form widgets were kept.`);}
     if(['text','word','html','epub','csv','xlsx','audio','privacy','encrypt'].includes(id)&&items.length){const d=await assemble(files,items,signal);await applyMarks(d,items,marks,signal);const bytes=await d.save();first={...first,bytes,doc:d,pages:d.getPageCount(),size:bytes.length};}
     const filename = (first?.name ?? 'document').replace(/\.[^.]+$/, '');
     if (['create', 'markdown', 'docx', 'sheet', 'ebook'].includes(id)) {
@@ -289,6 +292,9 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
     const out = await assemble(files, order,signal);
     if(id==='native-text'){await replaceExistingText(out,o.findText??'',o.replaceText??'');}
     if(id!=='form')await applyMarks(out,order,marks,signal);
+    if(id==='bookmarks'){addBookmarks(out,o.text);return result(await out.save(),`${filename}-bookmarks.pdf`);}
+    if(id==='halve'){const d=await halvePages(out);return result(await d.save(),`${filename}-halves.pdf`);}
+    if(id==='viewer'){out.catalog.set(PDFName.of('PageLayout'),PDFName.of(o.columns==='2'?'TwoColumnLeft':'SinglePage'));return result(await out.save(),`${filename}-viewer.pdf`);}
     if (id === 'split-all') {
         const z = new JSZip();
         for (let i = 0; i < out.getPageCount(); i++) {
@@ -513,3 +519,4 @@ export async function applyMarks(out:PDFDocument,order:PageItem[],marks:Mark[],s
 export function wrapText(text:string,font:{widthOfTextAtSize:(v:string,s:number)=>number},size:number,width:number){
  const lines:string[]=[];for(const para of text.split('\n')){let line='';for(const char of para){if(line&&font.widthOfTextAtSize(line+char,size)>width){lines.push(line);line='';}line+=char;}lines.push(line);}return lines;
 }
+

@@ -7,8 +7,8 @@ import {PDFDocument,StandardFonts,degrees} from 'pdf-lib';
 import {createCanvas,DOMMatrix,ImageData,Path2D} from '@napi-rs/canvas';
 import {DOMParser as XMLParser} from '@xmldom/xmldom';
 import JSZip from 'jszip';
-const root=path.resolve('.'),temp=[];
-function compile(name){const file=path.join(root,`lib/${name}.ts`),tmp=path.join(root,`lib/.verify-${name}.mjs`);let out=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;out=out.replaceAll("'./page-geometry'","'./.verify-page-geometry.mjs'");out=out.replaceAll("'/standard_fonts/'",JSON.stringify(path.join(root,"public/standard_fonts/")+"/")).replaceAll("'/cmaps/'",JSON.stringify(path.join(root,"public/cmaps/")+"/"));fs.writeFileSync(tmp,out);temp.push(tmp);return import(pathToFileURL(tmp).href);}
+const root=path.resolve('.'),temp=[];fs.mkdirSync('work/validation',{recursive:true});
+function compile(name){const file=path.join(root,`lib/${name}.ts`),tmp=path.join(root,`lib/.verify-${name}.mjs`);let out=ts.transpileModule(fs.readFileSync(file,'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText;out=out.replaceAll("'./extra-pdf'","'./.verify-extra-pdf.mjs'").replaceAll("'./native-text'","'./.verify-native-text.mjs'");out=out.replaceAll("'./page-geometry'","'./.verify-page-geometry.mjs'");out=out.replaceAll("'/standard_fonts/'",JSON.stringify(path.join(root,"public/standard_fonts/")+"/")).replaceAll("'/cmaps/'",JSON.stringify(path.join(root,"public/cmaps/")+"/"));fs.writeFileSync(tmp,out);temp.push(tmp);return import(pathToFileURL(tmp).href);}
 Object.assign(globalThis,{DOMMatrix,ImageData,Path2D});
 globalThis.document={createElement(tag){if(tag!=='canvas')throw Error('Unexpected DOM dependency: '+tag);return createCanvas(300,150);}};
 // Only the EPUB import fixture needs XML/HTML text parsing; no browser UI is simulated.
@@ -17,7 +17,7 @@ const fontBytes=fs.readFileSync('public/fonts/NotoSans-Regular.ttf');const origi
 globalThis.fetch=async url=>String(url)==='/fonts/NotoSans-Regular.ttf'?new Response(fontBytes):originalFetch(url);
 const results=[],checks=[];const check=(name,fn)=>{fn();checks.push(name);};
 try{
- await compile('page-geometry');const {WorkspaceHistory}=await compile('workspace-history');const {validateSelection,validatePages,MAX_BYTES}=await compile('input-validation');const E=await compile('pdf-engine');
+ await compile('extra-pdf');await compile('native-text');await compile('page-geometry');const {WorkspaceHistory}=await compile('workspace-history');const {validateSelection,validatePages,MAX_BYTES}=await compile('input-validation');const E=await compile('pdf-engine');
  (await E.pdfjs()).GlobalWorkerOptions.workerSrc=pathToFileURL(path.join(root,'node_modules/pdfjs-dist/build/pdf.worker.mjs')).href;
  const d=await PDFDocument.create(),font=await d.embedFont(StandardFonts.Helvetica);
  for(let i=0;i<3;i++){const p=d.addPage(i===1?[600,400]:[400,600]);p.drawText(`Fixture ${i+1} - SECRET`,{x:40,y:p.getHeight()-45,size:18,font});p.drawText('Name     Amount',{x:40,y:300,size:12,font});p.drawText('Chandra     123',{x:40,y:280,size:12,font});}
@@ -54,3 +54,4 @@ try{
  const unique=[...new Set(results.map(r=>r.tool))];fs.writeFileSync('work/validation/results.json',JSON.stringify({date:'2026-09-30',engineTools:unique,toolCount:unique.length,checks,results,notVerified:['OCR upstream model download / recognition','Browser speech playback','Live drag/drop, mobile, keyboard/focus, IndexedDB draft recovery','Office complex-layout fidelity']},null,2));
  console.log(`PASS: ${unique.length} processing tools with fixtures; ${checks.length} additional correctness, geometry, boundary, cancellation and history checks. OCR and UI/device checks explicitly excluded.`);
 }finally{globalThis.fetch=originalFetch;for(const f of temp)fs.unlinkSync(f);}
+

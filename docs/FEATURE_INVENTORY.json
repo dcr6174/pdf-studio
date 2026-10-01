@@ -1,0 +1,1585 @@
+{
+  "researched": "2026-10-01",
+  "scope": "Combined publicly listed capabilities of the six named services, not every hidden or enterprise workflow. Competitor claims are not independently validated.",
+  "sources": {
+    "iLovePDF": "https://www.ilovepdf.com/",
+    "Smallpdf": "https://smallpdf.com/pdf-tools",
+    "Sejda": "https://www.sejda.com/",
+    "PDF24": "https://tools.pdf24.org/en/all-tools",
+    "PDFgear": "https://www.pdfgear.com/online-tools/",
+    "ihatepdf": "https://www.ihatepdf.cv/"
+  },
+  "features": [
+    {
+      "feature": "AI assistant",
+      "competitors": [
+        "Smallpdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "AI document chat",
+      "competitors": [
+        "Smallpdf",
+        "ihatepdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "AI quizzes",
+      "competitors": [
+        "Smallpdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "AI summaries",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "ihatepdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "AZW3 import",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Annotation removal",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Missing",
+      "current": "Implemented",
+      "tool": "remove-annotations",
+      "priority": "P1",
+      "scope": "Removes non-widget annotations on original single PDF."
+    },
+    {
+      "feature": "Annotations",
+      "competitors": [
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "edit",
+      "priority": "P1",
+      "scope": "Overlay highlights and shapes; no full comments/replies or freehand annotation system."
+    },
+    {
+      "feature": "Application package",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Archival PDF conversion",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "PDF24"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Archival PDF validation",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Audio transcription",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Audio-file export",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Bates numbering",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "bates",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Bookmark-based split",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Bookmarks",
+      "competitors": [
+        "Sejda",
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Implemented",
+      "tool": "bookmarks",
+      "priority": "P1",
+      "scope": "Flat outline from page/title pairs."
+    },
+    {
+      "feature": "CSV import",
+      "competitors": [
+        "Smallpdf",
+        "ihatepdf"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Camera capture",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Colour inversion",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "invert",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Comparison",
+      "competitors": [
+        "iLovePDF",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "compare",
+      "priority": "P1",
+      "scope": "Side-by-side pages; no automatic change detection."
+    },
+    {
+      "feature": "Compress",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "compress",
+      "priority": "P0",
+      "scope": "Image presets rasterize; compact mode has document-dependent savings."
+    },
+    {
+      "feature": "Content-based rename",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Crop",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "crop",
+      "priority": "P1",
+      "scope": "Margin trimming; not secure removal."
+    },
+    {
+      "feature": "Deskew",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P1",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Document search",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P1",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "EPUB export",
+      "competitors": [
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "epub",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "EPUB import",
+      "competitors": [
+        "Smallpdf",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "ebook",
+      "priority": "P1",
+      "scope": "Reflowed text only; images and styling not retained."
+    },
+    {
+      "feature": "Electronic invoices",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Encryption",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "encrypt",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Existing-text editing",
+      "competitors": [
+        "Sejda",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "native-text",
+      "priority": "P0",
+      "scope": "Bounded edits; glyph and nested-object limits; no paragraph reflow."
+    },
+    {
+      "feature": "Flatten",
+      "competitors": [
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "flatten",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Form creation",
+      "competitors": [
+        "iLovePDF",
+        "Sejda",
+        "PDF24",
+        "PDFgear"
+      ],
+      "initial": "Missing",
+      "current": "Partial",
+      "tool": "create-form",
+      "priority": "P1",
+      "scope": "New A4 text-field forms only; not arbitrary field placement or full field types."
+    },
+    {
+      "feature": "Form filling",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "form",
+      "priority": "P0",
+      "scope": "Text, checkbox and dropdown support; original document workflow."
+    },
+    {
+      "feature": "GST invoices",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Grayscale",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "grayscale",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "HEIC import",
+      "competitors": [
+        "PDF24",
+        "PDFgear"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "HEIC to JPEG",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "HEIC to PNG",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "HTML export",
+      "competitors": [
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "html",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "HTML import",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "HWP import",
+      "competitors": [
+        "Smallpdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Headers and footers",
+      "competitors": [
+        "Sejda",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "headers",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Image extraction",
+      "competitors": [
+        "Sejda",
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P1",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Image import",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "images",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Images",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "edit",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Interleaving",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "interleave",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Invoice XML rendering",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Invoice validation",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Invoices",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "JPEG export",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "jpg",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Leak tracing",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Legacy PowerPoint import",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Legacy Word import",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Links",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "edit",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "MOBI import",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Markdown export",
+      "competitors": [
+        "iLovePDF",
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Markdown import",
+      "competitors": [
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "markdown",
+      "priority": "P1",
+      "scope": "Basic headings and lists, not full rich Markdown."
+    },
+    {
+      "feature": "Merge",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "merge",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Metadata editing",
+      "competitors": [
+        "Sejda",
+        "PDF24"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "metadata",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Metadata removal",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "clean",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Mirroring",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "flip",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "N-up",
+      "competitors": [
+        "Sejda",
+        "PDF24"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "nup",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Native print driver",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "OCR",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "ocr",
+      "priority": "P0",
+      "scope": "English recognition; ASCII searchable output; review errors."
+    },
+    {
+      "feature": "ODG import",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "ODP export",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "ODP import",
+      "competitors": [
+        "Smallpdf",
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "ODS export",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "ODS import",
+      "competitors": [
+        "Smallpdf",
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "ODT export",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "ODT import",
+      "competitors": [
+        "Smallpdf",
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "PDF invoice extraction",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "PDF reader",
+      "competitors": [
+        "Smallpdf",
+        "PDF24",
+        "PDFgear"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "organize",
+      "priority": "P1",
+      "scope": "Page previews and zoom; no full reader search or bookmarking controls."
+    },
+    {
+      "feature": "PNG export",
+      "competitors": [
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "png",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "POS billing",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "PSD export",
+      "competitors": [
+        "PDFgear"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "PSD import",
+      "competitors": [
+        "PDFgear"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Page deletion",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "organize",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Page extraction",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "split",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Page halving",
+      "competitors": [
+        "Sejda",
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Implemented",
+      "tool": "halve",
+      "priority": "P1",
+      "scope": "CropBox halves with rotation retained; hidden content is not redacted."
+    },
+    {
+      "feature": "Page insertion",
+      "competitors": [
+        "Smallpdf",
+        "PDFgear"
+      ],
+      "initial": "Missing",
+      "current": "Implemented",
+      "tool": "organize",
+      "priority": "P1",
+      "scope": "Blank page insertion plus existing PDF merge/workspace organization."
+    },
+    {
+      "feature": "Page numbering",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "numbers",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Page organization",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "organize",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Page overlay",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Page resize",
+      "competitors": [
+        "Sejda",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "resize",
+      "priority": "P1",
+      "scope": "A4 fitting only; no arbitrary dimensions."
+    },
+    {
+      "feature": "Page-image ZIP",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "zip",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Pages import",
+      "competitors": [
+        "Smallpdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Password generation",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Password removal",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "decrypt",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Peer sharing",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "PowerPoint export",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "pptx",
+      "priority": "P1",
+      "scope": "Page-image slides, not editable original graphics."
+    },
+    {
+      "feature": "PowerPoint import",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P1",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Privacy scan",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "privacy",
+      "priority": "P1",
+      "scope": "Standard metadata and pattern matching, not full hidden-object inspection."
+    },
+    {
+      "feature": "Publisher import",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "QR generation",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "RTF export",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "RTF import",
+      "competitors": [
+        "Smallpdf",
+        "PDF24",
+        "PDFgear"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Rasterization",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Redaction",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "redact",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Repair",
+      "competitors": [
+        "iLovePDF",
+        "Sejda",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "repair",
+      "priority": "P1",
+      "scope": "Resaves parsable PDFs; no forensic reconstruction."
+    },
+    {
+      "feature": "Rich document authoring",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "create",
+      "priority": "P1",
+      "scope": "Plain text creation, not a rich text document editor."
+    },
+    {
+      "feature": "Rotation",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "rotate",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "SVG export",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "SVG import",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Shapes",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "edit",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Shared whiteboard",
+      "competitors": [
+        "ihatepdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Size-based split",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Split",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "split",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Spreadsheet export",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "xlsx",
+      "priority": "P1",
+      "scope": "Heuristic text rows; no reliable table reconstruction."
+    },
+    {
+      "feature": "Spreadsheet import",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "sheet",
+      "priority": "P1",
+      "scope": "First sheet, text rows; no charts or original styling."
+    },
+    {
+      "feature": "TIFF export",
+      "competitors": [
+        "Sejda",
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "TIFF import",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Text export",
+      "competitors": [
+        "Sejda",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "text",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Text import",
+      "competitors": [
+        "Smallpdf",
+        "PDF24",
+        "PDFgear"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Text overlays",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "edit",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Text-based split",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Translation",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf"
+      ],
+      "initial": "Constrained",
+      "current": "Constrained",
+      "tool": "",
+      "priority": "P2",
+      "scope": "Needs additional engine, service, integration or platform support; not available in the current browser app."
+    },
+    {
+      "feature": "Viewer preferences",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Implemented",
+      "tool": "viewer",
+      "priority": "P1",
+      "scope": "Single-page or two-column preference; reader support varies."
+    },
+    {
+      "feature": "Visual invoice design",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Visual signatures",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "sign",
+      "priority": "P0",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Watermarks",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "ihatepdf"
+      ],
+      "initial": "Implemented",
+      "current": "Implemented",
+      "tool": "watermark",
+      "priority": "P1",
+      "scope": "Existing implementation; applicable caveats remain in the tool description."
+    },
+    {
+      "feature": "Web optimization",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "WebP to JPEG",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "WebP to PNG",
+      "competitors": [
+        "PDF24"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    },
+    {
+      "feature": "Word export",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "word",
+      "priority": "P0",
+      "scope": "Text-only DOCX, no original layout."
+    },
+    {
+      "feature": "Word import",
+      "competitors": [
+        "iLovePDF",
+        "Smallpdf",
+        "Sejda",
+        "PDF24",
+        "PDFgear",
+        "ihatepdf"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "docx",
+      "priority": "P0",
+      "scope": "DOCX text reflow only; no layout or image preservation."
+    },
+    {
+      "feature": "Workflow chains",
+      "competitors": [
+        "Sejda"
+      ],
+      "initial": "Partial",
+      "current": "Partial",
+      "tool": "organize",
+      "priority": "P1",
+      "scope": "Continue editing and shared workspace; no saved automated recipes."
+    },
+    {
+      "feature": "ZIP import",
+      "competitors": [
+        "Smallpdf"
+      ],
+      "initial": "Missing",
+      "current": "Missing",
+      "tool": "",
+      "priority": "P2",
+      "scope": "No working implementation is advertised."
+    }
+  ]
+}
