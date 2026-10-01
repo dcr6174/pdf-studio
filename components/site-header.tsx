@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/browser-link';
 import {ThemeToggle} from '@/components/theme-toggle';
 
 /** Slim header for static pages (privacy, about) so they match the studio header. */

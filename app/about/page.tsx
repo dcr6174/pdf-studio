@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/browser-link';
 import {SiteHeader,SiteFooter} from '@/components/site-header';
 import type {Metadata} from 'next';
 export const metadata:Metadata={title:'About PDF Studio',description:'A free browser PDF workspace with clear limits and on-device document processing.',alternates:{canonical:'/about'}};

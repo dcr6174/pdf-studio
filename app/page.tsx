@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+import Link from '@/components/browser-link';
 import { useEffect, useRef, useState, type ReactNode } from 'react';
 import { FileText, Search, Upload, ShieldCheck, Download, Plus, Merge, Scissors, Grid2X2, Minimize2, RotateCw, Copy, ArrowDownUp, Crop, PenLine, Droplets, Hash, Layers, Image as ImageIcon, Code2, BookOpen, Presentation, ScanLine, Volume2, LockKeyhole, UnlockKeyhole, Moon,  X, Check, GripVertical, Trash2, ChevronLeft, ChevronRight, FolderOpen, HardDrive, GitBranch, Loader2, Undo2, MousePointer2, Highlighter, Type, Square, StopCircle, Redo2, Save, ZoomIn, ZoomOut, Eye, Circle, Link2 } from 'lucide-react';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';

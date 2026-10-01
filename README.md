@@ -214,3 +214,9 @@ Validation: archive integrity and patch application passed; source lint passes w
 ### Guide-link navigation (1 October 2026)
 
 Landing-tool changes now synchronize the retained client workspace, so opening another guide does not leave the previous tool selected. Anchor links continue to preserve the tool. Tool-guide clicks are blocked during processing, unsaved native-text changes or pending redaction. Verification covers all 56 tool IDs and link destinations across 62 server-rendered guides; lint (0 errors, 31 warnings), TypeScript and production build pass. Actual live browser link clicks and Cloudflare deployment remain unverified.
+
+### Browser-confirmed navigation failure and fix (1 October 2026)
+
+On the deployed Workers site, guide and Privacy footer clicks did not change the URL. Console errors in the vinext Link chunk reported `TypeError: e is not a function` and RSC prefetch errors. Opening the Compress destination directly worked; its FAQ disclosure expanded correctly. Public page links now use `BrowserLink`, a standard HTML anchor, bypassing the failing client router. Existing workspace buttons and tool-menu handlers continue to preserve the document. Opening another guide, Privacy or About now loads a new page; save or download work first, and the existing beforeunload warning applies when documents/text are present. Native anchors support keyboard use, browser back/forward and opening new tabs. Automated link, homepage, 62-guide, navigation, lint, TypeScript and build checks pass. Live verification of this new commit requires Cloudflare to deploy it. The main domain returned 502 in this audit browser; this does not establish availability for other visitors. Workers-to-domain redirect stays disabled.
+
+Tools-menu mouse clicks now keep a menu already opened by hover open; touch and keyboard activation still toggle it. Policy regression tests cover these input modes.

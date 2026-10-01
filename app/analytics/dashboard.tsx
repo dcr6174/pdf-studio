@@ -1,5 +1,5 @@
 'use client';
-import Link from 'next/link';
+import Link from '@/components/browser-link';
 import {useCallback,useEffect,useState} from 'react';
 import {Activity,Users,Clock,CheckCircle2,RefreshCw,Layers,ShieldCheck,ChevronLeft,Loader2,Sun,Moon} from 'lucide-react';
 import {BarChart,Bar,XAxis,YAxis,CartesianGrid,Tooltip,ResponsiveContainer} from 'recharts';

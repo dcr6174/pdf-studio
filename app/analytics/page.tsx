@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/browser-link';
 import {headers} from 'next/headers';
 import {getChatGPTUser} from '@/app/chatgpt-auth';
 import {analyticsOwnerEmail} from '@/lib/analytics-db';

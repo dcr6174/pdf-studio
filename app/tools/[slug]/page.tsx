@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/browser-link';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import Studio from '@/app/page';

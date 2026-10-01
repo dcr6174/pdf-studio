@@ -1,4 +1,4 @@
-import Link from 'next/link';
+import Link from '@/components/browser-link';
 import {SiteHeader,SiteFooter} from '@/components/site-header';
 import type {Metadata} from 'next';
 export const metadata:Metadata={title:'Privacy policy',description:'How PDF Studio processes documents, saves local drafts and counts anonymous usage.',alternates:{canonical:'/privacy'}};
