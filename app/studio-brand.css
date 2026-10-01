@@ -33,3 +33,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 /* Tool landing pages contain the workspace, followed by readable help. */
 .seo-page:has(.studio-shell){max-width:none;padding:0}.tool-instructions{max-width:900px;margin:48px auto;padding:0 24px 48px}.tool-instructions nav{display:flex;flex-wrap:wrap;gap:12px}.tool-instructions nav a{padding:12px;background:#f2efff;border-radius:12px}
 @media(prefers-reduced-motion:reduce){.spin{animation:none}*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
+
+/* Center task entry and contain all page actions at narrow widths. */
+.home-hero{display:block;max-width:900px;margin:16px auto 40px;text-align:center}.hero-proof{justify-content:center}.hero-copy p{margin-left:auto;margin-right:auto}
+.document-shell .content{max-width:1440px;margin-inline:auto}.text-shell .content{max-width:1680px}
+.document-shell .tool-heading{text-align:center}.document-shell .back-link{width:max-content;margin-inline:auto}
+.empty-tool .studio-controls{display:flex;flex-direction:column;align-items:center}.empty-tool .tool-heading,.empty-tool .tool-note{width:100%;max-width:840px}.empty-tool .tool-drop{width:100%;max-width:840px;margin-inline:auto}
+.page-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,208px),1fr))}.page-cell,.page-card{min-width:0}.page-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;gap:2px}.page-actions button{min-width:0;width:100%;min-height:44px;padding:8px;display:grid;place-items:center}.workspace-summary{flex-wrap:wrap}.workspace-summary .row{flex-wrap:wrap;max-width:100%}.page-grid-heading{flex-wrap:wrap}.page-grid-heading .row{flex-wrap:wrap;max-width:100%}
+@media(max-width:767px){.home-hero{margin-top:8px;text-align:center}.document-shell .content{padding-inline:12px}.empty-tool .tool-drop{min-height:300px;padding:24px 16px}.page-actions button{min-width:0;min-height:44px}.workspace-rail .row{flex-wrap:wrap}}

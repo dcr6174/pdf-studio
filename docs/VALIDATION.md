@@ -86,3 +86,6 @@ Passed navigation/icon coverage, homepage SSR, TypeScript and the production bui
 See AUDIT-2026-10-01.md. Retested 48 processing cases and 32 additional checks after updating SheetJS to upstream 0.20.3. Existing-text, signatures, extra operations, analytics and owner suites pass. All 56 landing pages now render their actual workspace. Source-level work guards, keyboard discovery, native-install relevance, lazy processing loading and preferred-host/private-indexing changes are included. Browser/device testing is still blocked by live 502 responses in this environment.
 
 Final image-budget check passes; final TypeScript, 48 processing cases/32 checks, homepage/56 embedded tool SSR checks and production build pass after the image guard change.
+
+## Tool-first centered layout correction
+Removed homepage upload invitation and file picker; homepage drops instruct users to choose a tool. Empty tool headings and upload cards are centered; document content has a centered maximum width. Page grids now reserve room for four contained action cells; narrow action rows wrap. Homepage SSR verifies no upload invitation/button, and all 56 embedded-tool page checks, TypeScript and public production build pass. Real browser viewport/hover/mobile visual checks remain unverified in this environment.

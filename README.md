@@ -9,7 +9,7 @@ Free online PDF tools in a shared document workspace. Core tools require no acco
 - **Unified logo:** clear P monogram with an integrated document fold, indigo and deep teal, plus an optically adjusted favicon, shared by the header, footer, guides, owner dashboard, social metadata, favicon and PWA icons.
 - **All-tools menu:** hover Tools on desktop or click/tap it to reveal all 56 tools grouped by task, each with a meaningful icon and a colored category tile. Search, keyboard disclosure and Escape dismissal are supported.
 - **Install awareness:** hides install actions in the installed app, after confirmed installs, and when supported browser APIs report this PWA installed. A fresh installable-browser event resets the remembered state after uninstall. Detection from Safari/unsupported browser tabs is limited.
-- **Focused homepage:** one upload area, six popular tools, searchable task categories and an explicit “Browse all 56 tools” action. Compact top navigation replaces the crowded sidebar and repeated shortcuts.
+- **Focused homepage:** six popular tools, searchable task categories and an explicit “Browse all 56 tools” action. Compact top navigation replaces the crowded sidebar and repeated shortcuts.
 - **Full-width document workspace:** existing-text editing gives most of the screen to the actual PDF, with a narrow contextual editing panel. Mobile shows the page first and editing controls below.
 - **Existing PDF text:** select a supported original text object, replace it, fit longer replacements into its area or preserve its size, and check the real PDF preview. Undo/redo and page selection are included.
 - **Keep text edits:** commit the edited PDF into the shared workspace before switching tools. Navigation blocks accidental loss of uncommitted edits; explicit discard is available.
@@ -171,3 +171,6 @@ See [audit report](docs/AUDIT-2026-10-01.md) for evidence, the 56-tool status ma
 Security maintenance: SheetJS was updated from npm xlsx 0.18.5 to the upstream 0.20.3 tarball to address CVE-2023-30533 and CVE-2024-22363 affected version ranges. The lockfile records package integrity. Ordinary spreadsheet import/export regression passes; this is not a complete dependency security certification. Local owner routes receive noindex headers; www requests redirect to the preferred HTTPS domain when they reach the standalone Worker. Live bindings/headers remain unverified.
 
 Image inputs now have a 22-megapixel canvas budget. Oversized PNG dimensions reject before bitmap decoding; all formats reject before canvas allocation. Bitmap/canvas resources are released on success and failure. JPEG/WebP decoding itself still occurs before the dimensions can be checked.
+
+## Tool-first layout refinement
+Homepage has no file-upload area; visitors choose a task before opening files. Empty tool entry, heading and upload card are centered. Shared workspaces use a centered maximum width while existing-text editing retains a wider canvas. Page thumbnails have a minimum-width grid and four equal-width action cells so delete buttons remain inside their card. Narrow document action rows wrap.

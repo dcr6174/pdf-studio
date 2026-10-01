@@ -9,8 +9,8 @@ const {default:Home}=await import('../.home-check/page.mjs');
 const html=renderToStaticMarkup(createElement(Home));
 assert.equal((html.match(/<h1>/g)||[]).length,1);
 assert.ok(html.includes('Make your PDF'));
-assert.ok(html.includes('Drop your PDF here'));
-assert.ok(html.includes('157.3 MB total'));
+assert.ok(!html.includes('Drop your PDF here'),'home has no upload invitation');assert.ok(!html.includes('hero-upload'),'home has no upload button');
+assert.ok(html.includes('Choose your tool')); 
 assert.ok(html.includes('Browse all 56 tools'));
 assert.equal((html.match(/class="tool-card /g)||[]).length,6,'initial popular catalogue is focused');
 assert.equal((html.match(/href="\/tools\//g)||[]).length,56,'guides are crawlable before hydration');
@@ -22,4 +22,4 @@ const names=[...tools.matchAll(/^\['[^']+','([^']+)'/gm)].map(m=>m[1]);assert.eq
 for(const name of names)assert.ok(readme.includes('| '+name+' |'),`${name} missing from README`);
 assert.ok(!readme.includes('Light and dark themes'));
 assert.ok(readme.includes('Fit mode can shrink text'));
-console.log('PASS: initial homepage SSR, one H1, six popular tools, visible limits, all 56 crawlable guide links, FAQ, no sidebar and README coverage of all 56 tools.');
+console.log('PASS: initial homepage SSR, one H1, six popular tools, tool-first entry without homepage upload, all 56 crawlable guide links, FAQ, no sidebar and README coverage of all 56 tools.');
