@@ -73,3 +73,11 @@ verify-navigation-install checks unique menu links, category/disclosure markup, 
 ## Folded P identity refinement
 
 Replaced the document/check badge with an original folded P mark in two flat colors: indigo #2923b9 and teal #12bfb9. SVG is the production source, with raster exports for PWA, Apple and social consumers. Version 3 asset paths replace version 2 references; application identity is unchanged. The generated brand presentation is a visual concept, while production assets are clean SVG paths with transparent backgrounds and no textures/shadows.
+
+## Refined P identity v4
+Connected the P stem and bowl, shortened the stem, regularized the counter and integrated a document fold into the upper corner. Deep teal improves definition on white. Created a separately adjusted favicon and same-geometry monochrome SVG. Inspected actual raster renders at 16, 24 and 32 pixels and a header-style lockup. This is a design review board, not a live browser screenshot. Build and brand-reference checks remain separate from live deployment verification.
+
+## All-tools menu icon treatment
+Every one of the 56 tool links now includes a meaningful Lucide icon in a colored category tile. Icons are decorative to screen readers; the existing visible tool names remain accessible link labels. Pages, Edit & Sign, Convert and Privacy use lavender, peach, mint and blue respectively. Touch rows retain comfortable spacing.
+
+Passed navigation/icon coverage, homepage SSR, TypeScript and the production build. Actual browser hover/touch behavior and deployed appearance remain unverified because local cloud-browser preview was blocked.

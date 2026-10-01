@@ -1,13 +1,13 @@
 # PDF Studio
 
-<img src="public/brand/pdf-studio-logo-v3.png" width="80" height="80" alt="PDF Studio logo" />
+<img src="public/brand/pdf-studio-logo-v4.png" width="80" height="80" alt="PDF Studio logo" />
 
 Free online PDF tools in a shared document workspace. Core tools require no account or subscription and add no watermark. Documents are processed on your device.
 
 ## Latest improvements
 
-- **Unified logo:** original folded P mark in indigo and teal, with a document fold suggested through negative space, shared by the header, footer, guides, owner dashboard, social metadata, favicon and PWA icons.
-- **All-tools menu:** hover Tools on desktop or click/tap it to reveal all 56 tools grouped by task. Search, keyboard disclosure and Escape dismissal are supported.
+- **Unified logo:** clear P monogram with an integrated document fold, indigo and deep teal, plus an optically adjusted favicon, shared by the header, footer, guides, owner dashboard, social metadata, favicon and PWA icons.
+- **All-tools menu:** hover Tools on desktop or click/tap it to reveal all 56 tools grouped by task, each with a meaningful icon and a colored category tile. Search, keyboard disclosure and Escape dismissal are supported.
 - **Install awareness:** hides install actions in the installed app, after confirmed installs, and when supported browser APIs report this PWA installed. A fresh installable-browser event resets the remembered state after uninstall. Detection from Safari/unsupported browser tabs is limited.
 - **Focused homepage:** one upload area, six popular tools, searchable task categories and an explicit “Browse all 56 tools” action. Compact top navigation replaces the crowded sidebar and repeated shortcuts.
 - **Full-width document workspace:** existing-text editing gives most of the screen to the actual PDF, with a narrow contextual editing panel. Mobile shows the page first and editing controls below.
