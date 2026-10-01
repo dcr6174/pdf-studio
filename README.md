@@ -26,7 +26,7 @@ Every current tool is listed below. “Available” does not mean every PDF is s
 | --- | --- | --- |
 | Pages | Add bookmarks | One bookmark per line: page number followed by its title. Replaces the exported outline. |
 | Pages | Split pages in half | Uses CropBox boundaries; content outside each visible half is hidden, not securely removed. Rotations are retained. |
-| Pages | Reader layout | Sets a PDF viewer preference. Some readers ignore it. |
+| Pages | Reading layout preference | Sets a PDF viewer preference. Some readers ignore it. |
 | Privacy | Remove annotations | Works on the original single PDF; preserves form widgets. Export other workspace changes first. |
 | Edit & sign | Create fillable form | Creates English text fields on new A4 pages. This does not add arbitrary field types to an existing PDF. |
 | Pages | Merge PDFs | Bring your documents together. |
@@ -37,7 +37,7 @@ Every current tool is listed below. “Available” does not mean every PDF is s
 | Pages | Rotate PDF | Turn pages in the right direction. |
 | Pages | Reverse pages | Last page first. Simple. |
 | Pages | Duplicate pages | Make a second copy of every page. |
-| Pages | Alternate & mix | Weave pages from multiple PDFs. |
+| Pages | Interleave pages | Weave pages from multiple PDFs. |
 | Pages | Pages per sheet | Fit 2 or 4 pages on one sheet. |
 | Pages | Crop margins | Cropping hides content outside the page boundary; it does not permanently remove it. |
 | Pages | Resize to A4 | Fit every page onto an A4 sheet. |
@@ -77,9 +77,9 @@ Every current tool is listed below. “Available” does not mean every PDF is s
 | Privacy | Remove password | Unlock with a password you know. |
 | Privacy | Privacy scanner | Pattern matching can miss sensitive data or flag harmless text. Review the document before sharing. |
 | Privacy | Remove metadata | Clears standard title, author, subject, keywords, producer and dates. It is not a complete sanitization of every hidden object. |
-| Privacy | File fingerprint | Calculate a SHA-256 file hash. |
+| Privacy | Calculate file hash | Calculate a SHA-256 file hash. |
 | Pages | Bundle PDFs | Put your PDF files in a ZIP. |
-| Privacy | Resave PDF | Can resave PDFs that parse successfully. Severely damaged PDFs may not be recoverable. |
+| Privacy | Repair readable PDF | Can resave PDFs that parse successfully. Severely damaged PDFs may not be recoverable. |
 
 ## Workspace features
 
@@ -179,8 +179,22 @@ Homepage has no file-upload area; visitors choose a task before opening files. E
 
 - Homepage remains tool-first, with no upload target until a tool is selected. Its headline now explicitly identifies free PDF tools.
 - All 56 tool landing pages include visible breadcrumbs and truthful free WebApplication structured data. No ratings or rich-result promises are included.
-- Merge, split, compress, existing-text editing, signing, images to PDF, organize, OCR, redaction and form filling have task-specific instructions, use cases, output checks and common questions. The remaining guides retain their baseline instructions and need further editorial work.
+- Merge, split, compress, existing-text editing, signing, images to PDF, organize, OCR, redaction and form filling have task-specific instructions, use cases, output checks and common questions. This initial ten-tool batch was subsequently expanded to all 56 tools in the complete follow-up below.
 - The production URL `pdf-studio.dcr6174.workers.dev` remains accessible without redirecting to `pdf-studio.in`, per the owner's request. Do not enable that redirect until the owner explicitly asks. Workers responses remain noindex; other preview hosts remain usable and noindex.
 - Installation does not imply offline support: no service worker currently provides reliable offline operation. Search Console ownership, indexing, real-user performance and deployed redirect behavior still require external verification.
 
-Verify with `node checks/verify-seo.mjs`, `npm run verify:public`, `npx tsc --noEmit` and `npm run build:public`.
+Generate assets with `npm run generate:site-assets`, then verify with `node checks/verify-seo.mjs`, `npm run verify:public`, `npx tsc --noEmit` and `npm run build:public`.
+
+### Complete SEO and discovery follow-up
+
+- 56 functional tools now have individually written configuration instructions, use cases and output checks. Each of the 62 landing pages contains three visible steps and five FAQs, with matching WebApplication, BreadcrumbList, HowTo and FAQPage schema. This does not promise Google rich results or rankings.
+- Added real workspace pages for JPG to PDF, PNG to PDF, PDF to Excel, deleting pages, extracting pages and the online PDF editor. PDF-to-Excel remains heuristic text extraction; the online annotation editor is distinct from existing-text editing. No unsupported PowerPoint-to-PDF or HTML-to-PDF conversion is advertised.
+- Renamed Interleave pages, Reading layout preference, Calculate file hash and Repair readable PDF while preserving the existing guide URLs and engine IDs.
+- The homepage keeps six popular tools, adds category cards with counts, groups all 56 guides with descriptions, and explains free processing, offline limitations and actual limits. It has no upload target.
+- Light, dark and device-setting appearance choices use a labeled select, stored locally. The PDF page canvas retains its document colors.
+- Report a problem creates a copyable/downloadable local text template. It submits nothing and includes no document bytes, filenames, passwords or signatures automatically. A public support intake destination has not been configured.
+- All landing pages and the homepage have generated 1200×630 PNG social cards using the existing logo and large-image Twitter metadata.
+- `npm run generate:site-assets` regenerates social cards and the sitemap from the registry. Tracked content fingerprints preserve lastmod dates on unchanged rebuilds. The public build runs this automatically. Generated social PNGs are build outputs, not separately checked-in source; run the generator before standalone SEO checks.
+- Workers URLs remain accessible and noindex. The production Workers redirect stays disabled until the owner explicitly authorizes it.
+
+Not completed by code alone: Search Console/Bing ownership verification, search indexing, real-user Core Web Vitals, a configured support inbox, payments/donations and ads. No subscription, ad script, payment request or tracking expansion was introduced.

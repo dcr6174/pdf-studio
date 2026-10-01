@@ -13,7 +13,7 @@ assert.ok(!html.includes('Drop your PDF here'),'home has no upload invitation');
 assert.ok(html.includes('Choose your tool')); 
 assert.ok(html.includes('Browse all 56 tools'));
 assert.equal((html.match(/class="tool-card /g)||[]).length,6,'initial popular catalogue is focused');
-assert.equal((html.match(/href="\/tools\//g)||[]).length,56,'guides are crawlable before hydration');
+assert.equal(new Set([...html.matchAll(/href="(\/tools\/[^"]+)"/g)].map(m=>m[1])).size,56,'all catalogue guides are crawlable before hydration');
 assert.ok(html.includes('href="/privacy"')&&html.includes('href="/about"'));
 assert.ok(!html.includes('app-sidebar'));
 assert.ok(html.includes('Can I edit existing PDF text?'));

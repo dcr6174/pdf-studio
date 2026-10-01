@@ -62,3 +62,290 @@ export const toolGuidance: Record<string, ToolGuidance> = {
     faq: [['Why are there no fields?', 'The PDF may be a scan or a static form without interactive fields.'], ['What does flatten mean?', 'Flattening makes field values part of the page appearance rather than editable form controls.']]
   }
 };
+
+// Individually reviewed instructions for the remaining catalogue operations.
+const additional: Record<string, [string,string,string,string]> = {
+  "bookmarks": [
+    "Enter one page number and bookmark title per line, using positions in the file.",
+    "Preview the page references, then export a PDF with a new outline.",
+    "Navigate reports or chapters without scrolling through every page.",
+    "Existing outline entries are replaced. Check bookmark destinations in a reader that displays PDF outlines."
+  ],
+  "halve": [
+    "Open the PDF and inspect whether the content is arranged in left and right halves.",
+    "Export two halves per source page and check their reading order.",
+    "Separate side-by-side scans for easier reading.",
+    "Cropping hides content outside boundaries; it is not secure removal. The result must stay within 400 pages."
+  ],
+  "viewer": [
+    "Choose the available single-page or two-column reader preference.",
+    "Export and open the PDF in your preferred reader.",
+    "Set a preferred reading layout for a document.",
+    "This sets a viewer preference, not a permanent redesign. Readers may ignore it."
+  ],
+  "remove-annotations": [
+    "Use the original single PDF before making other workspace changes.",
+    "Export the cleaned copy and inspect comments, stamps, highlights and links.",
+    "Prepare a copy without non-form annotations.",
+    "Form widgets are preserved. Graphics already flattened into page content cannot be removed as annotations."
+  ],
+  "create-form": [
+    "Enter an English label on each line, up to 60 labels of 80 characters.",
+    "Create the A4 form, fill a sample field and inspect the export.",
+    "Build a simple questionnaire with new text fields.",
+    "Creates a new form. It does not place arbitrary field types on an existing PDF."
+  ],
+  "split-all": [
+    "Review the PDF page count before splitting.",
+    "Export the ZIP and open several individual PDFs to check the page sequence.",
+    "Send individual pages as separate documents.",
+    "The result is an archive of single-page PDFs. Unzip it before opening a PDF in a reader."
+  ],
+  "rotate": [
+    "Choose a rotation angle and inspect the workspace orientation.",
+    "Export the PDF and check portrait and landscape pages.",
+    "Fix sideways pages in scanned documents.",
+    "Rotation changes display orientation. Use Organize when only selected pages should rotate."
+  ],
+  "reverse": [
+    "Confirm that reversing the entire document matches your intended order.",
+    "Export and check that the original last page is now first.",
+    "Correct scans captured backwards.",
+    "The operation reverses every page. Use Organize for a custom order instead."
+  ],
+  "duplicate": [
+    "Check the original page count and the workspace page limit.",
+    "Export and verify the order of repeated pages.",
+    "Create repeated page copies for document preparation.",
+    "Page duplication increases the page count and file size. Keep the result within 400 pages."
+  ],
+  "interleave": [
+    "Choose the PDFs you want to alternate and check their starting order.",
+    "Export and inspect transitions between each source document.",
+    "Combine separately scanned fronts and backs of pages.",
+    "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation."
+  ],
+  "nup": [
+    "Choose two or four pages per sheet.",
+    "Export and inspect small text at the intended print size.",
+    "Make a compact handout or reduce the number of printed sheets.",
+    "Multiple pages on one sheet reduce their visible size. Use Resize for one page on each A4 sheet."
+  ],
+  "crop": [
+    "Choose the margin to trim and inspect content near every edge.",
+    "Export and check that useful text is not clipped.",
+    "Reduce unwanted white borders around a document.",
+    "Crop boundaries hide content; they do not securely erase it. Use Redact for sensitive regions."
+  ],
+  "resize": [
+    "Inspect the page orientations before fitting them to A4.",
+    "Export and check margins and scaling on mixed-size pages.",
+    "Prepare a document for standard A4 printing.",
+    "Scaling may make small text harder to read. It does not reflow paragraphs."
+  ],
+  "flip": [
+    "Confirm that a horizontal mirror is what you need.",
+    "Export and check the orientation of text and artwork.",
+    "Mirror artwork or correct a mirrored page image.",
+    "Mirrored text reads backwards. This is different from rotating a sideways page."
+  ],
+  "edit": [
+    "Choose text, an image, highlight, shape or link and place it on the page.",
+    "Export and inspect each added element at normal zoom.",
+    "Annotate a document or add information to a static form.",
+    "Adds new elements over page content. Use Edit existing text for supported text-object replacements and Redact for secure removal."
+  ],
+  "watermark": [
+    "Enter the watermark text and inspect its placement.",
+    "Export and check readability on pages with different orientations.",
+    "Label copies with a visible draft or ownership notice.",
+    "A watermark is a visual label, not encryption or an access-control mechanism."
+  ],
+  "numbers": [
+    "Choose the starting number for the sequence.",
+    "Export and check that numbering does not cover source text.",
+    "Add consistent page references to a report.",
+    "Workspace page positions can differ from printed page numbers. Check the exported sequence."
+  ],
+  "bates": [
+    "Enter the prefix and starting number for your identifiers.",
+    "Export and check the first and last identifiers.",
+    "Give pages sequential reference labels.",
+    "These are visual identifiers, not proof of authenticity. Check the labeling requirements of the recipient."
+  ],
+  "headers": [
+    "Enter the header or footer label in the available controls.",
+    "Export and inspect margins on every page orientation.",
+    "Label a document with a repeating title or reference.",
+    "Labels may overlap content near page edges. Reopen the output before sharing."
+  ],
+  "flatten": [
+    "Review whether you still need selectable text, links or interactive forms.",
+    "Export the rasterized PDF and inspect text readability.",
+    "Create static image pages from a document.",
+    "This rebuilds pages as images. Searchable text, links and form interaction are lost."
+  ],
+  "metadata": [
+    "Enter the title, author or subject you want in the document properties.",
+    "Export and inspect properties in another reader.",
+    "Correct standard document information.",
+    "Metadata changes do not remove visible personal information. Use Remove metadata when you need those standard fields cleared."
+  ],
+  "jpg": [
+    "Choose a resolution suitable for screen viewing or printing.",
+    "Export the ZIP and inspect the JPG images after extracting it.",
+    "Share PDF pages in an image format.",
+    "JPG is lossy and does not contain selectable text. Higher resolution uses more memory."
+  ],
+  "png": [
+    "Choose 72, 144 or 288 DPI according to your intended use.",
+    "Export the ZIP and inspect the extracted PNG images.",
+    "Create page images without JPG compression artifacts.",
+    "PNG preserves rendered pixels, not editable PDF objects. High resolution may produce large files."
+  ],
+  "text": [
+    "Use a PDF containing selectable text; run English OCR first for a scan.",
+    "Export the TXT file and check reading order and missing sections.",
+    "Copy document text into a plain-text workflow.",
+    "Columns and positioned text may come out in an unexpected order. Images and layout are not preserved."
+  ],
+  "word": [
+    "Use a text PDF, or run OCR first when the source is a scan.",
+    "Export the DOCX and review paragraphs, numbers and reading order.",
+    "Move extracted PDF text into a Word document for further writing.",
+    "This is text conversion. Original layout, tables and embedded images are not faithfully reconstructed."
+  ],
+  "html": [
+    "Open a PDF with selectable text.",
+    "Export the HTML and review its text in a browser.",
+    "Make extracted document text readable as a webpage.",
+    "The output is text-based. Original page styling, images and interactive PDF features are not retained."
+  ],
+  "epub": [
+    "Use a PDF with readable text in a sensible reading order.",
+    "Export the EPUB and inspect several chapters in an e-reader.",
+    "Read extracted PDF text in a reflowable format.",
+    "Complex page layouts and illustrations are not preserved. Review columns and headings."
+  ],
+  "pptx": [
+    "Review the page order you want as slides.",
+    "Export the PPTX and inspect slide dimensions and readability.",
+    "Present PDF pages as slides.",
+    "Each page becomes an image. Original text and graphics are not separately editable on the slides."
+  ],
+  "xlsx": [
+    "Use a PDF with selectable text rows; run OCR first for scans.",
+    "Export the XLSX and check every column and numeric value.",
+    "Move simple text rows into a spreadsheet.",
+    "Extraction uses heuristics. It does not guarantee original tables, formulas or column alignment."
+  ],
+  "csv": [
+    "Use selectable PDF text with consistent rows.",
+    "Export the CSV and check row and column separation.",
+    "Import extracted rows into a spreadsheet or another data tool.",
+    "Review amounts, dates and delimiters. Original formulas and cell formatting are not available from PDF text."
+  ],
+  "create": [
+    "Write the text for your new document in the editor.",
+    "Create the PDF and inspect line wrapping and page breaks.",
+    "Produce a simple PDF from written text.",
+    "This creates a text document, not a full desktop publishing layout. Keep a copy of the source text."
+  ],
+  "markdown": [
+    "Enter Markdown text using supported headings and lists.",
+    "Export and inspect the rendered headings and page breaks.",
+    "Convert simple structured notes to a readable PDF.",
+    "Complex tables and embedded images are unsupported. Review the result instead of assuming every Markdown extension works."
+  ],
+  "docx": [
+    "Choose a DOCX file containing the text you want to convert.",
+    "Export and inspect paragraph order and page breaks.",
+    "Create a PDF from Word document text.",
+    "Text is reflowed. Original layout, images and complex styling are not preserved; legacy DOC files are unsupported."
+  ],
+  "sheet": [
+    "Choose an XLSX, XLS or CSV input and check which sheet contains your data.",
+    "Export and inspect the printed text rows.",
+    "Create a simple PDF view of spreadsheet rows.",
+    "Only the first sheet is converted. Charts, complex styling and original print layout are not preserved."
+  ],
+  "ebook": [
+    "Choose an EPUB containing readable book text.",
+    "Export and inspect the reading order and page breaks.",
+    "Make a text-based PDF copy of an EPUB.",
+    "Illustrations and ebook styling are not preserved. Unsupported or protected EPUB files may fail."
+  ],
+  "grayscale": [
+    "Review whether your content relies on color distinctions.",
+    "Export and inspect graphs, highlights and small text.",
+    "Create a black-and-white page appearance.",
+    "Pages are rebuilt as images; text search, links and forms are lost. Similar colors can become hard to distinguish."
+  ],
+  "invert": [
+    "Review the source pages before changing their colors.",
+    "Export and inspect photographs, diagrams and text contrast.",
+    "Create an inverted page appearance for a specific document.",
+    "This modifies the document, unlike the website dark theme. Rasterization removes text search, links and forms."
+  ],
+  "audio": [
+    "Open a PDF with selectable text and choose an available browser voice.",
+    "Start playback and use the available stop controls when needed.",
+    "Listen to extracted text while reviewing a document.",
+    "There is no audio-file export. Network behavior and offline availability depend on the selected browser voice."
+  ],
+  "compare": [
+    "Choose two PDFs and inspect corresponding pages side by side.",
+    "Review differences visually, including dates, numbers and missing pages.",
+    "Compare versions of a document.",
+    "This is a comparison workspace, not guaranteed automatic semantic or legal difference detection."
+  ],
+  "encrypt": [
+    "Choose an opening password of at least eight characters.",
+    "Export the encrypted PDF and reopen it using that password.",
+    "Require an opening password for a copy of your document.",
+    "Keep the password safely and share it separately. There is no password recovery service."
+  ],
+  "decrypt": [
+    "Choose the protected PDF and enter a password you know.",
+    "Export the unlocked copy and confirm it opens without prompting.",
+    "Remove an opening password from a document you are authorized to use.",
+    "The correct password is required. This does not bypass unknown passwords or access permissions."
+  ],
+  "privacy": [
+    "Open a PDF with readable text and review the metadata and pattern findings.",
+    "Inspect each finding against the original document before deciding what to remove.",
+    "Check common patterns and standard document properties before sharing.",
+    "Pattern matching can miss sensitive information and flag harmless text. It is not a complete security audit."
+  ],
+  "clean": [
+    "Review which standard document properties need clearing.",
+    "Export and check title, author, subject and other standard properties.",
+    "Remove standard identifying metadata.",
+    "This is not complete sanitization of attachments, hidden objects or visible personal details."
+  ],
+  "hash": [
+    "Choose the PDF whose exact bytes you want to identify.",
+    "Calculate the SHA-256 value and copy it for comparison.",
+    "Check whether two file copies have identical bytes.",
+    "Any byte change alters the hash. A matching hash does not identify the author or verify a digital signature."
+  ],
+  "zip": [
+    "Choose the PDF files to include in one archive.",
+    "Download the ZIP and check that all intended files are present.",
+    "Package several PDFs for a single download.",
+    "ZIP packaging does not merge pages into a PDF or necessarily reduce the size of already compressed files."
+  ],
+  "repair": [
+    "Choose a PDF that can still be parsed by the browser engine.",
+    "Export the rebuilt copy and check all pages in an independent reader.",
+    "Resave a readable PDF structure as a new file.",
+    "Severely damaged documents may not be recoverable. Successful parsing is not a guarantee that all original content survives."
+  ]
+};
+for (const [id, [configure, finish, useCase, checks]] of Object.entries(additional)) {
+  toolGuidance[id] = {
+    steps: [(['create','markdown','create-form'].includes(id) ? 'Enter the content for your new document.' : 'Choose the supported source file or files from your device.'), configure, finish],
+    useCase, checks,
+    faq: [['What is this tool useful for?', useCase], ['What should I check in the result?', checks]]
+  };
+}

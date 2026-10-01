@@ -15,10 +15,11 @@
     "verify": "node checks/verify-engine.mjs",
     "verify:analytics": "node checks/verify-analytics.mjs && node checks/verify-tracker.mjs",
     "verify:studio": "node checks/verify-studio.mjs",
-    "build:public": "node scripts/prepare-pdf-assets.mjs && vite build --config vite.public.config.ts",
+    "build:public": "node scripts/prepare-pdf-assets.mjs && node scripts/generate-site-assets.mjs && vite build --config vite.public.config.ts",
     "deploy:public": "node scripts/deploy-public.mjs",
     "verify:public": "node checks/verify-public-owner.mjs",
-    "postinstall": "node scripts/prepare-pdf-assets.mjs"
+    "postinstall": "node scripts/prepare-pdf-assets.mjs",
+    "generate:site-assets": "node scripts/generate-site-assets.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

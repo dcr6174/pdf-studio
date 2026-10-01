@@ -1,0 +1,9 @@
+'use client';
+import {useState} from 'react';
+import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
+export function ReportProblem({tool}:{tool:string}){
+ const [open,setOpen]=useState(false),[description,setDescription]=useState(''),[status,setStatus]=useState('');
+ const report=()=>`PDF Studio problem report\nTool: ${tool}\n\nSteps to reproduce:\n${description}\n\nExpected result:\n\nActual result:\n\nNo document, filename, password or signature is included automatically.\n`;
+ const download=()=>{const url=URL.createObjectURL(new Blob([report()],{type:'text/plain'}));const a=document.createElement('a');a.href=url;a.download='pdf-studio-problem-report.txt';a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);setStatus('Report downloaded. Nothing was submitted.');};
+ return <><button className="secondary" onClick={()=>{setOpen(true);setStatus('');}}>Report a problem</button><Dialog open={open} onOpenChange={setOpen}><DialogContent><DialogTitle>Create a problem report</DialogTitle><DialogDescription>Describe what happened using a non-sensitive example. Do not include document text, personal details, passwords or signature images. This creates a local report for you to share; it does not upload or submit anything.</DialogDescription><label className="field"><span>Steps to reproduce</span><textarea rows={5} maxLength={4000} value={description} onChange={e=>setDescription(e.target.value)} placeholder="1. Open the tool… 2. Choose the option…"/></label><div className="row"><button className="primary" onClick={download}>Download report</button><button className="secondary" onClick={async()=>{try{await navigator.clipboard.writeText(report());setStatus('Report copied. Nothing was submitted.');}catch{setStatus('Clipboard unavailable. Download the report instead.');}}}>Copy report</button></div><p role="status">{status}</p></DialogContent></Dialog></>;
+}

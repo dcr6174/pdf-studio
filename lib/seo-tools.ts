@@ -181,7 +181,8 @@ const curatedById = new Map<string, (typeof curatedTools)[number]>(curatedTools.
 export const seoTools = tools.map(tool => {
   const curated = curatedById.get(tool.id);
   if (curated) return { ...curated, group: tool.group };
-  const slug = tool.name
+  const stableSlugs:Record<string,string>={viewer:"reader-layout",interleave:"alternate-and-mix",hash:"file-fingerprint",repair:"resave-pdf"};
+  const slug = stableSlugs[tool.id] ?? tool.name
     .toLowerCase()
     .replace(/&/g, 'and')
     .replace(/[^a-z0-9]+/g, '-')
@@ -196,3 +197,14 @@ export const seoTools = tools.map(tool => {
     group: tool.group,
   };
 });
+
+/** Keyword pages reuse real tools; no unsupported conversion is advertised. */
+const keywordPages = [
+ {slug:'jpg-to-pdf',id:'images',title:'JPG to PDF',heading:'Combine JPG photos into a PDF',intro:'Choose JPG photos, review their orientation and arrange them into one PDF.',detail:'Useful for photographed receipts or notes. The same workspace also accepts PNG and WebP; image conversion does not recognize text.'},
+ {slug:'png-to-pdf',id:'images',title:'PNG to PDF',heading:'Create a PDF from PNG images',intro:'Choose PNG screenshots or scans and arrange them into a PDF document.',detail:'PNG inputs must be below 22 megapixels each. Inspect transparency and margins in the exported page; searchable text requires a separate OCR step.'},
+ {slug:'pdf-to-excel',id:'xlsx',title:'PDF to Excel',heading:'Extract PDF text rows into an Excel spreadsheet',intro:'Convert selectable PDF text rows to XLSX, then review column alignment in Excel.',detail:'This is heuristic text extraction. Original tables, formulas, images and formatting are not faithfully reconstructed. Scans need OCR first.'},
+ {slug:'delete-pdf-pages',id:'organize',title:'Delete PDF pages',heading:'Remove unwanted pages from your PDF',intro:'Preview thumbnails, delete whole pages and export the remaining document.',detail:'Check the final page count and order. Deleting whole pages is different from redacting sensitive regions within a retained page.'},
+ {slug:'extract-pdf-pages',id:'split',title:'Extract PDF pages',heading:'Save selected pages as a new PDF',intro:'Choose page positions or ranges and export only the pages you need.',detail:'Use file positions, such as 1, 3–5, rather than printed page labels. Reopen the exported selection before sending it.'},
+ {slug:'pdf-editor',id:'edit',title:'Online PDF editor',heading:'Add text, images and annotations online',intro:'Annotate a PDF with new text, images, shapes, highlights and links in your browser.',detail:'This tool adds overlays. To replace supported original text objects, choose Edit existing text. A shape over sensitive text is not genuine redaction.'},
+].map(page=>({...page,group:tools.find(tool=>tool.id===page.id)!.group}));
+export const seoPages=[...seoTools,...keywordPages];

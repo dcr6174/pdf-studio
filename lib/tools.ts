@@ -3,7 +3,7 @@ export type Tool = {id:string;name:string;description:string;group:string;icon:s
 export const tools:Tool[] = [
 ['bookmarks','Add bookmarks','Create a clickable document outline.','Pages','book','One bookmark per line: page number followed by its title. Replaces the exported outline.'],
 ['halve','Split pages in half','Separate left and right halves of each page.','Pages','scissors','Uses CropBox boundaries; content outside each visible half is hidden, not securely removed. Rotations are retained.'],
-['viewer','Reader layout','Choose single-page or two-column viewing.','Pages','book','Sets a PDF viewer preference. Some readers ignore it.'],
+['viewer','Reading layout preference','Choose single-page or two-column viewing.','Pages','book','Sets a PDF viewer preference. Some readers ignore it.'],
 ['remove-annotations','Remove annotations','Remove comments, highlights, links and stamps.','Privacy','shield','Works on the original single PDF; preserves form widgets. Export other workspace changes first.'],
 ['create-form','Create fillable form','Turn field labels into a new fillable PDF.','Edit & sign','edit','Creates English text fields on new A4 pages. This does not add arbitrary field types to an existing PDF.'],
 ['merge','Merge PDFs','Bring your documents together.','Pages','merge'],
@@ -14,7 +14,7 @@ export const tools:Tool[] = [
 ['rotate','Rotate PDF','Turn pages in the right direction.','Pages','rotate'],
 ['reverse','Reverse pages','Last page first. Simple.','Pages','reverse'],
 ['duplicate','Duplicate pages','Make a second copy of every page.','Pages','copy'],
-['interleave','Alternate & mix','Weave pages from multiple PDFs.','Pages','merge'],
+['interleave','Interleave pages','Weave pages from multiple PDFs.','Pages','merge'],
 ['nup','Pages per sheet','Fit 2 or 4 pages on one sheet.','Pages','grid'],
 ['crop','Crop margins','Trim the edges of your pages.','Pages','crop','Cropping hides content outside the page boundary; it does not permanently remove it.'],
 ['resize','Resize to A4','Fit every page onto an A4 sheet.','Pages','crop'],
@@ -54,9 +54,9 @@ export const tools:Tool[] = [
 ['decrypt','Remove password','Unlock with a password you know.','Privacy','unlock'],
 ['privacy','Privacy scanner','Inspect metadata and text patterns.','Privacy','shield','Pattern matching can miss sensitive data or flag harmless text. Review the document before sharing.'],
 ['clean','Remove metadata','Clear standard document properties.','Privacy','shield','Clears standard title, author, subject, keywords, producer and dates. It is not a complete sanitization of every hidden object.'],
-['hash','File fingerprint','Calculate a SHA-256 file hash.','Privacy','hash'],
+['hash','Calculate file hash','Calculate a SHA-256 file hash.','Privacy','hash'],
 ['zip','Bundle PDFs','Put your PDF files in a ZIP.','Pages','layers'],
-['repair','Resave PDF','Rebuild a readable PDF structure.','Privacy','file','Can resave PDFs that parse successfully. Severely damaged PDFs may not be recoverable.'],
+['repair','Repair readable PDF','Rebuild a readable PDF structure.','Privacy','file','Can resave PDFs that parse successfully. Severely damaged PDFs may not be recoverable.'],
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
 export function accepted(id:string){return id==='images'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
 export function isMulti(id:string){return ['merge','organize','interleave','images','compare','zip'].includes(id);}

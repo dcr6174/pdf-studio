@@ -89,3 +89,13 @@ Final image-budget check passes; final TypeScript, 48 processing cases/32 checks
 
 ## Tool-first centered layout correction
 Removed homepage upload invitation and file picker; homepage drops instruct users to choose a tool. Empty tool headings and upload cards are centered; document content has a centered maximum width. Page grids now reserve room for four contained action cells; narrow action rows wrap. Homepage SSR verifies no upload invitation/button, and all 56 embedded-tool page checks, TypeScript and public production build pass. Real browser viewport/hover/mobile visual checks remain unverified in this environment.
+
+## Combined SEO/discovery batch — 1 October 2026
+
+Validated 62 server-rendered landing pages for 56 real tools: one task H1, real workspace/file picker, per-page canonical, visible breadcrumb, three visible instructions and five FAQs matching the JSON-LD graph. Validated 1200×630 PNG social cards and large-image metadata, stable pre-rename guide URLs, six supported keyword pages, related-workflow links, private-path sitemap exclusions and no advertised unsupported HTML/PowerPoint-to-PDF conversion.
+
+Homepage SSR confirms six popular cards, no upload invitation, all catalogue URLs, limits and honest offline copy. Navigation/PWA checks retain 56 unique icon-bearing menu links and existing install detection contracts. The owner-boundary suite confirms production Workers requests do not redirect and retain noindex. Two consecutive asset generations preserve the content/date state exactly. TypeScript and production build pass.
+
+Visual review of the existing-text social card confirms readable placement and consistent logo. Local browser preview is blocked by the cloud browser (`ERR_BLOCKED_BY_CLIENT`); real mobile layout, dark theme interaction/contrast, clipboard/download report behavior, menu hover/touch and keyboard event integration remain unverified. These are not WCAG certification or real-user Core Web Vitals results.
+
+Reports are local templates with no support submission destination. Appearance settings are local. No ads, subscriptions, donation destinations, payments or new document telemetry were enabled. Search Console ownership and external search indexing are not verified.

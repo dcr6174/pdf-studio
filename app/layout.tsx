@@ -10,8 +10,8 @@ export const metadata: Metadata = {
   description: "Edit supported PDF text, merge, split, compress and sign PDFs for free. A private browser workspace without accounts, file uploads or added watermarks.",
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
-  openGraph: { type: "website", siteName: "PDF Studio", locale: "en_IN", url: "https://pdf-studio.in", title: "PDF Studio — Free PDF Tools Online", description: "Free PDF tools with on-device document processing.", images: [{ url: "/brand/pdf-studio-logo-v4.png", alt: "PDF Studio logo" }] },
-  twitter: { card: "summary", title: "PDF Studio — Free PDF Tools Online", description: "Merge, split, compress and sign PDFs in your browser.", images: ["/brand/pdf-studio-logo-v4.png"] },
+  openGraph: { type: "website", siteName: "PDF Studio", locale: "en_IN", url: "https://pdf-studio.in", title: "PDF Studio — Free PDF Tools Online", description: "Free PDF tools with on-device document processing.", images: [{ url: "/social/home.png", width:1200, height:630, alt: "PDF Studio — Free online PDF tools" }] },
+  twitter: { card: "summary_large_image", title: "PDF Studio — Free PDF Tools Online", description: "Merge, split, compress and sign PDFs in your browser.", images: ["/social/home.png"] },
   icons: { apple: "/brand/apple-touch-v4.png", icon: "/brand/pdf-studio-favicon-v4.svg", shortcut: "/brand/pdf-studio-logo-v4.png" },
 };
 
