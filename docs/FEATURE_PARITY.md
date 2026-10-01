@@ -173,4 +173,6 @@ Real mobile interactions, uploads on actual devices, real large documents, Offic
 
 SEO reference: [Google Search Central starter guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide). Submit the deployed sitemap in Search Console and verify canonical pages and indexing after Cloudflare succeeds; deployment and ranking are separate from a passing local build.
 
-Release validation: new PDF-object checks, signature raster checks, 56 server-rendered SEO guide checks, existing 18-check engine suite, existing 48-tool/32-check studio suite, existing-text WASM checks, TypeScript and production build passed. The local HTTP preview could not start because Wrangler encountered an OS network-interface error; real browser/mobile UI behavior and Cloudflare rollout remain unverified.
+Release validation: new PDF-object checks, signature raster checks, 21 server-rendered SEO guide checks, existing 18-check engine suite, existing 48-tool/32-check studio suite, existing-text WASM checks, TypeScript and production build passed. The local HTTP preview could not start because Wrangler encountered an OS network-interface error; real browser/mobile UI behavior and Cloudflare rollout remain unverified.
+
+Latest audit integration: all 56 tools now have landing pages with an embedded workspace. Earlier validation counts above describe their original release; see AUDIT-2026-10-01.md and VALIDATION.md for the current scope.

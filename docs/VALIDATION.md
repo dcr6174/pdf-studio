@@ -53,8 +53,8 @@ Concurrent update reconciliation: preserved the independently added compact comp
 ## 1 October 2026 homepage/text refresh
 
 - Production build and TypeScript passed.
-- Homepage server-render check passed: one H1, six popular tools, clear limits, 56 crawlable guide links, FAQ and complete 56-tool README table.
-- SEO guide checks passed for all 56 routes.
+- Homepage server-render check passed: one H1, six popular tools, clear limits, 21 crawlable guide links, FAQ and complete 56-tool README table.
+- SEO guide checks passed for all 21 routes.
 - PDFium tests passed: edit/save/reopen, real changed raster, preservation of other text, bounds at all four rotations, longer replacements fitted to the original area, excessive-shrink rejection/rollback, glyph restrictions, blank and malformed input.
 - Studio regressions passed: 48 processing tools and 32 correctness/geometry/boundary/cancellation/history checks. OCR and UI/device checks excluded.
 - Browser preview verification blocked: cloud browser rejected local URL with `ERR_BLOCKED_BY_CLIENT`. Visual, mobile, drag/drop and dirty-state interaction checks remain unverified.
@@ -81,3 +81,8 @@ Connected the P stem and bowl, shortened the stem, regularized the counter and i
 Every one of the 56 tool links now includes a meaningful Lucide icon in a colored category tile. Icons are decorative to screen readers; the existing visible tool names remain accessible link labels. Pages, Edit & Sign, Convert and Privacy use lavender, peach, mint and blue respectively. Touch rows retain comfortable spacing.
 
 Passed navigation/icon coverage, homepage SSR, TypeScript and the production build. Actual browser hover/touch behavior and deployed appearance remain unverified because local cloud-browser preview was blocked.
+
+## October 1 audit (local, not deployed)
+See AUDIT-2026-10-01.md. Retested 48 processing cases and 32 additional checks after updating SheetJS to upstream 0.20.3. Existing-text, signatures, extra operations, analytics and owner suites pass. All 56 landing pages now render their actual workspace. Source-level work guards, keyboard discovery, native-install relevance, lazy processing loading and preferred-host/private-indexing changes are included. Browser/device testing is still blocked by live 502 responses in this environment.
+
+Final image-budget check passes; final TypeScript, 48 processing cases/32 checks, homepage/56 embedded tool SSR checks and production build pass after the image guard change.
