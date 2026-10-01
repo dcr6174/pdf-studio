@@ -180,7 +180,7 @@ Homepage has no file-upload area; visitors choose a task before opening files. E
 - Homepage remains tool-first, with no upload target until a tool is selected. Its headline now explicitly identifies free PDF tools.
 - All 56 tool landing pages include visible breadcrumbs and truthful free WebApplication structured data. No ratings or rich-result promises are included.
 - Merge, split, compress, existing-text editing, signing, images to PDF, organize, OCR, redaction and form filling have task-specific instructions, use cases, output checks and common questions. The remaining guides retain their baseline instructions and need further editorial work.
-- Public GET/HEAD pages on `pdf-studio.dcr6174.workers.dev` redirect to the same path/query on `https://pdf-studio.in`. API requests and owner authentication are not redirected; Workers responses are marked noindex. Other preview hosts remain usable and noindex.
+- The production URL `pdf-studio.dcr6174.workers.dev` remains accessible without redirecting to `pdf-studio.in`, per the owner's request. Do not enable that redirect until the owner explicitly asks. Workers responses remain noindex; other preview hosts remain usable and noindex.
 - Installation does not imply offline support: no service worker currently provides reliable offline operation. Search Console ownership, indexing, real-user performance and deployed redirect behavior still require external verification.
 
 Verify with `node checks/verify-seo.mjs`, `npm run verify:public`, `npx tsc --noEmit` and `npm run build:public`.
