@@ -16,7 +16,7 @@ Free online PDF tools in a shared document workspace. Core tools require no acco
 - **Signatures:** type a name or upload PNG/JPG/WebP with visible previews; optional drawing. Place, resize and export a visual signature.
 - **Clear settings:** explicit choices and labeled actions replace theme, batch and analytics switches. Actual form and page-selection checkboxes remain.
 - **Page and form tools:** insert blank pages, create bookmarks, split page halves, set reader layout, create new fillable text forms and remove annotations while preserving form widgets.
-- **SEO:** descriptive homepage content, visible FAQ, crawlable guide links, 21 unique tool guides with metadata/canonicals/breadcrumbs, sitemap, privacy and about pages. No ranking guarantees.
+- **SEO:** descriptive homepage content, visible FAQ, crawlable guide links, 56 unique tool guides with metadata/canonicals/breadcrumbs, sitemap, privacy and about pages. No ranking guarantees.
 
 ## All available tools
 

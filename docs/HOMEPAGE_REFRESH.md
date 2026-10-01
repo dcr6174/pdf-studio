@@ -21,7 +21,7 @@ Google recommends crawlable anchor links and server rendering/pre-rendering wher
 - https://developers.google.com/search/docs/crawling-indexing/links-crawlable
 - https://developers.google.com/search/docs/crawling-indexing/javascript/javascript-seo-basics
 
-The initial homepage HTML contains a single H1, supported PDF task descriptions, upload limits, visible FAQs and 21 real guide links. Existing guide routes have individual canonical metadata, descriptions and breadcrumb structured data. The homepage description now mentions supported existing-text editing. We do not claim ranking results or invent FAQ/rating rich-result eligibility.
+The initial homepage HTML contains a single H1, supported PDF task descriptions, upload limits, visible FAQs and 56 real guide links. Existing guide routes have individual canonical metadata, descriptions and breadcrumb structured data. The homepage description now mentions supported existing-text editing. We do not claim ranking results or invent FAQ/rating rich-result eligibility.
 
 ## Text-editor behavior
 
