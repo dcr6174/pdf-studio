@@ -69,3 +69,7 @@ Install actions are suppressed until initial detection is complete, inside stand
 New SVG/PNG branding is shared across the public UI, owner dashboard, guides, metadata, README and PWA manifest. Versioned asset names avoid stale logo cache keys. App identity and start URL stay unchanged. PNGs include normal 192/512px, maskable 512px and Apple 180px icons.
 
 verify-navigation-install checks unique menu links, category/disclosure markup, busy-state links, same-PWA identity detection, storage remembrance/reset/failure, manifest self-relationship, actual PNG dimensions and consistent logo references. Real hover, touch, installation/uninstallation and OS icon refresh remain unverified; the earlier cloud-browser local-preview block still applies.
+
+## Folded P identity refinement
+
+Replaced the document/check badge with an original folded P mark in two flat colors: indigo #2923b9 and teal #12bfb9. SVG is the production source, with raster exports for PWA, Apple and social consumers. Version 3 asset paths replace version 2 references; application identity is unchanged. The generated brand presentation is a visual concept, while production assets are clean SVG paths with transparent backgrounds and no textures/shadows.
