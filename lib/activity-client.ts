@@ -38,9 +38,10 @@ function start(){
 }
 export function useActivityTracking(view:string){
  const [disabled,setDisabled]=useState(false),[privacyBlocked,setPrivacyBlocked]=useState(false);
- useEffect(()=>{setDisabled(storageGet(localStorage,disabledKey)==='1');setPrivacyBlocked(privacySignal());const changed=(e:StorageEvent)=>{if(e.key===disabledKey)setDisabled(e.newValue==='1');};window.addEventListener('storage',changed);return()=>window.removeEventListener('storage',changed);},[]);
+ useEffect(()=>{let alive=true;queueMicrotask(()=>{if(alive){setDisabled(storageGet(localStorage,disabledKey)==='1');setPrivacyBlocked(privacySignal());}});const changed=(e:StorageEvent)=>{if(e.key===disabledKey)setDisabled(e.newValue==='1');};window.addEventListener('storage',changed);return()=>{alive=false;window.removeEventListener('storage',changed);};},[]);
  useEffect(()=>{if(disabled||privacyBlocked)return;return start();},[disabled,privacyBlocked]);
  useEffect(()=>{toolId=validTools.has(view)?view:null;if(toolId)trackActivity('tool_open',toolId);},[view,disabled,privacyBlocked]);
  function setEnabled(enabled:boolean){storageSet(localStorage,disabledKey,enabled?'0':'1');setDisabled(!enabled);if(!enabled){active=false;queue=[];persist();}}
  return {enabled:!disabled&&!privacyBlocked,privacyBlocked,setEnabled};
 }
+

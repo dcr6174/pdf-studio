@@ -6,16 +6,17 @@ export type DocumentState={files:Loaded[];pages:PageItem[];marks:Mark[]};
 const empty=():DocumentState=>({files:[],pages:[],marks:[]});
 export function useWorkspace(){
   const history=useRef(new WorkspaceHistory(empty()));
-  const [state,render]=useState(history.current.current);
+  const [snapshot,render]=useState(()=>({state:empty(),canUndo:false,canRedo:false}));
+  const publish=()=>render({state:history.current.current,canUndo:history.current.past.length>0,canRedo:history.current.future.length>0});
   function change<K extends keyof DocumentState>(key:K,next:SetStateAction<DocumentState[K]>){
     const previous=history.current.current;
     const value=typeof next==='function'?(next as (v:DocumentState[K])=>DocumentState[K])(previous[key]):next;
-    history.current.set({...previous,[key]:value},key);render(history.current.current);
+    history.current.set({...previous,[key]:value},key);publish();
   }
-  return {...state,setFiles:(v:SetStateAction<Loaded[]>)=>change('files',v),setPages:(v:SetStateAction<PageItem[]>)=>change('pages',v),setMarks:(v:SetStateAction<Mark[]>)=>change('marks',v),
-    undo:()=>render(history.current.undo()),redo:()=>render(history.current.redo()),canUndo:history.current.past.length>0,canRedo:history.current.future.length>0,
-    replace:(v:DocumentState)=>{history.current.set(v);render(v);},
-    clear:()=>{history.current.reset(empty());render(history.current.current);}};
+  return {...snapshot.state,getFiles:()=>history.current.current.files,setFiles:(v:SetStateAction<Loaded[]>)=>change('files',v),setPages:(v:SetStateAction<PageItem[]>)=>change('pages',v),setMarks:(v:SetStateAction<Mark[]>)=>change('marks',v),
+    undo:()=>{history.current.undo();publish();},redo:()=>{history.current.redo();publish();},canUndo:snapshot.canUndo,canRedo:snapshot.canRedo,
+    replace:(v:DocumentState)=>{history.current.set(v);publish();},
+    clear:()=>{history.current.reset(empty());publish();}};
 }
 // Explicit save only. No credentials or tool options are persisted.
 export async function draft(action:'get'|'save'|'delete',state?:DocumentState):Promise<DocumentState|undefined>{
@@ -27,3 +28,4 @@ export async function draft(action:'get'|'save'|'delete',state?:DocumentState):P
     tx.oncomplete=()=>resolve(value);tx.onerror=tx.onabort=()=>reject(tx.error);
   });}finally{db.close();}
 }
+

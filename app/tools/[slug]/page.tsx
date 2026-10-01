@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import Studio from '@/app/page';
@@ -30,17 +31,17 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
  ]};
  return <div className="seo-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
-  <nav className="tool-breadcrumbs" aria-label="Breadcrumb"><a href="/">PDF Studio</a><span aria-hidden="true"> / </span><span aria-current="page">{t.title}</span></nav>
+  <nav className="tool-breadcrumbs" aria-label="Breadcrumb"><Link href="/">PDF Studio</Link><span aria-hidden="true"> / </span><span aria-current="page">{t.title}</span></nav>
   <Studio initialTool={t.id}/>
   <section className="tool-instructions">
-   <h2>{t.heading}</h2><p>{t.intro}</p><a className="primary" href="#studio-content">Go to {t.title}</a>
+   <h2>{t.heading}</h2><p>{t.intro}</p><Link className="primary" href="#studio-content">Go to {t.title}</Link>
    <h2>How it works</h2><ol>{guidance.steps.map(step=><li key={step}>{step}</li>)}</ol><p>{t.detail}</p>
    <h2>When to use this tool</h2><p>{guidance.useCase}</p>
    <h2>What to check before sharing</h2><p>{guidance.checks}</p>
    <h2>Supported inputs and limitations</h2><p>Inputs: {formats}.</p><p>{tool.note??tool.description}</p><p>Technical cap: {limits}. Performance depends on your device. Download important work before closing the browser; local storage is not a backup.</p>
    <h2>Troubleshooting</h2><p>{guidance.checks} If the source cannot open, check it in another reader. Use Remove password only with a password you know. For scans needing selectable text, run English OCR and inspect the recognition result.</p>
    <h2>Common questions</h2>{faq.map(([question,answer])=><details key={question}><summary>{question}</summary><p>{answer}</p></details>)}
-   <h2>Choose a related workflow</h2><nav aria-label="Related PDF tools">{[...seoPages.filter(x=>x.id===t.id&&x.slug!==t.slug),...seoTools.filter(x=>x.id!==t.id&&x.group===tool.group)].slice(0,5).map(x=><a key={x.slug} href={'/tools/'+x.slug}><b>{x.title}</b><span>{x.intro}</span></a>)}</nav>
+   <h2>Choose a related workflow</h2><nav aria-label="Related PDF tools">{[...seoPages.filter(x=>x.id===t.id&&x.slug!==t.slug),...seoTools.filter(x=>x.id!==t.id&&x.group===tool.group)].slice(0,5).map(x=><Link key={x.slug} href={'/tools/'+x.slug}><b>{x.title}</b><span>{x.intro}</span></Link>)}</nav>
   </section>
  </div>;
 }
