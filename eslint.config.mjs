@@ -12,6 +12,12 @@ const eslintConfig = defineConfig([
     "out/**",
     "build/**",
     "next-env.d.ts",
+    "dist/**",
+    ".*-check/**",
+    ".wrangler/**",
+    "work/**",
+    "public/pdf.worker.min.mjs",
+    "public/vendor/**",
   ]),
   {
     files: ["components/ui/**/*.{ts,tsx}", "hooks/use-mobile.ts"],
@@ -26,3 +32,4 @@ const eslintConfig = defineConfig([
 ]);
 
 export default eslintConfig;
+

@@ -190,11 +190,17 @@ Generate assets with `npm run generate:site-assets`, then verify with `node chec
 - 56 functional tools now have individually written configuration instructions, use cases and output checks. Each of the 62 landing pages contains three visible steps and five FAQs, with matching WebApplication, BreadcrumbList, HowTo and FAQPage schema. This does not promise Google rich results or rankings.
 - Added real workspace pages for JPG to PDF, PNG to PDF, PDF to Excel, deleting pages, extracting pages and the online PDF editor. PDF-to-Excel remains heuristic text extraction; the online annotation editor is distinct from existing-text editing. No unsupported PowerPoint-to-PDF or HTML-to-PDF conversion is advertised.
 - Renamed Interleave pages, Reading layout preference, Calculate file hash and Repair readable PDF while preserving the existing guide URLs and engine IDs.
-- The homepage keeps six popular tools, adds category cards with counts, groups all 56 guides with descriptions, and explains free processing, offline limitations and actual limits. It has no upload target.
-- Light, dark and device-setting appearance choices use a labeled select, stored locally. The PDF page canvas retains its document colors.
+- The homepage keeps six popular tools, shows category filter pills with counts, groups all 56 guides with descriptions, and explains free processing, offline limitations and actual limits. It has no upload target.
+- A single light/dark button in the header follows the device setting until you pick a side, then remembers your choice locally. The PDF page canvas retains its document colors.
 - Report a problem creates a copyable/downloadable local text template. It submits nothing and includes no document bytes, filenames, passwords or signatures automatically. A public support intake destination has not been configured.
 - All landing pages and the homepage have generated 1200×630 PNG social cards using the existing logo and large-image Twitter metadata.
 - `npm run generate:site-assets` regenerates social cards and the sitemap from the registry. Tracked content fingerprints preserve lastmod dates on unchanged rebuilds. The public build runs this automatically. Generated social PNGs are build outputs, not separately checked-in source; run the generator before standalone SEO checks.
 - Workers URLs remain accessible and noindex. The production Workers redirect stays disabled until the owner explicitly authorizes it.
 
 Not completed by code alone: Search Console/Bing ownership verification, search indexing, real-user Core Web Vitals, a configured support inbox, payments/donations and ads. No subscription, ad script, payment request or tracking expansion was introduced.
+
+### UI consistency patch verification
+
+Integrated the supplied UI patch: one theme button, one install control in the header, counted category filters, a collapsed crawlable guide directory, shared static-page header, and aligned footer actions. Privacy settings remain available. Theme initialization follows the device even if storage is blocked; a manual choice remains active for the current session in that case. SEO pages and PDF capabilities are preserved.
+
+Validation for the UI patch: TypeScript, homepage SSR, navigation/install contracts, 62 SEO guides, owner-access rules, theme initialization tests and production build pass. Focused lint of new UI components has no errors; full source lint still reports 28 errors and 31 warnings in existing code. Phone/desktop visuals, actual first paint and browser theme-button events remain unverified here.

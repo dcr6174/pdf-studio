@@ -1,3 +1,4 @@
+import {themeBootstrapScript} from '@/lib/theme-policy';
 import type { Metadata } from "next";
 import "./globals.css";
 import "./studio-brand.css";
@@ -21,7 +22,8 @@ export default function RootLayout({
   children: React.ReactNode;
 }>) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head><script dangerouslySetInnerHTML={{__html:themeBootstrapScript}}/></head>
       <body className="antialiased"><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({"@context":"https://schema.org","@type":"WebSite",name:"PDF Studio",url:"https://pdf-studio.in/",description:"Free PDF tools with on-device document processing",inLanguage:"en"})}}/>{children}</body>
     </html>
   );
