@@ -1,6 +1,6 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
-import {processPDF,type Loaded,type PageItem,type Mark,type Output} from '@/lib/pdf-engine';
+import {processPDF,type Loaded,type PageItem,type Mark,type Output} from '@/lib/pdf-client';
 import {OnlineTextDocument,textEngine,type TextObject} from '@/lib/online-text-engine';
 import {ChevronLeft,ChevronRight,Undo2,Redo2,Download,Check,Search} from 'lucide-react';
 

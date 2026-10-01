@@ -1,4 +1,6 @@
-export const seoTools = [
+import { tools } from './tools';
+
+const curatedTools = [
   {
     "slug": "merge-pdf",
     "id": "merge",
@@ -168,3 +170,29 @@ export const seoTools = [
     "detail": "This is not complete sanitization of every hidden object, attachment or visible personal detail. Inspect the document before sharing."
   }
 ] as const;
+
+const curatedById = new Map<string, (typeof curatedTools)[number]>(curatedTools.map(tool => [tool.id, tool]));
+
+/**
+ * Keep the hand-written pages above, but never let a catalogue tool become an
+ * orphan with no crawlable, shareable guide URL. New catalogue entries get an
+ * honest baseline guide until their copy is expanded.
+ */
+export const seoTools = tools.map(tool => {
+  const curated = curatedById.get(tool.id);
+  if (curated) return { ...curated, group: tool.group };
+  const slug = tool.name
+    .toLowerCase()
+    .replace(/&/g, 'and')
+    .replace(/[^a-z0-9]+/g, '-')
+    .replace(/^-|-$/g, '');
+  return {
+    slug,
+    id: tool.id,
+    title: tool.name,
+    heading: tool.description.replace(/\.$/, ''),
+    intro: `${tool.description} Configure the available options, inspect the result and download it from your browser.`,
+    detail: tool.note ?? `This tool performs ${tool.name.toLowerCase()} in the shared PDF Studio workspace. Inspect the exported result before using it.`,
+    group: tool.group,
+  };
+});

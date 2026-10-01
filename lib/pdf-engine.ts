@@ -112,13 +112,21 @@ export async function loadFile(file: File, password?: string): Promise<Loaded> {
     let doc:PDFDocument;try{doc=await PDFDocument.load(bytes,{updateMetadata:false});}catch(e){if(String(e).toLowerCase().includes('encrypt'))throw new Error('This PDF is password protected. Use Remove password with a password you know, then continue editing.');throw new Error('This PDF could not be read. It may be damaged. Try a readable copy or another PDF reader.');}
     return { ...base, doc, pages: doc.getPageCount() };
 } if (/\.(png|jpe?g|webp)$/i.test(file.name)) {
+    // PNG dimensions can be checked before decoding; all formats are checked before canvas allocation.
+    const maxPixels=22000000;
+    if(bytes.length>=24&&bytes[0]===137&&bytes[1]===80&&bytes[2]===78&&bytes[3]===71){
+        const dimensions=new DataView(bytes.buffer,bytes.byteOffset+16,8);
+        if(dimensions.getUint32(0)*dimensions.getUint32(4)>maxPixels)throw new Error('Choose an image below 22 megapixels. Resize it before opening.');
+    }
     const b = await createImageBitmap(file);
-    const c = document.createElement('canvas');
-    c.width = b.width;
-    c.height = b.height;
-    c.getContext('2d')!.drawImage(b, 0, 0);
-    b.close();
-    return { ...base, pages: 1, image: c.toDataURL('image/png') };
+    let c:HTMLCanvasElement|undefined;
+    try{
+        if(b.width*b.height>maxPixels)throw new Error('Choose an image below 22 megapixels. Resize it before opening.');
+        c = document.createElement('canvas');
+        c.width = b.width;c.height = b.height;
+        c.getContext('2d')!.drawImage(b, 0, 0);
+        return { ...base, pages: 1, image: c.toDataURL('image/png') };
+    }finally{b.close();if(c){c.width=0;c.height=0;}}
 } return base; }
 export function ranges(value: string, count: number) { if (!value.trim())
     return Array.from({ length: count }, (_, i) => i); const out: number[] = []; for (const token of value.split(',')) {

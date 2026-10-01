@@ -30,7 +30,7 @@ export const tools:Tool[] = [
 ['flatten','Flatten PDF','Bake pages into a static document.','Edit & sign','layers','Rebuilds pages as images. Text is no longer selectable; links and forms are removed.'],
 ['form','Fill PDF forms','Complete existing fillable fields.','Edit & sign','edit','Supports text, checkbox and dropdown fields. Choose editable fields or flatten the completed form.'],
 ['metadata','Edit metadata','Update title, author and subject.','Edit & sign','file'],
-['images','Images to PDF','Turn photos into one document.','Convert','image'],
+['images','Images to PDF','Turn photos into one document.','Convert','image','PNG, JPG and WebP below 22 megapixels per image. Browser memory also depends on decoded images, not just file size.'],
 ['jpg','PDF to JPG','Export pages as images in a ZIP.','Convert','image'],
 ['png','PDF to PNG','Lossless page images, in a ZIP.','Convert','image'],
 ['text','Extract text','Save selectable text as a TXT file.','Convert','text'],

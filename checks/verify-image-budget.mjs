@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {build} from 'vite';
+import {createCanvas} from '@napi-rs/canvas';
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.image-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
+const {loadFile}=await import('../.image-check/engine.mjs');
+let decoded=0,allocated=0,closed=0;
+globalThis.document={createElement(){allocated++;return createCanvas(2,2);}};
+globalThis.createImageBitmap=async()=>{decoded++;const bitmap=createCanvas(2,2);bitmap.close=()=>closed++;return bitmap;};
+const png=new Uint8Array(24);png.set([137,80,78,71,13,10,26,10]);const dimensions=new DataView(png.buffer);dimensions.setUint32(16,5000);dimensions.setUint32(20,5000);
+await assert.rejects(()=>loadFile(new File([png],'huge.png')),/22 megapixels/);assert.equal(decoded,0);assert.equal(allocated,0);
+globalThis.createImageBitmap=async()=>{decoded++;return {width:5000,height:5000,close(){closed++;}};};
+await assert.rejects(()=>loadFile(new File([new Uint8Array([255,216,255])],'huge.jpg')),/22 megapixels/);assert.equal(allocated,0);assert.equal(closed,1);
+globalThis.createImageBitmap=async()=>{decoded++;const bitmap=createCanvas(2,2);bitmap.close=()=>closed++;return bitmap;};
+const valid=createCanvas(2,2).toBuffer('image/png');const file=await loadFile(new File([valid],'small.png'));assert.equal(file.pages,1);assert.match(file.image,/^data:image\/png;base64,/);assert.equal(closed,2);
+console.log('PASS: PNG oversized header rejected before decoding; decoded JPEG oversized dimensions rejected before canvas allocation; ordinary bitmap produces output; resources close on both paths. Decoder is stubbed for policy checks, not a browser compatibility claim.');

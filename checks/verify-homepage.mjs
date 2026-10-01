@@ -13,7 +13,7 @@ assert.ok(html.includes('Drop your PDF here'));
 assert.ok(html.includes('157.3 MB total'));
 assert.ok(html.includes('Browse all 56 tools'));
 assert.equal((html.match(/class="tool-card /g)||[]).length,6,'initial popular catalogue is focused');
-assert.equal((html.match(/href="\/tools\//g)||[]).length,21,'guides are crawlable before hydration');
+assert.equal((html.match(/href="\/tools\//g)||[]).length,56,'guides are crawlable before hydration');
 assert.ok(html.includes('href="/privacy"')&&html.includes('href="/about"'));
 assert.ok(!html.includes('app-sidebar'));
 assert.ok(html.includes('Can I edit existing PDF text?'));
@@ -22,4 +22,4 @@ const names=[...tools.matchAll(/^\['[^']+','([^']+)'/gm)].map(m=>m[1]);assert.eq
 for(const name of names)assert.ok(readme.includes('| '+name+' |'),`${name} missing from README`);
 assert.ok(!readme.includes('Light and dark themes'));
 assert.ok(readme.includes('Fit mode can shrink text'));
-console.log('PASS: initial homepage SSR, one H1, six popular tools, visible limits, all 21 crawlable guide links, FAQ, no sidebar and README coverage of all 56 tools.');
+console.log('PASS: initial homepage SSR, one H1, six popular tools, visible limits, all 56 crawlable guide links, FAQ, no sidebar and README coverage of all 56 tools.');

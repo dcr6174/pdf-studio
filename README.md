@@ -16,7 +16,7 @@ Free online PDF tools in a shared document workspace. Core tools require no acco
 - **Signatures:** type a name or upload PNG/JPG/WebP with visible previews; optional drawing. Place, resize and export a visual signature.
 - **Clear settings:** explicit choices and labeled actions replace theme, batch and analytics switches. Actual form and page-selection checkboxes remain.
 - **Page and form tools:** insert blank pages, create bookmarks, split page halves, set reader layout, create new fillable text forms and remove annotations while preserving form widgets.
-- **SEO:** descriptive homepage content, visible FAQ, crawlable guide links, 21 unique tool guides with metadata/canonicals/breadcrumbs, sitemap, privacy and about pages. No ranking guarantees.
+- **SEO:** descriptive homepage content, visible FAQ, crawlable guide links, 56 tool landing pages with an embedded workspace with metadata/canonicals/breadcrumbs, sitemap, privacy and about pages. No ranking guarantees.
 
 ## All available tools
 
@@ -53,7 +53,7 @@ Every current tool is listed below. “Available” does not mean every PDF is s
 | Edit & sign | Flatten PDF | Rebuilds pages as images. Text is no longer selectable; links and forms are removed. |
 | Edit & sign | Fill PDF forms | Supports text, checkbox and dropdown fields. Choose editable fields or flatten the completed form. |
 | Edit & sign | Edit metadata | Update title, author and subject. |
-| Convert | Images to PDF | Turn photos into one document. |
+| Convert | Images to PDF | PNG, JPG and WebP below 22 megapixels per image; decoded images may use more memory than file size suggests. |
 | Convert | PDF to JPG | Export pages as images in a ZIP. |
 | Convert | PDF to PNG | Lossless page images, in a ZIP. |
 | Convert | Extract text | Save selectable text as a TXT file. |
@@ -142,6 +142,7 @@ npm run verify:analytics
 npm run verify:public
 node checks/verify-extra-pdf.mjs
 node checks/verify-signatures.mjs
+node checks/verify-image-budget.mjs
 node checks/verify-online-text.mjs
 node checks/verify-seo.mjs
 node checks/verify-homepage.mjs
@@ -155,3 +156,18 @@ The raster helpers are development-only and pinned for reproducible verification
 ## License
 
 Application code: [MIT](LICENSE). Dependencies and fonts retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md).
+
+## Local audit improvements — 1 October 2026 (not deployed)
+
+- All 56 catalog tools now have a direct landing URL, an embedded tool workspace, format/limit copy, troubleshooting, canonical metadata, breadcrumbs and relevant related tools. The sitemap includes every landing page. Existing 21 URLs are retained.
+- Processing engine loads on the first document operation instead of a static homepage import. PDF.js, PDFium, OCR and conversion imports retain their task-specific loading. This is a bundle architecture improvement, not a measured Core Web Vitals claim.
+- Replacing an open document requires an explicit confirmation; cancellation leaves the workspace intact. Undo can restore a successfully replaced workspace.
+- Ctrl/Cmd+K respects processing and uncommitted existing-text guards. All-tools disclosure opens on keyboard focus as well as hover/click/tap.
+- Install action is shown for an available native install prompt, or iOS Safari manual installation. Known installation and standalone detection remain best-effort, not universal. No service worker is currently registered; no offline/update-cache guarantee is made.
+- Reduced-motion preference disables decorative spinner animation and transitions. Homepage explains that no installation or account is needed.
+
+See [audit report](docs/AUDIT-2026-10-01.md) for evidence, the 56-tool status matrix, remaining gaps and validation. Files saved in My files/drafts remain in browser storage until explicitly removed or browser data is cleared. Read aloud can use network-backed browser voices; it is not covered by a blanket offline claim.
+
+Security maintenance: SheetJS was updated from npm xlsx 0.18.5 to the upstream 0.20.3 tarball to address CVE-2023-30533 and CVE-2024-22363 affected version ranges. The lockfile records package integrity. Ordinary spreadsheet import/export regression passes; this is not a complete dependency security certification. Local owner routes receive noindex headers; www requests redirect to the preferred HTTPS domain when they reach the standalone Worker. Live bindings/headers remain unverified.
+
+Image inputs now have a 22-megapixel canvas budget. Oversized PNG dimensions reject before bitmap decoding; all formats reject before canvas allocation. Bitmap/canvas resources are released on success and failure. JPEG/WebP decoding itself still occurs before the dimensions can be checked.

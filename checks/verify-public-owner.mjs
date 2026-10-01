@@ -30,5 +30,7 @@ try {
  assert.equal((await boundary(req('/api/analytics/summary',{cookie}),env,next,1000+8*3600)).status,403);
  assert.equal((await boundary(req('/api/analytics/summary',{cookie}),{...env,OWNER_PASSWORD:'rotated-32-character-password-for-this-test'},next,1001)).status,403);
  const collect = await boundary(req('/api/analytics/collect'),env,next,1000);assert.equal(collect.status,200);assert.equal(collect.headers.has('set-cookie'),false);
- console.log('PASS: public access, protected analytics, forged headers, incorrect passwords, HTTPS, signed sessions, tampering, expiry and rotation.');
+ const canonical=await boundary(new Request('https://www.pdf-studio.in/tools/merge-pdf?source=test'),{},()=>{throw Error('Redirect must happen before application');});assert.equal(canonical.status,308);assert.equal(canonical.headers.get('location'),'https://pdf-studio.in/tools/merge-pdf?source=test');
+console.log('PASS: public access, protected analytics, forged headers, incorrect passwords, HTTPS, signed sessions, tampering, expiry and rotation.');
 } finally { fs.unlinkSync(path); }
+

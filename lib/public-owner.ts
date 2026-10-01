@@ -32,6 +32,7 @@ async function validBasic(request: Request, secret: string) {
 }
 export async function publicOwnerBoundary(request: Request, env: OwnerEnv, next: (request: Request) => Promise<Response>, now = Math.floor(Date.now() / 1000)) {
   const url = new URL(request.url), headers = new Headers(request.headers);
+  if(url.hostname==='www.pdf-studio.in'){url.hostname='pdf-studio.in';url.protocol='https:';return Response.redirect(url.toString(),308);}
   for (const name of [...headers.keys()]) if (name.startsWith('oai-authenticated-user-')) headers.delete(name);
   // Credentials must never reach the application, analytics, or request logs.
   headers.delete('authorization');
@@ -42,7 +43,7 @@ export async function publicOwnerBoundary(request: Request, env: OwnerEnv, next:
       owner = await validBasic(request, env.OWNER_PASSWORD!); fresh = owner;
     }
   }
-  const responseHeaders = { 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'same-origin' };
+  const responseHeaders = { 'X-Robots-Tag': 'noindex, nofollow', 'Cache-Control': 'no-store', 'X-Content-Type-Options': 'nosniff', 'Referrer-Policy': 'same-origin' };
   if (protectedPath(url.pathname) && !owner) {
     if (url.pathname.startsWith('/api/')) return Response.json({ error: 'Owner access is required.' }, { status: 403, headers: responseHeaders });
     if (!configured(env)) return new Response('Owner dashboard is not configured. The public PDF tools are available at /.', { status: 503, headers: responseHeaders });
@@ -59,7 +60,7 @@ export async function publicOwnerBoundary(request: Request, env: OwnerEnv, next:
   response.headers.set('Referrer-Policy', 'same-origin');
   response.headers.set('X-Frame-Options', 'DENY');
   if (url.protocol === 'https:') response.headers.set('Strict-Transport-Security', 'max-age=31536000');
-  if (protectedPath(url.pathname) || owner) response.headers.set('Cache-Control', 'no-store');
+  if (protectedPath(url.pathname) || owner) {response.headers.set('Cache-Control', 'no-store');response.headers.set('X-Robots-Tag','noindex, nofollow');}
   if (fresh) {
     const expires = String(now + lifetime);
     const hash = [...await signature('pdf-studio-owner:' + expires, env.OWNER_PASSWORD!)].map(v => v.toString(16).padStart(2, '0')).join('');
@@ -67,3 +68,4 @@ export async function publicOwnerBoundary(request: Request, env: OwnerEnv, next:
   }
   return response;
 }
+

@@ -32,3 +32,5 @@ Selecting a line keeps its editor selection after an edit/zoom render. The previ
 ## Remaining verification limits
 
 Production build, TypeScript, PDFium output tests, tool regressions and server-rendered SEO checks can run here. The cloud browser rejected the local preview URL with `ERR_BLOCKED_BY_CLIENT`; no browser visual, touch-device, drag/drop or end-to-end interaction verification is claimed. Live Cloudflare/domain rollout and Google indexing are also not verified by a code push.
+
+Latest audit integration: all 56 tools now have landing pages with an embedded workspace. Earlier validation counts above describe their original release; see AUDIT-2026-10-01.md and VALIDATION.md for the current scope.
