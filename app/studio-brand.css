@@ -31,7 +31,7 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .studio-header .tools-column a{gap:10px;min-height:46px}.menu-tool-icon{display:grid;place-items:center;width:32px;height:32px;flex-shrink:0;border-radius:9px;background:#eee8ff;color:#6335cb}.tools-column .menu-tool-icon svg{opacity:1;color:inherit}.category-1 .menu-tool-icon{background:#fff0e8;color:#a3442d}.category-2 .menu-tool-icon{background:#e2f6ef;color:#146d5f}.category-3 .menu-tool-icon{background:#eaf0ff;color:#345caa}.menu-tool-name{flex:1;min-width:0}.tools-column a:hover .menu-tool-icon{background:#fff}.tools-columns{gap:20px}.tools-panel{padding:24px 28px}@media(max-width:767px){.studio-header .tools-column a{gap:7px;min-height:48px}.menu-tool-icon{width:28px;height:28px;border-radius:7px}.menu-tool-icon svg{width:16px;height:16px}.tools-panel{padding:18px}.tools-column a>svg{display:none}}
 
 /* Tool landing pages contain the workspace, followed by readable help. */
-.seo-page:has(.studio-shell){max-width:none;padding:0}.tool-instructions{max-width:900px;margin:48px auto;padding:0 24px 48px}.tool-instructions nav{display:flex;flex-wrap:wrap;gap:12px}.tool-instructions nav a{padding:12px;background:#f2efff;border-radius:12px}
+.seo-page:has(.studio-shell){max-width:none;padding:0}.tool-instructions{max-width:900px;margin:48px auto;padding:0 24px 48px}.tool-instructions nav{display:flex;flex-wrap:wrap;gap:12px}
 @media(prefers-reduced-motion:reduce){.spin{animation:none}*,*::before,*::after{scroll-behavior:auto!important;transition:none!important}}
 
 /* Center task entry and contain all page actions at narrow widths. */
@@ -43,10 +43,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 @media(max-width:767px){.home-hero{margin-top:8px;text-align:center}.document-shell .content{padding-inline:12px}.empty-tool .tool-drop{min-height:300px;padding:24px 16px}.page-actions button{min-width:0;min-height:44px}.workspace-rail .row{flex-wrap:wrap}}
 
 /* Visible navigation belongs above the workspace without competing with the document. */
-.tool-breadcrumbs{max-width:1440px;margin:16px auto 0;padding:0 24px;font-size:14px;color:#55596d;overflow-wrap:anywhere}
-.tool-breadcrumbs a{color:#2923b9;text-decoration:underline;text-underline-offset:3px}
-.tool-instructions details{margin:12px 0;padding:16px;border:1px solid #d9dbea;border-radius:12px}
-.tool-instructions summary{cursor:pointer;font-weight:600;min-height:28px}
+
+
+
+
 .tool-instructions li+li{margin-top:12px}
 
 /* Plain-language discovery and preferences, with document pages kept independent. */
@@ -59,11 +59,11 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 
 .limits-wrap{overflow-x:auto;margin:24px 0}.limits-wrap table{width:100%;border-collapse:collapse;text-align:left}.limits-wrap caption{text-align:left;font-weight:700;padding:12px 0}.limits-wrap td,.limits-wrap th{padding:12px;border-bottom:1px solid var(--border)}.limits-wrap p{margin-top:12px;color:var(--muted)}
 .guide-categories>section{margin-top:28px}.guide-categories h3{margin-bottom:12px}.guide-categories .seo-links a{display:flex;flex-direction:column;gap:6px}.guide-categories .seo-links span,.tool-instructions nav span{font-size:.85rem;color:var(--muted);font-weight:400}
-.tool-instructions nav a{display:flex;flex-direction:column;gap:6px;flex:1 1 240px}.tool-instructions p{margin:12px 0;line-height:1.75}.tool-instructions h2{margin:28px 0 12px}.tool-breadcrumbs{color:var(--muted)}
+.tool-instructions p{margin:12px 0;line-height:1.75}.tool-instructions h2{margin:28px 0 12px}
 [data-theme=dark] .studio-header,[data-theme=dark] .tools-panel,[data-theme=dark] .native-commandbar,[data-theme=dark] .native-controls,[data-theme=dark] .home-faq,[data-theme=dark] .tool-card{background:var(--card);color:var(--foreground)}
 [data-theme=dark] .hero-copy h1 span{color:#c5aaff}
 [data-theme=dark] .tool-instructions nav a,[data-theme=dark] .tool-note{background:var(--soft);color:var(--foreground)}
-[data-theme=dark] .tool-breadcrumbs a{color:#c5aaff}
+[data-theme=dark] 
 [data-theme=dark] .native-notice{background:#16392c;color:#9ce5bb;border-color:#286347}
 [data-theme=dark] .tools-column h3{color:#c5aaff}[data-theme=dark] .tools-column.category-1 h3{color:#ffc3a4}[data-theme=dark] .tools-column.category-2 h3{color:#99daca}[data-theme=dark] .tools-column.category-3 h3{color:#aecbff}
 @media(max-width:767px){.studio-shell footer{flex-wrap:wrap;gap:14px}.hero-copy h1{font-size:2.4rem}}
@@ -117,8 +117,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .home-toolbox .tool-card .tool-category{display:flex;align-items:center;justify-content:space-between;width:100%;margin-top:auto;padding-top:12px;font-size:.8rem;color:var(--muted)}
 
 /* Guides list: folded, so it stops repeating the grid above it */
-.guide-directory summary{cursor:pointer;min-height:44px;display:flex;align-items:center;font-size:1.1rem;font-weight:650}
-.guide-directory[open] summary{margin-bottom:8px}
+
+
 
 /* Footer: one row, same controls, same height */
 .studio-shell footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 24px;max-width:1240px;margin:48px auto 0;padding:16px 24px 28px;border-top:1px solid var(--border);color:var(--muted);font-size:.875rem}
@@ -146,3 +146,66 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 
 /* Dark mode: the old header/footer fills are hard-coded white */
 [data-theme=dark] .studio-header{background:var(--card)}
+
+/* --- Pass 2 (tool pages, footer, guides) ------------------------------------ */
+/* Headline wraps evenly instead of leaving one word alone */
+.hero-copy h1{text-wrap:balance}
+
+/* Breadcrumb inside every tool heading, centred like the heading */
+.tool-breadcrumbs{display:flex;flex-wrap:wrap;align-items:center;justify-content:center;gap:6px;margin:0 0 12px;font-size:.875rem;color:var(--muted)}
+.tool-breadcrumbs a{display:inline-flex;align-items:center;gap:4px;min-height:32px;padding:0 8px;border-radius:8px;color:var(--muted);text-decoration:none}
+.tool-breadcrumbs a:hover{background:var(--soft);color:var(--foreground)}
+.tool-breadcrumbs [aria-current=page]{color:var(--foreground);font-weight:600}
+.text-shell .tool-breadcrumbs{justify-content:flex-start;margin:0}
+
+/* Footer uses the content width, so its left edge lines up with the page */
+.studio-shell footer{max-width:none;margin:56px 0 0;padding:16px 0 28px}
+
+/* FAQ and guides list share one look */
+.home-faq{max-width:none}
+.home-faq details,.tool-faq details{border:0;border-bottom:1px solid var(--border);border-radius:0;padding:14px 0;margin:0;background:none}
+.home-faq summary,.tool-faq summary,.guide-directory>summary{display:list-item;cursor:pointer;font-weight:600;line-height:1.5}
+.home-faq summary::marker,.tool-faq summary::marker,.guide-directory>summary::marker{color:var(--primary)}
+.home-faq details p,.tool-faq details p{margin:10px 0 0;color:var(--muted);line-height:1.7}
+.limits-wrap{margin:28px 0 8px}
+.guide-directory{margin-top:24px;padding:20px 0;border-top:1px solid var(--border)}
+.guide-directory>summary{font-size:1.1rem;padding:6px 0}
+.guide-directory>p{margin:8px 0 0}
+.guide-categories{margin-top:16px}
+.guide-categories h3{font-size:.95rem;font-weight:650;margin:20px 0 8px}
+
+/* Tool guide: same width as the workspace column, same type scale as home */
+.tool-page{display:block}
+.tool-instructions{max-width:840px;margin:64px auto 0;padding:32px 0 0;border-top:1px solid var(--border)}
+.tool-instructions h2{font-size:1.5rem;font-weight:700;letter-spacing:-.02em;margin:0 0 8px}
+.tool-instructions h3{font-size:1.1rem;font-weight:650;margin:28px 0 8px}
+.tool-instructions p{margin:8px 0;line-height:1.7;color:var(--muted)}
+.tool-instructions>p:first-of-type{font-size:1.05rem;color:var(--foreground)}
+.tool-instructions ol{list-style:decimal;padding-left:22px;margin:8px 0;line-height:1.7}
+.tool-instructions li+li{margin-top:6px}
+.tool-instructions .related-tools{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:12px;margin-top:8px}
+.tool-instructions .related-tools a{display:flex;flex-direction:column;gap:4px;padding:14px 16px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--foreground);text-decoration:none}
+.tool-instructions .related-tools a:hover{border-color:var(--primary);background:var(--blue-soft)}
+.tool-instructions .related-tools b{font-weight:600}
+.tool-instructions .related-tools span{font-size:.85rem;line-height:1.5;color:var(--muted)}
+.back-to-tool{margin-top:28px!important}
+
+/* Privacy / About: the shared header must not inherit article link styles */
+.seo-page .site-header a{text-decoration:none;color:var(--muted)}
+.seo-page .site-header .studio-wordmark{color:var(--foreground)}
+.seo-page .site-header nav{flex-wrap:nowrap;gap:4px}
+
+@media(max-width:767px){
+  .tool-instructions{margin-top:40px;padding-top:24px}
+  .tool-instructions h2{font-size:1.3rem}
+  .tool-instructions .related-tools{grid-template-columns:1fr}
+}
+/* Option fields before a file is added line up with the note and drop zone */
+.empty-tool .studio-controls>.field{width:100%;max-width:840px;margin:0 auto 16px}
+.tool-breadcrumbs{gap:4px}.tool-breadcrumbs a{padding:0 6px}
+.guide-directory{margin-top:8px}
+.site-footer{display:flex;flex-wrap:wrap;align-items:center;justify-content:space-between;gap:8px 24px;max-width:900px;margin:56px auto 0;padding:16px 0 28px;border-top:1px solid var(--border);color:var(--muted);font-size:.875rem}
+.site-footer .footer-brand{display:inline-flex;align-items:center;gap:8px;font-weight:600;color:var(--foreground)}
+.site-footer .footer-links{display:flex;flex-wrap:wrap;gap:4px}
+.seo-page .site-footer a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:8px;color:var(--muted);text-decoration:none}
+.seo-page .site-footer a:hover{background:var(--soft);color:var(--foreground)}

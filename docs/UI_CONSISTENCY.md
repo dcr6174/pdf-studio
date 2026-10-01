@@ -16,3 +16,21 @@ Validation details: focused lint of the new theme/header/reporting policy and st
 ## Lint fixes — 2026-10-01
 
 Internal navigation uses Next Link. Workspace undo/redo availability and native text history counts use React state rather than reading refs during render. File operations read the current workspace snapshot without a second mutable file ref. Effect initialization is deferred with lifecycle guards; typed signatures are generated in the input handler. The owner dashboard captures its saved theme before persisting the default. Source lint rules remain enabled. Production build passes; actual browser/mobile interactions remain unverified.
+
+## Pass 2 (tool pages)
+
+Bugs fixed
+- Clicking "Go to …" (or the skip link) on a tool page switched the page to the home screen. Cause: the back/forward handler treated any hash, including `#studio-content`, as "go home". It now ignores hashes that are not a view, and an empty hash on `/tools/...` returns to that page's tool.
+- Every tool page inherited the article styles for `.seo-page` (underlined purple header links, article margins on headings, flex on all navs). The tool page wrapper is now `.tool-page`; `.seo-page` is only used by Privacy and About.
+- The guide text rendered after the footer. It is now passed into the studio (`guide` prop) and appears above the footer, only while its own tool is open.
+- A second breadcrumb sat above the site header. Each tool heading now has one breadcrumb (All tools / group / tool) that replaces the old back link and group label.
+
+Cleanups
+- Guide: removed the Troubleshooting paragraph that repeated "What to check before sharing"; related tools favour popular tools; headings use one scale; FAQ uses the same divider style as the homepage.
+- Homepage FAQ: limits table moved below the questions; "Guides for every tool" shows its disclosure arrow again.
+- Footer spans the content width so its edges line up with the page; Privacy and About get the same footer.
+- Option fields on empty tool screens use the same width as the note and drop zone.
+
+### Pass 2 validation in the project environment
+
+The ZIP integrity check passed and all seven patch files applied without conflicts. Integrated the patch into the current source, keeping the prior lint fixes. New internal links use Next Link; popular-related IDs match the actual tool registry. Lint: 0 errors, 32 warnings. TypeScript and production build pass. All 62 SEO SSR pages have one breadcrumb, the tool-specific wrapper and guide content before the footer. Added `checks/verify-tool-navigation.mjs` to run the actual history handler with anchor, empty-fragment, tool/shelf/home and busy/dirty-text cases. Homepage, discovery/install, PDF processing, text export, signatures, analytics, owner boundary and theme checks pass. Browser screenshots, focus/scroll and phone/tablet controls were not verified. No dependency changes or fresh install were required. GitHub publication only; Cloudflare production status is not verified.

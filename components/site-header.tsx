@@ -9,3 +9,11 @@ export function SiteHeader(){
   <div className="header-end"><ThemeToggle/></div>
  </header>;
 }
+
+/** Matching footer for static pages. */
+export function SiteFooter(){
+ return <footer className="site-footer">
+  <span className="footer-brand"><img src="/brand/pdf-studio-logo-v4.png" alt="" width="22" height="22"/>PDF Studio</span>
+  <div className="footer-links"><Link href="/">All tools</Link><Link href="/privacy">Privacy policy</Link><Link href="/about">About</Link></div>
+ </footer>;
+}
