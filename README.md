@@ -1,24 +1,108 @@
-<p align="center"><img src="public/brand/pdf-studio-mark.png" width="80" height="80" alt="PDF Studio logo" /></p>
+# PDF Studio
 
-<h1 align="center">PDF Studio</h1>
-<p align="center">Free PDF tools. Your documents stay on your device.</p>
+Free online PDF tools in a shared document workspace. Core tools require no account or subscription and add no watermark. Documents are processed on your device.
 
-PDF Studio is an open-source workspace for organizing, annotating, signing and exporting PDFs. No subscription, mandatory account or added watermark for core tools.
+## Latest improvements
 
-## What you can do
+- **Focused homepage:** one upload area, six popular tools, searchable task categories and an explicit “Browse all 56 tools” action. Compact top navigation replaces the crowded sidebar and repeated shortcuts.
+- **Full-width document workspace:** existing-text editing gives most of the screen to the actual PDF, with a narrow contextual editing panel. Mobile shows the page first and editing controls below.
+- **Existing PDF text:** select a supported original text object, replace it, fit longer replacements into its area or preserve its size, and check the real PDF preview. Undo/redo and page selection are included.
+- **Keep text edits:** commit the edited PDF into the shared workspace before switching tools. Navigation blocks accidental loss of uncommitted edits; explicit discard is available.
+- **Signatures:** type a name or upload PNG/JPG/WebP with visible previews; optional drawing. Place, resize and export a visual signature.
+- **Clear settings:** explicit choices and labeled actions replace theme, batch and analytics switches. Actual form and page-selection checkboxes remain.
+- **Page and form tools:** insert blank pages, create bookmarks, split page halves, set reader layout, create new fillable text forms and remove annotations while preserving form widgets.
+- **SEO:** descriptive homepage content, visible FAQ, crawlable guide links, 21 unique tool guides with metadata/canonicals/breadcrumbs, sitemap, privacy and about pages. No ranking guarantees.
 
-- **Organize:** merge, split, extract, reorder, rotate, delete and duplicate pages.
-- **Edit and sign:** add text, images, highlights, shapes, links and visual signatures.
-- **Optimize:** compact PDFs while keeping text, or choose image-based compression.
-- **Convert:** PDF/images/text and supported document conversions.
-- **Protect:** opening passwords, authorized password removal and raster redaction.
-- **Keep working:** shared workspace, undo/redo, result previews and local saved drafts.
+## All available tools
 
-Light and dark themes, searchable tools, keyboard controls and responsive layouts are included.
+Every current tool is listed below. “Available” does not mean every PDF is supported: important implementation boundaries are explicit.
 
-## Privacy
+| Category | Tool | Behavior and limits |
+| --- | --- | --- |
+| Pages | Add bookmarks | One bookmark per line: page number followed by its title. Replaces the exported outline. |
+| Pages | Split pages in half | Uses CropBox boundaries; content outside each visible half is hidden, not securely removed. Rotations are retained. |
+| Pages | Reader layout | Sets a PDF viewer preference. Some readers ignore it. |
+| Privacy | Remove annotations | Works on the original single PDF; preserves form widgets. Export other workspace changes first. |
+| Edit & sign | Create fillable form | Creates English text fields on new A4 pages. This does not add arbitrary field types to an existing PDF. |
+| Pages | Merge PDFs | Bring your documents together. |
+| Pages | Organize pages | Reorder, rotate and remove pages. |
+| Pages | Split PDF | Extract the pages you need. |
+| Pages | Split every page | One PDF per page, in a ZIP. |
+| Pages | Compress PDF | Compact mode keeps text and links; image modes remove text search, links and forms. Savings depend on the document. |
+| Pages | Rotate PDF | Turn pages in the right direction. |
+| Pages | Reverse pages | Last page first. Simple. |
+| Pages | Duplicate pages | Make a second copy of every page. |
+| Pages | Alternate & mix | Weave pages from multiple PDFs. |
+| Pages | Pages per sheet | Fit 2 or 4 pages on one sheet. |
+| Pages | Crop margins | Cropping hides content outside the page boundary; it does not permanently remove it. |
+| Pages | Resize to A4 | Fit every page onto an A4 sheet. |
+| Pages | Mirror pages | Flip your document horizontally. |
+| Edit & sign | Edit existing text | Browser text editing · 50 MB and 100 pages. Single-line edits can shrink to fit the original area (minimum half size). Embedded fonts need available characters; scans and nested graphics have limitations. No paragraph reflow. Editing invalidates digital signatures. |
+| Edit & sign | Edit PDF | Adds new elements. Existing PDF text is not edited in place. |
+| Edit & sign | Sign PDF | A visual signature, without a certificate or identity verification. |
+| Edit & sign | Redact PDF | Export rebuilds all pages as images and removes original text, links, metadata and forms. |
+| Edit & sign | Add watermark | Your text, across every page. |
+| Edit & sign | Page numbers | Put your pages in order. |
+| Edit & sign | Bates numbering | Add a prefix and sequential IDs. |
+| Edit & sign | Headers & footers | Add a label to every page. |
+| Edit & sign | Flatten PDF | Rebuilds pages as images. Text is no longer selectable; links and forms are removed. |
+| Edit & sign | Fill PDF forms | Supports text, checkbox and dropdown fields. Choose editable fields or flatten the completed form. |
+| Edit & sign | Edit metadata | Update title, author and subject. |
+| Convert | Images to PDF | Turn photos into one document. |
+| Convert | PDF to JPG | Export pages as images in a ZIP. |
+| Convert | PDF to PNG | Lossless page images, in a ZIP. |
+| Convert | Extract text | Save selectable text as a TXT file. |
+| Convert | PDF to Word | Text conversion; original layout and embedded images are not preserved. Use OCR first for scans. |
+| Convert | PDF to HTML | Export text as a readable webpage. |
+| Convert | PDF to EPUB | Reflow text for your e-reader. |
+| Convert | PDF to PowerPoint | Slides are page images, not editable original text or graphics. |
+| Convert | PDF to spreadsheet | Heuristic extraction. Review column alignment; scans need OCR first. |
+| Convert | PDF to CSV | Extract text rows into a CSV. |
+| Convert | Create PDF | Write a fresh document. |
+| Convert | Markdown to PDF | Basic Markdown formatting; complex tables and embedded images are not supported. |
+| Convert | Word to PDF | Reflows text; original Word layout, images and styling are not preserved. Legacy .doc is not supported. |
+| Convert | Spreadsheet to PDF | Text-based conversion of the first sheet. Complex styling and charts are not preserved. |
+| Convert | EPUB to PDF | Reflows text; ebook styling and illustrations are not preserved. |
+| Convert | Grayscale PDF | Rebuilds pages as images. Text search, links and forms are lost. |
+| Convert | Invert colours | Rebuilds pages as images. Text search, links and forms are lost. |
+| Convert | Searchable PDF (OCR) | Downloads an English recognition model on first use. Accuracy varies; review important text. |
+| Convert | Read aloud | Uses browser speech synthesis. Voice availability and offline support depend on your device. No audio-file export. |
+| Pages | Compare PDFs | Check two documents side by side. |
+| Privacy | Protect PDF | Add an AES-256 opening password. |
+| Privacy | Remove password | Unlock with a password you know. |
+| Privacy | Privacy scanner | Pattern matching can miss sensitive data or flag harmless text. Review the document before sharing. |
+| Privacy | Remove metadata | Clears standard title, author, subject, keywords, producer and dates. It is not a complete sanitization of every hidden object. |
+| Privacy | File fingerprint | Calculate a SHA-256 file hash. |
+| Pages | Bundle PDFs | Put your PDF files in a ZIP. |
+| Privacy | Resave PDF | Can resave PDFs that parse successfully. Severely damaged PDFs may not be recoverable. |
 
-PDF processing happens in your browser. Files and drafts are saved on your device only when you choose to save them. Anonymous analytics records tool activity, never document contents, filenames or passwords. Tracking can be disabled in **Open source & privacy**.
+## Workspace features
+
+- Reliable file-picker alternative to drag and drop, supported format checks and errors that retain the original workspace.
+- Shared document across compatible tools; document undo/redo, thumbnail selection, zoom, rotation, page movement buttons and drag reordering.
+- Insert matching-size blank pages; duplicate or delete selected pages.
+- Inspect exported PDFs, download results, reopen results for further editing, or explicitly save them to My files.
+- Explicit local saved drafts in IndexedDB. Clear browser data to remove saved copies. Unsaved work is not promised to survive a refresh.
+- Batch ZIP output for compression, rotation, metadata removal, JPG/PNG export, protection, resaving and grayscale.
+- Installable PWA, responsive layouts, visible keyboard focus, labeled controls and reduced-motion handling. Complete real-device accessibility verification remains pending.
+
+## Important text-editor boundaries
+
+**Edit existing text** changes supported original PDFium text objects. **Edit PDF** adds overlays. They are separate workflows.
+
+Existing-text editing is limited to **50 MB and 100 pages**, single-line objects and available font characters. It does not provide paragraph reflow, arbitrary font substitution or editing text inside nested graphics. Fit mode can shrink text to **50%** of its original size; very long replacements are rejected and the original is retained. Editing invalidates existing cryptographic signatures.
+
+OCR makes scans searchable, but the current OCR text layer does not turn the scanned image into editable original text. Signature placement is visual signing, not certificate-based digital signing. Redaction rebuilds pages as images and removes the original content layers; a crop or black shape alone is not redaction.
+
+Office conversions are text-based or image-based as shown in the table; original layout, tables, images and fonts are not guaranteed. Full combined competitor feature parity remains incomplete: see [the coverage inventory](docs/FEATURE_PARITY.md).
+
+## Privacy and owner analytics
+
+Documents, filenames, passwords and PDF text do not enter analytics. Optional anonymous events count visits and tool activity; records expire after 48 hours. Usage counting can be disabled in **Privacy** and respects supported browser privacy signals. OCR downloads its recognition model. Read-aloud voices and network behavior depend on the browser and device.
+
+Owner analytics is a separate protected route; public tools need no owner login. Configure runtime secrets and Cloudflare Access as described in [the hosting guide](docs/PUBLIC_HOSTING.md). The public website and owner/API routes must not share a blanket login restriction.
+
+The normal workspace limit is **157.3 MB total and 400 pages**. Smaller feature-specific limits are shown in tools. Browser memory and device performance may impose practical limits before these ceilings. No unlimited free server processing is promised.
 
 ## Run locally
 
@@ -29,50 +113,39 @@ npm ci
 npm run dev
 ```
 
-The terminal prints the local website address. PDF.js assets are restored automatically from the pinned dependency. A placeholder database configuration is created for local builds; use your real D1 database ID before deployment.
+PDF.js and PDFium assets are prepared automatically from pinned dependencies. A placeholder D1 configuration can support local builds; replace it with your real database ID before deployment.
 
-## Publish your website
+## Deploy to Cloudflare
 
-**[Start here](docs/START_HERE.md)** for the next Cloudflare step, or follow the **[complete hosting guide](docs/PUBLIC_HOSTING.md)**.
-
-GitHub stores the code. Cloudflare Workers hosts the public app and D1 analytics. Visitors need no GitHub or ChatGPT account. The owner analytics dashboard uses a separate owner password. The custom domain is not activated by uploading code to GitHub.
+GitHub stores the code; Cloudflare Workers hosts the app and D1 analytics. Visitors need no GitHub or ChatGPT account. Follow [Start here](docs/START_HERE.md) and [the complete hosting guide](docs/PUBLIC_HOSTING.md).
 
 ```sh
 node scripts/configure-public.mjs YOUR_DATABASE_ID
-npm run build
+npm run build:public
 npm run deploy:public
 ```
 
-Set owner credentials only as Cloudflare runtime secrets. Never commit passwords or tokens.
+Set owner credentials as Cloudflare runtime secrets. Never commit tokens or passwords. With GitHub automatic deployment configured, a push can trigger a build; confirm the commit and successful deployment in Cloudflare. A GitHub push alone does not prove the live domain updated.
 
-## Important limits
-
-- Editing adds overlays; existing PDF text is not edited in place.
-- Visual signatures are not certificate-based digital signatures.
-- Office/text conversions may reflow content and lose formatting.
-- Raster compression/redaction removes original text layers, forms and links.
-- Workspaces are limited to **157.3 MB total** and **400 pages** to protect browser memory.
-
-See the [combined competitor feature inventory](docs/FEATURE_PARITY.md) for current coverage and remaining gaps. Full combined parity is not complete.
-
-See the [feature matrix and research](docs/RESEARCH_AND_AUDIT.md) and [validation results](docs/VALIDATION.md). Live browser/mobile and OCR verification remains pending.
-
-## Checks
+## Verification
 
 ```sh
+npm install --no-save --package-lock=false @napi-rs/canvas@0.1.80 @xmldom/xmldom@0.8.15
 npm run verify
+npm run verify:studio
 npm run verify:analytics
 npm run verify:public
+node checks/verify-extra-pdf.mjs
+node checks/verify-signatures.mjs
+node checks/verify-online-text.mjs
+node checks/verify-seo.mjs
+node checks/verify-homepage.mjs
 npx tsc --noEmit
+npm run build:public
 ```
+
+The raster helpers are development-only and pinned for reproducible verification. Tests validate generated PDFs and source-rendered pages; they do not replace browser/mobile testing. See [validation](docs/VALIDATION.md), [the UX audit](docs/HOMEPAGE_REFRESH.md) and [research/feature coverage](docs/RESEARCH_AND_AUDIT.md).
 
 ## License
 
-**MIT** for application code. Dependencies and fonts retain their own licenses; see [LICENSE](LICENSE) and [third-party notices](THIRD_PARTY_NOTICES.md).
-
-
-## Current feature work
-
-Signatures expose name entry and image upload together, with previews and optional drawing. Existing-text editing uses browser PDFium. Page tools include blank insertion, bookmarks, page halving and reader-layout preferences. Basic new fillable text forms and original-document annotation removal are available.
-
-Additional checks: `node checks/verify-extra-pdf.mjs`, `node checks/verify-signatures.mjs`, `node checks/verify-online-text.mjs`, `node checks/verify-seo.mjs`, and `npm run verify:studio`. For raster tests, run `npm install --no-save --package-lock=false @napi-rs/canvas@0.1.80 @xmldom/xmldom@0.8.15` after `npm ci`. These packages are test helpers.
+Application code: [MIT](LICENSE). Dependencies and fonts retain their own licenses; see [third-party notices](THIRD_PARTY_NOTICES.md).

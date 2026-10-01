@@ -19,7 +19,7 @@ export const tools:Tool[] = [
 ['crop','Crop margins','Trim the edges of your pages.','Pages','crop','Cropping hides content outside the page boundary; it does not permanently remove it.'],
 ['resize','Resize to A4','Fit every page onto an A4 sheet.','Pages','crop'],
 ['flip','Mirror pages','Flip your document horizontally.','Pages','reverse'],
-['native-text','Edit existing text','Select original text, change it and preview the actual PDF.','Edit & sign','text','Browser text editing · 50 MB and 100 pages. Single-line edits must fit the original area. Embedded fonts need available characters; scans and nested graphics have limitations. No paragraph reflow. Editing invalidates digital signatures.'],
+['native-text','Edit existing text','Select original text, change it and preview the actual PDF.','Edit & sign','text','Browser text editing · 50 MB and 100 pages. Single-line edits can shrink to fit the original area (minimum half size). Embedded fonts need available characters; scans and nested graphics have limitations. No paragraph reflow. Editing invalidates digital signatures.'],
 ['edit','Edit PDF','Add text, images and highlights.','Edit & sign','edit','Adds new elements. Existing PDF text is not edited in place.'],
 ['sign','Sign PDF','Draw, type or upload a signature.','Edit & sign','pen','A visual signature, without a certificate or identity verification.'],
 ['redact','Redact PDF','Permanently remove chosen regions.','Edit & sign','shield','Export rebuilds all pages as images and removes original text, links, metadata and forms.'],

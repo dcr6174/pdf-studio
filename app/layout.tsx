@@ -7,7 +7,7 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: "PDF Studio", statusBarStyle: "default" },
   metadataBase: new URL("https://pdf-studio.in"),
   title: { default: "PDF Studio — Free PDF Tools Online", template: "%s | PDF Studio" },
-  description: "Merge, split, compress, organize and sign PDFs for free. Process documents in your browser without accounts, file uploads or watermarks.",
+  description: "Edit supported PDF text, merge, split, compress and sign PDFs for free. A private browser workspace without accounts, file uploads or added watermarks.",
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
   openGraph: { type: "website", siteName: "PDF Studio", locale: "en_IN", url: "https://pdf-studio.in", title: "PDF Studio — Free PDF Tools Online", description: "Free PDF tools with on-device document processing.", images: [{ url: "/brand/pdf-studio-mark.png", alt: "PDF Studio logo" }] },
@@ -26,3 +26,4 @@ export default function RootLayout({
     </html>
   );
 }
+

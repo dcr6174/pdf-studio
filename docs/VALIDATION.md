@@ -40,7 +40,7 @@
 
 1. Desktop Chrome/Firefox/Safari: real drag/drop, folder/non-file drops, repeated picker selection, drop overlays, encrypted errors, full export/download and continued editing.
 2. iPhone Safari/Android Chrome/tablet: touch sorting, corner resize, zoom/scroll, virtual keyboard, file picker and download UX; profile memory with representative image-heavy files.
-3. Keyboard and screen reader: sidebar/dialog focus return, skip link, search, sortable announcements, element grouping, numeric controls, live progress/errors and output reading order; 200% text enlargement and 320 CSS px reflow.
+3. Keyboard and screen reader: navigation/dialog focus return, skip link, search, sortable announcements, element grouping, numeric controls, live progress/errors and output reading order; 200% text enlargement and 320 CSS px reflow.
 4. OCR first load/offline model handling, cancellation during recognition, recognition alignment/accuracy and English-only limitations.
 5. Complex Office fixtures with fonts/tables/embedded images and scans. Compare against the original and preserve the published limitations; do not advertise layout fidelity without stronger engines.
 6. Batch partial failures/cancellation and local draft recovery after refresh. Verify saved draft/shelf deletion and ensure no document content enters network requests or logs.
@@ -49,3 +49,13 @@ No fake processing or seeded usage is used. Unverified areas remain declared rat
 
 Concurrent update reconciliation: preserved the independently added compact compression mode, search synonyms, up-front catalogue caveats and product review. The stronger shared-workspace/result-inspection journey replaces its earlier re-upload continuation.
 
+
+## 1 October 2026 homepage/text refresh
+
+- Production build and TypeScript passed.
+- Homepage server-render check passed: one H1, six popular tools, clear limits, 21 crawlable guide links, FAQ and complete 56-tool README table.
+- SEO guide checks passed for all 21 routes.
+- PDFium tests passed: edit/save/reopen, real changed raster, preservation of other text, bounds at all four rotations, longer replacements fitted to the original area, excessive-shrink rejection/rollback, glyph restrictions, blank and malformed input.
+- Studio regressions passed: 48 processing tools and 32 correctness/geometry/boundary/cancellation/history checks. OCR and UI/device checks excluded.
+- Browser preview verification blocked: cloud browser rejected local URL with `ERR_BLOCKED_BY_CLIENT`. Visual, mobile, drag/drop and dirty-state interaction checks remain unverified.
+- Commit/deployment are reported separately; a code push does not verify Cloudflare rollout or Google indexing.

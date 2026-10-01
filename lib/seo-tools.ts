@@ -53,7 +53,7 @@ export const seoTools = [
     "title": "Edit existing PDF text",
     "heading": "Change the original text in a PDF",
     "intro": "Choose a text object on the page, enter your replacement and preview the actual changed PDF.",
-    "detail": "Single-line edits must fit the original bounds. Embedded fonts need characters already available on the page. Scanned pages and paragraph reflow are not supported. This editor supports 50 MB and 100 pages."
+    "detail": "Single-line replacements can shrink to fit the original bounds, down to half the original size. Keep edits in the shared workspace to continue with other tools. Embedded fonts need characters already available on the page. Scanned pages and paragraph reflow are not supported. This editor supports 50 MB and 100 pages."
   },
   {
     "slug": "fill-pdf-forms",
