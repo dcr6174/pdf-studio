@@ -41,3 +41,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .empty-tool .studio-controls{display:flex;flex-direction:column;align-items:center}.empty-tool .tool-heading,.empty-tool .tool-note{width:100%;max-width:840px}.empty-tool .tool-drop{width:100%;max-width:840px;margin-inline:auto}
 .page-grid{grid-template-columns:repeat(auto-fill,minmax(min(100%,208px),1fr))}.page-cell,.page-card{min-width:0}.page-actions{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));width:100%;gap:2px}.page-actions button{min-width:0;width:100%;min-height:44px;padding:8px;display:grid;place-items:center}.workspace-summary{flex-wrap:wrap}.workspace-summary .row{flex-wrap:wrap;max-width:100%}.page-grid-heading{flex-wrap:wrap}.page-grid-heading .row{flex-wrap:wrap;max-width:100%}
 @media(max-width:767px){.home-hero{margin-top:8px;text-align:center}.document-shell .content{padding-inline:12px}.empty-tool .tool-drop{min-height:300px;padding:24px 16px}.page-actions button{min-width:0;min-height:44px}.workspace-rail .row{flex-wrap:wrap}}
+
+/* Visible navigation belongs above the workspace without competing with the document. */
+.tool-breadcrumbs{max-width:1440px;margin:16px auto 0;padding:0 24px;font-size:14px;color:#55596d;overflow-wrap:anywhere}
+.tool-breadcrumbs a{color:#2923b9;text-decoration:underline;text-underline-offset:3px}
+.tool-instructions details{margin:12px 0;padding:16px;border:1px solid #d9dbea;border-radius:12px}
+.tool-instructions summary{cursor:pointer;font-weight:600;min-height:28px}
+.tool-instructions li+li{margin-top:12px}

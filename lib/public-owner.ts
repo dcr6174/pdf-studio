@@ -33,6 +33,8 @@ async function validBasic(request: Request, secret: string) {
 export async function publicOwnerBoundary(request: Request, env: OwnerEnv, next: (request: Request) => Promise<Response>, now = Math.floor(Date.now() / 1000)) {
   const url = new URL(request.url), headers = new Headers(request.headers);
   if(url.hostname==='www.pdf-studio.in'){url.hostname='pdf-studio.in';url.protocol='https:';return Response.redirect(url.toString(),308);}
+  // Only the production hostname redirects; local and preview deployments remain usable.
+  if(url.hostname==='pdf-studio.dcr6174.workers.dev' && ['GET','HEAD'].includes(request.method) && !url.pathname.startsWith('/api/') && !protectedPath(url.pathname)){url.hostname='pdf-studio.in';url.protocol='https:';url.port='';return Response.redirect(url.toString(),308);}
   for (const name of [...headers.keys()]) if (name.startsWith('oai-authenticated-user-')) headers.delete(name);
   // Credentials must never reach the application, analytics, or request logs.
   headers.delete('authorization');
@@ -60,6 +62,7 @@ export async function publicOwnerBoundary(request: Request, env: OwnerEnv, next:
   response.headers.set('Referrer-Policy', 'same-origin');
   response.headers.set('X-Frame-Options', 'DENY');
   if (url.protocol === 'https:') response.headers.set('Strict-Transport-Security', 'max-age=31536000');
+  if(url.hostname.endsWith('.workers.dev')) response.headers.set('X-Robots-Tag','noindex, nofollow');
   if (protectedPath(url.pathname) || owner) {response.headers.set('Cache-Control', 'no-store');response.headers.set('X-Robots-Tag','noindex, nofollow');}
   if (fresh) {
     const expires = String(now + lifetime);

@@ -8,7 +8,7 @@ await build({configFile:false,logLevel:'error',resolve:{alias:{'@':resolve('.')}
 const {default:Home}=await import('../.home-check/page.mjs');
 const html=renderToStaticMarkup(createElement(Home));
 assert.equal((html.match(/<h1>/g)||[]).length,1);
-assert.ok(html.includes('Make your PDF'));
+assert.ok(html.includes('Free PDF tools:'));
 assert.ok(!html.includes('Drop your PDF here'),'home has no upload invitation');assert.ok(!html.includes('hero-upload'),'home has no upload button');
 assert.ok(html.includes('Choose your tool')); 
 assert.ok(html.includes('Browse all 56 tools'));
