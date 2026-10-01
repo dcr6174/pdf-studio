@@ -59,3 +59,13 @@ Concurrent update reconciliation: preserved the independently added compact comp
 - Studio regressions passed: 48 processing tools and 32 correctness/geometry/boundary/cancellation/history checks. OCR and UI/device checks excluded.
 - Browser preview verification blocked: cloud browser rejected local URL with `ERR_BLOCKED_BY_CLIENT`. Visual, mobile, drag/drop and dirty-state interaction checks remain unverified.
 - Commit/deployment are reported separately; a code push does not verify Cloudflare rollout or Google indexing.
+
+## Install detection, all-tools menu and unified logo
+
+The new all-tools disclosure renders all 56 unique working tool links in four categories, with hover, click/touch, search, focus-out and Escape handling. Existing-document navigation guards remain in place.
+
+Install actions are suppressed until initial detection is complete, inside standalone/minimal-ui/iOS app mode, after a confirmed install (remembered locally), or when a supported browser reports this same PWA installed. Both install controls synchronize, and a fresh beforeinstallprompt event resets remembered installation. Browser-tab detection is not universally available: Safari/unsupported browsers and cleared storage may not reveal a previously installed PWA. Sources: https://developer.chrome.com/docs/capabilities/get-installed-related-apps and https://developer.mozilla.org/en-US/docs/Web/API/BeforeInstallPromptEvent/userChoice .
+
+New SVG/PNG branding is shared across the public UI, owner dashboard, guides, metadata, README and PWA manifest. Versioned asset names avoid stale logo cache keys. App identity and start URL stay unchanged. PNGs include normal 192/512px, maskable 512px and Apple 180px icons.
+
+verify-navigation-install checks unique menu links, category/disclosure markup, busy-state links, same-PWA identity detection, storage remembrance/reset/failure, manifest self-relationship, actual PNG dimensions and consistent logo references. Real hover, touch, installation/uninstallation and OS icon refresh remain unverified; the earlier cloud-browser local-preview block still applies.

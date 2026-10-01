@@ -10,16 +10,22 @@
   "theme_color": "#6d28d9",
   "icons": [
     {
-      "src": "/brand/app-192.png",
+      "src": "/brand/app-192-v2.png",
       "sizes": "192x192",
       "type": "image/png",
       "purpose": "any"
     },
     {
-      "src": "/brand/app-512.png",
+      "src": "/brand/app-512-v2.png",
       "sizes": "512x512",
       "type": "image/png",
       "purpose": "any"
+    },
+    {
+      "src": "/brand/app-maskable-v2.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
     }
   ],
   "shortcuts": [
@@ -35,5 +41,13 @@
       "name": "Sign a PDF",
       "url": "/#sign"
     }
-  ]
+  ],
+  "related_applications": [
+    {
+      "platform": "webapp",
+      "url": "https://pdf-studio.in/manifest.webmanifest",
+      "id": "https://pdf-studio.in/"
+    }
+  ],
+  "prefer_related_applications": false
 }
