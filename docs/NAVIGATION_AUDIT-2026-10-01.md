@@ -14,3 +14,5 @@ Scope: live desktop Chrome interaction at the Workers deployment, plus source an
 Checks: source lint 0 errors / 31 warnings, TypeScript, production build, homepage SSR, 62 guide SSR/link destinations, history/landing-tool policy, browser-link attributes/events and discovery/install contracts. Real clicks on the new deployment and mobile/touch layouts remain unverified. Prior route-state tests did not catch the deployed framework Link runtime failure; this audit adds a regression check preventing reintroduction of that dependency in navigation.
 
 Cross-page guide/About/Privacy links now use full browser navigation. Tool-menu operations still reuse the current workspace. Browser beforeunload protection warns about loaded documents/text when leaving; do not rely on browser memory as a saved backup.
+
+Reloading `/#shelf` was also observed to show the homepage. Initial hash handling now recognizes `shelf` as well as tool IDs, so static-page My files links work after full navigation. A regression check covers this bootstrap contract.
