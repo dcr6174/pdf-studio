@@ -23,3 +23,5 @@ for(const name of names)assert.ok(readme.includes('| '+name+' |'),`${name} missi
 assert.ok(!readme.includes('Light and dark themes'));
 assert.ok(readme.includes('Fit mode can shrink text'));
 console.log('PASS: initial homepage SSR, one H1, six popular tools, tool-first entry without homepage upload, all 56 crawlable guide links, FAQ, no sidebar and README coverage of all 56 tools.');
+
+assert.ok(!/Actual processing limits|157\.3 MB|50 MB|400 pages|22 megapixels|20 files/.test(html),'no upfront limit table or numbers');

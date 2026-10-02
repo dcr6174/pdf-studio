@@ -20,7 +20,7 @@ export const toolGuidance: Record<string, ToolGuidance> = {
     faq: [['Is compression lossless?', 'Compact mode retains PDF content. Image-based modes can lose detail and document features.'], ['Why is the result not smaller?', 'The source may already be optimized. Reduction depends on its content and the selected mode.']]
   },
   'native-text': {
-    steps: ['Open a PDF within the 50 MB and 100-page limits. Select an existing text object on the page.', 'Enter a short replacement and preview the changed PDF. Use characters supported by the available font and keep the replacement within its bounds.', 'Keep the edited document in the workspace or export it. Reopen the output and inspect each changed line.'],
+    steps: ['Open a PDF. Select an existing text object on the page.', 'Enter a short replacement and preview the changed PDF. Use characters supported by the available font and keep the replacement within its bounds.', 'Keep the edited document in the workspace or export it. Reopen the output and inspect each changed line.'],
     useCase: 'Correct a short label, date or typo in a PDF containing real text objects. Use Add text for a new note; it does not replace underlying text.',
     checks: 'Scanned text is an image and cannot be edited with this tool. Paragraph reflow is unsupported. Embedded fonts may lack new characters; fitting can shrink text to half its original size. A visible replacement is not a redaction guarantee.',
     faq: [['Why can I not select a sentence?', 'It may be a scan, outlined artwork or unsupported text structure. OCR adds searchable text but does not reconstruct a fully editable layout.'], ['Does this edit the original text?', 'Supported single-line PDF text objects are changed in the exported PDF. This is different from adding a text overlay.']]
@@ -32,7 +32,7 @@ export const toolGuidance: Record<string, ToolGuidance> = {
     faq: [['Can I upload my signature?', 'Yes. Choose the image-upload option in the signature controls.'], ['Is this cryptographic signing?', 'No. The tool places a visual signature; it does not issue a certificate or verify identity.']]
   },
   images: {
-    steps: ['Choose JPG, PNG or WebP images below the 22-megapixel per-image limit.', 'Review the resulting pages and arrange their order in the workspace.', 'Export the PDF and check orientation, margins and small details before downloading.'],
+    steps: ['Choose JPG, PNG or WebP images.', 'Review the resulting pages and arrange their order in the workspace.', 'Export the PDF and check orientation, margins and small details before downloading.'],
     useCase: 'Combine photographed notes, receipts or scanned images into one PDF. This creates image pages rather than searchable text.',
     checks: 'Very large images use substantial browser memory. Reduce their dimensions first if necessary. Use OCR afterwards when you need searchable English text.',
     faq: [['Can I use PNG as well as JPG?', 'Yes. JPG, PNG and WebP inputs are supported.'], ['Will the PDF text be selectable?', 'Image conversion alone does not recognize text. OCR is a separate operation.']]
@@ -75,7 +75,7 @@ const additional: Record<string, [string,string,string,string]> = {
     "Open the PDF and inspect whether the content is arranged in left and right halves.",
     "Export two halves per source page and check their reading order.",
     "Separate side-by-side scans for easier reading.",
-    "Cropping hides content outside boundaries; it is not secure removal. The result must stay within 400 pages."
+    "Cropping hides content outside boundaries; it is not secure removal."
   ],
   "viewer": [
     "Choose the available single-page or two-column reader preference.",
@@ -114,10 +114,10 @@ const additional: Record<string, [string,string,string,string]> = {
     "The operation reverses every page. Use Organize for a custom order instead."
   ],
   "duplicate": [
-    "Check the original page count and the workspace page limit.",
+    "Check the original page count.",
     "Export and verify the order of repeated pages.",
     "Create repeated page copies for document preparation.",
-    "Page duplication increases the page count and file size. Keep the result within 400 pages."
+    "Page duplication increases the page count and file size."
   ],
   "interleave": [
     "Choose the PDFs you want to alternate and check their starting order.",

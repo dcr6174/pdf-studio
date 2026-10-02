@@ -16,10 +16,9 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
  const {slug}=await params,t=seoPages.find(t=>t.slug===slug);if(!t)notFound();
  const tool=tools.find(x=>x.id===t.id)!,guidance=toolGuidance[t.id];
  const formats=accepted(t.id).replaceAll('.','').toUpperCase();
- const limits=t.id==='native-text'?'50 MB and 100 pages':t.id==='images'?'157.3 MB total, with each image below 22 megapixels':'157.3 MB total and 400 pages';
  const faq:[string,string][]=[...guidance.faq,
   ['Which files can I use?',`Supported inputs: ${formats}. ${tool.note??tool.description}`],
-  ['Is this free, and what are the limits?',`Core tools require no account or subscription and add no watermark. This workflow supports ${limits}. Available device memory can impose a lower practical limit.`],
+  ['Is this free?','Core tools require no account or subscription and add no watermark.'],
   ['Do my documents leave my device?','Document processing runs in your browser. PDF Studio does not upload document files. Explicitly saved drafts and My files remain in this browser until deleted. Read aloud may use network-backed browser voices.']
  ];
  const url='https://pdf-studio.in/tools/'+t.slug;
@@ -37,7 +36,7 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
    <h3>How it works</h3><ol>{guidance.steps.map(step=><li key={step}>{step}</li>)}</ol><p>{t.detail}</p>
    <h3>When to use this tool</h3><p>{guidance.useCase}</p>
    <h3>What to check before sharing</h3><p>{guidance.checks}</p>
-   <h3>Supported files and limits</h3><p>{tool.note??tool.description}</p><p>Inputs: {formats}. Technical cap: {limits}. Performance depends on your device. Download important work before closing the browser; local storage is not a backup.</p>
+   <h3>Supported files</h3><p>{tool.note??tool.description}</p><p>Inputs: {formats}. Performance depends on your device. Download important work before closing the browser; local storage is not a backup.</p>
    <h3>Troubleshooting</h3><p>If the file will not open, check it in another PDF reader. If it is password-protected, use Remove a PDF password with a password you know. For scans that need selectable text, run Make a PDF searchable first.</p>
    <h3>Common questions</h3><div className="tool-faq">{faq.map(([question,answer])=><details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div>
    <h3>Related tools</h3><nav className="related-tools" aria-label="Related PDF tools">{related.map(x=><Link key={x.slug} href={'/tools/'+x.slug}><b>{x.title}</b><span>{x.intro}</span></Link>)}</nav>
