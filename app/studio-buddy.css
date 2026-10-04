@@ -194,3 +194,8 @@ html.theme-fade :where(img,canvas,video,.large-thumb,.thumb-shell)::before{trans
 .proof-link{margin-left:10px;color:var(--primary);text-decoration:underline;text-underline-offset:3px;font-size:.9rem}
 
 .seo-page h1{line-height:1.15}
+
+/* Personal touches stay below the tools and guides. */
+.home-daily-footer{text-align:center;padding:28px 16px 12px}
+.home-daily-footer .welcome-meta{justify-content:center}
+.home-daily-footer .daily-line{margin:12px auto 0}

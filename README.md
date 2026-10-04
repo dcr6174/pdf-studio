@@ -327,3 +327,5 @@ Validation: 49 fixture-based processing workflows and 33 additional correctness/
 Refresh integration: corrected clock render errors, timer cleanup, interrupted/rapid theme switching, stale result page counts and privacy verification claims. Retained the previously reviewed comparison and CV guidance, rejection-only caps, accessible logo names and supported camera formats. Local checks and their remaining limitations are recorded after verification.
 
 Refresh validation (4 October 2026): lint, TypeScript, search/welcome/paste/result checks, SEO routes and public-page links, upload rejection/recovery checks, and 49 fixture-based processing workflows plus 33 additional correctness checks passed. Production build passed with existing bundler warnings. No fresh package installation, real-phone camera test or rendered visual interaction test was performed for this integration. Cloudflare deployment is not verified.
+
+The local clock and daily encouraging line appear at the bottom of the homepage, after the guides and above the footer. Greeting and saved-document recovery remain near the top.
