@@ -1,5 +1,4 @@
 import {cp,mkdir,access} from 'node:fs/promises';
-import {fileURLToPath} from 'node:url';
 const root=new URL('../',import.meta.url);
 await mkdir(new URL('public/',root),{recursive:true});
 for(const name of ['cmaps','standard_fonts']) await cp(new URL('node_modules/pdfjs-dist/'+name,root),new URL('public/'+name,root),{recursive:true});
@@ -12,3 +11,4 @@ await mkdir(new URL('public/vendor/',root),{recursive:true});
 await cp(new URL('node_modules/@embedpdf/pdfium/dist/pdfium.wasm',root),new URL('public/vendor/pdfium.wasm',root));
 await cp(new URL('node_modules/@embedpdf/pdfium/LICENSE',root),new URL('public/vendor/PDFIUM-WRAPPER-LICENSE.txt',root));
 await cp(new URL('node_modules/@embedpdf/pdfium/LICENSE.pdfium',root),new URL('public/vendor/PDFIUM-LICENSE.txt',root));
+

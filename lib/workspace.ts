@@ -22,7 +22,7 @@ export function useWorkspace(){
 export async function draft(action:'get'|'save'|'delete',state?:DocumentState):Promise<DocumentState|undefined>{
   const db=await new Promise<IDBDatabase>((resolve,reject)=>{const r=indexedDB.open('openpdf-draft',1);r.onupgradeneeded=()=>r.result.createObjectStore('draft');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});
   try{return await new Promise((resolve,reject)=>{const tx=db.transaction('draft',action==='get'?'readonly':'readwrite'),store=tx.objectStore('draft');let value:DocumentState|undefined;
-    if(action==='save'&&state)store.put({...state,files:state.files.map(({doc,...f})=>f)},'workspace');
+    if(action==='save'&&state)store.put({...state,files:state.files.map(file=>({id:file.id,name:file.name,bytes:file.bytes,size:file.size,pages:file.pages,image:file.image}))},'workspace');
     else if(action==='delete')store.delete('workspace');
     else {const r=store.get('workspace');r.onsuccess=()=>value=r.result;}
     tx.oncomplete=()=>resolve(value);tx.onerror=tx.onabort=()=>reject(tx.error);

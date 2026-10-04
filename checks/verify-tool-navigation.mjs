@@ -33,5 +33,5 @@ console.log('PASS: retained workspace switches on landing-tool changes and cance
 
 assert.equal(run({hash:'#merge',marks:[{kind:'redact'}]}).calls.length,0,'pending redactions block history navigation');
 assert.deepEqual(run({pathname:'/tools/merge-pdf',view:'compress'}).calls,[['merge',false]],'history resolves the actual tool path');
-assert.ok(source.includes('queueMicrotask(()=>navigate(id,false))'),'hash startup never pushes history');
+assert.ok(source.includes('queueMicrotask(()=>bootstrapNavigate(id))')&&source.includes('useEffectEvent((id:string)=>navigate(id,false))'),'hash startup never pushes history');
 assert.ok(source.includes("window.addEventListener('hashchange',back)"),'direct hash changes share the navigation handler');

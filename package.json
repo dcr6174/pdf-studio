@@ -10,7 +10,7 @@
     "dev": "node scripts/prepare-pdf-assets.mjs && vite",
     "build": "npm run build:public",
     "start": "wrangler dev --config dist/server/wrangler.json",
-    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next",
+    "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --max-warnings 0",
     "db:generate": "drizzle-kit generate",
     "verify": "node checks/verify-engine.mjs",
     "verify:analytics": "node checks/verify-analytics.mjs && node checks/verify-tracker.mjs",

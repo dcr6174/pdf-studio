@@ -1,7 +1,7 @@
 import fs from 'node:fs';
 import ts from 'typescript';
 import assert from 'node:assert/strict';
-import {PDFDocument, StandardFonts, PDFName, decodePDFRawStream} from 'pdf-lib';
+import {PDFDocument, StandardFonts, decodePDFRawStream} from 'pdf-lib';
 import {PDF} from '@libpdf/core';
 import JSZip from 'jszip';
 const compiled=ts.transpileModule(fs.readFileSync(new URL('../lib/pdf-engine.ts',import.meta.url),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText.replace("'./page-geometry'","'./.verify-geometry.mjs'").replace("'./extra-pdf'","'./.verify-extra-pdf.mjs'").replace("'./native-text'","'./.verify-native-text.mjs'");

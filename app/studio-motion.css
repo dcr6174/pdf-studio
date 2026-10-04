@@ -1,0 +1,29 @@
+/* EasyUI-inspired press, unfold and reveal patterns, adapted to native controls.
+   Reference: https://www.easyui.site/ — attribution in THIRD_PARTY_NOTICES.md. */
+:root{--studio-motion-fast:160ms;--studio-motion-enter:220ms;--studio-motion-ease:cubic-bezier(.16,1,.3,1)}
+.studio-shell .primary,.studio-shell .secondary,.tools-trigger,.home-toolbox .filters button{
+ transition:transform var(--studio-motion-fast) var(--studio-motion-ease),background-color var(--studio-motion-fast),border-color var(--studio-motion-fast),box-shadow var(--studio-motion-fast);
+}
+.studio-shell .primary:active:not(:disabled),.studio-shell .secondary:active:not(:disabled),.tools-trigger:active,.home-toolbox .filters button:active{transform:scale(.98,.965)}
+.home-toolbox .tool-card{transition:transform var(--studio-motion-enter) var(--studio-motion-ease),box-shadow var(--studio-motion-enter),border-color var(--studio-motion-fast)}
+.home-toolbox .tool-card .tool-icon{transition:transform var(--studio-motion-enter) var(--studio-motion-ease)}
+@media(hover:hover) and (pointer:fine){
+ .home-toolbox .tool-card:hover{transform:translateY(-3px)}
+ .home-toolbox .tool-card:hover .tool-icon{transform:rotate(-4deg)}
+}
+.tools-panel:not([hidden]),.output-panel{animation:studio-reveal var(--studio-motion-enter) var(--studio-motion-ease)}
+.success-icon{animation:studio-settle 300ms var(--studio-motion-ease)}
+.tools-trigger svg{transition:transform var(--studio-motion-enter) var(--studio-motion-ease)}
+.tools-trigger[aria-expanded=true] svg{transform:rotate(180deg)}
+.tool-drop{transition:border-color var(--studio-motion-fast),background-color var(--studio-motion-fast),box-shadow var(--studio-motion-fast)}
+.drag-overlay{animation:studio-fade var(--studio-motion-fast) ease-out}
+.home-faq details[open] p,.tool-instructions details[open] p{animation:studio-unfold var(--studio-motion-enter) var(--studio-motion-ease)}
+@keyframes studio-fade{from{opacity:0}to{opacity:1}}
+@keyframes studio-reveal{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
+@keyframes studio-unfold{from{opacity:0;transform:translateY(-4px)}to{opacity:1;transform:translateY(0)}}
+@keyframes studio-settle{from{opacity:0;transform:scale(.9)}to{opacity:1;transform:scale(1)}}
+@media(prefers-reduced-motion:reduce){
+ .studio-shell .primary,.studio-shell .secondary,.tools-trigger,.tools-trigger svg,.home-toolbox .filters button,.home-toolbox .tool-card,.home-toolbox .tool-card .tool-icon,.tool-drop{transition:none!important}
+ .drag-overlay,.tools-panel,.output-panel,.success-icon,.home-faq details p,.tool-instructions details p{animation:none!important}
+ .studio-shell .primary:active,.studio-shell .secondary:active,.tools-trigger:active,.home-toolbox .filters button:active,.home-toolbox .tool-card:hover,.home-toolbox .tool-card:hover .tool-icon{transform:none!important}
+}

@@ -2,6 +2,7 @@ import {themeBootstrapScript} from '@/lib/theme-policy';
 import type { Metadata } from "next";
 import "./globals.css";
 import "./studio-brand.css";
+import "./studio-motion.css";
 
 export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",

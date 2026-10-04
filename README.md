@@ -237,3 +237,11 @@ The studio already uses React 19; this update improves the existing app rather t
 - Signing shows signature/image placement controls; general annotation controls remain in Edit PDF. On narrow screens, the existing-text document appears before the controls.
 
 Verification: `node checks/verify-react-workflows.mjs`, `node checks/verify-tool-navigation.mjs`, `node checks/verify-browser-links.mjs`, plus the existing PDF, signature, SEO and homepage checks. Workflow tests execute the actual upload handler with PDF parsing mocked; engine checks independently validate generated PDFs. These tests do not establish real-user performance or every mobile/browser interaction. Cloudflare deployment is separate; the Workers redirect remains disabled.
+
+### Motion and lint cleanup (October 4, 2026)
+
+Subtle EasyUI-inspired CSS interactions now provide button press feedback, tool-card hover elevation, menu reveal/chevron rotation, FAQ answer reveal and result confirmation. They use native controls, add no animation package, preserve server-rendered guide content, and respect reduced motion. PDF pages, signatures and drag coordinates are not animated. These are adapted interaction patterns, not an installation of the entire EasyUI component library.
+
+React navigation uses a memoized callback with explicit dependencies; startup navigation uses an effect event so it reads current state without rerunning bootstrap. Thumbnail rendering tracks changed bytes and image data. Images use one browser-only component with explicit logo dimensions, asynchronous decoding and lazy private previews; document images never go through an image optimization server. The Next-specific server image-optimization lint rule is exempted only in that wrapper, where native images are required by the privacy model. Generated `.verify-*.mjs` files are excluded from lint because their TypeScript source is checked instead. Unused imports and variables were removed; form and installation conditionals are explicit. Check with `npm run lint` and `npx tsc --noEmit`.
+
+EasyUI references and its MIT notice are recorded in `THIRD_PARTY_NOTICES.md` and `licenses/EasyUI-MIT.txt`.

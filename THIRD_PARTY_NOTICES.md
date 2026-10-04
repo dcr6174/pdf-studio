@@ -14,3 +14,13 @@ Dependencies retain the licences in their installed packages, as locked in packa
 - SheetJS xlsx 0.20.3: Apache-2.0. The upstream tarball and integrity are pinned in package-lock.json; the unmaintained npm 0.18.5 package is not used.
 - Vinext/Sites starter and bundled UI primitives retain applicable upstream notices in the source.
 
+## Interaction design attribution
+
+The restrained press-compression and unfolding/reveal patterns in `app/studio-motion.css` were adapted for PDF Studio after inspecting EasyUI's PressButton and UnfoldAccordion source. The implementation uses native CSS rather than EasyUI's Framer Motion components and keeps PDF Studio's existing markup, colors and accessibility behavior.
+
+- Project: https://github.com/Surajmaurya1/easyui
+- Website: https://www.easyui.site/
+- Reference source: `public/source/press-button.json` and `public/source/unfold-accordion.json`, inspected October 4, 2026.
+- Copyright (c) 2026 Suraj Maurya. MIT License: see `licenses/EasyUI-MIT.txt`.
+
+Other component and PDF dependencies retain their package licenses and existing notices.

@@ -18,7 +18,17 @@ const eslintConfig = defineConfig([
     "work/**",
     "public/pdf.worker.min.mjs",
     "public/vendor/**",
+    // Transpiled test fixtures; lint their TypeScript sources instead.
+    "lib/.verify-*.mjs",
   ]),
+  {
+    files: ["components/browser-image.tsx"],
+    rules: {
+      // This browser-only wrapper renders private data/blob URLs and local
+      // assets. Server optimization would violate the document privacy model.
+      "@next/next/no-img-element": "off",
+    },
+  },
   {
     files: ["components/ui/**/*.{ts,tsx}", "hooks/use-mobile.ts"],
     rules: {

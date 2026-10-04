@@ -1,6 +1,6 @@
 import {addBookmarks,removeAnnotations,halvePages,createForm} from './extra-pdf';
 import {replaceExistingText} from './native-text';
-import { PDFDocument, StandardFonts, rgb, degrees, PDFTextField, PDFCheckBox, PDFDropdown, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray, type PDFPage } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb, degrees, PDFTextField, PDFCheckBox, PDFDropdown, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray } from 'pdf-lib';
 import JSZip from 'jszip';
 import {pageGeometry,displayPoint,safeLink} from './page-geometry';
 export type Loaded = {
@@ -107,7 +107,7 @@ export async function textPages(bytes: Uint8Array, password?: string) { const d 
 finally {
     await d.destroy();
 } }
-export async function loadFile(file: File, password?: string): Promise<Loaded> { const bytes = new Uint8Array(await file.arrayBuffer()); const base = { id: crypto.randomUUID(), name: file.name, bytes, size: file.size, pages: 0 }; if (/\.pdf$/i.test(file.name)) {
+export async function loadFile(file: File): Promise<Loaded> { const bytes = new Uint8Array(await file.arrayBuffer()); const base = { id: crypto.randomUUID(), name: file.name, bytes, size: file.size, pages: 0 }; if (/\.pdf$/i.test(file.name)) {
     if(!new TextDecoder().decode(bytes.slice(0,1024)).includes('%PDF-'))throw new Error('This file is not a PDF. Choose a valid PDF document.');
     let doc:PDFDocument;try{doc=await PDFDocument.load(bytes,{updateMetadata:false});}catch(e){if(String(e).toLowerCase().includes('encrypt'))throw new Error('This PDF is password protected. Use Remove password with a password you know, then continue editing.');throw new Error('This PDF could not be read. It may be damaged. Try a readable copy or another PDF reader.');}
     return { ...base, doc, pages: doc.getPageCount() };
@@ -321,7 +321,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
             if (f instanceof PDFTextField)
                 f.setText(String(val));
             else if (f instanceof PDFCheckBox)
-                val ? f.check() : f.uncheck();
+                {if(val)f.check();else f.uncheck();}
             else if (f instanceof PDFDropdown)
                 f.select(String(val));
         }
