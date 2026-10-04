@@ -185,7 +185,7 @@ html.theme-fade :where(img,canvas,video,.large-thumb,.thumb-shell)::before{trans
 @media (max-width:520px){.result-summary{grid-template-columns:1fr;gap:10px}.rs-arrow{transform:rotate(90deg);justify-self:center}}
 @media (forced-colors:active){.result-summary{border:1px solid ButtonText}.rs-bar u{background:Highlight}}
 
-/* ---- Prove it page ---------------------------------------------------------- */
+/* ---- Check it yourself page ---------------------------------------------------------- */
 .proof-steps{list-style:decimal;padding-left:22px;display:grid;gap:10px;line-height:1.65}
 .proof-browser{border:0;border-bottom:1px solid var(--border);padding:12px 0}
 .proof-browser summary{cursor:pointer;font-weight:600;min-height:32px;display:list-item}

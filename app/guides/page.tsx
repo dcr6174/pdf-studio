@@ -1,4 +1,5 @@
 import type {Metadata} from 'next';
+import {pageMeta} from '@/lib/page-meta';
 import {Spotlight} from '@/components/spotlight';
 import Link from '@/components/browser-link';
 import {SiteHeader,SiteFooter} from '@/components/site-header';
@@ -7,9 +8,7 @@ import {conversionGuides} from '@/lib/conversion-guides';
 import {comparisons} from '@/lib/comparisons';
 import {groups} from '@/lib/tools';
 
-export const metadata:Metadata={title:'PDF guides: how to edit, merge, compress, sign and scan PDFs free',
- description:'Step-by-step guides for every PDF Studio tool, popular tasks like compressing a PDF to 100 KB or editing a CV, and honest comparisons with iLovePDF, Smallpdf, Sejda and Adobe.',
- alternates:{canonical:'/guides'}};
+export const metadata:Metadata=pageMeta('/guides','PDF guides: how to edit, merge, compress, sign and scan PDFs free','Step-by-step guides for every PDF Studio tool, popular tasks like compressing a PDF to 100 KB or editing a CV, and honest comparisons with iLovePDF, Smallpdf, Sejda and Adobe.');
 
 const popular=['edit-cv-pdf','compress-pdf-to-100kb','scan-to-pdf','jpg-to-pdf','delete-pdf-pages','pdf-to-excel'];
 
@@ -26,8 +25,8 @@ export default function Guides(){
   <h2>Export guides</h2>
   <ul className="guide-list">{conversionGuides.map(g=><li key={g.slug}><Link href={'/tools/'+g.slug}>{g.title}</Link><span>{g.intro}</span></li>)}</ul>
   <h2>Trust and privacy</h2>
-  <ul className="guide-list"><li><Link href="/prove-it">Prove it: check that your PDF never leaves your device</Link><span>Four checks you can run in your own browser, including an offline test.</span></li><li><Link href="/privacy">Privacy policy</Link><span>What is stored on your device and what, if anything, is sent.</span></li><li><Link href="/contact">Contact</Link><span>Questions, problems and suggestions.</span></li></ul>
-  <h2>Compare PDF Studio</h2>
+  <ul className="guide-list"><li><Link href="/check-it-yourself">Check it yourself: what PDF Studio sends</Link><span>Four checks you can run in your own browser, and what they can and cannot show.</span></li><li><Link href="/privacy">Privacy policy</Link><span>What is stored on your device and what, if anything, is sent.</span></li><li><Link href="/contact">Contact</Link><span>Questions, problems and suggestions.</span></li></ul>
+  <h2>Compared with other tools (what each publishes)</h2>
   <ul className="guide-list">{comparisons.map(c=><li key={c.slug}><Link href={'/compare/'+c.slug}>{c.title}</Link><span>{c.summary}</span></li>)}</ul>
  </main><SiteFooter/></div>;
 }

@@ -1,0 +1,8 @@
+/**
+ * If the page's JavaScript never starts (a blocked or stale script file, an over-eager content blocker,
+ * a Cloudflare setting), every button looks fine but does nothing. This tiny inline script waits a few
+ * seconds and, only if the app has not marked itself ready, shows a plain message with a Refresh button.
+ * components/startup-ready.tsx sets data-ready on <html> as soon as React is running.
+ */
+export const STARTUP_GUARD_MS=7000;
+export const startupGuardScript=`(function(){try{var ms=${STARTUP_GUARD_MS};function show(){if(document.documentElement.dataset.ready||document.getElementById('startup-guard'))return;var d=document.createElement('div');d.id='startup-guard';d.setAttribute('role','alert');d.style.cssText='position:fixed;left:12px;right:12px;bottom:calc(12px + env(safe-area-inset-bottom,0px));z-index:2147483000;max-width:560px;margin:0 auto;padding:14px 16px;border-radius:14px;background:#17142E;color:#fff;font:15px/1.5 system-ui,sans-serif;box-shadow:0 12px 32px rgba(0,0,0,.35)';d.innerHTML='<b>This page did not finish loading.</b><br>Buttons may not respond. Refresh the page. If it keeps happening, turn off content blockers for this site or email pdf.studio.in@gmail.com.<br><button type="button" style="margin-top:10px;min-height:44px;padding:0 18px;border:0;border-radius:10px;background:#fff;color:#17142E;font:600 15px system-ui,sans-serif;cursor:pointer">Refresh</button>';d.querySelector('button').onclick=function(){location.reload()};document.body.appendChild(d)}function arm(){setTimeout(show,ms)}if(document.readyState!=='loading')arm();else document.addEventListener('DOMContentLoaded',arm)}catch(e){}})();`;

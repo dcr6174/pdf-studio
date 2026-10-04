@@ -29,12 +29,12 @@ assert.deepEqual(R.barWidths(100,50),{before:100,after:50});assert.deepEqual(R.b
 assert.equal(R.plural(1,'page'),'1 page');assert.equal(R.plural(3,'file'),'3 files');
 
 // ---- wiring and the proof page
-const page=await readFile('app/page.tsx','utf8'),prove=await readFile('app/prove-it/page.tsx','utf8'),sitemap=await readFile('public/sitemap.xml','utf8'),gen=await readFile('scripts/generate-site-assets.mjs','utf8');
+const page=await readFile('app/page.tsx','utf8'),prove=await readFile('app/check-it-yourself/page.tsx','utf8'),sitemap=await readFile('public/sitemap.xml','utf8'),gen=await readFile('scripts/generate-site-assets.mjs','utf8');
 assert.ok(page.includes("document.addEventListener('paste', onPaste)")&&page.includes('isEditableTarget(e.target)'),'paste ignores text fields');
 assert.ok(page.includes("c.view === 'home'")&&page.includes('Open a tool first'),'home does not take uploads, so paste there only explains');
 assert.ok(page.includes('<PasteHint/>')&&page.includes('<ResultSummary'));
 assert.ok(page.includes("['create','markdown','create-form','hash','privacy','audio','compare'].includes(view)"),'summary skipped where sizes mean nothing');
-for(const must of ['Preserve log','collect','zebra-lantern','Offline','Do Not Track','What these checks cannot show','privacy policy'])assert.ok(prove.includes(must),'prove-it mentions '+must);
+for(const must of ['Preserve log','collect','zebra-lantern','Offline','Do Not Track','What these checks cannot show','Privacy policy'])assert.ok(prove.includes(must),'check page mentions '+must);
 assert.ok(!/we (?:guarantee|promise) 100%|military|bank-level|unhackable/i.test(prove),'no overclaiming');
-assert.ok(sitemap.includes('https://pdf-studio.in/prove-it')&&gen.includes("'/prove-it'"));
+assert.ok(sitemap.includes('https://pdf-studio.in/check-it-yourself')&&gen.includes("'/check-it-yourself'"));
 console.log('PASS: paste (files, items fallback, screenshots, text fields untouched, home explains), before/after maths and tones, wiring, and the Prove it page content and sitemap.');

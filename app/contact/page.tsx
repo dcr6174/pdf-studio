@@ -1,9 +1,10 @@
 import type {Metadata} from 'next';
+import {pageMeta} from '@/lib/page-meta';
 import {SiteHeader,SiteFooter} from '@/components/site-header';
 import Link from '@/components/browser-link';
 import {CONTACT_EMAIL,mailtoLink} from '@/lib/contact';
 
-export const metadata:Metadata={title:'Contact PDF Studio: questions, problems and suggestions',description:'Email PDF Studio with a question, a problem report or an idea. Tips for a useful report, and what not to send.',alternates:{canonical:'/contact'}};
+export const metadata:Metadata=pageMeta('/contact','Contact PDF Studio: questions, problems and suggestions','Email PDF Studio with a question, a problem report or an idea. Tips for a useful report, and what not to send.');
 
 export default function Contact(){
  const schema={'@context':'https://schema.org','@type':'ContactPage',name:'Contact PDF Studio',url:'https://pdf-studio.in/contact',mainEntity:{'@type':'Organization',name:'PDF Studio',url:'https://pdf-studio.in/',email:CONTACT_EMAIL}};

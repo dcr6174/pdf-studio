@@ -1,4 +1,6 @@
 import {themeBootstrapScript} from '@/lib/theme-policy';
+import {startupGuardScript} from '@/lib/startup-guard';
+import {StartupReady} from '@/components/startup-ready';
 import type { Metadata } from "next";
 import "./globals.css";
 import "./studio-brand.css";
@@ -10,12 +12,12 @@ export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
   appleWebApp: { capable: true, title: "PDF Studio", statusBarStyle: "default" },
   metadataBase: new URL("https://pdf-studio.in"),
-  title: { default: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Upload", template: "%s | PDF Studio" },
-  description: "Free PDF editor and tools: edit text, merge, compress, sign and scan. No watermark, no upload, no sign-up. Files stay on your device.",
+  title: { default: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up", template: "%s | PDF Studio" },
+  description: "Free PDF editor and tools: edit text, merge, compress, sign and scan. No watermark, no sign-up. Designed to process files on your device.",
   alternates: { canonical: "/" },
   robots: { index: true, follow: true },
-  openGraph: { type: "website", siteName: "PDF Studio", locale: "en_IN", url: "https://pdf-studio.in", title: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Upload", description: "Edit, merge, compress, sign and scan PDFs free. No watermark, no upload, no sign-up.", images: [{ url: "/social/home.png", width:1200, height:630, alt: "PDF Studio — Free online PDF tools" }] },
-  twitter: { card: "summary_large_image", title: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Upload", description: "Edit, merge, compress, sign and scan PDFs free. No watermark, no upload.", images: ["/social/home.png"] },
+  openGraph: { type: "website", siteName: "PDF Studio", locale: "en_IN", url: "https://pdf-studio.in", title: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up", description: "Edit, merge, compress, sign and scan PDFs free. No watermark, no sign-up.", images: [{ url: "/social/home.png", width:1200, height:630, alt: "PDF Studio — Free online PDF tools" }] },
+  twitter: { card: "summary_large_image", title: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up", description: "Edit, merge, compress, sign and scan PDFs free. No watermark, no sign-up.", images: ["/social/home.png"] },
   icons: { apple: "/brand/apple-touch-v5.png", icon: [{ url: "/brand/pdf-studio-favicon-v5.svg", type: "image/svg+xml" }, { url: "/favicon.ico", sizes: "48x48" }], shortcut: "/brand/pdf-studio-logo-v5.png" },
 };
 
@@ -26,8 +28,8 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head><script dangerouslySetInnerHTML={{__html:themeBootstrapScript}}/><link rel="preload" href="/fonts/Outfit-Bold-subset.woff" as="font" type="font/woff" crossOrigin="anonymous"/></head>
-      <body className="antialiased"><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({"@context":"https://schema.org","@type":"WebSite",name:"PDF Studio",url:"https://pdf-studio.in/",description:"Free PDF tools with on-device document processing",inLanguage:"en"})}}/>{children}</body>
+      <head><script dangerouslySetInnerHTML={{__html:themeBootstrapScript}}/><script dangerouslySetInnerHTML={{__html:startupGuardScript}}/><link rel="preload" href="/fonts/Outfit-Bold-subset.woff" as="font" type="font/woff" crossOrigin="anonymous"/></head>
+      <body className="antialiased"><noscript><p style={{margin:0,padding:"12px 16px",background:"#17142E",color:"#fff",font:"15px/1.5 system-ui,sans-serif"}}>PDF Studio needs JavaScript to open and edit files. Please turn it on for this site.</p></noscript><StartupReady/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({"@context":"https://schema.org","@type":"WebSite",name:"PDF Studio",url:"https://pdf-studio.in/",description:"Free PDF tools with on-device document processing",inLanguage:"en"})}}/>{children}</body>
     </html>
   );
 }

@@ -5,14 +5,14 @@ import {existsSync} from 'node:fs';
 import {build} from 'vite';
 import {renderToStaticMarkup} from 'react-dom/server';
 
-for (const [entry,dir] of [['app/guides/page.tsx','.guides-check'],['app/compare/[slug]/page.tsx','.comparisons-check'],['app/contact/page.tsx','.contact-check'],['app/prove-it/page.tsx','.proof-check']]) {
+for (const [entry,dir] of [['app/guides/page.tsx','.guides-check'],['app/compare/[slug]/page.tsx','.comparisons-check'],['app/contact/page.tsx','.contact-check'],['app/check-it-yourself/page.tsx','.proof-check']]) {
  await build({configFile:false,logLevel:'error',resolve:{alias:{'@':resolve('.')}},build:{ssr:entry,outDir:dir,emptyOutDir:true,rollupOptions:{output:{entryFileNames:'page.mjs'}}}});
 }
 const {default:Guides}=await import('../.guides-check/page.mjs');
 const {default:Compare,generateStaticParams,generateMetadata}=await import('../.comparisons-check/page.mjs');
 const {generateStaticParams:toolParams}=await import('../.seo-check/page.mjs');
 const comparisons=generateStaticParams();
-const destinations=new Set(['/', '/guides', '/privacy', '/about', '/contact', '/prove-it',...toolParams().map(p=>'/tools/'+p.slug),...comparisons.map(p=>'/compare/'+p.slug)]);
+const destinations=new Set(['/', '/guides', '/privacy', '/about', '/contact', '/check-it-yourself',...toolParams().map(p=>'/tools/'+p.slug),...comparisons.map(p=>'/compare/'+p.slug)]);
 const sitemap=await readFile('public/sitemap.xml','utf8');
 const check=html=>{
  assert.equal((html.match(/<h1>/g)||[]).length,1);
@@ -35,5 +35,5 @@ for(const params of comparisons){
 await assert.rejects(()=>Compare({params:Promise.resolve({slug:'missing-comparison'})}));
 console.log('PASS: guides hub and all four comparison pages render, internal links resolve, schemas parse, canonicals match, brand links have names, and upfront validation caps remain hidden.');
 
-for(const [slug,dir] of [['contact','.contact-check'],['prove-it','.proof-check']]){const page=await import('../'+dir+'/page.mjs');check(renderToStaticMarkup(page.default()));assert.equal(page.metadata.alternates.canonical,'/'+slug);assert.ok(sitemap.includes('https://pdf-studio.in/'+slug));}
-console.log('PASS: Contact and Prove it render with valid destinations and canonicals.');
+for(const [slug,dir] of [['contact','.contact-check'],['check-it-yourself','.proof-check']]){const page=await import('../'+dir+'/page.mjs');check(renderToStaticMarkup(page.default()));assert.equal(page.metadata.alternates.canonical,'/'+slug);assert.ok(sitemap.includes('https://pdf-studio.in/'+slug));}
+console.log('PASS: Contact and Check it yourself render with valid destinations and canonicals.');

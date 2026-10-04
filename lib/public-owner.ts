@@ -4,7 +4,7 @@ const cookieName = '__Host-pdf-studio-owner';
 const lifetime = 8 * 60 * 60;
 const encoder = new TextEncoder();
 export type OwnerEnv = { OWNER_PASSWORD?: string; ANALYTICS_OWNER_EMAIL?: string };
-const protectedPath = (path: string) => path === '/analytics' || path.startsWith('/analytics/') || path === '/api/analytics/summary' || path === '/api/analytics/access';
+const protectedPath = (path: string) => path === '/analytics' || path.startsWith('/analytics/') || (path.startsWith('/api/analytics/') && path !== '/api/analytics/collect');
 const configured = (env: OwnerEnv) => typeof env.OWNER_PASSWORD === 'string' && env.OWNER_PASSWORD.length >= 32 && !!env.ANALYTICS_OWNER_EMAIL;
 async function key(secret: string) { return crypto.subtle.importKey('raw', encoder.encode(secret), { name: 'HMAC', hash: 'SHA-256' }, false, ['sign', 'verify']); }
 async function signature(message: string, secret: string) {

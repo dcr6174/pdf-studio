@@ -15,6 +15,6 @@ export function SiteHeader(){
 export function SiteFooter(){
  return <footer className="site-footer">
   <span className="footer-brand"><Image unoptimized src="/brand/pdf-studio-logo-v5.png" alt="" width="22" height="22"/>PDF Studio</span>
-  <div className="footer-links"><Link href="/">All tools</Link><Link href="/privacy">Privacy policy</Link><Link href="/prove-it">Prove it</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link></div>
+  <div className="footer-links"><Link href="/">All tools</Link><Link href="/privacy">Privacy policy</Link><Link href="/check-it-yourself">Check it yourself</Link><Link href="/about">About</Link><Link href="/contact">Contact</Link></div>
  </footer>;
 }
