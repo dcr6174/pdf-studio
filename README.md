@@ -224,3 +224,16 @@ Tools-menu mouse clicks now keep a menu already opened by hover open; touch and 
 ### Limit messaging (2 October 2026)
 
 Removed the homepage processing-limits table and numeric caps from upload areas, tool notes, guides, FAQs and existing-text help. Supported formats and processing/privacy explanations remain visible. Validation thresholds remain enforced; exceeding file size, page count, image dimensions or batch count displays the relevant actionable error. This is a presentation change, not unlimited processing.
+
+### React navigation and upload reliability (October 4, 2026)
+
+The studio already uses React 19; this update improves the existing app rather than replacing it.
+
+- Tool selections update to shareable `/tools/<slug>` URLs while retaining the in-memory document. Reloading opens that tool. Startup hashes do not add history entries; direct hash changes and Back/Forward share the same guards, including pending redactions.
+- The Tools menu remains open after keyboard activation and supports native Ctrl/Cmd-click for opening a tool in another tab. A separate tab starts its own workspace.
+- Rejected uploads retain the prior document and downloadable output. File counts and bytes are checked before parsing; page counts are checked incrementally. Removed pages no longer consume page capacity when appending documents.
+- Form field extraction finishes before the workspace is replaced. Existing-text limits are validated before committing an upload and again when opening existing workspace content.
+- Batch counts are validated at upload and processing time. Rejection messages state the actual amount, permitted amount and recovery action. Numeric limits remain absent from the normal homepage and tool screens.
+- Signing shows signature/image placement controls; general annotation controls remain in Edit PDF. On narrow screens, the existing-text document appears before the controls.
+
+Verification: `node checks/verify-react-workflows.mjs`, `node checks/verify-tool-navigation.mjs`, `node checks/verify-browser-links.mjs`, plus the existing PDF, signature, SEO and homepage checks. Workflow tests execute the actual upload handler with PDF parsing mocked; engine checks independently validate generated PDFs. These tests do not establish real-user performance or every mobile/browser interaction. Cloudflare deployment is separate; the Workers redirect remains disabled.

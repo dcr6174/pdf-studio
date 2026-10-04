@@ -209,3 +209,15 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 .site-footer .footer-links{display:flex;flex-wrap:wrap;gap:4px}
 .seo-page .site-footer a{display:inline-flex;align-items:center;min-height:44px;padding:0 12px;border-radius:8px;color:var(--muted);text-decoration:none}
 .seo-page .site-footer a:hover{background:var(--soft);color:var(--foreground)}
+
+/* Keep the paper centered while task controls fit their available column. */
+.editor-main,.native-canvas-area,.properties{min-width:0}
+.editor-toolbar{flex-wrap:wrap}
+.properties .field{min-width:0;max-width:100%}
+.native-canvas-hint{flex-wrap:wrap}
+@media(max-width:767px){
+ .native-canvas-area{order:0}
+ .native-controls{order:1}
+ .native-export{margin-left:0;flex-wrap:wrap}
+ .native-history{flex-wrap:wrap}
+}

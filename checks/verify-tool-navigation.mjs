@@ -1,13 +1,14 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import vm from 'node:vm';
+import ts from 'typescript';
 const source=await readFile('app/page.tsx','utf8');
 const handler=source.match(/const back=\(\)=>\{([\s\S]*?)\};window\.addEventListener\('popstate',back\)/);
 assert.ok(handler,'test the actual popstate handler');
-const body=handler[1].replace('let next:string','let next');
-function run({hash='',pathname='/',view='compress',initialTool='compress',busy=false,loading=false,textDirty=false}={}){
+const body=ts.transpile(handler[1],{target:ts.ScriptTarget.ES2022});
+function run({hash='',pathname='/',view='compress',initialTool='compress',busy=false,loading=false,textDirty=false,marks=[]}={}){
  const calls=[],messages=[],pushes=[];
- vm.runInNewContext(`(()=>{${body}})()`,{location:{hash,pathname},view,initialTool,busy,loading,textDirty,tools:[{id:'compress'},{id:'merge'},{id:'native-text'}],navigate:(...args)=>calls.push(args),toast:s=>messages.push(s),window:{history:{pushState:(...args)=>pushes.push(args)}}});
+ vm.runInNewContext(`(()=>{${body}})()`,{location:{hash,pathname},view,initialTool,busy,loading,textDirty,marks,seoTools:[{id:'compress',slug:'compress-pdf'},{id:'merge',slug:'merge-pdf'},{id:'native-text',slug:'edit-pdf-text'}],tools:[{id:'compress'},{id:'merge'},{id:'native-text'}],navigate:(...args)=>calls.push(args),toast:s=>messages.push(s),window:{history:{pushState:(...args)=>pushes.push(args)}}});
  return {calls,messages,pushes};
 }
 for(const hash of ['#studio-content','#tool-guide-title','#unknown'])assert.deepEqual(run({hash}).calls,[],'anchor changes keep current tool');
@@ -29,3 +30,8 @@ for(const initialTool of [...toolIds,'home']){
 }
 {const calls=[],callbacks=[],landingTool={current:'previous-tool'};const cleanup=vm.runInNewContext(`(()=>{if(landingTool.current===initialTool)return;${routeEffect[1]}})()`,{initialTool:'merge',landingTool,queueMicrotask:fn=>callbacks.push(fn),navigate:(...args)=>calls.push(args)});cleanup();callbacks.forEach(fn=>fn());assert.deepEqual(calls,[],'cancel stale route effects');}
 console.log('PASS: retained workspace switches on landing-tool changes and cancels stale queued navigation.');
+
+assert.equal(run({hash:'#merge',marks:[{kind:'redact'}]}).calls.length,0,'pending redactions block history navigation');
+assert.deepEqual(run({pathname:'/tools/merge-pdf',view:'compress'}).calls,[['merge',false]],'history resolves the actual tool path');
+assert.ok(source.includes('queueMicrotask(()=>navigate(id,false))'),'hash startup never pushes history');
+assert.ok(source.includes("window.addEventListener('hashchange',back)"),'direct hash changes share the navigation handler');

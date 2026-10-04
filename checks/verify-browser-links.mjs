@@ -21,7 +21,7 @@ assert.equal(update({detail:1},{current:'mouse'},true),true,'hover then click ke
 assert.equal(update({detail:1},{current:'mouse'},false),true);
 assert.equal(update({detail:1},{current:'touch'},true),false);
 assert.equal(update({detail:1},{current:'touch'},false),true);
-assert.equal(update({detail:0},{current:'mouse'},true),false,'keyboard toggles');
+assert.equal(update({detail:0},{current:'mouse'},true),true,'keyboard activation keeps the focused menu open');
 console.log('PASS: mouse hover/click, touch toggle and keyboard menu policy.');
 
-assert.ok((await readFile('app/page.tsx','utf8')).includes("if (id==='shelf'||tools.some(t => t.id === id))"),'My files hash works on full page load');
+assert.ok((await readFile('app/page.tsx','utf8')).includes("if (id==='home'||id==='shelf'||tools.some(t => t.id === id))"),'My files hash works on full page load');

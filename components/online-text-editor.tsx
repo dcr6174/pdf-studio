@@ -1,4 +1,5 @@
 'use client';
+import {validateTextInput} from '@/lib/input-validation';
 import {useEffect,useRef,useState} from 'react';
 import {processPDF,type Loaded,type PageItem,type Mark,type Output} from '@/lib/pdf-client';
 import {OnlineTextDocument,textEngine,type TextObject} from '@/lib/online-text-engine';
@@ -12,7 +13,7 @@ export function OnlineTextEditor({files,pages,marks,onOutput,onDirty,onCommit}:P
  useEffect(()=>{alive.current=true;return()=>{alive.current=false;doc.current?.close();};},[]);
  useEffect(()=>{onDirty(dirty);},[dirty,onDirty]);
  useEffect(()=>{let active=true;Promise.resolve().then(()=>{if(!active)return;setBusy(true);setBytes(undefined);setError('');setDirty(false);setNotice('');history.current=[];future.current=[];setHistorySize(0);setFutureSize(0);selection.current=undefined;setPage(0);
-  if(files.reduce((n,f)=>n+f.size,0)>50000000||pages.length>100){setError('Text editing supports up to 50 MB and 100 pages. Your original remains in the workspace.');setBusy(false);return;}
+  try{validateTextInput(files.reduce((n,f)=>n+f.size,0),pages.length);}catch(e){setError((e as Error).message+' Your original remains in the workspace.');setBusy(false);return;}
   processPDF('organize',files,pages,marks,{range:'',text:'',title:'',author:'',subject:'',password:'',quality:'balanced',angle:'90',margin:'20',start:'1',columns:'2',fields:{}},()=>{}).then(async o=>{const b=new Uint8Array(await o.blob.arrayBuffer());if(active){original.current=b;setBytes(b);}}).catch(e=>{if(active){setError(e.message);setBusy(false);}});});return()=>{active=false;};
  },[files,pages,marks]);
  useEffect(()=>{if(!bytes)return;let active=true;Promise.resolve().then(()=>{if(!active)return;setBusy(true);setError('');setObjects([]);

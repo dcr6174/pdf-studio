@@ -23,7 +23,7 @@ import {ReportProblem} from '@/components/report-problem';
 import {AlertDialog,AlertDialogContent,AlertDialogHeader,AlertDialogTitle,AlertDialogDescription,AlertDialogFooter,AlertDialogCancel,AlertDialogAction} from '@/components/ui/alert-dialog';
 import {SignaturePicker} from '@/components/signature-picker';
 import {useWorkspace,draft,type DocumentState} from '@/lib/workspace';
-import {validateSelection,validatePages} from '@/lib/input-validation';
+import {validateSelection,validatePages,validateBatch,validateTextInput} from '@/lib/input-validation';
 import {pageGeometry} from '@/lib/page-geometry';
 const icons: Record<string, typeof FileText> = { merge: Merge, grid: Grid2X2, scissors: Scissors, compress: Minimize2, rotate: RotateCw, reverse: ArrowDownUp, copy: Copy, crop: Crop, edit: PenLine, pen: PenLine, shield: ShieldCheck, droplet: Droplets, numbers: Hash, layers: Layers, file: FileText, image: ImageIcon, text: Type, code: Code2, book: BookOpen, slides: Presentation, plus: Plus, moon: Moon, scan: ScanLine, audio: Volume2, lock: LockKeyhole, unlock: UnlockKeyhole, hash: Hash };
 const searchAliases:Record<string,string>={'native-text':'edit existing inbuilt built in text replace font',images:'jpg jpeg png photo picture',word:'doc docx editable',compress:'reduce size smaller resume cv kb mb',organize:'delete remove rearrange reorder pages',sign:'signature autograph',ocr:'scan scanned searchable recognition',encrypt:'password security lock',decrypt:'unlock password',edit:'annotate annotation write highlight',form:'fill application checkbox'};
@@ -94,14 +94,14 @@ function App({initialTool='home',guide}:{initialTool?:string;guide?:ReactNode}) 
     const sensors = useSensors(useSensor(PointerSensor, { activationConstraint: { distance: 8 } }), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
     const opt = (key: keyof Options, value: string) => setOptions(o => ({ ...o, [key]: value }));
     function navigate(id:string,record=true){
-      if(busy||loading)return;
+      if(busy||loading||id===view)return;
       if(view==='native-text'&&textDirty&&id!==view){toast.error("Keep your text edits in the workspace or discard them before switching tools.");return;}
       if(marks.some(m=>m.kind==='redact')&&!['home','redact','shelf'].includes(id)){setError('Export your redacted PDF and choose Continue editing before switching tools, or remove the redaction regions.');return;}
       if(typeof speechSynthesis!=='undefined')speechSynthesis.cancel();
       toolOptions.current[view]=options;setOptions(toolOptions.current[id]??{...defaults,quality:['jpg','png'].includes(id)?'2':id==='compress'?'compact':'balanced'});
       setView(id);setError('');setOutput(undefined);setSelected('');setBatchMode(false);
       if(id!=='home'&&id!=='shelf')lastTool.current=id;
-      setPageSelection([]);setMode('move');const url=id==='home'?'/':`/#${id}`;if(record&&location.pathname+location.hash!==url)window.history.pushState(null,'',url);requestAnimationFrame(()=>{document.getElementById('studio-content')?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});});
+      setPageSelection([]);setMode('move');const url=id==='home'?'/':id==='shelf'?'/#shelf':'/tools/'+seoTools.find(t=>t.id===id)!.slug;if(record&&location.pathname+location.hash!==url)window.history.pushState(null,'',url);requestAnimationFrame(()=>{document.getElementById('studio-content')?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'auto'});});
     }
     const landingTool=useRef(initialTool);
     useEffect(()=>{
@@ -110,15 +110,14 @@ function App({initialTool='home',guide}:{initialTool?:string;guide?:ReactNode}) 
       queueMicrotask(()=>{if(active){landingTool.current=initialTool;navigate(initialTool,false);}});
       return()=>{active=false;};
     },[initialTool,navigate]);
-    useEffect(()=>{const back=()=>{const id=location.hash.slice(1);let next:string;if(id==='')next=location.pathname.startsWith('/tools/')?initialTool:'home';else if(id==='home'||id==='shelf'||tools.some(t=>t.id===id))next=id;else return;if(next===view)return;if(busy||loading||(view==='native-text'&&textDirty)){window.history.pushState(null,'',view==='home'?'/':`/#${view}`);toast('Finish the current operation or keep your text edits before leaving.');return;}navigate(next,false);};window.addEventListener('popstate',back);return()=>window.removeEventListener('popstate',back);},[view,textDirty,busy,loading,initialTool]);
+    useEffect(()=>{const back=()=>{const id=location.hash.slice(1);let next:string;if(id==='')next=seoTools.find(t=>'/tools/'+t.slug===location.pathname)?.id??'home';else if(id==='home'||id==='shelf'||tools.some(t=>t.id===id))next=id;else return;if(next===view)return;if(busy||loading||(view==='native-text'&&textDirty)||(marks.some(m=>m.kind==='redact')&&!['home','redact','shelf'].includes(next))){window.history.pushState(null,'',view==='home'?'/':view==='shelf'?'/#shelf':'/tools/'+seoTools.find(t=>t.id===view)!.slug);toast('Finish the current operation or keep your text edits before leaving.');return;}navigate(next,false);};window.addEventListener('popstate',back);window.addEventListener('hashchange',back);return()=>{window.removeEventListener('popstate',back);window.removeEventListener('hashchange',back);};},[view,textDirty,busy,loading,initialTool,marks]);
     async function saveCurrentDraft(){try{await draft('save',{files,pages,marks});setSavedDraft({files,pages,marks});toast.success('Draft saved on this device. Save again after further edits.');}catch{toast.error('Could not save the draft. Download your file instead.');}}
     async function restoreDraft(confirmed=false){if(!savedDraft)return;if(files.length&&!confirmed){setRestoreOpen(true);return;}setLoading(true);try{const restored:Loaded[]=[];for(const f of savedDraft.files){if(f.image||!f.pages)restored.push(f);else restored.push({...await loadFile(new File([f.bytes.slice().buffer as ArrayBuffer],f.name)),id:f.id});}workspace.replace({...savedDraft,files:restored});setView('organize');setActivePage(savedDraft.pages[0]?.id??'');toast.success('Saved draft restored');}catch{setError('Could not restore this draft. Your saved copy has been kept.');}finally{setLoading(false);}}
     async function continueOutput(){if(!output)return;setLoading(true);try{const f=await loadFile(new File([output.blob],output.name));validatePages(f.pages);workspace.replace({files:[f],pages:Array.from({length:f.pages},(_,index)=>({id:crypto.randomUUID(),fileId:f.id,index,rotation:0})),marks:[]});setView('organize');setOutput(undefined);setBatchMode(false);setOptions({...defaults});toast.success('Result opened in your workspace. Undo restores the previous document.');}catch(e){setError(e instanceof Error?e.message:'Could not reopen this output.');}finally{setLoading(false);}}
     useEffect(()=>{if(view==='form'&&files.length===1){let active=true;fields(files[0].bytes).then(ff=>{if(active){setFormFields(ff);setOptions(o=>({...o,fields:Object.fromEntries(ff.filter(f=>f.kind!=='unsupported').map(f=>[f.name,f.value]))}));}}).catch(()=>setFormFields([]));return()=>{active=false;};}if(view==='metadata'&&files[0]?.doc){let active=true;const doc=files[0].doc;Promise.resolve().then(()=>{if(active)setOptions(o=>({...o,title:doc.getTitle()??'',author:doc.getAuthor()??'',subject:doc.getSubject()??''}));});return()=>{active=false;};}},[view,files]);
-    useEffect(() => { const id = location.hash.slice(1); if (id==='shelf'||tools.some(t => t.id === id))
-        queueMicrotask(()=>navigate(id)); shelf('list').then(setShelfFiles).catch(() => { }); const key = (e: KeyboardEvent) => { if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
+    useEffect(() => { const id = location.hash.slice(1); if (id==='home'||id==='shelf'||tools.some(t => t.id === id))
+        queueMicrotask(()=>navigate(id,false)); shelf('list').then(setShelfFiles).catch(() => { }); const key = (e: KeyboardEvent) => { if ((e.ctrlKey || e.metaKey) && e.key === 'k') {
         e.preventDefault();
-        if(location.hash==='#native-text'){toast('Use Tools after keeping or discarding your text edits.');return;}
         searchAction.current();
     } if (e.key === 'Escape') {
         setSelected('');
@@ -142,12 +141,16 @@ function App({initialTool='home',guide}:{initialTool?:string;guide?:ReactNode}) 
     async function ingest(list: File[], target = view, confirmed=false) {
       const appends=isMulti(target)||batchMode||target==='home';
       if(!confirmed&&workspace.getFiles().length&&(!appends||!workspace.getFiles().every(f=>accepted(target).split(',').some(ext=>f.name.toLowerCase().endsWith(ext))))){pendingFiles.current={list,target};setReplaceOpen(true);return;} if(view==='native-text'&&textDirty){toast.error('Keep or discard your text edits before opening another file.');return;} if (queue.current || busy)
-        return; queue.current = true; setLoading(true); setError(''); setOutput(undefined); try {
+        return; queue.current = true; setLoading(true); setError(''); try {
         if (target === 'home') {
             target = list.every(f=>/\.(png|jpe?g|webp)$/i.test(f.name))?'images':list.length>1?'merge':'organize';
             navigate(target);
         }
-        validateSelection(list,accepted(target),isMulti(target)||batchMode,(isMulti(target)||batchMode)?workspace.getFiles().reduce((n,f)=>n+f.size,0):0);
+        const adding=(isMulti(target)||batchMode)&&workspace.getFiles().every(f=>accepted(target).split(',').some(ext=>f.name.toLowerCase().endsWith(ext)));
+        validateSelection(list,accepted(target),isMulti(target)||batchMode,adding?workspace.getFiles().reduce((n,f)=>n+f.size,0):0);
+        if(batchMode)validateBatch(list.length+(adding?workspace.getFiles().length:0));
+        if(target==='compare'&&list.length+(adding?workspace.getFiles().length:0)>2)throw new Error('Choose two PDFs to compare.');
+        if(target==='native-text')validateTextInput(list.reduce((n,f)=>n+f.size,0));
         const incoming: Loaded[] = [];
         for (const f of list) {
             if (['decrypt', 'hash', 'zip'].includes(target)) {
@@ -155,16 +158,18 @@ function App({initialTool='home',guide}:{initialTool?:string;guide?:ReactNode}) 
             }
             else
                 incoming.push(await loadFile(f));
+            validatePages((adding?pages.length:0)+incoming.reduce((n,file)=>n+file.pages,0));
         }
-        const adding=(isMulti(target)||batchMode)&&workspace.getFiles().every(f=>accepted(target).split(',').some(ext=>f.name.toLowerCase().endsWith(ext)));
         const next = adding ? [...workspace.getFiles(), ...incoming] : incoming;
-        if(batchMode&&next.length>20)throw new Error('Batch processing supports up to 20 files.');
+        if(batchMode)validateBatch(next.length);
         if (target === 'compare' && next.length > 2)
             throw new Error('Choose two PDFs to compare.');
-        validatePages(next.reduce((n,f)=>n+f.pages,0));
+        validatePages((adding?pages.length:0)+incoming.reduce((n,f)=>n+f.pages,0));
         
 
         const extra = incoming.flatMap(f => Array.from({ length: f.pages }, (_, i) => ({ id: crypto.randomUUID(), fileId: f.id, index: i, rotation: 0 })));
+        if(target==='native-text')validateTextInput(next.reduce((n,f)=>n+f.size,0),incoming.reduce((n,f)=>n+f.pages,0));
+        const incomingFields=target==='form'?await fields(incoming[0].bytes):undefined;
         workspace.replace({files:next,pages:adding?[...pages,...extra]:extra,marks:adding?marks:[]});
         if (extra.length)
             setActivePage(extra[0].id);
@@ -174,7 +179,7 @@ function App({initialTool='home',guide}:{initialTool?:string;guide?:ReactNode}) 
         if (target === 'metadata' && incoming[0].doc)
             setOptions(o => ({ ...o, title: incoming[0].doc!.getTitle() ?? '', author: incoming[0].doc!.getAuthor() ?? '', subject: incoming[0].doc!.getSubject() ?? '' }));
         if (target === 'form') {
-            const ff = await fields(incoming[0].bytes);
+            const ff = incomingFields!;
             setFormFields(ff);
             setOptions(o => ({ ...o, fields: Object.fromEntries(ff.filter(f => f.kind !== 'unsupported').map(f => [f.name, f.value])) }));
         }
@@ -187,7 +192,7 @@ function App({initialTool='home',guide}:{initialTool?:string;guide?:ReactNode}) 
         setLoading(false);
     } }
     async function run(){
-      if(busy||loading||!ready)return;const controller=new AbortController();cancel.current=controller;
+      if(busy||loading||!ready)return;if(batchMode){try{validateBatch(files.length);}catch(e){setError((e as Error).message);return;}}const controller=new AbortController();cancel.current=controller;
       trackActivity('process_start',view);setBusy(true);setProgress(0);setError('');setOutput(undefined);
       try{let r:Output;
         if(batchMode&&files.length>1){const {default:JSZip}=await import('jszip');const z=new JSZip(),failures:string[]=[];let success=0;
@@ -225,7 +230,7 @@ function App({initialTool='home',guide}:{initialTool?:string;guide?:ReactNode}) 
         setPages(p => arrayMove(p, p.findIndex(i => i.id === e.active.id), p.findIndex(i => i.id === e.over!.id))); }
     const filtered = tools.filter(t => (group === 'All tools' || t.group === group) && `${t.name} ${t.description} ${searchAliases[t.id]??''}`.toLowerCase().includes(search.trim().toLowerCase()));
     return <>
-    <Link className="skip-link" href="#studio-content">Skip to workspace</Link><main onClickCapture={e=>{const a=(e.target as Element).closest?.('a[href]');if(!a||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const url=new URL(a.getAttribute('href')!,location.href);if(url.origin!==location.origin||!url.pathname.startsWith('/tools/'))return;if(busy||loading||(view==='native-text'&&textDirty)||marks.some(m=>m.kind==='redact')){e.preventDefault();e.stopPropagation();toast('Finish processing, keep your text edits, or export redactions before opening another guide.');}}} className={`main studio-shell ${view==='home'?'home-shell':'document-shell'} ${view==='native-text'?'text-shell':''} ${tool&&(!files.length||!compatible)?'empty-tool':''}`}><header className="studio-header"><Link className="studio-wordmark" href="/" onClick={e=>{e.preventDefault();navigate('home');}}><img className="wordmark-logo" src="/brand/pdf-studio-logo-v4.svg" alt="" width="44" height="44"/><span>PDF <b>Studio</b></span></Link><nav aria-label="Main navigation"><ToolsMenu onSelect={navigate} disabled={busy||loading}/><Link href="/#shelf" aria-current={view==='shelf'?'page':undefined} onClick={e=>{e.preventDefault();navigate('shelf');}}>My files</Link>{analyticsAccess&&<Link href="/analytics">Owner</Link>}</nav><div className="header-end"><InstallApp/><ThemeToggle/></div></header>
+    <Link className="skip-link" href="#studio-content">Skip to workspace</Link><main onClickCapture={e=>{const a=(e.target as Element).closest?.('a[href]');if(!a||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const url=new URL(a.getAttribute('href')!,location.href);if(url.origin!==location.origin||!url.pathname.startsWith('/tools/'))return;if(busy||loading||(view==='native-text'&&textDirty)||marks.some(m=>m.kind==='redact')){e.preventDefault();e.stopPropagation();toast('Finish processing, keep your text edits, or export redactions before opening another guide.');}}} className={`main studio-shell ${view==='home'?'home-shell':'document-shell'} ${view==='native-text'?'text-shell':''} ${tool&&(!files.length||!compatible)?'empty-tool':''}`}><header className="studio-header"><Link className="studio-wordmark" href="/" onClick={e=>{if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();navigate('home');}}><img className="wordmark-logo" src="/brand/pdf-studio-logo-v4.svg" alt="" width="44" height="44"/><span>PDF <b>Studio</b></span></Link><nav aria-label="Main navigation"><ToolsMenu onSelect={navigate} disabled={busy||loading}/><Link href="/#shelf" aria-current={view==='shelf'?'page':undefined} onClick={e=>{if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();navigate('shelf');}}>My files</Link>{analyticsAccess&&<Link href="/analytics">Owner</Link>}</nav><div className="header-end"><InstallApp/><ThemeToggle/></div></header>
     <div id="studio-content" tabIndex={-1} className="content" aria-busy={busy || loading} onDragEnter={e => { if (view!=='home'&&!busy&&!loading&&e.dataTransfer.types.includes('Files')) {
         e.preventDefault();
         dragDepth.current++;
@@ -264,7 +269,7 @@ function App({initialTool='home',guide}:{initialTool?:string;guide?:ReactNode}) 
         catch {
             toast.error('Could not remove this file.');
         } }}><Trash2 size={18}/></button></div>)}</div> : <div className="empty-shelf"><FolderOpen size={45}/><h2>Room for your finished work.</h2><p>Process a document, then choose “Save to My files”.<br />Nothing is saved here automatically.</p><button className="primary" onClick={() => navigate('home')}>Browse tools</button></div>}</> : <>
-        <div className="tool-heading"><nav className="tool-breadcrumbs" aria-label="Breadcrumb"><Link href="/" onClick={e=>{e.preventDefault();navigate('home');}}><ChevronLeft size={16} aria-hidden="true"/>All tools</Link><span aria-hidden="true">/</span><span>{tool?.group}</span><span aria-hidden="true">/</span><span aria-current="page">{tool?.name}</span></nav><h1>{tool?.name}</h1><p>{tool?.description}</p></div>
+        <div className="tool-heading"><nav className="tool-breadcrumbs" aria-label="Breadcrumb"><Link href="/" onClick={e=>{if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();navigate('home');}}><ChevronLeft size={16} aria-hidden="true"/>All tools</Link><span aria-hidden="true">/</span><span>{tool?.group}</span><span aria-hidden="true">/</span><span aria-current="page">{tool?.name}</span></nav><h1>{tool?.name}</h1><p>{tool?.description}</p></div>
         {!ready&&compatible&&files.length>0&&<div className="tool-note">This file has no loaded pages. Use Remove password for a protected PDF, then Continue editing.</div>}
         {view!=='native-text'&&tool?.note && <div className="tool-note"><FileText size={17}/><span>{tool.note}</span></div>}
             {batchTools.includes(view)&&<Choice label="How to process these files" value={batchMode?'separate':'together'} onChange={v=>setBatchMode(v==='separate')} items={[["together","One document"],["separate","Each file separately · ZIP download"]]}/>}
@@ -273,7 +278,7 @@ function App({initialTool='home',guide}:{initialTool?:string;guide?:ReactNode}) 
             {files.length > 0 && !['create-form','native-text'].includes(view) && <div className="workspace-summary"><span><FileText size={18}/><b>{files.length} {files.length === 1 ? 'file' : 'files'}</b><span>·</span>{pages.length > 0 && `${pages.length} pages · `}{(files.reduce((s, f) => s + f.size, 0) / 1000 / 1000).toFixed(2)} MB</span><div className="row"><button className="secondary" disabled={busy || loading} onClick={() => input.current?.click()}><Plus size={16}/>{additive?'Add files':'Replace file'}</button><button className="icon-button" aria-label="Clear workspace" disabled={busy} onClick={()=>setClearOpen(true)}><X size={19}/></button></div></div>}
             {loading && <p className="status"><Loader2 className="spin" size={18}/>Reading your files…</p>}
                 {view==='sign'&&<div className="sign-start"><div><b>1. Create your signature</b><p>2. Place and resize it on the page · 3. Export your signed PDF</p></div><button className="primary" onClick={()=>setSignature(true)}>Type or upload signature</button></div>}
-                {view==='native-text' ? <OnlineTextEditor files={files} pages={pages} marks={marks} onOutput={setOutput} onDirty={setTextDirty} onCommit={async blob=>{const f=await loadFile(new File([blob],"pdf-studio-edited.pdf"));workspace.replace({files:[f],pages:Array.from({length:f.pages},(_,index)=>({id:crypto.randomUUID(),fileId:f.id,index,rotation:0})),marks:[]});setOutput(undefined);toast.success("Edited PDF saved to your workspace. You can switch tools now.");}}/> : editor && current && currentFile ? <div className="editor-layout"><div className="editor-main"><div className="editor-toolbar"><button className={mode === 'move' ? 'selected' : ''} onClick={() => setMode('move')}><MousePointer2 size={17}/>Move</button>{view !== 'redact' && <><button className={mode === 'text' ? 'selected' : ''} onClick={() => setMode('text')}><Type size={17}/>Text</button><button className={mode === 'highlight' ? 'selected' : ''} onClick={() => setMode('highlight')}><Highlighter size={17}/>Highlight</button><button onClick={() => setSignature(true)}><PenLine size={17}/>Signature</button><button onClick={() => imageInput.current?.click()}><ImageIcon size={17}/>Image</button><button onClick={()=>addMark('rectangle')}><Square size={17}/>Box</button><button onClick={()=>addMark('ellipse')}><Circle size={17}/>Circle</button><button onClick={()=>addMark('link')}><Link2 size={17}/>Link</button></>}{view === 'redact' && <button className={mode === 'redact' ? 'selected' : ''} onClick={() => setMode('redact')}><Square size={17}/>Redact region</button>}<button onClick={workspace.undo} disabled={!workspace.canUndo} aria-label="Undo document change"><Undo2 size={17}/></button><button onClick={workspace.redo} disabled={!workspace.canRedo} aria-label="Redo document change"><Redo2 size={17}/></button><button onClick={()=>setZoom(z=>Math.max(.5,z-.25))} aria-label="Zoom out"><ZoomOut size={17}/></button><button onClick={()=>setZoom(1)}>{Math.round(zoom*100)}%</button><button onClick={()=>setZoom(z=>Math.min(2,z+.25))} aria-label="Zoom in"><ZoomIn size={17}/></button></div><p className="editor-hint">{mode === 'move' ? 'Select an element to move it with arrow keys or the position fields. Drag to move; use the corner to resize.' : `Click or tap the page to add ${mode === 'text' ? 'text' : mode === 'highlight' ? 'a highlight' : 'a redaction region'}.`}</p><div className="board-scroll"><div className="page-board" style={{width:`${zoom*100}%`,maxWidth:"none"}} ref={board} onPointerDown={e => { if (e.target === e.currentTarget || e.target instanceof HTMLImageElement) {
+                {view==='native-text' ? <OnlineTextEditor files={files} pages={pages} marks={marks} onOutput={setOutput} onDirty={setTextDirty} onCommit={async blob=>{const f=await loadFile(new File([blob],"pdf-studio-edited.pdf"));workspace.replace({files:[f],pages:Array.from({length:f.pages},(_,index)=>({id:crypto.randomUUID(),fileId:f.id,index,rotation:0})),marks:[]});setOutput(undefined);toast.success("Edited PDF saved to your workspace. You can switch tools now.");}}/> : editor && current && currentFile ? <div className="editor-layout"><div className="editor-main"><div className="editor-toolbar"><button className={mode === 'move' ? 'selected' : ''} onClick={() => setMode('move')}><MousePointer2 size={17}/>Move</button>{view !== 'redact' && <>{view!=='sign'&&<><button className={mode === 'text' ? 'selected' : ''} onClick={() => setMode('text')}><Type size={17}/>Text</button><button className={mode === 'highlight' ? 'selected' : ''} onClick={() => setMode('highlight')}><Highlighter size={17}/>Highlight</button></>}<button onClick={() => setSignature(true)}><PenLine size={17}/>Signature</button><button onClick={() => imageInput.current?.click()}><ImageIcon size={17}/>Image</button>{view!=='sign'&&<><button onClick={()=>addMark('rectangle')}><Square size={17}/>Box</button><button onClick={()=>addMark('ellipse')}><Circle size={17}/>Circle</button><button onClick={()=>addMark('link')}><Link2 size={17}/>Link</button></>}</>}{view === 'redact' && <button className={mode === 'redact' ? 'selected' : ''} onClick={() => setMode('redact')}><Square size={17}/>Redact region</button>}<button onClick={workspace.undo} disabled={!workspace.canUndo} aria-label="Undo document change"><Undo2 size={17}/></button><button onClick={workspace.redo} disabled={!workspace.canRedo} aria-label="Redo document change"><Redo2 size={17}/></button><button onClick={()=>setZoom(z=>Math.max(.5,z-.25))} aria-label="Zoom out"><ZoomOut size={17}/></button><button onClick={()=>setZoom(1)}>{Math.round(zoom*100)}%</button><button onClick={()=>setZoom(z=>Math.min(2,z+.25))} aria-label="Zoom in"><ZoomIn size={17}/></button></div><p className="editor-hint">{mode === 'move' ? 'Select an element to move it with arrow keys or the position fields. Drag to move; use the corner to resize.' : `Click or tap the page to add ${mode === 'text' ? 'text' : mode === 'highlight' ? 'a highlight' : 'a redaction region'}.`}</p><div className="board-scroll"><div className="page-board" style={{width:`${zoom*100}%`,maxWidth:"none"}} ref={board} onPointerDown={e => { if (e.target === e.currentTarget || e.target instanceof HTMLImageElement) {
                     if (mode !== 'move') {
                         const r = e.currentTarget.getBoundingClientRect();
                         addMark(mode, Math.min(.65, (e.clientX - r.left) / r.width), Math.min(.85, (e.clientY - r.top) / r.height));
