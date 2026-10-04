@@ -104,10 +104,10 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 
 /* Filters: same height and radius as every other control */
 .home-toolbox .filters{display:flex;flex-wrap:wrap;gap:8px;margin:20px 0}
-.home-toolbox .filters button{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--muted);font-size:.9rem;font-weight:550}
+.home-toolbox .filters button{display:inline-flex;align-items:center;gap:6px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--foreground);font-size:.9rem;font-weight:550}
 .home-toolbox .filters button:hover:not(.selected){background:var(--soft);color:var(--foreground)}
 .home-toolbox .filters button.selected{background:var(--foreground);color:var(--card);border-color:var(--foreground)}
-.home-toolbox .filters .count{font-size:.78rem;opacity:.7}
+.home-toolbox .filters .count{font-size:.78rem;opacity:1;color:inherit}
 
 /* Tool cards: identical structure and spacing in every grid */
 .home-toolbox .tool-card{display:flex;flex-direction:column;align-items:flex-start;text-align:left;min-height:168px;padding:20px;border-radius:14px}

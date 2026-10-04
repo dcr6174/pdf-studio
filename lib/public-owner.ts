@@ -65,6 +65,8 @@ export async function publicOwnerBoundary(request: Request, env: OwnerEnv, next:
     if(!await validPassword(password,env.OWNER_PASSWORD!))return reply('Incorrect password. Please try again.',401);
     return Response.json({ok:true},{headers:{...responseHeaders,'Set-Cookie':await sessionCookie(env.OWNER_PASSWORD!,now)}});
   }
+  // Public capability probe: authentication failures are normal visitor state.
+  if (url.pathname === '/api/analytics/access') return Response.json({owner}, {headers: responseHeaders});
   if (protectedPath(url.pathname) && !owner) {
     if (url.pathname.startsWith('/api/')) return Response.json({ error: 'Owner access is required.' }, { status: 403, headers: responseHeaders });
 

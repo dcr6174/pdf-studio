@@ -16,10 +16,12 @@ try {
  const screen=await boundary(req('/analytics'),env,next,1000);assert.equal(screen.status,200);assert.equal(screen.headers.has('WWW-Authenticate'),false);assert.ok(screen.headers.get('Content-Security-Policy').includes('frame-ancestors'));const html=await screen.text();assert.ok(html.includes('autocomplete="current-password"'));assert.ok(html.includes('method="post"'));const script=html.match(/<script nonce="[^"]+">([\s\S]*?)<\/script>/)[1];new Script(script);assert.ok(!html.includes('analytics-tracker'));
  assert.equal((await boundary(req('/analytics'),{},next,1000)).status,503);
  assert.equal((await boundary(req('/api/analytics/summary'),env,next,1000)).status,403);
- assert.equal((await boundary(req('/api/analytics/access'),env,next,1000)).headers.has('WWW-Authenticate'),false);
+ const access=await boundary(req('/api/analytics/access'),env,next,1000);assert.equal(access.status,200);assert.deepEqual(await access.json(),{owner:false});assert.equal(access.headers.get('Cache-Control'),'no-store');assert.equal(access.headers.has('WWW-Authenticate'),false);
+ assert.deepEqual(await (await boundary(req('/api/analytics/access'),{},next,1000)).json(),{owner:false});
  const forged = {'oai-authenticated-user-id':'forged','oai-authenticated-user-email':env.ANALYTICS_OWNER_EMAIL};
  await boundary(req('/',forged),env,next,1000); assert.equal(seen.headers.get('oai-authenticated-user-id'),null);
  assert.equal((await boundary(req('/api/analytics/summary',forged),env,next,1000)).status,403);
+ assert.deepEqual(await (await boundary(req('/api/analytics/access',forged),env,next,1000)).json(),{owner:false});
  const login=(password,extra={},origin='https://pdf.example')=>new Request('https://pdf.example/api/owner/login',{method:'POST',headers:{origin,'content-type':'application/json',...extra},body:JSON.stringify({password})});
  assert.equal((await boundary(login('wrong'),env,next,1000)).status,401);
  assert.equal((await boundary(login(env.OWNER_PASSWORD,{},'https://evil.test'),env,next,1000)).status,403);
@@ -29,6 +31,8 @@ try {
  const signed=await boundary(login(env.OWNER_PASSWORD),env,next,1000);assert.equal(signed.status,200);assert.deepEqual(await signed.clone().json(),{ok:true});
  const setCookie=signed.headers.get('set-cookie'); assert.match(setCookie,/Secure; HttpOnly; SameSite=Strict/);
  const cookie=setCookie.split(';')[0];
+ const ownerAccess=await boundary(req('/api/analytics/access',{cookie}),env,next,1001);assert.equal(ownerAccess.status,200);assert.deepEqual(await ownerAccess.json(),{owner:true});
+ assert.deepEqual(await (await boundary(req('/api/analytics/access',{cookie:cookie+'a'}),env,next,1001)).json(),{owner:false});
  assert.equal((await boundary(req('/api/analytics/summary',{cookie}),env,next,1001)).status,200);assert.equal(seen.headers.get('authorization'),null);assert.equal(seen.headers.get('oai-authenticated-user-email'),env.ANALYTICS_OWNER_EMAIL);
  assert.equal((await boundary(req('/api/analytics/summary',{cookie:cookie+'a'}),env,next,1001)).status,403);
  assert.equal((await boundary(req('/api/analytics/summary',{cookie}),env,next,1000+8*3600)).status,403);
