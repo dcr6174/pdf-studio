@@ -186,6 +186,8 @@ async function plainPDF(text: string, markdown = false) { const { jsPDF } = awai
 export async function processPDF(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number) => void, signal?:AbortSignal): Promise<Output> {
     signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
     let first = files[0];
+    const unchanged = files.length===1 && !marks.length && items.length===first.pages && items.every((p,i)=>p.fileId===first.id&&p.index===i&&p.rotation===0);
+    if(unchanged&&(['organize','edit','sign','merge'].includes(id)||(id==='form'&&!o.flattenForm&&!Object.keys(o.fields).length))){progress(100);return result(first.bytes,first.name,undefined,'No changes: downloaded the original file without rebuilding it.');}
     if(id==='create-form'){const d=await createForm(o.text);return result(await d.save(),'fillable-form.pdf');}
     if(id==='remove-annotations'){if(files.length!==1||marks.length||items.length!==first.pages||items.some((p,i)=>p.index!==i||p.rotation))throw new Error('Remove annotations on the original single PDF. Export other workspace changes first.');const d=await PDFDocument.load(first.bytes);const count=removeAnnotations(d);return result(await d.save(),'pdf-studio-clean-annotations.pdf',undefined,`${count} annotations removed. Form widgets were kept.`);}
     if(['text','word','html','epub','csv','xlsx','audio','privacy','encrypt'].includes(id)&&items.length){const d=await assemble(files,items,signal);await applyMarks(d,items,marks,signal);const bytes=await d.save();first={...first,bytes,doc:d,pages:d.getPageCount(),size:bytes.length};}
@@ -336,9 +338,9 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
         if(o.flattenForm)form.flatten();
         return result(await d.save(), `${filename}-filled.pdf`);
     }
-    if(id==='compress'&&o.quality==='compact'){progress(90);const bytes=await out.save({useObjectStreams:true});signal?.throwIfAborted();return result(bytes,`${filename}-compact.pdf`,undefined,bytes.length>=files.reduce((n,f)=>n+f.size,0)?'No size reduction. Keep the original or try an image preset.':undefined);}
+    if(id==='compress'&&o.quality==='compact'){progress(90);const baseline=unchanged?first.bytes:await out.save();const compact=unchanged?await PDFDocument.load(first.bytes,{updateMetadata:false}):out;const bytes=await compact.save({useObjectStreams:true});signal?.throwIfAborted();const smaller=bytes.length<baseline.length;return result(smaller?bytes:baseline,`${filename}-compact.pdf`,undefined,smaller?`Reduced from ${baseline.length} to ${bytes.length} bytes. Text and links retained.`:'No size reduction: kept the source unchanged. Try an image preset only if losing searchable text, links and forms is acceptable.');}
     if (['jpg', 'png', 'compress', 'flatten', 'redact', 'grayscale', 'invert', 'ocr', 'pptx'].includes(id)) {
-        const source = await out.save();
+        const source = id==='compress'&&unchanged?first.bytes:await out.save();
         const raster = await PDFDocument.create();
         const z = new JSZip();
         let ppt: InstanceType<typeof import('pptxgenjs').default> | undefined;
@@ -413,8 +415,9 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
             if (ppt)
                 return { blob: await ppt.write({ outputType: 'blob' }) as Blob, name: `${filename}.pptx` };
             const bytes=await raster.save();
-            const warning=id==='compress'&&bytes.length>=first.size?'The output is not smaller. Your original is retained; download it instead if preferred.':undefined;
-            return result(bytes, `${filename}-${id}.pdf`,undefined,warning);
+            const noSaving=id==='compress'&&bytes.length>=source.length;
+            const warning=id==='compress'?(noSaving?'No size reduction: kept the source instead of the larger raster output.':`Reduced from ${source.length} to ${bytes.length} bytes. Image-based output: searchable text, links and forms are lost.`):undefined;
+            return result(noSaving?source:bytes, `${filename}-${id}.pdf`,undefined,warning);
         }
         finally {
             await worker?.terminate();
