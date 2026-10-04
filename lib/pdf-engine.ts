@@ -2,7 +2,7 @@ import {addBookmarks,removeAnnotations,halvePages,createForm} from './extra-pdf'
 import {replaceExistingText} from './native-text';
 import { PDFDocument, StandardFonts, rgb, degrees, PDFTextField, PDFCheckBox, PDFDropdown, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray } from 'pdf-lib';
 import JSZip from 'jszip';
-import {pageGeometry,displayPoint,safeLink} from './page-geometry';
+import {pageGeometry,displayPoint,safeLink,arrowHead} from './page-geometry';
 export type Loaded = {
     id: string;
     name: string;
@@ -21,7 +21,7 @@ export type PageItem = {
 export type Mark = {
     id: string;
     pageId: string;
-    kind: 'text' | 'image' | 'highlight' | 'redact' | 'rectangle' | 'ellipse' | 'link';
+    kind: 'text' | 'image' | 'highlight' | 'redact' | 'rectangle' | 'ellipse' | 'link' | 'line' | 'arrow' | 'whiteout';
     x: number;
     y: number;
     w: number;
@@ -31,6 +31,12 @@ export type Mark = {
     image?: string;
     color: string;
     fontSize: number;
+    underline?: boolean;
+    strike?:boolean;
+    fontFamily?: 'noto'|'helvetica'|'times'|'courier';
+    bold?:boolean;
+    italic?:boolean;
+    align?:'left'|'center'|'right';
 };
 export type Options = {
     findText?: string;
@@ -500,6 +506,7 @@ export async function applyMarks(out:PDFDocument,order:PageItem[],marks:Mark[],s
  const fontkit=(await import('@pdf-lib/fontkit')).default;out.registerFontkit(fontkit);
  const response=await fetch('/fonts/NotoSans-Regular.ttf',{signal});if(!response.ok)throw new Error('The editor font could not be loaded. Please try again.');
  const font=await out.embedFont(await response.arrayBuffer(),{subset:true});
+ const fontCache=new Map<string,typeof font>();
  for(let i=0;i<out.getPageCount();i++){
   const p=out.getPage(i),g=pageGeometry(p);signal?.throwIfAborted();
   for(const m of usable.filter(m=>m.pageId===order[i].id)){
@@ -508,10 +515,16 @@ export async function applyMarks(out:PDFDocument,order:PageItem[],marks:Mark[],s
    const hex=/^#[0-9a-f]{6}$/i.test(m.color)?m.color.slice(1):'172638',color=rgb(parseInt(hex.slice(0,2),16)/255,parseInt(hex.slice(2,4),16)/255,parseInt(hex.slice(4,6),16)/255);
    p.pushOperators(pushGraphicsState(),concatTransformationMatrix(...g.matrix as [number,number,number,number,number,number]));
    if(m.kind==='text'){
-    const lines=wrapText(m.text??'',font,m.fontSize,ww);const lineHeight=m.fontSize*1.2;
+    let markFont=font;if(m.fontFamily&&m.fontFamily!=='noto'){const family=m.fontFamily==='times'?'TimesRoman':m.fontFamily==='courier'?'Courier':'Helvetica';const variant=family==='TimesRoman'?(m.bold?(m.italic?'TimesRomanBoldItalic':'TimesRomanBold'):(m.italic?'TimesRomanItalic':'TimesRoman')):family+(m.bold?(m.italic?'BoldOblique':'Bold'):(m.italic?'Oblique':''));let cached=fontCache.get(variant);if(!cached){cached=await out.embedFont(StandardFonts[variant as keyof typeof StandardFonts]);fontCache.set(variant,cached);}markFont=cached;}
+    let lines:string[];try{lines=wrapText(m.text??'',markFont,m.fontSize,ww);}catch{throw new Error('This font cannot display some characters. Choose Unicode (Noto Sans).');}const lineHeight=m.fontSize*1.2;
     if(lines.length*lineHeight>hh+1)throw new Error('A text box is too small for its text. Increase its height or reduce the font size.');
-    p.drawText(lines.join('\n'),{x:xx,y:yy+hh-m.fontSize,size:m.fontSize,lineHeight,font,color});
+    for(let n=0;n<lines.length;n++){const text=lines[n],width=markFont.widthOfTextAtSize(text,m.fontSize),offset=m.align==='center'?(ww-width)/2:m.align==='right'?ww-width:0,baseline=yy+hh-m.fontSize-n*lineHeight;p.drawText(text,{x:xx+offset,y:baseline,size:m.fontSize,font:markFont,color});if(m.strike&&text)p.drawLine({start:{x:xx+offset,y:baseline+m.fontSize*.3},end:{x:xx+offset+width,y:baseline+m.fontSize*.3},thickness:Math.max(.5,m.fontSize/16),color});if(m.underline&&text)p.drawLine({start:{x:xx+offset,y:baseline-m.fontSize*.12},end:{x:xx+offset+width,y:baseline-m.fontSize*.12},thickness:Math.max(.5,m.fontSize/16),color});}
    }else if(m.kind==='highlight')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,color,opacity:.25});
+   else if(m.kind==='whiteout')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,color});
+   else if(m.kind==='line'||m.kind==='arrow'){
+    p.drawLine({start:{x:xx,y:yy+hh},end:{x:xx+ww,y:yy},thickness:2,color});
+    if(m.kind==='arrow')for(const point of arrowHead(ww,hh))p.drawLine({start:{x:xx+ww,y:yy},end:{x:xx+point.x*ww,y:yy+hh-point.y*hh},thickness:2,color});
+   }
    else if(m.kind==='rectangle')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,borderColor:color,borderWidth:2});
    else if(m.kind==='ellipse')p.drawEllipse({x:xx+ww/2,y:yy+hh/2,xScale:ww/2,yScale:hh/2,borderColor:color,borderWidth:2});
    else if(m.kind==='image'&&m.image){const image=await out.embedPng(m.image);p.drawImage(image,{x:xx,y:yy,width:ww,height:hh});}

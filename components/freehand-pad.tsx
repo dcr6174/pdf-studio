@@ -1,0 +1,8 @@
+'use client';
+import {useRef,useState} from 'react';
+import {trimSignature} from '@/lib/signatures';
+export function FreehandPad({onUse}:{onUse:(image:string)=>void}){
+ const canvas=useRef<HTMLCanvasElement>(null),down=useRef(false);const [ink,setInk]=useState('#172638'),[drawn,setDrawn]=useState(false),[error,setError]=useState('');
+ const point=(e:React.PointerEvent<HTMLCanvasElement>)=>{const r=e.currentTarget.getBoundingClientRect();return {x:(e.clientX-r.left)*800/r.width,y:(e.clientY-r.top)*400/r.height};};
+ return <div><p>Draw a freehand mark, then place and resize it on your PDF. Image upload is an alternative to drawing.</p><label className="field">Pen colour<input type="color" value={ink} onChange={e=>setInk(e.target.value)}/></label><canvas ref={canvas} width={800} height={400} className="signature-pad" aria-label="Freehand drawing canvas" onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);down.current=true;setDrawn(true);const c=e.currentTarget.getContext('2d')!,p=point(e);c.beginPath();c.moveTo(p.x,p.y);c.lineWidth=4;c.strokeStyle=ink;c.lineCap='round';c.lineTo(p.x+.1,p.y);c.stroke();}} onPointerMove={e=>{if(down.current){const p=point(e),c=e.currentTarget.getContext('2d')!;c.lineTo(p.x,p.y);c.stroke();}}} onPointerUp={()=>down.current=false} onPointerCancel={()=>down.current=false}/><div className="row"><button className="secondary" onClick={()=>{canvas.current?.getContext('2d')?.clearRect(0,0,800,400);setDrawn(false);}}>Clear drawing</button><button className="primary" disabled={!drawn} onClick={()=>{try{if(canvas.current)onUse(trimSignature(canvas.current));}catch{setError('Draw a visible mark first.');}}}>Place drawing</button></div>{error&&<p role="alert">{error}</p>}</div>;
+}

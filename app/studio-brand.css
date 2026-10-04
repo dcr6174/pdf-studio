@@ -302,3 +302,7 @@ html.theme-fade,html.theme-fade *,html.theme-fade *::before,html.theme-fade *::a
 }
 
 .guides-hub h2{margin-top:32px}
+/* Focused Sign/Edit additions */
+.signature-option .secondary{margin:6px 6px 0 0}.signature-option select{min-height:44px;border:1px solid var(--border);border-radius:10px;padding:8px;background:var(--card);color:var(--foreground)}.sign-start{flex-wrap:wrap;gap:12px}.editor-toolbar button{min-height:44px}.properties select{min-height:44px;width:100%;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--foreground);padding:8px}.mark.line,.mark.arrow{background:transparent}
+
+.signature-option,.signature-option:nth-of-type(2){background:var(--card);color:var(--foreground);border-color:var(--border)}.signature-option h3{color:var(--foreground)}.editor-more{position:relative}.editor-more summary{min-height:44px;display:flex;align-items:center;padding:9px 12px;cursor:pointer;border:1px solid var(--border);border-radius:8px;font-size:.875rem}.editor-more>div{position:absolute;top:100%;left:0;z-index:20;display:grid;gap:6px;min-width:190px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--card);box-shadow:var(--shadow)}.editor-more summary:focus-visible{outline:3px solid var(--primary);outline-offset:3px}.signature-picker .row{flex-wrap:wrap}

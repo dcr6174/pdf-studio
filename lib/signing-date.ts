@@ -1,0 +1,3 @@
+export const signingDateFormats=['local','iso','day-first','month-first','long','short'] as const;
+export type SigningDateFormat=typeof signingDateFormats[number];
+export function signingDate(date:Date,format:SigningDateFormat){const y=date.getFullYear(),m=String(date.getMonth()+1).padStart(2,'0'),d=String(date.getDate()).padStart(2,'0');if(format==='iso')return `${y}-${m}-${d}`;if(format==='day-first')return `${d}/${m}/${y}`;if(format==='month-first')return `${m}/${d}/${y}`;if(format==='long')return date.toLocaleDateString(undefined,{day:'numeric',month:'long',year:'numeric'});if(format==='short')return date.toLocaleDateString(undefined,{day:'numeric',month:'short',year:'numeric'});return date.toLocaleDateString();}

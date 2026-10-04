@@ -1,10 +1,10 @@
 {
   "/": {
-    "hash": "1e3bcdf27693a3741728c57c24f3335f390a3cbcc5ccb098d0f283c4aea00a56",
+    "hash": "e2626ae93e9b5c39c402afa2c48336261c5c1eb4d7f183de5bc94381ec5954b7",
     "lastmod": "2026-10-04"
   },
   "/privacy": {
-    "hash": "9fe9db6c6488598f1e8cd63233f2cddbb2dd1c6391b0bbcb0c3fbec205f42bfa",
+    "hash": "a7af35a0bb7ec57be54210aec26dc5f7ea9c3b5092965d16959d12446fa87c26",
     "lastmod": "2026-10-04"
   },
   "/tools/add-pdf-bookmarks": {
@@ -84,7 +84,7 @@
     "lastmod": "2026-10-04"
   },
   "/tools/edit-pdf": {
-    "hash": "d87d6a48ff4fe12ac67facc7c327d4fa10f44f496c82b16cfb2dcbbb56b3ebb1",
+    "hash": "9892d50cb9f239394202ca02f50a11e1f66899431ebcb773f582228bcd038675",
     "lastmod": "2026-10-04"
   },
   "/tools/sign-pdf": {
@@ -256,7 +256,7 @@
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-editor": {
-    "hash": "f046c2ed858976a4094d4c1de0c9db8cced1ab639fc125b44ad79c79ea714945",
+    "hash": "b87bb1d4654d2660a32a5268a0765f04fb8bf66bfbeb12d2dc9e48b646e588ad",
     "lastmod": "2026-10-04"
   },
   "/tools/edit-cv-pdf": {
@@ -276,7 +276,7 @@
     "lastmod": "2026-10-04"
   },
   "/guides": {
-    "hash": "63d4f1cec4efd60319f71ac1cfd7dbbadb10c90dc3138627f33887b74fa4d2ff",
+    "hash": "db519d9919d28d2bc741d7ae8471b4194338a338ba12722c952e4f05468fead0",
     "lastmod": "2026-10-04"
   },
   "/compare/ilovepdf-alternative": {
