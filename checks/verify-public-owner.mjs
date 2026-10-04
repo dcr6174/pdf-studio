@@ -1,8 +1,11 @@
 import assert from 'node:assert/strict';
 import fs from 'node:fs';
 import ts from 'typescript';
+import {Script} from 'node:vm';
 const path = new URL('../lib/.verify-public-owner.mjs', import.meta.url);
-fs.writeFileSync(path, ts.transpileModule(fs.readFileSync(new URL('../lib/public-owner.ts', import.meta.url),'utf8'), { compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022} }).outputText);
+const loginPath=new URL('../lib/.verify-owner-login.mjs',import.meta.url);
+fs.writeFileSync(loginPath,ts.transpileModule(fs.readFileSync(new URL('../lib/owner-login.ts',import.meta.url),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText);
+fs.writeFileSync(path, ts.transpileModule(fs.readFileSync(new URL('../lib/public-owner.ts', import.meta.url),'utf8'), { compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022} }).outputText.replace("'./owner-login'","'./.verify-owner-login.mjs'"));
 try {
  const { publicOwnerBoundary: boundary } = await import(path.href);
  const env = { OWNER_PASSWORD: 'fixture-password-32-characters-not-real-secret', ANALYTICS_OWNER_EMAIL: 'owner@example.test' };
@@ -10,22 +13,23 @@ try {
  const next = async r => { seen = r; return Response.json({ok:true}); };
  const req = (path='/',headers={}) => new Request('https://pdf.example'+path,{headers});
  assert.equal((await boundary(req(),env,next,1000)).status,200);
- assert.equal((await boundary(req('/analytics'),env,next,1000)).status,401);
+ const screen=await boundary(req('/analytics'),env,next,1000);assert.equal(screen.status,200);assert.equal(screen.headers.has('WWW-Authenticate'),false);assert.ok(screen.headers.get('Content-Security-Policy').includes('frame-ancestors'));const html=await screen.text();assert.ok(html.includes('autocomplete="current-password"'));assert.ok(html.includes('method="post"'));const script=html.match(/<script nonce="[^"]+">([\s\S]*?)<\/script>/)[1];new Script(script);assert.ok(!html.includes('analytics-tracker'));
  assert.equal((await boundary(req('/analytics'),{},next,1000)).status,503);
  assert.equal((await boundary(req('/api/analytics/summary'),env,next,1000)).status,403);
  assert.equal((await boundary(req('/api/analytics/access'),env,next,1000)).headers.has('WWW-Authenticate'),false);
  const forged = {'oai-authenticated-user-id':'forged','oai-authenticated-user-email':env.ANALYTICS_OWNER_EMAIL};
  await boundary(req('/',forged),env,next,1000); assert.equal(seen.headers.get('oai-authenticated-user-id'),null);
  assert.equal((await boundary(req('/api/analytics/summary',forged),env,next,1000)).status,403);
- const basic = password => ({authorization:'Basic '+btoa('owner:'+password)});
- assert.equal((await boundary(req('/analytics',basic('wrong')),env,next,1000)).status,401);
- assert.equal((await boundary(new Request('http://pdf.example/analytics',{headers:basic(env.OWNER_PASSWORD)}),env,next,1000)).status,403);
- const signed = await boundary(req('/analytics',basic(env.OWNER_PASSWORD)),env,next,1000);
- assert.equal(signed.status,200); assert.deepEqual(await signed.json(),{ok:true}); assert.equal(seen.headers.get('authorization'),null);
- assert.equal(seen.headers.get('oai-authenticated-user-email'),env.ANALYTICS_OWNER_EMAIL);
+ const login=(password,extra={},origin='https://pdf.example')=>new Request('https://pdf.example/api/owner/login',{method:'POST',headers:{origin,'content-type':'application/json',...extra},body:JSON.stringify({password})});
+ assert.equal((await boundary(login('wrong'),env,next,1000)).status,401);
+ assert.equal((await boundary(login(env.OWNER_PASSWORD,{},'https://evil.test'),env,next,1000)).status,403);
+ assert.equal((await boundary(login(env.OWNER_PASSWORD),{},next,1000)).status,503);
+ assert.equal((await boundary(new Request('http://pdf.example/analytics'),env,next,1000)).status,403);
+ assert.equal((await boundary(new Request('https://pdf.example/api/owner/login',{method:'POST',headers:{origin:'https://pdf.example','content-type':'application/json','cf-connecting-ip':'oversize'},body:'x'.repeat(2049)}),env,next,1000)).status,400);
+ const signed=await boundary(login(env.OWNER_PASSWORD),env,next,1000);assert.equal(signed.status,200);assert.deepEqual(await signed.clone().json(),{ok:true});
  const setCookie=signed.headers.get('set-cookie'); assert.match(setCookie,/Secure; HttpOnly; SameSite=Strict/);
  const cookie=setCookie.split(';')[0];
- assert.equal((await boundary(req('/api/analytics/summary',{cookie}),env,next,1001)).status,200);
+ assert.equal((await boundary(req('/api/analytics/summary',{cookie}),env,next,1001)).status,200);assert.equal(seen.headers.get('authorization'),null);assert.equal(seen.headers.get('oai-authenticated-user-email'),env.ANALYTICS_OWNER_EMAIL);
  assert.equal((await boundary(req('/api/analytics/summary',{cookie:cookie+'a'}),env,next,1001)).status,403);
  assert.equal((await boundary(req('/api/analytics/summary',{cookie}),env,next,1000+8*3600)).status,403);
  assert.equal((await boundary(req('/api/analytics/summary',{cookie}),{...env,OWNER_PASSWORD:'rotated-32-character-password-for-this-test'},next,1001)).status,403);
@@ -34,5 +38,7 @@ try {
 const production=await boundary(new Request('https://pdf-studio.dcr6174.workers.dev/tools/sign-pdf?source=test'),{},next);assert.equal(production.status,308);assert.equal(production.headers.get('location'),'https://pdf-studio.in/tools/sign-pdf?source=test');
  const preview=await boundary(new Request('https://preview.pdf-studio.workers.dev/tools/sign-pdf'),{},next);assert.equal(preview.status,308);assert.equal(preview.headers.get('location'),'https://pdf-studio.in/tools/sign-pdf');
  const post=await boundary(new Request('https://pdf-studio.dcr6174.workers.dev/api/analytics/collect',{method:'POST'}),{},next);assert.equal(post.status,308);assert.equal(post.headers.get('location'),'https://pdf-studio.in/api/analytics/collect');
-console.log('PASS: public access, protected analytics, forged headers, incorrect passwords, HTTPS, signed sessions, tampering, expiry and rotation.');
-} finally { fs.unlinkSync(path); }
+const logout=await boundary(new Request('https://pdf.example/api/owner/logout',{method:'POST',headers:{origin:'https://pdf.example',cookie}}),env,next,1001);assert.match(logout.headers.get('set-cookie'),/Max-Age=0/);
+ for(let i=0;i<8;i++)assert.equal((await boundary(login('wrong',{'cf-connecting-ip':'rate-test'}),env,next,1000)).status,401);assert.equal((await boundary(login('wrong',{'cf-connecting-ip':'rate-test'}),env,next,1000)).status,429);assert.equal((await boundary(login('wrong',{'cf-connecting-ip':'rate-test'}),env,next,1061)).status,401);
+console.log('PASS: owner form sign-in, CSP, origin checks, body limits, attempt throttling, logout, public access, protected analytics, forged headers, incorrect passwords, HTTPS, signed sessions, tampering, expiry and rotation.');
+} finally { fs.unlinkSync(path);fs.unlinkSync(loginPath); }

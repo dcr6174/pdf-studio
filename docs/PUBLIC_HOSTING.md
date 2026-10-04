@@ -40,7 +40,7 @@ npx wrangler secret put ANALYTICS_OWNER_EMAIL --config wrangler.public.json
 
 For `OWNER_PASSWORD`, generate and save a unique random password of at least 32 ASCII characters in your password manager. Enter it only in the Wrangler prompt or Cloudflare dashboard, never in GitHub source or chat. `ANALYTICS_OWNER_EMAIL` is your email, used solely to identify the owner internally. Without both settings, the dashboard stays closed; public tools still work.
 
-Open `/analytics`. The browser asks for username **owner** and your owner password. A signed Secure/HttpOnly/SameSite cookie lasts eight hours. Rotate `OWNER_PASSWORD` to revoke all existing sessions. Browser HTTP Basic credentials can be cached: use a dedicated browser profile, and close it/clear its site data when finished on a shared computer. This is a single-owner password setup, not multi-user account management or two-factor authentication. HTTPS is required.
+Open `/analytics` to use the branded owner password screen; no username or browser Basic-auth prompt is required. Show/Hide, loading/error states, and Sign out are provided. A signed Secure/HttpOnly/SameSite cookie lasts eight hours. Rotate `OWNER_PASSWORD` to revoke all sessions; Sign out clears the cookie in that browser. Both secrets must be configured at Worker runtime, not only in build settings. This is single-owner password access, not multi-user accounts or two-factor authentication. HTTPS is required. The login endpoint accepts same-origin JSON POST requests with a bounded body. A best-effort, per-isolate throttle allows eight attempts per minute; it is not a globally coordinated rate limit.
 
 The standalone Worker strips all incoming Sites identity headers before making its own authorization decision. The anonymous `/api/analytics/collect` endpoint stays public and validates its strict event schema. Requests for analytics data fail closed without an owner session.
 
@@ -93,4 +93,5 @@ Reviewed 30 September 2026:
 - https://developers.cloudflare.com/workers/configuration/routing/custom-domains/
 - https://developers.cloudflare.com/workers/vite-plugin/reference/api/
 - https://developers.cloudflare.com/d1/reference/migrations/
+
 
