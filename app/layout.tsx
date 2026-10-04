@@ -3,6 +3,8 @@ import type { Metadata } from "next";
 import "./globals.css";
 import "./studio-brand.css";
 import "./studio-motion.css";
+import "./studio-refresh.css";
+import "./studio-buddy.css";
 
 export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
@@ -24,7 +26,7 @@ export default function RootLayout({
 }>) {
   return (
     <html lang="en" suppressHydrationWarning>
-      <head><script dangerouslySetInnerHTML={{__html:themeBootstrapScript}}/></head>
+      <head><script dangerouslySetInnerHTML={{__html:themeBootstrapScript}}/><link rel="preload" href="/fonts/Outfit-Bold-subset.woff" as="font" type="font/woff" crossOrigin="anonymous"/></head>
       <body className="antialiased"><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({"@context":"https://schema.org","@type":"WebSite",name:"PDF Studio",url:"https://pdf-studio.in/",description:"Free PDF tools with on-device document processing",inLanguage:"en"})}}/>{children}</body>
     </html>
   );

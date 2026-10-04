@@ -34,3 +34,6 @@ Cleanups
 ### Pass 2 validation in the project environment
 
 The ZIP integrity check passed and all seven patch files applied without conflicts. Integrated the patch into the current source, keeping the prior lint fixes. New internal links use Next Link; popular-related IDs match the actual tool registry. Lint: 0 errors, 32 warnings. TypeScript and production build pass. All 62 SEO SSR pages have one breadcrumb, the tool-specific wrapper and guide content before the footer. Added `checks/verify-tool-navigation.mjs` to run the actual history handler with anchor, empty-fragment, tool/shelf/home and busy/dirty-text cases. Homepage, discovery/install, PDF processing, text export, signatures, analytics, owner boundary and theme checks pass. Browser screenshots, focus/scroll and phone/tablet controls were not verified. No dependency changes or fresh install were required. GitHub publication only; Cloudflare production status is not verified.
+
+## Refresh (October 2026)
+Superseded look: see `docs/REFRESH-2026-10.md`. The "Consistency layer" and later blocks in `app/studio-brand.css` still apply, but `app/studio-refresh.css` loads last and wins on colours, cards, filters, search, header and motion.

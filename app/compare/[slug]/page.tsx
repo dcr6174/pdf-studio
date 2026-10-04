@@ -1,5 +1,6 @@
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
+import {Spotlight} from '@/components/spotlight';
 import Link from '@/components/browser-link';
 import {SiteHeader,SiteFooter} from '@/components/site-header';
 import {comparisons,COMPARISONS_CHECKED} from '@/lib/comparisons';
@@ -22,7 +23,7 @@ export default async function ComparePage({params}:{params:Promise<{slug:string}
    <tbody>{c.rows.map(([topic,ours,theirs])=><tr key={topic}><th scope="row">{topic}</th><td data-label="PDF Studio">{ours}</td><td data-label={c.name}>{theirs}</td></tr>)}</tbody></table></div>
   <h2>Choose {c.name} if</h2><ul>{c.theyAreBetter.map(x=><li key={x}>{x}</li>)}</ul>
   <h2>Choose PDF Studio if</h2><ul>{c.weAreBetter.map(x=><li key={x}>{x}</li>)}</ul>
-  <h2>Try it</h2><nav className="related-tools" aria-label="Popular tools"><Link href="/tools/edit-pdf-text"><b>Edit PDF text</b><span>Change existing text in your browser.</span></Link><Link href="/tools/compress-pdf"><b>Compress PDF</b><span>Make a PDF smaller for email and portals.</span></Link><Link href="/tools/merge-pdf"><b>Merge PDF files</b><span>Combine PDFs in the order you choose.</span></Link></nav>
+  <h2>Try it</h2><Spotlight as="nav" className="related-tools" item="a" aria-label="Popular tools"><Link href="/tools/edit-pdf-text"><b>Edit PDF text</b><span>Change existing text in your browser.</span></Link><Link href="/tools/compress-pdf"><b>Compress PDF</b><span>Make a PDF smaller for email and portals.</span></Link><Link href="/tools/merge-pdf"><b>Merge PDF files</b><span>Combine PDFs in the order you choose.</span></Link></Spotlight>
   <h2>Sources</h2><ul>{c.sources.map(s=><li key={s.url}><a href={s.url} rel="noreferrer nofollow">{s.label}</a></li>)}</ul>
   <p className="checked">Other comparisons: {comparisons.filter(x=>x.slug!==c.slug).map((x,i)=><span key={x.slug}>{i>0?' · ':''}<Link href={'/compare/'+x.slug}>{x.title}</Link></span>)}</p>
  </main><SiteFooter/></div>;

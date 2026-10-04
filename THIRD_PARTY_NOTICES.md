@@ -28,4 +28,4 @@ Other component and PDF dependencies retain their package licenses and existing 
 
 ## Outfit (logo wordmark)
 
-The "pdf studio" wordmark in the v5 logo files is drawn from Outfit Bold, converted to vector outlines. Outfit is licensed under the SIL Open Font License 1.1 (https://openfontlicense.org). The font file itself is not shipped with the site.
+The "pdf studio" wordmark in the v5 logo files is drawn from Outfit Bold, converted to vector outlines. Outfit is licensed under the SIL Open Font License 1.1 (https://openfontlicense.org). A Latin subset of Outfit Bold (public/fonts/Outfit-Bold-subset.woff, about 16 KB) is also shipped as the heading font; its license is in public/fonts/Outfit-OFL.txt.

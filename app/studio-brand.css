@@ -230,46 +230,8 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
 [data-theme=dark] .lockup-dark{display:block}
 @media(max-width:767px){.wordmark-lockup{height:34px}}
 
-/* ---- Buddy hero animation ------------------------------------------------ */
-.buddy-hero{display:block;margin:0 auto 4px;padding:0;border:0;background:none;line-height:0;cursor:pointer;border-radius:28px;-webkit-tap-highlight-color:transparent}
-.buddy-hero:focus-visible{outline:3px solid var(--primary);outline-offset:4px}
-.buddy-hero svg{width:132px;height:140px;overflow:visible}
-.buddy-hero g,.buddy-hero ellipse{transform-box:view-box}
-.bh-ground{fill:#3A1FB8;opacity:.18;transform-origin:64px 124px;animation:bh-ground-in .9s ease-out both,bh-ground-idle 4s ease-in-out 1.6s infinite}
-[data-theme=dark] .bh-ground{fill:#000;opacity:.45}
-.bh-body{transform-origin:64px 108px;animation:bh-drop .9s cubic-bezier(.3,.7,.4,1) both}
-.bh-float{animation:bh-float 4s ease-in-out 1.6s infinite}
-.bh-hop{transform-origin:64px 108px}
-.bh-fold{transform-origin:106px 12px;animation:bh-fold .5s cubic-bezier(.2,.9,.3,1.35) .5s both}
-.bh-cheeks{fill:#FF8FB8;opacity:0;animation:bh-cheeks .4s ease-out 1.05s forwards}
-.bh-eyes{transform-origin:64px 62px;animation:bh-open .3s ease-out .8s both,bh-blink 5.2s ease-in-out 2.6s infinite}
-.bh-look{transform:translate(var(--bh-x,0px),var(--bh-y,0px));transition:transform .18s ease-out}
-.bh-smile{stroke-dasharray:1;stroke-dashoffset:1;animation:bh-draw .4s ease-out .95s both}
-.bh-joy-eyes,.bh-grin{opacity:0;transition:opacity .12s}
-.bh-eyes,.bh-mouth{transition:opacity .12s}
-.mood-joy .bh-eyes,.mood-joy .bh-mouth{opacity:0}
-.mood-joy .bh-joy-eyes,.mood-joy .bh-grin{opacity:1}
-.mood-joy .bh-hop{animation:bh-hop .65s cubic-bezier(.3,.7,.4,1)}
-@media(hover:hover){.buddy-hero:not(.mood-joy):hover .bh-hop{animation:bh-wiggle .55s ease-in-out}}
-@keyframes bh-drop{0%{transform:translateY(-70px) scale(.92);opacity:0}40%{opacity:1}48%{transform:translateY(0) scale(1.09,.86)}64%{transform:translateY(-9px) scale(.96,1.05)}82%{transform:translateY(0) scale(1.02,.98)}100%{transform:none}}
-@keyframes bh-ground-in{0%{transform:scale(.2);opacity:0}48%{transform:scale(1.12);opacity:.24}100%{transform:none;opacity:.18}}
-@keyframes bh-ground-idle{0%,100%{transform:none}50%{transform:scale(.9)}}
-@keyframes bh-float{0%,100%{transform:none}50%{transform:translateY(-4px)}}
-@keyframes bh-fold{0%{transform:scale(0) rotate(-45deg)}100%{transform:none}}
-@keyframes bh-cheeks{to{opacity:.75}}
-@keyframes bh-open{0%{transform:scaleY(.08)}100%{transform:none}}
-@keyframes bh-blink{0%,93%,100%{transform:none}96%{transform:scaleY(.08)}}
-@keyframes bh-draw{0%{stroke-dashoffset:1;opacity:0}1%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
-@keyframes bh-hop{0%{transform:none}28%{transform:translateY(-16px) rotate(-6deg)}55%{transform:translateY(0) scale(1.07,.9)}75%{transform:rotate(3deg)}100%{transform:none}}
-@keyframes bh-wiggle{0%,100%{transform:none}25%{transform:rotate(-4deg)}60%{transform:rotate(3deg)}}
-@media(max-width:767px){.buddy-hero svg{width:104px;height:110px}}
-@media(prefers-reduced-motion:reduce){
- .buddy-hero *{animation:none!important;transition:none!important}
- .bh-smile{stroke-dashoffset:0}.bh-cheeks{opacity:.75}.bh-look{transform:none}
-}
-
 /* ---- Slow theme transition ---------------------------------------------- */
-:root{--theme-fade:700ms;--theme-ease:cubic-bezier(.4,0,.2,1)}
+:root{--theme-fade:450ms;--theme-ease:cubic-bezier(.4,0,.2,1)}
 /* View Transitions: the whole page cross-fades as one image */
 ::view-transition-old(root),::view-transition-new(root){animation-duration:var(--theme-fade);animation-timing-function:var(--theme-ease)}
 ::view-transition-group(root){animation-duration:var(--theme-fade)}
@@ -340,9 +302,3 @@ html.theme-fade,html.theme-fade *,html.theme-fade *::before,html.theme-fade *::a
 }
 
 .guides-hub h2{margin-top:32px}
-.buddy-display{display:flex;flex-direction:column;align-items:center}
-.buddy-motion-toggle{min-height:44px;padding:8px 12px;font-size:.75rem;color:var(--muted);border-radius:8px}
-.buddy-motion-toggle:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
-.buddy-paused .buddy-hero *{animation-play-state:paused!important}
-.buddy-paused .bh-look{transform:none}
-@media(prefers-reduced-motion:reduce){.buddy-motion-toggle{display:none}}

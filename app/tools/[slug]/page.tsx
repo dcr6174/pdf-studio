@@ -8,6 +8,7 @@ import Studio from '@/app/page';
 import {tools,accepted} from '@/lib/tools';
 import {seoPages,seoTools} from '@/lib/seo-tools';
 import {toolGuidance} from '@/lib/tool-guidance';
+import {Spotlight} from '@/components/spotlight';
 
 export function generateStaticParams(){return [...seoPages,...conversionGuides].map(t=>({slug:t.slug}));}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
@@ -42,7 +43,7 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
    <h3>Supported files</h3><p>{tool.note??tool.description}</p><p>Inputs: {formats}. Performance depends on your device. Download important work before closing the browser; local storage is not a backup.</p>
    <h3>Troubleshooting</h3><p>{searchGuidance[t.slug]?guidance.faq.map(([question,answer])=>`${question} ${answer}`).join(" "):"If the file will not open, check it in another PDF reader. If it is password-protected, use Remove a PDF password with a password you know. For scans that need selectable text, run Make a PDF searchable first."}</p>
    <h3>Common questions</h3><div className="tool-faq">{faq.map(([question,answer])=><details key={question}><summary>{question}</summary><p>{answer}</p></details>)}</div>
-   <h3>Related tools</h3><nav className="related-tools" aria-label="Related PDF tools">{related.map(x=><Link key={x.slug} href={'/tools/'+x.slug}><b>{x.title}</b><span>{x.intro}</span></Link>)}</nav>
+   <h3>Related tools</h3><Spotlight as="nav" className="related-tools" item="a" aria-label="Related PDF tools">{related.map(x=><Link key={x.slug} href={'/tools/'+x.slug}><b>{x.title}</b><span>{x.intro}</span></Link>)}</Spotlight>
    <p className="back-to-tool"><a className="secondary" href="#studio-content">Back to {t.title}</a></p>
   </section>;
  return <div className="tool-page">

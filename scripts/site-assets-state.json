@@ -1,282 +1,282 @@
 {
   "/": {
-    "hash": "db1df3b56aa8c23b78475d15a1c82ce1d766c85e17835e8cb87d61c194a6d5cb",
+    "hash": "ba591152a657bfb346cfc576a1c93c8e3f021373457481133491b42da319a7a7",
     "lastmod": "2026-10-04"
   },
   "/privacy": {
-    "hash": "42529df1132882d7d540aa14e8c1bac11b7ca345dc4749b86d50b7e292bcffe3",
-    "lastmod": "2026-10-01"
+    "hash": "72b2d8217861d035d53236e66ac5b9b8de260c2cb029a04e3d13aa1718bf2886",
+    "lastmod": "2026-10-04"
   },
   "/tools/add-pdf-bookmarks": {
-    "hash": "e83648c95a491c5590ab3839a5b68c98d14f4ef9281b8282f2e7f4a723e0f719",
+    "hash": "d560da2476c4e1f4ce52243e89767714637186c06c8a9006ab91488560a69786",
     "lastmod": "2026-10-04"
   },
   "/tools/split-pdf-in-half": {
-    "hash": "263e641c911b0211aec1b06272f2b1977b468aa6956a1430b6e0900d8ecc8d44",
+    "hash": "9cf5a1ed3743787c07dafd36e8836379996d1968a8051b167e0cb2d3140da7c6",
     "lastmod": "2026-10-04"
   },
   "/tools/reader-layout": {
-    "hash": "8226ffb020bc98acb6087e5dfb7500a8c90a98592712078dd26571e62f5cddbb",
+    "hash": "64f6195ae6dccdf9c539c2011077cb22ddd3dd0694974a38918d2d01794ec730",
     "lastmod": "2026-10-04"
   },
   "/tools/remove-pdf-annotations": {
-    "hash": "87836e0b8654d7364782a4c7c7617d12399ce61d212fd82db6cf97ba06a244eb",
+    "hash": "b7257122ccd0904dbd3fc529f540e16a6413340df46fa72d8a0504956dee3b84",
     "lastmod": "2026-10-04"
   },
   "/tools/create-fillable-pdf": {
-    "hash": "d30fe7477f88de5f90c97195e02bba0dead0d1c2b3ed2c98fe983117e499c176",
+    "hash": "fc92f420a1dfd1f15a2ebf838bb9bba6b2cd8b1a0bac2b95c26ebdad6f3d8425",
     "lastmod": "2026-10-04"
   },
   "/tools/merge-pdf": {
-    "hash": "ab63c0c07a061a0d455b9f14cea195d02df0f859de72ad57fe203ca39a6480e4",
+    "hash": "92dfd4abab16e303f7708b6bcd39710fd7bfbefbdcc601a4b12982574112e7ae",
     "lastmod": "2026-10-04"
   },
   "/tools/organize-pdf": {
-    "hash": "4e4b00f14e1b31f0de92ae9b7c9ccc02b18d6ff52498f132782c79112d5064d9",
+    "hash": "aaa1a2f52b714e2126f053b09b97ab5cc1497e5730b42453abf1f5e5f5060670",
     "lastmod": "2026-10-04"
   },
   "/tools/split-pdf": {
-    "hash": "94886bade3712d4ab3bab6539d4628cf94ac59fe8cb4a93687bc79fe5da0184c",
+    "hash": "9ed5f1d3d272d8439a808e45e9f8ed4e7141c074529e705c3fe2267a4d23c8e8",
     "lastmod": "2026-10-04"
   },
   "/tools/split-every-page": {
-    "hash": "189bd19611dfddcc4e6dfa19af6668189ed7945c7163c9011820ea943ed7c6e5",
+    "hash": "dc14a0f31e18dba5fd411ac9f87e4c5dfddba9b6c12a2d7a9f7c78bc5b17e001",
     "lastmod": "2026-10-04"
   },
   "/tools/compress-pdf": {
-    "hash": "976483fff4f6e83e2f172fe6706a626483f317a954fe922faf8f674b50ad921c",
+    "hash": "1f5db71cddfa83bf6412ef50290c709a09eb540c062ac3a666f2a9887ba9f424",
     "lastmod": "2026-10-04"
   },
   "/tools/rotate-pdf": {
-    "hash": "c910187c4693a3851796a25b3b863bae3ebd16f52f255e1053e690ccf44d9aab",
+    "hash": "19a18c42ed7a9b2c6d674da337c5725febd004c8baa10d43c5f1ac1aa927c15f",
     "lastmod": "2026-10-04"
   },
   "/tools/reverse-pages": {
-    "hash": "cf2b9cbc6acdcc481a19fc281d66270c8788a0e2203376cf38b464ab07d76045",
+    "hash": "4cda8d892ac6bfaacbff59d7abe61e4362fb7e01bcc0373b496733f832450966",
     "lastmod": "2026-10-04"
   },
   "/tools/duplicate-pages": {
-    "hash": "27699486dc19fb55dfef4472f0acb396175640d19179ae5f9ed924c3b4971e6a",
+    "hash": "219c68e5f7d5764fa25b473d750c4199ea83e96c8380ead48bc5c6ee3ee8d855",
     "lastmod": "2026-10-04"
   },
   "/tools/alternate-and-mix": {
-    "hash": "6a9274e3e8f5fbb681b15e5e2a40c7884e1e9275b82893adf7f263174b0418a4",
+    "hash": "4697cdb09d484958f36e52a3dc1cede632ee9ee53aa6ebf41848093be9258731",
     "lastmod": "2026-10-04"
   },
   "/tools/pages-per-sheet": {
-    "hash": "72b9f9beb1a445de3993026c8a848ba82b6460be073925d152c74a1bf5ad45ad",
+    "hash": "d00344f1dababd1e33c95d8b0c961c153b4e8c39d55febd876af62ba17e6d8dd",
     "lastmod": "2026-10-04"
   },
   "/tools/crop-margins": {
-    "hash": "7ecaaf25de3c28bcaa927c44cd65f7a0e7246e91d1ec61c8a86398ebeff62488",
+    "hash": "b39cdf1490f105641ed7245ab57fe75fdc65e6f2779efb24a0e6413a7a787314",
     "lastmod": "2026-10-04"
   },
   "/tools/resize-to-a4": {
-    "hash": "fd6d792c19d907714a3c14b578b994c7c695be5030760b1e2f92f6d35d37659f",
+    "hash": "23c3ccc0975c7efe67745e0d815090e42cf6607510b38c803abf3bd62984184e",
     "lastmod": "2026-10-04"
   },
   "/tools/mirror-pages": {
-    "hash": "4b40120689ef45fb320d6f145197926e2460e1f398b174d44c82e507f9782938",
+    "hash": "5059b0db411bbeaa787831e6a76e7c25ab3415271b4ad001fa2ce83710a241b5",
     "lastmod": "2026-10-04"
   },
   "/tools/edit-pdf-text": {
-    "hash": "55b4f17e2fc82dee7779dff3a85477c5956bcb1e40e7ffed0a3f2ddd58be16e9",
+    "hash": "8ff6c4735ea25e43516f5aa821da31d9ab096fa53c272af3169f944aeb2b8fbc",
     "lastmod": "2026-10-04"
   },
   "/tools/edit-pdf": {
-    "hash": "6437706c02cf53bb15ad3c317fa13a2edda5c7cc91d2685db2f5a9432a0dbb95",
+    "hash": "d87d6a48ff4fe12ac67facc7c327d4fa10f44f496c82b16cfb2dcbbb56b3ebb1",
     "lastmod": "2026-10-04"
   },
   "/tools/sign-pdf": {
-    "hash": "4e1691efb39f673cd392b1465d3b653b44e5a949538d04467589f94c0e4e2bb1",
+    "hash": "a2677217a3c93ce94531a5bfbd9f7dc3bfa4c5f61c1647e7e5535d3d37c7c3e5",
     "lastmod": "2026-10-04"
   },
   "/tools/redact-pdf": {
-    "hash": "4e211ef86c5d7a840fb96c037ee9dfa0292a5580e440ca91e4530ee8764fa71a",
+    "hash": "9c6040df744fb23a8b96d5df3310aeb60258f77dc38b3384ea72727e6751fc1f",
     "lastmod": "2026-10-04"
   },
   "/tools/add-watermark": {
-    "hash": "45054b739386284a8206de1a6dc007e6ff2e9523a9d51aa9274ca850c2f7d622",
+    "hash": "7142338a113484b8b7af209f07cfaf69a13cd164b699a9ae9f4b3e378211a17a",
     "lastmod": "2026-10-04"
   },
   "/tools/add-page-numbers": {
-    "hash": "9cff1ac92e7c7b49558b2e996606ab3e040217365cab48c7abea187ec6050202",
+    "hash": "b08d18274ab8df4b004ab38e707ac10d59eb494928bfda7ae99593bfcff88a01",
     "lastmod": "2026-10-04"
   },
   "/tools/bates-numbering": {
-    "hash": "36a681bc544dafdce37abd74eef24a2b09a675c92261ea3b7d734df9b60fab91",
+    "hash": "44b38cc57c956f21dfe4011db1fdbc46e0b64f2c54a5ee59db8da20b51fb6ab1",
     "lastmod": "2026-10-04"
   },
   "/tools/headers-and-footers": {
-    "hash": "e05322f177d91bfcbf48059edb5c80774ff15c03ad2a9d0f919fc8c4559b475c",
+    "hash": "23308dfa540b6382a9d4c413e267b1c96f6f958002ff42725ce374319a3f1864",
     "lastmod": "2026-10-04"
   },
   "/tools/flatten-pdf": {
-    "hash": "3e7a2cb60af31032f897daafe8d4e610cc0b7260336a59dc82887682dfda5db7",
+    "hash": "ec73aed62073aec50fa76c2d926b5454e7b8376f7db1d45e7d38526d3331a4ca",
     "lastmod": "2026-10-04"
   },
   "/tools/fill-pdf-forms": {
-    "hash": "9544779b71e0ca59527b47c4fff78bcef06a36ddc7e91ed5ad2f8654abfde0fc",
+    "hash": "1da82317b835be4cfcbde9b8e79bdb39b979f2ed8a65c8ef503cc8c75c014d72",
     "lastmod": "2026-10-04"
   },
   "/tools/edit-metadata": {
-    "hash": "1a94238f7b4aac2f2ee047555fe56b67f4670d7fc2a2307e5c925e7e5043d278",
+    "hash": "4d107536ce2d1a7b278dd598788a81efade5c74fa7f0e629da4ae15f1204525d",
     "lastmod": "2026-10-04"
   },
   "/tools/scan-to-pdf": {
-    "hash": "045e19c8d199a3f9b0772568c51b057483873be9dc428d6817019566f1ec5f8d",
+    "hash": "275a38127b1d4c4772f8a3248a95da344bc9a956b3f0b3870bd26c119b0bbd71",
     "lastmod": "2026-10-04"
   },
   "/tools/images-to-pdf": {
-    "hash": "87091a2725270042a462c651962382fa8edb4753078a466a90e544cdba519856",
+    "hash": "450c9f0da0dbb4a753858b7a64c20ce98c4e4db8e5bf23c50b255da214f8e969",
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-to-jpg": {
-    "hash": "7c4a1e6a068f96e6d998b1d291d78f3619647528fbb8d43c87a81bffccecfe1d",
+    "hash": "96805ca8ea2735cb7eca13ebbf52540de34333c576d32e4404dfee37248d646b",
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-to-png": {
-    "hash": "2fae5896b105572084a9cdf7c60a2f56c8e38ab1d9c68f8aab46c616e76d5e99",
+    "hash": "d2702db3b1957c905fa5bf1b24f685c3d01abffe3454e4e7fe66540587b3a510",
     "lastmod": "2026-10-04"
   },
   "/tools/extract-text": {
-    "hash": "eb3e72826d4f20879280f0adc462bdd7527fa4520d767f519f76d7e3e02b4c91",
+    "hash": "089b2f2bbabc855d012f1fc75246d78caef045ab7acfd9335276cd0358515557",
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-to-word": {
-    "hash": "1394aeb7ce3fd6cee62b4225bb5f1a84ab03ad5d1c216bc7875432257561b3b3",
+    "hash": "0d1ef51f4155cd8bad9339bbfa1522d1a56ec5c750b33bc4fc9d3ba8986443d1",
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-to-html": {
-    "hash": "baf2dcd960f8bb36240d20a1f70f1a1ea8d23560f48191f6069d5723d3346ebb",
+    "hash": "d477a18751d36910f5b7228495ed01ce0f854615203364140b846a356e3c994e",
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-to-epub": {
-    "hash": "08289a18ce83a42ed643285b19586f620b148c2d4375eadffcc6966087eac6d3",
+    "hash": "126771a37e51fea17019f5c86eba8a9bd92f8d1e28c0adb59611de6ed4b3ad02",
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-to-powerpoint": {
-    "hash": "2b109c8dfb791b179b677add33705dd0a0ce5aa0af5e3099f85a61e735cbf261",
+    "hash": "1c3ffd811d5a34f276b08e401a1aeedd9c679662043d99f4520f98d6a9992bb5",
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-to-spreadsheet": {
-    "hash": "fd42097d69a1cee0b9896425620ea71e4ed97b3497a6c1cdf10ea9c89fbbe2e3",
+    "hash": "2bec5b31abf96cc051fd6faef706aac19f1adf30e6b7ae1091ac58cc3ad4ff82",
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-to-csv": {
-    "hash": "db4adabca8f72e50e0bd366bd79d28cc67f8e9231b0cb79f66f30668b021d110",
+    "hash": "da7331905c4d79ef951bffb8159dda4294fda2c5a397fc00bd550b5801691e06",
     "lastmod": "2026-10-04"
   },
   "/tools/create-pdf": {
-    "hash": "80af80182b5ba4729266044355cd28fbacef3408b37a06ebba81a630a9dcc14a",
+    "hash": "2ed9f302217e0541e9daf2e7c73db2dd8707849541de48a2a63c2762a523b954",
     "lastmod": "2026-10-04"
   },
   "/tools/markdown-to-pdf": {
-    "hash": "94075e0560dd8ed6cb40ea3bffda62fcf5fcbaded5662492527b85f090c57011",
+    "hash": "af26384cf64774747ca50149dc1fb933db09cdac942bd80d9bf577182a07fe05",
     "lastmod": "2026-10-04"
   },
   "/tools/word-to-pdf": {
-    "hash": "3ff182e57ee2362029c331c98f43d4a754349176a1a5be62cd3bc02b44e736ca",
+    "hash": "c7126e0f9ddc35215987aaf2190a3fd9079f69aa4d7d58524a5888167b82cfd4",
     "lastmod": "2026-10-04"
   },
   "/tools/spreadsheet-to-pdf": {
-    "hash": "5e956a5839d5538970dd55322a45c7203427986039221bdea2d53d219aeba609",
+    "hash": "c24b907f71b85653900e6a926faec09a6c54ecd6eb8b8396be0d89fedd8406ef",
     "lastmod": "2026-10-04"
   },
   "/tools/epub-to-pdf": {
-    "hash": "dd7991b0b987a407f306e9ccf767581c2e6f4462380bca683a73b5f72771552f",
+    "hash": "2542c13cc5491bc7a85212aca406f3313480239cd3a9efaf02d8ad79d2e0d7c3",
     "lastmod": "2026-10-04"
   },
   "/tools/grayscale-pdf": {
-    "hash": "1e7a8bb5b3c6145b64723dc74b7e1787c68ec2887d9a2984192b2a47aa2502e9",
+    "hash": "c2745008d75ac82c75a0eb386f5946244f8acba3fbf83368899d4457519cff81",
     "lastmod": "2026-10-04"
   },
   "/tools/invert-colours": {
-    "hash": "14804b58a2ff3a5926e62f2d8864ece3c661571cfdf775619d0b3f26fba208f6",
+    "hash": "f6a56bf3dfadc25b709489244ba224437d02c4c1654630b8f99fd50c23232dce",
     "lastmod": "2026-10-04"
   },
   "/tools/ocr-pdf": {
-    "hash": "ff41bc7c73e2e0777966317057b04154aa3ff9d5fee2154e9b9e7f7a7462f7f8",
+    "hash": "26e95d6ffdb954e836bdebc00a8bb109ed3418125895b933fd710f6aef09db91",
     "lastmod": "2026-10-04"
   },
   "/tools/read-aloud": {
-    "hash": "7f460d2feac0ecf61587303598acde429e291035d6f16751fef12de52712deaa",
+    "hash": "e7e837b6564c26c58c9396e0c184a575c5b0ce44583108e45c95826f63584304",
     "lastmod": "2026-10-04"
   },
   "/tools/compare-pdfs": {
-    "hash": "f6bb05b3f19223d0020a41c00ef44bbee2ae898db3cb5dcf0c8993ee7626f8f6",
+    "hash": "6bcd9af72af5a2e5b65ff9b98b7ab4a2bc90552b630282053105b79299c88d2f",
     "lastmod": "2026-10-04"
   },
   "/tools/protect-pdf": {
-    "hash": "3574365b70967293ec96c4f723ca8867c28024a16db1b4699315bca31c83e871",
+    "hash": "ddc0833372ffd78646e3a782e5e63ee92cbdefc2a3730065046e46fb82b08bc9",
     "lastmod": "2026-10-04"
   },
   "/tools/unlock-pdf": {
-    "hash": "65d05486cc75445b854b0f0ce05dc94f67b934a9c99cebcda7e58dfd497c8820",
+    "hash": "8bcb68a227880b0ea76133159e0a23750c753cdf0d5e48d7dc7dd518bb18c686",
     "lastmod": "2026-10-04"
   },
   "/tools/privacy-scanner": {
-    "hash": "d0216824820c773183d185f154e90819c9e9ee53d8fe5409ed3d7417ee8c8237",
+    "hash": "c32db921abb8e864a46009feb668e821d9c22cf8b28d402186ec331dbc398176",
     "lastmod": "2026-10-04"
   },
   "/tools/remove-pdf-metadata": {
-    "hash": "079ccf4b640c4a46e7f23196230403454259a0a57d8c12998f2ca637e11565d8",
+    "hash": "21d8b778d946d553bf64fb94e5868ab8fb36d296a5de65ff411b0c1b2ee239b3",
     "lastmod": "2026-10-04"
   },
   "/tools/file-fingerprint": {
-    "hash": "57ed7f3e65b13ea9a39e705214bb7cea06cf4855fd3e60bf7f5a9359309df980",
+    "hash": "10e75314f5980f4b12ffbaab4f635ffbf114819234ca3a65d7f80929c3934398",
     "lastmod": "2026-10-04"
   },
   "/tools/bundle-pdfs": {
-    "hash": "235854c8d06cd1adbdae8baf4a37c4fd9537f6fc6ccf9c9ba74f9d3e6759163b",
+    "hash": "0680cdead88681c724ad7f1bd5995bec0e8e98e9430082bfd561e9dc1fb83f9c",
     "lastmod": "2026-10-04"
   },
   "/tools/resave-pdf": {
-    "hash": "371b48a84abcefe56405427f8159e12ddfc9ac2326f1089a565daeb5a97f84b9",
+    "hash": "e106c2e4921f0729e198bc8b2db1709b7675458622f330b51085997d62bc8952",
     "lastmod": "2026-10-04"
   },
   "/tools/jpg-to-pdf": {
-    "hash": "1a522ba5ee9e82ad491dccbb73f20f98894633bf9449e8cbaa56cfbc69c063e6",
+    "hash": "5f7a4303c0de8a60ab430f22405f131a57db52d1f05c72bf3d8d7118f1a03349",
     "lastmod": "2026-10-04"
   },
   "/tools/png-to-pdf": {
-    "hash": "f4c31e6f9c90ab69d12c3375716c2125e31ff7c8cbabf75abe926b19d7efc685",
+    "hash": "139aedd22f87fceff0a04072260199fafbabcfbc4880b9901bb4d6c4ebf55f51",
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-to-excel": {
-    "hash": "88deed3395278175262fabd84a6d070be91543dbc1c1951389260307ade55bae",
+    "hash": "994d1cf427f22d7c44b6213f9fd1fb25ba30bdbce62aec042e170c3c0546604b",
     "lastmod": "2026-10-04"
   },
   "/tools/delete-pdf-pages": {
-    "hash": "26219396d6c88e13b1e866e17b8c56f1ad1ea3ef9958d4d2b5afde936c19648e",
+    "hash": "c794ee0fad4204388ac03db883000f57ab6dfcdedfa3f1e7f5f3f8cd8622e307",
     "lastmod": "2026-10-04"
   },
   "/tools/extract-pdf-pages": {
-    "hash": "685232828de1c9445c0e9ac1e98998754fa6a6d704ed1456e0deec589c72341d",
+    "hash": "bcc9ef5d24f23a79c3b2174ddc81cfbad808caa8a50fd646d10d375346b13205",
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-editor": {
-    "hash": "b2097d9deecf0b1f85caf94a587a9ace0f13e5ff90091fdde293dd94965fc93f",
+    "hash": "f046c2ed858976a4094d4c1de0c9db8cced1ab639fc125b44ad79c79ea714945",
     "lastmod": "2026-10-04"
   },
   "/tools/edit-cv-pdf": {
-    "hash": "6819cdae7d2ad61ab6493ede8fcb10c1879c1820cbdd63e0fd62350f2d766d7a",
+    "hash": "b94d8c4d3e5e00e3910c0a66734ba283320121c6d40c1cbe4f7935a0d838111e",
     "lastmod": "2026-10-04"
   },
   "/tools/compress-pdf-to-100kb": {
-    "hash": "422c51bc0ae14b789217d9178657dc9a4b04edaf4d5f05cb3603118950171a3b",
+    "hash": "68147b03b300bc557a1e6ce7a2651fab83913ce5e7a393302852efb95f0235ec",
     "lastmod": "2026-10-04"
   },
   "/tools/powerpoint-to-pdf": {
-    "hash": "380a4c18e2a656e583644db9e8643337348e0a840b9baa7e6ee3234392cddec8",
+    "hash": "0d1925cb0f7ed11dc1decc01be3db93e607c722c69b7bc2c418960d58afe1c96",
     "lastmod": "2026-10-04"
   },
   "/tools/html-to-pdf": {
-    "hash": "b1d52a65c874998a5c6261eaff603817496fc523441f4182924b60af61a8a2ca",
+    "hash": "8e223025ffe796198110df3a1135fff174e1e7d413100e430fda483df4e730a7",
     "lastmod": "2026-10-04"
   },
   "/guides": {
-    "hash": "277926e5fc3d518c2ff54267780dc19b42f96a582b528d457c85ee0ad21e5ee0",
+    "hash": "2cfee83b46bde847aee6c0ac143a859593c1f6a7e8de8fc74d8060afa1c6609b",
     "lastmod": "2026-10-04"
   },
   "/compare/ilovepdf-alternative": {
