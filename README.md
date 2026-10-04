@@ -333,3 +333,5 @@ The local clock and daily encouraging line appear at the bottom of the homepage,
 ### Canonical domain and simplified homepage (4 October 2026)
 
 The greeting, local clock and daily line appear above the homepage footer. Saved-document recovery remains available. All `*.workers.dev` requests that reach this app now redirect to `https://pdf-studio.in`, preserving the path and query with HTTP 308, including preview hosts and non-GET requests. This supersedes the earlier instructions to keep Workers URLs accessible. The repository robots.txt contains no Claude-User-specific allow block. Cloudflare-managed robots additions are separate from this source file. Live rollout remains unverified.
+
+Asset incident correction (4 October 2026): reverted the all-assets Worker-first setting after production CSS/JS 404 reports. Cloudflare again serves matching static assets directly; Worker-served pages retain canonical Workers redirects. A clean production build is required. This supersedes the earlier all-request redirect description.

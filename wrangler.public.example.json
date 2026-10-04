@@ -23,9 +23,5 @@
   },
   "observability": {
     "enabled": false
-  },
-  "assets": {
-    "run_worker_first": true,
-    "binding": "ASSETS"
   }
 }
