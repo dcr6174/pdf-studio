@@ -8,7 +8,7 @@ assert.ok(handler,'test the actual popstate handler');
 const body=ts.transpile(handler[1],{target:ts.ScriptTarget.ES2022});
 function run({hash='',pathname='/',view='compress',initialTool='compress',busy=false,loading=false,textDirty=false,marks=[]}={}){
  const calls=[],messages=[],pushes=[];
- vm.runInNewContext(`(()=>{${body}})()`,{location:{hash,pathname},view,initialTool,busy,loading,textDirty,marks,seoTools:[{id:'compress',slug:'compress-pdf'},{id:'merge',slug:'merge-pdf'},{id:'native-text',slug:'edit-pdf-text'}],tools:[{id:'compress'},{id:'merge'},{id:'native-text'}],navigate:(...args)=>calls.push(args),toast:s=>messages.push(s),window:{history:{pushState:(...args)=>pushes.push(args)}}});
+ vm.runInNewContext(`(()=>{${body}})()`,{location:{hash,pathname},view,initialTool,busy,loading,textDirty,marks,seoTools:[{id:'compress',slug:'compress-pdf'},{id:'merge',slug:'merge-pdf'},{id:'native-text',slug:'edit-pdf-text'}],seoPages:[{id:'compress',slug:'compress-pdf'},{id:'merge',slug:'merge-pdf'},{id:'native-text',slug:'edit-pdf-text'},{id:'edit',slug:'pdf-editor'}],tools:[{id:'compress'},{id:'merge'},{id:'native-text'}],navigate:(...args)=>calls.push(args),toast:s=>messages.push(s),window:{history:{pushState:(...args)=>pushes.push(args)}}});
  return {calls,messages,pushes};
 }
 for(const hash of ['#studio-content','#tool-guide-title','#unknown'])assert.deepEqual(run({hash}).calls,[],'anchor changes keep current tool');
@@ -35,3 +35,5 @@ assert.equal(run({hash:'#merge',marks:[{kind:'redact'}]}).calls.length,0,'pendin
 assert.deepEqual(run({pathname:'/tools/merge-pdf',view:'compress'}).calls,[['merge',false]],'history resolves the actual tool path');
 assert.ok(source.includes('queueMicrotask(()=>bootstrapNavigate(id))')&&source.includes('useEffectEvent((id:string)=>navigate(id,false))'),'hash startup never pushes history');
 assert.ok(source.includes("window.addEventListener('hashchange',back)"),'direct hash changes share the navigation handler');
+
+assert.deepEqual(run({pathname:'/tools/pdf-editor',view:'compress'}).calls,[['edit',false]],'search aliases resolve during browser history');

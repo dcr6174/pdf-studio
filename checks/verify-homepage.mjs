@@ -13,7 +13,7 @@ assert.ok(!html.includes('Drop your PDF here'),'home has no upload invitation');
 assert.ok(html.includes('Choose your tool')); 
 assert.ok(html.includes('Browse all 56 tools'));
 assert.equal((html.match(/class="tool-card /g)||[]).length,6,'initial popular catalogue is focused');
-assert.equal(new Set([...html.matchAll(/href="(\/tools\/[^"]+)"/g)].map(m=>m[1])).size,56,'all catalogue guides are crawlable before hydration');
+assert.equal(new Set([...html.matchAll(/href="(\/tools\/[^"]+)"/g)].map(m=>m[1])).size,64,'all catalogue and search guides are crawlable before hydration');
 assert.ok(html.includes('href="/privacy"')&&html.includes('href="/about"'));
 assert.ok(!html.includes('app-sidebar'));
 assert.ok(html.includes('Can I edit existing PDF text?'));
@@ -22,6 +22,6 @@ const names=[...tools.matchAll(/^\['[^']+','([^']+)'/gm)].map(m=>m[1]);assert.eq
 for(const name of names)assert.ok(readme.includes('| '+name+' |'),`${name} missing from README`);
 assert.ok(!readme.includes('Light and dark themes'));
 assert.ok(readme.includes('Fit mode can shrink text'));
-console.log('PASS: initial homepage SSR, one H1, six popular tools, tool-first entry without homepage upload, all 56 crawlable guide links, FAQ, no sidebar and README coverage of all 56 tools.');
+console.log('PASS: initial homepage SSR, one H1, six popular tools, tool-first entry without homepage upload, all 64 crawlable tool/search/export guide links, FAQ, no sidebar and README coverage of all 56 tools.');
 
 assert.ok(!/Actual processing limits|157\.3 MB|50 MB|400 pages|22 megapixels|20 files/.test(html),'no upfront limit table or numbers');

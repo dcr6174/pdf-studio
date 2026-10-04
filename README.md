@@ -245,3 +245,11 @@ Subtle EasyUI-inspired CSS interactions now provide button press feedback, tool-
 React navigation uses a memoized callback with explicit dependencies; startup navigation uses an effect event so it reads current state without rerunning bootstrap. Thumbnail rendering tracks changed bytes and image data. Images use one browser-only component with explicit logo dimensions, asynchronous decoding and lazy private previews; document images never go through an image optimization server. The Next-specific server image-optimization lint rule is exempted only in that wrapper, where native images are required by the privacy model. Generated `.verify-*.mjs` files are excluded from lint because their TypeScript source is checked instead. Unused imports and variables were removed; form and installation conditionals are explicit. Check with `npm run lint` and `npx tsc --noEmit`.
 
 EasyUI references and its MIT notice are recorded in `THIRD_PARTY_NOTICES.md` and `licenses/EasyUI-MIT.txt`.
+
+### Search landing pages and evidence-backed guidance (October 4, 2026)
+
+JPG-to-PDF, PNG-to-PDF, PDF-to-Excel, Delete PDF pages, Extract PDF pages and PDF editor already existed as working-tool aliases. They now have task-specific steps, use cases, checks and FAQs, matching page headings, and crawlable links in the homepage guide directory. The directory also links the existing Edit PDF page. The normal homepage still has no upload area.
+
+`/tools/powerpoint-to-pdf` and `/tools/html-to-pdf` are clearly labelled manual export guides with official instructions, separate structured data, social previews, canonical URLs and sitemap entries. They do not accept PPTX/HTML or pretend to offer direct conversion. Export in PowerPoint or the browser first, then use PDF Studio to finish the PDF. External applications/webpages have their own file handling and network behavior.
+
+Spreadsheet/CSV results show extracted row count, pages containing selectable text and a short browser-local row preview. Missing text pages are flagged; original tables, formulas and formatting are not reconstructed. This preview is not sent to analytics. See `docs/SEARCH_INTENT_AND_PAIN_POINTS.md` for dated sources, limitations and follow-up priorities. Numeric input caps remain visible only after rejection.

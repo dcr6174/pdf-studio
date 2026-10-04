@@ -278,11 +278,13 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
         const x = await import('xlsx');
         const rows = text.split('\n').filter(Boolean).map(l => l.trim().split(/\s{2,}|\t/));
         const sheet = x.utils.aoa_to_sheet(rows);
+        const readable=texts.filter(page=>page.trim()).length;
+        const report=`Heuristic text extraction: ${rows.length} rows from ${readable} of ${texts.length} pages with selectable text.\n${readable<texts.length?'Some pages had no selectable text; inspect them and run OCR if needed.\n':''}Columns and table structure may need manual cleanup. Verify totals, dates and identifiers against the source. Formulas and original formatting are not reconstructed.\nFirst extracted rows (review before sharing):\n${rows.slice(0,8).map(row=>row.join(' | ')).join('\n')}`;
         if (id === 'csv')
-            return result(x.utils.sheet_to_csv(sheet), `${filename}.csv`, 'text/csv');
+            return result(x.utils.sheet_to_csv(sheet), `${filename}.csv`, 'text/csv',report);
         const w = x.utils.book_new();
         x.utils.book_append_sheet(w, sheet, 'Extracted text');
-        return result(new Uint8Array(x.write(w, { type: 'array', bookType: 'xlsx' })), `${filename}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet');
+        return result(new Uint8Array(x.write(w, { type: 'array', bookType: 'xlsx' })), `${filename}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',report);
     }
     if (!items.length && files.some(f => f.pages > 0) && id !== 'form')
         throw new Error('Keep at least one page in your document.');
