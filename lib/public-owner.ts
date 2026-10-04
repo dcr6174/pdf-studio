@@ -32,8 +32,8 @@ async function validBasic(request: Request, secret: string) {
 }
 export async function publicOwnerBoundary(request: Request, env: OwnerEnv, next: (request: Request) => Promise<Response>, now = Math.floor(Date.now() / 1000)) {
   const url = new URL(request.url), headers = new Headers(request.headers);
-  if(url.hostname==='www.pdf-studio.in'){url.hostname='pdf-studio.in';url.protocol='https:';return Response.redirect(url.toString(),308);}
-  // Keep the production Workers URL accessible until the owner explicitly enables its redirect.
+  if(url.hostname==='www.pdf-studio.in'||url.hostname.endsWith('.workers.dev')){url.hostname='pdf-studio.in';url.protocol='https:';return Response.redirect(url.toString(),308);}
+  // Owner-authorized canonical redirect: preserve path/query and request method (308).
   for (const name of [...headers.keys()]) if (name.startsWith('oai-authenticated-user-')) headers.delete(name);
   // Credentials must never reach the application, analytics, or request logs.
   headers.delete('authorization');
@@ -70,4 +70,3 @@ export async function publicOwnerBoundary(request: Request, env: OwnerEnv, next:
   }
   return response;
 }
-

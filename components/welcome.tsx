@@ -11,9 +11,8 @@ import type {Recoverable} from '@/lib/resume';
  * Nothing here moves or changes while someone is reading.
  */
 export function Welcome({draft,onResume,onDelete,busy}:{draft:Recoverable|null;onResume:()=>void;onDelete:()=>void;busy:boolean}){
- const now=useNow();
- return <div className="welcome" data-ready={now?'true':'false'}>
-  <p className="welcome-greeting">{now&&<>{greetingFor(now)} <span>{GREETING_TAIL}</span></>}</p>
+ if(!draft)return null;
+ return <div className="welcome" data-ready="true">
 
   {draft&&<div className="welcome-resume" role="group" aria-label="Continue your saved document">
    <p><b>Ready to continue?</b> <span>{draft.names.length===1?draft.names[0]:`${draft.names.length} files`} · {draft.pages} {draft.pages===1?'page':'pages'}</span></p>
@@ -35,4 +34,10 @@ export function LocalClock(){
  const clock=now?formatClock(now):null;
  const iso=now?`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}T${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`:undefined;
  return <p className="welcome-meta" data-ready={clock?'true':'false'}>{clock&&<span className="clock-chip"><span className="clock-dot" aria-hidden="true"/><time dateTime={iso}><RollingTime text={clock.time}/></time><span className="clock-sep" aria-hidden="true">·</span><span className="clock-date">{clock.date}</span></span>}</p>;
+}
+
+/** Greeting stays beside the clock at the bottom of the homepage. */
+export function Greeting(){
+ const now=useNow();
+ return <p className="welcome-greeting">{now&&<>{greetingFor(now)} <span>{GREETING_TAIL}</span></>}</p>;
 }

@@ -329,3 +329,7 @@ Refresh integration: corrected clock render errors, timer cleanup, interrupted/r
 Refresh validation (4 October 2026): lint, TypeScript, search/welcome/paste/result checks, SEO routes and public-page links, upload rejection/recovery checks, and 49 fixture-based processing workflows plus 33 additional correctness checks passed. Production build passed with existing bundler warnings. No fresh package installation, real-phone camera test or rendered visual interaction test was performed for this integration. Cloudflare deployment is not verified.
 
 The local clock and daily encouraging line appear at the bottom of the homepage, after the guides and above the footer. Greeting and saved-document recovery remain near the top.
+
+### Canonical domain and simplified homepage (4 October 2026)
+
+The greeting, local clock and daily line appear above the homepage footer. Saved-document recovery remains available. All `*.workers.dev` requests that reach this app now redirect to `https://pdf-studio.in`, preserving the path and query with HTTP 308, including preview hosts and non-GET requests. This supersedes the earlier instructions to keep Workers URLs accessible. The repository robots.txt contains no Claude-User-specific allow block. Cloudflare-managed robots additions are separate from this source file. Live rollout remains unverified.
