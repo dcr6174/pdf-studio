@@ -1,3 +1,5 @@
+> Superseded on 4 October 2026 by [BRAND-V5.md](BRAND-V5.md) (Page Buddy). Kept for history.
+
 # PDF Studio
 
 The refreshed identity uses a folded ribbon S mark with violet, coral and turquoise facets. A quiet white working canvas, violet controls, coral editing accents and teal conversion accents organize the interface. Existing saved drafts, local files and theme choices retain their original storage keys so the rename does not erase user data.

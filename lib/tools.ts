@@ -30,6 +30,7 @@ export const tools:Tool[] = [
 ['flatten','Flatten PDF','Bake pages into a static document.','Edit & sign','layers','Rebuilds pages as images. Text is no longer selectable; links and forms are removed.'],
 ['form','Fill PDF forms','Complete existing fillable fields.','Edit & sign','edit','Supports text, checkbox and dropdown fields. Choose editable fields or flatten the completed form.'],
 ['metadata','Edit metadata','Update title, author and subject.','Edit & sign','file'],
+['scan','Scan to PDF','Photograph paper pages and save them as one PDF.','Convert','image','Take a photo can open the camera on supported phones; other browsers show a file picker. Each photo becomes a page. Crop and straighten in your camera app first; text is not recognized (run Make a PDF searchable afterwards).'],
 ['images','Images to PDF','Turn photos into one document.','Convert','image','PNG, JPG and WebP images. Browser memory also depends on decoded images, not just file size.'],
 ['jpg','PDF to JPG','Export pages as images in a ZIP.','Convert','image'],
 ['png','PDF to PNG','Lossless page images, in a ZIP.','Convert','image'],
@@ -58,6 +59,6 @@ export const tools:Tool[] = [
 ['zip','Bundle PDFs','Put your PDF files in a ZIP.','Pages','layers'],
 ['repair','Repair readable PDF','Rebuild a readable PDF structure.','Privacy','file','Can resave PDFs that parse successfully. Severely damaged PDFs may not be recoverable.'],
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
-export function accepted(id:string){return id==='images'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
-export function isMulti(id:string){return ['merge','organize','interleave','images','compare','zip'].includes(id);}
+export function accepted(id:string){return id==='images'||id==='scan'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
+export function isMulti(id:string){return ['merge','organize','interleave','images','scan','compare','zip'].includes(id);}
 

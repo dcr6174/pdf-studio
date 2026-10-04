@@ -31,6 +31,12 @@ export const toolGuidance: Record<string, ToolGuidance> = {
     checks: 'A signature image is not certificate-based digital signing or identity verification. Use a transparent image when possible and inspect the output before sharing.',
     faq: [['Can I upload my signature?', 'Yes. Choose the image-upload option in the signature controls.'], ['Is this cryptographic signing?', 'No. The tool places a visual signature; it does not issue a certificate or verify identity.']]
   },
+  scan: {
+    steps: ['Open Scan to PDF on your phone and tap Take a photo. Hold the phone straight above the page, in good light, with the whole page in the frame.', 'Take another photo for each page. Reorder or delete pages in the workspace; use Rotate if a photo came out sideways.', 'Export the PDF, zoom in to check the smallest writing, then download it.'],
+    useCase: 'Turn signed forms, receipts, ID copies or handwritten notes into one PDF without installing a scanner app. Photos stay on your device.',
+    checks: 'Each photo becomes one page exactly as taken: there is no automatic edge detection, cropping or straightening, so crop in your camera app first. Text is not recognized; run Make a PDF searchable afterwards if you need selectable text. Large camera photos can make the PDF big; use Compress PDF if a portal has a size limit.',
+    faq: [['Does Scan to PDF upload my photos?', 'No. Photos are read and assembled into a PDF inside your browser.'], ['Can it straighten or crop the page automatically?', 'Not yet. Crop and straighten in your camera or gallery app before adding the photo.']]
+  },
   images: {
     steps: ['Choose JPG, PNG or WebP images.', 'Review the resulting pages and arrange their order in the workspace.', 'Export the PDF and check orientation, margins and small details before downloading.'],
     useCase: 'Combine photographed notes, receipts or scanned images into one PDF. This creates image pages rather than searchable text.',

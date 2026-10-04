@@ -1,6 +1,6 @@
 {
   "/": {
-    "hash": "f561b82c3839dcf261010a7867d1b186caa8650c15aa5289422764049ce452df",
+    "hash": "db1df3b56aa8c23b78475d15a1c82ce1d766c85e17835e8cb87d61c194a6d5cb",
     "lastmod": "2026-10-04"
   },
   "/privacy": {
@@ -121,6 +121,10 @@
   },
   "/tools/edit-metadata": {
     "hash": "1a94238f7b4aac2f2ee047555fe56b67f4670d7fc2a2307e5c925e7e5043d278",
+    "lastmod": "2026-10-04"
+  },
+  "/tools/scan-to-pdf": {
+    "hash": "045e19c8d199a3f9b0772568c51b057483873be9dc428d6817019566f1ec5f8d",
     "lastmod": "2026-10-04"
   },
   "/tools/images-to-pdf": {
@@ -255,12 +259,40 @@
     "hash": "b2097d9deecf0b1f85caf94a587a9ace0f13e5ff90091fdde293dd94965fc93f",
     "lastmod": "2026-10-04"
   },
+  "/tools/edit-cv-pdf": {
+    "hash": "6819cdae7d2ad61ab6493ede8fcb10c1879c1820cbdd63e0fd62350f2d766d7a",
+    "lastmod": "2026-10-04"
+  },
+  "/tools/compress-pdf-to-100kb": {
+    "hash": "422c51bc0ae14b789217d9178657dc9a4b04edaf4d5f05cb3603118950171a3b",
+    "lastmod": "2026-10-04"
+  },
   "/tools/powerpoint-to-pdf": {
     "hash": "380a4c18e2a656e583644db9e8643337348e0a840b9baa7e6ee3234392cddec8",
     "lastmod": "2026-10-04"
   },
   "/tools/html-to-pdf": {
     "hash": "b1d52a65c874998a5c6261eaff603817496fc523441f4182924b60af61a8a2ca",
+    "lastmod": "2026-10-04"
+  },
+  "/guides": {
+    "hash": "277926e5fc3d518c2ff54267780dc19b42f96a582b528d457c85ee0ad21e5ee0",
+    "lastmod": "2026-10-04"
+  },
+  "/compare/ilovepdf-alternative": {
+    "hash": "e7944156652b46b9a03e955756365e038c573cae114f3b9a24543647bff37ee8",
+    "lastmod": "2026-10-04"
+  },
+  "/compare/smallpdf-alternative": {
+    "hash": "c9f74f795322d9d59f5f849d46778be503d98efa9cb5bcce29764368b37f7624",
+    "lastmod": "2026-10-04"
+  },
+  "/compare/sejda-alternative": {
+    "hash": "036c16b424ceaf80a5d565908247741d9b5eff8c09c3dda466db96c5b69a84c1",
+    "lastmod": "2026-10-04"
+  },
+  "/compare/adobe-acrobat-alternative": {
+    "hash": "84b00dbc01558756807d16a2707f28d8a0df63938e3bbc1ffda5669e0ea4a9f2",
     "lastmod": "2026-10-04"
   }
 }

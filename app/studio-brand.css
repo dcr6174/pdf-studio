@@ -221,3 +221,128 @@ button:focus-visible,a:focus-visible,input:focus-visible,textarea:focus-visible{
  .native-export{margin-left:0;flex-wrap:wrap}
  .native-history{flex-wrap:wrap}
 }
+
+/* Logo lockup (Page Buddy v5): one image, light/dark swap with the theme */
+.studio-wordmark{display:inline-flex;align-items:center;gap:0;line-height:0}
+.wordmark-lockup{display:block;height:40px;width:auto}
+.lockup-dark{display:none}
+[data-theme=dark] .lockup-light{display:none}
+[data-theme=dark] .lockup-dark{display:block}
+@media(max-width:767px){.wordmark-lockup{height:34px}}
+
+/* ---- Buddy hero animation ------------------------------------------------ */
+.buddy-hero{display:block;margin:0 auto 4px;padding:0;border:0;background:none;line-height:0;cursor:pointer;border-radius:28px;-webkit-tap-highlight-color:transparent}
+.buddy-hero:focus-visible{outline:3px solid var(--primary);outline-offset:4px}
+.buddy-hero svg{width:132px;height:140px;overflow:visible}
+.buddy-hero g,.buddy-hero ellipse{transform-box:view-box}
+.bh-ground{fill:#3A1FB8;opacity:.18;transform-origin:64px 124px;animation:bh-ground-in .9s ease-out both,bh-ground-idle 4s ease-in-out 1.6s infinite}
+[data-theme=dark] .bh-ground{fill:#000;opacity:.45}
+.bh-body{transform-origin:64px 108px;animation:bh-drop .9s cubic-bezier(.3,.7,.4,1) both}
+.bh-float{animation:bh-float 4s ease-in-out 1.6s infinite}
+.bh-hop{transform-origin:64px 108px}
+.bh-fold{transform-origin:106px 12px;animation:bh-fold .5s cubic-bezier(.2,.9,.3,1.35) .5s both}
+.bh-cheeks{fill:#FF8FB8;opacity:0;animation:bh-cheeks .4s ease-out 1.05s forwards}
+.bh-eyes{transform-origin:64px 62px;animation:bh-open .3s ease-out .8s both,bh-blink 5.2s ease-in-out 2.6s infinite}
+.bh-look{transform:translate(var(--bh-x,0px),var(--bh-y,0px));transition:transform .18s ease-out}
+.bh-smile{stroke-dasharray:1;stroke-dashoffset:1;animation:bh-draw .4s ease-out .95s both}
+.bh-joy-eyes,.bh-grin{opacity:0;transition:opacity .12s}
+.bh-eyes,.bh-mouth{transition:opacity .12s}
+.mood-joy .bh-eyes,.mood-joy .bh-mouth{opacity:0}
+.mood-joy .bh-joy-eyes,.mood-joy .bh-grin{opacity:1}
+.mood-joy .bh-hop{animation:bh-hop .65s cubic-bezier(.3,.7,.4,1)}
+@media(hover:hover){.buddy-hero:not(.mood-joy):hover .bh-hop{animation:bh-wiggle .55s ease-in-out}}
+@keyframes bh-drop{0%{transform:translateY(-70px) scale(.92);opacity:0}40%{opacity:1}48%{transform:translateY(0) scale(1.09,.86)}64%{transform:translateY(-9px) scale(.96,1.05)}82%{transform:translateY(0) scale(1.02,.98)}100%{transform:none}}
+@keyframes bh-ground-in{0%{transform:scale(.2);opacity:0}48%{transform:scale(1.12);opacity:.24}100%{transform:none;opacity:.18}}
+@keyframes bh-ground-idle{0%,100%{transform:none}50%{transform:scale(.9)}}
+@keyframes bh-float{0%,100%{transform:none}50%{transform:translateY(-4px)}}
+@keyframes bh-fold{0%{transform:scale(0) rotate(-45deg)}100%{transform:none}}
+@keyframes bh-cheeks{to{opacity:.75}}
+@keyframes bh-open{0%{transform:scaleY(.08)}100%{transform:none}}
+@keyframes bh-blink{0%,93%,100%{transform:none}96%{transform:scaleY(.08)}}
+@keyframes bh-draw{0%{stroke-dashoffset:1;opacity:0}1%{opacity:1}100%{stroke-dashoffset:0;opacity:1}}
+@keyframes bh-hop{0%{transform:none}28%{transform:translateY(-16px) rotate(-6deg)}55%{transform:translateY(0) scale(1.07,.9)}75%{transform:rotate(3deg)}100%{transform:none}}
+@keyframes bh-wiggle{0%,100%{transform:none}25%{transform:rotate(-4deg)}60%{transform:rotate(3deg)}}
+@media(max-width:767px){.buddy-hero svg{width:104px;height:110px}}
+@media(prefers-reduced-motion:reduce){
+ .buddy-hero *{animation:none!important;transition:none!important}
+ .bh-smile{stroke-dashoffset:0}.bh-cheeks{opacity:.75}.bh-look{transform:none}
+}
+
+/* ---- Slow theme transition ---------------------------------------------- */
+:root{--theme-fade:700ms;--theme-ease:cubic-bezier(.4,0,.2,1)}
+/* View Transitions: the whole page cross-fades as one image */
+::view-transition-old(root),::view-transition-new(root){animation-duration:var(--theme-fade);animation-timing-function:var(--theme-ease)}
+::view-transition-group(root){animation-duration:var(--theme-fade)}
+/* Fallback (no View Transitions): ease colours on every element for one switch only */
+html.theme-fade,html.theme-fade *,html.theme-fade *::before,html.theme-fade *::after{
+ transition:background-color var(--theme-fade) var(--theme-ease),color var(--theme-fade) var(--theme-ease),border-color var(--theme-fade) var(--theme-ease),
+  fill var(--theme-fade) var(--theme-ease),stroke var(--theme-fade) var(--theme-ease),box-shadow var(--theme-fade) var(--theme-ease),
+  outline-color var(--theme-fade) var(--theme-ease),text-decoration-color var(--theme-fade) var(--theme-ease)!important}
+/* The sun/moon icon turns as it swaps */
+.theme-icon{display:inline-grid;place-items:center}
+.theme-icon.turned{animation:theme-icon-in .5s var(--theme-ease)}
+@keyframes theme-icon-in{from{opacity:0;transform:rotate(-90deg) scale(.6)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){
+ ::view-transition-old(root),::view-transition-new(root),::view-transition-group(root){animation:none}
+ .theme-icon{animation:none}
+ html.theme-fade *{transition:none!important}
+}
+/* FAQ sits on the page in both themes (no extra panel in dark mode) */
+[data-theme=dark] .home-faq{background:none}
+
+/* ---- Guides hub, comparisons, scan, Buddy states ------------------------- */
+.seo-page main.tool-instructions{max-width:900px;margin:0 auto;padding:8px 0 24px;border-top:0}
+.seo-page main.tool-instructions h1{font-size:clamp(1.8rem,4vw,2.4rem);font-weight:750;letter-spacing:-.02em;margin:8px 0 12px}
+.seo-page .lead{font-size:1.08rem;color:var(--foreground)}
+.seo-page .checked{font-size:.875rem;color:var(--muted)}
+.seo-page .page-crumbs{font-size:.875rem;color:var(--muted)}
+.seo-page .page-crumbs a{color:var(--muted)}
+.guide-list{list-style:none!important;padding:0!important;margin:8px 0 0;display:grid;gap:2px}
+.guide-list li{display:flex;flex-direction:column;gap:2px;padding:10px 0;border-bottom:1px solid var(--border)}
+.guide-list li+li{margin-top:0!important}
+.seo-page .guide-list a{font-weight:600;text-decoration:none;color:var(--primary)}
+.seo-page .guide-list a:hover{text-decoration:underline}
+.guide-list span{font-size:.9rem;color:var(--muted);line-height:1.55}
+.table-scroll{overflow-x:auto;margin:16px 0;border:1px solid var(--border);border-radius:12px}
+.compare-table{width:100%;border-collapse:collapse;font-size:.92rem;min-width:560px}
+.compare-table th,.compare-table td{padding:12px 14px;text-align:left;vertical-align:top;border-bottom:1px solid var(--border);line-height:1.5}
+.compare-table thead th{background:var(--soft);font-weight:650}
+.compare-table tbody th{font-weight:600;width:24%;color:var(--foreground)}
+.compare-table tbody tr:last-child>*{border-bottom:0}
+.compare-table td:nth-child(2){background:color-mix(in srgb,var(--primary) 6%,transparent)}
+.seo-page main.tool-instructions ul:not(.guide-list){list-style:disc;padding-left:22px;line-height:1.7}
+.camera-row{display:flex;flex-direction:column;align-items:center;gap:8px;margin:14px auto 0;text-align:center}
+.camera-row button{display:inline-flex;align-items:center;gap:8px;min-height:48px;padding:0 22px}
+.camera-row small{color:var(--muted);font-size:.85rem}
+.buddy-state{display:block;width:96px;height:96px}
+.success-icon.buddy-success{width:56px;height:56px;background:none;border-radius:0;flex:none}
+.success-icon.buddy-success img{width:52px;height:52px}
+.error-panel .buddy-oops{flex:none;width:40px;height:40px}
+/* Static-page header on phones: logo + theme on row 1, links on row 2 */
+@media(max-width:767px){
+ .site-header{display:grid;grid-template-columns:1fr auto;align-items:center;gap:8px 12px;padding:10px 0 12px}
+ .site-header .studio-wordmark{grid-column:1;grid-row:1}
+ .site-header .header-end{grid-column:2;grid-row:1;margin-left:0}
+ .site-header nav{grid-column:1/-1;grid-row:2;gap:4px;border-top:1px solid var(--border);padding-top:6px}
+ .site-header nav a{padding:0 10px}
+ .seo-page{padding-left:16px;padding-right:16px}
+}
+/* Comparison table becomes stacked cards on phones */
+@media(max-width:640px){
+ .table-scroll{border:0;overflow:visible}
+ .compare-table{min-width:0}
+ .compare-table thead{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0)}
+ .compare-table,.compare-table tbody,.compare-table tr,.compare-table th,.compare-table td{display:block;width:auto}
+ .compare-table tr{border:1px solid var(--border);border-radius:12px;margin:0 0 10px;overflow:hidden}
+ .compare-table tbody th{background:var(--soft);border-bottom:1px solid var(--border);width:auto}
+ .compare-table td{border-bottom:1px solid var(--border)}
+ .compare-table td::before{content:attr(data-label);display:block;font-size:.78rem;font-weight:650;color:var(--muted);margin-bottom:2px}
+}
+
+.guides-hub h2{margin-top:32px}
+.buddy-display{display:flex;flex-direction:column;align-items:center}
+.buddy-motion-toggle{min-height:44px;padding:8px 12px;font-size:.75rem;color:var(--muted);border-radius:8px}
+.buddy-motion-toggle:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.buddy-paused .buddy-hero *{animation-play-state:paused!important}
+.buddy-paused .bh-look{transform:none}
+@media(prefers-reduced-motion:reduce){.buddy-motion-toggle{display:none}}

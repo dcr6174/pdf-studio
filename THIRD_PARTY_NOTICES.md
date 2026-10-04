@@ -24,3 +24,8 @@ The restrained press-compression and unfolding/reveal patterns in `app/studio-mo
 - Copyright (c) 2026 Suraj Maurya. MIT License: see `licenses/EasyUI-MIT.txt`.
 
 Other component and PDF dependencies retain their package licenses and existing notices.
+
+
+## Outfit (logo wordmark)
+
+The "pdf studio" wordmark in the v5 logo files is drawn from Outfit Bold, converted to vector outlines. Outfit is licensed under the SIL Open Font License 1.1 (https://openfontlicense.org). The font file itself is not shipped with the site.

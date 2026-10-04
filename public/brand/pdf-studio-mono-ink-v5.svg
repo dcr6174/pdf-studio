@@ -1,0 +1,4 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="128" height="128" viewBox="0 0 128 128" role="img" aria-label="PDF Studio"><title>PDF Studio</title><defs><mask id="kmi"><rect width="128" height="128" fill="#fff"/><g fill="#000" stroke="#000"><ellipse cx="50" cy="62" rx="6.5" ry="8.5" fill="#000"/><ellipse cx="78" cy="62" rx="6.5" ry="8.5" fill="#000"/>
+<circle cx="52.2" cy="58.8" r="2.4" fill="#000"/><circle cx="80.2" cy="58.8" r="2.4" fill="#000"/>
+<path d="M56 79Q64 87 72 79" fill="none" stroke="#000" stroke-width="5" stroke-linecap="round"/></g><path d="M78 8V30Q78 40 88 40H110" fill="none" stroke="#000" stroke-width="6"/></mask></defs>
+<path d="M42 12H78L106 40V90Q106 108 88 108H40Q22 108 22 90V32Q22 12 42 12Z" fill="#1B1640" mask="url(#kmi)"/><path d="M78 12V30Q78 40 88 40H106Z" fill="#1B1640"/></svg>

@@ -1,22 +1,24 @@
 # PDF Studio
 
-<img src="public/brand/pdf-studio-logo-v4.png" width="80" height="80" alt="PDF Studio logo" />
+<img src="public/brand/pdf-studio-lockup-v5.svg" height="64" alt="PDF Studio logo: Page Buddy, a friendly folded page" />
 
 Free online PDF tools in a shared document workspace. Core tools require no account or subscription and add no watermark. Documents are processed on your device.
 
 ## Latest improvements
 
-- **Unified logo:** clear P monogram with an integrated document fold, indigo and deep teal, plus an optically adjusted favicon, shared by the header, footer, guides, owner dashboard, social metadata, favicon and PWA icons.
-- **All-tools menu:** hover Tools on desktop or click/tap it to reveal all 56 tools grouped by task, each with a meaningful icon and a colored category tile. Search, keyboard disclosure and Escape dismissal are supported.
+- **New brand, Page Buddy (v5):** a friendly soft-3D page with a folded-corner tuft and a simple face, with an Outfit Bold lowercase "pdf studio" wordmark converted to shapes. Light and dark lockups in the header swap with the theme; favicon (SVG + ICO), Apple touch, PWA and maskable icons, footer, dashboard and social images all use it. Full kit and rules: [docs/BRAND-V5.md](docs/BRAND-V5.md).
+- **Homepage mascot animation:** Buddy drops in with a squash-and-bounce, the fold pops, eyes open and the smile draws (about 1.4 s, once). He then floats and blinks, his eyes follow a mouse pointer, and a tap or a file dragged onto the page makes him hop. Reduced-motion users see the still logo. Code: `components/buddy-hero.tsx`.
+- **Slow light/dark switch:** the theme button cross-fades the whole page over 700 ms (View Transitions where supported, colour easing elsewhere, instant with reduced motion). The sun/moon icon turns as it swaps. Speed: `--theme-fade` in `app/studio-brand.css` and `FADE_MS` in `components/theme-toggle.tsx`.
+- **All-tools menu:** hover Tools on desktop or click/tap it to reveal all 57 tools grouped by task, each with a meaningful icon and a colored category tile. Search, keyboard disclosure and Escape dismissal are supported.
 - **Install awareness:** hides install actions in the installed app, after confirmed installs, and when supported browser APIs report this PWA installed. A fresh installable-browser event resets the remembered state after uninstall. Detection from Safari/unsupported browser tabs is limited.
-- **Focused homepage:** six popular tools, searchable task categories and an explicit “Browse all 56 tools” action. Compact top navigation replaces the crowded sidebar and repeated shortcuts.
+- **Focused homepage:** six popular tools, searchable task categories and an explicit “Browse all 57 tools” action. Compact top navigation replaces the crowded sidebar and repeated shortcuts.
 - **Full-width document workspace:** existing-text editing gives most of the screen to the actual PDF, with a narrow contextual editing panel. Mobile shows the page first and editing controls below.
 - **Existing PDF text:** select a supported original text object, replace it, fit longer replacements into its area or preserve its size, and check the real PDF preview. Undo/redo and page selection are included.
 - **Keep text edits:** commit the edited PDF into the shared workspace before switching tools. Navigation blocks accidental loss of uncommitted edits; explicit discard is available.
 - **Signatures:** type a name or upload PNG/JPG/WebP with visible previews; optional drawing. Place, resize and export a visual signature.
 - **Clear settings:** explicit choices and labeled actions replace theme, batch and analytics switches. Actual form and page-selection checkboxes remain.
 - **Page and form tools:** insert blank pages, create bookmarks, split page halves, set reader layout, create new fillable text forms and remove annotations while preserving form widgets.
-- **SEO:** descriptive homepage content, visible FAQ, crawlable guide links, 56 tool landing pages with an embedded workspace with metadata/canonicals/breadcrumbs, sitemap, privacy and about pages. No ranking guarantees.
+- **SEO:** descriptive homepage content, visible FAQ, crawlable guide links, 57 tool landing pages with an embedded workspace with metadata/canonicals/breadcrumbs, sitemap, privacy and about pages. No ranking guarantees.
 
 ## All available tools
 
@@ -53,6 +55,7 @@ Every current tool is listed below. “Available” does not mean every PDF is s
 | Edit & sign | Flatten PDF | Rebuilds pages as images. Text is no longer selectable; links and forms are removed. |
 | Edit & sign | Fill PDF forms | Supports text, checkbox and dropdown fields. Choose editable fields or flatten the completed form. |
 | Edit & sign | Edit metadata | Update title, author and subject. |
+| Convert | Scan to PDF | Take a photo with the phone or tablet camera (or choose photos); each photo becomes a page. No automatic cropping or text recognition. |
 | Convert | Images to PDF | PNG, JPG and WebP below 22 megapixels per image; decoded images may use more memory than file size suggests. |
 | Convert | PDF to JPG | Export pages as images in a ZIP. |
 | Convert | PDF to PNG | Lossless page images, in a ZIP. |
@@ -107,7 +110,7 @@ Documents, filenames, passwords and PDF text do not enter analytics. Optional an
 
 Owner analytics is a separate protected route; public tools need no owner login. Configure runtime secrets and Cloudflare Access as described in [the hosting guide](docs/PUBLIC_HOSTING.md). The public website and owner/API routes must not share a blanket login restriction.
 
-The normal workspace limit is **157.3 MB total and 400 pages**. Smaller feature-specific limits are shown in tools. Browser memory and device performance may impose practical limits before these ceilings. No unlimited free server processing is promised.
+The normal workspace limit is **157.3 MB total and 400 pages**. Feature-specific limits are reported when validation rejects an input. Browser memory and device performance may impose practical limits before these ceilings. No unlimited free server processing is promised.
 
 ## Run locally
 
@@ -152,6 +155,13 @@ npm run build:public
 ```
 
 The raster helpers are development-only and pinned for reproducible verification. Tests validate generated PDFs and source-rendered pages; they do not replace browser/mobile testing. See [validation](docs/VALIDATION.md), [the UX audit](docs/HOMEPAGE_REFRESH.md) and [research/feature coverage](docs/RESEARCH_AND_AUDIT.md).
+
+## Brand and theme
+
+- Logo files live in `public/brand/` (`*-v5.*`), mascot expressions in `public/brand/buddy/`. Older v2 to v4 logos were removed.
+- Colours: violet `#6A4DFF`, deep violet `#4B2FE0`, ink `#1B1640`, lavender `#EDE9FF`, blush `#FF8FB8`, mint `#22C79E`.
+- Do not edit the SVGs by hand to recolour them; follow [docs/BRAND-V5.md](docs/BRAND-V5.md). A preview sheet is in `docs/brand-sheet-v5.png`.
+- Applying an update package: see [docs/HOW_TO_APPLY.md](docs/HOW_TO_APPLY.md).
 
 ## License
 
@@ -253,3 +263,26 @@ JPG-to-PDF, PNG-to-PDF, PDF-to-Excel, Delete PDF pages, Extract PDF pages and PD
 `/tools/powerpoint-to-pdf` and `/tools/html-to-pdf` are clearly labelled manual export guides with official instructions, separate structured data, social previews, canonical URLs and sitemap entries. They do not accept PPTX/HTML or pretend to offer direct conversion. Export in PowerPoint or the browser first, then use PDF Studio to finish the PDF. External applications/webpages have their own file handling and network behavior.
 
 Spreadsheet/CSV results show extracted row count, pages containing selectable text and a short browser-local row preview. Missing text pages are flagged; original tables, formulas and formatting are not reconstructed. This preview is not sent to analytics. See `docs/SEARCH_INTENT_AND_PAIN_POINTS.md` for dated sources, limitations and follow-up priorities. Numeric input caps remain visible only after rejection.
+
+### Page Buddy brand, mascot animation and slow theme switch (October 4, 2026)
+
+- Replaced the folded-P logo with Page Buddy v5 everywhere (header lockup with light/dark versions, favicon SVG + ICO, PWA/Apple icons, footer, dashboard, social image generator, manifest colours `#6A4DFF` / `#F7F6FF`).
+- Added `components/buddy-hero.tsx` above the homepage headline.
+- Theme button now cross-fades over 700 ms; automatic device-theme changes use the same fade.
+- Dark mode: the homepage FAQ no longer sits on a separate panel.
+- `checks/verify-navigation-install.mjs` now requires the v5 logo and rejects v4 references.
+- The original ZIP was unbuilt. During integration, lint (zero warnings), TypeScript, generated SEO assets, production build and processing checks passed using the existing installed dependencies. A fresh `npm ci`, real-device camera and visual interaction checks remain for the deployment environment.
+
+### Scan to PDF, guides hub, comparisons and Buddy states (October 4, 2026)
+
+- **Scan to PDF** (57th tool): a Take a photo button can open the camera on supported phones and tablets; other browsers show a file picker (`capture="environment"`), each photo becomes a page, and "Take another photo" adds more. The same camera button appears on Images to PDF. No auto-crop or OCR; the page says so.
+- **New search pages:** `/tools/edit-cv-pdf` (Edit existing text) and `/tools/compress-pdf-to-100kb` (Compress PDF), with their own steps and FAQs and no promised exact size.
+- **Guides hub** at `/guides`: popular tasks, every tool guide by category, export guides and comparisons. "Guides" is in the header.
+- **Comparison pages** at `/compare/ilovepdf-alternative`, `/compare/smallpdf-alternative`, `/compare/sejda-alternative`, `/compare/adobe-acrobat-alternative`. Dated (checked 4 October 2026), sourced, and each says when the other product is the better choice. Data: `lib/comparisons.ts`; re-check the sources before changing the date.
+- **Homepage title:** "PDF Studio: Free PDF Editor & Tools, No Watermark, No Upload".
+- **Buddy expressions:** sleepy on the empty My files screen, cheering on "Your file is ready", worried on errors.
+- Sitemap generation includes `/guides` and `/compare/*`. Checks updated for 57 tools and 67 tool/guide routes.
+
+Integration verification: the uploaded package was reviewed against the current main branch. Corrected upfront caps and batch claims in comparisons, clarified Adobe India terms and scanned-CV editing limitations, added a pause control for ongoing Buddy motion, hardened theme-transition error handling, and corrected stale test counts. Previous upload-recovery, privacy and navigation fixes are preserved. Real-phone camera behavior and live deployment remain unverified.
+
+Validation: 49 fixture-based processing workflows and 33 additional correctness/boundary/history checks passed, including Scan to PDF export. Native-text edit/save/reopen and signature embedding passed, as did rejection recovery, browser-link policies, analytics and owner access tests. Server-rendered SEO tests cover 67 tool/guide routes; the new guides/comparison check verifies all four comparisons and their internal destinations. These are local automated checks, not live click, OCR or real-device results.
