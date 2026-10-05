@@ -1,0 +1,9 @@
+'use client';
+import Image from '@/components/browser-image';
+import {useEffect,useState} from 'react';
+import {signatureFromName,signatureStyles,loadSignatureFont,type SignatureStyle} from '@/lib/signatures';
+export function SignatureSettings({style,ink,pen,onStyle,onInk,onPen}:{style:SignatureStyle;ink:string;pen:number;onStyle:(s:SignatureStyle)=>void;onInk:(c:string)=>void;onPen:(w:number)=>void}){
+ const [previews,setPreviews]=useState<Record<string,string>>({});
+ useEffect(()=>{let active=true;void Promise.all(signatureStyles.map(async d=>{try{await loadSignatureFont(d.id);return[d.id,signatureFromName('Your name',d.id,ink)] as const;}catch{return[d.id,''] as const;}})).then(rows=>{if(active)setPreviews(Object.fromEntries(rows));});return()=>{active=false;};},[ink]);
+ return <div className="sign-settings-body"><div className="field" role="radiogroup" aria-label="Signature style"><span>Font style</span><div className="sign-style-grid">{signatureStyles.map(d=><button key={d.id} type="button" role="radio" aria-checked={style===d.id} aria-label={d.label} className={style===d.id?'sign-style on':'sign-style'} onClick={()=>onStyle(d.id)}>{previews[d.id]?<Image unoptimized width={240} height={80} style={{width:'auto',height:'auto',maxHeight:34}} src={previews[d.id]} alt=""/>:<span className="muted">…</span>}<small>{d.label}</small></button>)}</div></div><label className="field">Ink colour<input type="color" value={ink} onChange={e=>onInk(e.target.value)}/></label><div className="field" role="radiogroup" aria-label="Pen thickness"><span>Pen thickness (for Draw)</span><div className="row">{([[3,'Thin'],[5,'Medium'],[9,'Bold']] as const).map(([w,l])=><button key={w} type="button" role="radio" aria-checked={pen===w} className={pen===w?'primary':'secondary'} onClick={()=>onPen(w)}>{l}</button>)}</div></div></div>;
+}
