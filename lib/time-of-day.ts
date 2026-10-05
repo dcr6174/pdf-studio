@@ -43,9 +43,8 @@ export const dailyLines=[
 export function dayNumber(d:Date){return Math.floor(Date.UTC(d.getFullYear(),d.getMonth(),d.getDate())/86400000);}
 export function dailyLine(d:Date){return dailyLines[((dayNumber(d)%dailyLines.length)+dailyLines.length)%dailyLines.length];}
 
-/** Show seconds in the clock? Off by default: a clock that changes every second is a distraction while people work.
- *  Set to true for a ticking clock (the seconds digits roll like the minutes). */
-export const SHOW_SECONDS=false;
+/** The homepage clock shows seconds, using the visitor’s device time. */
+export const SHOW_SECONDS=true;
 
 /** Milliseconds until the next whole minute (or second, when SHOW_SECONDS is on). Never a fixed interval, so it stays on the beat. */
 export function msToNextMinute(d:Date){return (60-d.getSeconds())*1000-d.getMilliseconds();}

@@ -428,3 +428,8 @@ select,option,[data-slot=select-trigger],[data-slot=select-content],[data-slot=s
 .native-inline textarea{display:block;box-sizing:border-box;width:100%;min-height:100%;resize:vertical;border:0;border-radius:0;padding:3px;background:#fff;color:#17152b;font:16px/1.4 'OpenPDF Noto',sans-serif;white-space:pre-wrap}
 .native-inline textarea:focus-visible,.native-inline input:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
 @media(max-width:800px){.native-inline textarea{min-height:100px;max-height:28dvh;font-size:18px;background:var(--card);color:var(--foreground)}}
+
+/* Explanatory content shares a readable rounded card on every guide route. */
+.tool-instructions{box-sizing:border-box;border:1px solid var(--border);border-radius:20px;background:var(--card);color:var(--foreground);padding:24px!important;margin-block:24px;min-width:0;overflow-wrap:anywhere}
+.seo-page main.tool-instructions{border:1px solid var(--border);padding:24px!important}
+@media(max-width:600px){.tool-instructions,.seo-page main.tool-instructions{padding:16px!important;border-radius:16px}}

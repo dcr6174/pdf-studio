@@ -32,7 +32,7 @@ export function DailyLine(){
 export function LocalClock(){
  const now=useNow();
  const clock=now?formatClock(now):null;
- const iso=now?`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}T${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}`:undefined;
+ const iso=now?`${now.getFullYear()}-${String(now.getMonth()+1).padStart(2,'0')}-${String(now.getDate()).padStart(2,'0')}T${String(now.getHours()).padStart(2,'0')}:${String(now.getMinutes()).padStart(2,'0')}:${String(now.getSeconds()).padStart(2,'0')}`:undefined;
  return <p className="welcome-meta" data-ready={clock?'true':'false'}>{clock&&<span className="clock-chip"><span className="clock-dot" aria-hidden="true"/><time dateTime={iso}><RollingTime text={clock.time}/></time><span className="clock-sep" aria-hidden="true">·</span><span className="clock-date">{clock.date}</span></span>}</p>;
 }
 

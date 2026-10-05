@@ -17,14 +17,14 @@ assert.equal(`${T.greetingFor(at(19,38))} ${T.GREETING_TAIL}`,'Good evening. Let
 // theme always wins over the hour
 for(const part of ['morning','day','evening','night'])assert.equal(T.lightFor('dark',part),'moon',`dark theme wins at ${part}`);
 assert.deepEqual(['morning','day','evening','night'].map(p=>T.lightFor('light',p)),['morning','day','evening','evening']);
-// clock text: hour and minutes, weekday and month, no seconds
+// clock text: hours, minutes and seconds, weekday and month
 const clock=T.formatClock(at(19,38),'en-US');
-assert.equal(clock.time,'7:38 PM');assert.match(clock.date,/Sunday/);assert.match(clock.date,/October/);assert.ok(!/:\d\d:\d\d/.test(clock.time),'no seconds');
+assert.equal(clock.time,'7:38:00 PM');assert.match(clock.date,/Sunday/);assert.match(clock.date,/October/);assert.ok(/:\d\d:\d\d/.test(clock.time),'seconds visible');
 // refresh lands on the next minute boundary
 assert.equal(T.msToNextMinute(new Date(2026,9,4,19,38,0,0)),60000);
 assert.equal(T.msToNextMinute(new Date(2026,9,4,19,38,59,500)),500);
-// seconds are off by default; the beat is the minute (or the second when switched on)
-assert.equal(T.SHOW_SECONDS,false);
+// seconds are on by default; refresh on a whole-second boundary
+assert.equal(T.SHOW_SECONDS,true);
 assert.equal(T.msToNextTick(new Date(2026,9,4,19,38,59,500)),500);
 assert.equal(T.msToNextTick(new Date(2026,9,4,19,38,10,250),true),750);
 assert.equal(T.formatClock(at(19,38),'en-US',true).time,'7:38:00 PM');
@@ -41,13 +41,13 @@ assert.equal(R.recoverableDraft({files:[],pages:[1]}),null,'no files');
 assert.equal(R.recoverableDraft({files:[{name:'a.pdf'}],pages:[]}),null,'no pages');
 assert.equal(R.recoverableDraft({pages:[1]}),null,'files missing');
 assert.deepEqual(R.recoverableDraft({files:[{name:'a.pdf'},{name:'b.pdf'}],pages:[1,2,3]}),{names:['a.pdf','b.pdf'],pages:3});
-// the UI file keeps the rules: greeting/time only after mount, no seconds timer, resume gated, Download is the primary button
+// the UI file keeps the rules: greeting/time only after mount, second-aligned timer, resume gated, Download is the primary button
 const welcome=await readFile('components/welcome.tsx','utf8'),now=await readFile('components/use-now.ts','utf8'),page=await readFile('app/page.tsx','utf8'),buddy=await readFile('components/buddy-hero.tsx','utf8');
-assert.ok(!/setInterval/.test(now),'no ticking interval: updates on the minute');
+assert.ok(!/setInterval/.test(now),'aligned timeout rather than drifting interval');
 assert.ok(now.includes('msToNextTick'));
 assert.ok(welcome.includes('{draft&&'),'resume block only renders with a recoverable draft');
 assert.ok(page.includes('recoverableDraft(savedDraft)'));
 assert.ok(page.includes("view!=='home'||!recoverable"),'old banner is not shown twice on the home page');
-assert.ok(page.includes('<ReadyNote'));assert.ok(page.includes('className="primary" onClick={() => download(output.blob, output.name)}'),'Download remains the primary action');
-assert.ok(!/bh-float|setInterval/.test(buddy),'Buddy has no continuous floating');
-console.log('PASS: parts of the day, greeting, theme-over-time lighting, minute-aligned clock without seconds, one steady daily line, resume only for recoverable drafts, no ticking timers, Download stays primary.');
+assert.ok(page.includes('<ReadyNote'));assert.ok(page.includes('id="download-result" className="primary" onClick={()=>download(output.blob,output.name)}'),'Download remains the primary action');
+assert.ok(!/setInterval/.test(buddy),'Buddy does not run a timer loop');
+console.log('PASS: parts of the day, greeting, theme-over-time lighting, second-aligned clock with seconds, one steady daily line, resume only for recoverable drafts, no drifting intervals, Download stays primary.');

@@ -475,3 +475,7 @@ Click an existing line to select its compatible aligned paragraph, or choose One
 The PDFium engine measures replacement words with the original font and rewrites the existing text objects. Same-font, same-size, same-colour, aligned horizontal lines can wrap within their original line slots. Shortened paragraphs clear unused text; overflowing edits retain the original and the draft for correction. Page rotations are supported. Mixed-font runs, nested text, arbitrary new lines, document-wide cascading reflow, Indian-script shaping and automatic font substitution remain unsupported. Draft typing uses browser controls; the actual PDF raster refreshes after applying.
 
 Validation: `node checks/verify-paragraph-text.mjs` exercises four page rotations, save/reopen, shortened paragraphs, overflow rollback and column/font isolation. `node checks/verify-online-text.mjs` retains native single-object coverage. Browser interaction and physical mobile keyboard tests require a reachable preview; local preview was blocked in the cloud browser.
+
+### Homepage clock and information cards
+
+The homepage footer clock displays hours, minutes and seconds in local device time. The duplicate “Guides for every tool” homepage section is removed; Guides remains in the top navigation. Tool instructions and guide articles share a responsive rounded information card with theme-aware colours.
