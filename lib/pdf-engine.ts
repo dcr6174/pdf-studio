@@ -1,3 +1,4 @@
+import {decodePhoto,normalizeCameraFile} from './mobile-image';
 import {addBookmarks,cleanupPDF,removeAnnotations,halvePages,createForm} from './extra-pdf';
 import {replaceExistingText} from './native-text';
 import { PDFDocument, StandardFonts, rgb, degrees, PDFTextField, PDFCheckBox, PDFDropdown, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray } from 'pdf-lib';
@@ -113,7 +114,7 @@ export async function textPages(bytes: Uint8Array, password?: string) { const d 
 finally {
     await d.destroy();
 } }
-export async function loadFile(file: File): Promise<Loaded> { const bytes = new Uint8Array(await file.arrayBuffer()); const base = { id: crypto.randomUUID(), name: file.name, bytes, size: file.size, pages: 0 }; if (/\.pdf$/i.test(file.name)) {
+export async function loadFile(file: File): Promise<Loaded> { file=normalizeCameraFile(file); const bytes = new Uint8Array(await file.arrayBuffer()); const base = { id: crypto.randomUUID(), name: file.name, bytes, size: file.size, pages: 0 }; if (/\.pdf$/i.test(file.name)) {
     if(!new TextDecoder().decode(bytes.slice(0,1024)).includes('%PDF-'))throw new Error('This file is not a PDF. Choose a valid PDF document.');
     let doc:PDFDocument;try{doc=await PDFDocument.load(bytes,{updateMetadata:false});}catch(e){if(String(e).toLowerCase().includes('encrypt'))throw new Error('This PDF is password protected. Use Remove password with a password you know, then continue editing.');throw new Error('This PDF could not be read. It may be damaged. Try a readable copy or another PDF reader.');}
     return { ...base, doc, pages: doc.getPageCount() };
@@ -124,13 +125,13 @@ export async function loadFile(file: File): Promise<Loaded> { const bytes = new 
         const dimensions=new DataView(bytes.buffer,bytes.byteOffset+16,8);
         if(dimensions.getUint32(0)*dimensions.getUint32(4)>maxPixels)throw new Error('Choose an image below 22 megapixels. Resize it before opening.');
     }
-    const b = await createImageBitmap(file);
+    const b = await decodePhoto(file);
     let c:HTMLCanvasElement|undefined;
     try{
         if(b.width*b.height>maxPixels)throw new Error('Choose an image below 22 megapixels. Resize it before opening.');
         c = document.createElement('canvas');
         c.width = b.width;c.height = b.height;
-        c.getContext('2d')!.drawImage(b, 0, 0);
+        const context=c.getContext('2d');if(!context)throw new Error('Your browser could not prepare this photo. Try a smaller JPG or PNG.');context.drawImage(b.source, 0, 0);
         return { ...base, pages: 1, image: c.toDataURL('image/png') };
     }finally{b.close();if(c){c.width=0;c.height=0;}}
 } return base; }

@@ -1,0 +1,14 @@
+import assert from 'node:assert/strict';
+import {build} from 'vite';
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/mobile-image.ts',outDir:'.camera-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'camera.mjs'}}}});
+const {normalizeCameraFile,decodePhoto}=await import('../.camera-check/camera.mjs');
+const source=new File(['camera'],'image',{type:'image/jpeg',lastModified:123});
+const normalized=normalizeCameraFile(source);assert.equal(normalized.name,'image.jpg');assert.equal(normalized.lastModified,123);assert.equal(await normalized.text(),'camera');
+const heic=new File(['heic'],'photo.heic',{type:'image/heic'});assert.equal(normalizeCameraFile(heic),heic);
+let revoked=0;globalThis.createImageBitmap=async()=>{throw new Error('bitmap decoder unavailable');};
+URL.createObjectURL=()=> 'blob:camera-fixture';URL.revokeObjectURL=()=>revoked++;
+globalThis.Image=class{naturalWidth=12;naturalHeight=20;set src(value){if(value)queueMicrotask(()=>this.onload());}};
+const decoded=await decodePhoto(source);assert.equal(decoded.width,12);assert.equal(decoded.height,20);decoded.close();assert.equal(revoked,1);
+globalThis.Image=class{set src(value){if(value)queueMicrotask(()=>this.onerror());}};
+await assert.rejects(()=>decodePhoto(source),/Save it as JPG or PNG/);assert.equal(revoked,2);
+console.log('PASS: camera MIME naming, byte preservation, unsupported HEIC retained, bitmap failure fallback and URL cleanup. Browser decoder mocked; actual mobile hardware unverified.');

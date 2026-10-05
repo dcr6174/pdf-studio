@@ -1,3 +1,4 @@
+import {SupportLink} from '@/components/support-link';
 import Link from '@/components/browser-link';
 import Image from '@/components/browser-image';
 import {ThemeToggle} from '@/components/theme-toggle';
@@ -7,7 +8,7 @@ export function SiteHeader(){
  return <header className="site-header">
   <Link className="studio-wordmark" aria-label="PDF Studio home" href="/"><Image unoptimized className="wordmark-lockup lockup-light" src="/brand/pdf-studio-lockup-v5.svg" alt="PDF Studio" width="160" height="40"/><Image unoptimized className="wordmark-lockup lockup-dark" src="/brand/pdf-studio-lockup-v5-dark.svg" alt="" aria-hidden="true" width="160" height="40"/></Link>
   <nav aria-label="Main navigation"><Link href="/tools">All tools</Link><Link href="/#shelf">My files</Link><Link href="/guides">Guides</Link></nav>
-  <div className="header-end"><ThemeToggle/></div>
+  <div className="header-end"><SupportLink/><ThemeToggle/></div>
  </header>;
 }
 

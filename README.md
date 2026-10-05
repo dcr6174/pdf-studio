@@ -407,3 +407,8 @@ Public catalogue copy uses “60+ tools” on the homepage, search prompt, menu 
 `public/llms.txt` links to actual guides, tools and privacy resources. The shared JSON-LD identifies PDF Studio and its existing public contact address. Homepage instructions use an ordered list; closed tool menus and guide directories render their contents when opened. Document/image file inputs have accessible labels, and `#shelf` has a permanent target.
 
 Anonymous homepage HTML uses an ETag with private revalidation; owner/API no-store protections remain in place. This does not add document caching. Audit coverage and unresolved external/legal items are recorded in `docs/GEO_FIXES_2026-10-05.md`. No GEO score or live pass is claimed.
+
+### Upload compatibility and optional support
+Camera JPG/PNG/WebP files with MIME metadata can be opened even when their filename has no image extension. A browser image decoder fallback handles bitmap decoder failures; unsupported HEIC is not advertised as supported. Asynchronous opening has a timeout with a recovery error and keeps existing workspace data. This cannot interrupt a synchronous parser blocking the main thread. Device-level camera/EXIF behavior still requires real mobile validation.
+
+Optional Buy Me a Coffee links appear in shared headers and successful-export results. Downloads remain free and primary; no donation scripts are embedded.

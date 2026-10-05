@@ -1,3 +1,4 @@
+import {SupportLink} from '@/components/support-link';
 import Image from '@/components/browser-image';
 
 /** "Your PDF" for PDFs, otherwise the closest plain word. */
@@ -10,6 +11,6 @@ export function readyNoun(name:string){
 export function ReadyNote({name,detail}:{name:string;detail:string}){
  return <>
   <span className="success-icon buddy-success"><Image unoptimized src="/brand/buddy/buddy-success.svg" alt="" width="52" height="52"/><i className="spark spark-a" aria-hidden="true"/><i className="spark spark-b" aria-hidden="true"/><i className="spark spark-c" aria-hidden="true"/></span>
-  <div><h3 role="status">Nicely done. Your {readyNoun(name)} is ready.</h3><p>{detail}</p></div>
+  <div><h3 role="status">Nicely done. Your {readyNoun(name)} is ready.</h3><p>{detail}</p><SupportLink success/></div>
  </>;
 }

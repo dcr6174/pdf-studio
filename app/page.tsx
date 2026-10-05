@@ -25,6 +25,9 @@ import {ThemeToggle} from '@/components/theme-toggle';
 import {BuddyHero} from '@/components/buddy-hero';
 import {Spotlight} from '@/components/spotlight';
 import {Welcome,DailyLine,LocalClock,Greeting} from '@/components/welcome';
+import {openingDeadline} from '@/lib/open-file-deadline';
+import {normalizeCameraFile} from '@/lib/mobile-image';
+import {SupportLink} from '@/components/support-link';
 import {ReadyNote} from '@/components/ready-note';
 import {recoverableDraft} from '@/lib/resume';
 import {RecentTools} from '@/components/recent-tools';
@@ -188,6 +191,7 @@ function App({initialTool='home',initialHeading,guide}:{initialTool?:string;init
             throw new Error('The workspace is busy'); if(view==='native-text'&&textDirty&&input.toolId!==view)throw new Error('Keep or discard text edits before switching tools.'); navigate(input.toolId); return { opened: input.toolId }; } }, { signal: life.signal })).catch(() => { }); return () => life.abort(); }, [busy, loading,view,textDirty,navigate]);
     useEffect(()=>{searchAction.current=()=>{if(busy||loading||(view==='native-text'&&textDirty)){toast('Finish processing or keep your text edits before searching.');return;}navigate('home');requestAnimationFrame(()=>searchInput.current?.focus());};});
     async function ingest(list: File[], target = view, confirmed=false) {
+      if(target==='scan'||target==='images')list=list.map(normalizeCameraFile);
       const appends=isMulti(target)||batchMode||target==='home';
       if(!confirmed&&workspace.getFiles().length&&(!appends||!workspace.getFiles().every(f=>accepted(target).split(',').some(ext=>f.name.toLowerCase().endsWith(ext))))){pendingFiles.current={list,target};setReplaceOpen(true);return;} if(view==='native-text'&&textDirty){toast.error('Keep or discard your text edits before opening another file.');return;} if (queue.current || busy)
         return; queue.current = true; setLoading(true); setError(''); try {
@@ -203,10 +207,10 @@ function App({initialTool='home',initialHeading,guide}:{initialTool?:string;init
         const incoming: Loaded[] = [];
         for (const f of list) {
             if (['decrypt', 'hash', 'zip'].includes(target)) {
-                incoming.push({ id: crypto.randomUUID(), name: f.name, bytes: new Uint8Array(await f.arrayBuffer()), size: f.size, pages: 0 });
+                incoming.push({ id: crypto.randomUUID(), name: f.name, bytes: new Uint8Array(await openingDeadline(f.arrayBuffer())), size: f.size, pages: 0 });
             }
             else
-                incoming.push(await loadFile(f));
+                incoming.push(await openingDeadline(loadFile(f)));
             validatePages((adding?pages.length:0)+incoming.reduce((n,file)=>n+file.pages,0));
         }
         const next = adding ? [...workspace.getFiles(), ...incoming] : incoming;
@@ -218,7 +222,7 @@ function App({initialTool='home',initialHeading,guide}:{initialTool?:string;init
 
         const extra = incoming.flatMap(f => Array.from({ length: f.pages }, (_, i) => ({ id: crypto.randomUUID(), fileId: f.id, index: i, rotation: 0 })));
         if(target==='native-text')validateTextInput(next.reduce((n,f)=>n+f.size,0),incoming.reduce((n,f)=>n+f.pages,0));
-        const incomingFields=target==='form'?await fields(incoming[0].bytes):undefined;
+        const incomingFields=target==='form'?await openingDeadline(fields(incoming[0].bytes)):undefined;
         workspace.replace({files:next,pages:adding?[...pages,...extra]:extra,marks:adding?marks:[]});
         if (extra.length)
             setActivePage(extra[0].id);
@@ -285,7 +289,7 @@ function App({initialTool='home',initialHeading,guide}:{initialTool?:string;init
     const filtered = searching ? found.tools : tools.filter(t => group === 'All tools' || t.group === group);
     const searchStatus = !searching ? '' : found.mode === 'none' ? 'No tools found. Try “merge”, “compress” or “sign”.' : found.mode === 'empty' ? 'Showing 60+ tools.' : `${found.mode === 'any' ? 'No exact match. ' : ''}${found.tools.length} ${found.tools.length === 1 ? 'tool' : 'tools'} found. Press Enter to open ${found.tools[0].name}.`;
     return <>
-    <Link className="skip-link" href="#studio-content">Skip to workspace</Link><main onClickCapture={e=>{const a=(e.target as Element).closest?.('a[href]');if(!a||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const url=new URL(a.getAttribute('href')!,location.href);if(url.origin!==location.origin||!url.pathname.startsWith('/tools/'))return;if(busy||loading||(view==='native-text'&&textDirty)||marks.some(m=>m.kind==='redact')){e.preventDefault();e.stopPropagation();toast('Finish processing, keep your text edits, or export redactions before opening another guide.');}}} className={`main studio-shell ${view==='home'?'home-shell':'document-shell'} ${view==='native-text'?'text-shell':''} ${files.length&&compatible&&view!=='home'&&view!=='shelf'?'document-loaded':''} ${tool&&(!files.length||!compatible)?'empty-tool':''}`}><header className="studio-header"><Link className="studio-wordmark" aria-label="PDF Studio home" href="/" onClick={e=>{if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();navigate('home');}}><Image unoptimized className="wordmark-lockup lockup-light" src="/brand/pdf-studio-lockup-v5.svg" alt="PDF Studio" width="160" height="40"/><Image unoptimized className="wordmark-lockup lockup-dark" src="/brand/pdf-studio-lockup-v5-dark.svg" alt="" aria-hidden="true" width="160" height="40"/></Link><nav aria-label="Main navigation"><ToolsMenu onSelect={navigate} disabled={busy||loading}/><Link href="/#shelf" aria-current={view==='shelf'?'page':undefined} onClick={e=>{if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();navigate('shelf');}}>My files</Link><Link href="/guides">Guides</Link>{analyticsAccess&&<Link href="/analytics">Owner</Link>}</nav><div className="header-end"><InstallApp/><ThemeToggle/></div></header>
+    <Link className="skip-link" href="#studio-content">Skip to workspace</Link><main onClickCapture={e=>{const a=(e.target as Element).closest?.('a[href]');if(!a||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const url=new URL(a.getAttribute('href')!,location.href);if(url.origin!==location.origin||!url.pathname.startsWith('/tools/'))return;if(busy||loading||(view==='native-text'&&textDirty)||marks.some(m=>m.kind==='redact')){e.preventDefault();e.stopPropagation();toast('Finish processing, keep your text edits, or export redactions before opening another guide.');}}} className={`main studio-shell ${view==='home'?'home-shell':'document-shell'} ${view==='native-text'?'text-shell':''} ${files.length&&compatible&&view!=='home'&&view!=='shelf'?'document-loaded':''} ${tool&&(!files.length||!compatible)?'empty-tool':''}`}><header className="studio-header"><Link className="studio-wordmark" aria-label="PDF Studio home" href="/" onClick={e=>{if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();navigate('home');}}><Image unoptimized className="wordmark-lockup lockup-light" src="/brand/pdf-studio-lockup-v5.svg" alt="PDF Studio" width="160" height="40"/><Image unoptimized className="wordmark-lockup lockup-dark" src="/brand/pdf-studio-lockup-v5-dark.svg" alt="" aria-hidden="true" width="160" height="40"/></Link><nav aria-label="Main navigation"><ToolsMenu onSelect={navigate} disabled={busy||loading}/><Link href="/#shelf" aria-current={view==='shelf'?'page':undefined} onClick={e=>{if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();navigate('shelf');}}>My files</Link><Link href="/guides">Guides</Link>{analyticsAccess&&<Link href="/analytics">Owner</Link>}</nav><div className="header-end"><SupportLink/><InstallApp/><ThemeToggle/></div></header>
     <span id="shelf" className="shelf-route-anchor" aria-hidden="true"/><div id="studio-content" tabIndex={-1} className="content" aria-busy={busy || loading} onDragEnter={e => { if (view!=='home'&&!busy&&!loading&&e.dataTransfer.types.includes('Files')) {
         e.preventDefault();
         dragDepth.current++;
