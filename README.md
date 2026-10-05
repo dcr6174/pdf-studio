@@ -483,3 +483,7 @@ The homepage footer clock displays hours, minutes and seconds in local device ti
 ### Catalogue expand/collapse recovery
 
 Browse 60+ tools and Show popular tools switch the homepage catalogue in place, then focus and scroll to Pick a tool. The control exposes expanded state and its target grid to assistive technology. Mobile uses a full-width touch button. A live browser check reproduced the former collapse problem: six cards remained but the catalogue heading was above the viewport. No redirect loop was reproduced.
+
+### Tool discovery and optional donations
+
+The homepage centers “Pick a tool” above the wrapping category buttons on desktop and mobile. Successful exports keep Download as the primary action and show an optional Donate action below the result controls, with “Happy with your result? Help keep PDF Studio free.” The header retains its compact donation icon. Donation actions link to https://buymeacoffee.com/dcr6174 and have a gentle continuous glow; reduced-motion preferences disable the pulse while retaining a static glow.

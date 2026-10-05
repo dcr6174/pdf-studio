@@ -437,3 +437,17 @@ select,option,[data-slot=select-trigger],[data-slot=select-content],[data-slot=s
 #toolbox-title{scroll-margin-top:24px}
 #toolbox-title:focus-visible{outline:2px solid var(--primary);outline-offset:6px;border-radius:4px}
 @media(max-width:600px){.browse-tools{min-height:48px;width:100%;max-width:100%}#toolbox-title{scroll-margin-top:16px}}
+
+/* Centered tool discovery and optional support after successful exports. */
+.home-toolbox .catalogue-top{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:18px;text-align:center}
+.home-toolbox .catalogue-top h2{margin:0}
+.home-toolbox .catalogue-top .filters{display:flex;flex-wrap:wrap;justify-content:center;margin:0 0 24px;max-width:100%}
+.support-link{position:relative;isolation:isolate;justify-content:center;min-width:44px;min-height:44px;background:#ffdf84;color:#302300;box-shadow:0 0 12px #efb73255}
+.support-link::before{content:"";position:absolute;inset:-3px;border-radius:inherit;pointer-events:none;z-index:-1;box-shadow:0 0 16px 3px #efb73266;animation:donate-glow 3s ease-in-out infinite}
+.support-link:hover{background:#ffd15e;color:#302300}
+.support-link-success{gap:9px;padding:12px 20px;font-size:1rem;font-weight:650}
+.support-message{display:flex;flex-direction:column;align-items:center;gap:14px;width:100%}
+.support-message p{margin:0;color:var(--muted);font-size:.9rem;line-height:1.6}
+@keyframes donate-glow{0%,100%{opacity:.45}50%{opacity:1}}
+@media(prefers-reduced-motion:reduce){.support-link::before{animation:none;opacity:.65}}
+@media(max-width:767px){.home-toolbox .catalogue-top{align-items:center;gap:16px}.home-toolbox .catalogue-top .filters{width:100%}}
