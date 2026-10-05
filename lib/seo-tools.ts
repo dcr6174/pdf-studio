@@ -55,7 +55,7 @@ const curatedTools = [
     "title": "Edit existing PDF text",
     "heading": "Change the original text in a PDF",
     "intro": "Choose a text object on the page, enter your replacement and preview the actual changed PDF.",
-    "detail": "Single-line replacements can shrink to fit the original bounds, down to half the original size. Keep edits in the shared workspace to continue with other tools. Embedded fonts need characters already available on the page. Scanned pages and paragraph reflow are not supported."
+    "detail": "Click existing text and type on the PDF. Compatible aligned paragraphs wrap within their existing lines at the original font size. Edits apply when you leave the text; Undo restores applied changes. Single lines can shrink to half size. Embedded fonts need available characters; scans, mixed-font paragraphs, extra-line reflow and nested graphics are not supported."
   },
   {
     "slug": "fill-pdf-forms",

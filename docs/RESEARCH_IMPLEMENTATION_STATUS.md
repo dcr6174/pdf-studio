@@ -8,7 +8,7 @@ This tracks the full research brief; implementation is not equivalent to verific
 | Download viewport | Existing full-screen result retained | Real mobile/desktop viewport and one-download regression |
 | Donation bottom | Implemented after result actions | Visual narrow-screen check |
 | Document-first separate layouts | Existing responsive editor and new reader mobile/desktop controls | Unified shell refactor, measured page offsets, mobile keyboard corpus |
-| Direct existing-text caret | Existing on-PDF input and supported object rewrite retained | Ayaan portable algorithm prototype, paragraph shaping/reflow, nested objects and Indian scripts |
+| Direct existing-text caret | Existing on-PDF input and supported object rewrite retained | Compatible aligned paragraph reflow and automatic apply implemented; extra-line cascading, shaping, nested objects and Indian scripts remain |
 | Ayaan evaluation | Source research complete, no native engine copied | Portable Rust/WASM proof plus independent save/reopen benchmarks |
 | Workspace continuity | Existing shared controller; reader consumes it | Breakpoint/keyboard/resume browser regression |
 | Compression no-larger output | Compact/raster no-larger guards plus supported RGB JPEG stream optimization implemented | Real browser decoder and representative visual quality benchmarks |

@@ -423,3 +423,8 @@ select,option,[data-slot=select-trigger],[data-slot=select-content],[data-slot=s
 .signature-picker input:not([type=color]),.signature-picker select{width:100%}
 .signature-dialog{overscroll-behavior:contain;scroll-padding-block:16px}
 @media(max-width:480px){.signature-dialog{width:calc(100vw - 24px)!important;max-width:calc(100vw - 24px)!important;padding:16px}.signature-option{padding:12px}.signature-tabs{gap:4px}.signature-tabs button{padding:8px 4px}.signature-picker .row{flex-wrap:wrap}.signature-picker .row button{flex:1 1 120px}.signature-option>button{display:block;width:100%;margin-top:8px}}
+
+/* Inline paragraph drafting uses the actual page area; export rewrites text objects. */
+.native-inline textarea{display:block;box-sizing:border-box;width:100%;min-height:100%;resize:vertical;border:0;border-radius:0;padding:3px;background:#fff;color:#17152b;font:16px/1.4 'OpenPDF Noto',sans-serif;white-space:pre-wrap}
+.native-inline textarea:focus-visible,.native-inline input:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+@media(max-width:800px){.native-inline textarea{min-height:100px;max-height:28dvh;font-size:18px;background:var(--card);color:var(--foreground)}}

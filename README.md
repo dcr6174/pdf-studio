@@ -48,7 +48,7 @@ Every current tool is listed below. “Available” does not mean every PDF is s
 | Pages | Crop margins | Cropping hides content outside the page boundary; it does not permanently remove it. |
 | Pages | Resize to A4 | Fit every page onto an A4 sheet. |
 | Pages | Mirror pages | Flip your document horizontally. |
-| Edit & sign | Edit existing text | Browser text editing · 50 MB and 100 pages. Single-line edits can shrink to fit the original area (minimum half size). Embedded fonts need available characters; scans and nested graphics have limitations. No paragraph reflow. Editing invalidates digital signatures. |
+| Edit & sign | Edit existing text | Browser text editing · 50 MB and 100 pages. Single-line edits can shrink to fit the original area (minimum half size). Embedded fonts need available characters; scans and nested graphics have limitations. Compatible aligned paragraphs reflow within existing line slots at the original font size. No extra-line or document-wide reflow. Editing invalidates digital signatures. |
 | Edit & sign | Edit PDF | Adds new elements. Existing PDF text is not edited in place. |
 | Edit & sign | Sign PDF | A visual signature, without a certificate or identity verification. |
 | Edit & sign | Redact PDF | Export rebuilds all pages as images and removes original text, links, metadata and forms. |
@@ -102,7 +102,7 @@ Every current tool is listed below. “Available” does not mean every PDF is s
 
 **Edit existing text** changes supported original PDFium text objects. **Edit PDF** adds overlays. They are separate workflows.
 
-Existing-text editing is limited to **50 MB and 100 pages**, single-line objects and available font characters. It does not provide paragraph reflow, arbitrary font substitution or editing text inside nested graphics. Fit mode can shrink text to **50%** of its original size; very long replacements are rejected and the original is retained. Editing invalidates existing cryptographic signatures.
+Existing-text editing is limited to **50 MB and 100 pages**, single-line objects or compatible aligned paragraphs, and available font characters. Paragraphs wrap within existing lines; extra-line and document-wide reflow are not supported. It does not provide arbitrary font substitution or editing text inside nested graphics. Fit mode can shrink text to **50%** of its original size; very long replacements are rejected and the original is retained. Editing invalidates existing cryptographic signatures.
 
 OCR makes scans searchable, but the current OCR text layer does not turn the scanned image into editable original text. Signature placement is visual signing, not certificate-based digital signing. Redaction rebuilds pages as images and removes the original content layers; a crop or black shape alone is not redaction.
 
@@ -373,7 +373,7 @@ Name, initials and today’s date add editable text boxes. Six date formats and 
 
 Edit: lines, arrows, whiteout, a freehand drawing pad and duplicate-element action join existing text/image/highlight/shape/link controls. Freehand marks are PNG overlays that can be placed and resized. Numeric position fields and keyboard movement remain available. Whiteout only covers content; underlying text remains extractable. Redact is the removal workflow.
 
-Added text supports Unicode Noto Sans or standard Helvetica, Times and Courier; standard-font variants have bold and italic, all support underline, strikethrough and left/center/right alignment. Noto bold/italic are disabled because those font files are not provided. Unsupported characters in a standard font cause an actionable export error. These formatting controls apply to added text; the actual existing-text editor is preserved. No paragraph reflow or automatic scan-text replacement has been introduced.
+Added text supports Unicode Noto Sans or standard Helvetica, Times and Courier; standard-font variants have bold and italic, all support underline, strikethrough and left/center/right alignment. Noto bold/italic are disabled because those font files are not provided. Unsupported characters in a standard font cause an actionable export error. These formatting controls apply to added text; the actual existing-text editor is preserved. Compatible original paragraphs now wrap within existing line slots; automatic scan-text replacement is not available.
 
 Validation: lint and TypeScript pass, and 49 processing fixtures plus 39 correctness checks pass, including drawing exports at four rotations and styled-text export/reopen. Signature tests cover styles, colours, image validation and PDF embedding. Rendered drawing output was inspected. Full browser/mobile interaction, signature-storage behavior on real browsers and camera capture remain unverified.
 
@@ -383,7 +383,7 @@ The second supplied text-editor ZIP performs real text replacement but failed a 
 The public owner-access capability check returns 200 with a boolean, avoiding an expected 403 error on every anonymous homepage visit. Private reports remain protected; session cookies are verified and forged identity headers ignored. Filter labels/counts now use opaque, contrasting theme colours, and both footers use the existing small SVG brand mark instead of a full-size PNG. `node checks/verify-pagespeed-fixes.mjs` verifies source contrast and logo wiring; `npm run verify:public` covers anonymous, authenticated and forged access probes. Input limits still appear only following rejection. PageSpeed screenshots are prior lab results; a fresh live score has not been measured.
 
 ## Direct on-page text editing and unchanged exports
-Click supported existing text and type directly on the PDF. Enter/Save text commits the real PDFium edit; Escape/Cancel abandons pending typing. The separate replacement textarea is removed. Pending text cannot be accidentally exported or lost through page/zoom/history changes. The actual PDF is rerendered after saving. Embedded-font glyph restrictions, single-line limits and no paragraph reflow remain; scans and nested text structures are not reconstructed.
+Click supported existing text and type directly on the PDF. Leaving the text commits the real PDFium edit automatically; Escape abandons pending typing and Undo restores applied edits. The separate replacement textarea is removed. Pending text cannot be accidentally exported or lost through page/zoom/history changes. The actual PDF is rerendered after saving. Embedded-font restrictions and bounded paragraph reflow remain; scans and nested text structures are not reconstructed.
 
 An untouched single PDF exported through Organize, Edit, Sign or the existing-text editor retains its original bytes and size. Compression keeps the source when the requested preset would enlarge it, with real size feedback. Compact retains text/links; page-image presets can lose search, links and forms. Tests include byte equality, four compression presets and a noisy scanned-page fixture. See `docs/DIRECT_TEXT_AND_COMPRESSION.md` for competitor documentation, precise scope and verification limitations.
 
@@ -448,7 +448,7 @@ Reader follow-up: PDF Reader supports selection directly on rendered text and sa
 ## Remaining-research follow-up
 
 - Reader: continuous mode renders near-visible pages and releases offscreen canvases; two-page mode falls back to one page on narrow screens. Fit page, fit width, on-page selection/links, optional local reading bookmarks and delete actions are available. Source PDFs may have poor text order or missing accessibility tags. Page thumbnails, pinch controls and direct encrypted prompting are included; device checks remain pending.
-- Existing-text editing: unavailable embedded-font characters are reported while typing and Save is disabled for them. Native rewrite, overflow rollback and Enter/Escape behavior remain. Paragraph reflow, nested-object edits and Indian-script shaping remain unsupported.
+- Existing-text editing: unavailable embedded-font characters are reported while typing and prevent applying an invalid draft. Native rewrite and overflow rollback remain. Compatible aligned paragraphs wrap within existing lines; extra-line reflow, nested-object edits and Indian-script shaping remain unsupported.
 - Scan: manual four-corner projective correction, bilinear sampling, explicit preview/apply, cancellation and workspace undo. Large correction images are downsampled for memory safety; automatic detection is not implemented. Physical camera tests remain pending.
 - Workflows: choose presets or reorder a custom sequence of merge, rotate 90°, reverse pages, clear metadata and compact without rasterizing. Unsupported and oversized sequences are rejected at processing. Sources are retained.
 - Create PDF: optional authored A4 positioned-text templates using the existing local Noto Sans font. Configure page, position, width, height and font size; field overflow and unavailable glyphs are rejected. No imported backgrounds, image/table schemas or cross-page paragraph reflow.
@@ -467,3 +467,11 @@ Validation: `checks/verify-text-document.mjs` checks Unicode decoding, encoding 
 ### Mobile and signature theme fixes
 
 Signature style samples now use a bounded transparency paper surface in both themes, without changing exported ink. Signature panels inherit readable theme colours; the popup has one scroll container and narrow-screen buttons wrap. Reader spread layout uses the same measured-width threshold as page rendering, avoiding half-width pages in a single column. Text to PDF now yields and checks cancellation within long paragraphs as well as between paragraphs. Physical camera, mobile keyboard and live deployment verification remain outstanding.
+
+### Direct paragraph editing and automatic apply
+
+Click an existing line to select its compatible aligned paragraph, or choose One text object for a smaller edit. Type directly on the document. Leaving the text, changing pages, exporting or switching tools applies a valid draft automatically. Save text, Cancel and Keep edits buttons are removed. Escape restores pending text, and Undo/Redo retain ten applied document states. No-change export retains the source bytes.
+
+The PDFium engine measures replacement words with the original font and rewrites the existing text objects. Same-font, same-size, same-colour, aligned horizontal lines can wrap within their original line slots. Shortened paragraphs clear unused text; overflowing edits retain the original and the draft for correction. Page rotations are supported. Mixed-font runs, nested text, arbitrary new lines, document-wide cascading reflow, Indian-script shaping and automatic font substitution remain unsupported. Draft typing uses browser controls; the actual PDF raster refreshes after applying.
+
+Validation: `node checks/verify-paragraph-text.mjs` exercises four page rotations, save/reopen, shortened paragraphs, overflow rollback and column/font isolation. `node checks/verify-online-text.mjs` retains native single-object coverage. Browser interaction and physical mobile keyboard tests require a reachable preview; local preview was blocked in the cloud browser.
