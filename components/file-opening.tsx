@@ -1,0 +1,2 @@
+/** Local loading illustration; no external requests or simulated percentage. */
+export function FileOpening(){return <div className="file-opening" role="status" aria-live="polite"><div className="file-opening-art" aria-hidden="true"><span className="file-opening-page">PDF</span><span className="file-opening-dot"/><span className="file-opening-dot"/><span className="file-opening-dot"/></div><div><strong>Opening your files…</strong><p>Reading and checking them on your device.</p></div></div>;}

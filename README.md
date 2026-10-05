@@ -412,3 +412,5 @@ Anonymous homepage HTML uses an ETag with private revalidation; owner/API no-sto
 Camera JPG/PNG/WebP files with MIME metadata can be opened even when their filename has no image extension. A browser image decoder fallback handles bitmap decoder failures; unsupported HEIC is not advertised as supported. Asynchronous opening has a timeout with a recovery error and keeps existing workspace data. This cannot interrupt a synchronous parser blocking the main thread. Device-level camera/EXIF behavior still requires real mobile validation.
 
 Optional Buy Me a Coffee links appear in shared headers and successful-export results. Downloads remain free and primary; no donation scripts are embedded.
+
+File opening displays a local CSS document animation, with a static reduced-motion alternative. It indicates actual pending validation, without estimated percentages or external animation requests.
