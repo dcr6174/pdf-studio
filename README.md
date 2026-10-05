@@ -487,3 +487,7 @@ Browse 60+ tools and Show popular tools switch the homepage catalogue in place, 
 ### Tool discovery and optional donations
 
 The homepage centers “Pick a tool” above the wrapping category buttons on desktop and mobile. Successful exports keep Download as the primary action and show an optional Donate action below the result controls, with “Happy with your result? Help keep PDF Studio free.” The header retains its compact donation icon. Donation actions link to https://buymeacoffee.com/dcr6174 and have a gentle continuous glow; reduced-motion preferences disable the pulse while retaining a static glow.
+
+### Mobile step labels and menu reliability
+
+On narrow screens, each homepage how-to step contains its own number, preventing stray “01 / 02 / 03” labels at the page edge. The tool icon registry includes workflows, blank-page checking, the PDF reader and chapter splitting. The Tools menu also falls back to a document icon for future entries, so a missing icon cannot crash navigation.

@@ -451,3 +451,6 @@ select,option,[data-slot=select-trigger],[data-slot=select-content],[data-slot=s
 @keyframes donate-glow{0%,100%{opacity:.45}50%{opacity:1}}
 @media(prefers-reduced-motion:reduce){.support-link::before{animation:none;opacity:.65}}
 @media(max-width:767px){.home-toolbox .catalogue-top{align-items:center;gap:16px}.home-toolbox .catalogue-top .filters{width:100%}}
+
+/* Keep mobile how-to numbers inside their own step, rather than the page. */
+@media(max-width:767px){.home-steps>li{position:relative;padding-left:42px;min-width:0}.home-steps>li>span{position:absolute;left:0;top:3px}}
