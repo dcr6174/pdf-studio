@@ -1,4 +1,5 @@
 'use client';
+import {StudioHeader} from '@/components/studio-header';
 import {decodeTextFile} from '@/lib/text-document';
 import {TemplateBuilder} from '@/components/template-builder';
 import {WorkflowBuilder} from '@/components/workflow-builder';
@@ -24,16 +25,12 @@ import { shelf, type ShelfFile } from '@/lib/shelf';
 import { useActivityTracking, trackActivity } from '@/lib/activity-client';
 import { OnlineTextEditor, type TextEditorHandle } from '@/components/online-text-editor';
 import {ToolSearchDialog} from '@/components/tool-search-dialog';
-import {ToolsMenu} from '@/components/tools-menu';
-import { InstallApp } from '@/components/install-app';
 import { seoPages, seoTools } from '@/lib/seo-tools';
-import {ThemeToggle} from '@/components/theme-toggle';
 import {BuddyHero} from '@/components/buddy-hero';
 import {Spotlight} from '@/components/spotlight';
 import {Welcome,DailyLine,LocalClock,Greeting} from '@/components/welcome';
 import {openingDeadline} from '@/lib/open-file-deadline';
 import {normalizeCameraFile} from '@/lib/mobile-image';
-import {SupportLink} from '@/components/support-link';
 import {ResultCard} from '@/components/result-card';
 import {recoverableDraft} from '@/lib/resume';
 import {RecentTools} from '@/components/recent-tools';
@@ -300,7 +297,7 @@ function App({initialTool='home',initialHeading,guide}:{initialTool?:string;init
     const searchStatus = !searching ? '' : found.mode === 'none' ? 'No tools found. Try “merge”, “compress” or “sign”.' : found.mode === 'empty' ? 'Showing 60+ tools.' : `${found.mode === 'any' ? 'No exact match. ' : ''}${found.tools.length} ${found.tools.length === 1 ? 'tool' : 'tools'} found. Press Enter to open ${found.tools[0].name}.`;
     return <>
     <ToolSearchDialog open={searchOpen} onOpenChange={setSearchOpen} onSelect={navigate}/>
-    <Link className="skip-link" href="#studio-content">Skip to workspace</Link><main onClickCapture={e=>{const a=(e.target as Element).closest?.('a[href]');if(!a||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const url=new URL(a.getAttribute('href')!,location.href);if(url.origin!==location.origin||!url.pathname.startsWith('/tools/'))return;if(busy||loading||(view==='native-text'&&textDirty)||marks.some(m=>m.kind==='redact')){e.preventDefault();e.stopPropagation();toast('Finish processing, keep your text edits, or export redactions before opening another guide.');}}} className={`main studio-shell ${view==='home'?'home-shell':'document-shell'} ${view==='native-text'?'text-shell':''} ${files.length&&compatible&&view!=='home'&&view!=='shelf'?'document-loaded':''} ${tool&&(!files.length||!compatible)?'empty-tool':''}`}><header className="studio-header"><Link className="studio-wordmark" aria-label="PDF Studio home" href="/" onClick={e=>{if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();navigate('home');}}><Image unoptimized className="wordmark-lockup lockup-light" src="/brand/pdf-studio-lockup-v5.svg" alt="PDF Studio" width="160" height="40"/><Image unoptimized className="wordmark-lockup lockup-dark" src="/brand/pdf-studio-lockup-v5-dark.svg" alt="" aria-hidden="true" width="160" height="40"/></Link><nav aria-label="Main navigation"><ToolsMenu onSelect={navigate} disabled={busy||loading}/><Link href="/#shelf" aria-current={view==='shelf'?'page':undefined} onClick={e=>{if(e.button!==0||e.metaKey||e.ctrlKey||e.shiftKey||e.altKey)return;e.preventDefault();navigate('shelf');}}>My files</Link><Link href="/guides">Guides</Link>{analyticsAccess&&<Link href="/analytics">Owner</Link>}</nav><div className="header-end"><SupportLink/><InstallApp/><ThemeToggle/></div></header>
+    <Link className="skip-link" href="#studio-content">Skip to workspace</Link><main onClickCapture={e=>{const a=(e.target as Element).closest?.('a[href]');if(!a||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;const url=new URL(a.getAttribute('href')!,location.href);if(url.origin!==location.origin||!url.pathname.startsWith('/tools/'))return;if(busy||loading||(view==='native-text'&&textDirty)||marks.some(m=>m.kind==='redact')){e.preventDefault();e.stopPropagation();toast('Finish processing, keep your text edits, or export redactions before opening another guide.');}}} className={`main studio-shell ${view==='home'?'home-shell':'document-shell'} ${view==='native-text'?'text-shell':''} ${files.length&&compatible&&view!=='home'&&view!=='shelf'?'document-loaded':''} ${tool&&(!files.length||!compatible)?'empty-tool':''}`}><StudioHeader onNavigate={navigate} disabled={busy||loading} shelf={view==='shelf'} owner={analyticsAccess}/>
     <span id="shelf" className="shelf-route-anchor" aria-hidden="true"/><div id="studio-content" tabIndex={-1} className="content" aria-busy={busy || loading} onDragEnter={e => { if (view!=='home'&&!busy&&!loading&&e.dataTransfer.types.includes('Files')) {
         e.preventDefault();
         dragDepth.current++;

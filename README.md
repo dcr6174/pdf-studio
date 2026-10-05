@@ -505,3 +505,7 @@ Result and tool-search popups use viewportPositioned dialogs, which omit the sha
 ### Refreshed Guides hub and email links
 
 The Guides hub uses responsive task cards, popular guides, live search and category filters with an announced result count and reset action. Export instructions, privacy resources and comparisons remain linked. Colors follow the site's theme variables; keyboard focus and comfortable touch targets are supported. All original guide URLs are retained. Problem-report, contact and inline error mail links request a new browsing context with target=_blank and noopener/noreferrer. Mailto handling still depends on the user's browser and configured mail application.
+
+### One consistent header
+
+The homepage, document workspace and informational pages share StudioHeader: the same logo, categorized Tools menu, My files, Guides, optional install action, donation icon and theme control. The owner link remains access-dependent in the studio. The header stays in normal document flow and no longer shrinks when a document opens. Duplicate header markup was removed; static pages use real tool links, while workspace navigation preserves the current document.
