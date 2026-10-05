@@ -8,6 +8,10 @@ import {tools,type Tool} from './tools';
  * (never list something a tool cannot do).
  */
 export const toolKeywords:Record<string,string>={
+ reader:'reader, read pdf, view document, reading focus, find text',
+ workflow:'workflow, recipes, pipeline, sequence, chain operations',
+ 'split-chapters':'split chapters, bookmark boundaries, separate chapters',
+ 'blank-check':'blank page candidates, find empty pages, check blank pages',
  webp:'webp, web picture, page images, pdf to webp',
  'remove-bookmarks':'delete outline, remove table of contents, remove navigation',
  'remove-attachments':'embedded files, remove attachment, delete attachment, companion files',

@@ -101,9 +101,9 @@ const curatedTools = [
     "slug": "ocr-pdf",
     "id": "ocr",
     "title": "Make a PDF searchable",
-    "heading": "Recognize English text in scanned pages",
-    "intro": "Run OCR to add an invisible searchable English text layer to rendered PDF pages.",
-    "detail": "The first run downloads a recognition model. Accuracy varies; review names, numbers and important text. Other languages are not currently supported."
+    "heading": "Recognize text in scanned pages",
+    "intro": "Choose a supported language and add an invisible searchable text layer to scanned PDF pages.",
+    "detail": "The first run downloads a recognition model. Accuracy varies; review names, numbers and important text. Choose English, French, German, Spanish, Italian or Portuguese. Unsupported searchable characters are reported in the export result."
   },
   {
     "slug": "protect-pdf",
@@ -181,7 +181,7 @@ const curatedById = new Map<string, (typeof curatedTools)[number]>(curatedTools.
 export const seoTools = tools.map(tool => {
   const curated = curatedById.get(tool.id);
   if (curated) return { ...curated, group: tool.group };
-  const stableSlugs:Record<string,string>={viewer:"reader-layout",interleave:"alternate-and-mix",hash:"file-fingerprint",repair:"resave-pdf"};
+  const stableSlugs:Record<string,string>={reader:"pdf-reader",viewer:"reader-layout",interleave:"alternate-and-mix",hash:"file-fingerprint",repair:"resave-pdf"};
   const slug = stableSlugs[tool.id] ?? tool.name
     .toLowerCase()
     .replace(/&/g, 'and')

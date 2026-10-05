@@ -1,6 +1,10 @@
 export const groups = ['All tools','Pages','Edit & sign','Convert','Privacy','My files'];
 export type Tool = {id:string;name:string;description:string;group:string;icon:string;note?:string};
 export const tools:Tool[] = [
+['workflow','PDF workflows','Run a reviewed sequence and download one result.','Pages','layers','Merge then compact, rotate then compact, or clear standard metadata then compact. Originals remain in the workspace.'],
+['split-chapters','Split by chapters','Split at supported top-level bookmark destinations.','Pages','scissors','Requires usable outline entries. Inspect resulting chapter boundaries.'],
+['blank-check','Find possible blank pages','Review likely blank pages without deleting them.','Pages','file','Low-resolution image analysis can miss faint content. No pages are deleted automatically.'],
+['reader','PDF Reader','Read, search and navigate a PDF without changing it.','Pages','book','View one page at a time with selectable extracted text, search and document outlines. Scans need OCR for search.'],
 ['webp','PDF to WebP','Export lightweight page images in a ZIP.','Convert','image','Rendered page images, not editable text. Requires browser WebP encoding support.'],
 ['remove-bookmarks','Remove bookmarks','Remove the document navigation outline.','Pages','book','Original single PDF only. Page content and links remain; removing navigation does not remove sensitive text.'],
 ['remove-attachments','Remove embedded files','Remove reachable embedded file attachments.','Privacy','shield','Removes attachment name trees, associated-file references and file-attachment annotations. Not complete sanitization; unreachable historical bytes may remain.'],
@@ -52,7 +56,7 @@ export const tools:Tool[] = [
 ['ebook','EPUB to PDF','Turn book text into a document.','Convert','book','Reflows text; ebook styling and illustrations are not preserved.'],
 ['grayscale','Grayscale PDF','Make pages black and white.','Convert','droplet','Rebuilds pages as images. Text search, links and forms are lost.'],
 ['invert','Invert colours','Create a dark version of your PDF.','Convert','moon','Rebuilds pages as images. Text search, links and forms are lost.'],
-['ocr','Searchable PDF (OCR)','Recognize English text in scans.','Convert','scan','Downloads an English recognition model on first use. Accuracy varies; review important text.'],
+['ocr','Searchable PDF (OCR)','Recognize text in scans using a selected language.','Convert','scan','English, French, German, Spanish, Italian and Portuguese models download on demand. Accuracy varies; unsupported searchable characters are reported.'],
 ['audio','Read aloud','Listen with your device’s voices.','Convert','audio','Uses browser speech synthesis. Voice availability and offline support depend on your device. No audio-file export.'],
 ['compare','Compare PDFs','Check two documents side by side.','Pages','copy'],
 ['encrypt','Protect PDF','Add an AES-256 opening password.','Privacy','lock'],
@@ -64,5 +68,5 @@ export const tools:Tool[] = [
 ['repair','Repair readable PDF','Rebuild a readable PDF structure.','Privacy','file','Can resave PDFs that parse successfully. Severely damaged PDFs may not be recoverable.'],
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
 export function accepted(id:string){return id==='images'||id==='scan'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
-export function isMulti(id:string){return ['merge','organize','interleave','images','scan','compare','zip'].includes(id);}
+export function isMulti(id:string){return ['workflow','merge','organize','interleave','images','scan','compare','zip'].includes(id);}
 

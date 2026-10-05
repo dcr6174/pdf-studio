@@ -15,6 +15,7 @@ const FOLD='M78 12V30Q78 40 88 40H106Z';
  * this component only knows the time of day and when the theme changes.
  */
 export function BuddyHero(){
+ const host=useRef<HTMLButtonElement>(null);
  const uid=useId().replace(/[^a-zA-Z0-9]/g,'');
  const id=(name:string)=>`bh${uid}${name}`;
  const timer=useRef<number|undefined>(undefined);
@@ -25,6 +26,7 @@ export function BuddyHero(){
  const part=usePartOfDay();
 
  function cheer(){
+  if(matchMedia('(prefers-reduced-motion: reduce)').matches)return;
   setMood('joy');setHop(n=>n+1);
   window.clearTimeout(timer.current);
   timer.current=window.setTimeout(()=>setMood('happy'),1200);
@@ -43,14 +45,13 @@ export function BuddyHero(){
    reactTimer.current=window.setTimeout(()=>setReaction(''),1400);
   });
   mo.observe(root,{attributes:true,attributeFilter:['data-theme']});
-  let dragging=false;
-  const drag=(e:DragEvent)=>{if(!e.dataTransfer?.types?.includes('Files')||dragging||reduce())return;dragging=true;cheer();};
-  const end=()=>{dragging=false;};
-  window.addEventListener('dragenter',drag);window.addEventListener('dragleave',end);window.addEventListener('drop',end);
-  return()=>{mo.disconnect();window.removeEventListener('dragenter',drag);window.removeEventListener('dragleave',end);window.removeEventListener('drop',end);window.clearTimeout(timer.current);window.clearTimeout(reactTimer.current);};
+  const element=host.current;
+  const io=new IntersectionObserver(entries=>{if(element)element.dataset.paused=entries[0].isIntersecting&&!document.hidden?'false':'true';});if(element)io.observe(element);
+  const visibility=()=>{if(element)element.dataset.paused=document.hidden?'true':'false';};document.addEventListener('visibilitychange',visibility);
+  return()=>{mo.disconnect();io.disconnect();document.removeEventListener('visibilitychange',visibility);window.clearTimeout(timer.current);window.clearTimeout(reactTimer.current);};
  },[]);
 
- return <button type="button" className={`buddy-hero mood-${mood}${reaction?` react-${reaction}`:''}`} data-part={part} onClick={cheer} aria-label="Say hi to Buddy, the PDF Studio mascot">
+ return <button ref={host} onPointerMove={e=>{if(e.pointerType!=='mouse'||matchMedia('(prefers-reduced-motion: reduce)').matches)return;const r=e.currentTarget.getBoundingClientRect();e.currentTarget.style.setProperty('--eye-x',`${Math.max(-3,Math.min(3,(e.clientX-r.left-r.width/2)/20))}px`);e.currentTarget.style.setProperty('--eye-y',`${Math.max(-2,Math.min(2,(e.clientY-r.top-r.height/2)/25))}px`);}} onPointerLeave={e=>{e.currentTarget.style.setProperty('--eye-x','0px');e.currentTarget.style.setProperty('--eye-y','0px');}} type="button" className={`buddy-hero mood-${mood}${reaction?` react-${reaction}`:''}`} data-part={part} onClick={cheer} aria-label="Say hi to Buddy, the PDF Studio mascot">
   <svg viewBox="0 0 128 136" width="132" height="140" aria-hidden="true" focusable="false">
    <defs>
     <linearGradient id={id('g')} x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#9B86FF"/><stop offset=".55" stopColor="#6A4DFF"/><stop offset="1" stopColor="#4B2FE0"/></linearGradient>

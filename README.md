@@ -417,3 +417,28 @@ File opening displays a local CSS document animation, with a static reduced-moti
 
 
 Signature controls stay in normal document flow rather than a fixed overlay. The existing nine style cards and ink controls live inside the signature popup; changing name, style or ink regenerates the typed signature and discards stale asynchronous previews. Drawing, upload and camera creation remain available.
+
+## Research refresh implementation — 5 October 2026
+
+- Optional Buy Me a Coffee appears at the bottom of export results, after all download/edit/save/report actions.
+- Form-safe assembly keeps a full single PDF's field structure. Page-copy operations reject fillable documents unless an explicit supported flattening path is chosen; Merge offers that choice. Originals are not mutated. Flattened appearance pixels still require visual verification.
+- PDF Reader (`/tools/pdf-reader`) shares the workspace: single-page canvas, fit width/zoom/view rotation, page navigation, document-wide extracted-text search, supported outlines, selectable extracted text, reading focus and optional local reading position with a forget action. Unchanged downloads retain original bytes. It does not yet provide continuous/two-page modes, on-page text/link layers, pinch controls or a direct encrypted-file password prompt. Untagged extracted text can have incorrect reading order. No universal accessibility/offline guarantee.
+- Scan offers reviewed manual edge cropping and straightening, with workspace undo. No automatic perspective detection or deskew claim. Camera decoding still needs physical Android/iOS checks.
+- Split by chapters uses supported top-level local bookmark destinations, exports ZIP files and refuses editable forms. Nested destinations do not define chapters. Output boundaries require inspection.
+- Find possible blank pages reports low-resolution visual candidates and retains every page. Small/faint content can be missed; users must inspect before removing pages.
+- OCR exposes English, French, German, Spanish, Italian and Portuguese models loaded on demand. Non-encodable characters are reported rather than silently discarded; visible scans remain. Model quality and multilingual corpus results have not been benchmarked. Indian script shaping/searchable embedding is not implemented.
+- Buddy has restrained floating and pointer-local eye tracking, suspends motion when hidden/offscreen and stays static with reduced motion. Homepage dragging never suggests acceptance.
+- Validation: lint/TypeScript, existing 18 engine checks, camera/input-budget checks and `checks/verify-refresh-core.mjs`. Real devices, new reader/scan screenshots, chapter rendering and OCR model benchmarks remain unverified.
+
+The research brief also proposes larger engine, server and template projects. These are not implemented merely by adding this documentation; see `docs/RESEARCH_IMPLEMENTATION_STATUS.md` for remaining acceptance gates.
+
+Compression also offers supported RGB JPEG resource optimization: recompresses unmasked JPEG streams at reduced quality while retaining PDF text and form structure. Other codecs, masks/custom decode images and very large images are skipped. The final file must be smaller or source bytes are returned. This is lossy image optimization, not lossless compression.
+
+PDF workflows offer explicit merge→compact, rotate 90°→compact and clear-standard-metadata→compact sequences. Cancellation is checked between engine stages; only the final result is returned and source workspace is retained. Metadata clearing is not sanitization.
+
+| Tool | Implementation and limits |
+| --- | --- |
+| PDF Reader | Single-page reading, extracted-text search/selection, outlines, view-only rotation and local position opt-in. Layered page selection, continuous mode and direct encrypted password prompt pending. |
+| Split by chapters | Supported top-level local bookmark destinations; ZIP export; editable forms require prior flattening. |
+| Find possible blank pages | Review-only low-resolution candidate report. Faint/small content may be missed. Never deletes pages automatically. |
+| PDF workflows | Three explicit browser sequences with source preservation and stage cancellation. No custom workflow builder yet. |

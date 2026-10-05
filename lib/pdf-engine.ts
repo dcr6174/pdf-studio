@@ -1,3 +1,4 @@
+import {optimizeJPEGImages} from './optimize-jpeg';
 import {decodePhoto,normalizeCameraFile} from './mobile-image';
 import {addBookmarks,cleanupPDF,removeAnnotations,halvePages,createForm} from './extra-pdf';
 import {replaceExistingText} from './native-text';
@@ -54,6 +55,8 @@ export type Options = {
     start: string;
     columns: string;
     fields: Record<string, string | boolean>;
+    recipe?:string;
+    ocrLanguage?:string;
     flattenForm?:boolean;
     footer?:string;
 };
@@ -148,7 +151,7 @@ export function ranges(value: string, count: number) { if (!value.trim())
 } return [...new Set(out)]; }
 function blob(bytes: Uint8Array | string, type = 'application/pdf') { return new Blob([typeof bytes === 'string' ? bytes : bytes.slice().buffer as ArrayBuffer], { type }); }
 const result = (b: Uint8Array | string, name: string, type?: string, report?: string): Output => ({ blob: blob(b, type), name, report });
-export async function assemble(files: Loaded[], items: PageItem[], signal?:AbortSignal) { const out = await PDFDocument.create(); for (const item of items) {
+export async function assemble(files: Loaded[], items: PageItem[], signal?:AbortSignal, flattenForms=false) { if(files.length===1&&!files[0].image&&items.length===files[0].pages&&items.every((p,i)=>p.fileId===files[0].id&&p.index===i)){const d=await PDFDocument.load(files[0].bytes,{updateMetadata:false});for(const item of items){signal?.throwIfAborted();const p=d.getPage(item.index);p.setRotation(degrees((p.getRotation().angle+item.rotation)%360));}return d;} const sources=new Map<string,PDFDocument>();for(const f of files){if(f.image)continue;const src=await PDFDocument.load(f.bytes,{updateMetadata:false});if(src.getForm().getFields().length){if(!flattenForms)throw new Error('This PDF contains fillable fields. To merge safely, choose “Make form fields read-only before merging”, or fill and flatten it first. Your originals are unchanged.');try{src.getForm().flatten();}catch{throw new Error('These form appearances could not be flattened safely. Fill and save the PDF in its original form editor, then try again.');}}sources.set(f.id,src);}const out = await PDFDocument.create(); for (const item of items) {
     signal?.throwIfAborted();await new Promise(resolve=>setTimeout(resolve,0));
     const f = files.find(f => f.id === item.fileId);
     if (!f)
@@ -160,7 +163,7 @@ export async function assemble(files: Loaded[], items: PageItem[], signal?:Abort
         p.setRotation(degrees(item.rotation));
     }
     else {
-        const src = f.doc ?? await PDFDocument.load(f.bytes, { updateMetadata: false });
+        const src = sources.get(f.id)!;
         const [p] = await out.copyPages(src, [item.index]);
         p.setRotation(degrees((p.getRotation().angle + item.rotation) % 360));
         out.addPage(p);
@@ -187,6 +190,9 @@ async function plainPDF(text: string, markdown = false) { const { jsPDF } = awai
 export async function processPDF(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number) => void, signal?:AbortSignal): Promise<Output> {
     signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
     let first = files[0];
+    if(id==='workflow'){
+      const steps=o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'?['clean','compress']:['merge','compress'];let currentFiles=files,currentPages=items,currentMarks=marks;let output:Output|undefined;const reports:string[]=[];for(let i=0;i<steps.length;i++){signal?.throwIfAborted();output=await processPDF(steps[i],currentFiles,currentPages,currentMarks,{...o,quality:'compact'},n=>progress(Math.round((i*100+n)/steps.length)),signal);if(output.report)reports.push(output.report);const bytes=new Uint8Array(await output.blob.arrayBuffer());const doc=await PDFDocument.load(bytes,{updateMetadata:false});const file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];}return {...output!,report:`Completed: ${steps.join(' → ')}. Original workspace retained. ${reports.join(' ')}`};
+    }
     if(id==='merge'&&files.length<2)throw new Error('Add at least two PDF files to merge.');
     const unchanged = files.length===1 && !marks.length && items.length===first.pages && items.every((p,i)=>p.fileId===first.id&&p.index===i&&p.rotation===0);
     if(unchanged&&(['organize','edit','sign','merge'].includes(id)||(id==='form'&&!o.flattenForm&&!Object.keys(o.fields).length))){progress(100);return result(first.bytes,first.name,undefined,'No changes: downloaded the original file without rebuilding it.');}
@@ -315,7 +321,14 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
     if (!order.length)
         throw new Error('Keep at least one page in your document.');
     if(order.length>400)throw new Error('This operation would exceed the 400-page workspace limit. Choose fewer pages.');
-    const out = await assemble(files, order,signal);
+    const out = id==='form'?await PDFDocument.load(first.bytes,{updateMetadata:false}):await assemble(files, order,signal,id==='merge'&&o.flattenForm);
+    if(id==='split-chapters'){
+      if(out.getForm().getFields().length)throw new Error('Flatten fillable fields before splitting chapters, then reopen the result. Editable fields cannot safely be copied into chapter files.');
+      const bytes=await out.save();const d=await renderer(bytes);try{const outline=await d.getOutline();if(!outline?.length)throw new Error('This PDF has no top-level bookmarks. Add bookmarks first, or use Split with page ranges.');const starts=new Set<number>([0]);for(const row of outline){signal?.throwIfAborted();let dest=row.dest;if(typeof dest==='string')dest=await d.getDestination(dest);if(Array.isArray(dest)){const n=typeof dest[0]==='number'?dest[0]:await d.getPageIndex(dest[0]);if(n>=0&&n<out.getPageCount())starts.add(n);}}if(starts.size===1)throw new Error('No usable chapter boundaries were found. Use Split with page ranges instead.');const bounds=[...starts].sort((a,b)=>a-b);bounds.push(out.getPageCount());const zip=new JSZip();for(let i=0;i<bounds.length-1;i++){const part=await PDFDocument.create();const copied=await part.copyPages(out,Array.from({length:bounds[i+1]-bounds[i]},(_,n)=>bounds[i]+n));copied.forEach(p=>part.addPage(p));zip.file(`chapter-${i+1}-pages-${bounds[i]+1}-${bounds[i+1]}.pdf`,await part.save());progress(Math.round((i+1)/(bounds.length-1)*100));}return{blob:await zip.generateAsync({type:'blob'}),name:`${filename}-chapters.zip`,report:'Split at supported top-level bookmark destinations. Inspect chapter boundaries before sharing.'};}finally{await d.destroy();}
+    }
+    if(id==='blank-check'){
+      const bytes=unchanged?first.bytes:await out.save();const candidates:number[]=[];for(let i=0;i<out.getPageCount();i++){const c=await renderPage(bytes,i,.3,undefined,0,signal);try{const ctx=c.getContext('2d')!;const data=ctx.getImageData(0,0,c.width,c.height).data;let dark=0;for(let n=0;n<data.length;n+=4)if(data[n]<245||data[n+1]<245||data[n+2]<245)dark++;if(dark/(c.width*c.height)<.001)candidates.push(i+1);}finally{c.width=0;c.height=0;}progress(Math.round((i+1)/out.getPageCount()*100));}return result(bytes,`${filename}-blank-review.pdf`,undefined,candidates.length?`Possible blank pages: ${candidates.join(', ')}. No pages were deleted. Low-resolution analysis can miss faint or small content. Inspect each candidate in Organize before removing it.`:'No likely blank pages found. No pages were deleted; faint content and scan noise can affect detection.');
+    }
     if(id==='native-text'){await replaceExistingText(out,o.findText??'',o.replaceText??'');}
     if(id!=='form')await applyMarks(out,order,marks,signal);
     if(id==='bookmarks'){addBookmarks(out,o.text);return result(await out.save(),`${filename}-bookmarks.pdf`);}
@@ -346,6 +359,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
         if(o.flattenForm)form.flatten();
         return result(await d.save(), `${filename}-filled.pdf`);
     }
+    if(id==='compress'&&o.quality==='images'){const source=unchanged?first.bytes:await out.save();const d=await PDFDocument.load(source,{updateMetadata:false});const changed=await optimizeJPEGImages(d,signal);progress(95);const bytes=changed?await d.save({useObjectStreams:true}):source;return result(bytes.length<source.length?bytes:source,`${filename}-images-optimized.pdf`,undefined,bytes.length<source.length?`Optimized ${changed} supported RGB JPEG images. Text, links and form structure retained. JPEG quality is reduced; inspect small image details.`:'No smaller result: original source retained. Only unmasked RGB JPEG streams are supported by this mode.');}
     if(id==='compress'&&o.quality==='compact'){progress(90);const baseline=unchanged?first.bytes:await out.save();const compact=unchanged?await PDFDocument.load(first.bytes,{updateMetadata:false}):out;const bytes=await compact.save({useObjectStreams:true});signal?.throwIfAborted();const smaller=bytes.length<baseline.length;return result(smaller?bytes:baseline,`${filename}-compact.pdf`,undefined,smaller?`Reduced from ${baseline.length} to ${bytes.length} bytes. Text and links retained.`:'No size reduction: kept the source unchanged. Try an image preset only if losing searchable text, links and forms is acceptable.');}
     if (['jpg', 'png', 'webp', 'compress', 'flatten', 'redact', 'grayscale', 'invert', 'ocr', 'pptx'].includes(id)) {
         const source = id==='compress'&&unchanged?first.bytes:await out.save();
@@ -357,10 +371,11 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
             ppt = new P();
             ppt.layout = 'LAYOUT_WIDE';
         }
+        let omittedGlyphs=0;
         let worker: Awaited<ReturnType<typeof import('tesseract.js').createWorker>> | undefined;
         try {
             if (id === 'ocr')
-                worker = await (await import('tesseract.js')).createWorker('eng', 1, { logger: m => { if (m.status === 'recognizing text')
+                worker = await (await import('tesseract.js')).createWorker(['eng','fra','deu','spa','ita','por'].includes(o.ocrLanguage??'eng')?(o.ocrLanguage??'eng'):'eng', 1, { logger: m => { if (m.status === 'recognizing text')
                         reportProgress(Math.round(m.progress * 80) + 10); } });
             const font = id === 'ocr' ? await raster.embedFont(StandardFonts.Helvetica) : undefined;
             for (let i = 0; i < order.length; i++) {
@@ -408,7 +423,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
                             for (const par of b.paragraphs)
                                 for (const line of par.lines)
                                     for (const word of line.words) {
-                                        const t = word.text.replace(/[^\x20-\x7e]/g, '');
+                                        const t = Array.from(word.text).filter(character=>{try{font.encodeText(character);return true;}catch{omittedGlyphs++;return false;}}).join('');
                                         if (!t)
                                             continue;
                                         page.drawText(t, { x: word.bbox.x0 / scale, y: page.getHeight() - word.bbox.y1 / scale, size: Math.max(3, (word.bbox.y1 - word.bbox.y0) / scale), font, opacity: 0 });
@@ -425,7 +440,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
                 return { blob: await ppt.write({ outputType: 'blob' }) as Blob, name: `${filename}.pptx` };
             const bytes=await raster.save();
             const noSaving=id==='compress'&&bytes.length>=source.length;
-            const warning=id==='compress'?(noSaving?'No size reduction: kept the source instead of the larger raster output.':`Reduced from ${source.length} to ${bytes.length} bytes. Image-based output: searchable text, links and forms are lost.`):undefined;
+            const warning=id==='ocr'?`OCR language: ${o.ocrLanguage??'eng'}. Recognition can be wrong; review names and numbers.${omittedGlyphs?` ${omittedGlyphs} characters could not be included in the searchable layer; visible scan retained.`:''}`:id==='compress'?(noSaving?'No size reduction: kept the source instead of the larger raster output.':`Reduced from ${source.length} to ${bytes.length} bytes. Image-based output: searchable text, links and forms are lost.`):undefined;
             return result(noSaving?source:bytes, `${filename}-${id}.pdf`,undefined,warning);
         }
         finally {

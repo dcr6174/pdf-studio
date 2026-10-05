@@ -1,4 +1,5 @@
 import fs from 'node:fs';
+import {build} from 'vite';
 import ts from 'typescript';
 import assert from 'node:assert/strict';
 import {PDFDocument, StandardFonts, decodePDFRawStream} from 'pdf-lib';
@@ -9,7 +10,8 @@ const tmp=new URL('../lib/.verify-engine.mjs',import.meta.url);fs.writeFileSync(
 const geometry=new URL('../lib/.verify-geometry.mjs',import.meta.url);fs.writeFileSync(geometry,ts.transpileModule(fs.readFileSync(new URL('../lib/page-geometry.ts',import.meta.url),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText);
 for(const name of ['extra-pdf','native-text'])fs.writeFileSync(new URL('../lib/.verify-'+name+'.mjs',import.meta.url),ts.transpileModule(fs.readFileSync(new URL('../lib/'+name+'.ts',import.meta.url),'utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ES2022}}).outputText);
 try{
-const {processPDF,ranges}=await import(tmp.href+'?'+Date.now());
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.engine-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
+const {processPDF,ranges}=await import('../.engine-check/engine.mjs');
 const doc=await PDFDocument.create();const font=await doc.embedFont(StandardFonts.Helvetica);for(let i=0;i<3;i++){const p=doc.addPage([400+i*20,600]);p.drawText(`Fixture page ${i+1}`,{font,x:30,y:550});}doc.setTitle('Fixture title');doc.setAuthor('Test author');const bytes=await doc.save();const file={id:'fixture',name:'fixture.pdf',bytes,size:bytes.length,pages:3,doc};const pages=Array.from({length:3},(_,index)=>({id:`page-${index}`,fileId:'fixture',index,rotation:0}));const defaults={range:'',text:'',title:'',author:'',subject:'',password:'',quality:'balanced',angle:'90',margin:'20',start:'1',columns:'2',fields:{}};const run=(id,o={},items=pages,files=[file])=>processPDF(id,files,items,[],{...defaults,...o},()=>{});const parsed=async o=>PDFDocument.load(new Uint8Array(await o.blob.arrayBuffer()),{updateMetadata:false});
 const compact=await parsed(await run('compress',{quality:'compact'},[pages[2],pages[0]]));assert.equal(compact.getPageCount(),2);assert.equal(compact.getPage(0).getWidth(),440);const streams=compact.getPage(0).node.Contents();const content=streams.asArray().map(ref=>Buffer.from(decodePDFRawStream(compact.context.lookup(ref)).decode()).toString()).join('');assert.match(content,/4669787475726520706167652033/i);
 assert.deepEqual(ranges('1, 3',3),[0,2]);assert.throws(()=>ranges('0-8',3));

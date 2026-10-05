@@ -1,0 +1,13 @@
+import assert from 'node:assert/strict';
+import {build} from 'vite';
+import {PDFDocument} from 'pdf-lib';
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.refresh-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
+const {assemble,processPDF}=await import('../.refresh-check/engine.mjs');
+const d=await PDFDocument.create();d.addPage([400,600]);const field=d.getForm().createTextField('Name');field.setText('Test reader');field.addToPage(d.getPage(0),{x:30,y:300,width:180,height:28});const bytes=await d.save();const f={id:'one',name:'form.pdf',bytes,size:bytes.length,pages:1,doc:d};const items=[{id:'p1',fileId:f.id,index:0,rotation:0}];const defaults={range:'',text:'',title:'',author:'',subject:'',password:'',quality:'compact',angle:'90',margin:'0',start:'1',columns:'1',fields:{}};
+const noChange=await processPDF('organize',[f],items,[],defaults,()=>{});assert.deepEqual(new Uint8Array(await noChange.blob.arrayBuffer()),bytes);
+const kept=await assemble([f],items);assert.equal(kept.getForm().getTextField('Name').getText(),'Test reader');
+const second={...f,id:'two'};const joined=[...items,{id:'p2',fileId:'two',index:0,rotation:0}];await assert.rejects(()=>assemble([f,second],joined),/fillable fields/);
+const flattened=await assemble([f,second],joined,undefined,true);const reopened=await PDFDocument.load(await flattened.save());assert.equal(reopened.getPageCount(),2);assert.equal(reopened.getForm().getFields().length,0);for(const p of reopened.getPages())assert.ok(p.node.Contents());assert.equal(d.getForm().getFields().length,1);assert.equal(d.getForm().getTextField('Name').getText(),'Test reader');
+const rotated=await assemble([f],[{...items[0],rotation:90}]);assert.equal(rotated.getPage(0).getRotation().angle,90);assert.equal(rotated.getForm().getFields().length,1);
+const recipe=await processPDF('workflow',[f],items,[],{...defaults,recipe:'rotate-compact'},()=>{});const recipeDoc=await PDFDocument.load(new Uint8Array(await recipe.blob.arrayBuffer()));assert.equal(recipeDoc.getPage(0).getRotation().angle,90);assert.equal(recipeDoc.getForm().getTextField('Name').getText(),'Test reader');
+console.log('PASS: byte-identical no-edit export, full-document form preservation, explicit merge rejection, flattened two-page reopen, source forms unchanged and rotated form preservation. Appearance pixels remain unverified.');

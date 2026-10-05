@@ -2,6 +2,10 @@
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
 <url><loc>https://pdf-studio.in/</loc><lastmod>2026-10-05</lastmod></url>
 <url><loc>https://pdf-studio.in/privacy</loc><lastmod>2026-10-04</lastmod></url>
+<url><loc>https://pdf-studio.in/tools/pdf-workflows</loc><lastmod>2026-10-05</lastmod></url>
+<url><loc>https://pdf-studio.in/tools/split-by-chapters</loc><lastmod>2026-10-05</lastmod></url>
+<url><loc>https://pdf-studio.in/tools/find-possible-blank-pages</loc><lastmod>2026-10-05</lastmod></url>
+<url><loc>https://pdf-studio.in/tools/pdf-reader</loc><lastmod>2026-10-05</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/pdf-to-webp</loc><lastmod>2026-10-05</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/remove-bookmarks</loc><lastmod>2026-10-05</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/remove-embedded-files</loc><lastmod>2026-10-05</lastmod></url>
@@ -15,7 +19,7 @@
 <url><loc>https://pdf-studio.in/tools/organize-pdf</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/split-pdf</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/split-every-page</loc><lastmod>2026-10-04</lastmod></url>
-<url><loc>https://pdf-studio.in/tools/compress-pdf</loc><lastmod>2026-10-04</lastmod></url>
+<url><loc>https://pdf-studio.in/tools/compress-pdf</loc><lastmod>2026-10-05</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/rotate-pdf</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/reverse-pages</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/duplicate-pages</loc><lastmod>2026-10-04</lastmod></url>
@@ -36,10 +40,10 @@
 <url><loc>https://pdf-studio.in/tools/fill-pdf-forms</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/edit-metadata</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/scan-to-pdf</loc><lastmod>2026-10-04</lastmod></url>
-<url><loc>https://pdf-studio.in/tools/images-to-pdf</loc><lastmod>2026-10-04</lastmod></url>
+<url><loc>https://pdf-studio.in/tools/images-to-pdf</loc><lastmod>2026-10-05</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/pdf-to-jpg</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/pdf-to-png</loc><lastmod>2026-10-04</lastmod></url>
-<url><loc>https://pdf-studio.in/tools/extract-text</loc><lastmod>2026-10-04</lastmod></url>
+<url><loc>https://pdf-studio.in/tools/extract-text</loc><lastmod>2026-10-05</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/pdf-to-word</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/pdf-to-html</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/pdf-to-epub</loc><lastmod>2026-10-04</lastmod></url>
@@ -53,7 +57,7 @@
 <url><loc>https://pdf-studio.in/tools/epub-to-pdf</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/grayscale-pdf</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/invert-colours</loc><lastmod>2026-10-04</lastmod></url>
-<url><loc>https://pdf-studio.in/tools/ocr-pdf</loc><lastmod>2026-10-04</lastmod></url>
+<url><loc>https://pdf-studio.in/tools/ocr-pdf</loc><lastmod>2026-10-05</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/read-aloud</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/compare-pdfs</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/protect-pdf</loc><lastmod>2026-10-04</lastmod></url>
