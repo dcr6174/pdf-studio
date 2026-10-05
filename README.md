@@ -501,3 +501,7 @@ Single-file compression compares actual byte sizes with decimal KB precision, sh
 ### Popup positioning safeguard
 
 Result and tool-search popups use viewportPositioned dialogs, which omit the shared centered dialog’s 50% translation and zoom classes. Their own viewport positioning controls centering or mobile bottom-sheet placement. This fixes the reproduced desktop result shift caused by an inherited CSS translate of -50% -50%. Other dialogs retain their existing layout.
+
+### Refreshed Guides hub and email links
+
+The Guides hub uses responsive task cards, popular guides, live search and category filters with an announced result count and reset action. Export instructions, privacy resources and comparisons remain linked. Colors follow the site's theme variables; keyboard focus and comfortable touch targets are supported. All original guide URLs are retained. Problem-report, contact and inline error mail links request a new browsing context with target=_blank and noopener/noreferrer. Mailto handling still depends on the user's browser and configured mail application.

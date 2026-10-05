@@ -11,11 +11,11 @@ export default function Contact(){
  return <main className="seo-page"><SiteHeader/>
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
   <h1>Contact PDF Studio</h1>
-  <p className="lead">Questions, problems and ideas are welcome. Write to <a href={'mailto:'+CONTACT_EMAIL}>{CONTACT_EMAIL}</a>.</p>
+  <p className="lead">Questions, problems and ideas are welcome. Write to <a target="_blank" rel="noopener noreferrer" href={'mailto:'+CONTACT_EMAIL}>{CONTACT_EMAIL}</a>.</p>
   <div className="contact-cards">
-   <a href={mailtoLink('question')}><b>Ask a question</b><span>How a tool works, what a limit means, or whether something is supported.</span></a>
-   <a href={mailtoLink('problem')}><b>Report a problem</b><span>Something failed, looked wrong, or did not match what the page promised.</span></a>
-   <a href={mailtoLink('suggestion')}><b>Suggest an idea</b><span>A tool, a format or a small improvement that would save you time.</span></a>
+   <a target="_blank" rel="noopener noreferrer" href={mailtoLink('question')}><b>Ask a question</b><span>How a tool works, what a limit means, or whether something is supported.</span></a>
+   <a target="_blank" rel="noopener noreferrer" href={mailtoLink('problem')}><b>Report a problem</b><span>Something failed, looked wrong, or did not match what the page promised.</span></a>
+   <a target="_blank" rel="noopener noreferrer" href={mailtoLink('suggestion')}><b>Suggest an idea</b><span>A tool, a format or a small improvement that would save you time.</span></a>
   </div>
   <p>These buttons open a draft in your own mail app. Nothing is sent until you press Send.</p>
   <h2>What helps most in a problem report</h2>
