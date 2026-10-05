@@ -37,6 +37,8 @@ export type Mark = {
     readerOnly?:boolean;
     color: string;
     fontSize: number;
+    opacity?:number;
+    watermark?:boolean;
     underline?: boolean;
     strike?:boolean;
     fontFamily?: 'noto'|'helvetica'|'times'|'courier';
@@ -506,8 +508,8 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
                 throw new Error('Choose a smaller margin in points.');
             p.setCropBox(margin, margin, w - margin * 2, h - margin * 2);
         }
-        if (id === 'watermark') {
-            p.drawText(o.text || 'DRAFT', { x: w * .15, y: h * .45, size: Math.min(54, w / 12), font, color: rgb(.35, .35, .4), opacity: .22, rotate: degrees(35) });
+        if (id === 'watermark' && !marks.some(m=>m.watermark)) {
+            throw new Error('Place a watermark on the page before exporting.');
         }
         if (['numbers', 'bates', 'headers'].includes(id)) {
             const n = i + (Number(o.start) || 1);
@@ -554,7 +556,7 @@ export async function applyMarks(out:PDFDocument,order:PageItem[],marks:Mark[],s
     let markFont=font;if(m.fontFamily&&m.fontFamily!=='noto'){const family=m.fontFamily==='times'?'TimesRoman':m.fontFamily==='courier'?'Courier':'Helvetica';const variant=family==='TimesRoman'?(m.bold?(m.italic?'TimesRomanBoldItalic':'TimesRomanBold'):(m.italic?'TimesRomanItalic':'TimesRoman')):family+(m.bold?(m.italic?'BoldOblique':'Bold'):(m.italic?'Oblique':''));let cached=fontCache.get(variant);if(!cached){cached=await out.embedFont(StandardFonts[variant as keyof typeof StandardFonts]);fontCache.set(variant,cached);}markFont=cached;}
     let lines:string[];try{lines=wrapText(m.text??'',markFont,m.fontSize,ww);}catch{throw new Error('This font cannot display some characters. Choose Unicode (Noto Sans).');}const lineHeight=m.fontSize*1.2;
     if(lines.length*lineHeight>hh+1)throw new Error('A text box is too small for its text. Increase its height or reduce the font size.');
-    for(let n=0;n<lines.length;n++){const text=lines[n],width=markFont.widthOfTextAtSize(text,m.fontSize),offset=m.align==='center'?(ww-width)/2:m.align==='right'?ww-width:0,baseline=yy+hh-m.fontSize-n*lineHeight;p.drawText(text,{x:xx+offset,y:baseline,size:m.fontSize,font:markFont,color});if(m.strike&&text)p.drawLine({start:{x:xx+offset,y:baseline+m.fontSize*.3},end:{x:xx+offset+width,y:baseline+m.fontSize*.3},thickness:Math.max(.5,m.fontSize/16),color});if(m.underline&&text)p.drawLine({start:{x:xx+offset,y:baseline-m.fontSize*.12},end:{x:xx+offset+width,y:baseline-m.fontSize*.12},thickness:Math.max(.5,m.fontSize/16),color});}
+    for(let n=0;n<lines.length;n++){const text=lines[n],width=markFont.widthOfTextAtSize(text,m.fontSize),offset=m.align==='center'?(ww-width)/2:m.align==='right'?ww-width:0,baseline=yy+hh-m.fontSize-n*lineHeight;p.drawText(text,{x:xx+offset,y:baseline,size:m.fontSize,font:markFont,color,opacity:Math.max(0,Math.min(1,m.opacity??1))});if(m.strike&&text)p.drawLine({start:{x:xx+offset,y:baseline+m.fontSize*.3},end:{x:xx+offset+width,y:baseline+m.fontSize*.3},thickness:Math.max(.5,m.fontSize/16),color});if(m.underline&&text)p.drawLine({start:{x:xx+offset,y:baseline-m.fontSize*.12},end:{x:xx+offset+width,y:baseline-m.fontSize*.12},thickness:Math.max(.5,m.fontSize/16),color});}
    }else if(m.kind==='highlight')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,color,opacity:.25});
    else if(m.kind==='whiteout')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,color});
    else if(m.kind==='line'||m.kind==='arrow'){

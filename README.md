@@ -509,3 +509,7 @@ The Guides hub uses responsive task cards, popular guides, live search and categ
 ### One consistent header
 
 The homepage, document workspace and informational pages share StudioHeader: the same logo, categorized Tools menu, My files, Guides, optional install action, donation icon and theme control. The owner link remains access-dependent in the studio. The header stays in normal document flow and no longer shrinks when a document opens. Duplicate header markup was removed; static pages use real tool links, while workspace navigation preserves the current document.
+
+### Watermark placement and eight-way resizing
+Watermarks now use the shared page editor: tap to place or place centrally, then drag, resize, edit text/colour/font size and opacity. Apply to the current page, an explicit page range, or all pages. Applying a scope replaces existing watermark marks on those target pages while preserving unrelated annotations. Watermarks are visual text labels, not access control. The former automatic diagonal stamp is removed; place a watermark before export. Arbitrary watermark rotation is not added in this update.
+Selected elements have four corner and four edge handles. Image/signature corners preserve proportions; edge handles change one dimension. Keyboard users can focus each handle and use arrows, or use the existing position/size fields. Coordinates remain normalized to the displayed, rotated page for export.
