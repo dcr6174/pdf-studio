@@ -433,3 +433,7 @@ select,option,[data-slot=select-trigger],[data-slot=select-content],[data-slot=s
 .tool-instructions{box-sizing:border-box;border:1px solid var(--border);border-radius:20px;background:var(--card);color:var(--foreground);padding:24px!important;margin-block:24px;min-width:0;overflow-wrap:anywhere}
 .seo-page main.tool-instructions{border:1px solid var(--border);padding:24px!important}
 @media(max-width:600px){.tool-instructions,.seo-page main.tool-instructions{padding:16px!important;border-radius:16px}}
+
+#toolbox-title{scroll-margin-top:24px}
+#toolbox-title:focus-visible{outline:2px solid var(--primary);outline-offset:6px;border-radius:4px}
+@media(max-width:600px){.browse-tools{min-height:48px;width:100%;max-width:100%}#toolbox-title{scroll-margin-top:16px}}

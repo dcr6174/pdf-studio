@@ -479,3 +479,7 @@ Validation: `node checks/verify-paragraph-text.mjs` exercises four page rotation
 ### Homepage clock and information cards
 
 The homepage footer clock displays hours, minutes and seconds in local device time. The duplicate “Guides for every tool” homepage section is removed; Guides remains in the top navigation. Tool instructions and guide articles share a responsive rounded information card with theme-aware colours.
+
+### Catalogue expand/collapse recovery
+
+Browse 60+ tools and Show popular tools switch the homepage catalogue in place, then focus and scroll to Pick a tool. The control exposes expanded state and its target grid to assistive technology. Mobile uses a full-width touch button. A live browser check reproduced the former collapse problem: six cards remained but the catalogue heading was above the viewport. No redirect loop was reproduced.
