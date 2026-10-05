@@ -53,13 +53,15 @@ function DialogContent({
   children,
   showCloseButton = true,
   fullscreen = false,
+  viewportPositioned = false,
   style,
   ...props
 }: React.ComponentProps<typeof DialogPrimitive.Content> & {
   showCloseButton?: boolean
   fullscreen?: boolean
+  viewportPositioned?: boolean
 }) {
-  const layout=dialogLayout(fullscreen,style)
+  const layout=viewportPositioned?{className:"fixed z-50 rounded-lg border bg-background shadow-lg outline-none",style}:dialogLayout(fullscreen,style)
   return (
     <DialogPortal data-slot="dialog-portal">
       <DialogOverlay />

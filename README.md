@@ -497,3 +497,7 @@ On narrow screens, each homepage how-to step contains its own number, preventing
 Exports open in a centered 560 px desktop card or a mobile bottom sheet with a visible close action. Mobile keeps Download outside the scrollable body. There is one ready message, optional PDF preview, Continue editing, and a collapsed More options section for local saving and original-file downloads. Donations remain optional at the end of the body.
 
 Single-file compression compares actual byte sizes with decimal KB precision, shows measured savings, and offers collapsed tips only below 1% savings or for larger output. Larger compression results make Download original primary when available. Size increases after editing or signing are not treated as compression failures. Try other settings closes the result and focuses the existing compression controls without discarding the workspace. Preview renders only when expanded.
+
+### Popup positioning safeguard
+
+Result and tool-search popups use viewportPositioned dialogs, which omit the shared centered dialog’s 50% translation and zoom classes. Their own viewport positioning controls centering or mobile bottom-sheet placement. This fixes the reproduced desktop result shift caused by an inherited CSS translate of -50% -50%. Other dialogs retain their existing layout.
