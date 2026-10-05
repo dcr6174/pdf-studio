@@ -8,6 +8,10 @@ import {tools,type Tool} from './tools';
  * (never list something a tool cannot do).
  */
 export const toolKeywords:Record<string,string>={
+ webp:'webp, web picture, page images, pdf to webp',
+ 'remove-bookmarks':'delete outline, remove table of contents, remove navigation',
+ 'remove-attachments':'embedded files, remove attachment, delete attachment, companion files',
+ 'remove-links':'unlink, remove hyperlinks, remove urls, disable links',
  bookmarks:'bookmark, outline, table of contents, toc, chapters, index, navigation',
  halve:'split pages in half, cut page in two, book scan, two page scan, left right pages, separate scanned pages, half',
  viewer:'reading layout, view mode, two page view, page layout, single page, spread',

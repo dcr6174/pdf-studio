@@ -3,3 +3,29 @@ export function addBookmarks(doc:PDFDocument,input:string){const rows=input.spli
 export function removeAnnotations(doc:PDFDocument){let removed=0;for(const p of doc.getPages()){const a=p.node.lookupMaybe(PDFName.of('Annots'),PDFArray);if(!a)continue;for(let i=a.size()-1;i>=0;i--){const entry=a.lookup(i,PDFDict);if(entry.get(PDFName.of('Subtype'))?.toString()!=='/Widget'){a.remove(i);removed++;}}}return removed;}
 export async function halvePages(doc:PDFDocument){if(doc.getPageCount()*2>400)throw new Error('Splitting in half would exceed 400 pages.');const out=await PDFDocument.create();for(let i=0;i<doc.getPageCount();i++){const source=doc.getPage(i),b=source.getCropBox(),r=((source.getRotation().angle%360)+360)%360;for(let side=0;side<2;side++){const p=(await out.copyPages(doc,[i]))[0],part=r===180||r===270?1-side:side;if(r%180)p.setCropBox(b.x,b.y+part*b.height/2,b.width,b.height/2);else p.setCropBox(b.x+part*b.width/2,b.y,b.width/2,b.height);out.addPage(p);}}return out;}
 export async function createForm(input:string){const names=input.split('\n').map(s=>s.trim()).filter(Boolean);if(!names.length)throw new Error('Enter a field label on each line.');if(names.length>60)throw new Error('Use at most 60 fields.');if(names.some(n=>n.length>80||!/^[\x20-\x7e]+$/.test(n)))throw new Error('Use English field labels of up to 80 characters.');const d=await PDFDocument.create(),font=await d.embedFont(StandardFonts.Helvetica),form=d.getForm();let page=d.addPage([595.28,841.89]),y=755;page.drawText('Fillable form',{x:40,y:790,size:22,font});for(let i=0;i<names.length;i++){if(y<85){page=d.addPage([595.28,841.89]);y=755;}page.drawText(names[i],{x:40,y,size:12,font,color:rgb(.14,.12,.25)});const fieldName=names[i].replace(/\./g,' ')+' ['+(i+1)+']';const field=form.createTextField(fieldName);field.addToPage(page,{x:40,y:y-40,width:515,height:28,borderWidth:1,borderColor:rgb(.6,.55,.75)});y-=85;}form.updateFieldAppearances(font);return d;}
+
+/** Remove only the requested reachable PDF structures; this is not secure redaction. */
+export function cleanupPDF(doc:PDFDocument,kind:'remove-bookmarks'|'remove-links'|'remove-attachments'){
+ let removed=0;
+ if(kind==='remove-bookmarks'){
+  if(doc.catalog.has(PDFName.of('Outlines'))){doc.catalog.delete(PDFName.of('Outlines'));removed++;}
+  if(doc.catalog.get(PDFName.of('PageMode'))?.toString()==='/UseOutlines')doc.catalog.delete(PDFName.of('PageMode'));
+  return removed;
+ }
+ const stripAssociated=(dict:PDFDict)=>{if(dict.has(PDFName.of('AF'))){dict.delete(PDFName.of('AF'));removed++;}};
+ if(kind==='remove-attachments'){
+  const names=doc.catalog.lookupMaybe(PDFName.of('Names'),PDFDict);
+  if(names?.has(PDFName.of('EmbeddedFiles'))){names.delete(PDFName.of('EmbeddedFiles'));removed++;}
+  for(const [,object] of doc.context.enumerateIndirectObjects())if(object instanceof PDFDict)stripAssociated(object);
+  stripAssociated(doc.catalog);
+ }
+ for(const page of doc.getPages()){
+  if(kind==='remove-attachments')stripAssociated(page.node);
+  const annots=page.node.lookupMaybe(PDFName.of('Annots'),PDFArray);if(!annots)continue;
+  for(let i=annots.size()-1;i>=0;i--){const entry=annots.lookup(i,PDFDict);
+   const subtype=entry.get(PDFName.of('Subtype'))?.toString();
+   if(subtype===(kind==='remove-links'?'/Link':'/FileAttachment')){annots.remove(i);removed++;}
+  }
+ }
+ return removed;
+}

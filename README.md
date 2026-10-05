@@ -9,9 +9,9 @@ Free online PDF tools in a shared document workspace. Core tools require no acco
 - **New brand, Page Buddy (v5):** a friendly soft-3D page with a folded-corner tuft and a simple face, with an Outfit Bold lowercase "pdf studio" wordmark converted to shapes. Light and dark lockups in the header swap with the theme; favicon (SVG + ICO), Apple touch, PWA and maskable icons, footer, dashboard and social images all use it. Full kit and rules: [docs/BRAND-V5.md](docs/BRAND-V5.md).
 - **Homepage mascot animation:** Buddy drops in with a squash-and-bounce, the fold pops, eyes open and the smile draws (about 1.4 s, once). He then floats and blinks, his eyes follow a mouse pointer, and a tap or a file dragged onto the page makes him hop. Reduced-motion users see the still logo. Code: `components/buddy-hero.tsx`.
 - **Slow light/dark switch:** the theme button cross-fades the whole page over 700 ms (View Transitions where supported, colour easing elsewhere, instant with reduced motion). The sun/moon icon turns as it swaps. Speed: `--theme-fade` in `app/studio-brand.css` and `FADE_MS` in `components/theme-toggle.tsx`.
-- **All-tools menu:** hover Tools on desktop or click/tap it to reveal all 57 tools grouped by task, each with a meaningful icon and a colored category tile. Search, keyboard disclosure and Escape dismissal are supported.
+- **All-tools menu:** hover Tools on desktop or click/tap it to reveal all 61 tools grouped by task, each with a meaningful icon and a colored category tile. Search, keyboard disclosure and Escape dismissal are supported.
 - **Install awareness:** hides install actions in the installed app, after confirmed installs, and when supported browser APIs report this PWA installed. A fresh installable-browser event resets the remembered state after uninstall. Detection from Safari/unsupported browser tabs is limited.
-- **Focused homepage:** six popular tools, searchable task categories and an explicit “Browse all 57 tools” action. Compact top navigation replaces the crowded sidebar and repeated shortcuts.
+- **Focused homepage:** six popular tools, searchable task categories and an explicit “Browse all 61 tools” action. Compact top navigation replaces the crowded sidebar and repeated shortcuts.
 - **Full-width document workspace:** existing-text editing gives most of the screen to the actual PDF, with a narrow contextual editing panel. Mobile shows the page first and editing controls below.
 - **Existing PDF text:** select a supported original text object, replace it, fit longer replacements into its area or preserve its size, and check the real PDF preview. Undo/redo and page selection are included.
 - **Keep text edits:** commit the edited PDF into the shared workspace before switching tools. Navigation blocks accidental loss of uncommitted edits; explicit discard is available.
@@ -29,9 +29,13 @@ Every current tool is listed below. “Available” does not mean every PDF is s
 | Pages | Add bookmarks | One bookmark per line: page number followed by its title. Replaces the exported outline. |
 | Pages | Split pages in half | Uses CropBox boundaries; content outside each visible half is hidden, not securely removed. Rotations are retained. |
 | Pages | Reading layout preference | Sets a PDF viewer preference. Some readers ignore it. |
+| Convert | PDF to WebP | Rasterized page images in ZIP; browser WebP support required. |
+| Pages | Remove bookmarks | Removes the outline on the original single PDF, keeping content and links. |
+| Privacy | Remove embedded files | Removes reachable attachment entries and references; not secure sanitization of old bytes. |
+| Privacy | Remove PDF links | Removes Link annotations, preserving comments, form widgets and visible URL text. |
 | Privacy | Remove annotations | Works on the original single PDF; preserves form widgets. Export other workspace changes first. |
 | Edit & sign | Create fillable form | Creates English text fields on new A4 pages. This does not add arbitrary field types to an existing PDF. |
-| Pages | Merge PDFs | Bring your documents together. |
+| Pages | Merge PDFs | Export appears after two PDFs are added. Fillable form fields are not preserved; fill and flatten forms before merging. |
 | Pages | Organize pages | Reorder, rotate and remove pages. |
 | Pages | Split PDF | Extract the pages you need. |
 | Pages | Split every page | One PDF per page, in a ZIP. |
@@ -281,11 +285,11 @@ Spreadsheet/CSV results show extracted row count, pages containing selectable te
 - **Comparison pages** at `/compare/ilovepdf-alternative`, `/compare/smallpdf-alternative`, `/compare/sejda-alternative`, `/compare/adobe-acrobat-alternative`. Dated (checked 4 October 2026), sourced, and each says when the other product is the better choice. Data: `lib/comparisons.ts`; re-check the sources before changing the date.
 - **Homepage title:** "PDF Studio: Free PDF Editor & Tools, No Watermark, No Upload".
 - **Buddy expressions:** sleepy on the empty My files screen, cheering on "Your file is ready", worried on errors.
-- Sitemap generation includes `/guides` and `/compare/*`. Checks updated for 57 tools and 67 tool/guide routes.
+- Sitemap generation includes `/guides` and `/compare/*`. Checks updated for 61 tools and 71 tool/guide routes.
 
 Integration verification: the uploaded package was reviewed against the current main branch. Corrected upfront caps and batch claims in comparisons, clarified Adobe India terms and scanned-CV editing limitations, added a pause control for ongoing Buddy motion, hardened theme-transition error handling, and corrected stale test counts. Previous upload-recovery, privacy and navigation fixes are preserved. Real-phone camera behavior and live deployment remain unverified.
 
-Validation: 49 fixture-based processing workflows and 33 additional correctness/boundary/history checks passed, including Scan to PDF export. Native-text edit/save/reopen and signature embedding passed, as did rejection recovery, browser-link policies, analytics and owner access tests. Server-rendered SEO tests cover 67 tool/guide routes; the new guides/comparison check verifies all four comparisons and their internal destinations. These are local automated checks, not live click, OCR or real-device results.
+Validation: 49 fixture-based processing workflows and 33 additional correctness/boundary/history checks passed, including Scan to PDF export. Native-text edit/save/reopen and signature embedding passed, as did rejection recovery, browser-link policies, analytics and owner access tests. Server-rendered SEO tests cover 71 tool/guide routes; the new guides/comparison check verifies all four comparisons and their internal destinations. These are local automated checks, not live click, OCR or real-device results.
 
 ### Refreshed design and sliding hover highlight (October 4, 2026)
 
@@ -392,3 +396,6 @@ Export opens a full-screen result with Download first, focus management, optiona
 
 
 Download dialog fix: exported results use a dedicated full-screen dialog layout with zero viewport offsets and no centered-dialog translations. Download remains the first focused action. `node checks/verify-download-layout.mjs` verifies the layout contract and preserves normal dialog centering. Lint, TypeScript and the production build passed; live browser positioning after Cloudflare deployment remains unverified.
+
+
+October 5 update: 61 catalogue tools (including inspection and reader utilities, not 61 PDF editing engines). Homepage keyboard search shortcut remains available without a visible badge. Privacy proof opens on hover, focus or tap. Merge export requires at least two input files. Result buttons have bounded height; limits remain visible only after rejected validation. Source comparison: docs/IHATEPDF_REVIEW.md.

@@ -22,7 +22,7 @@ console.log('PASS: actual history handler preserves anchors, restores landing to
 
 const routeEffect=source.match(/useEffect\(\(\)=>\{\n      if\(landingTool.current===initialTool\)return;([\s\S]*?)\n    \},\[initialTool,navigate\]\);/);
 assert.ok(routeEffect,'route changes synchronize the retained workspace');
-const toolIds=[...((await readFile('lib/tools.ts','utf8')).matchAll(/^\['([^']+)'/gm))].map(m=>m[1]);assert.equal(toolIds.length,57);
+const toolIds=[...((await readFile('lib/tools.ts','utf8')).matchAll(/^\['([^']+)'/gm))].map(m=>m[1]);assert.equal(toolIds.length,61);
 for(const initialTool of [...toolIds,'home']){
  const calls=[],callbacks=[],landingTool={current:'previous-tool'};
  const cleanup=vm.runInNewContext(`(()=>{if(landingTool.current===initialTool)return;${routeEffect[1]}})()`,{initialTool,landingTool,queueMicrotask:fn=>callbacks.push(fn),navigate:(...args)=>calls.push(args)});

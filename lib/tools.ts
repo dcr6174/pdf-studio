@@ -1,12 +1,16 @@
 export const groups = ['All tools','Pages','Edit & sign','Convert','Privacy','My files'];
 export type Tool = {id:string;name:string;description:string;group:string;icon:string;note?:string};
 export const tools:Tool[] = [
+['webp','PDF to WebP','Export lightweight page images in a ZIP.','Convert','image','Rendered page images, not editable text. Requires browser WebP encoding support.'],
+['remove-bookmarks','Remove bookmarks','Remove the document navigation outline.','Pages','book','Original single PDF only. Page content and links remain; removing navigation does not remove sensitive text.'],
+['remove-attachments','Remove embedded files','Remove reachable embedded file attachments.','Privacy','shield','Removes attachment name trees, associated-file references and file-attachment annotations. Not complete sanitization; unreachable historical bytes may remain.'],
+['remove-links','Remove PDF links','Remove clickable page link annotations.','Privacy','shield','Keeps visible text, comments and form widgets. Text that looks like a URL remains visible. Original single PDF only.'],
 ['bookmarks','Add bookmarks','Create a clickable document outline.','Pages','book','One bookmark per line: page number followed by its title. Replaces the exported outline.'],
 ['halve','Split pages in half','Separate left and right halves of each page.','Pages','scissors','Uses CropBox boundaries; content outside each visible half is hidden, not securely removed. Rotations are retained.'],
 ['viewer','Reading layout preference','Choose single-page or two-column viewing.','Pages','book','Sets a PDF viewer preference. Some readers ignore it.'],
 ['remove-annotations','Remove annotations','Remove comments, highlights, links and stamps.','Privacy','shield','Works on the original single PDF; preserves form widgets. Export other workspace changes first.'],
 ['create-form','Create fillable form','Turn field labels into a new fillable PDF.','Edit & sign','edit','Creates English text fields on new A4 pages. This does not add arbitrary field types to an existing PDF.'],
-['merge','Merge PDFs','Bring your documents together.','Pages','merge'],
+['merge','Merge PDFs','Bring your documents together.','Pages','merge','Fillable form fields are not preserved by page copying. Fill and flatten forms first, then merge.'],
 ['organize','Organize pages','Reorder, rotate and remove pages.','Pages','grid'],
 ['split','Split PDF','Extract the pages you need.','Pages','scissors'],
 ['split-all','Split every page','One PDF per page, in a ZIP.','Pages','scissors'],

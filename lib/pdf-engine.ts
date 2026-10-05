@@ -1,4 +1,4 @@
-import {addBookmarks,removeAnnotations,halvePages,createForm} from './extra-pdf';
+import {addBookmarks,cleanupPDF,removeAnnotations,halvePages,createForm} from './extra-pdf';
 import {replaceExistingText} from './native-text';
 import { PDFDocument, StandardFonts, rgb, degrees, PDFTextField, PDFCheckBox, PDFDropdown, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray } from 'pdf-lib';
 import JSZip from 'jszip';
@@ -186,8 +186,15 @@ async function plainPDF(text: string, markdown = false) { const { jsPDF } = awai
 export async function processPDF(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number) => void, signal?:AbortSignal): Promise<Output> {
     signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
     let first = files[0];
+    if(id==='merge'&&files.length<2)throw new Error('Add at least two PDF files to merge.');
     const unchanged = files.length===1 && !marks.length && items.length===first.pages && items.every((p,i)=>p.fileId===first.id&&p.index===i&&p.rotation===0);
     if(unchanged&&(['organize','edit','sign','merge'].includes(id)||(id==='form'&&!o.flattenForm&&!Object.keys(o.fields).length))){progress(100);return result(first.bytes,first.name,undefined,'No changes: downloaded the original file without rebuilding it.');}
+    if(['remove-bookmarks','remove-links','remove-attachments'].includes(id)){
+      if(!unchanged)throw new Error('Use the original single PDF for this cleanup. Export other workspace changes first.');
+      const d=await PDFDocument.load(first.bytes,{updateMetadata:false});
+      const count=cleanupPDF(d,id as 'remove-bookmarks'|'remove-links'|'remove-attachments');progress(100);
+      return result(count?await d.save():first.bytes,first.name.replace(/\.pdf$/i,'')+'-'+id+'.pdf',undefined,count?`${count} navigation or attachment structures removed. This is not secure redaction.`:'Nothing to remove: original bytes retained.');
+    }
     if(id==='create-form'){const d=await createForm(o.text);return result(await d.save(),'fillable-form.pdf');}
     if(id==='remove-annotations'){if(files.length!==1||marks.length||items.length!==first.pages||items.some((p,i)=>p.index!==i||p.rotation))throw new Error('Remove annotations on the original single PDF. Export other workspace changes first.');const d=await PDFDocument.load(first.bytes);const count=removeAnnotations(d);return result(await d.save(),'pdf-studio-clean-annotations.pdf',undefined,`${count} annotations removed. Form widgets were kept.`);}
     if(['text','word','html','epub','csv','xlsx','audio','privacy','encrypt'].includes(id)&&items.length){const d=await assemble(files,items,signal);await applyMarks(d,items,marks,signal);const bytes=await d.save();first={...first,bytes,doc:d,pages:d.getPageCount(),size:bytes.length};}
@@ -339,7 +346,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
         return result(await d.save(), `${filename}-filled.pdf`);
     }
     if(id==='compress'&&o.quality==='compact'){progress(90);const baseline=unchanged?first.bytes:await out.save();const compact=unchanged?await PDFDocument.load(first.bytes,{updateMetadata:false}):out;const bytes=await compact.save({useObjectStreams:true});signal?.throwIfAborted();const smaller=bytes.length<baseline.length;return result(smaller?bytes:baseline,`${filename}-compact.pdf`,undefined,smaller?`Reduced from ${baseline.length} to ${bytes.length} bytes. Text and links retained.`:'No size reduction: kept the source unchanged. Try an image preset only if losing searchable text, links and forms is acceptable.');}
-    if (['jpg', 'png', 'compress', 'flatten', 'redact', 'grayscale', 'invert', 'ocr', 'pptx'].includes(id)) {
+    if (['jpg', 'png', 'webp', 'compress', 'flatten', 'redact', 'grayscale', 'invert', 'ocr', 'pptx'].includes(id)) {
         const source = id==='compress'&&unchanged?first.bytes:await out.save();
         const raster = await PDFDocument.create();
         const z = new JSZip();
@@ -357,7 +364,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
             const font = id === 'ocr' ? await raster.embedFont(StandardFonts.Helvetica) : undefined;
             for (let i = 0; i < order.length; i++) {
                 signal?.throwIfAborted();await new Promise(resolve=>setTimeout(resolve,0));
-                const scale = id === 'compress' ? (o.quality === 'small' ? 1 : o.quality === 'balanced' ? 1.5 : 2) : id === 'jpg' || id === 'png' ? Number(o.quality) || 2 : 1.5;
+                const scale = id === 'compress' ? (o.quality === 'small' ? 1 : o.quality === 'balanced' ? 1.5 : 2) : ['jpg','png','webp'].includes(id) ? Number(o.quality) || 2 : 1.5;
                 const c = await render(source, i, scale,undefined,0,signal);
                 const ctx = c.getContext('2d')!;
                 if (id === 'redact') {
@@ -378,8 +385,9 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
                     }
                     ctx.putImageData(px, 0, 0);
                 }
-                const jpg = c.toDataURL(id === 'png' ? 'image/png' : 'image/jpeg', id === 'compress' ? (o.quality === 'small' ? .45 : .72) : .92);
-                if (id === 'jpg' || id === 'png') {
+                const jpg = c.toDataURL(id === 'png' ? 'image/png' : id==='webp'?'image/webp':'image/jpeg', id === 'compress' ? (o.quality === 'small' ? .45 : .72) : .92);
+                if (['jpg','png','webp'].includes(id)) {
+                    if(id==='webp'&&!jpg.startsWith('data:image/webp'))throw new Error('This browser cannot encode WebP. Choose PDF to PNG or JPG instead.');
                     z.file(`page-${i + 1}.${id}`, jpg.split(',')[1], { base64: true });
                 }
                 else if (ppt) {
@@ -410,7 +418,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
                 c.height = 0;
                 progress(10 + Math.round((i + 1) / order.length * 85));
             }
-            if (id === 'jpg' || id === 'png')
+            if (['jpg','png','webp'].includes(id))
                 return { blob: await z.generateAsync({ type: 'blob' }), name: `${filename}-${id}.zip` };
             if (ppt)
                 return { blob: await ppt.write({ outputType: 'blob' }) as Blob, name: `${filename}.pptx` };

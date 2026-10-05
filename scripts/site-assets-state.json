@@ -1,11 +1,27 @@
 {
   "/": {
-    "hash": "0bd41d6ce43732b0ee15a2140e026d70d7a55674176dd6e59835225cc7ca08c6",
+    "hash": "3081c17935321bfe9cca0846fb05aaab56158005f0aa69807310121ad896cfda",
     "lastmod": "2026-10-05"
   },
   "/privacy": {
     "hash": "a7af35a0bb7ec57be54210aec26dc5f7ea9c3b5092965d16959d12446fa87c26",
     "lastmod": "2026-10-04"
+  },
+  "/tools/pdf-to-webp": {
+    "hash": "58c7362681a19e55c76fad721c15dc1f176ee46c4098212912626813dcb85965",
+    "lastmod": "2026-10-05"
+  },
+  "/tools/remove-bookmarks": {
+    "hash": "9e0d45b9e41fd090d1868d8abc63a313e4c644b712b858c29ad1a41d98c4e55f",
+    "lastmod": "2026-10-05"
+  },
+  "/tools/remove-embedded-files": {
+    "hash": "1fe8cd030c6ef3d6c6ac7b7b05f23bf36c5ea9475d875436a788c3effd93ba79",
+    "lastmod": "2026-10-05"
+  },
+  "/tools/remove-pdf-links": {
+    "hash": "d75f26777aa6237ce0adb2ad7b59152d51647b266daa56b7d41786221f21f173",
+    "lastmod": "2026-10-05"
   },
   "/tools/add-pdf-bookmarks": {
     "hash": "d560da2476c4e1f4ce52243e89767714637186c06c8a9006ab91488560a69786",
@@ -28,8 +44,8 @@
     "lastmod": "2026-10-04"
   },
   "/tools/merge-pdf": {
-    "hash": "92dfd4abab16e303f7708b6bcd39710fd7bfbefbdcc601a4b12982574112e7ae",
-    "lastmod": "2026-10-04"
+    "hash": "ce76977b4fad3617d01d96d33de1354a23e3b3cbafe43616645bad3d0756c86d",
+    "lastmod": "2026-10-05"
   },
   "/tools/organize-pdf": {
     "hash": "aaa1a2f52b714e2126f053b09b97ab5cc1497e5730b42453abf1f5e5f5060670",
@@ -280,8 +296,8 @@
     "lastmod": "2026-10-05"
   },
   "/guides": {
-    "hash": "db519d9919d28d2bc741d7ae8471b4194338a338ba12722c952e4f05468fead0",
-    "lastmod": "2026-10-04"
+    "hash": "02498425916fa8330a4a962b3ae7f058fdc6a37f77c0360c6089002c9c48ab2d",
+    "lastmod": "2026-10-05"
   },
   "/compare/ilovepdf-alternative": {
     "hash": "f670425e44fcf70b8d9612f79dcd3e77c600cf9ed91a78a33ce8c0b8af6c5641",
