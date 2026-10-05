@@ -1,4 +1,5 @@
-import {Coffee} from 'lucide-react';
+import {HeartHandshake} from 'lucide-react';
 export function SupportLink({success=false}:{success?:boolean}){
- return <a className="support-link" href="https://buymeacoffee.com/dcr6174" target="_blank" rel="noopener noreferrer" aria-label="Buy me a coffee, optional support, opens in a new tab"><Coffee size={18} aria-hidden="true"/><span>{success?'Happy with the result? Buy me a coffee':'Buy me a coffee'}</span></a>;
+ const label=success?'Donate — optional support after your result':'Donate — optional support';
+ return <a className="support-link" href="https://buymeacoffee.com/dcr6174" target="_blank" rel="noopener noreferrer" aria-label={label+', opens in a new tab'} title={label} style={{minWidth:44,justifyContent:'center'}}><HeartHandshake size={20} aria-hidden="true"/></a>;
 }
