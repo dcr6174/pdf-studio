@@ -11,7 +11,7 @@ assert.equal((html.match(/<h1>/g)||[]).length,1);
 assert.ok(html.includes('Free PDF tools:'));
 assert.ok(!html.includes('Drop your PDF here'),'home has no upload invitation');assert.ok(!html.includes('hero-upload'),'home has no upload button');
 assert.ok(html.includes('Choose your tool')); 
-assert.ok(html.includes('Browse all 61 tools'));
+assert.ok(html.includes('Browse 60+ tools'));
 assert.equal((html.match(/class="tool-card /g)||[]).length,6,'initial popular catalogue is focused');
 assert.equal(new Set([...html.matchAll(/href="(\/tools\/[^"]+)"/g)].map(m=>m[1])).size,71,'all catalogue and search guides are crawlable before hydration');
 assert.ok(html.includes('href="/privacy"')&&html.includes('href="/about"'));
@@ -25,3 +25,5 @@ assert.ok(readme.includes('Fit mode can shrink text'));
 console.log('PASS: initial homepage SSR, one H1, six popular tools, tool-first entry without homepage upload, all 71 crawlable tool/search/export guide links, FAQ, no sidebar and README coverage of all 61 tools.');
 
 assert.ok(!/Actual processing limits|161\.3 MB|50 MB|400 pages|22 megapixels|20 files/.test(html),'no upfront limit table or numbers');
+
+assert.ok(html.includes('60+ free tools')&&html.includes('Search 60+ PDF tools'));assert.ok(!html.includes('61 free tools')&&!html.includes('Browse all 61 tools'));
