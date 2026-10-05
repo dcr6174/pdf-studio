@@ -1,3 +1,4 @@
+import {flattenFormSafely,hasFormWidgets} from './form-safe';
 import {optimizeJPEGImages} from './optimize-jpeg';
 import {decodePhoto,normalizeCameraFile} from './mobile-image';
 import {addBookmarks,cleanupPDF,removeAnnotations,halvePages,createForm} from './extra-pdf';
@@ -13,6 +14,7 @@ export type Loaded = {
     pages: number;
     doc?: PDFDocument;
     image?: string;
+    readerOnly?:boolean;
 };
 export type PageItem = {
     id: string;
@@ -31,6 +33,7 @@ export type Mark = {
     text?: string;
     url?: string;
     image?: string;
+    readerOnly?:boolean;
     color: string;
     fontSize: number;
     underline?: boolean;
@@ -56,6 +59,8 @@ export type Options = {
     columns: string;
     fields: Record<string, string | boolean>;
     recipe?:string;
+    workflowSteps?:string[];
+    templateFields?:import('./template-document').TemplateField[];
     ocrLanguage?:string;
     flattenForm?:boolean;
     footer?:string;
@@ -68,7 +73,7 @@ export type Output = {
 let pdfjsPromise: Promise<typeof import('pdfjs-dist')> | undefined;
 export async function pdfjs() { if (!pdfjsPromise)
     pdfjsPromise = import('pdfjs-dist').then(m => { m.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'; return m; }); return pdfjsPromise; }
-export async function renderer(bytes: Uint8Array, password?: string) { return (await pdfjs()).getDocument({ data: bytes.slice(), password, cMapUrl: '/cmaps/', cMapPacked: true, standardFontDataUrl: '/standard_fonts/', isEvalSupported: false }).promise; }
+export async function renderer(bytes: Uint8Array, password?: string) { const task=(await pdfjs()).getDocument({ data: bytes.slice(), password, cMapUrl: '/cmaps/', cMapPacked: true, standardFontDataUrl: '/standard_fonts/', isEvalSupported: false });try{return await task.promise;}catch(e){try{await task.destroy();}catch{}throw e;} }
 async function renderPage(bytes: Uint8Array, index: number, scale = 1, password?: string, rotation=0, signal?:AbortSignal) { signal?.throwIfAborted(); const d = await renderer(bytes, password); try {
     const p = await d.getPage(index + 1);
     const v = p.getViewport({ scale, rotation:(p.rotate+rotation)%360 });
@@ -117,9 +122,9 @@ export async function textPages(bytes: Uint8Array, password?: string) { const d 
 finally {
     await d.destroy();
 } }
-export async function loadFile(file: File): Promise<Loaded> { file=normalizeCameraFile(file); const bytes = new Uint8Array(await file.arrayBuffer()); const base = { id: crypto.randomUUID(), name: file.name, bytes, size: file.size, pages: 0 }; if (/\.pdf$/i.test(file.name)) {
+export async function loadFile(file: File,allowEncryptedReader=false): Promise<Loaded> { file=normalizeCameraFile(file); const bytes = new Uint8Array(await file.arrayBuffer()); const base = { id: crypto.randomUUID(), name: file.name, bytes, size: file.size, pages: 0 }; if (/\.pdf$/i.test(file.name)) {
     if(!new TextDecoder().decode(bytes.slice(0,1024)).includes('%PDF-'))throw new Error('This file is not a PDF. Choose a valid PDF document.');
-    let doc:PDFDocument;try{doc=await PDFDocument.load(bytes,{updateMetadata:false});}catch(e){if(String(e).toLowerCase().includes('encrypt'))throw new Error('This PDF is password protected. Use Remove password with a password you know, then continue editing.');throw new Error('This PDF could not be read. It may be damaged. Try a readable copy or another PDF reader.');}
+    let doc:PDFDocument;try{doc=await PDFDocument.load(bytes,{updateMetadata:false});}catch(e){if(String(e).toLowerCase().includes('encrypt')&&allowEncryptedReader)return {...base,readerOnly:true};if(String(e).toLowerCase().includes('encrypt'))throw new Error('This PDF is password protected. Use Remove password with a password you know, then continue editing.');throw new Error('This PDF could not be read. It may be damaged. Try a readable copy or another PDF reader.');}
     return { ...base, doc, pages: doc.getPageCount() };
 } if (/\.(png|jpe?g|webp)$/i.test(file.name)) {
     // PNG dimensions can be checked before decoding; all formats are checked before canvas allocation.
@@ -151,7 +156,7 @@ export function ranges(value: string, count: number) { if (!value.trim())
 } return [...new Set(out)]; }
 function blob(bytes: Uint8Array | string, type = 'application/pdf') { return new Blob([typeof bytes === 'string' ? bytes : bytes.slice().buffer as ArrayBuffer], { type }); }
 const result = (b: Uint8Array | string, name: string, type?: string, report?: string): Output => ({ blob: blob(b, type), name, report });
-export async function assemble(files: Loaded[], items: PageItem[], signal?:AbortSignal, flattenForms=false) { if(files.length===1&&!files[0].image&&items.length===files[0].pages&&items.every((p,i)=>p.fileId===files[0].id&&p.index===i)){const d=await PDFDocument.load(files[0].bytes,{updateMetadata:false});for(const item of items){signal?.throwIfAborted();const p=d.getPage(item.index);p.setRotation(degrees((p.getRotation().angle+item.rotation)%360));}return d;} const sources=new Map<string,PDFDocument>();for(const f of files){if(f.image)continue;const src=await PDFDocument.load(f.bytes,{updateMetadata:false});if(src.getForm().getFields().length){if(!flattenForms)throw new Error('This PDF contains fillable fields. To merge safely, choose “Make form fields read-only before merging”, or fill and flatten it first. Your originals are unchanged.');try{src.getForm().flatten();}catch{throw new Error('These form appearances could not be flattened safely. Fill and save the PDF in its original form editor, then try again.');}}sources.set(f.id,src);}const out = await PDFDocument.create(); for (const item of items) {
+export async function assemble(files: Loaded[], items: PageItem[], signal?:AbortSignal, flattenForms=false) { if(files.length===1&&!files[0].image&&items.length===files[0].pages&&items.every((p,i)=>p.fileId===files[0].id&&p.index===i)){const d=await PDFDocument.load(files[0].bytes,{updateMetadata:false});for(const item of items){signal?.throwIfAborted();const p=d.getPage(item.index);p.setRotation(degrees((p.getRotation().angle+item.rotation)%360));}return d;} const sources=new Map<string,PDFDocument>();for(const f of files){if(f.image)continue;const src=await PDFDocument.load(f.bytes,{updateMetadata:false});if(src.getForm().getFields().length||hasFormWidgets(src)){if(!flattenForms)throw new Error('This PDF contains fillable fields. To merge safely, choose “Make form fields read-only before merging”, or fill and flatten it first. Your originals are unchanged.');try{flattenFormSafely(src);}catch{throw new Error('These form appearances could not be flattened safely. Fill and save the PDF in its original form editor, then try again.');}}sources.set(f.id,src);}const out = await PDFDocument.create(); for (const item of items) {
     signal?.throwIfAborted();await new Promise(resolve=>setTimeout(resolve,0));
     const f = files.find(f => f.id === item.fileId);
     if (!f)
@@ -191,7 +196,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
     signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
     let first = files[0];
     if(id==='workflow'){
-      const steps=o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'?['clean','compress']:['merge','compress'];let currentFiles=files,currentPages=items,currentMarks=marks;let output:Output|undefined;const reports:string[]=[];for(let i=0;i<steps.length;i++){signal?.throwIfAborted();output=await processPDF(steps[i],currentFiles,currentPages,currentMarks,{...o,quality:'compact'},n=>progress(Math.round((i*100+n)/steps.length)),signal);if(output.report)reports.push(output.report);const bytes=new Uint8Array(await output.blob.arrayBuffer());const doc=await PDFDocument.load(bytes,{updateMetadata:false});const file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];}return {...output!,report:`Completed: ${steps.join(' → ')}. Original workspace retained. ${reports.join(' ')}`};
+      const steps=o.recipe==='custom'?(o.workflowSteps??['merge','compress']):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'?['clean','compress']:['merge','compress'];if(!steps.length)throw new Error('Add at least one workflow step.');if(steps.length>8)throw new Error('This workflow supports up to 8 steps. Remove extra steps and retry.');if(steps.some(s=>!['merge','rotate','reverse','clean','compress'].includes(s)))throw new Error('This workflow includes an unsupported step. Choose a listed operation.');let currentFiles=files,currentPages=items,currentMarks=marks;let output:Output|undefined;const reports:string[]=[];for(let i=0;i<steps.length;i++){signal?.throwIfAborted();output=await processPDF(steps[i],currentFiles,currentPages,currentMarks,{...o,quality:'compact',angle:'90'},n=>progress(Math.round((i*100+n)/steps.length)),signal);if(output.report)reports.push(output.report);const bytes=new Uint8Array(await output.blob.arrayBuffer());const doc=await PDFDocument.load(bytes,{updateMetadata:false});const file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];}return {...output!,report:`Completed: ${steps.join(' → ')}. Original workspace retained. ${reports.join(' ')}`};
     }
     if(id==='merge'&&files.length<2)throw new Error('Add at least two PDF files to merge.');
     const unchanged = files.length===1 && !marks.length && items.length===first.pages && items.every((p,i)=>p.fileId===first.id&&p.index===i&&p.rotation===0);
@@ -356,7 +361,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
             else if (f instanceof PDFDropdown)
                 f.select(String(val));
         }
-        if(o.flattenForm)form.flatten();
+        if(o.flattenForm)flattenFormSafely(d);
         return result(await d.save(), `${filename}-filled.pdf`);
     }
     if(id==='compress'&&o.quality==='images'){const source=unchanged?first.bytes:await out.save();const d=await PDFDocument.load(source,{updateMetadata:false});const changed=await optimizeJPEGImages(d,signal);progress(95);const bytes=changed?await d.save({useObjectStreams:true}):source;return result(bytes.length<source.length?bytes:source,`${filename}-images-optimized.pdf`,undefined,bytes.length<source.length?`Optimized ${changed} supported RGB JPEG images. Text, links and form structure retained. JPEG quality is reduced; inspect small image details.`:'No smaller result: original source retained. Only unmasked RGB JPEG streams are supported by this mode.');}

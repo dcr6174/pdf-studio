@@ -1,10 +1,10 @@
 export const groups = ['All tools','Pages','Edit & sign','Convert','Privacy','My files'];
 export type Tool = {id:string;name:string;description:string;group:string;icon:string;note?:string};
 export const tools:Tool[] = [
-['workflow','PDF workflows','Run a reviewed sequence and download one result.','Pages','layers','Merge then compact, rotate then compact, or clear standard metadata then compact. Originals remain in the workspace.'],
+['workflow','PDF workflows','Run a reviewed sequence and download one result.','Pages','layers','Choose a preset or arrange supported steps in your own sequence. Originals remain in the workspace.'],
 ['split-chapters','Split by chapters','Split at supported top-level bookmark destinations.','Pages','scissors','Requires usable outline entries. Inspect resulting chapter boundaries.'],
 ['blank-check','Find possible blank pages','Review likely blank pages without deleting them.','Pages','file','Low-resolution image analysis can miss faint content. No pages are deleted automatically.'],
-['reader','PDF Reader','Read, search and navigate a PDF without changing it.','Pages','book','View one page at a time with selectable extracted text, search and document outlines. Scans need OCR for search.'],
+['reader','PDF Reader','Read, search and navigate a PDF without changing it.','Pages','book','Single-page, continuous and wide-screen two-page viewing, on-page text selection, search and document outlines. Scans need OCR for search.'],
 ['webp','PDF to WebP','Export lightweight page images in a ZIP.','Convert','image','Rendered page images, not editable text. Requires browser WebP encoding support.'],
 ['remove-bookmarks','Remove bookmarks','Remove the document navigation outline.','Pages','book','Original single PDF only. Page content and links remain; removing navigation does not remove sensitive text.'],
 ['remove-attachments','Remove embedded files','Remove reachable embedded file attachments.','Privacy','shield','Removes attachment name trees, associated-file references and file-attachment annotations. Not complete sanitization; unreachable historical bytes may remain.'],
@@ -38,7 +38,7 @@ export const tools:Tool[] = [
 ['flatten','Flatten PDF','Bake pages into a static document.','Edit & sign','layers','Rebuilds pages as images. Text is no longer selectable; links and forms are removed.'],
 ['form','Fill PDF forms','Complete existing fillable fields.','Edit & sign','edit','Supports text, checkbox and dropdown fields. Choose editable fields or flatten the completed form.'],
 ['metadata','Edit metadata','Update title, author and subject.','Edit & sign','file'],
-['scan','Scan to PDF','Photograph paper pages and save them as one PDF.','Convert','image','Take a photo can open the camera on supported phones; other browsers show a file picker. Each photo becomes a page. Crop and straighten in your camera app first; text is not recognized (run Make a PDF searchable afterwards).'],
+['scan','Scan to PDF','Photograph paper pages and save them as one PDF.','Convert','image','Take a photo can open the camera on supported phones; other browsers show a file picker. Each photo becomes a page. Review manual crop, straightening or four-corner perspective correction before applying. Text is not recognized; run OCR afterwards.'],
 ['images','Images to PDF','Turn photos into one document.','Convert','image','PNG, JPG and WebP images. Browser memory also depends on decoded images, not just file size.'],
 ['jpg','PDF to JPG','Export pages as images in a ZIP.','Convert','image'],
 ['png','PDF to PNG','Lossless page images, in a ZIP.','Convert','image'],

@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import {PDFDocument} from 'pdf-lib';
+import {pathToFileURL} from 'node:url';
+import {build} from 'vite';
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.reader-password-check',rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
+const E=await import('../.reader-password-check/engine.mjs');(await E.pdfjs()).GlobalWorkerOptions.workerSrc=pathToFileURL(process.cwd()+'/node_modules/pdfjs-dist/build/pdf.worker.mjs').href;
+const pdf=await PDFDocument.create();pdf.addPage([400,600]);const bytes=await pdf.save(),file={id:'source',name:'protected.pdf',bytes,size:bytes.length,pages:1,doc:pdf},pages=[{id:'p1',fileId:'source',index:0,rotation:0}],options={range:'',text:'',title:'',author:'',subject:'',password:'reader-fixture-password',quality:'compact',angle:'90',margin:'0',start:'1',columns:'1',fields:{}};
+const encrypted=await E.processPDF('encrypt',[file],pages,[],options,()=>{}),protectedBytes=new Uint8Array(await encrypted.blob.arrayBuffer());
+await assert.rejects(()=>E.renderer(protectedBytes),e=>e.name==='PasswordException');await assert.rejects(()=>E.renderer(protectedBytes,'wrong-password'),e=>e.name==='PasswordException');
+const opened=await E.renderer(protectedBytes,options.password);assert.equal(opened.numPages,1);await opened.destroy();
+const input=new File([protectedBytes],'protected.pdf',{type:'application/pdf'});const readerFile=await E.loadFile(input,true);assert.equal(readerFile.readerOnly,true);assert.deepEqual(readerFile.bytes,protectedBytes);await assert.rejects(()=>E.loadFile(input),/password protected/);
+console.log('PASS: missing/wrong password rejected, correct password opens; reader intake retains encrypted bytes and editing intake rejects them. UI/device prompt testing remains pending.');

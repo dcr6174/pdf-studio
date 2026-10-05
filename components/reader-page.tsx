@@ -1,23 +1,26 @@
 'use client';
-import {useEffect,useRef} from 'react';
+import {useEffect,useRef,useState} from 'react';
 import type {PDFDocumentProxy} from 'pdfjs-dist';
+import {acquireReaderRender} from '@/lib/reader-render-queue';
 import {safeLink} from '@/lib/page-geometry';
 
 /** A fresh canvas per render prevents PDF.js cancellation races on rapid zoom. */
-export function ReaderPage({document,page,width,zoom,rotation,onText,onError,onPage}:{document:PDFDocumentProxy;page:number;width:number;zoom:number;rotation:number;onText:(text:string)=>void;onError:(message:string)=>void;onPage:(page:number)=>void}){
+export function ReaderPage({document,page,width,zoom,rotation,onText,onError,onPage,fit='width',thumbnail=false}:{document:PDFDocumentProxy;page:number;width:number;zoom:number;rotation:number;fit?:'width'|'page';thumbnail?:boolean;onText:(text:string)=>void;onError:(message:string)=>void;onPage:(page:number)=>void}){
  const host=useRef<HTMLDivElement>(null);
- useEffect(()=>{let active=true;let renderTask:{cancel:()=>void;promise:Promise<unknown>}|undefined;let textLayer:{cancel:()=>void}|undefined;
- const root=host.current;if(!root)return;root.replaceChildren();
+ const [visible,setVisible]=useState(false),[reservedHeight,setReservedHeight]=useState(0);
+ useEffect(()=>{const element=host.current;if(!element)return;const observer=new IntersectionObserver(entries=>setVisible(entries[0].isIntersecting),{rootMargin:"300px"});observer.observe(element);return()=>observer.disconnect();},[]);
+ useEffect(()=>{let active=true;const cancel=new AbortController();let release:(()=>void)|undefined;let renderTask:{cancel:()=>void;promise:Promise<unknown>}|undefined;let textLayer:{cancel:()=>void}|undefined;
+ const root=host.current;if(!root||!visible)return;root.replaceChildren();
  void(async()=>{try{
- const p=await document.getPage(page);if(!active)return;
+ release=await acquireReaderRender(cancel.signal);const p=await document.getPage(page);if(!active)return;
  const angle=(p.rotate+rotation)%360,base=p.getViewport({scale:1,rotation:angle});
- const requested=Math.min(2,Math.max(.25,(width-24)/base.width))*zoom;
+ const widthScale=Math.max(.1,(width-24)/base.width);const requested=Math.min(2,fit==='page'?Math.min(widthScale,Math.max(200,window.innerHeight-200)/base.height):widthScale)*zoom;
  const scale=Math.min(requested,Math.sqrt(4000000/(base.width*base.height)));
- const view=p.getViewport({scale,rotation:angle});
+ const view=p.getViewport({scale,rotation:angle});setReservedHeight(view.height);
  const canvas=window.document.createElement('canvas');canvas.width=Math.ceil(view.width);canvas.height=Math.ceil(view.height);canvas.setAttribute('aria-label',`PDF page ${page}`);
  root.style.width=`${view.width}px`;root.style.height=`${view.height}px`;root.appendChild(canvas);
  const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Canvas is unavailable.');
- renderTask=p.render({canvasContext:ctx,viewport:view});await renderTask.promise;if(!active)return;
+ renderTask=p.render({canvasContext:ctx,viewport:view});await renderTask.promise;release();release=undefined;if(!active||thumbnail)return;
  const content=await p.getTextContent();if(!active)return;onText(content.items.map(i=>'str' in i?i.str:'').join(' '));
  const layer=window.document.createElement('div');layer.className='reader-text-layer';layer.style.setProperty('--scale-factor',String(scale));root.appendChild(layer);
  const pdfjs=await import('pdfjs-dist');if(!active)return;
@@ -30,8 +33,8 @@ export function ReaderPage({document,page,width,zoom,rotation,onText,onError,onP
  if(url){const anchor=link as HTMLAnchorElement;anchor.href=url;anchor.target='_blank';anchor.rel='noopener noreferrer';}
  else{(link as HTMLButtonElement).type='button';link.onclick=()=>{void(async()=>{try{const dest=typeof a.dest==='string'?await document.getDestination(a.dest):a.dest;if(!Array.isArray(dest))return;const n=typeof dest[0]==='number'?dest[0]:await document.getPageIndex(dest[0]);if(active)onPage(n+1);}catch{if(active)onError('This PDF link has an unsupported destination.');}})();};}root.appendChild(link);
  }
- }catch(e){if(active&&!(e instanceof Error&&e.name==='RenderingCancelledException'))onError('This page could not render. Try another page.');}})();
- return()=>{active=false;renderTask?.cancel();textLayer?.cancel();root.replaceChildren();};
- },[document,page,width,zoom,rotation,onText,onError,onPage]);
- return <div ref={host} className="reader-page-surface"/>;
+ }catch(e){if(active&&!(e instanceof Error&&e.name==='RenderingCancelledException'))onError('This page could not render. Try another page.');}finally{release?.();}})();
+ return()=>{active=false;cancel.abort();renderTask?.cancel();textLayer?.cancel();root.replaceChildren();};
+ },[document,page,width,zoom,rotation,onText,onError,onPage,visible,fit,thumbnail]);
+ return <div ref={host} className="reader-page-surface" style={{minHeight:reservedHeight||Math.max(180,width*1.3)}}/>;
 }

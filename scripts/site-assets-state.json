@@ -1,6 +1,6 @@
 {
   "/": {
-    "hash": "f952e56ffb88780f2c65dc721dc0e00cab95e60d9e219b26c52336635db61586",
+    "hash": "2d9929e6212942f294c178db78ec447ede15b18ac7ff4462f84f4254c9be0239",
     "lastmod": "2026-10-05"
   },
   "/privacy": {
@@ -8,7 +8,7 @@
     "lastmod": "2026-10-04"
   },
   "/tools/pdf-workflows": {
-    "hash": "386e4c9d04ec1c54e41e7606dd86b2d8b61ce13d77cbd4fea4cfd9e301847af3",
+    "hash": "177b2925ed486bd26977489a15cc593d32631e684c5e3d018d0337f0805faa00",
     "lastmod": "2026-10-05"
   },
   "/tools/split-by-chapters": {
@@ -20,7 +20,7 @@
     "lastmod": "2026-10-05"
   },
   "/tools/pdf-reader": {
-    "hash": "6b3a58ae08de54cf452a5a6a7aef32a458d5b0623eb0a70afdcedca4647ebdcb",
+    "hash": "1d72f3b49157eaff926b5fa140fb9de4b0cf5379204cd1379aaca0b39ce54fdf",
     "lastmod": "2026-10-05"
   },
   "/tools/pdf-to-webp": {
@@ -156,8 +156,8 @@
     "lastmod": "2026-10-04"
   },
   "/tools/scan-to-pdf": {
-    "hash": "275a38127b1d4c4772f8a3248a95da344bc9a956b3f0b3870bd26c119b0bbd71",
-    "lastmod": "2026-10-04"
+    "hash": "3101a51011d6a1c94b66785ab220f5e4951bfe4d3926caacf17518d4c5e59078",
+    "lastmod": "2026-10-05"
   },
   "/tools/images-to-pdf": {
     "hash": "cd919455daca665acb1da3cbc1c61e886e13555aee83f775fb618e4895cfd212",

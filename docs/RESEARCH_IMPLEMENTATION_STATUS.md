@@ -4,7 +4,7 @@ This tracks the full research brief; implementation is not equivalent to verific
 
 | Research request | Status / evidence | Remaining work |
 |---|---|---|
-| Form preservation / explicit flatten merge | Implemented, reopened structural tests pass | Pixel comparison, unusual field appearances and signature widgets |
+| Form preservation / explicit flatten merge | Implemented, reopened structural tests pass | Poppler equality passes for filled text/checkbox/dropdown; unusual appearances and signature widgets remain |
 | Download viewport | Existing full-screen result retained | Real mobile/desktop viewport and one-download regression |
 | Donation bottom | Implemented after result actions | Visual narrow-screen check |
 | Document-first separate layouts | Existing responsive editor and new reader mobile/desktop controls | Unified shell refactor, measured page offsets, mobile keyboard corpus |
@@ -12,13 +12,13 @@ This tracks the full research brief; implementation is not equivalent to verific
 | Ayaan evaluation | Source research complete, no native engine copied | Portable Rust/WASM proof plus independent save/reopen benchmarks |
 | Workspace continuity | Existing shared controller; reader consumes it | Breakpoint/keyboard/resume browser regression |
 | Compression no-larger output | Compact/raster no-larger guards plus supported RGB JPEG stream optimization implemented | Real browser decoder and representative visual quality benchmarks |
-| Reader | Implemented single page/search/outlines/extracted-text/position | Continuous and two-page viewing, layered selection/links, pinch, encrypted prompt, real-device tests |
+| Reader | Implemented single/continuous/spread, fit page, layered selection/links, local position/bookmarks | Thumbnails, pinch and encrypted prompt implemented; real-device tests pending |
 | Multilingual OCR | Six Latin language controls implemented | Model/output benchmarks; Indian-script font embedding and shaping |
-| Scan correction | Manual crop/straighten with explicit apply/undo | Perspective detection and physical camera validation |
+| Scan correction | Manual crop/straighten/perspective with preview, cancellation and undo | Automatic corner detection and physical camera validation |
 | Chapter split | Implemented supported top-level destinations | Representative render tests, nested outline support |
 | Blank candidates | Implemented review-only heuristic | Sensitivity benchmark; no automatic deletion |
-| Recipes | Three explicit sequences implemented over the existing processing engine; originals retained | Custom workflow builder and larger batch corpus |
-| Template builder | Not implemented | Pinned licensed dependency, authored schemas, fonts and representative export tests |
+| Recipes | Three explicit sequences implemented over the existing processing engine; originals retained | Custom ordered builder implemented; larger batch corpus pending |
+| Template builder | Basic authored A4 positioned-text templates implemented inside Create PDF | Image/table schemas, backgrounds, richer designer, representative visual/device tests |
 | Optional server conversions | Not implemented | Separate service, isolated uploads, resource policy, deployment credentials and retention validation |
 | Privacy/analytics | Existing local processing/opt-out retained | Actual unique-fixture network trace; Cloudflare beacon setting verification |
 | New guides | Added reader/chapter/blank instructions and honest FAQs | End-to-end link crawl and multilingual OCR guide expansion |
@@ -34,4 +34,13 @@ No benchmark scores, universal font compatibility or production deployment is as
 - Added safe HTTP/HTTPS/mailto links and supported internal page destinations. Unsafe URL schemes are ignored.
 - Each render owns its canvas, avoiding reuse while an earlier PDF.js render cancels. Canvas allocation is capped at four million pixels per page; zoom may therefore have limited sharpness on very large pages.
 - Unchanged-download behavior remains in the shared processing engine.
-- Continuous/spread layouts, pinch controls, encrypted-file prompting and physical-device selection/link testing remain unverified or incomplete. Native and server research proposals remain separate work, not advertised implementations.
+- Pinch, thumbnails and encrypted prompting are implemented; physical-device interaction and selection/link testing remain unverified. Native and server research proposals remain separate work, not advertised implementations.
+
+### Follow-up verification
+- Native text tests cover unsupported-glyph preflight plus actual object rewrite/save/reopen and rotated objects.
+- Scan tests verify projective corner mapping, finite interior points and crossed/degenerate corner rejection. Device/camera fidelity is not yet verified.
+- Template tests independently reopen two A4 pages and verify text, plus invalid geometry/overflow/glyph rejection.
+- Form flatten regression checks now require Poppler to render without syntax errors and compare original/export appearances pixel-for-pixel on the synthetic filled-field corpus.
+
+- Reader passwords: actual encrypted fixture verifies missing/wrong password rejection, correct-password opening, encrypted-byte preservation and editing-intake rejection. Failed PDF.js loading tasks are destroyed.
+- Reader render queue: verifies two simultaneous canvas tasks, queued progress, pending cancellation and idempotent release.

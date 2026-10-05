@@ -1,0 +1,5 @@
+'use client';
+const choices=[['merge','Merge input PDFs'],['rotate','Rotate 90° clockwise'],['reverse','Reverse page order'],['clean','Clear standard metadata'],['compress','Compact without rasterizing']];
+export function WorkflowBuilder({steps,onChange}:{steps:string[];onChange:(steps:string[])=>void}){
+ return <fieldset className="workflow-builder"><legend>Your steps, in order</legend><ol>{steps.map((step,i)=><li key={i}><label>Step {i+1}<select value={step} onChange={e=>onChange(steps.map((s,n)=>n===i?e.target.value:s))}>{choices.map(([id,label])=><option key={id} value={id}>{label}</option>)}</select></label><button disabled={i===0} onClick={()=>{const next=[...steps];[next[i-1],next[i]]=[next[i],next[i-1]];onChange(next);}} aria-label={`Move step ${i+1} up`}>Move up</button><button onClick={()=>onChange(steps.filter((_,n)=>n!==i))} aria-label={`Remove step ${i+1}`}>Remove</button></li>)}</ol><button onClick={()=>onChange([...steps,'compress'])}>Add step</button><p>Review the order before processing. Originals remain available. Clearing metadata is not secure sanitization. Fillable PDFs may require flattening before page-copy operations.</p></fieldset>;
+}

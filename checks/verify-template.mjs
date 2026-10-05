@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {build} from 'vite';
+import {PDFDocument} from 'pdf-lib';
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/template-document.ts',outDir:'.template-check',rollupOptions:{output:{entryFileNames:'template.mjs'}}}});
+const {createTemplatePDF,validateTemplate}=await import('../.template-check/template.mjs');
+const field={id:'title',text:'An authored template',x:40,y:40,width:500,height:100,size:18,page:1},font=await readFile('public/fonts/NotoSans-Regular.ttf');
+const bytes=await createTemplatePDF([field,{...field,id:'body',text:'Page two body text',size:12,page:2}],font);const reopened=await PDFDocument.load(bytes);assert.equal(reopened.getPageCount(),2);assert.equal(reopened.getPage(0).getWidth(),595.28);
+assert.throws(()=>validateTemplate([{...field,x:590}]),/outside/);
+await assert.rejects(()=>createTemplatePDF([{...field,text:'Too much content '.repeat(100),height:20}],font),/overflows/);
+await assert.rejects(()=>createTemplatePDF([{...field,text:'Unsupported 🦄'}],font),/characters/);
+const wasm=await readFile('node_modules/@embedpdf/pdfium/dist/pdfium.wasm');globalThis.fetch=async()=>new Response(wasm);
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/online-text-engine.ts',outDir:'.template-render-check',rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
+const {OnlineTextDocument,textEngine}=await import('../.template-render-check/engine.mjs');const view=new OnlineTextDocument(await textEngine(),bytes);assert.ok(view.inspect(0,1).objects.some(o=>o.text==='An authored template'));assert.ok(view.inspect(1,1).objects.some(o=>o.text==='Page two body text'));view.close();
+console.log('PASS: authored fields exported/reopened on two A4 pages with independently extracted text; invalid positions, overflow and missing glyphs rejected. Visual/device review remains necessary.');

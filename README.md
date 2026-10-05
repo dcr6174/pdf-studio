@@ -422,7 +422,7 @@ Signature controls stay in normal document flow rather than a fixed overlay. The
 
 - Optional Buy Me a Coffee appears at the bottom of export results, after all download/edit/save/report actions.
 - Form-safe assembly keeps a full single PDF's field structure. Page-copy operations reject fillable documents unless an explicit supported flattening path is chosen; Merge offers that choice. Originals are not mutated. Flattened appearance pixels still require visual verification.
-- PDF Reader (`/tools/pdf-reader`) shares the workspace: single-page canvas, fit width/zoom/view rotation, page navigation, document-wide extracted-text search, supported outlines, selectable extracted text, reading focus and optional local reading position with a forget action. Unchanged downloads retain original bytes. It does not yet provide continuous/two-page modes, pinch controls or a direct encrypted-file password prompt. Untagged extracted text can have incorrect reading order. No universal accessibility/offline guarantee.
+- PDF Reader (`/tools/pdf-reader`) shares the workspace: single-page canvas, fit width/zoom/view rotation, page navigation, document-wide extracted-text search, supported outlines, selectable extracted text, reading focus and optional local reading position with a forget action. Unchanged downloads retain original bytes. Pinch controls and encrypted-file prompting are implemented but still need physical-device UI checks. Untagged extracted text can have incorrect reading order. No universal accessibility/offline guarantee.
 - Scan offers reviewed manual edge cropping and straightening, with workspace undo. No automatic perspective detection or deskew claim. Camera decoding still needs physical Android/iOS checks.
 - Split by chapters uses supported top-level local bookmark destinations, exports ZIP files and refuses editable forms. Nested destinations do not define chapters. Output boundaries require inspection.
 - Find possible blank pages reports low-resolution visual candidates and retains every page. Small/faint content can be missed; users must inspect before removing pages.
@@ -438,9 +438,22 @@ PDF workflows offer explicit merge→compact, rotate 90°→compact and clear-st
 
 | Tool | Implementation and limits |
 | --- | --- |
-| PDF Reader | Single-page reading, extracted-text search/selection, outlines, view-only rotation and local position opt-in. Continuous mode and direct encrypted password prompt pending. |
+| PDF Reader | Single-page reading, extracted-text search/selection, outlines, view-only rotation and local position opt-in. Encrypted-file password prompt retains original encrypted bytes. |
 | Split by chapters | Supported top-level local bookmark destinations; ZIP export; editable forms require prior flattening. |
 | Find possible blank pages | Review-only low-resolution candidate report. Faint/small content may be missed. Never deletes pages automatically. |
-| PDF workflows | Three explicit browser sequences with source preservation and stage cancellation. No custom workflow builder yet. |
+| PDF workflows | Three explicit browser sequences with source preservation and stage cancellation. Ordered custom workflows support merge, rotation, reversal, metadata clearing and compacting. |
 
 Reader follow-up: PDF Reader supports selection directly on rendered text and safe external links plus supported internal page links. Scans still require OCR for text selection. Reader canvases are capped at four million pixels to limit memory use, so very large pages can lose zoom sharpness. Continuous/spread reading and encrypted-file prompting are not yet included.
+
+## Remaining-research follow-up
+
+- Reader: continuous mode renders near-visible pages and releases offscreen canvases; two-page mode falls back to one page on narrow screens. Fit page, fit width, on-page selection/links, optional local reading bookmarks and delete actions are available. Source PDFs may have poor text order or missing accessibility tags. Page thumbnails, pinch controls and direct encrypted prompting are included; device checks remain pending.
+- Existing-text editing: unavailable embedded-font characters are reported while typing and Save is disabled for them. Native rewrite, overflow rollback and Enter/Escape behavior remain. Paragraph reflow, nested-object edits and Indian-script shaping remain unsupported.
+- Scan: manual four-corner projective correction, bilinear sampling, explicit preview/apply, cancellation and workspace undo. Large correction images are downsampled for memory safety; automatic detection is not implemented. Physical camera tests remain pending.
+- Workflows: choose presets or reorder a custom sequence of merge, rotate 90°, reverse pages, clear metadata and compact without rasterizing. Unsupported and oversized sequences are rejected at processing. Sources are retained.
+- Create PDF: optional authored A4 positioned-text templates using the existing local Noto Sans font. Configure page, position, width, height and font size; field overflow and unavailable glyphs are rejected. No imported backgrounds, image/table schemas or cross-page paragraph reflow.
+- Form safety: flattening removes real widget references from page annotations, rejects unattached widgets and retains non-widget annotations. Poppler appearance checks cover filled text, checkbox and dropdown fields on two merged pages, with no syntax warnings. Signature widgets and unusual appearances remain unverified.
+
+Checks: `verify-scan-perspective.mjs`, `verify-template.mjs`, `verify-form-appearance.mjs` (requires Poppler), `verify-online-text.mjs`, and `verify-refresh-core.mjs`. These supplement browser/mobile testing; they do not establish production deployment.
+
+Protected Reader files: enter a password for local viewing; missing/wrong passwords are rejected and failed loading tasks are destroyed. The encrypted source is retained for download. Use Remove password explicitly before editing. Page thumbnails and two-finger reader zoom are included; pinch/keyboard/camera behavior still requires real-device checks. Passwords are cleared after submission and never saved to reading-position storage.
