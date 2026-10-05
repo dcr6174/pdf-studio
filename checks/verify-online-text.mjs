@@ -1,6 +1,9 @@
 import assert from 'node:assert/strict';
 import {readFile,writeFile} from 'node:fs/promises';
 import {build} from 'vite';
+import ts from 'typescript';
+const draftSource=ts.transpileModule(await readFile('lib/commit-text-draft.ts','utf8'),{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText;
+const {commitTextDraft}=await import('data:text/javascript;base64,'+Buffer.from(draftSource).toString('base64')); 
 import fontkit from '@pdf-lib/fontkit';
 import {PDFDocument,StandardFonts,degrees} from 'pdf-lib';
 await build({configFile:false,logLevel:'error',build:{ssr:'lib/online-text-engine.ts',outDir:'.text-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
@@ -20,5 +23,6 @@ const blank=await PDFDocument.create();blank.addPage();const b=new OnlineTextDoc
 const angledPDF=await PDFDocument.create(),angledFont=await angledPDF.embedFont(StandardFonts.Helvetica);angledPDF.addPage([500,700]).drawText('Original text',{x:120,y:420,size:20,font:angledFont,rotate:degrees(45)});const angled=new OnlineTextDocument(m,await angledPDF.save());const angledObject=angled.inspect(0).objects.find(o=>o.text==='Original text');
 function matrixOf(document,index){const page=m.FPDF_LoadPage(document.doc,0),buffer=m.pdfium.wasmExports.malloc(24);try{assert.ok(m.FPDFPageObj_GetMatrix(m.FPDFPage_GetObject(page,index),buffer));return Array.from(m.pdfium.HEAPF32.slice(buffer/4,buffer/4+6));}finally{m.pdfium.wasmExports.free(buffer);m.FPDF_ClosePage(page);}}
 const beforeMatrix=matrixOf(angled,angledObject.index);angled.replace(0,angledObject.index,'Original');const angledReopened=new OnlineTextDocument(m,angled.save()),afterObject=angledReopened.inspect(0).objects.find(o=>o.text==='Original');assert.ok(afterObject);assert.deepEqual(matrixOf(angledReopened,afterObject.index),beforeMatrix,'45-degree text-object transform survives exported replacement');angledReopened.close();angled.close();
+const draftBytes=await fixture(),draftDoc=new OnlineTextDocument(m,draftBytes);assert.equal(commitTextDraft(draftDoc,draftBytes),draftBytes,'switching with no draft retains exact bytes');const draftObject=draftDoc.inspect(0).objects.find(o=>o.text==='Original text');const committedDraft=commitTextDraft(draftDoc,draftBytes,{page:0,index:draftObject.index,value:'Edited text',fit:false});const draftReopened=new OnlineTextDocument(m,committedDraft);assert.ok(draftReopened.inspect(0).objects.some(o=>o.text==='Edited text'),'pending inline typing is committed before switching');draftReopened.close();draftDoc.close();
 console.log('Online native text: actual edit/save/reopen, changed raster preview, four page rotations, 45-degree text-object rotation, unaffected text, overflow rollback, fitted longer text and excessive-shrink rollback, unsupported glyphs, multiline, blank and malformed PDFs passed.');
 

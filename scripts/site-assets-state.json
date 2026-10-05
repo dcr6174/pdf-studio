@@ -1,7 +1,7 @@
 {
   "/": {
-    "hash": "e2626ae93e9b5c39c402afa2c48336261c5c1eb4d7f183de5bc94381ec5954b7",
-    "lastmod": "2026-10-04"
+    "hash": "eb91e1d7bc1a31d5eac53871c2ec8dfb43dff8a7d50dfc1cc263c67963f0000c",
+    "lastmod": "2026-10-05"
   },
   "/privacy": {
     "hash": "a7af35a0bb7ec57be54210aec26dc5f7ea9c3b5092965d16959d12446fa87c26",
@@ -274,6 +274,10 @@
   "/tools/html-to-pdf": {
     "hash": "8e223025ffe796198110df3a1135fff174e1e7d413100e430fda483df4e730a7",
     "lastmod": "2026-10-04"
+  },
+  "/tools": {
+    "hash": "7237beab2f1afcf8da65d2ab9779656e2440a4e5024f986ba05a908f71de96f1",
+    "lastmod": "2026-10-05"
   },
   "/guides": {
     "hash": "db519d9919d28d2bc741d7ae8471b4194338a338ba12722c952e4f05468fead0",
