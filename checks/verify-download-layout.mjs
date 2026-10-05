@@ -1,0 +1,11 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import ts from 'typescript';
+const source=ts.transpileModule(await readFile('lib/dialog-layout.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;
+const {dialogLayout}=await import('data:text/javascript;base64,'+Buffer.from(source).toString('base64'));
+const full=dialogLayout(true,{top:'50%',left:'50%',transform:'translate(-50%,-50%)',translate:'-50% -50%',maxWidth:'500px'});
+for(const property of ['top','left','right','bottom','inset'])assert.equal(full.style[property],0);
+assert.equal(full.style.position,'fixed');assert.equal(full.style.transform,'none');assert.equal(full.style.translate,'none');assert.equal(full.style.width,'100%');assert.equal(full.style.maxWidth,'100%');assert.equal(full.style.height,'100dvh');assert.equal(full.style.overflowY,'auto');assert.ok(!/translate|top-\[|left-\[|animate/.test(full.className),'no centered positioning or zoom animation in full screen');
+const centered=dialogLayout(false,{color:'red'});assert.ok(centered.className.includes('translate-x-[-50%]'));assert.equal(centered.style.color,'red');
+const app=await readFile('app/page.tsx','utf8');assert.ok(app.includes('<DialogContent fullscreen className="result-fullscreen"'));assert.ok(app.includes('id="download-result"'));assert.ok(app.includes("target?.focus({preventScroll:true})"));assert.ok(app.includes('!resultOpen&&<Toaster'));
+console.log('PASS: full-screen results discard centered classes and override conflicting inline coordinates/transforms, remain scrollable, retain download focus, and preserve ordinary dialog centering. Live browser positioning is unverified.');

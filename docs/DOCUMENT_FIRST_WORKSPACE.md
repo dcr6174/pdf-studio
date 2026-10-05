@@ -19,3 +19,6 @@ Full interactive browser/mobile, touch placement, virtual keyboard and camera te
 ## Preserved limits
 
 Uploads appear inside tools, not on the homepage. Input limits are explained only after rejection. No account is needed. Files/signatures remain locally processed/stored. Untouched exports preserve their bytes in the supported workflows. Existing-text editing still does not support arbitrary paragraph reflow, missing embedded glyphs, nested text or reconstructed scan editing. Appearance changes do not extend those engine capabilities.
+
+
+Download dialog fix: exported results use a dedicated full-screen dialog layout with zero viewport offsets and no centered-dialog translations. Download remains the first focused action. `node checks/verify-download-layout.mjs` verifies the layout contract and preserves normal dialog centering. Lint, TypeScript and the production build passed; live browser positioning after Cloudflare deployment remains unverified.
