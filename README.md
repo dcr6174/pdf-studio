@@ -401,3 +401,9 @@ Download dialog fix: exported results use a dedicated full-screen dialog layout 
 October 5 update: 61 catalogue tools (including inspection and reader utilities, not 61 PDF editing engines). Homepage keyboard search shortcut remains available without a visible badge. Privacy proof opens on hover, focus or tap. Merge export requires at least two input files. Result buttons have bounded height; limits remain visible only after rejected validation. Source comparison: docs/IHATEPDF_REVIEW.md.
 
 Public catalogue copy uses “60+ tools” on the homepage, search prompt, menu and directory. Exact counts remain in internal checks and filtered search results. Stirling-PDF source review and prioritized ideas: docs/STIRLING_REVIEW.md.
+
+### Homepage discoverability and revalidation
+
+`public/llms.txt` links to actual guides, tools and privacy resources. The shared JSON-LD identifies PDF Studio and its existing public contact address. Homepage instructions use an ordered list; closed tool menus and guide directories render their contents when opened. Document/image file inputs have accessible labels, and `#shelf` has a permanent target.
+
+Anonymous homepage HTML uses an ETag with private revalidation; owner/API no-store protections remain in place. This does not add document caching. Audit coverage and unresolved external/legal items are recorded in `docs/GEO_FIXES_2026-10-05.md`. No GEO score or live pass is claimed.

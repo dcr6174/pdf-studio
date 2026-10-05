@@ -1,10 +1,12 @@
+import {publicPageCache} from '../lib/public-page-cache';
 import {purgeAudience} from '../lib/audience';
 import handler from 'vinext/server/fetch-handler';
 import { publicOwnerBoundary } from '../lib/public-owner';
 
 export default {
-  fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext) {
-    return publicOwnerBoundary(request, env, clean => { const url=new URL(clean.url); if((clean.method==='GET'||clean.method==='HEAD')&&url.pathname.replace(/\/$/,'')==='/prove-it'){url.pathname='/check-it-yourself';return Promise.resolve(Response.redirect(url.toString(),301));} return handler.fetch(clean, env, ctx); });
+  async fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext) {
+    const response=await publicOwnerBoundary(request, env, clean => { const url=new URL(clean.url); if((clean.method==='GET'||clean.method==='HEAD')&&url.pathname.replace(/\/$/,'')==='/prove-it'){url.pathname='/check-it-yourself';return Promise.resolve(Response.redirect(url.toString(),301));} return handler.fetch(clean, env, ctx); });
+    return publicPageCache(request,response);
   },
   async scheduled(_event: ScheduledEvent, env: Cloudflare.Env) {
     if (!env.DB) return;

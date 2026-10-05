@@ -1,0 +1,13 @@
+# PDF Studio
+
+> Free PDF tools with on-device document processing.
+
+## Resources
+- [All tools](https://pdf-studio.in/tools): Browse supported PDF workflows.
+- [Guides](https://pdf-studio.in/guides): Instructions and capability limitations.
+- [Privacy policy](https://pdf-studio.in/privacy): Document handling and anonymous usage counting.
+- [Check it yourself](https://pdf-studio.in/check-it-yourself): Inspect browser network behavior.
+- [Contact](https://pdf-studio.in/contact): Questions and problem reports.
+
+Existing-text editing supports some text objects; scanned documents and font limitations need care.
+Offline operation is not guaranteed.
