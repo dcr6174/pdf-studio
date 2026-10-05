@@ -50,3 +50,7 @@ No benchmark scores, universal font compatibility or production deployment is as
 - Browser-local PDF generation supports A4/US Letter, font size, wrapping and automatic pages.
 - UTF-8/UTF-16 text decoding and missing-font-character rejection avoid silent corruption. Current workspace is retained if text decoding fails.
 - Indian-script shaping, paragraph editing of original PDFs and optional native/server work remain incomplete. No deployment is asserted.
+
+### Mobile and signature theme fixes
+
+Signature style samples now use a bounded transparency paper surface in both themes, without changing exported ink. Signature panels inherit readable theme colours; the popup has one scroll container and narrow-screen buttons wrap. Reader spread layout uses the same measured-width threshold as page rendering, avoiding half-width pages in a single column. Text to PDF now yields and checks cancellation within long paragraphs as well as between paragraphs. Physical camera, mobile keyboard and live deployment verification remain outstanding.

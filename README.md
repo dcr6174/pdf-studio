@@ -463,3 +463,7 @@ Protected Reader files: enter a password for local viewing; missing/wrong passwo
 Open `/tools/text-to-pdf` or `/tools/txt-to-pdf`. Type/paste text or open a `.txt` file, choose A4/US Letter and a font size, then create, inspect and download. Existing `/tools/create-pdf` links still work. Processing stays in the browser; Noto Sans is loaded from this site. UTF-8 and BOM-marked UTF-16 are supported; invalid encodings and unavailable font characters are rejected. Long text wraps across pages. Original formatting is not reconstructed; full Indian-script font coverage/shaping remains unsupported. Authored templates remain available in the same tool.
 
 Validation: `checks/verify-text-document.mjs` checks Unicode decoding, encoding rejection, page dimensions, multi-page output and rejected empty/missing-glyph input. Device/UI review remains separate.
+
+### Mobile and signature theme fixes
+
+Signature style samples now use a bounded transparency paper surface in both themes, without changing exported ink. Signature panels inherit readable theme colours; the popup has one scroll container and narrow-screen buttons wrap. Reader spread layout uses the same measured-width threshold as page rendering, avoiding half-width pages in a single column. Text to PDF now yields and checks cancellation within long paragraphs as well as between paragraphs. Physical camera, mobile keyboard and live deployment verification remain outstanding.
