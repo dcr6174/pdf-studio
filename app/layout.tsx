@@ -8,6 +8,7 @@ import "./studio-brand.css";
 import "./studio-motion.css";
 import "./studio-refresh.css";
 import "./studio-buddy.css";
+import "./tool-search.css";
 
 export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
