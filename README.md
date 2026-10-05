@@ -414,3 +414,6 @@ Camera JPG/PNG/WebP files with MIME metadata can be opened even when their filen
 Optional Buy Me a Coffee links appear in shared headers and successful-export results. Downloads remain free and primary; no donation scripts are embedded.
 
 File opening displays a local CSS document animation, with a static reduced-motion alternative. It indicates actual pending validation, without estimated percentages or external animation requests.
+
+
+Signature controls stay in normal document flow rather than a fixed overlay. The existing nine style cards and ink controls live inside the signature popup; changing name, style or ink regenerates the typed signature and discards stale asynchronous previews. Drawing, upload and camera creation remain available.
