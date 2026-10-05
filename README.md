@@ -70,7 +70,7 @@ Every current tool is listed below. “Available” does not mean every PDF is s
 | Convert | PDF to PowerPoint | Slides are page images, not editable original text or graphics. |
 | Convert | PDF to spreadsheet | Heuristic extraction. Review column alignment; scans need OCR first. |
 | Convert | PDF to CSV | Extract text rows into a CSV. |
-| Convert | Create PDF | Write a fresh document. |
+| Convert | Text to PDF | Write a fresh document. |
 | Convert | Markdown to PDF | Basic Markdown formatting; complex tables and embedded images are not supported. |
 | Convert | Word to PDF | Reflows text; original Word layout, images and styling are not preserved. Legacy .doc is not supported. |
 | Convert | Spreadsheet to PDF | Text-based conversion of the first sheet. Complex styling and charts are not preserved. |
@@ -457,3 +457,9 @@ Reader follow-up: PDF Reader supports selection directly on rendered text and sa
 Checks: `verify-scan-perspective.mjs`, `verify-template.mjs`, `verify-form-appearance.mjs` (requires Poppler), `verify-online-text.mjs`, and `verify-refresh-core.mjs`. These supplement browser/mobile testing; they do not establish production deployment.
 
 Protected Reader files: enter a password for local viewing; missing/wrong passwords are rejected and failed loading tasks are destroyed. The encrypted source is retained for download. Use Remove password explicitly before editing. Page thumbnails and two-finger reader zoom are included; pinch/keyboard/camera behavior still requires real-device checks. Passwords are cleared after submission and never saved to reading-position storage.
+
+### Text to PDF
+
+Open `/tools/text-to-pdf` or `/tools/txt-to-pdf`. Type/paste text or open a `.txt` file, choose A4/US Letter and a font size, then create, inspect and download. Existing `/tools/create-pdf` links still work. Processing stays in the browser; Noto Sans is loaded from this site. UTF-8 and BOM-marked UTF-16 are supported; invalid encodings and unavailable font characters are rejected. Long text wraps across pages. Original formatting is not reconstructed; full Indian-script font coverage/shaping remains unsupported. Authored templates remain available in the same tool.
+
+Validation: `checks/verify-text-document.mjs` checks Unicode decoding, encoding rejection, page dimensions, multi-page output and rejected empty/missing-glyph input. Device/UI review remains separate.

@@ -1,3 +1,4 @@
+import {textToPDF} from './text-document';
 import {flattenFormSafely,hasFormWidgets} from './form-safe';
 import {optimizeJPEGImages} from './optimize-jpeg';
 import {decodePhoto,normalizeCameraFile} from './mobile-image';
@@ -58,6 +59,8 @@ export type Options = {
     start: string;
     columns: string;
     fields: Record<string, string | boolean>;
+    textFontSize?:string;
+    textPageSize?:string;
     recipe?:string;
     workflowSteps?:string[];
     templateFields?:import('./template-document').TemplateField[];
@@ -207,6 +210,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
       const count=cleanupPDF(d,id as 'remove-bookmarks'|'remove-links'|'remove-attachments');progress(100);
       return result(count?await d.save():first.bytes,first.name.replace(/\.pdf$/i,'')+'-'+id+'.pdf',undefined,count?`${count} navigation or attachment structures removed. This is not secure redaction.`:'Nothing to remove: original bytes retained.');
     }
+    if(id==='create'){const response=await fetch('/fonts/NotoSans-Regular.ttf');if(!response.ok)throw new Error('The local document font could not load. Retry when online.');const bytes=await textToPDF(o.text,new Uint8Array(await response.arrayBuffer()),{size:Number(o.textFontSize??'11'),paper:o.textPageSize??'a4',signal});progress(100);return result(bytes,'pdf-studio-text.pdf');}
     if(id==='create-form'){const d=await createForm(o.text);return result(await d.save(),'fillable-form.pdf');}
     if(id==='remove-annotations'){if(files.length!==1||marks.length||items.length!==first.pages||items.some((p,i)=>p.index!==i||p.rotation))throw new Error('Remove annotations on the original single PDF. Export other workspace changes first.');const d=await PDFDocument.load(first.bytes);const count=removeAnnotations(d);return result(await d.save(),'pdf-studio-clean-annotations.pdf',undefined,`${count} annotations removed. Form widgets were kept.`);}
     if(['text','word','html','epub','csv','xlsx','audio','privacy','encrypt'].includes(id)&&items.length){const d=await assemble(files,items,signal);await applyMarks(d,items,marks,signal);const bytes=await d.save();first={...first,bytes,doc:d,pages:d.getPageCount(),size:bytes.length};}

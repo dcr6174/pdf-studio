@@ -1,6 +1,6 @@
 {
   "/": {
-    "hash": "2d9929e6212942f294c178db78ec447ede15b18ac7ff4462f84f4254c9be0239",
+    "hash": "bad0e444589b02e3819c0335d484cccae5ef66150ca42cedfc3d199536ae64e3",
     "lastmod": "2026-10-05"
   },
   "/privacy": {
@@ -200,8 +200,8 @@
     "lastmod": "2026-10-04"
   },
   "/tools/create-pdf": {
-    "hash": "2ed9f302217e0541e9daf2e7c73db2dd8707849541de48a2a63c2762a523b954",
-    "lastmod": "2026-10-04"
+    "hash": "9fddc59149e5ca33fc80b29344302fe4ab34b18446c4fd560fe488b8840b1d34",
+    "lastmod": "2026-10-05"
   },
   "/tools/markdown-to-pdf": {
     "hash": "af26384cf64774747ca50149dc1fb933db09cdac942bd80d9bf577182a07fe05",
@@ -267,6 +267,14 @@
     "hash": "e106c2e4921f0729e198bc8b2db1709b7675458622f330b51085997d62bc8952",
     "lastmod": "2026-10-04"
   },
+  "/tools/text-to-pdf": {
+    "hash": "b3d2ad5756e613157cfae0eb925f1599cf43b2e982b17017426dc98b47dfafde",
+    "lastmod": "2026-10-05"
+  },
+  "/tools/txt-to-pdf": {
+    "hash": "7f3475926db192420ed92389e08533904723feb339a19b76a0e1e3fe4d9eabe0",
+    "lastmod": "2026-10-05"
+  },
   "/tools/jpg-to-pdf": {
     "hash": "5f7a4303c0de8a60ab430f22405f131a57db52d1f05c72bf3d8d7118f1a03349",
     "lastmod": "2026-10-04"
@@ -312,7 +320,7 @@
     "lastmod": "2026-10-05"
   },
   "/guides": {
-    "hash": "1edadb130cf606888c3c9dff4e4cefbe93b8cf2f87d46030aa133c8221cddcc3",
+    "hash": "5ad5805f75f40bb155b00f62d62d1960039edc96259ff51465d394047ab8e8ef",
     "lastmod": "2026-10-05"
   },
   "/compare/ilovepdf-alternative": {

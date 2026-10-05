@@ -44,3 +44,9 @@ No benchmark scores, universal font compatibility or production deployment is as
 
 - Reader passwords: actual encrypted fixture verifies missing/wrong password rejection, correct-password opening, encrypted-byte preservation and editing-intake rejection. Failed PDF.js loading tasks are destroyed.
 - Reader render queue: verifies two simultaneous canvas tasks, queued progress, pending cancellation and idempotent release.
+
+### Text conversion follow-up
+- Dedicated Text to PDF and TXT to PDF landing pages reuse the real Create tool; old Create PDF URLs remain valid.
+- Browser-local PDF generation supports A4/US Letter, font size, wrapping and automatic pages.
+- UTF-8/UTF-16 text decoding and missing-font-character rejection avoid silent corruption. Current workspace is retained if text decoding fails.
+- Indian-script shaping, paragraph editing of original PDFs and optional native/server work remain incomplete. No deployment is asserted.

@@ -49,7 +49,7 @@ export const tools:Tool[] = [
 ['pptx','PDF to PowerPoint','Put each PDF page on a slide.','Convert','slides','Slides are page images, not editable original text or graphics.'],
 ['xlsx','PDF to spreadsheet','Extract text rows into XLSX.','Convert','grid','Heuristic extraction. Review column alignment; scans need OCR first.'],
 ['csv','PDF to CSV','Extract text rows into a CSV.','Convert','grid'],
-['create','Create PDF','Write a fresh document.','Convert','plus'],
+['create','Text to PDF','Turn typed text or a text file into a PDF.','Convert','plus'],
 ['markdown','Markdown to PDF','Headings, lists and readable text.','Convert','code','Basic Markdown formatting; complex tables and embedded images are not supported.'],
 ['docx','Word to PDF','Convert DOCX text into a PDF.','Convert','text','Reflows text; original Word layout, images and styling are not preserved. Legacy .doc is not supported.'],
 ['sheet','Spreadsheet to PDF','Print spreadsheet rows to a PDF.','Convert','grid','Text-based conversion of the first sheet. Complex styling and charts are not preserved.'],

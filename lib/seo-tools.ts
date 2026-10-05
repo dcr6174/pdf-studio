@@ -181,7 +181,7 @@ const curatedById = new Map<string, (typeof curatedTools)[number]>(curatedTools.
 export const seoTools = tools.map(tool => {
   const curated = curatedById.get(tool.id);
   if (curated) return { ...curated, group: tool.group };
-  const stableSlugs:Record<string,string>={reader:"pdf-reader",viewer:"reader-layout",interleave:"alternate-and-mix",hash:"file-fingerprint",repair:"resave-pdf"};
+  const stableSlugs:Record<string,string>={create:"create-pdf",reader:"pdf-reader",viewer:"reader-layout",interleave:"alternate-and-mix",hash:"file-fingerprint",repair:"resave-pdf"};
   const slug = stableSlugs[tool.id] ?? tool.name
     .toLowerCase()
     .replace(/&/g, 'and')
@@ -200,6 +200,8 @@ export const seoTools = tools.map(tool => {
 
 /** Keyword pages reuse real tools; no unsupported conversion is advertised. */
 const keywordPages = [
+ {slug:'text-to-pdf',id:'create',title:'Text to PDF',heading:'Convert text to a PDF in your browser',intro:'Type or paste text, or open a Unicode text file, choose a page size and font size, then create and inspect your PDF.',detail:'Text wraps onto new pages. Uses local Noto Sans; missing glyphs and unsupported encodings are rejected. Source formatting is not reconstructed.'},
+ {slug:'txt-to-pdf',id:'create',title:'TXT to PDF',heading:'Turn a text file into a readable PDF',intro:'Open a UTF-8 text file or a UTF-16 file with a byte-order mark, review the text and export a PDF.',detail:'Review page breaks and characters before downloading. Unsupported encodings or font characters produce a clear error. Files are processed in this browser.'},
  {slug:'jpg-to-pdf',id:'images',title:'JPG to PDF',heading:'Combine JPG photos into a PDF',intro:'Choose JPG photos, review their orientation and arrange them into one PDF.',detail:'Useful for photographed receipts or notes. The same workspace also accepts PNG and WebP; image conversion does not recognize text.'},
  {slug:'png-to-pdf',id:'images',title:'PNG to PDF',heading:'Create a PDF from PNG images',intro:'Choose PNG screenshots or scans and arrange them into a PDF document.',detail:'Inspect transparency and margins in the exported page; searchable text requires a separate OCR step.'},
  {slug:'pdf-to-excel',id:'xlsx',title:'PDF to Excel',heading:'Extract PDF text rows into an Excel spreadsheet',intro:'Convert selectable PDF text rows to XLSX, then review column alignment in Excel.',detail:'This is heuristic text extraction. Original tables, formulas, images and formatting are not faithfully reconstructed. Scans need OCR first.'},
