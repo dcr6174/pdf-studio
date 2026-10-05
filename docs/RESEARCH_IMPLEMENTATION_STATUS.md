@@ -28,3 +28,10 @@ This tracks the full research brief; implementation is not equivalent to verific
 | Original-byte preservation | Automated unchanged export check passes | Full representative corpus beyond synthetic form |
 
 No benchmark scores, universal font compatibility or production deployment is asserted. All numeric processing limits remain rejection-only.
+
+### Reader follow-up
+- Added PDF.js on-page selectable text rather than requiring the extracted-text panel.
+- Added safe HTTP/HTTPS/mailto links and supported internal page destinations. Unsafe URL schemes are ignored.
+- Each render owns its canvas, avoiding reuse while an earlier PDF.js render cancels. Canvas allocation is capped at four million pixels per page; zoom may therefore have limited sharpness on very large pages.
+- Unchanged-download behavior remains in the shared processing engine.
+- Continuous/spread layouts, pinch controls, encrypted-file prompting and physical-device selection/link testing remain unverified or incomplete. Native and server research proposals remain separate work, not advertised implementations.

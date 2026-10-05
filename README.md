@@ -422,7 +422,7 @@ Signature controls stay in normal document flow rather than a fixed overlay. The
 
 - Optional Buy Me a Coffee appears at the bottom of export results, after all download/edit/save/report actions.
 - Form-safe assembly keeps a full single PDF's field structure. Page-copy operations reject fillable documents unless an explicit supported flattening path is chosen; Merge offers that choice. Originals are not mutated. Flattened appearance pixels still require visual verification.
-- PDF Reader (`/tools/pdf-reader`) shares the workspace: single-page canvas, fit width/zoom/view rotation, page navigation, document-wide extracted-text search, supported outlines, selectable extracted text, reading focus and optional local reading position with a forget action. Unchanged downloads retain original bytes. It does not yet provide continuous/two-page modes, on-page text/link layers, pinch controls or a direct encrypted-file password prompt. Untagged extracted text can have incorrect reading order. No universal accessibility/offline guarantee.
+- PDF Reader (`/tools/pdf-reader`) shares the workspace: single-page canvas, fit width/zoom/view rotation, page navigation, document-wide extracted-text search, supported outlines, selectable extracted text, reading focus and optional local reading position with a forget action. Unchanged downloads retain original bytes. It does not yet provide continuous/two-page modes, pinch controls or a direct encrypted-file password prompt. Untagged extracted text can have incorrect reading order. No universal accessibility/offline guarantee.
 - Scan offers reviewed manual edge cropping and straightening, with workspace undo. No automatic perspective detection or deskew claim. Camera decoding still needs physical Android/iOS checks.
 - Split by chapters uses supported top-level local bookmark destinations, exports ZIP files and refuses editable forms. Nested destinations do not define chapters. Output boundaries require inspection.
 - Find possible blank pages reports low-resolution visual candidates and retains every page. Small/faint content can be missed; users must inspect before removing pages.
@@ -438,7 +438,9 @@ PDF workflows offer explicit merge→compact, rotate 90°→compact and clear-st
 
 | Tool | Implementation and limits |
 | --- | --- |
-| PDF Reader | Single-page reading, extracted-text search/selection, outlines, view-only rotation and local position opt-in. Layered page selection, continuous mode and direct encrypted password prompt pending. |
+| PDF Reader | Single-page reading, extracted-text search/selection, outlines, view-only rotation and local position opt-in. Continuous mode and direct encrypted password prompt pending. |
 | Split by chapters | Supported top-level local bookmark destinations; ZIP export; editable forms require prior flattening. |
 | Find possible blank pages | Review-only low-resolution candidate report. Faint/small content may be missed. Never deletes pages automatically. |
 | PDF workflows | Three explicit browser sequences with source preservation and stage cancellation. No custom workflow builder yet. |
+
+Reader follow-up: PDF Reader supports selection directly on rendered text and safe external links plus supported internal page links. Scans still require OCR for text selection. Reader canvases are capped at four million pixels to limit memory use, so very large pages can lose zoom sharpness. Continuous/spread reading and encrypted-file prompting are not yet included.
