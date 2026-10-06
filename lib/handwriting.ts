@@ -29,7 +29,8 @@ export async function createHandwritingPDF(text:string,options:HandwritingOption
  const {PDFDocument,rgb,degrees}=await import('pdf-lib');const {default:fontkit}=await import('@pdf-lib/fontkit');
  const doc=await PDFDocument.create();doc.registerFontkit(fontkit);
  // Subsetting drops outlines in some bundled fonts; embed the full font for reliable visible glyphs.
- const font=await doc.embedFont(fontBytes,{subset:false});
+ // Disable optional ligatures: full-font ToUnicode maps their glyphs incorrectly in several styles.
+ const font=await doc.embedFont(fontBytes,{subset:false,features:{liga:false,clig:false,dlig:false,calt:false}});
  const normalized=text.replace(/\r\n?/g,'\n').replace(/\t/g,'    ');
  const charset=new Set(font.getCharacterSet());const missing=[...new Set([...normalized].filter(c=>c!=='\n'&&!charset.has(c.codePointAt(0)!)))];
  if(mode!=='notebook-maker'&&missing.length)throw new Error('This style cannot write: '+missing.slice(0,12).join(' ')+'. Choose another style or import a font that supports these characters. Your text is retained.');
