@@ -7,6 +7,34 @@ const full=dialogLayout(true,{top:'50%',left:'50%',transform:'translate(-50%,-50
 for(const property of ['top','left','right','bottom','inset'])assert.equal(full.style[property],0);
 assert.equal(full.style.position,'fixed');assert.equal(full.style.transform,'none');assert.equal(full.style.translate,'none');assert.equal(full.style.width,'100%');assert.equal(full.style.maxWidth,'100%');assert.equal(full.style.height,'100dvh');assert.equal(full.style.overflowY,'auto');assert.ok(!/translate|top-\[|left-\[|animate/.test(full.className),'no centered positioning or zoom animation in full screen');
 const centered=dialogLayout(false,{color:'red'});assert.ok(centered.className.includes('translate-x-[-50%]'));assert.equal(centered.style.color,'red');
-const card=await readFile('components/result-card.tsx','utf8');assert.ok(card.includes('className="result-card"'));assert.ok(card.includes('id="download-result"'));assert.ok(card.includes('focus({preventScroll:true})'));assert.ok(card.includes('larger&&onOriginal?onOriginal:onDownload'));
-const app=await readFile('app/page.tsx','utf8');assert.ok(app.includes('!resultOpen&&<Toaster'));
-console.log('PASS: dialog positioning safeguards, primary download focus, compression-original fallback and toast suppression. Live positioning unverified.');
+// Exercise the actual result component with hooks stubbed for a synchronous render.
+const {createRequire}=await import('node:module');
+const require=createRequire(import.meta.url);
+const vm=await import('node:vm');
+const cardSource=ts.transpileModule(await readFile('components/result-card.tsx','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText;
+const exports={};
+vm.runInNewContext(cardSource,{exports,require:id=>{
+ if(id==='react')return {useState:value=>[value,()=>{}],useEffect:()=>{},useRef:()=>({current:null})};
+ if(id==='lucide-react')return Object.fromEntries(['ArrowLeft','Check','Download','FolderOpen','Pencil'].map(name=>[name,()=>null]));
+ if(id.endsWith('.css'))return {};
+ if(id==='@/components/file-facts')return {formatBytes:value=>value+' bytes'};
+ return require(id);
+}});
+const {ResultCard}=exports;
+const {renderToStaticMarkup}=require('react-dom/server');
+const props={output:{blob:new Blob(['pdf'],{type:'application/pdf'}),name:'ready.pdf'},open:true,onDownload:()=>{},onSettings:()=>{}};
+const html=renderToStaticMarkup(ResultCard(props));
+assert.match(html,/<section[^>]*aria-labelledby="result-heading"/);
+assert.match(html,/Your PDF is ready/);assert.match(html,/Download PDF/);assert.match(html,/Change settings/);
+assert.ok(!html.includes('role="dialog"')&&!html.includes('Donate'),'normal page without a result donation');
+assert.equal(ResultCard({...props,open:false}),null);
+assert.match(renderToStaticMarkup(ResultCard({...props,output:{blob:new Blob(['zip'],{type:'application/zip'}),name:'pages.zip'}})),/Download ZIP/);
+let processed=0,original=0;
+const compressed=ResultCard({...props,compress:true,before:{files:1,pages:1,size:1,unit:'page'},onDownload:()=>processed++,onOriginal:()=>original++});
+const buttons=[];
+function visit(node){if(!node||typeof node!=='object')return;if(Array.isArray(node)){node.forEach(visit);return;}if(node.type==='button')buttons.push(node);visit(node.props?.children);}
+visit(compressed);buttons.find(button=>button.props.className.includes('result-screen-download')).props.onClick();
+assert.equal(original,1);assert.equal(processed,0,'larger compression defaults to the smaller original');
+const app=await readFile('app/page.tsx','utf8');assert.match(app,/hidden=\{!!output&&resultOpen\}/,'workspace remains mounted behind the results');
+assert.ok(!app.includes('!resultOpen&&<Toaster'),'save notifications remain available on results');
+console.log('PASS: dialog safeguards; actual full-page PDF/ZIP results; compression download fallback; mounted workspace and visible notifications. Live spacing checked separately.');
