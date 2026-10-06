@@ -1,6 +1,6 @@
 import {BookmarkMinus,Paperclip,Unlink,Bookmark,Columns2,BookOpen,MessageSquareOff,ListTodo,Merge,Grid2X2,Scissors,Files,Minimize2,RotateCw,ArrowDownUp,Copy,ArrowLeftRight,LayoutGrid,Crop,Maximize2,FlipHorizontal2,TextCursorInput,PenLine,Signature,ShieldCheck,Droplets,Hash,ListOrdered,PanelTop,Layers,ClipboardList,FileText,Images,Image,FileType,Code2,Presentation,Table,Plus,Braces,FileSpreadsheet,ScanText,Volume2,Columns3,LockKeyhole,UnlockKeyhole,Search,Brush,Fingerprint,Archive,Wrench,SunMoon,Camera} from 'lucide-react';
 export const toolIcons:Record<string,typeof FileText>={
- workflow:ListTodo,'blank-check':Search,reader:BookOpen,'split-chapters':Bookmark,webp:Image,'remove-bookmarks':BookmarkMinus,'remove-attachments':Paperclip,'remove-links':Unlink,
+ 'pdf-to-handwriting':PenLine,workflow:ListTodo,'blank-check':Search,reader:BookOpen,'split-chapters':Bookmark,webp:Image,'remove-bookmarks':BookmarkMinus,'remove-attachments':Paperclip,'remove-links':Unlink,
  bookmarks:Bookmark,halve:Columns2,viewer:BookOpen,'remove-annotations':MessageSquareOff,'create-form':ListTodo,
  merge:Merge,organize:Grid2X2,split:Scissors,'split-all':Files,compress:Minimize2,rotate:RotateCw,reverse:ArrowDownUp,duplicate:Copy,interleave:ArrowLeftRight,nup:LayoutGrid,crop:Crop,resize:Maximize2,flip:FlipHorizontal2,
  'native-text':TextCursorInput,edit:PenLine,sign:Signature,redact:ShieldCheck,watermark:Droplets,numbers:Hash,bates:ListOrdered,headers:PanelTop,flatten:Layers,form:ClipboardList,metadata:FileText,

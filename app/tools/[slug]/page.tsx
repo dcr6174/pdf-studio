@@ -5,6 +5,9 @@ import {searchGuidance} from '@/lib/search-guidance';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import Studio from '@/app/page';
+import {SiteHeader,SiteFooter} from '@/components/site-header';
+import {HandwritingStudio} from '@/components/handwriting-studio';
+import '@/app/creative/creative.css';
 import {tools,accepted} from '@/lib/tools';
 import {seoPages,seoTools} from '@/lib/seo-tools';
 import {toolGuidance} from '@/lib/tool-guidance';
@@ -17,7 +20,7 @@ export async function generateMetadata({params}:{params:Promise<{slug:string}>})
  return {title:t.title+('id' in t?' — Free Online':''),description:t.intro,alternates:{canonical:'/tools/'+t.slug},twitter:{card:'summary_large_image',images:[image.url],title:t.title+' | PDF Studio',description:t.intro},openGraph:{images:[image],title:t.title+' | PDF Studio',description:t.intro,url:'https://pdf-studio.in/tools/'+t.slug}};
 }
 export default async function ToolPage({params}:{params:Promise<{slug:string}>}){
- const {slug}=await params;const conversion=conversionGuides.find(g=>g.slug===slug);if(conversion)return <ConversionGuide guide={conversion}/>;const t=seoPages.find(t=>t.slug===slug);if(!t)notFound();
+ const {slug}=await params;if(slug==='pdf-to-handwriting')return <div className="creative-shell"><SiteHeader/><HandwritingStudio mode="pdf-to-handwriting"/><SiteFooter/></div>;const conversion=conversionGuides.find(g=>g.slug===slug);if(conversion)return <ConversionGuide guide={conversion}/>;const t=seoPages.find(t=>t.slug===slug);if(!t)notFound();
  const tool=tools.find(x=>x.id===t.id)!,guidance=searchGuidance[t.slug]??toolGuidance[t.id];
  const formats=accepted(t.id).replaceAll('.','').toUpperCase();
  const faq:[string,string][]=[...guidance.faq,

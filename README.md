@@ -525,14 +525,14 @@ Mirror pages, Resize to A4 and Pages per sheet finalize source and normalized em
 New generated text fields have transparent backgrounds. Existing form widgets still render above ordinary page content. When an added element overlaps an interactive field, Edit, Sign and Watermark reject export unless you choose “Make fields read-only” in the fillable-field export setting. That option preserves current field appearances but removes editable fields before drawing marks; the original workspace PDF remains unchanged. It is an explicit tradeoff, not cryptographic signing or a way to keep fields interactive above signatures.
 
 
-## Creative tools: handwriting and notebooks
+## Studio Lab: handwriting and notebooks
 
-The shared header includes a **Creative tools** menu, with real links and a directory at `/creative`. Its four working routes are:
+The shared header links to **Lab · Beta**, with a directory at `/lab`. Three creative tools stay in Lab; PDF to handwriting is in the main PDF tools:
 
-- `/creative/text-to-handwriting`: type/paste notes, or import a UTF-8/UTF-16 TXT file.
-- `/creative/pdf-to-handwriting`: extract selectable text from a PDF, review/correct it, then reflow it onto notebook pages.
-- `/creative/notebook-maker`: create multi-page printable blank paper.
-- `/creative/handwriting-practice`: create light tracing text with a blank practice line beneath each line.
+- `/lab/text-to-handwriting`: type/paste notes, or import a UTF-8/UTF-16 TXT file.
+- `/tools/pdf-to-handwriting`: extract selectable text from a PDF, review/correct it, then reflow it onto notebook pages.
+- `/lab/notebook-maker`: create multi-page printable blank paper.
+- `/lab/handwriting-practice`: create light tracing text with a blank practice line beneath each line.
 
 All four use the same notebook engine, with 20 bundled SIL Open Font License styles, optional local TTF/OTF import, white/cream paper, A4/Letter pages, six paper styles (plain, ruled, wide ruled, double ruled, grid, dotted), ink colour, text size, line spacing and margins. Bounded, deterministic line variation can be shuffled without changing on every render. Font source URLs and the pinned Google Fonts revision are in `public/fonts/handwriting/sources.json`; each font has an adjacent OFL notice. `scripts/collect-handwriting-fonts.py` is a maintainer-only regeneration script, not a build dependency.
 
@@ -556,3 +556,7 @@ Text, imported PDF bytes and custom fonts remain in the browser tab. They are no
 Design references: SatvikHGupta/Text-To-Handwriting (stable seeded variation, responsive panels, custom fonts) and IT-BAER/HandType (personal font/paper concept). The renderer and components were written for PDF Studio. No code or unidentified font collection was copied from these projects.
 
 Run `node checks/verify-handwriting.mjs`, `npx tsc --noEmit`, `npm run lint`, and `npm run build:public`. Handwriting checks exercise all bundled fonts, text wrapping/pagination, rejected characters/settings/oversized input, cancellation, notebook backgrounds and practice output. Physical mobile/printing and arbitrary third-party fonts still require manual QA.
+
+### Studio Lab navigation
+
+The shared header ends with **Lab** and a red **Beta** badge. `/lab` contains Text to handwriting, Notebook maker and Handwriting practice. PDF to handwriting belongs to the main Convert category at `/tools/pdf-to-handwriting`, and is searchable in the PDF tools catalogue. Existing `/creative` links redirect to the corresponding destination. Lab is for creative experiments; it currently lists implemented tools only. Opening PDF to handwriting from an active workspace warns users to download unsaved work; document transfer between these separate workspaces is not automatic.

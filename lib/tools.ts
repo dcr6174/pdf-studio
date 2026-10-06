@@ -1,6 +1,7 @@
 export const groups = ['All tools','Pages','Edit & sign','Convert','Privacy','My files'];
 export type Tool = {id:string;name:string;description:string;group:string;icon:string;note?:string};
 export const tools:Tool[] = [
+['pdf-to-handwriting','PDF to handwriting','Turn selectable PDF text into handwritten-style notes.','Convert','pen','Extracts and reflows selectable text onto new paper. Images, tables and original layout are not preserved. Scans need OCR first.'],
 ['workflow','PDF workflows','Run a reviewed sequence and download one result.','Pages','layers','Choose a preset or arrange supported steps in your own sequence. Originals remain in the workspace.'],
 ['split-chapters','Split by chapters','Split at supported top-level bookmark destinations.','Pages','scissors','Requires usable outline entries. Inspect resulting chapter boundaries.'],
 ['blank-check','Find possible blank pages','Review likely blank pages without deleting them.','Pages','file','Low-resolution image analysis can miss faint content. No pages are deleted automatically.'],

@@ -12,6 +12,7 @@ export const creativeTools:{slug:CreativeMode;title:string;description:string}[]
  {slug:'notebook-maker',title:'Notebook maker',description:'Create printable ruled, dotted, grid or plain paper.'},
  {slug:'handwriting-practice',title:'Handwriting practice',description:'Create light tracing lines with space to practise underneath.'},
 ];
+export const labTools=creativeTools.filter(t=>t.slug!=='pdf-to-handwriting');
 export type HandwritingOptions={font:string;size:number;spacing:number;margin:number;paper:'ruled'|'wide'|'double'|'grid'|'dots'|'plain';pageSize:'a4'|'letter';ink:string;cream:boolean;variation:number;seed:number;blankPages:number};
 export const handwritingDefaults:HandwritingOptions={font:'caveat',size:18,spacing:1.7,margin:48,paper:'ruled',pageSize:'a4',ink:'#243c80',cream:false,variation:0,seed:1,blankPages:1};
 const fontRequests=new Map<string,Promise<Uint8Array>>();

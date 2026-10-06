@@ -132,6 +132,7 @@ function App({initialTool='home',initialHeading,guide}:{initialTool?:string;init
       if(workspace.getFiles().some(f=>f.readerOnly)&&!['reader','decrypt','hash','zip','home','shelf'].includes(id)){setError('This workspace contains a protected PDF. Use Remove password with a password you know before editing, or clear the workspace to open another document.');return;}
       if(view==='native-text'&&textDirty&&!committed&&id!==view){toast.error("Keep your text edits in the workspace or discard them before switching tools.");return;}
       if(marks.some(m=>m.kind==='redact')&&!['home','redact','shelf'].includes(id)){setError('Export your redacted PDF and choose Continue editing before switching tools, or remove the redaction regions.');return;}
+      if(id==='pdf-to-handwriting'){if((workspace.getFiles().length||marks.length)&&!window.confirm('Open PDF to handwriting? Download any unsaved workspace edits first.'))return;window.location.assign(new URL('/tools/pdf-to-handwriting',window.location.origin).href);return;}
       if(typeof speechSynthesis!=='undefined')speechSynthesis.cancel();
       toolOptions.current[view]=options;setOptions(toolOptions.current[id]??{...defaults,quality:['jpg','png','webp'].includes(id)?'2':id==='compress'?'compact':'balanced'});
       if(tools.some(t=>t.id===id))setRecent(addRecent(id));
