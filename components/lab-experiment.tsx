@@ -1,11 +1,15 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
+import {LabWorkspace} from '@/components/lab-workspace';
 import Link from '@/components/browser-link';
 import Image from '@/components/browser-image';
 import {SupportLink} from '@/components/support-link';
 import {experiments,wordFrequencies,paletteFromPixels,cloudSVG,flipbookHTML,type Experiment} from '@/lib/lab-tools';
 function download(blob:Blob,name:string){const url=URL.createObjectURL(blob);const a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1000);}
 export function LabExperiment({mode}:{mode:Experiment}){
+ return mode==='whiteboard'?<LegacyLabExperiment mode={mode}/>:<LabWorkspace mode={mode}/>;
+}
+function LegacyLabExperiment({mode}:{mode:Experiment}){
  const tool=experiments.find(t=>t.slug===mode)!;
  const [file,setFile]=useState<File>(),[bytes,setBytes]=useState<Uint8Array>(),[count,setCount]=useState(0),[page,setPage]=useState(0),[image,setImage]=useState(''),[rendered,setRendered]=useState<{bytes:Uint8Array;page:number}>(),[words,setWords]=useState<ReturnType<typeof wordFrequencies>>([]),[palette,setPalette]=useState<ReturnType<typeof paletteFromPixels>>([]),[busy,setBusy]=useState(false),[error,setError]=useState(''),[message,setMessage]=useState(''),[success,setSuccess]=useState(false),[Whiteboard,setWhiteboard]=useState<React.ComponentType|null>(null);
  const ready=rendered?.bytes===bytes&&rendered?.page===page;
