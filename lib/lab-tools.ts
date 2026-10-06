@@ -2,6 +2,9 @@ export const experiments=[
  {slug:'flipbook',title:'PDF Flipbook',description:'Read pages with a gentle turn animation and export an offline HTML book.',kind:'Visual'},
  {slug:'word-cloud',title:'PDF Word cloud',description:'Explore frequent words in selectable PDF text and export a colorful SVG.',kind:'Text'},
  {slug:'page-palette',title:'Page palette',description:'Extract representative colors from a PDF page and copy their hex values.',kind:'Visual'},
+ {slug:'poster-collage',title:'Poster collage',description:'Arrange PDF pages on a colorful poster and download PNG or PDF.',kind:'Visual'},
+ {slug:'pdf-to-gif',title:'PDF to GIF',description:'Turn selected PDF pages into an animated GIF with adjustable speed.',kind:'Visual'},
+ {slug:'sketch-pdf',title:'Sketch over a PDF',description:'Draw and highlight directly on PDF pages, then export your annotated document.',kind:'Visual'},
  {slug:'whiteboard',title:'Whiteboard',description:'Draw diagrams on a blank canvas and export PNG, PDF or an editable scene.',kind:'Visual'},
 ] as const;
 export type Experiment=(typeof experiments)[number]['slug'];

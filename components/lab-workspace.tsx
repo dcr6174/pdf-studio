@@ -22,7 +22,7 @@ import {
 } from "@/lib/lab-design";
 import "../app/lab/lab-workspace.css";
 
-type Mode = Exclude<Experiment, "whiteboard">;
+type Mode = Extract<Experiment, "flipbook" | "word-cloud" | "page-palette">;
 type Region = { x: number; y: number; w: number; h: number };
 function save(blob: Blob, name: string) {
   const url = URL.createObjectURL(blob);
@@ -1580,3 +1580,4 @@ export function LabWorkspace({ mode }: { mode: Mode }) {
     </main>
   );
 }
+

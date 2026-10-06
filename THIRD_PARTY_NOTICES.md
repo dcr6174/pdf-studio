@@ -29,3 +29,7 @@ Other component and PDF dependencies retain their package licenses and existing 
 ## Outfit (logo wordmark)
 
 The "pdf studio" wordmark in the v5 logo files is drawn from Outfit Bold, converted to vector outlines. Outfit is licensed under the SIL Open Font License 1.1 (https://openfontlicense.org). A Latin subset of Outfit Bold (public/fonts/Outfit-Bold-subset.woff, about 16 KB) is also shipped as the heading font; its license is in public/fonts/Outfit-OFL.txt.
+
+## gifenc 1.0.3
+
+Animated GIF encoding uses [gifenc](https://github.com/mattdesl/gifenc), Copyright Matt DesLauriers, under the MIT license. The license is included at `public/GIFENC-LICENSE.txt`. It is loaded only for the PDF-to-GIF worker.
