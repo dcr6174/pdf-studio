@@ -1,7 +1,18 @@
-.studio-header.studio-shared{position:relative;top:auto;z-index:40;background:var(--card);-webkit-backdrop-filter:none;backdrop-filter:none;transform:none}.document-loaded .studio-header.studio-shared{min-height:80px;padding-top:16px;padding-bottom:16px}
- .studio-header nav .lab-link{color:var(--primary);gap:6px}.lab-beta{display:inline-flex;padding:3px 6px;border-radius:6px;background:#fee2e2;color:#b91c1c;font-size:.65rem;font-weight:750;line-height:1.2;text-transform:uppercase}[data-theme=dark] .lab-beta{background:#4c1821;color:#ffb4bd}
-
-@media(max-width:767px){.studio-header.studio-shared{flex-wrap:wrap;gap:8px 12px;padding:10px 16px;min-height:64px}.studio-header.studio-shared .studio-wordmark{order:1;min-width:0}.studio-header.studio-shared .wordmark-lockup{width:130px;height:33px}.studio-header.studio-shared .header-end{order:2;margin-left:auto;gap:6px;flex-wrap:nowrap}.studio-header.studio-shared .header-end .source-top{padding:0 10px;font-size:12px;white-space:nowrap}.studio-header.studio-shared>nav{display:flex;order:3;width:100%;flex-wrap:wrap;gap:4px;padding:6px 0 0;border-top:1px solid var(--border)}.studio-header.studio-shared>nav>a,.studio-header.studio-shared>nav>button{min-height:44px;padding:0 10px;font-size:14px}.document-loaded .studio-header.studio-shared{min-height:64px;padding:10px 16px}}
-
-.studio-header.studio-shared .studio-brand-anchor{display:inline-flex;flex-shrink:0;min-width:0}.studio-header.studio-shared .studio-pinned-brand{position:fixed;z-index:40;top:10px;left:max(24px,calc((100vw - 1240px)/2));display:inline-flex;align-items:center;padding:8px 12px;border:1px solid var(--border);border-radius:12px;background:var(--card);box-shadow:0 3px 14px #0000000d;margin:0}.studio-header.studio-shared .studio-pinned-brand .wordmark-lockup{width:140px;height:35px}
-@media(max-width:767px){.studio-header.studio-shared .studio-brand-anchor{order:1}.studio-header.studio-shared .studio-pinned-brand{top:8px;left:12px;padding:6px 9px}.studio-header.studio-shared .studio-pinned-brand .wordmark-lockup{width:125px;height:32px}}
+/* Brand and controls stay together; navigation keeps its normal scroll position. */
+.studio-header.studio-shared{position:relative;top:auto;z-index:40;display:grid;grid-template-columns:160px minmax(0,1fr) auto;align-items:center;gap:24px;min-height:72px;padding:12px max(24px,calc((100vw - 1240px)/2));background:var(--card);border-bottom:1px solid var(--border);-webkit-backdrop-filter:none;backdrop-filter:none;transform:none}
+.studio-header.studio-shared .studio-brand-row{display:contents}
+.studio-header.studio-shared .studio-brand-row>.studio-wordmark{grid-column:1;grid-row:1;min-width:0}
+.studio-header.studio-shared .studio-brand-row>.header-end{grid-column:3;grid-row:1;display:flex;align-items:center;gap:10px;margin-left:auto;flex-wrap:nowrap}
+.studio-header.studio-shared>nav{grid-column:2;grid-row:1;display:flex;align-items:center;gap:4px;margin:0;min-width:0}
+.studio-header.studio-shared .brand-row-pinned{position:fixed;inset:0 0 auto;z-index:40;display:flex;align-items:center;justify-content:space-between;gap:24px;min-height:72px;padding:12px max(24px,calc((100vw - 1240px)/2));background:var(--card);border-bottom:1px solid var(--border);box-shadow:0 2px 8px #00000008}
+.studio-header.studio-shared .brand-row-pinned .header-end{margin-left:auto}
+.studio-header nav .lab-link{color:var(--primary);gap:6px}.lab-beta{display:inline-flex;padding:3px 6px;border-radius:6px;background:#fee2e2;color:#b91c1c;font-size:.65rem;font-weight:750;line-height:1.2;text-transform:uppercase}[data-theme=dark] .lab-beta{background:#4c1821;color:#ffb4bd}
+@media(max-width:767px){
+ .studio-header.studio-shared{grid-template-columns:130px minmax(0,1fr);grid-template-rows:44px auto;gap:8px 12px;padding:10px 16px;min-height:64px}
+ .studio-header.studio-shared .wordmark-lockup{width:130px;height:33px}
+ .studio-header.studio-shared .studio-brand-row>.header-end{grid-column:2;gap:6px}
+ .studio-header.studio-shared .header-end .source-top{padding:0 10px;font-size:12px;white-space:nowrap}
+ .studio-header.studio-shared>nav{grid-column:1/-1;grid-row:2;width:100%;flex-wrap:wrap;gap:4px;padding:6px 0 0;border-top:1px solid var(--border)}
+ .studio-header.studio-shared>nav>a,.studio-header.studio-shared>nav>button{min-height:44px;padding:0 10px;font-size:14px}
+ .studio-header.studio-shared .brand-row-pinned{min-height:64px;padding:10px 16px;gap:12px}
+}

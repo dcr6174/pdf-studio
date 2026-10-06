@@ -20,3 +20,15 @@
 
 
 @media(max-width:767px){.shelf-shell .saved-list>div>div{flex-basis:calc(100% - 45px)}}
+
+/* Headings and links share an axis; phones use the centered reference layout. */
+.pdf-site-footer.pdf-site-footer .footer-group h2{padding-inline:10px}
+@media(max-width:767px){
+ .pdf-site-footer.pdf-site-footer .footer-inner{padding:32px 24px 24px;text-align:center}
+ .pdf-site-footer.pdf-site-footer .footer-intro{flex-direction:column;justify-content:center;gap:16px;margin-bottom:36px}
+ .pdf-site-footer.pdf-site-footer .footer-columns{grid-template-columns:minmax(0,1fr);gap:32px}
+ .pdf-site-footer.pdf-site-footer .footer-group{align-items:center;gap:4px;width:100%}
+ .pdf-site-footer.pdf-site-footer .footer-group h2{width:100%;text-align:center;padding:0;margin-bottom:8px;font-size:13px}
+ .pdf-site-footer.pdf-site-footer .footer-group>a,.pdf-site-footer.pdf-site-footer .footer-group>button{justify-content:center;width:100%;max-width:320px;text-align:center;font-size:14px;padding:10px 12px;min-height:44px}
+ .pdf-site-footer.pdf-site-footer .footer-bottom{align-items:center;justify-content:center;text-align:center;margin-top:32px}
+}
