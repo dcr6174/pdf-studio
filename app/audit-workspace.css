@@ -82,3 +82,8 @@ select,select option{background:var(--card);color:var(--foreground);color-scheme
 /* Keep Sign PDF focused: signature controls first, document page remains primary. */
 .sign-panel-intro{margin:-6px 0 14px;color:var(--muted);font-size:.86rem;line-height:1.5}.sign-signature-creator{border:1px solid var(--border);border-radius:14px;padding:12px;background:var(--card)}.sign-signature-creator>h3{font-size:.9rem;margin:0 0 8px}.sign-create-panel .signature-picker-footer{gap:8px}.sign-placement-tools{display:grid;gap:10px;margin:14px 0;padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--soft)}.sign-placement-tools>b{font-size:.95rem}.sign-placement-tools p{margin:0;font-size:.78rem;line-height:1.45}.sign-placement-tools .field{margin:0}.sign-placement-tools button{min-height:44px;width:100%}.sign-local-note{margin:12px 0 0;color:var(--muted);font-size:.72rem;line-height:1.45}.signature-placement{display:flex;align-items:center;gap:10px;flex-wrap:wrap}.signature-placement span{flex:1;min-width:200px}
 @media(max-width:900px){.sign-workspace .editor-layout{grid-template-columns:minmax(0,1fr)}.sign-workspace .properties{order:2}.sign-workspace .editor-main{order:1}.sign-placement-tools{margin-inline:0}.sign-create-panel{padding-bottom:8px}}
+
+/* Keep category filters full-width after shared theme styles load. */
+.studio-shell.home-shell .filters.spotlight{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));width:100%;overflow:visible;gap:10px;border-radius:16px;padding:8px}
+.studio-shell.home-shell .filters.spotlight button{justify-content:center;min-height:48px}
+@media(max-width:540px){.studio-shell.home-shell .filters.spotlight{grid-template-columns:repeat(2,minmax(0,1fr))}}
