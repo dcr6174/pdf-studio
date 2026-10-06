@@ -8,3 +8,14 @@
 
 /* Fit the viewport: catalogue scrolls independently, support remains visible. */
 .navigation-drawer-body{flex:1;overflow-y:auto;padding-bottom:8px}.navigation-drawer>.drawer-support{flex-shrink:0;margin:0;padding:12px 8px;gap:6px}.navigation-drawer>.drawer-support small{display:none}.drawer-popular{padding-bottom:8px;margin-bottom:6px}.drawer-popular>a{min-height:40px;padding-block:8px}.drawer-category summary{min-height:44px;padding-block:10px}@media(max-height:720px){.drawer-popular{display:grid;grid-template-columns:1fr 1fr;gap:2px}.drawer-popular h2{grid-column:1/-1}.drawer-popular>a{font-size:12px;gap:6px;padding:8px;min-height:40px}.navigation-drawer[data-slot=dialog-content]{gap:8px;padding-top:18px!important;padding-bottom:max(10px,env(safe-area-inset-bottom))!important}}
+
+/* Keep the same menu trigger available while the nonmodal sitemap is open. */
+.navigation-drawer[data-slot=dialog-content]{padding-top:94px!important}
+.navigation-drawer-trigger{position:relative;z-index:80}
+.drawer-history{padding:12px 0;border-bottom:1px solid var(--border)}
+.drawer-history h2{font-size:14px;font-weight:700;margin:0 12px 8px}
+.drawer-history>a,.drawer-history>button{display:flex;align-items:center;gap:10px;width:100%;min-height:44px;text-align:left;padding:10px 12px;border-radius:10px;color:var(--foreground);text-decoration:none;font-size:14px}
+.drawer-history>a:hover,.drawer-history>button:hover{background:var(--soft)}
+.drawer-history span{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.drawer-history p{margin:8px 12px;color:var(--muted);font-size:13px}
+@media(max-width:767px){.navigation-drawer[data-slot=dialog-content]{padding-top:140px!important}}
