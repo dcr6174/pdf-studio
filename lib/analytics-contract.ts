@@ -17,3 +17,7 @@ export function parseActivity(value:unknown):ActivityBatch{
 export const LIVE_MS=90_000,HOUR_MS=3_600_000,DAY_MS=86_400_000,RETENTION_MS=2*DAY_MS;
 export type MetricsWindow={visitors:number;starts:number;completed:number;failed:number;downloads:number};
 export type AnalyticsSummary={updatedAt:number;liveOnline:number;lastHour:MetricsWindow;last24Hours:MetricsWindow;liveTools:{toolId:string|null;visitors:number}[];tools:{toolId:string;opens:number;completed:number;failed:number;downloads:number;uniqueVisitors:number}[];activity:{hour:number;completed:number}[];firstRecordedAt:number|null};
+
+
+export type OwnerPeriod="1h"|"24h"|"1m"|"5m"|"1y"|"all";
+export type OwnerHistory={period:OwnerPeriod;since:number;firstRecordedAt:number|null;totals:{visits:number;starts:number;completed:number;failed:number;downloads:number};tools:{toolId:string;opens:number;completed:number;failed:number;downloads:number}[];activity:{time:number;completed:number;failed:number}[]};

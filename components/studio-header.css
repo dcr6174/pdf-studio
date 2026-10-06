@@ -33,3 +33,6 @@
 }
 @media(max-width:767px){.studio-header.studio-shared .brand-row-pinned .source-top{display:none}}
 
+
+.owner-header-link{display:inline-flex;align-items:center;padding:10px 14px;border-radius:12px;background:#8b5cf620;color:var(--foreground);font-weight:650;white-space:nowrap}.owner-header-link:focus-visible{outline:3px solid #9b78ef;outline-offset:3px}@media(max-width:420px){.owner-header-link{padding:8px;font-size:12px}}
+

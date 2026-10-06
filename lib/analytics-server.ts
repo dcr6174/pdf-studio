@@ -11,6 +11,7 @@ export async function readActivityRequest(request:Request):Promise<ActivityBatch
  const all=new Uint8Array(total);let cursor=0;for(const c of chunks){all.set(c,cursor);cursor+=c.length;}try{return parseActivity(JSON.parse(new TextDecoder().decode(all)));}catch{throw new AnalyticsRejected(400,'Invalid activity batch.');}
 }
 export async function recordActivity(db:D1Database,batch:ActivityBatch,now=Date.now()){
+ await ensureHistory(db);
  const minute=Math.floor(now/60_000);const previous=await db.prepare('SELECT rate_window, rate_count FROM analytics_visitors WHERE id = ?').bind(batch.visitorId).first<{rate_window:number;rate_count:number}>();
  if(previous&&previous.rate_window===minute&&previous.rate_count>=120)throw new AnalyticsRejected(429,'Too many events.');
  const statements=[db.prepare(`INSERT INTO analytics_visitors (id,last_activity,last_visible,tool_id,rate_window,rate_count) VALUES (?,?,?,?,?,?)
@@ -32,4 +33,25 @@ export async function getAnalytics(db:D1Database,now=Date.now()):Promise<Analyti
  ]);
  const counts=responses[0].results[0] as unknown as {online:number|null;hour:number|null;day:number|null};const metrics=(row:unknown,visitors:number|null):MetricsWindow=>({...row as Omit<MetricsWindow,'visitors'>,visitors:visitors??0});
  return {updatedAt:now,liveOnline:counts?.online??0,lastHour:metrics(responses[1].results[0],counts?.hour),last24Hours:metrics(responses[2].results[0],counts?.day),liveTools:responses[3].results as AnalyticsSummary['liveTools'],tools:responses[4].results as AnalyticsSummary['tools'],activity:responses[5].results as AnalyticsSummary['activity'],firstRecordedAt:(responses[6].results[0] as {first:number|null})?.first??null};
+}
+
+
+const historyReady=new WeakMap<D1Database,Promise<unknown>>();
+function ensureHistory(db:D1Database){let promise=historyReady.get(db);if(!promise){promise=db.batch([
+ db.prepare("CREATE TABLE IF NOT EXISTS analytics_daily (day INTEGER NOT NULL,tool_id TEXT NOT NULL,kind TEXT NOT NULL,total INTEGER NOT NULL,PRIMARY KEY(day,tool_id,kind))"),
+ db.prepare("INSERT INTO analytics_daily(day,tool_id,kind,total) SELECT CAST(received_at/86400000 AS INTEGER)*86400000,COALESCE(tool_id,''),kind,COUNT(*) FROM analytics_events GROUP BY 1,2,3 ON CONFLICT(day,tool_id,kind) DO NOTHING"),
+ db.prepare("CREATE TRIGGER IF NOT EXISTS analytics_daily_insert AFTER INSERT ON analytics_events BEGIN INSERT INTO analytics_daily(day,tool_id,kind,total) VALUES(CAST(NEW.received_at/86400000 AS INTEGER)*86400000,COALESCE(NEW.tool_id,''),NEW.kind,1) ON CONFLICT(day,tool_id,kind) DO UPDATE SET total=total+1; END")
+ ]).catch(error=>{historyReady.delete(db);throw error;});historyReady.set(db,promise);}return promise;}
+export async function getOwnerHistory(db:D1Database,period:import('./analytics-contract').OwnerPeriod,now=Date.now()):Promise<import('./analytics-contract').OwnerHistory>{
+ await ensureHistory(db);
+ const months=period==='1m'?1:period==='5m'?5:period==='1y'?12:0;const start=new Date(now);if(months)start.setUTCMonth(start.getUTCMonth()-months);
+ const since=period==='1h'?now-HOUR_MS:period==='24h'?now-DAY_MS:period==='all'?0:Math.floor(start.getTime()/DAY_MS)*DAY_MS;
+ const short=period==='1h'||period==='24h';const source=short?'analytics_events':'analytics_daily';const count=short?'1':'total';const time=short?'received_at':'day';
+ const rows=await db.batch([
+ db.prepare(`SELECT COALESCE(SUM(CASE WHEN kind='visit' THEN ${count} ELSE 0 END),0) AS visits,COALESCE(SUM(CASE WHEN kind='process_start' THEN ${count} ELSE 0 END),0) AS starts,COALESCE(SUM(CASE WHEN kind='process_success' THEN ${count} ELSE 0 END),0) AS completed,COALESCE(SUM(CASE WHEN kind='process_error' THEN ${count} ELSE 0 END),0) AS failed,COALESCE(SUM(CASE WHEN kind='download' THEN ${count} ELSE 0 END),0) AS downloads FROM ${source} WHERE ${time}>=? AND ${time}<=?`).bind(since,now),
+ db.prepare(`SELECT tool_id AS toolId,SUM(CASE WHEN kind='tool_open' THEN ${count} ELSE 0 END) AS opens,SUM(CASE WHEN kind='process_success' THEN ${count} ELSE 0 END) AS completed,SUM(CASE WHEN kind='process_error' THEN ${count} ELSE 0 END) AS failed,SUM(CASE WHEN kind='download' THEN ${count} ELSE 0 END) AS downloads FROM ${source} WHERE ${time}>=? AND ${time}<=? AND tool_id IS NOT NULL AND tool_id!='' GROUP BY tool_id ORDER BY opens DESC,completed DESC`).bind(since,now),
+ db.prepare(`SELECT CAST(${time}/? AS INTEGER)*? AS time,SUM(CASE WHEN kind='process_success' THEN ${count} ELSE 0 END) AS completed,SUM(CASE WHEN kind='process_error' THEN ${count} ELSE 0 END) AS failed FROM ${source} WHERE ${time}>=? AND ${time}<=? GROUP BY 1 ORDER BY 1`).bind(short?HOUR_MS:DAY_MS,short?HOUR_MS:DAY_MS,since,now),
+ db.prepare('SELECT MIN(day) AS first FROM analytics_daily')
+ ]);
+ return {period,since,firstRecordedAt:(rows[3].results[0] as {first:number|null})?.first??null,totals:rows[0].results[0] as import('./analytics-contract').OwnerHistory['totals'],tools:rows[1].results as import('./analytics-contract').OwnerHistory['tools'],activity:rows[2].results as import('./analytics-contract').OwnerHistory['activity']};
 }
