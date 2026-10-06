@@ -13,7 +13,7 @@ export function useWorkspace(){
     const value=typeof next==='function'?(next as (v:DocumentState[K])=>DocumentState[K])(previous[key]):next;
     history.current.set({...previous,[key]:value},key);publish();
   }
-  return {...snapshot.state,getFiles:()=>history.current.current.files,setFiles:(v:SetStateAction<Loaded[]>)=>change('files',v),setPages:(v:SetStateAction<PageItem[]>)=>change('pages',v),setMarks:(v:SetStateAction<Mark[]>)=>change('marks',v),
+  return {...snapshot.state,getFiles:()=>history.current.current.files,getSnapshot:()=>history.current.current,setFiles:(v:SetStateAction<Loaded[]>)=>change('files',v),setPages:(v:SetStateAction<PageItem[]>)=>change('pages',v),setMarks:(v:SetStateAction<Mark[]>)=>change('marks',v),
     undo:()=>{history.current.undo();publish();},redo:()=>{history.current.redo();publish();},canUndo:snapshot.canUndo,canRedo:snapshot.canRedo,
     replace:(v:DocumentState)=>{history.current.set(v);publish();},
     clear:()=>{history.current.reset(empty());publish();}};

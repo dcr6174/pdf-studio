@@ -1,4 +1,5 @@
 'use client';
+import {uploadFeedback} from '@/lib/upload-feedback';
 import {paragraphFor} from '@/lib/text-paragraph';
 import {commitTextDraft} from '@/lib/commit-text-draft';
 import {validateTextInput} from '@/lib/input-validation';
@@ -23,11 +24,11 @@ export function OnlineTextEditor({controller,files,pages,marks,onOutput,onDirty,
  useEffect(()=>{if(selected!==undefined&&!busy){inline.current?.focus({preventScroll:true});if(window.matchMedia('(max-width:800px)').matches)document.querySelector('.native-hit.selected')?.scrollIntoView({block:'center',behavior:'auto'});}},[selected,busy]);
  useEffect(()=>{let active=true;Promise.resolve().then(()=>{if(!active)return;setBusy(true);setBytes(undefined);setError('');setDirty(false);setNotice('');history.current=[];future.current=[];setHistorySize(0);setFutureSize(0);selection.current=undefined;setPage(0);
   try{validateTextInput(files.reduce((n,f)=>n+f.size,0),pages.length);}catch(e){setError((e as Error).message+' Your original remains in the workspace.');setBusy(false);return;}
-  processPDF('organize',files,pages,marks,{range:'',text:'',title:'',author:'',subject:'',password:'',quality:'balanced',angle:'90',margin:'20',start:'1',columns:'2',fields:{}},()=>{}).then(async o=>{const b=new Uint8Array(await o.blob.arrayBuffer());if(active){original.current=b;setBytes(b);}}).catch(e=>{if(active){setError(e.message);setBusy(false);}});});return()=>{active=false;};
+  processPDF('organize',files,pages,marks,{range:'',text:'',title:'',author:'',subject:'',password:'',quality:'balanced',angle:'90',margin:'20',start:'1',columns:'2',fields:{}},()=>{}).then(async o=>{const b=new Uint8Array(await o.blob.arrayBuffer());if(active){original.current=b;setBytes(b);}}).catch(e=>{if(active){setError(uploadFeedback(e).message);setBusy(false);}});});return()=>{active=false;};
  },[files,pages,marks]);
  useEffect(()=>{if(!bytes)return;let active=true;Promise.resolve().then(()=>{if(!active)return;setBusy(true);setError('');setObjects([]);
   textEngine().then(m=>{if(!active)return;const next=new OnlineTextDocument(m,bytes);doc.current?.close();doc.current=next;setCount(next.pageCount);const view=next.inspect(page,Math.min(3,1.5*zoom));if(canvas.current){canvas.current.width=view.width;canvas.current.height=view.height;canvas.current.getContext('2d')!.putImageData(new ImageData(view.rgba,view.width,view.height),0,0);}setObjects(view.objects);const selectedObject=view.objects.find(o=>o.index===selection.current);setSelected(selectedObject?.index);if(selectedObject)setValue((paragraphMode?paragraphFor(view.objects,selectedObject.index):[selectedObject]).map(o=>o.text).join(' '));
-  }).catch(e=>active&&setError(e.message)).finally(()=>active&&setBusy(false));});return()=>{active=false;};
+  }).catch(e=>active&&setError(uploadFeedback(e).message)).finally(()=>active&&setBusy(false));});return()=>{active=false;};
  },[bytes,page,zoom,paragraphMode]);
  async function select(o:TextObject){if(applying.current&&!(await applying.current))return;if(pending&&!(await apply()))return;if(window.matchMedia('(max-width:800px)').matches&&zoom<1.5)setZoom(1.5);selection.current=o.index;setSelected(o.index);const next=paragraphMode?paragraphFor(objects,o.index):[o];setValue(next.map(row=>row.text).join(' '));setError('');setNotice('');}
  useEffect(()=>{if(selected===undefined||busy||!doc.current){setMissing([]);return;}try{setMissing(doc.current.missingCharacters(page,selected,value.replace(/[\r\n\t]/g,' ')));}catch{setMissing([]);}},[selected,value,page,busy]);

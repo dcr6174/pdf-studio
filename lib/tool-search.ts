@@ -8,6 +8,7 @@ import {tools,type Tool} from './tools';
  * (never list something a tool cannot do).
  */
 export const toolKeywords:Record<string,string>={
+ 'pdf-to-handwriting':'pdf to handwriting, handwritten pdf, notebook, rewrite pdf as handwriting',
  reader:'reader, read pdf, view document, reading focus, find text',
  workflow:'workflow, recipes, pipeline, sequence, chain operations',
  'split-chapters':'split chapters, bookmark boundaries, separate chapters',
