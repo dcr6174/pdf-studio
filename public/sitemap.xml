@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://pdf-studio.in/</loc><lastmod>2026-10-05</lastmod></url>
+<url><loc>https://pdf-studio.in/</loc><lastmod>2026-10-06</lastmod></url>
 <url><loc>https://pdf-studio.in/privacy</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/pdf-workflows</loc><lastmod>2026-10-05</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/split-by-chapters</loc><lastmod>2026-10-05</lastmod></url>
@@ -28,7 +28,7 @@
 <url><loc>https://pdf-studio.in/tools/crop-margins</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/resize-to-a4</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/mirror-pages</loc><lastmod>2026-10-04</lastmod></url>
-<url><loc>https://pdf-studio.in/tools/edit-pdf-text</loc><lastmod>2026-10-04</lastmod></url>
+<url><loc>https://pdf-studio.in/tools/edit-pdf-text</loc><lastmod>2026-10-05</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/edit-pdf</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/sign-pdf</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/tools/redact-pdf</loc><lastmod>2026-10-04</lastmod></url>
@@ -85,6 +85,11 @@
 <url><loc>https://pdf-studio.in/compare/smallpdf-alternative</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/compare/sejda-alternative</loc><lastmod>2026-10-04</lastmod></url>
 <url><loc>https://pdf-studio.in/compare/adobe-acrobat-alternative</loc><lastmod>2026-10-04</lastmod></url>
+<url><loc>https://pdf-studio.in/creative</loc></url>
+<url><loc>https://pdf-studio.in/creative/text-to-handwriting</loc></url>
+<url><loc>https://pdf-studio.in/creative/pdf-to-handwriting</loc></url>
+<url><loc>https://pdf-studio.in/creative/notebook-maker</loc></url>
+<url><loc>https://pdf-studio.in/creative/handwriting-practice</loc></url>
 <url><loc>https://pdf-studio.in/about</loc></url>
 <url><loc>https://pdf-studio.in/contact</loc></url>
 <url><loc>https://pdf-studio.in/check-it-yourself</loc></url>

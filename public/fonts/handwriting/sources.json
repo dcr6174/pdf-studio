@@ -1,0 +1,125 @@
+{
+  "revision": "7085eb89a950e85db5b166b7a58d414544b4140c",
+  "fonts": [
+    {
+      "id": "caveat",
+      "label": "Casual",
+      "file": "caveat.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/caveat/Caveat%5Bwght%5D.ttf"
+    },
+    {
+      "id": "patrickhand",
+      "label": "Neat print",
+      "file": "patrickhand.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/patrickhand/PatrickHand-Regular.ttf"
+    },
+    {
+      "id": "kalam",
+      "label": "Soft pen",
+      "file": "kalam.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/kalam/Kalam-Regular.ttf"
+    },
+    {
+      "id": "indieflower",
+      "label": "Notebook",
+      "file": "indieflower.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/indieflower/IndieFlower-Regular.ttf"
+    },
+    {
+      "id": "shadowsintolight",
+      "label": "Tall pen",
+      "file": "shadowsintolight.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/shadowsintolight/ShadowsIntoLight.ttf"
+    },
+    {
+      "id": "architectsdaughter",
+      "label": "Architect",
+      "file": "architectsdaughter.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/architectsdaughter/ArchitectsDaughter-Regular.ttf"
+    },
+    {
+      "id": "handlee",
+      "label": "Rounded",
+      "file": "handlee.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/handlee/Handlee-Regular.ttf"
+    },
+    {
+      "id": "pangolin",
+      "label": "Friendly",
+      "file": "pangolin.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/pangolin/Pangolin-Regular.ttf"
+    },
+    {
+      "id": "coveredbyyourgrace",
+      "label": "School notes",
+      "file": "coveredbyyourgrace.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/coveredbyyourgrace/CoveredByYourGrace.ttf"
+    },
+    {
+      "id": "gloriahallelujah",
+      "label": "Loose print",
+      "file": "gloriahallelujah.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/gloriahallelujah/GloriaHallelujah.ttf"
+    },
+    {
+      "id": "gochihand",
+      "label": "Bold pen",
+      "file": "gochihand.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/gochihand/GochiHand-Regular.ttf"
+    },
+    {
+      "id": "petemoss",
+      "label": "Narrow",
+      "file": "petemoss.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/petemoss/Petemoss-Regular.ttf"
+    },
+    {
+      "id": "badscript",
+      "label": "Everyday",
+      "file": "badscript.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/badscript/BadScript-Regular.ttf"
+    },
+    {
+      "id": "reeniebeanie",
+      "label": "Quick notes",
+      "file": "reeniebeanie.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/reeniebeanie/ReenieBeanie.ttf"
+    },
+    {
+      "id": "nothingyoucoulddo",
+      "label": "Personal",
+      "file": "nothingyoucoulddo.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/nothingyoucoulddo/NothingYouCouldDo.ttf"
+    },
+    {
+      "id": "caveatbrush",
+      "label": "Marker",
+      "file": "caveatbrush.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/caveatbrush/CaveatBrush-Regular.ttf"
+    },
+    {
+      "id": "cedarvillecursive",
+      "label": "Joined script",
+      "file": "cedarvillecursive.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/cedarvillecursive/Cedarville-Cursive.ttf"
+    },
+    {
+      "id": "dancingscript",
+      "label": "Flowing",
+      "file": "dancingscript.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/dancingscript/DancingScript%5Bwght%5D.ttf"
+    },
+    {
+      "id": "allura",
+      "label": "Elegant",
+      "file": "allura.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/allura/Allura-Regular.ttf"
+    },
+    {
+      "id": "sacramento",
+      "label": "Light cursive",
+      "file": "sacramento.ttf",
+      "source": "https://raw.githubusercontent.com/google/fonts/7085eb89a950e85db5b166b7a58d414544b4140c/ofl/sacramento/Sacramento-Regular.ttf"
+    }
+  ]
+}

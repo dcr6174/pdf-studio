@@ -523,3 +523,36 @@ Result previews clear the previous file when a new output opens.
 ### Page embedding and signatures on forms
 Mirror pages, Resize to A4 and Pages per sheet finalize source and normalized embedded resources before copying them into the output. Regression checks render every output page with Poppler, including four rotations and non-zero CropBox origins. Run `node checks/verify-page-embedding.mjs` with Poppler, Python and Pillow available.
 New generated text fields have transparent backgrounds. Existing form widgets still render above ordinary page content. When an added element overlaps an interactive field, Edit, Sign and Watermark reject export unless you choose “Make fields read-only” in the fillable-field export setting. That option preserves current field appearances but removes editable fields before drawing marks; the original workspace PDF remains unchanged. It is an explicit tradeoff, not cryptographic signing or a way to keep fields interactive above signatures.
+
+
+## Creative tools: handwriting and notebooks
+
+The shared header includes a **Creative tools** menu, with real links and a directory at `/creative`. Its four working routes are:
+
+- `/creative/text-to-handwriting`: type/paste notes, or import a UTF-8/UTF-16 TXT file.
+- `/creative/pdf-to-handwriting`: extract selectable text from a PDF, review/correct it, then reflow it onto notebook pages.
+- `/creative/notebook-maker`: create multi-page printable blank paper.
+- `/creative/handwriting-practice`: create light tracing text with a blank practice line beneath each line.
+
+All four use the same notebook engine, with 20 bundled SIL Open Font License styles, optional local TTF/OTF import, white/cream paper, A4/Letter pages, six paper styles (plain, ruled, wide ruled, double ruled, grid, dotted), ink colour, text size, line spacing and margins. Bounded, deterministic line variation can be shuffled without changing on every render. Font source URLs and the pinned Google Fonts revision are in `public/fonts/handwriting/sources.json`; each font has an adjacent OFL notice. `scripts/collect-handwriting-fonts.py` is a maintainer-only regeneration script, not a build dependency.
+
+### Preview, download and privacy
+
+The live preview renders the **actual vector PDF bytes** which Download exports, rather than taking a screenshot of HTML. Page navigation and zoom inspect one page at a time. Type on page opens an editable notebook surface; Preview returns to the exact generated PDF. Fonts load on demand; processing libraries load when the creative workspace is used. Downloaded text remains selectable, and paper/dots/rules are PDF drawing operations. Full-font embedding avoids missing glyphs observed with subsetting; it adds the selected font to the output, so some PDFs are larger. Mobile has Preview/Text/Style panels; desktop keeps settings beside the document. Download comes before optional donation support. Input replacement prompts before discarding edited text; a navigation warning protects undownloaded changes.
+
+Text, imported PDF bytes and custom fonts remain in the browser tab. They are not sent to analytics or saved automatically. Font assets are served from our own domain. Refreshing or closing the tab can lose notes; download before leaving. Imported fonts are held in memory, not persisted.
+
+### Meaningful limitations
+
+- PDF import **reflows extracted text**. It does not replace original PDF text in place, retain images/tables/layout, or perform OCR. Scans with no selectable text receive an OCR-first message. Encrypted PDFs should be unlocked first.
+- Handwriting recognition, photo-to-personal-font generation, drawn custom alphabets, cloud sync and animated book turning are not implemented or advertised.
+- Font coverage varies; missing characters stop generation with a list and retain the user's text. Import a suitable font or choose another style. No automatic fallback or universal Indian-language support is claimed.
+- Natural variation is per-line, not alternate glyph synthesis. Practice sheets use faint real text, not dotted glyph outlines.
+- Technical guards reject imports above 50 MB / 100 PDF pages, notes above 200,000 characters, output above 100 pages, and custom fonts above 5 MB. Limits are explained **only after rejection**, not shown in an upfront limits table.
+- Fonts may create taller/looser letterforms; inspect each preview page before printing.
+
+### References and validation
+
+Design references: SatvikHGupta/Text-To-Handwriting (stable seeded variation, responsive panels, custom fonts) and IT-BAER/HandType (personal font/paper concept). The renderer and components were written for PDF Studio. No code or unidentified font collection was copied from these projects.
+
+Run `node checks/verify-handwriting.mjs`, `npx tsc --noEmit`, `npm run lint`, and `npm run build:public`. Handwriting checks exercise all bundled fonts, text wrapping/pagination, rejected characters/settings/oversized input, cancellation, notebook backgrounds and practice output. Physical mobile/printing and arbitrary third-party fonts still require manual QA.
