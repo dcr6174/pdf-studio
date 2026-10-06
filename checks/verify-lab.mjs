@@ -1,0 +1,21 @@
+import assert from 'node:assert/strict';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import ts from 'typescript';
+import vm from 'node:vm';
+import {createCanvas} from '@napi-rs/canvas';
+import {PDFDocument} from 'pdf-lib';
+import {execFileSync} from 'node:child_process';
+import {DOMParser} from '@xmldom/xmldom';
+const source=await readFile('lib/lab-tools.ts','utf8');await mkdir('.lab-check',{recursive:true});await writeFile('.lab-check/lab.mjs',ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText);
+const {wordFrequencies,paletteFromPixels,cloudSVG,flipbookHTML,bitmapPDF}=await import('../.lab-check/lab.mjs');
+assert.deepEqual(wordFrequencies('The PDF pdf notes notes NOTES and café café'),[{word:'notes',count:3},{word:'café',count:2},{word:'pdf',count:2}]);
+assert.deepEqual(wordFrequencies('the and a'),[]);
+const palette=paletteFromPixels(new Uint8ClampedArray([255,0,0,255,255,0,0,255,0,0,255,255,0,255,0,0]));assert.equal(palette[0].hex,'#ff0000');assert.equal(palette[0].percent,67);assert.equal(palette[1].hex,'#0000ff');
+const svg=cloudSVG([{word:'<script>&"',count:3}]);assert(!svg.includes('<script>'));const parsed=new DOMParser().parseFromString(svg,'image/svg+xml');assert.equal(parsed.getElementsByTagName('text')[0].textContent,'<script>&"');
+const images=['data:image/jpeg;base64,QQ==','data:image/jpeg;base64,Qg=='];const html=flipbookHTML(images);assert.throws(()=>flipbookHTML(['</script><script>alert(1)</script>']));assert(html.includes('prefers-reduced-motion'));
+const elements=Object.fromEntries(['page','prev','next','count','full'].map(id=>[id,{disabled:false,textContent:'',src:''}]));const fakeDocument={getElementById:id=>elements[id],documentElement:{requestFullscreen:async()=>{}},fullscreenElement:null};vm.runInNewContext(html.match(/<script>([\s\S]*)<\/script>/)[1],{document:fakeDocument});assert.equal(elements.page.src,images[0]);assert(elements.prev.disabled);elements.next.onclick();assert.equal(elements.page.src,images[1]);assert(elements.next.disabled);elements.prev.onclick();assert.equal(elements.page.src,images[0]);assert.equal(elements.count.textContent,'Page 1 of 2');
+const manifest=JSON.parse(await readFile('dist/client/.vite/manifest.json','utf8'));const lab=manifest['components/lab-experiment.tsx'];assert(lab.dynamicImports.includes('components/lab-whiteboard.tsx'));assert(!lab.imports.includes('components/lab-whiteboard.tsx'));
+const whiteboard=manifest['components/lab-whiteboard.tsx'];assert(whiteboard.dynamicImports.includes('node_modules/@excalidraw/excalidraw/dist/prod/index.js'));
+console.log('PASS: Unicode counts, stopwords, palette transparency and frequencies, SVG escaping, offline-book navigation/order, reduced-motion export, lazy Whiteboard and Excalidraw chunks');
+
+const canvas=createCanvas(600,300),ctx=canvas.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,600,300);ctx.fillStyle='#6341e8';ctx.fillRect(40,40,180,180);const pdf=await bitmapPDF(canvas.toBuffer('image/png'));await writeFile('.lab-check/whiteboard.pdf',pdf);const opened=await PDFDocument.load(pdf);assert.equal(opened.getPageCount(),1);assert.deepEqual(opened.getPage(0).getSize(),{width:600,height:300});execFileSync('pdftoppm',['-f','1','-singlefile','-scale-to','600','-png','.lab-check/whiteboard.pdf','.lab-check/whiteboard']);const {loadImage}=await import('@napi-rs/canvas');const raster=await loadImage('.lab-check/whiteboard.png');const out=createCanvas(raster.width,raster.height);out.getContext('2d').drawImage(raster,0,0);const px=out.getContext('2d').getImageData(80,80,1,1).data;assert(px[2]>180&&px[0]<140,'exported PDF must retain the violet drawing');console.log('PASS: actual Whiteboard image-to-PDF export reopens and independently rasterizes with visible content');

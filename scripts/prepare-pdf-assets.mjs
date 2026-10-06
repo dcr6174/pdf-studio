@@ -12,3 +12,8 @@ await cp(new URL('node_modules/@embedpdf/pdfium/dist/pdfium.wasm',root),new URL(
 await cp(new URL('node_modules/@embedpdf/pdfium/LICENSE',root),new URL('public/vendor/PDFIUM-WRAPPER-LICENSE.txt',root));
 await cp(new URL('node_modules/@embedpdf/pdfium/LICENSE.pdfium',root),new URL('public/vendor/PDFIUM-LICENSE.txt',root));
 
+
+// Self-host Excalidraw fonts; no document data or text goes to a font CDN.
+await mkdir(new URL('public/excalidraw/',root),{recursive:true});
+await cp(new URL('node_modules/@excalidraw/excalidraw/dist/prod/fonts',root),new URL('public/excalidraw/fonts',root),{recursive:true,filter:source=>!source.includes('/Liberation')});
+
