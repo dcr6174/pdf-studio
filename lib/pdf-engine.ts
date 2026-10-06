@@ -32,6 +32,7 @@ export type PageItem = {
 export type Mark = {
     id: string;
     pageId: string;
+    signatureGroup?:string;
     kind: 'text' | 'image' | 'highlight' | 'redact' | 'rectangle' | 'ellipse' | 'link' | 'line' | 'arrow' | 'whiteout';
     x: number;
     y: number;
