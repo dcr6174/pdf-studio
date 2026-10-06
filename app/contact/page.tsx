@@ -1,6 +1,6 @@
 import type {Metadata} from 'next';
 import {pageMeta} from '@/lib/page-meta';
-import {SiteHeader,SiteFooter} from '@/components/site-header';
+import {SiteFrame} from '@/components/site-frame';
 import Link from '@/components/browser-link';
 import {CONTACT_EMAIL,mailtoLink} from '@/lib/contact';
 
@@ -8,7 +8,7 @@ export const metadata:Metadata=pageMeta('/contact','Contact PDF Studio: question
 
 export default function Contact(){
  const schema={'@context':'https://schema.org','@type':'ContactPage',name:'Contact PDF Studio',url:'https://pdf-studio.in/contact',mainEntity:{'@type':'Organization',name:'PDF Studio',url:'https://pdf-studio.in/',email:CONTACT_EMAIL}};
- return <main className="seo-page"><SiteHeader/>
+ return <SiteFrame><main className="seo-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
   <h1>Contact PDF Studio</h1>
   <p className="lead">Questions, problems and ideas are welcome. Write to <a target="_blank" rel="noopener noreferrer" href={'mailto:'+CONTACT_EMAIL}>{CONTACT_EMAIL}</a>.</p>
@@ -30,6 +30,6 @@ export default function Contact(){
   <h2>What to expect</h2>
   <p>PDF Studio is run by a small team, so replies can take a few days. We read every message. Your email address is used only to reply to you; see the <Link href="/privacy">privacy policy</Link>.</p>
   <Link className="primary" href="/">Open PDF Studio</Link>
-  <SiteFooter/>
- </main>;
+  
+ </main></SiteFrame>;
 }

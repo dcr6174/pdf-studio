@@ -14,7 +14,7 @@ export default async function ComparePage({params}:{params:Promise<{slug:string}
  const {slug}=await params,c=comparisons.find(x=>x.slug===slug);if(!c)notFound();
  const url='https://pdf-studio.in/compare/'+c.slug;
  const schema={'@context':'https://schema.org','@graph':[{'@type':'BreadcrumbList',itemListElement:[{'@type':'ListItem',position:1,name:'PDF Studio',item:'https://pdf-studio.in/'},{'@type':'ListItem',position:2,name:'Guides',item:'https://pdf-studio.in/guides'},{'@type':'ListItem',position:3,name:c.title,item:url}]},{'@type':'Article',headline:c.title,description:c.description,dateModified:'2026-10-04',author:{'@type':'Organization',name:'PDF Studio'}}]};
- return <div className="seo-page"><SiteHeader/><main className="tool-instructions compare-page">
+ return <div className="site-frame"><SiteHeader/><main className="tool-instructions compare-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
   <nav className="page-crumbs" aria-label="Breadcrumb"><Link href="/guides">Guides</Link> / Comparison</nav>
   <h1>{c.title}</h1><p className="lead">{c.summary}</p>

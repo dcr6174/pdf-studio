@@ -32,3 +32,8 @@
  .pdf-site-footer.pdf-site-footer .footer-group>a,.pdf-site-footer.pdf-site-footer .footer-group>button{justify-content:center;width:100%;max-width:320px;text-align:center;font-size:14px;padding:10px 12px;min-height:44px}
  .pdf-site-footer.pdf-site-footer .footer-bottom{align-items:center;justify-content:center;text-align:center;margin-top:32px}
 }
+
+.site-frame{width:100%;max-width:none;min-height:100dvh;background:var(--background);color:var(--foreground)}
+.pdf-site-footer.pdf-site-footer .footer-group>.footer-donate{width:auto;max-width:100%;min-height:44px;padding:10px 18px;margin:8px 0 0 10px;gap:8px;background:#ffdf85;border-color:#ffdf85;color:#44330d;font-weight:700;white-space:nowrap}
+.pdf-site-footer.pdf-site-footer .footer-group>.footer-donate:hover{background:#f7d164;border-color:#f7d164;color:#332506}
+@media(max-width:767px){.pdf-site-footer.pdf-site-footer .footer-group>.footer-donate{margin:12px 0 0;min-width:120px;width:auto}}

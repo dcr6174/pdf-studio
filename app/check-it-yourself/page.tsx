@@ -1,6 +1,6 @@
 import type {Metadata} from 'next';
 import {pageMeta} from '@/lib/page-meta';
-import {SiteHeader,SiteFooter} from '@/components/site-header';
+import {SiteFrame} from '@/components/site-frame';
 import Link from '@/components/browser-link';
 import {CONTACT_EMAIL} from '@/lib/contact';
 
@@ -25,7 +25,7 @@ export default function CheckItYourself(){
   {'@type':'HowTo',name:'How to look at what PDF Studio sends from your browser',step:steps.map((text,i)=>({'@type':'HowToStep',position:i+1,text}))},
   {'@type':'FAQPage',mainEntity:faq.map(([name,text])=>({'@type':'Question',name,acceptedAnswer:{'@type':'Answer',text}}))},
  ]};
- return <main className="seo-page"><SiteHeader/>
+ return <SiteFrame><main className="seo-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
   <h1>Check it yourself: what does PDF Studio send?</h1>
   <p className="lead">PDF Studio is designed to process your files in your browser, not on a server. You can look at what your browser actually sends and judge for yourself. These checks give useful evidence. They are not a guarantee, and their limits are listed below.</p>
@@ -75,6 +75,6 @@ export default function CheckItYourself(){
 
   <p>Found something unexpected? Please tell us at <a href={'mailto:'+CONTACT_EMAIL}>{CONTACT_EMAIL}</a>. Do not attach private documents.</p>
   <p><Link className="primary" href="/">Open PDF Studio</Link> <Link href="/privacy">Privacy policy</Link> · <Link href="/contact">Contact</Link></p>
-  <SiteFooter/>
- </main>;
+  
+ </main></SiteFrame>;
 }
