@@ -198,9 +198,9 @@ const additional: Record<string, [string,string,string,string]> = {
   ],
   "flatten": [
     "Review whether you still need selectable text, links or interactive forms.",
-    "Export the rasterized PDF and inspect text readability.",
-    "Create static image pages from a document.",
-    "This rebuilds pages as images. Searchable text, links and form interaction are lost."
+    "Choose form-field mode to retain text, or image mode to flatten the entire appearance.",
+    "Make filled form fields read-only or create static image pages.",
+    "Form-field mode preserves selectable text and makes form fields read-only. Image mode removes searchable text, links and editable forms, and may enlarge the file."
   ],
   "metadata": [
     "Enter the title, author or subject you want in the document properties.",

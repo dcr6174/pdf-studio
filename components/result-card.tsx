@@ -5,7 +5,7 @@ import {ArrowLeft, Download, FolderOpen, Pencil} from 'lucide-react';
 import {formatBytes} from '@/components/file-facts';
 import './result-screen.css';
 
-type Output = {blob: Blob; name: string; report?: string; inputSize?: number};
+type Output = {blob: Blob; name: string; report?: string; inputSize?: number;warnings?:string[];target?:{requestedKB:number;met:boolean}};
 export function ResultCard({output, open, before, compress, onDownload, onOriginal, onContinue, onNextTool, onStartOver, onSave, onSettings, onProtect, error, previewContent}: {
     output: Output; open: boolean; onOpenChange?: (value: boolean) => void;
     before?: {files: number; pages: number; size: number; unit: 'page' | 'image'}; compress?: boolean;
@@ -49,6 +49,9 @@ export function ResultCard({output, open, before, compress, onDownload, onOrigin
         <h1 id="result-heading">Your {label} is ready</h1>
         <p className="result-screen-file">{output.name} <span>· {formatBytes(output.blob.size)}</span></p>
         {compress && inputSize > 0 && <p className="result-screen-size">{saved > 0 ? `${saved}% smaller · ${formatBytes(inputSize)} → ${formatBytes(output.blob.size)}` : larger ? 'The original is smaller. Download it below, or change your settings.' : 'This PDF is already compact. You can download it or change your settings.'}</p>}
+        {output.target&&<p className="result-screen-size" role="status">{output.target.met?'Target met':'Target not met'} · Result {(output.blob.size/1000).toFixed(1)} KB / target {output.target.requestedKB} KB</p>}
+        {output.warnings?.map(warning=><p key={warning} className="result-output-warning" role="status">{warning}</p>)}
+        {!compress&&inputSize>0&&output.warnings?.length&&<p className="result-screen-size">{formatBytes(inputSize)} → {formatBytes(output.blob.size)}</p>}
         <div className="result-main-actions"><button ref={downloadButton} className="primary result-screen-download" onClick={larger && onOriginal ? onOriginal : onDownload}><Download size={24}/>{larger && onOriginal ? 'Download original PDF' : `Download ${label}`}</button>{onSave && <button className="secondary" onClick={onSave}><FolderOpen size={17}/>Save to My files</button>}</div>
         <div className="result-screen-return"><button className="link-button" onClick={onSettings}><ArrowLeft size={17}/>Change settings</button>{onStartOver && <button className="link-button" onClick={onStartOver}>Start over</button>}</div>
         {(onContinue || onNextTool) && <section className="result-screen-next" aria-label="Continue with your PDF"><h2>Continue with this PDF</h2><div>{onContinue && <button className="secondary" onClick={onContinue}><Pencil size={17}/>Continue editing</button>}{onNextTool && (onContinue ? [['compress', 'Compress'], ['sign', 'Sign']] : [['edit', 'Edit PDF'], ['compress', 'Compress'], ['sign', 'Sign']]).map(([id, text]) => <button className="secondary" key={id} onClick={() => onNextTool(id)}>{text}</button>)}</div></section>}
@@ -60,3 +63,4 @@ export function ResultCard({output, open, before, compress, onDownload, onOrigin
         </div>
     </section>;
 }
+
