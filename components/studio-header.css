@@ -36,3 +36,10 @@
 
 .owner-header-link{display:inline-flex;align-items:center;padding:10px 14px;border-radius:12px;background:#8b5cf620;color:var(--foreground);font-weight:650;white-space:nowrap}.owner-header-link:focus-visible{outline:3px solid #9b78ef;outline-offset:3px}@media(max-width:420px){.owner-header-link{padding:8px;font-size:12px}}
 
+
+/* Make the full catalogue fit the available screen width. */
+.studio-header.studio-shared{z-index:60}
+.studio-header.studio-shared .tools-trigger{font-size:16px;min-height:48px;padding:12px 18px;font-weight:700}
+.studio-header.studio-shared .tools-panel{position:fixed!important;top:80px!important;left:16px!important;right:16px!important;width:auto!important;max-width:none!important;max-height:calc(100dvh - 96px)!important;overflow:auto}
+.studio-header.studio-shared .tools-columns{display:grid;grid-template-columns:repeat(auto-fit,minmax(220px,1fr));gap:20px;width:100%}
+@media(max-width:767px){.studio-header.studio-shared .tools-panel{top:130px!important;max-height:calc(100dvh - 146px)!important;left:8px!important;right:8px!important}.studio-header.studio-shared .tools-columns{grid-template-columns:repeat(auto-fit,minmax(160px,1fr))}}
