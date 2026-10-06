@@ -70,3 +70,11 @@ select,select option{background:var(--card);color:var(--foreground);color-scheme
 /* Signing fields adapted from the supplied reference screenshots. */
 .sign-field-list{display:grid;gap:10px}.sign-field-list h3{font-size:.78rem;text-transform:uppercase;letter-spacing:.06em;color:var(--muted);margin:10px 0 0}.sign-field-card{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--card)}.sign-field-card>svg{color:var(--primary);flex:none}.sign-field-card>div{min-width:0;flex:1}.sign-field-card b,.sign-field-card small{display:block}.sign-field-card small{color:var(--muted);font-size:.76rem;margin-top:3px}.sign-field-card button{min-height:38px;padding:6px 12px}.sign-placement-tools{display:grid;gap:10px;margin:12px 0;padding:14px;border:1px solid var(--border);border-radius:14px;background:var(--card)}.sign-placement-tools>b{font-size:.9rem}.sign-placement-tools .field{margin:0}.sign-placement-tools button{min-height:44px}
 @media(max-width:900px){.sign-placement-tools{margin-inline:0}}
+
+/* Keep discovery close to the header instead of stacking three hero offsets. */
+.studio-shell.home-shell .content{padding-top:20px}
+.home-shell .home-hero{margin:0 auto 24px;padding:12px 0 16px}
+.home-shell .hero-copy>.buddy-hero{margin:0 auto 4px}
+.home-shell .buddy-hero svg{width:80px;height:86px}
+.home-shell .quick-tasks{margin:14px auto 0}
+@media(max-width:767px){.studio-shell.home-shell .content{padding-top:12px}.home-shell .home-hero{margin:0 auto 18px;padding:8px 0 12px}.home-shell .buddy-hero svg{width:70px;height:76px}}
