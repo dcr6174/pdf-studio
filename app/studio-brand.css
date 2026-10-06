@@ -479,3 +479,8 @@ select,option,[data-slot=select-trigger],[data-slot=select-content],[data-slot=s
 .resize-handle.handle-nw{left:0;top:0;cursor:nwse-resize}.resize-handle.handle-n{left:50%;top:0;cursor:ns-resize}.resize-handle.handle-ne{left:100%;top:0;cursor:nesw-resize}.resize-handle.handle-e{left:100%;top:50%;cursor:ew-resize}.resize-handle.handle-se{left:100%;top:100%;cursor:nwse-resize}.resize-handle.handle-s{left:50%;top:100%;cursor:ns-resize}.resize-handle.handle-sw{left:0;top:100%;cursor:nesw-resize}.resize-handle.handle-w{left:0;top:50%;cursor:ew-resize}
 .page-board .resize-handle:focus-visible{outline:3px solid #e3a000;outline-offset:3px}
 @media(pointer:coarse){.page-board .mark .resize-handle{width:32px;height:32px;min-width:32px;min-height:32px}}
+
+/* Small visible handles with generous transparent hit areas. */
+.page-board .mark .resize-handle{width:28px;height:28px;min-width:28px;min-height:28px;border:0;background:transparent;box-shadow:none;border-radius:0}
+.page-board .mark .resize-handle::after{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;transform:translate(-50%,-50%);background:#6545df;border:1px solid #fff;box-shadow:0 0 0 1px #6545df;border-radius:2px;pointer-events:none}
+@media(pointer:coarse){.page-board .mark .resize-handle{width:32px;height:32px;min-width:32px;min-height:32px}.page-board .mark .resize-handle::after{width:11px;height:11px}}

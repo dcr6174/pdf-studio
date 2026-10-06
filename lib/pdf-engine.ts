@@ -1,3 +1,4 @@
+import {markRotation} from './mark-rotation';
 import {workflowSettings,type WorkflowStepSettings} from './workflow-recipes';
 import {resizeSheet,resizePlacement,splitGroups} from './page-layout';
 import {pixelsHaveInk,rejectBlankOutput} from './output-integrity';
@@ -43,6 +44,7 @@ export type Mark = {
     fontSize: number;
     opacity?:number;
     watermark?:boolean;
+    angle?:number;
     underline?: boolean;
     strike?:boolean;
     fontFamily?: 'noto'|'helvetica'|'times'|'courier';
@@ -594,6 +596,7 @@ export async function applyMarks(out:PDFDocument,order:PageItem[],marks:Mark[],s
    const xx=x*g.width,yy=(1-y-h)*g.height,ww=w*g.width,hh=h*g.height;
    const hex=/^#[0-9a-f]{6}$/i.test(m.color)?m.color.slice(1):'172638',color=rgb(parseInt(hex.slice(0,2),16)/255,parseInt(hex.slice(2,4),16)/255,parseInt(hex.slice(4,6),16)/255);
    p.pushOperators(pushGraphicsState(),concatTransformationMatrix(...g.matrix as [number,number,number,number,number,number]));
+   if(m.watermark&&m.angle)p.pushOperators(concatTransformationMatrix(...markRotation(m.angle,xx,yy,ww,hh)));
    if(m.kind==='text'){
     let markFont=font;if(m.fontFamily&&m.fontFamily!=='noto'){const family=m.fontFamily==='times'?'TimesRoman':m.fontFamily==='courier'?'Courier':'Helvetica';const variant=family==='TimesRoman'?(m.bold?(m.italic?'TimesRomanBoldItalic':'TimesRomanBold'):(m.italic?'TimesRomanItalic':'TimesRoman')):family+(m.bold?(m.italic?'BoldOblique':'Bold'):(m.italic?'Oblique':''));let cached=fontCache.get(variant);if(!cached){cached=await out.embedFont(StandardFonts[variant as keyof typeof StandardFonts]);fontCache.set(variant,cached);}markFont=cached;}
     let lines:string[];try{lines=wrapText(m.text??'',markFont,m.fontSize,ww);}catch{throw new Error('This font cannot display some characters. Choose Unicode (Noto Sans).');}const lineHeight=m.fontSize*1.2;
