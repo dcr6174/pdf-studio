@@ -1,0 +1,10 @@
+'use client';
+import {useState} from 'react';
+import {ReportProblem} from '@/components/report-problem';
+import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
+import {privacySignal,usageAllowed,setUsagePreference} from '@/lib/activity-client';
+import Link from '@/components/browser-link';
+export function FooterActions({tool}:{tool:string}){
+ const [open,setOpen]=useState(false),[enabled,setEnabled]=useState(false),[blocked,setBlocked]=useState(false),[message,setMessage]=useState('');
+ return <><ReportProblem tool={tool}/><button type="button" onClick={()=>{setBlocked(privacySignal());setEnabled(usageAllowed());setMessage('');setOpen(true);}}>Privacy settings</button><Dialog open={open} onOpenChange={setOpen}><DialogContent><DialogTitle>Privacy settings</DialogTitle><DialogDescription>Your documents are processed on your device. Saved files and drafts stay in this browser; clearing browser data removes them.</DialogDescription><p>Anonymous usage counting excludes document contents, filenames, passwords and signatures. Analytics records expire after 48 hours.</p><p role="status">{blocked?'Your browser privacy signal disables usage counting.':enabled?'Anonymous usage counting is allowed.':'Anonymous usage counting is disabled.'}</p>{!blocked&&<button className="secondary" onClick={()=>{const next=!enabled;try{setUsagePreference(next);setEnabled(usageAllowed());setMessage(usageAllowed()===next?'Preference saved for this browser.':'This browser could not save the preference.');}catch{setMessage('This browser could not save the preference.');}}}>{enabled?'Disable usage counting':'Allow anonymous usage counting'}</button>}<p role="status">{message}</p><p>OCR downloads a recognition model. Read aloud uses browser-provided voices.</p><Link href="/privacy">Read the privacy policy</Link></DialogContent></Dialog></>;
+}

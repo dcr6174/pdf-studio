@@ -36,12 +36,14 @@ function start(){
  schedule();
  return()=>{active=false;clearInterval(timer);if(flushTimer){clearTimeout(flushTimer);flushTimer=undefined;}document.removeEventListener('visibilitychange',visibility);window.removeEventListener('online',online);window.removeEventListener('pagehide',unload);window.removeEventListener('storage',storage);};
 }
+export function setUsagePreference(enabled:boolean){storageSet(localStorage,disabledKey,enabled?'0':'1');if(!enabled){active=false;queue=[];persist();}window.dispatchEvent(new Event('pdf-studio-privacy-change'));}
+export function usageAllowed(){return !privacySignal()&&storageGet(localStorage,disabledKey)!=='1';}
 export function useActivityTracking(view:string){
  const [disabled,setDisabled]=useState(false),[privacyBlocked,setPrivacyBlocked]=useState(false);
- useEffect(()=>{let alive=true;queueMicrotask(()=>{if(alive){setDisabled(storageGet(localStorage,disabledKey)==='1');setPrivacyBlocked(privacySignal());}});const changed=(e:StorageEvent)=>{if(e.key===disabledKey)setDisabled(e.newValue==='1');};window.addEventListener('storage',changed);return()=>{alive=false;window.removeEventListener('storage',changed);};},[]);
+ useEffect(()=>{let alive=true;queueMicrotask(()=>{if(alive){setDisabled(storageGet(localStorage,disabledKey)==='1');setPrivacyBlocked(privacySignal());}});const changed=(e:StorageEvent)=>{if(e.key===disabledKey)setDisabled(e.newValue==='1');};const preference=()=>setDisabled(storageGet(localStorage,disabledKey)==='1');window.addEventListener('storage',changed);window.addEventListener('pdf-studio-privacy-change',preference);return()=>{alive=false;window.removeEventListener('storage',changed);window.removeEventListener('pdf-studio-privacy-change',preference);};},[]);
  useEffect(()=>{if(disabled||privacyBlocked)return;return start();},[disabled,privacyBlocked]);
  useEffect(()=>{toolId=validTools.has(view)?view:null;if(toolId)trackActivity('tool_open',toolId);},[view,disabled,privacyBlocked]);
- function setEnabled(enabled:boolean){storageSet(localStorage,disabledKey,enabled?'0':'1');setDisabled(!enabled);if(!enabled){active=false;queue=[];persist();}}
+ function setEnabled(enabled:boolean){setUsagePreference(enabled);setDisabled(!enabled);}
  return {enabled:!disabled&&!privacyBlocked,privacyBlocked,setEnabled};
 }
 
