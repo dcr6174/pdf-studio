@@ -509,3 +509,16 @@ select,option,[data-slot=select-trigger],[data-slot=select-content],[data-slot=s
 @media(max-width:1050px){.home-shell .popular-tool-row{grid-template-columns:repeat(6,minmax(160px,1fr));overflow-x:auto;overscroll-behavior-x:contain;scroll-snap-type:x proximity;padding:2px 2px 12px}.home-popular .tool-card{scroll-snap-align:start}.home-shell .home-toolbox .tool-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
 @media(max-width:767px){.home-shell .home-hero{padding:4px 0 0;margin-bottom:22px}.home-shell .hero-copy h1{margin-top:8px}.home-section-heading{gap:4px;margin-bottom:12px}.home-section-heading p{width:100%}.home-category-heading{display:block}.home-category-heading p{margin-top:4px}.home-shell .home-toolbox .tool-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}.home-shell .home-toolbox .tool-card{padding:14px;min-height:125px}.home-popular{margin-bottom:28px}}
 @media(max-width:420px){.home-shell .home-toolbox .tool-grid{grid-template-columns:minmax(0,1fr)}}
+
+/* Compact headline and category controls. */
+.home-shell .hero-copy .home-benefit-statement{font-size:clamp(.95rem,1.4vw,1.08rem);line-height:1.7;letter-spacing:normal;max-width:760px;margin:0 auto 24px;color:var(--muted)}
+.home-shell .popular-tool-row{grid-template-columns:repeat(8,minmax(130px,1fr));overflow-x:auto;padding-bottom:12px}
+.home-shell .home-popular .tool-card{padding:14px;min-height:150px}
+.home-catalog-pills{display:flex;gap:6px;flex-wrap:wrap;border:1px solid var(--border);border-radius:999px;padding:5px;background:var(--soft)}
+.home-catalog-pills button{min-height:44px;padding:8px 16px;border-radius:999px;color:var(--foreground);font-size:.85rem;white-space:nowrap}
+.home-catalog-pills button[aria-pressed=true]{background:var(--foreground);color:var(--card)}
+[data-theme=dark] .studio-shell .primary{background:#5424b5;color:#fff}
+.result-main-actions{display:flex;align-items:center;justify-content:center;gap:12px;flex-wrap:wrap;margin:28px 0 14px}
+.result-screen .result-main-actions .result-screen-download{margin:0}
+.result-main-actions>.secondary{min-height:52px;display:inline-flex;align-items:center;gap:8px}
+@media(max-width:767px){.home-catalog-pills{border-radius:18px;width:100%;gap:4px}.home-catalog-pills button{flex:1;padding:8px 12px}.home-shell .popular-tool-row{grid-template-columns:repeat(8,160px)}.result-main-actions{flex-direction:column}.result-main-actions>button{width:100%}}
