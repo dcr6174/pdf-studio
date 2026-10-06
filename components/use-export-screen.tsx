@@ -2,7 +2,7 @@
 import {useState} from 'react';
 import {ResultCard} from '@/components/result-card';
 
-export function useExportScreen(afterDownload?: () => void) {
+export function useExportScreen(afterDownload?: (output: {blob: Blob; name: string}) => void) {
     const [output, setOutput] = useState<{blob: Blob; name: string}>();
     const [visible, setVisible] = useState(false);
     function prepare(blob: Blob, name: string) {setOutput({blob, name}); setVisible(true);}
@@ -13,7 +13,7 @@ export function useExportScreen(afterDownload?: () => void) {
         const url = URL.createObjectURL(output.blob), anchor = document.createElement('a');
         anchor.href = url; anchor.download = output.name; anchor.click();
         setTimeout(() => URL.revokeObjectURL(url), 30000);
-        afterDownload?.();
+        afterDownload?.(output);
     }}/>;
     return {prepare, visible, screen};
 }
