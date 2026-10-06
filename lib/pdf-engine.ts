@@ -10,7 +10,7 @@ import {optimizeJPEGImages} from './optimize-jpeg';
 import {decodePhoto,normalizeCameraFile} from './mobile-image';
 import {addBookmarks,cleanupPDF,removeAnnotations,halvePages,createForm} from './extra-pdf';
 import {replaceExistingText} from './native-text';
-import { PDFDocument, StandardFonts, rgb, degrees, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb, degrees, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray, PDFDict } from 'pdf-lib';
 import JSZip from 'jszip';
 import {sensitiveTextCandidates} from './sensitive-text';
 import {pageGeometry,displayPoint,safeLink,arrowHead} from './page-geometry';
@@ -91,6 +91,7 @@ export type Options = {
     ocrSkipText?:boolean;
     ocrPreprocess?:string;
     flattenForm?:boolean;
+    flattenMode?:'forms'|'image';
     footer?:string;
 };
 export type Output = {
@@ -98,6 +99,8 @@ export type Output = {
     name: string;
     report?: string;
     inputSize?: number;
+    warnings?:string[];
+    target?:{requestedKB:number;met:boolean};
     ocrReview?:import('./ocr-review').OCRReviewPage[];
 };
 let pdfjsPromise: Promise<typeof import('pdfjs-dist')> | undefined;
@@ -210,7 +213,7 @@ async function plainPDF(text: string, markdown = false) { const { jsPDF } = awai
     binary += String.fromCharCode(arr[i]); p.addFileToVFS('NotoSans.ttf', btoa(binary)); p.addFont('NotoSans.ttf', 'NotoSans', 'normal'); p.setFont('NotoSans'); p.setFontSize(11); let y = 23; for (const raw of text.split('\n')) {
     const heading = markdown && /^#{1,3} /.test(raw);
     p.setFontSize(heading ? 17 : 11);
-    const clean = markdown ? raw.replace(/^#{1,6}\s/, '').replace(/\*\*([^*]+)\*\*/g, '$1').replace(/^[-*] /, '• ') : raw;
+    const clean = markdown ? raw.replace(/^#{1,6}\s/, '').replace(/\*\*([^*]+)\*\*/g, '$1').replace(/^[-*] /, '•  ') : raw;
     const lines = p.splitTextToSize(clean, 168);
     for (const line of lines) {
         if (y > 273) {
@@ -405,10 +408,11 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         const source=unchanged?first.bytes:await out.save();let best:Output=result(source,`${filename}-compress.pdf`,undefined,undefined,source.length);
         if(source.length>target){const raster=!['compact','images'].includes(o.quality),attempts=raster?[{quality:'compact'},{quality:o.quality,compressJPEG:o.quality==='small'?.45:o.quality==='balanced'?.72:.9},{quality:o.quality,compressJPEG:.35},{quality:o.quality,compressJPEG:.2}]:[{quality:o.quality}];
         for(let i=0;i<attempts.length;i++){signal?.throwIfAborted();const candidate=await processPDF('compress',files,items,marks,{...o,compressTarget:undefined,...attempts[i]},n=>progress(Math.round((i*100+n)/attempts.length)),signal);if(candidate.blob.size<best.blob.size)best=candidate;if(best.blob.size<=target)break;}}
-        return {...best,report:`${best.blob.size<=target?'Target reached.':'Target not reached; smallest tested result retained.'} Requested ${o.compressTarget} KB; result ${(best.blob.size/1000).toFixed(1)} KB. ${best.report??'Original source retained unchanged.'} Best-effort size targeting cannot guarantee readability or a specific size; inspect the preview.`};
+        return {...best,target:{requestedKB:Number(o.compressTarget),met:best.blob.size<=target},report:`${best.blob.size<=target?'Target reached.':'Target not reached; smallest tested result retained.'} Requested ${o.compressTarget} KB; result ${(best.blob.size/1000).toFixed(1)} KB. ${best.report??'Original source retained unchanged.'} Best-effort size targeting cannot guarantee readability or a specific size; inspect the preview.`};
     }
     if(id==='compress'&&o.quality==='images'){const source=unchanged?first.bytes:await out.save();const d=await PDFDocument.load(source,{updateMetadata:false});const changed=await optimizeJPEGImages(d,signal);progress(95);const bytes=changed?await d.save({useObjectStreams:true}):source;return result(bytes.length<source.length?bytes:source,`${filename}-images-optimized.pdf`,undefined,bytes.length<source.length?`Optimized ${changed} supported RGB JPEG images. Text, links and form structure retained. JPEG quality is reduced; inspect small image details.`:'No smaller result: original source retained. Only unmasked RGB JPEG streams are supported by this mode.',source.length);}
     if(id==='compress'&&o.quality==='compact'){progress(90);const baseline=unchanged?first.bytes:await out.save();const compact=unchanged?await PDFDocument.load(first.bytes,{updateMetadata:false}):out;const bytes=await compact.save({useObjectStreams:true});signal?.throwIfAborted();const smaller=bytes.length<baseline.length;return result(smaller?bytes:baseline,`${filename}-compact.pdf`,undefined,smaller?`Reduced from ${baseline.length} to ${bytes.length} bytes. Text and links retained.`:'No size reduction: kept the source unchanged. Try an image preset only if losing searchable text, links and forms is acceptable.',baseline.length);}
+    if(id==='flatten'&&o.flattenMode!=='image'){const count=out.getForm().getFields().length;flattenFormSafely(out);progress(100);return result(await out.save(),`${filename}-flatten.pdf`,undefined,`${count} form fields made read-only. Selectable text and page sizes retained. Other annotations remain; choose image mode to flatten the entire appearance.`,first.size);}
     if (['jpg', 'png', 'webp', 'compress', 'flatten', 'redact', 'grayscale', 'invert', 'ocr', 'pptx'].includes(id)) {
         const source = id==='compress'&&unchanged?first.bytes:await out.save();
         const raster = await PDFDocument.create();
@@ -427,7 +431,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             for (let i = 0; i < order.length; i++) {
                 signal?.throwIfAborted();await new Promise(resolve=>setTimeout(resolve,0));
                 if(id==='ocr'){let skip=!!ocrSelected&&!ocrSelected.has(i);if(!skip&&o.ocrSkipText!==false){const reader=await renderer(source);try{const text=await (await reader.getPage(i+1)).getTextContent();skip=text.items.some(item=>'str' in item&&item.str.trim().length>0);}finally{await reader.destroy();}}if(skip){const [copied]=await raster.copyPages(out,[i]);raster.addPage(copied);ocrReview.push(null);progress(10+Math.round((i+1)/order.length*85));continue;}}
-                const scale = id === 'compress' ? (o.quality === 'small' ? 1 : o.quality === 'balanced' ? 1.5 : 2) : ['jpg','png','webp'].includes(id) ? Number(o.quality) || 2 : 1.5;
+                const scale = id === 'compress' ? (o.quality === 'small' ? 1 : o.quality === 'balanced' ? 1.5 : 2) : ['jpg','png','webp'].includes(id) ? Number(o.quality) || 2 : ['flatten','redact','grayscale','invert'].includes(id)?150/72:1.5;
                 const c = await render(source, i, scale,undefined,0,signal);
                 const ctx = c.getContext('2d')!;
                 if (id === 'redact') {
@@ -495,7 +499,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             const bytes=await raster.save();
             const noSaving=id==='compress'&&bytes.length>=source.length;
             const warning=id==='ocr'?`OCR language: ${o.ocrLanguage??'eng'}. Recognition can be wrong; review names and numbers.${omittedGlyphs?` ${omittedGlyphs} characters could not be included in the searchable layer; visible scan retained.`:''}`:id==='compress'?(noSaving?'No size reduction: kept the source instead of the larger raster output.':`Reduced from ${source.length} to ${bytes.length} bytes. Image-based output: searchable text, links and forms are lost.`):undefined;
-            return {...result(noSaving?source:bytes, `${filename}-${id}.pdf`,undefined,warning,id==='compress'?source.length:undefined),...(id==='ocr'?{ocrReview}:{})};
+            return {...result(noSaving?source:bytes, `${filename}-${id}.pdf`,undefined,warning,id==='compress'?source.length:files.reduce((total,file)=>total+file.size,0)),...(['flatten','redact','grayscale','invert'].includes(id)?{warnings:['Image-based output: selectable text, links and editable forms are removed. Inspect the result before sharing.']}:{}),...(id==='ocr'?{ocrReview}:{})};
         }
         finally {
             await worker?.terminate();
@@ -580,8 +584,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         out.setKeywords([]);
         out.setCreator('');
         out.setProducer('');
-        out.setCreationDate(new Date(0));
-        out.setModificationDate(new Date(0));
+        const info=out.context.lookup(out.context.trailerInfo.Info,PDFDict);info.delete(PDFName.of('CreationDate'));info.delete(PDFName.of('ModDate'));out.catalog.delete(PDFName.of('Metadata'));
     }
     signal?.throwIfAborted();return result(await out.save(), `${filename}-${id}.pdf`);
 }
@@ -661,5 +664,4 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
  await rejectBlankOutput(outputPages,sourcePages,probe,signal);
  return output;
 }
-
 

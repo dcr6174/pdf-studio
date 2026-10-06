@@ -1,0 +1,2 @@
+'use client';
+export default function ToolError({reset}:{reset:()=>void}){return <main className="seo-page"><h1>This tool could not load</h1><p>A recent update or network interruption may have prevented a tool file from loading. Try again. If it still fails, reload this page to get the current version.</p><button className="primary" onClick={()=>reset()}>Try again</button><button className="secondary" onClick={()=>window.location.reload()}>Reload tool</button><p><a href="/tools">Browse tools</a> · <a href="/help">Get help</a></p></main>;}

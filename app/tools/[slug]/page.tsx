@@ -54,8 +54,9 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
   </section>;
  return <div className="tool-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
-  <Studio initialTool={t.id} initialHeading={t.title} guide={guide}/>
+  <Studio initialTool={t.id} initialHeading={t.title} initialOptions={t.slug==='compress-pdf-to-100kb'?{compressTarget:'100'}:undefined} guide={guide}/>
  </div>;
 }
+
 
 

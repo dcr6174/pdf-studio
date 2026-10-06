@@ -18,3 +18,10 @@ html[data-theme="dark"] .conversion-guide-badge{background:#392457;color:#efe5ff
 
 .lab-workspace .lab-workspace-heading h1,.experiment-main h1{color:#263247;background:none;-webkit-text-fill-color:currentColor}
 html[data-theme="dark"] .lab-workspace .lab-workspace-heading h1,html[data-theme="dark"] .experiment-main h1{color:#eef0fa}
+
+
+.result-output-warning{max-width:620px;margin:16px auto;padding:14px 18px;border:1px solid #bd8538;border-radius:12px;background:var(--card,#fff);color:var(--foreground,#21152f);line-height:1.5}
+.studio-header.studio-shared .studio-wordmark,.studio-header.studio-shared button{min-height:44px}
+.studio-header.studio-shared .studio-wordmark{display:flex;align-items:center}
+html[data-theme="light"]{--muted-foreground:#6f6480;--muted:#6f6480}
+@media(max-width:480px){.studio-header.studio-shared [aria-label="Main navigation"] a[href="/lab"]{display:none}.studio-header.studio-shared{gap:8px;padding:6px 10px}.tools-directory .filters{position:sticky;top:0;z-index:5;background:var(--card,#fff);padding:8px 0}}

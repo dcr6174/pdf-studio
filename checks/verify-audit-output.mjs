@@ -1,0 +1,33 @@
+import {build} from 'vite';
+import assert from 'node:assert/strict';
+import {PDFDocument,StandardFonts,PDFName,degrees} from 'pdf-lib';
+import {createCanvas,DOMMatrix,ImageData,Path2D} from '@napi-rs/canvas';
+import {createRequire} from 'node:module';
+import fs from 'node:fs';
+import {execFileSync} from 'node:child_process';
+globalThis.DOMMatrix=DOMMatrix;globalThis.ImageData=ImageData;globalThis.Path2D=Path2D;
+globalThis.document={createElement(tag){assert.equal(tag,'canvas');return createCanvas(1,1);}};
+await build({configFile:false,logLevel:'error',plugins:[{name:'node-font-fixture',transform(code,id){if(id.endsWith('/lib/pdf-engine.ts'))return {code:code.replace(/standardFontDataUrl:\s*['"]\/standard_fonts\/['"]/g,'standardFontDataUrl: '+JSON.stringify(new URL('../public/standard_fonts/',import.meta.url).pathname)),map:null};}}],build:{ssr:'lib/pdf-engine.ts',outDir:'.audit-output-check',rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
+const {processPDF,pdfjs,render}=await import('../.audit-output-check/engine.mjs');
+const reader=await pdfjs();reader.GlobalWorkerOptions.workerSrc=createRequire(import.meta.url).resolve('pdfjs-dist/build/pdf.worker.min.mjs');
+const doc=await PDFDocument.create(),font=await doc.embedFont(StandardFonts.Helvetica);
+const letter=doc.addPage([612,792]);letter.drawText('PRIVATE-TEST-74291',{x:40,y:700,size:16,font});
+const rotated=doc.addPage([400,600]);rotated.drawText('Second sample page',{x:30,y:550,font});rotated.setRotation(degrees(90));
+doc.setTitle('Fixture');doc.setAuthor('Private fixture author');
+const bytes=await doc.save(),file={id:'sample',name:'sample.pdf',bytes,size:bytes.length,pages:2},pages=[0,1].map(index=>({id:'p'+index,fileId:'sample',index,rotation:0}));
+const options={range:'',text:'',title:'',author:'',subject:'',password:'',quality:'compact',angle:'90',margin:'20',start:'1',columns:'2',fields:{}};
+const run=(id,extra={},marks=[])=>processPDF(id,[file],pages,marks,{...options,...extra},()=>{});
+const sourcePreview=await render(bytes,0,1);const pixels=sourcePreview.getContext('2d').getImageData(0,0,sourcePreview.width,sourcePreview.height).data;let ink=0;for(let i=0;i<pixels.length;i+=4)if(pixels[i]<180&&pixels[i+1]<180&&pixels[i+2]<180)ink++;assert.ok(ink>100,'source text must visibly render before testing redaction');
+const redaction=await run('redact',{},[{id:'redaction',pageId:'p0',kind:'redact',x:0,y:0,w:1,h:.2,color:'#000000',fontSize:16}]);
+assert.ok(redaction.warnings.length);assert.equal(redaction.inputSize,bytes.length);
+const redacted=await PDFDocument.load(await redaction.blob.arrayBuffer());assert.deepEqual(redacted.getPages().map(p=>[p.getWidth(),p.getHeight()]),[[612,792],[600,400]]);
+assert.equal(redacted.getAuthor(),undefined);assert.equal(redacted.getForm().getFields().length,0);
+fs.writeFileSync('.audit-output-check/redacted.pdf',Buffer.from(await redaction.blob.arrayBuffer()));
+assert.doesNotMatch(execFileSync('pdftotext',['.audit-output-check/redacted.pdf','-']).toString(),/PRIVATE-TEST-74291|Second sample page/);
+for(const id of ['grayscale','invert']){const output=await run(id);assert.ok(output.warnings.length);assert.equal(output.inputSize,bytes.length);const reopened=await PDFDocument.load(await output.blob.arrayBuffer());assert.deepEqual(reopened.getPages().map(p=>[p.getWidth(),p.getHeight()]),[[612,792],[600,400]]);}
+const flattened=await run('flatten');fs.writeFileSync('.audit-output-check/flattened.pdf',Buffer.from(await flattened.blob.arrayBuffer()));assert.match(execFileSync('pdftotext',['.audit-output-check/flattened.pdf','-']).toString(),/PRIVATE-TEST-74291/);
+const target=await run('compress',{compressTarget:'100'});assert.equal(target.target.met,true);assert.equal(target.target.requestedKB,100);
+const impossible=await run('compress',{compressTarget:'.01'});assert.equal(impossible.target.met,false);assert.ok(impossible.blob.size<=bytes.length);
+const clean=await run('clean'),cleaned=await PDFDocument.load(await clean.blob.arrayBuffer(),{updateMetadata:false}),info=cleaned.context.lookup(cleaned.context.trailerInfo.Info);assert.equal(info.has(PDFName.of('CreationDate')),false);assert.equal(info.has(PDFName.of('ModDate')),false);
+console.log('PASS: redacted text absent in Poppler extraction; Letter and rotated-page sizes preserved; image-loss warnings; text-preserving flatten; target met/unmet; metadata dates removed.');
+
