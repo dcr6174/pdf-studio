@@ -89,3 +89,9 @@
  .document-loaded .editor-layout{gap:12px}
  .document-loaded .form-page-scroll{max-height:60dvh}
 }
+
+/* Tool screens devote the page to the task; browsing pages retain site navigation. */
+.studio-shell.document-shell .content{min-height:calc(100dvh - 72px)}
+.tool-guide-disclosure{margin:20px 0 0;border-top:1px solid var(--border);color:var(--muted)}
+.tool-guide-disclosure>summary{display:flex;align-items:center;min-height:44px;padding:10px 0;font-size:13px;cursor:pointer}
+.tool-guide-disclosure[open]>summary{color:var(--foreground)}
