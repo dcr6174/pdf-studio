@@ -86,6 +86,9 @@ export type Options = {
     workflowSettings?:WorkflowStepSettings[];
     templateFields?:import('./template-document').TemplateField[];
     ocrLanguage?:string;
+    ocrRange?:string;
+    ocrSkipText?:boolean;
+    ocrPreprocess?:string;
     flattenForm?:boolean;
     footer?:string;
 };
@@ -94,6 +97,7 @@ export type Output = {
     name: string;
     report?: string;
     inputSize?: number;
+    ocrReview?:import('./ocr-review').OCRReviewPage[];
 };
 let pdfjsPromise: Promise<typeof import('pdfjs-dist')> | undefined;
 export async function pdfjs() { if (!pdfjsPromise)
@@ -221,9 +225,9 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
     let first = files[0];
     if(id==='workflow'){
-      const names=o.recipe==='custom'?(o.workflowSteps??['merge','compress']):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'||o.recipe==='share-ready'?['clean','compress']:o.recipe==='email-ready'?['compress']:o.recipe==='print-ready'?['resize']:['merge','compress'];
+      const names=o.recipe==='custom'?(o.workflowSteps??['merge','compress']):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'||o.recipe==='share-ready'?['clean','compress']:o.recipe==='clean-scan'?['ocr']:o.recipe==='email-ready'?['compress']:o.recipe==='print-ready'?['resize']:['merge','compress'];
       const steps=names.map((id,index)=>({id,settings:workflowSettings(id,o.recipe==='custom'?o.workflowSettings?.[index]:undefined)})).filter((_,index)=>o.recipe!=='custom'||!o.workflowDisabled?.includes(index));
-      if(!steps.length)throw new Error('Add at least one workflow step.');if(steps.length>8)throw new Error('This workflow supports up to 8 steps. Remove extra steps and retry.');if(steps.some(s=>!['merge','rotate','reverse','clean','compress','resize'].includes(s.id)))throw new Error('This workflow includes an unsupported step. Choose a listed operation.');
+      if(!steps.length)throw new Error('Add at least one workflow step.');if(steps.length>8)throw new Error('This workflow supports up to 8 steps. Remove extra steps and retry.');if(steps.some(s=>!['merge','rotate','reverse','clean','compress','resize','ocr'].includes(s.id)))throw new Error('This workflow includes an unsupported step. Choose a listed operation.');
       let currentFiles=files,currentPages=items,currentMarks=marks;let output:Output|undefined;const reports:string[]=[];
       for(let i=0;i<steps.length;i++){signal?.throwIfAborted();try{output=await processPDF(steps[i].id,currentFiles,currentPages,currentMarks,{...o,range:'',resizeRange:'',quality:'compact',angle:'90',...steps[i].settings},n=>progress(Math.round((i*100+n)/steps.length)),signal);}catch(e){if(signal?.aborted)throw e;throw new Error(`Step ${i+1} (${steps[i].id}) failed: ${e instanceof Error?e.message:'Could not process this step.'} Your original workspace is retained.`);}if(output.report)reports.push(output.report);const bytes=new Uint8Array(await output.blob.arrayBuffer());const doc=await PDFDocument.load(bytes,{updateMetadata:false});const file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];}
       return {...output!,report:`Completed: ${steps.map(s=>s.id).join(' → ')}. Original workspace retained. ${reports.join(' ')}`};
@@ -413,15 +417,14 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             ppt = new P();
             ppt.layout = 'LAYOUT_WIDE';
         }
-        let omittedGlyphs=0;
+        let omittedGlyphs=0;const ocrReview:import('./ocr-review').OCRReviewPage[]=[];
+        const ocrSelected=id==='ocr'&&o.ocrRange?new Set(ranges(o.ocrRange,order.length)):undefined;
         let worker: Awaited<ReturnType<typeof import('tesseract.js').createWorker>> | undefined;
         try {
-            if (id === 'ocr')
-                worker = await (await import('tesseract.js')).createWorker(['eng','fra','deu','spa','ita','por'].includes(o.ocrLanguage??'eng')?(o.ocrLanguage??'eng'):'eng', 1, { logger: m => { if (m.status === 'recognizing text')
-                        reportProgress(Math.round(m.progress * 80) + 10); } });
             const font = id === 'ocr' ? await raster.embedFont(StandardFonts.Helvetica) : undefined;
             for (let i = 0; i < order.length; i++) {
                 signal?.throwIfAborted();await new Promise(resolve=>setTimeout(resolve,0));
+                if(id==='ocr'){let skip=!!ocrSelected&&!ocrSelected.has(i);if(!skip&&o.ocrSkipText!==false){const reader=await renderer(source);try{const text=await (await reader.getPage(i+1)).getTextContent();skip=text.items.some(item=>'str' in item&&item.str.trim().length>0);}finally{await reader.destroy();}}if(skip){const [copied]=await raster.copyPages(out,[i]);raster.addPage(copied);ocrReview.push(null);progress(10+Math.round((i+1)/order.length*85));continue;}}
                 const scale = id === 'compress' ? (o.quality === 'small' ? 1 : o.quality === 'balanced' ? 1.5 : 2) : ['jpg','png','webp'].includes(id) ? Number(o.quality) || 2 : 1.5;
                 const c = await render(source, i, scale,undefined,0,signal);
                 const ctx = c.getContext('2d')!;
@@ -458,7 +461,12 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
                     const visible=pageGeometry(out.getPage(i));
                     const page = raster.addPage([visible.width,visible.height]);
                     page.drawImage(img, { x: 0, y: 0, width: page.getWidth(), height: page.getHeight() });
-                    if (worker && font) {
+                    if (id==='ocr' && font) {
+                        if(!worker)worker = await (await import('tesseract.js')).createWorker(['eng','fra','deu','spa','ita','por'].includes(o.ocrLanguage??'eng')?(o.ocrLanguage??'eng'):'eng', 1, { logger: m => { if (m.status === 'recognizing text')
+                        reportProgress(Math.round(m.progress * 80) + 10); } });
+
+                        const review:NonNullable<import('./ocr-review').OCRReviewPage>={width:page.getWidth(),height:page.getHeight(),image:c.toDataURL('image/jpeg',.9),words:[]};ocrReview.push(review);
+                        if(o.ocrPreprocess==='grayscale'||o.ocrPreprocess==='threshold'){const pixels=ctx.getImageData(0,0,c.width,c.height);for(let k=0;k<pixels.data.length;k+=4){const gray=.2126*pixels.data[k]+.7152*pixels.data[k+1]+.0722*pixels.data[k+2],v=o.ocrPreprocess==='threshold'?(gray<160?0:255):gray;pixels.data[k]=pixels.data[k+1]=pixels.data[k+2]=v;}ctx.putImageData(pixels,0,0);}
                         const r = await worker.recognize(c, {}, { blocks: true });
                         signal?.throwIfAborted();
                         const blocks = r.data.blocks ?? [];
@@ -466,6 +474,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
                             for (const par of b.paragraphs)
                                 for (const line of par.lines)
                                     for (const word of line.words) {
+                                        review.words.push({text:word.text,confidence:word.confidence,x:word.bbox.x0/scale,y:word.bbox.y0/scale,width:(word.bbox.x1-word.bbox.x0)/scale,height:(word.bbox.y1-word.bbox.y0)/scale});
                                         const t = Array.from(word.text).filter(character=>{try{font.encodeText(character);return true;}catch{omittedGlyphs++;return false;}}).join('');
                                         if (!t)
                                             continue;
@@ -484,7 +493,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             const bytes=await raster.save();
             const noSaving=id==='compress'&&bytes.length>=source.length;
             const warning=id==='ocr'?`OCR language: ${o.ocrLanguage??'eng'}. Recognition can be wrong; review names and numbers.${omittedGlyphs?` ${omittedGlyphs} characters could not be included in the searchable layer; visible scan retained.`:''}`:id==='compress'?(noSaving?'No size reduction: kept the source instead of the larger raster output.':`Reduced from ${source.length} to ${bytes.length} bytes. Image-based output: searchable text, links and forms are lost.`):undefined;
-            return result(noSaving?source:bytes, `${filename}-${id}.pdf`,undefined,warning,id==='compress'?source.length:undefined);
+            return {...result(noSaving?source:bytes, `${filename}-${id}.pdf`,undefined,warning,id==='compress'?source.length:undefined),...(id==='ocr'?{ocrReview}:{})};
         }
         finally {
             await worker?.terminate();
@@ -650,4 +659,5 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
  await rejectBlankOutput(outputPages,sourcePages,probe,signal);
  return output;
 }
+
 

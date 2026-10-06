@@ -14,3 +14,11 @@ export function wrapParagraph(text:string,width:number,measure:(value:string)=>n
  const lines:string[]=[];const add=(s:string)=>{lines.push(s.trimEnd());if(lines.length>maxLines)throw new Error('The paragraph needs more lines than its original area. Shorten it; nearby content has not been moved.');};
  for(const part of text.replace(/\r\n?/g,'\n').replace(/\t/g,'    ').split('\n')){let line='';for(const word of part.split(/\s+/).filter(Boolean)){const next=line?line+' '+word:word;if(measure(next)<=width+.25){line=next;continue;}if(line){add(line);line='';}for(const char of word){if(measure(line+char)>width+.25){if(!line)throw new Error('A character cannot fit inside this paragraph.');add(line);line='';}line+=char;}}add(line);}return lines;
 }
+
+/** Same baseline plus a small gap; never bridges a full column gutter. */
+export function lineFor(objects:TextObject[],selected:number){
+ const first=objects.find(o=>o.index===selected);if(!first?.layout)return first?[first]:[];
+ const l=first.layout,ordered=objects.filter(o=>o.layout&&o.layout.key===l.key&&Math.abs(o.layout.top-l.top)<=Math.max(1,l.height*.2)).sort((a,b)=>a.layout!.left-b.layout!.left),at=ordered.indexOf(first);let start=at,end=at;
+ const adjacent=(a:TextObject,b:TextObject)=>b.layout!.left-a.layout!.right<=Math.max(4,l.height*.8)&&b.layout!.left>=a.layout!.right-1;
+ while(start>0&&adjacent(ordered[start-1],ordered[start]))start--;while(end+1<ordered.length&&adjacent(ordered[end],ordered[end+1]))end++;return ordered.slice(start,end+1);
+}
