@@ -109,7 +109,7 @@ assert.throws(() => styledFlipbookHTML(["</script>"], defaultBook));
 assert(html.includes("prefers-reduced-motion"));
 assert(html.includes("#d9eee5"));
 const elements = Object.fromEntries(
-  ["book", "first", "second", "prev", "next", "count", "view", "full"].map(
+  ["book", "first", "second", "prev", "next", "count", "view", "full", "sound"].map(
     (id) => [
       id,
       {

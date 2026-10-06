@@ -870,3 +870,5 @@
     transition: none !important;
   }
 }
+
+.lab-book-pages{perspective:1600px}.lab-book-pages.has-animation>.lab-page-image{animation:lab-paper-turn 650ms cubic-bezier(.22,.65,.3,1);transform-origin:left center;backface-visibility:hidden}.lab-book-pages.has-animation>.lab-page-image::after{content:"";position:absolute;inset:0;pointer-events:none;background:linear-gradient(90deg,#2a1b1438,transparent 38%,#ffffff44);animation:lab-paper-shade 650ms ease-out forwards}@keyframes lab-paper-turn{0%{transform:rotateY(-65deg) skewY(-3deg);filter:brightness(.8)}60%{transform:rotateY(12deg)}100%{transform:rotateY(0);filter:brightness(1)}}@keyframes lab-paper-shade{to{opacity:0}}@media(prefers-reduced-motion:reduce){.lab-book-pages.has-animation>.lab-page-image,.lab-book-pages.has-animation>.lab-page-image::after{animation:none}.lab-book-pages.has-animation>.lab-page-image::after{display:none}}

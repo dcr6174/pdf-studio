@@ -408,35 +408,30 @@ export function LabWorkspace({ mode }: { mode: Mode }) {
     }
   }
   function sound() {
-    if (
-      !book.sound ||
-      window.matchMedia("(prefers-reduced-motion: reduce)").matches
-    )
-      return;
+    if (!book.sound) return;
     try {
       const ctx = new AudioContext();
-      const buffer = ctx.createBuffer(1, ctx.sampleRate * 0.12, ctx.sampleRate),
-        d = buffer.getChannelData(0);
-      for (let i = 0; i < d.length; i++)
-        d[i] = (Math.random() * 2 - 1) * 0.035 * (1 - i / d.length);
-      const src = ctx.createBufferSource();
-      src.buffer = buffer;
-      src.connect(ctx.destination);
-      src.onended = () => void ctx.close();
-      src.start();
-    } catch {
-      /* Sound is optional. */
-    }
+      const buffer = ctx.createBuffer(1, Math.ceil(ctx.sampleRate * 0.42), ctx.sampleRate);
+      const data = buffer.getChannelData(0);
+      for (let i = 0; i < data.length; i++) {
+        const t = i / data.length;
+        data[i] = (Math.random() * 2 - 1) * Math.sin(Math.PI * t) * (0.65 + 0.35 * Math.sin(t * 55));
+      }
+      const src = ctx.createBufferSource(), filter = ctx.createBiquadFilter(), gain = ctx.createGain();
+      src.buffer = buffer; filter.type = 'bandpass'; filter.frequency.setValueAtTime(1600, ctx.currentTime);
+      filter.frequency.exponentialRampToValueAtTime(700, ctx.currentTime + 0.42); filter.Q.value = 0.55;
+      gain.gain.value = 0.18; src.connect(filter); filter.connect(gain); gain.connect(ctx.destination);
+      src.onended = () => void ctx.close(); void ctx.resume().then(() => src.start()).catch(() => ctx.close());
+    } catch { /* Optional paper rustle. */ }
   }
   function navigate(next: number) {
     const target = Math.max(0, Math.min(count - 1, next));
     if (!file || busy || target === page) return;
-    setReady(false);
     setPage(target);
     setRegion(undefined);
   }
   function turn(delta: number) {
-    if (!file || busy) return;
+    if (!file || busy || page + delta * (spread ? 2 : 1) < 0 || page + delta * (spread ? 2 : 1) >= count) return;
     navigate(page + delta * (spread ? 2 : 1));
     if (mode === "flipbook") sound();
   }
@@ -1191,7 +1186,7 @@ export function LabWorkspace({ mode }: { mode: Mode }) {
                     checked={book.sound}
                     onChange={(e) => setBookOption("sound", e.target.checked)}
                   />
-                  Page sound in this preview
+                  Paper page-turn sound
                 </label>
                 <p>
                   Reduced-motion preferences are respected. Sound is off by
