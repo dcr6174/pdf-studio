@@ -113,8 +113,9 @@ const elements = Object.fromEntries(
     (id) => [
       id,
       {
-        style: {},
-        classList: { toggle() {} },
+        style: {setProperty(){},removeProperty(){}},
+        setPointerCapture(){},hasPointerCapture(){return true},releasePointerCapture(){},
+        classList: { toggle() {}, add(){}, remove(){} },
         click() {
           if (!this.disabled) this.onclick?.();
         },
@@ -144,6 +145,24 @@ elements.view.value = "single";
 elements.view.onchange();
 elements.next.click();
 assert.equal(elements.first.src, images[1]);
+const pointer=(x,y=0)=>({clientX:x,clientY:y,pointerId:1,isPrimary:true,button:0,target:{tagName:'IMG'}});
+elements.book.onpointerdown(pointer(200));
+elements.book.onpointermove(pointer(90));
+elements.book.onpointerup(pointer(90));
+assert.equal(elements.first.src,images[2]);
+elements.book.onpointerdown(pointer(90));
+elements.book.onpointerup(pointer(200));
+assert.equal(elements.first.src,images[1]);
+elements.book.onpointerdown(pointer(200));
+elements.book.onpointerup(pointer(185));
+assert.equal(elements.first.src,images[1]);
+elements.book.onpointerdown(pointer(200));
+elements.book.onpointercancel();
+elements.book.onpointerup(pointer(80));
+assert.equal(elements.first.src,images[1]);
+elements.book.onpointerdown(pointer(200));
+elements.book.onpointerup(pointer(120,180));
+assert.equal(elements.first.src,images[1]);
 console.log(
   "PASS: Unicode counts, exclusions, palette filtering and ratios, colour formats, deterministic non-overlapping cloud shapes, SVG escaping/transparency, offline book navigation and validation.",
 );

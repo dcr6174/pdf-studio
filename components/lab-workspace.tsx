@@ -175,7 +175,7 @@ export function LabWorkspace({ mode }: { mode: Mode }) {
     raster = useRef<HTMLCanvasElement | null>(null),
     job = useRef<AbortController | null>(null),
     drag = useRef<{ x: number; y: number } | null>(null),
-    touch = useRef<{ x: number; y: number } | null>(null),
+    touch = useRef<{ x: number; y: number; id: number } | null>(null),
     swipe = useRef(false);
   const spread =
     mode === "flipbook" &&
@@ -851,29 +851,47 @@ export function LabWorkspace({ mode }: { mode: Mode }) {
                 }
               }}
               onPointerDown={(e) => {
-                if (mode === "flipbook" && e.pointerType === "touch" && file) {
-                  touch.current = { x: e.clientX, y: e.clientY };
-                  swipe.current = false;
-                }
+                if (mode !== "flipbook" || !file || busy || !ready || !e.isPrimary || e.button !== 0 || !(e.target as Element).closest(".lab-page-image")) return;
+                touch.current = { x: e.clientX, y: e.clientY, id: e.pointerId };
+                swipe.current = false;
+                e.currentTarget.setPointerCapture(e.pointerId);
               }}
               onPointerMove={(e) => {
-                if (!touch.current) return;
-                const dx = e.clientX - touch.current.x,
-                  dy = e.clientY - touch.current.y;
-                if (Math.abs(dx) > 20 && Math.abs(dx) > Math.abs(dy))
-                  swipe.current = true;
+                const start = touch.current;
+                if (!start || start.id !== e.pointerId) return;
+                const dx = e.clientX - start.x, dy = e.clientY - start.y;
+                if (Math.abs(dx) > 12 && Math.abs(dx) > Math.abs(dy)) swipe.current = true;
+                if (swipe.current) {
+                  e.currentTarget.classList.add("is-dragging");
+                  e.currentTarget.style.setProperty("--page-drag", Math.max(-100, Math.min(100, dx)) + "px");
+                  e.currentTarget.style.setProperty("--page-angle", Math.max(-28, Math.min(28, dx / 7)) + "deg");
+                }
               }}
               onPointerUp={(e) => {
-                if (
-                  touch.current &&
-                  swipe.current &&
-                  Math.abs(e.clientX - touch.current.x) > 60
-                )
-                  turn(
-                    (e.clientX < touch.current.x ? 1 : -1) *
-                      (book.rtl ? -1 : 1),
-                  );
+                const start = touch.current;
+                if (!start || start.id !== e.pointerId) return;
                 touch.current = null;
+                e.currentTarget.classList.remove("is-dragging");
+                e.currentTarget.style.removeProperty("--page-drag");
+                e.currentTarget.style.removeProperty("--page-angle");
+                if (e.currentTarget.hasPointerCapture(e.pointerId)) e.currentTarget.releasePointerCapture(e.pointerId);
+                if (swipe.current && Math.abs(e.clientX - start.x) > 60)
+                  turn((e.clientX < start.x ? 1 : -1) * (book.rtl ? -1 : 1));
+                swipe.current = false;
+              }}
+              onPointerCancel={(e) => {
+                touch.current = null;
+                swipe.current = false;
+                e.currentTarget.classList.remove("is-dragging");
+                e.currentTarget.style.removeProperty("--page-drag");
+                e.currentTarget.style.removeProperty("--page-angle");
+              }}
+              onLostPointerCapture={(e) => {
+                touch.current = null;
+                swipe.current = false;
+                e.currentTarget.classList.remove("is-dragging");
+                e.currentTarget.style.removeProperty("--page-drag");
+                e.currentTarget.style.removeProperty("--page-angle");
               }}
             >
               <div className="lab-page-scroll">
