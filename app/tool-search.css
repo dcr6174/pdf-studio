@@ -6,8 +6,8 @@
 /* Blur only the background behind the open search panel. */
 body:has(.tool-search-panel[data-state="open"]) [data-slot="dialog-overlay"]{
   background:rgba(24,18,40,.5)!important;
-  backdrop-filter:blur(20px);
-  -webkit-backdrop-filter:blur(20px);
+  backdrop-filter:blur(6px);
+  -webkit-backdrop-filter:blur(6px);
 }
 
 :is(.dark,[data-theme="dark"]) .tool-search-input{color:#d5c6ff}
