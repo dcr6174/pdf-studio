@@ -10,6 +10,7 @@ import "./studio-refresh.css";
 import "./studio-buddy.css";
 import "./audit-workspace.css";
 import "./working-screen.css";
+import "./audit-list-one.css";
 
 export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
