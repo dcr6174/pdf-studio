@@ -6,9 +6,11 @@ import {notFound} from 'next/navigation';
 import {SiteHeader} from '@/components/site-header';
 import {HandwritingStudio} from '@/components/handwriting-studio';
 import {labTools} from '@/lib/handwriting';
+import {labMeta,fullTitle} from '@/lib/seo-meta';
 import {pageMeta} from '@/lib/page-meta';
 import '../../creative/creative.css';
 export function generateStaticParams(){return [...labTools,...experiments].map(t=>({slug:t.slug}));}
-export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const tool=[...labTools,...experiments].find(t=>t.slug===slug);return tool?pageMeta('/lab/'+slug,tool.title+' — free online',tool.description):{};}
+export async function generateMetadata({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const tool=[...labTools,...experiments].find(t=>t.slug===slug);if(!tool)return {};const m=labMeta[slug]??{title:tool.title+' — free online',description:tool.description};return {...pageMeta('/lab/'+slug,fullTitle(m.title),m.description),title:{absolute:fullTitle(m.title)}};}
 export default async function CreativeTool({params}:{params:Promise<{slug:string}>}){const {slug}=await params;const tool=[...labTools,...experiments].find(t=>t.slug===slug);if(!tool)notFound();return <div className="creative-shell"><SiteHeader/>{['poster-collage','pdf-to-gif','sketch-pdf'].includes(slug)?<LabVisualStudio mode={slug as 'poster-collage'|'pdf-to-gif'|'sketch-pdf'}/>:experiments.some(t=>t.slug===slug)?<LabExperiment mode={slug as 'flipbook'|'word-cloud'|'page-palette'|'whiteboard'}/>:<HandwritingStudio mode={tool.slug as (typeof labTools)[number]['slug']}/>}</div>;}
+
 

@@ -1,4 +1,6 @@
 import Link from '@/components/browser-link';
+import {toolMeta,fullTitle} from '@/lib/seo-meta';
+import {FormLanding} from '@/components/form-landing';
 import {conversionGuides} from '@/lib/conversion-guides';
 import {ConversionGuide} from '@/components/conversion-guide';
 import {searchGuidance} from '@/lib/search-guidance';
@@ -17,7 +19,8 @@ export function generateStaticParams(){return [...seoPages,...conversionGuides].
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
  const {slug}=await params, t=[...seoPages,...conversionGuides].find(t=>t.slug===slug);if(!t)return {};
  const image={url:'/social/'+t.slug+'.png',width:1200,height:630,alt:t.title+' — PDF Studio'};
- return {title:t.title+('id' in t?' — Free Online':''),description:t.intro,alternates:{canonical:'/tools/'+t.slug},twitter:{card:'summary_large_image',images:[image.url],title:t.title+' | PDF Studio',description:t.intro},openGraph:{images:[image],title:t.title+' | PDF Studio',description:t.intro,url:'https://pdf-studio.in/tools/'+t.slug}};
+ const meta=toolMeta[slug]??{title:t.title+('id' in t?' — Free Online':''),description:t.intro};
+ return {title:{absolute:fullTitle(meta.title)},description:meta.description,alternates:{canonical:'/tools/'+t.slug},twitter:{card:'summary_large_image',images:[image.url],title:fullTitle(meta.title),description:meta.description},openGraph:{images:[image],title:fullTitle(meta.title),description:meta.description,url:'https://pdf-studio.in/tools/'+t.slug}};
 }
 export default async function ToolPage({params}:{params:Promise<{slug:string}>}){
  const {slug}=await params;if(slug==='pdf-to-handwriting')return <div className="creative-shell"><SiteHeader/><HandwritingStudio mode="pdf-to-handwriting"/></div>;const conversion=conversionGuides.find(g=>g.slug===slug);if(conversion)return <ConversionGuide guide={conversion}/>;const t=seoPages.find(t=>t.slug===slug);if(!t)notFound();
@@ -38,7 +41,7 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
  const popular=['merge','compress','native-text','organize','sign','split','images','word','rotate','encrypt','decrypt','ocr'];
  const rank=(id:string)=>{const i=popular.indexOf(id);return i<0?popular.length:i;};
  const related=[...seoPages.filter(x=>x.id===t.id&&x.slug!==t.slug),...seoTools.filter(x=>x.id!==t.id&&x.group===tool.group).sort((a,b)=>rank(a.id)-rank(b.id))].slice(0,6);
- const guide=<section className="tool-instructions" aria-labelledby="tool-guide-title">
+ const guide=t.id==='form'?<FormLanding faq={faq}/>:<section className="tool-instructions" aria-labelledby="tool-guide-title">
    <h2 id="tool-guide-title">{t.heading}</h2><p>{t.intro}</p>
    <h3>How it works</h3><ol>{guidance.steps.map(step=><li key={step}>{step}</li>)}</ol><p>{t.detail}</p>
    <h3>When to use this tool</h3><p>{guidance.useCase}</p>
@@ -54,4 +57,5 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
   <Studio initialTool={t.id} initialHeading={t.title} guide={guide}/>
  </div>;
 }
+
 
