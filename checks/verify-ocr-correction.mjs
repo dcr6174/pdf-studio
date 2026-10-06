@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
+import {build} from 'vite';
+import {PDFDocument,StandardFonts} from 'pdf-lib';
+import {createCanvas,Image,GlobalFonts} from '@napi-rs/canvas';
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/ocr-document.ts',outDir:'.ocr-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'ocr.mjs'}}}});
+Image.prototype.decode=function(){return this.complete?Promise.resolve():new Promise((resolve,reject)=>{this.onload=resolve;this.onerror=reject;});};
+const fontBytes=await readFile('public/fonts/NotoSans-Regular.ttf');GlobalFonts.register(fontBytes,'OpenPDF Noto');globalThis.fetch=async()=>new Response(fontBytes);globalThis.Image=Image;globalThis.document={createElement:()=>createCanvas(1,1)};
+const {exportOCR}=await import('../.ocr-check/ocr.mjs');
+const source=await PDFDocument.create(),f=await source.embedFont(StandardFonts.Helvetica);source.addPage([400,600]).drawText('Untouched native page',{font:f,x:30,y:550,size:12});source.addPage([400,600]);const bytes=await source.save();
+const scan=createCanvas(400,600),ctx=scan.getContext('2d');ctx.fillStyle='white';ctx.fillRect(0,0,400,600);ctx.fillStyle='black';ctx.font='12px OpenPDF Noto';ctx.fillText('Original OCR',30,40);
+const row=(id,text,x,y,width=200)=>({id,text,originalText:text,x,y,width,height:14,size:12,confidence:95,background:'#ffffff',rects:[{x,y,width,height:14}]});
+const model={index:1,width:400,height:600,image:scan.toDataURL('image/png'),rows:[row('a','Original OCR',30,30),row('b','Following line',30,80),row('c','Other column',300,80,80)]};
+const unchanged=await PDFDocument.load(await exportOCR(bytes,[model]));assert.equal(unchanged.getPageCount(),2);assert.equal(unchanged.getPage(0).getWidth(),400);
+model.rows[0].text='Café résumé and a longer corrected sentence which wraps into more than one line.';const edited=await exportOCR(bytes,[model],true);assert.equal((await PDFDocument.load(edited)).getPageCount(),2);
+const wasm=await readFile('node_modules/@embedpdf/pdfium/dist/pdfium.wasm');globalThis.fetch=async()=>new Response(wasm);const {OnlineTextDocument,textEngine}=await import('../.flow-check/engine.mjs');const d=new OnlineTextDocument(await textEngine(),edited);assert(d.inspect(0).objects.some(o=>o.text.includes('Untouched native page')));const objects=d.inspect(1).objects;assert(objects.some(o=>o.text.includes('résumé')));const following=objects.find(o=>o.text.includes('Following line')),other=objects.find(o=>o.text.includes('Other column'));assert(following.layout.baseline<other.layout.baseline,'movement stays in corrected column');d.close();
+model.rows[0].text='';globalThis.fetch=async()=>new Response(fontBytes);assert.equal((await PDFDocument.load(await exportOCR(bytes,[model],true))).getPageCount(),2);model.rows[0].text='word '.repeat(1000);await assert.rejects(()=>exportOCR(bytes,[model],true),/exceeds|long/);
+console.log('PASS: OCR export, correction, Unicode search layer, column movement, deletion, overflow rejection, untouched native page preservation.');
