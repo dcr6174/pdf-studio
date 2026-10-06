@@ -1,3 +1,4 @@
+import {taskInputIssue} from './task-readiness';
 import {readFormFields,applyFormValues,flattenVisibleForm,type FormValue} from './pdf-forms';
 import {markRotation} from './mark-rotation';
 import {workflowSettings,type WorkflowStepSettings} from './workflow-recipes';
@@ -224,6 +225,7 @@ async function plainPDF(text: string, markdown = false) { const { jsPDF } = awai
 async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number) => void, signal?:AbortSignal): Promise<Output> {
     signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
     let first = files[0];
+    const inputIssue=taskInputIssue(id,files.length,o);if(inputIssue)throw new Error(inputIssue);
     if(id==='workflow'){
       const names=o.recipe==='custom'?(o.workflowSteps??['merge','compress']):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'||o.recipe==='share-ready'?['clean','compress']:o.recipe==='clean-scan'?['ocr']:o.recipe==='email-ready'?['compress']:o.recipe==='print-ready'?['resize']:['merge','compress'];
       const steps=names.map((id,index)=>({id,settings:workflowSettings(id,o.recipe==='custom'?o.workflowSettings?.[index]:undefined)})).filter((_,index)=>o.recipe!=='custom'||!o.workflowDisabled?.includes(index));
