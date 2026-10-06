@@ -84,3 +84,12 @@ This is a focused implementation plus a roadmap. It is not a claim that all prop
 3. Test long filenames, keyboard open, landscape, rapid page/zoom changes, replacement failure, retry, radio clearing, multi-select, readonly and unsupported controls.
 4. Inspect production asset responses after deployment. Use the existing production hosting configuration, never a local placeholder D1 configuration.
 5. Check every shared-layout tool/alias for accessible settings and a reachable main action before expanding the pattern to the remaining task-specific refinements.
+
+
+## Full-width release follow-up
+
+The supplied desktop screenshot showed unused outer gutters, a centered header, an empty task-settings strip and long editor instructions above the document. Active tools now use the available viewport with 16px desktop and 10px phone gutters. The navigation drawer and wordmark sit at the left edge; the theme control stays at the right edge. Empty settings are hidden explicitly. Editor guidance is collapsed behind an accessible disclosure. The PDF gets the remaining width beside a 300px settings panel, which stacks below 900px. Home and article reading widths remain intentional.
+
+The Stage 1 ZIP was reviewed rather than copied wholesale. Its XFA check ran after pdf-lib removed XFA, and flattening revealed hidden field text. This release retains the earlier catalog-level XFA check, visible-widget flattening, read-only protection, synchronized page/list controls, render pixel limit, resize observation and input-focus mobile action fallback. It adds signed-document rejection, Unicode text appearance embedding with unsupported-glyph errors, and routes Continue editing to Forms for editable output and Edit PDF for flattened output.
+
+Validation: changed-file lint, TypeScript and the standalone production build passed. The form regression suite now also rejects signed forms and XFA exports, reopens Unicode values and rejects unsupported emoji. Independent MuPDF extraction confirms flattened visible values and absence of hidden/no-view text. All 18 existing engine regression checks passed. Local browser visual acceptance remains subject to the preview connectivity limitation; production verification must be checked separately after deployment. Physical phone keyboard and touch acceptance remain unverified.

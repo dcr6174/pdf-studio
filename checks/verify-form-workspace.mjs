@@ -1,9 +1,9 @@
 import assert from 'node:assert/strict';
-import {mkdir, writeFile} from 'node:fs/promises';
+import {mkdir, writeFile, readFile} from 'node:fs/promises';
 import {build} from 'vite';
 import {PDFDocument, PDFName, degrees} from 'pdf-lib';
 
-await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.form-workspace-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
+await build({configFile:false,publicDir:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.form-workspace-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
 const {fields,processPDF}=await import('../.form-workspace-check/engine.mjs');
 const source=await PDFDocument.create(),page=source.addPage([600,800]),second=source.addPage([600,800]);
 second.setRotation(degrees(90));second.setCropBox(20,30,550,720);
@@ -45,6 +45,21 @@ await assert.rejects(()=>processPDF('form',[file],pages,[],{...options,fields:{D
 const xfa=await PDFDocument.load(bytes);xfa.catalog.lookup(PDFName.of('AcroForm')).set(PDFName.of('XFA'),xfa.context.obj('unsupported'));
 const xfaBytes=await xfa.save({updateFieldAppearances:false});
 await assert.rejects(()=>fields(xfaBytes),/XFA/);
+await assert.rejects(()=>processPDF('form',[{...file,bytes:xfaBytes}],pages,[],options,()=>{}),/XFA/);
+const signed=await PDFDocument.load(bytes);
+const signature=signed.context.obj({FT:'Sig',T:signed.context.obj('Digital signature'),V:signed.context.obj({Type:'Sig'})});
+signed.getForm().acroForm.addField(signed.context.register(signature));
+const signedBytes=await signed.save({updateFieldAppearances:false});
+await assert.rejects(()=>fields(signedBytes),/digital signature/);
+const originalFetch=globalThis.fetch;
+globalThis.fetch=async url=>url==='/fonts/NotoSans-Regular.ttf'?new Response(await readFile('public/fonts/NotoSans-Regular.ttf')):originalFetch(url);
+try {
+ const unicode=await processPDF('form',[file],pages,[],{...options,fields:{'Full name':'José François'}},()=>{});
+ const reopened=await PDFDocument.load(await unicode.blob.arrayBuffer());
+ assert.equal(reopened.getForm().getTextField('Full name').getText(),'José François');
+ await assert.rejects(()=>processPDF('form',[file],pages,[],{...options,fields:{'Full name':'Name 😀'}},()=>{}),/cannot display/);
+} finally {globalThis.fetch=originalFetch;}
+
 await mkdir('.form-workspace-check/fixtures',{recursive:true});
 for(const [name,content] of [['source',bytes],['editable',new Uint8Array(await editable.blob.arrayBuffer())],['flattened',new Uint8Array(await flattened.blob.arrayBuffer())]]) await writeFile(`.form-workspace-check/fixtures/${name}.pdf`,content);
 console.log('PASS: text, multiline, checkbox, radio, dropdown and multi-select values reopen correctly; repeated widgets, hidden/read-only fields, rotated/cropped pages, flattening, invalid choices and XFA rejection checked.');

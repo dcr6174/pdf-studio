@@ -62,3 +62,30 @@
  .form-pager button{min-width:48px;min-height:48px}.form-page-scroll{scroll-padding-bottom:48px}
 }
 @media(prefers-reduced-motion:reduce){.task-workspace *,.pdf-form-editor *{scroll-behavior:auto;transition:none}}
+
+/* Active tools use the viewport rather than the marketing page's centered column. */
+.studio-shell.document-shell .content{width:100%;max-width:none;margin:0;padding-inline:16px}
+.document-loaded .document-bar{padding:8px 0;margin-bottom:8px}
+.document-loaded .tool-note{margin:0 0 8px;padding:8px 12px}
+.document-loaded .settings-panel[hidden]{display:none}
+.document-loaded .editor-layout,.document-loaded.sign-workspace .editor-layout{grid-template-columns:minmax(0,1fr) 300px;gap:16px}
+.document-loaded .editor-main{padding:8px;background:var(--soft);border-radius:10px}
+.document-loaded .board-scroll{padding:12px;border-radius:8px;max-height:calc(100dvh - 250px);min-height:240px}
+.document-loaded .editor-help{font-size:12px;color:var(--muted);margin:4px 0}
+.document-loaded .editor-help summary{display:flex;align-items:center;min-height:32px;cursor:pointer}
+.document-loaded .editor-help p{margin:0 0 8px}
+.document-loaded .properties,.document-loaded .form-options{top:76px;padding:16px;border-radius:10px}
+.document-loaded .action-bar{margin-top:12px;padding:10px 12px;border-radius:8px}
+.document-loaded .pdf-form-editor,.document-loaded .task-workspace.focused-workspace{gap:16px}
+.document-loaded .form-page-scroll{max-height:calc(100dvh - 300px)}
+@media(max-width:900px){
+ .document-loaded .editor-layout,.document-loaded.sign-workspace .editor-layout{grid-template-columns:minmax(0,1fr)}
+ .document-loaded .board-scroll{max-height:65dvh}
+ .document-loaded .properties,.document-loaded .form-options{position:static}
+}
+@media(max-width:767px){
+ .studio-shell.document-shell .content{padding-inline:10px}
+ .document-loaded .action-bar{margin:0;border-radius:0;padding:10px 12px max(10px,env(safe-area-inset-bottom))}
+ .document-loaded .editor-layout{gap:12px}
+ .document-loaded .form-page-scroll{max-height:60dvh}
+}

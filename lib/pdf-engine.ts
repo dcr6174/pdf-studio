@@ -389,7 +389,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if (id === 'form') {
         if(files.length!==1||marks.length||items.length!==files[0].pages||items.some((p,i)=>p.index!==i||p.rotation))throw new Error('Fill forms on the original PDF. Export page changes first and continue with the result.');
         const d = await PDFDocument.load(first.bytes);
-        applyFormValues(d,o.fields);
+        await applyFormValues(d,o.fields);
         if(o.flattenForm)flattenVisibleForm(d);
         return result(await d.save(), `${filename}-filled.pdf`);
     }
