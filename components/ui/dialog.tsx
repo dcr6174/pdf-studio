@@ -64,7 +64,7 @@ function DialogContent({
   const layout=viewportPositioned?{className:"fixed z-50 rounded-lg border bg-background shadow-lg outline-none",style}:dialogLayout(fullscreen,style)
   return (
     <DialogPortal data-slot="dialog-portal">
-      <DialogOverlay style={viewportPositioned?{backdropFilter:"blur(20px)",WebkitBackdropFilter:"blur(20px)",backgroundColor:"rgba(15, 12, 35, 0.5)"}:undefined} />
+      <DialogOverlay style={viewportPositioned?{backdropFilter:className?.includes("tool-search-panel")?"blur(6px)":"blur(20px)",WebkitBackdropFilter:className?.includes("tool-search-panel")?"blur(6px)":"blur(20px)",backgroundColor:"rgba(15, 12, 35, 0.5)"}:undefined} />
       <DialogPrimitive.Content
         data-slot="dialog-content"
         data-fullscreen={fullscreen?"true":undefined}
@@ -166,4 +166,3 @@ export {
   DialogTitle,
   DialogTrigger,
 }
-

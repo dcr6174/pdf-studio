@@ -6,6 +6,8 @@ const source=await readFile('app/page.tsx','utf8');
 const validation=ts.transpile(await readFile('lib/input-validation.ts','utf8'),{module:ts.ModuleKind.CommonJS});
 const exports={};vm.runInNewContext(validation,{exports,Error});
 const {validateSelection,validatePages,validateBatch,validateTextInput,MAX_BYTES}=exports;
+const feedbackExports={};vm.runInNewContext(ts.transpile(await readFile('lib/upload-feedback.ts','utf8'),{module:ts.ModuleKind.CommonJS}),{exports:feedbackExports,Error});
+const {uploadFeedback}=feedbackExports;
 validateSelection([{name:'a.pdf',size:MAX_BYTES}],'.pdf',true);
 assert.throws(()=>validateSelection([{name:'a.pdf',size:MAX_BYTES+1}],'.pdf',true),/total .* MB/);
 validatePages(400);assert.throws(()=>validatePages(401),/401 pages/);
@@ -14,7 +16,7 @@ validateTextInput(50000000,100);assert.throws(()=>validateTextInput(50000001),/5
 const ingest=ts.transpile(source.slice(source.indexOf('    async function ingest('),source.indexOf('    async function run(')),{target:ts.ScriptTarget.ES2022});
 async function check({list,existing=[],pages=[],batchMode=false,target='compress',fieldFailure=false}){
  const output={name:'previous-result.pdf'},state={output,error:'',commits:0,loads:0};
- const context={Error,validateSelection,validatePages,validateBatch,validateTextInput,view:target,batchMode,pages,marks:[],busy:false,textDirty:false,queue:{current:false},pendingFiles:{},workspace:{getFiles:()=>existing,replace:()=>state.commits++},accepted:()=>'.pdf',isMulti:id=>['merge','organize','compare'].includes(id),setReplaceOpen:()=>{},setLoading:()=>{},setError:value=>state.error=value,setOutput:value=>state.output=value,loadFile:async f=>{state.loads++;return {...f,id:'fixture',bytes:new Uint8Array(),pages:f.pages??1};},fields:async()=>{if(fieldFailure)throw new Error('Form parser failed');return [];},setFormFields:()=>{},setOptions:()=>{},setActivePage:()=>{},opt:()=>{},navigate:()=>{},toast:{error:()=>{}},crypto:{randomUUID:()=> 'page-id'},File:class{},TextDecoder};
+ const context={Error,uploadFeedback,setUploadIssue:()=>{},openingDeadline:work=>work,validateSelection,validatePages,validateBatch,validateTextInput,view:target,batchMode,pages,marks:[],busy:false,textDirty:false,queue:{current:false},pendingFiles:{},workspace:{getFiles:()=>existing,replace:()=>state.commits++},accepted:()=>'.pdf',isMulti:id=>['merge','organize','compare'].includes(id),setReplaceOpen:()=>{},setLoading:()=>{},setError:value=>state.error=value,setOutput:value=>state.output=value,loadFile:async f=>{state.loads++;return {...f,id:'fixture',bytes:new Uint8Array(),pages:f.pages??1};},fields:async()=>{if(fieldFailure)throw new Error('Form parser failed');return [];},setFormFields:()=>{},setOptions:()=>{},setActivePage:()=>{},opt:()=>{},navigate:()=>{},toast:{error:()=>{}},crypto:{randomUUID:()=> 'page-id'},File:class{},TextDecoder};
  vm.createContext(context);vm.runInContext(ingest+'\nglobalThis.ingest=ingest;',context);await context.ingest(list,target,true);return state;
 }
 const pdf=(size=1,pages=1)=>({name:'test.pdf',size,pages});

@@ -579,3 +579,22 @@ Lab retains the three handwriting/paper tools. Future ideas are text-only and ca
 PDF experiments reject files over 50 MB or 100 pages and retain the previous result on rejected input. Word-cloud extraction rejects over one million characters; offline-book export rejects over 60 MB of encoded images. Limits appear only after validation rejects an input. Large pages render to bounded pixel dimensions, one at a time. Fonts are hosted locally and their notices are available under `/excalidraw/`; processing does not send document bytes to a server. The Whiteboard's local-file import is supplied by Excalidraw.
 
 Validation: `npm run lint`, `npx tsc --noEmit`, `npm run build:public`, `node checks/verify-lab.mjs`. The check verifies counts, transparent-pixel handling, SVG escaping, HTML-book page order/navigation and dynamic chunk boundaries. The Whiteboard image-to-PDF path is reopened and independently rasterized with Poppler to confirm visible drawing content. Browser fullscreen, touch drawing, mobile keyboard behavior and actual Excalidraw export UI still need browser/device testing; no Nord 2 test is claimed. Existing vinext build warnings remain.
+
+### 6 October 2026 audit fixes
+
+See [the 29-page audit implementation record](docs/AUDIT_2026_10_06.md) for every finding, verification evidence and remaining work.
+
+- Merge starts with ordered file cards and accessible Move up/down actions; page organization and advanced page actions are collapsed. One-file Merge remains visible and disabled until another file is added.
+- Compress uses a single-page preview and reports savings against the exact processing input. A larger recompression is discarded. Lossy page-image settings warn before export. Reports sit inside Processing details.
+- Rejected uploads retain useful size/page/image/batch messages. Malformed parser errors have readable copy, replacement action and optional technical details. Limits are not shown as a general table.
+- Continue editing and restored drafts synchronize tool, address and document title. Results can reopen in Compress, Sign or Edit without re-uploading.
+- Redaction preserves exact visible source geometry. It remains raster redaction: searchable text, links and editable forms are removed.
+- Mobile shared navigation uses Menu; installation is inside it. Donation stays in the footer and after result actions.
+- Signature creation retains Type/Draw/Upload/Camera and nine typed styles, with a compact selector, persistent tab content and a fixed action footer. Saving signatures locally is optional.
+- Selected-page extraction can produce one PDF or a ZIP containing one PDF per selected page. Resize supports A4/US Letter, portrait/landscape, fit with a 20-point margin.
+- Custom workflows support enabled/disabled steps, ordering, duplication, searchable insertion and named local recipes. Recipe import/export includes no passwords or document bytes. Current operations: merge, rotate, reverse, clear standard metadata, compact and fit to A4. Metadata clearing is not sanitization.
+- Privacy pattern candidates now include common Indian phone formats. This check is incomplete and does not certify safe sharing.
+
+Audit verification: `node checks/verify-audit-fixes.mjs`, `node checks/verify-page-embedding.mjs`, `node checks/verify-blank-output.mjs`, `node checks/verify-engine.mjs`, `node checks/verify-form-appearance.mjs`, `node checks/verify-jpeg-optimization.mjs`, `node checks/verify-tool-navigation.mjs`, `node checks/verify-signatures.mjs`, `node checks/verify-document-first.mjs`, `node checks/verify-download-layout.mjs` and `node checks/verify-paragraph-text.mjs`.
+
+Real phone/browser layout, camera, keyboard and live deployment remain unverified. Full Office-layout conversion, arbitrary paragraph expansion, broader OCR/searchable-layer languages, custom page-layout previews and intermediate workflow recovery remain larger work; they are not claimed as completed.
