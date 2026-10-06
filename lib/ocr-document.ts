@@ -39,3 +39,4 @@ export async function exportOCR(bytes:Uint8Array,pages:OCRPage[],moveBelow=false
   canvas.width=0;canvas.height=0;
  }return out.save();
 }
+

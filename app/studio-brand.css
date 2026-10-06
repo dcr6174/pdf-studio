@@ -487,3 +487,4 @@ select,option,[data-slot=select-trigger],[data-slot=select-content],[data-slot=s
 
 .native-flow-toggle{display:flex;align-items:flex-start;gap:8px;font-size:.85rem;line-height:1.5;margin:10px 0}.native-flow-toggle input{margin-top:4px;width:auto}.native-draft-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.native-hit.ocr-uncertain{border:1px solid #d68b16;background:#fbbf2414}.ocr-corrected-preview{position:absolute;white-space:pre-wrap;overflow-wrap:anywhere;pointer-events:none;color:#172033}.native-controls textarea{width:100%;resize:vertical;min-height:100px}.native-inline textarea{white-space:pre-wrap;overflow-wrap:anywhere}
 
+

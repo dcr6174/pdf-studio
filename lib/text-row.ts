@@ -12,3 +12,4 @@ export function horizontalRow(objects:TextObject[],selected:number):TextObject[]
  return candidates.slice(start,end+1);
 }
 export function rowText(rows:TextObject[]){return rows.map((o,i)=>{const prev=rows[i-1];return (i&&prev.layout&&o.layout&&o.layout.left-prev.layout.right>o.layout.height*.1?' ':'')+o.text.trim();}).join('');}
+

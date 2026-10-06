@@ -12,7 +12,7 @@ export function resolveSigningPages<T extends IdentifiedPage>(pages:readonly T[]
     if(!range.trim())throw new Error('Enter page numbers such as 1, 3-5.');
     const wanted=new Set<number>();
     for(const token of range.split(',')){
-      const match=/^\\s*(\\d+)(?:\\s*-\\s*(\\d+))?\\s*$/.exec(token);
+      const match=/^\s*(\d+)(?:\s*-\s*(\d+))?\s*$/.exec(token);
       if(!match)throw new Error('Enter page numbers such as 1, 3-5.');
       const from=Number(match[1]),to=Number(match[2]??match[1]);
       if(from<1||to<from||to>pages.length)throw new Error('Choose pages between 1 and '+pages.length+'.');
@@ -31,3 +31,4 @@ export function copySigningMark<T extends SigningMark>(marks:readonly T[],mark:T
   const copies=targets.filter(page=>page.id!==mark.pageId).map(page=>({...source,id:createId(),pageId:page.id}) as T);
   return {marks:[...marks.filter(item=>item.signatureGroup!==group&&item.id!==mark.id),source,...copies],pageCount:targets.length};
 }
+
