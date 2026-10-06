@@ -560,3 +560,9 @@ Run `node checks/verify-handwriting.mjs`, `npx tsc --noEmit`, `npm run lint`, an
 ### Studio Lab navigation
 
 The shared header ends with **Lab** and a red **Beta** badge. `/lab` contains Text to handwriting, Notebook maker and Handwriting practice. PDF to handwriting belongs to the main Convert category at `/tools/pdf-to-handwriting`, and is searchable in the PDF tools catalogue. Existing `/creative` links redirect to the corresponding destination. Lab is for creative experiments; it currently lists implemented tools only. Opening PDF to handwriting from an active workspace warns users to download unsaved work; document transfer between these separate workspaces is not automatic.
+
+### Blog starter
+
+`/blog` uses the shared header and footer, page-specific metadata and a responsive layout. It honestly shows that no posts are published, with links to existing PDF guides rather than placeholder articles. Both the workspace and informational-page footers link to Blog. The sitemap generator includes `/blog` with a content-tracked modification date. Add real article pages before adding article cards or Article schema; do not invent author names or publication dates.
+
+To verify locally: `npm run lint`, `npx tsc --noEmit`, `npm run build:public`. Open `/blog`, follow its guide links and check both footer links on desktop and mobile. After committing and pushing, deploy the latest commit through Cloudflare; confirm `/blog`, its stylesheet, and `/sitemap.xml` return successfully on production.
