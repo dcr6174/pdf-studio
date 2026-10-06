@@ -1,4 +1,22 @@
-import {PDFDocument,PDFDict,PDFName} from 'pdf-lib';
+import {PDFDocument,PDFDict,PDFName,PDFArray} from 'pdf-lib';
+import {displayPoint} from './page-geometry';
+import type {Mark,PageItem} from './pdf-engine';
+/** Widgets render above page content, regardless of mark creation order. */
+export function hasOverlappingWidgets(document:PDFDocument,order:PageItem[],marks:Mark[]){
+ return document.getPages().some((page,i)=>{
+  const annotations=page.node.Annots();if(!annotations)return false;
+  const regions=marks.filter(m=>m.pageId===order[i]?.id&&m.kind!=='redact').map(m=>{
+   const corners=[[m.x,m.y],[m.x+m.w,m.y],[m.x,m.y+m.h],[m.x+m.w,m.y+m.h]].map(([u,v])=>displayPoint(page,u,v));
+   return {left:Math.min(...corners.map(p=>p.x)),right:Math.max(...corners.map(p=>p.x)),bottom:Math.min(...corners.map(p=>p.y)),top:Math.max(...corners.map(p=>p.y))};
+  });
+  for(let n=0;n<annotations.size();n++){
+   const widget=document.context.lookup(annotations.get(n));if(!(widget instanceof PDFDict)||widget.get(PDFName.of('Subtype'))!==PDFName.of('Widget'))continue;
+   const rect=widget.lookup(PDFName.of('Rect'));if(!(rect instanceof PDFArray))continue;
+   const a=rect.asArray().map(v=>Number(v.toString()));if(a.length!==4||!a.every(Number.isFinite))continue;
+   const [left,bottom,right,top]=a;if(regions.some(r=>r.left<right&&r.right>left&&r.bottom<top&&r.top>bottom))return true;
+  }return false;
+ });
+}
 /** Flatten owned fields, then remove their actual widget references.
  * pdf-lib 1.17.1 removeField can leave deleted widget refs in page Annots. */
 export function flattenFormSafely(document:PDFDocument){

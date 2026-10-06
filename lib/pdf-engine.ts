@@ -1,5 +1,6 @@
+import {pixelsHaveInk,rejectBlankOutput} from './output-integrity';
 import {textToPDF} from './text-document';
-import {flattenFormSafely,hasFormWidgets} from './form-safe';
+import {flattenFormSafely,hasFormWidgets,hasOverlappingWidgets} from './form-safe';
 import {optimizeJPEGImages} from './optimize-jpeg';
 import {decodePhoto,normalizeCameraFile} from './mobile-image';
 import {addBookmarks,cleanupPDF,removeAnnotations,halvePages,createForm} from './extra-pdf';
@@ -161,7 +162,7 @@ export function ranges(value: string, count: number) { if (!value.trim())
 } return [...new Set(out)]; }
 function blob(bytes: Uint8Array | string, type = 'application/pdf') { return new Blob([typeof bytes === 'string' ? bytes : bytes.slice().buffer as ArrayBuffer], { type }); }
 const result = (b: Uint8Array | string, name: string, type?: string, report?: string): Output => ({ blob: blob(b, type), name, report });
-export async function assemble(files: Loaded[], items: PageItem[], signal?:AbortSignal, flattenForms=false) { if(files.length===1&&!files[0].image&&items.length===files[0].pages&&items.every((p,i)=>p.fileId===files[0].id&&p.index===i)){const d=await PDFDocument.load(files[0].bytes,{updateMetadata:false});for(const item of items){signal?.throwIfAborted();const p=d.getPage(item.index);p.setRotation(degrees((p.getRotation().angle+item.rotation)%360));}return d;} const sources=new Map<string,PDFDocument>();for(const f of files){if(f.image)continue;const src=await PDFDocument.load(f.bytes,{updateMetadata:false});if(src.getForm().getFields().length||hasFormWidgets(src)){if(!flattenForms)throw new Error('This PDF contains fillable fields. To merge safely, choose “Make form fields read-only before merging”, or fill and flatten it first. Your originals are unchanged.');try{flattenFormSafely(src);}catch{throw new Error('These form appearances could not be flattened safely. Fill and save the PDF in its original form editor, then try again.');}}sources.set(f.id,src);}const out = await PDFDocument.create(); for (const item of items) {
+export async function assemble(files: Loaded[], items: PageItem[], signal?:AbortSignal, flattenForms=false) { if(files.length===1&&!files[0].image&&items.length===files[0].pages&&items.every((p,i)=>p.fileId===files[0].id&&p.index===i)){const d=await PDFDocument.load(files[0].bytes,{updateMetadata:false});for(const item of items){signal?.throwIfAborted();const p=d.getPage(item.index);p.setRotation(degrees((p.getRotation().angle+item.rotation)%360));}if(flattenForms&&hasFormWidgets(d))flattenFormSafely(d);return d;} const sources=new Map<string,PDFDocument>();for(const f of files){if(f.image)continue;const src=await PDFDocument.load(f.bytes,{updateMetadata:false});if(src.getForm().getFields().length||hasFormWidgets(src)){if(!flattenForms)throw new Error('This PDF contains fillable fields. To merge safely, choose “Make form fields read-only before merging”, or fill and flatten it first. Your originals are unchanged.');try{flattenFormSafely(src);}catch{throw new Error('These form appearances could not be flattened safely. Fill and save the PDF in its original form editor, then try again.');}}sources.set(f.id,src);}const out = await PDFDocument.create(); for (const item of items) {
     signal?.throwIfAborted();await new Promise(resolve=>setTimeout(resolve,0));
     const f = files.find(f => f.id === item.fileId);
     if (!f)
@@ -197,15 +198,15 @@ async function plainPDF(text: string, markdown = false) { const { jsPDF } = awai
     }
     y += 2;
 } return new Uint8Array(p.output('arraybuffer')); }
-export async function processPDF(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number) => void, signal?:AbortSignal): Promise<Output> {
+async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number) => void, signal?:AbortSignal): Promise<Output> {
     signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
     let first = files[0];
     if(id==='workflow'){
       const steps=o.recipe==='custom'?(o.workflowSteps??['merge','compress']):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'?['clean','compress']:['merge','compress'];if(!steps.length)throw new Error('Add at least one workflow step.');if(steps.length>8)throw new Error('This workflow supports up to 8 steps. Remove extra steps and retry.');if(steps.some(s=>!['merge','rotate','reverse','clean','compress'].includes(s)))throw new Error('This workflow includes an unsupported step. Choose a listed operation.');let currentFiles=files,currentPages=items,currentMarks=marks;let output:Output|undefined;const reports:string[]=[];for(let i=0;i<steps.length;i++){signal?.throwIfAborted();output=await processPDF(steps[i],currentFiles,currentPages,currentMarks,{...o,quality:'compact',angle:'90'},n=>progress(Math.round((i*100+n)/steps.length)),signal);if(output.report)reports.push(output.report);const bytes=new Uint8Array(await output.blob.arrayBuffer());const doc=await PDFDocument.load(bytes,{updateMetadata:false});const file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];}return {...output!,report:`Completed: ${steps.join(' → ')}. Original workspace retained. ${reports.join(' ')}`};
     }
     if(id==='merge'&&files.length<2)throw new Error('Add at least two PDF files to merge.');
-    const unchanged = files.length===1 && !marks.length && items.length===first.pages && items.every((p,i)=>p.fileId===first.id&&p.index===i&&p.rotation===0);
-    if(unchanged&&(['organize','edit','sign','merge'].includes(id)||(id==='form'&&!o.flattenForm&&!Object.keys(o.fields).length))){progress(100);return result(first.bytes,first.name,undefined,'No changes: downloaded the original file without rebuilding it.');}
+    const unchanged = files.length===1 && !first.image && !marks.length && items.length===first.pages && items.every((p,i)=>p.fileId===first.id&&p.index===i&&p.rotation===0);
+    if(unchanged&&!(o.flattenForm&&['edit','sign','form'].includes(id))&&(['organize','edit','sign','merge'].includes(id)||(id==='form'&&!o.flattenForm&&!Object.keys(o.fields).length))){progress(100);return result(first.bytes,first.name,undefined,'No changes: downloaded the original file without rebuilding it.');}
     if(['remove-bookmarks','remove-links','remove-attachments'].includes(id)){
       if(!unchanged)throw new Error('Use the original single PDF for this cleanup. Export other workspace changes first.');
       const d=await PDFDocument.load(first.bytes,{updateMetadata:false});
@@ -332,7 +333,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
     if (!order.length)
         throw new Error('Keep at least one page in your document.');
     if(order.length>400)throw new Error('This operation would exceed the 400-page workspace limit. Choose fewer pages.');
-    const out = id==='form'?await PDFDocument.load(first.bytes,{updateMetadata:false}):await assemble(files, order,signal,id==='merge'&&o.flattenForm);
+    const out = id==='form'?await PDFDocument.load(first.bytes,{updateMetadata:false}):await assemble(files, order,signal,['merge','edit','sign','watermark'].includes(id)&&o.flattenForm);
     if(id==='split-chapters'){
       if(out.getForm().getFields().length)throw new Error('Flatten fillable fields before splitting chapters, then reopen the result. Editable fields cannot safely be copied into chapter files.');
       const bytes=await out.save();const d=await renderer(bytes);try{const outline=await d.getOutline();if(!outline?.length)throw new Error('This PDF has no top-level bookmarks. Add bookmarks first, or use Split with page ranges.');const starts=new Set<number>([0]);for(const row of outline){signal?.throwIfAborted();let dest=row.dest;if(typeof dest==='string')dest=await d.getDestination(dest);if(Array.isArray(dest)){const n=typeof dest[0]==='number'?dest[0]:await d.getPageIndex(dest[0]);if(n>=0&&n<out.getPageCount())starts.add(n);}}if(starts.size===1)throw new Error('No usable chapter boundaries were found. Use Split with page ranges instead.');const bounds=[...starts].sort((a,b)=>a-b);bounds.push(out.getPageCount());const zip=new JSZip();for(let i=0;i<bounds.length-1;i++){const part=await PDFDocument.create();const copied=await part.copyPages(out,Array.from({length:bounds[i+1]-bounds[i]},(_,n)=>bounds[i]+n));copied.forEach(p=>part.addPage(p));zip.file(`chapter-${i+1}-pages-${bounds[i]+1}-${bounds[i+1]}.pdf`,await part.save());progress(Math.round((i+1)/(bounds.length-1)*100));}return{blob:await zip.generateAsync({type:'blob'}),name:`${filename}-chapters.zip`,report:'Split at supported top-level bookmark destinations. Inspect chapter boundaries before sharing.'};}finally{await d.destroy();}
@@ -341,6 +342,7 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
       const bytes=unchanged?first.bytes:await out.save();const candidates:number[]=[];for(let i=0;i<out.getPageCount();i++){const c=await renderPage(bytes,i,.3,undefined,0,signal);try{const ctx=c.getContext('2d')!;const data=ctx.getImageData(0,0,c.width,c.height).data;let dark=0;for(let n=0;n<data.length;n+=4)if(data[n]<245||data[n+1]<245||data[n+2]<245)dark++;if(dark/(c.width*c.height)<.001)candidates.push(i+1);}finally{c.width=0;c.height=0;}progress(Math.round((i+1)/out.getPageCount()*100));}return result(bytes,`${filename}-blank-review.pdf`,undefined,candidates.length?`Possible blank pages: ${candidates.join(', ')}. No pages were deleted. Low-resolution analysis can miss faint or small content. Inspect each candidate in Organize before removing it.`:'No likely blank pages found. No pages were deleted; faint content and scan noise can affect detection.');
     }
     if(id==='native-text'){await replaceExistingText(out,o.findText??'',o.replaceText??'');}
+    if(['edit','sign','watermark'].includes(id)&&hasOverlappingWidgets(out,order,marks))throw new Error('An added element overlaps a fillable field and could be hidden. Choose Make fields read-only before exporting, or move the element outside the field. Your original remains unchanged.');
     if(id!=='form')await applyMarks(out,order,marks,signal);
     if(id==='bookmarks'){addBookmarks(out,o.text);return result(await out.save(),`${filename}-bookmarks.pdf`);}
     if(id==='halve'){const d=await halvePages(out);return result(await d.save(),`${filename}-halves.pdf`);}
@@ -459,9 +461,11 @@ export async function processPDF(id: string, files: Loaded[], items: PageItem[],
         }
     }
     if (id === 'resize' || id === 'nup' || id === 'flip') {
+        await out.flush();
         const fresh = await PDFDocument.create();
         const normalized=await PDFDocument.create();
         for(const page of out.getPages()){const box=page.getCropBox(),g=pageGeometry(page);const e=await normalized.embedPage(page,{left:box.x,bottom:box.y,right:box.x+box.width,top:box.y+box.height});const q=normalized.addPage([g.width,g.height]);q.drawPage(e,{x:g.rotation===180||g.rotation===270?g.width:0,y:g.rotation===90||g.rotation===180?g.height:0,rotate:degrees(-g.rotation)});}
+        await normalized.flush();
         const embeds=await fresh.embedPages(normalized.getPages());
         if (id === 'resize') {
             for (const e of embeds) {
@@ -581,3 +585,34 @@ export function wrapText(text:string,font:{widthOfTextAtSize:(v:string,s:number)
  const lines:string[]=[];for(const para of text.split('\n')){let line='';for(const char of para){if(line&&font.widthOfTextAtSize(line+char,size)>width){lines.push(line);line='';}line+=char;}lines.push(line);}return lines;
 }
 
+
+/** Do not report success for invalid PDF bytes or complete unexpected blank output. */
+export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks:Mark[],o:Options,progress:(n:number)=>void,signal?:AbortSignal):Promise<Output>{
+ const output=await processPDFUnchecked(id,files,items,marks,o,progress,signal);
+ if(output.blob.type!=='application/pdf'||id==='encrypt')return output;
+ signal?.throwIfAborted();
+ const bytes=new Uint8Array(await output.blob.arrayBuffer());
+ if(!new TextDecoder().decode(bytes.slice(0,1024)).includes('%PDF-'))throw new Error('Export did not produce a valid PDF. Your original is still in the workspace.');
+ const doc=await PDFDocument.load(bytes,{updateMetadata:false});
+ if(!doc.getPageCount())throw new Error('Export produced no pages. Your original is still in the workspace.');
+ const same=files.length===1&&!files[0].image&&bytes.length===files[0].bytes.length&&bytes.every((b,i)=>b===files[0].bytes[i]);
+ // Pixel checks run only in a browser. Intentional removal/covering can legitimately erase content.
+ if(same||typeof document==='undefined'||['invert','crop','remove-annotations','decrypt','create','markdown','create-form'].includes(id)||marks.some(m=>m.kind==='whiteout'))return output;
+ type ProbePage={bytes:Uint8Array;index:number;rotation:number;image?:string};
+ const outputPages:ProbePage[]=doc.getPages().map((_,index)=>({bytes,index,rotation:0}));
+ const chosen=id==='split'?ranges(o.range,items.length).map(i=>items[i]):items;
+ const sourcePages:ProbePage[]=chosen.map(p=>{const f=files.find(f=>f.id===p.fileId);if(!f)throw new Error('A source file is missing.');return{bytes:f.bytes,index:p.index,rotation:p.rotation,image:f.image};});
+ const probe=async(page:ProbePage)=>{
+  signal?.throwIfAborted();let canvas:HTMLCanvasElement|undefined;
+  try{
+   if(page.image){
+    const imageBytes=Uint8Array.from(atob(page.image.split(',')[1]),c=>c.charCodeAt(0));const photo=await decodePhoto(new File([imageBytes.buffer],'source.png',{type:'image/png'}));
+    try{canvas=document.createElement('canvas');canvas.width=Math.min(180,photo.width);canvas.height=Math.max(1,Math.round(photo.height*canvas.width/photo.width));if(canvas.width*canvas.height>2000000)throw new Error('This source is too large to verify.');const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Your browser could not verify this export.');ctx.drawImage(photo.source,0,0,canvas.width,canvas.height);}finally{photo.close();}
+   }else canvas=await render(page.bytes,page.index,.18,undefined,page.rotation,signal);
+   const ctx=canvas.getContext('2d');if(!ctx)throw new Error('Your browser could not verify this export.');
+   return pixelsHaveInk(ctx.getImageData(0,0,canvas.width,canvas.height).data);
+  }finally{if(canvas){canvas.width=0;canvas.height=0;}}
+ };
+ await rejectBlankOutput(outputPages,sourcePages,probe,signal);
+ return output;
+}
