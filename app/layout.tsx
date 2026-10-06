@@ -9,6 +9,7 @@ import "./studio-motion.css";
 import "./studio-refresh.css";
 import "./studio-buddy.css";
 import "./audit-workspace.css";
+import "./working-screen.css";
 
 export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
@@ -35,4 +36,5 @@ export default function RootLayout({
     </html>
   );
 }
+
 
