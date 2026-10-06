@@ -1,3 +1,5 @@
+import {workflowSettings,type WorkflowStepSettings} from './workflow-recipes';
+import {resizeSheet,resizePlacement,splitGroups} from './page-layout';
 import {pixelsHaveInk,rejectBlankOutput} from './output-integrity';
 import {textToPDF} from './text-document';
 import {flattenFormSafely,hasFormWidgets,hasOverlappingWidgets} from './form-safe';
@@ -52,6 +54,10 @@ export type Options = {
     splitOutput?:string;
     resizeSize?:string;
     resizeOrientation?:string;
+    resizeWidth?:string;
+    resizeHeight?:string;
+    resizeMode?:string;
+    resizeRange?:string;
     findText?: string;
     replaceText?: string;
     range: string;
@@ -61,6 +67,8 @@ export type Options = {
     subject: string;
     password: string;
     quality: string;
+    compressTarget?:string;
+    compressJPEG?:number;
     angle: string;
     margin: string;
     start: string;
@@ -71,6 +79,7 @@ export type Options = {
     recipe?:string;
     workflowSteps?:string[];
     workflowDisabled?:number[];
+    workflowSettings?:WorkflowStepSettings[];
     templateFields?:import('./template-document').TemplateField[];
     ocrLanguage?:string;
     flattenForm?:boolean;
@@ -208,7 +217,12 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
     let first = files[0];
     if(id==='workflow'){
-      const steps=o.recipe==='custom'?(o.workflowSteps??['merge','compress']).filter((_,i)=>!o.workflowDisabled?.includes(i)):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'?['clean','compress']:o.recipe==='email-ready'?['compress']:o.recipe==='print-ready'?['resize']:['merge','compress'];if(!steps.length)throw new Error('Add at least one workflow step.');if(steps.length>8)throw new Error('This workflow supports up to 8 steps. Remove extra steps and retry.');if(steps.some(s=>!['merge','rotate','reverse','clean','compress','resize'].includes(s)))throw new Error('This workflow includes an unsupported step. Choose a listed operation.');let currentFiles=files,currentPages=items,currentMarks=marks;let output:Output|undefined;const reports:string[]=[];for(let i=0;i<steps.length;i++){signal?.throwIfAborted();output=await processPDF(steps[i],currentFiles,currentPages,currentMarks,{...o,quality:'compact',angle:'90'},n=>progress(Math.round((i*100+n)/steps.length)),signal);if(output.report)reports.push(output.report);const bytes=new Uint8Array(await output.blob.arrayBuffer());const doc=await PDFDocument.load(bytes,{updateMetadata:false});const file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];}return {...output!,report:`Completed: ${steps.join(' → ')}. Original workspace retained. ${reports.join(' ')}`};
+      const names=o.recipe==='custom'?(o.workflowSteps??['merge','compress']):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'||o.recipe==='share-ready'?['clean','compress']:o.recipe==='email-ready'?['compress']:o.recipe==='print-ready'?['resize']:['merge','compress'];
+      const steps=names.map((id,index)=>({id,settings:workflowSettings(id,o.recipe==='custom'?o.workflowSettings?.[index]:undefined)})).filter((_,index)=>o.recipe!=='custom'||!o.workflowDisabled?.includes(index));
+      if(!steps.length)throw new Error('Add at least one workflow step.');if(steps.length>8)throw new Error('This workflow supports up to 8 steps. Remove extra steps and retry.');if(steps.some(s=>!['merge','rotate','reverse','clean','compress','resize'].includes(s.id)))throw new Error('This workflow includes an unsupported step. Choose a listed operation.');
+      let currentFiles=files,currentPages=items,currentMarks=marks;let output:Output|undefined;const reports:string[]=[];
+      for(let i=0;i<steps.length;i++){signal?.throwIfAborted();try{output=await processPDF(steps[i].id,currentFiles,currentPages,currentMarks,{...o,range:'',resizeRange:'',quality:'compact',angle:'90',...steps[i].settings},n=>progress(Math.round((i*100+n)/steps.length)),signal);}catch(e){if(signal?.aborted)throw e;throw new Error(`Step ${i+1} (${steps[i].id}) failed: ${e instanceof Error?e.message:'Could not process this step.'} Your original workspace is retained.`);}if(output.report)reports.push(output.report);const bytes=new Uint8Array(await output.blob.arrayBuffer());const doc=await PDFDocument.load(bytes,{updateMetadata:false});const file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];}
+      return {...output!,report:`Completed: ${steps.map(s=>s.id).join(' → ')}. Original workspace retained. ${reports.join(' ')}`};
     }
     if(id==='merge'&&files.length<2)throw new Error('Add at least two PDF files to merge.');
     const unchanged = files.length===1 && !first.image && !marks.length && items.length===first.pages && items.every((p,i)=>p.fileId===first.id&&p.index===i&&p.rotation===0);
@@ -334,7 +348,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if (id === 'duplicate')
         order = order.flatMap(p => [p, p]);
     if(id==='interleave'){const stacks=files.map(f=>order.filter(p=>p.fileId===f.id));order=[];for(let n=0;n<Math.max(...stacks.map(p=>p.length));n++)for(const stack of stacks)if(stack[n])order.push(stack[n]);}
-    if (id === 'split')
+    if (id === 'split'&&o.splitOutput!=='groups')
         order = ranges(o.range, order.length).map(i => order[i]);
     if (!order.length)
         throw new Error('Keep at least one page in your document.');
@@ -353,6 +367,12 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if(id==='bookmarks'){addBookmarks(out,o.text);return result(await out.save(),`${filename}-bookmarks.pdf`);}
     if(id==='halve'){const d=await halvePages(out);return result(await d.save(),`${filename}-halves.pdf`);}
     if(id==='viewer'){out.catalog.set(PDFName.of('PageLayout'),PDFName.of(o.columns==='2'?'TwoColumnLeft':'SinglePage'));return result(await out.save(),`${filename}-viewer.pdf`);}
+    if(id==='split'&&o.splitOutput==='groups'){
+        if(out.getForm().getFields().length||hasFormWidgets(out))throw new Error('This PDF has fillable fields. Make them read-only in Flatten PDF first, then split the result.');
+        const groups=splitGroups(o.range,out.getPageCount()),zip=new JSZip();
+        for(let i=0;i<groups.length;i++){signal?.throwIfAborted();const part=await PDFDocument.create();const copied=await part.copyPages(out,groups[i]);copied.forEach(page=>part.addPage(page));zip.file(`group-${i+1}.pdf`,await part.save());progress(Math.round((i+1)/groups.length*100));}
+        return {blob:await zip.generateAsync({type:'blob'}),name:`${filename}-groups.zip`,report:`${groups.length} PDF groups. Repeated pages across different groups are included in each group.`};
+    }
     if (id === 'split-all'||id==='split'&&o.splitOutput==='separate') {
         if(out.getForm().getFields().length||hasFormWidgets(out))throw new Error('This PDF has fillable fields. Make them read-only in Flatten PDF first, then split the result.');
         const z = new JSZip();
@@ -378,6 +398,13 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         }
         if(o.flattenForm)flattenFormSafely(d);
         return result(await d.save(), `${filename}-filled.pdf`);
+    }
+    if(id==='compress'&&o.compressTarget?.trim()){
+        const target=Number(o.compressTarget)*1000;if(!Number.isFinite(target)||target<=0)throw new Error('Enter a positive target size in KB.');
+        const source=unchanged?first.bytes:await out.save();let best:Output=result(source,`${filename}-compress.pdf`,undefined,undefined,source.length);
+        if(source.length>target){const raster=!['compact','images'].includes(o.quality),attempts=raster?[{quality:'compact'},{quality:o.quality,compressJPEG:o.quality==='small'?.45:o.quality==='balanced'?.72:.9},{quality:o.quality,compressJPEG:.35},{quality:o.quality,compressJPEG:.2}]:[{quality:o.quality}];
+        for(let i=0;i<attempts.length;i++){signal?.throwIfAborted();const candidate=await processPDF('compress',files,items,marks,{...o,compressTarget:undefined,...attempts[i]},n=>progress(Math.round((i*100+n)/attempts.length)),signal);if(candidate.blob.size<best.blob.size)best=candidate;if(best.blob.size<=target)break;}}
+        return {...best,report:`${best.blob.size<=target?'Target reached.':'Target not reached; smallest tested result retained.'} Requested ${o.compressTarget} KB; result ${(best.blob.size/1000).toFixed(1)} KB. ${best.report??'Original source retained unchanged.'} Best-effort size targeting cannot guarantee readability or a specific size; inspect the preview.`};
     }
     if(id==='compress'&&o.quality==='images'){const source=unchanged?first.bytes:await out.save();const d=await PDFDocument.load(source,{updateMetadata:false});const changed=await optimizeJPEGImages(d,signal);progress(95);const bytes=changed?await d.save({useObjectStreams:true}):source;return result(bytes.length<source.length?bytes:source,`${filename}-images-optimized.pdf`,undefined,bytes.length<source.length?`Optimized ${changed} supported RGB JPEG images. Text, links and form structure retained. JPEG quality is reduced; inspect small image details.`:'No smaller result: original source retained. Only unmasked RGB JPEG streams are supported by this mode.',source.length);}
     if(id==='compress'&&o.quality==='compact'){progress(90);const baseline=unchanged?first.bytes:await out.save();const compact=unchanged?await PDFDocument.load(first.bytes,{updateMetadata:false}):out;const bytes=await compact.save({useObjectStreams:true});signal?.throwIfAborted();const smaller=bytes.length<baseline.length;return result(smaller?bytes:baseline,`${filename}-compact.pdf`,undefined,smaller?`Reduced from ${baseline.length} to ${bytes.length} bytes. Text and links retained.`:'No size reduction: kept the source unchanged. Try an image preset only if losing searchable text, links and forms is acceptable.',baseline.length);}
@@ -432,7 +459,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
                     s.addImage({ data: jpg, x: (13.333 - w) / 2, y: (7.5 - h) / 2, w, h });
                 }
                 else {
-                    const img = await raster.embedJpg(c.toDataURL('image/jpeg', id === 'compress' ? (o.quality === 'small' ? .45 : o.quality === 'balanced' ? .72 : .9) : .9));
+                    const img = await raster.embedJpg(c.toDataURL('image/jpeg', id === 'compress' ? Math.max(.1,Math.min(.95,o.compressJPEG??(o.quality === 'small' ? .45 : o.quality === 'balanced' ? .72 : .9))) : .9));
                     const visible=pageGeometry(out.getPage(i));
                     const page = raster.addPage([visible.width,visible.height]);
                     page.drawImage(img, { x: 0, y: 0, width: page.getWidth(), height: page.getHeight() });
@@ -476,11 +503,13 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         await normalized.flush();
         const embeds=await fresh.embedPages(normalized.getPages());
         if (id === 'resize') {
-            for (const e of embeds) {
-                const sheet=o.resizeSize==='letter'?[612,792]:[595.28,841.89];if(o.resizeOrientation==='landscape')sheet.reverse();
-                const p=fresh.addPage(sheet as [number,number]);
-                const s=Math.min((sheet[0]-40)/e.width,(sheet[1]-40)/e.height);
-                p.drawPage(e,{x:(sheet[0]-e.width*s)/2,y:(sheet[1]-e.height*s)/2,width:e.width*s,height:e.height*s});
+            if(out.getForm().getFields().length||hasFormWidgets(out))throw new Error('Resize would lose fillable fields. Make them read-only in Flatten PDF first, then resize the result.');
+            const sheet=resizeSheet(o),selected=new Set(ranges(o.resizeRange??'',embeds.length));
+            for(let i=0;i<embeds.length;i++){
+                signal?.throwIfAborted();
+                if(!selected.has(i)){fresh.addPage((await fresh.copyPages(out,[i]))[0]);continue;}
+                const e=embeds[i],p=fresh.addPage(sheet),placement=resizePlacement(e.width,e.height,sheet,o.resizeMode==='fill');
+                p.drawPage(e,placement);
             }
         }
         else if (id === 'flip') {
