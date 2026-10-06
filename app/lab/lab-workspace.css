@@ -704,7 +704,7 @@
   align-items: center;
   flex-wrap: wrap;
 }
-.dark .lab-workspace {
+[data-theme="dark"] .lab-workspace {
   --lab-ink: #eef0fa;
   --lab-muted: #adb5cc;
   --lab-border: #3c3851;
@@ -712,20 +712,20 @@
   --lab-soft: #2b263d;
   --lab-violet: #9878f5;
 }
-.dark .lab-workspace .lab-button-primary {
+[data-theme="dark"] .lab-workspace .lab-button-primary {
   background: #7654da;
   border-color: #7654da;
   color: white;
 }
-.dark .lab-extracted-swatches [aria-pressed="true"],
-.dark .lab-thumbnails [aria-current="page"] {
+[data-theme="dark"] .lab-extracted-swatches [aria-pressed="true"],
+[data-theme="dark"] .lab-thumbnails [aria-current="page"] {
   background: #39304e;
   color: #ece6ff;
 }
-.dark .lab-workspace select {
+[data-theme="dark"] .lab-workspace select {
   color-scheme: dark;
 }
-.dark .lab-rendering {
+[data-theme="dark"] .lab-rendering {
   background: #fff9;
   color: #263247;
 }
