@@ -1,7 +1,7 @@
 'use client';
 
 import {useEffect, useRef, useState, type ReactNode} from 'react';
-import {ArrowLeft, Check, Download, FolderOpen, Pencil} from 'lucide-react';
+import {ArrowLeft, Download, FolderOpen, Pencil} from 'lucide-react';
 import {formatBytes} from '@/components/file-facts';
 import './result-screen.css';
 
@@ -14,9 +14,12 @@ export function ResultCard({output, open, before, compress, onDownload, onOrigin
     onSettings: () => void; onProtect?: () => void; error?: string; previewContent?: ReactNode;
 }) {
     const [preview, setPreview] = useState(false);
+    const [successVersion, setSuccessVersion] = useState(0);
     const downloadButton = useRef<HTMLButtonElement>(null);
     useEffect(() => {
         if (!open) return;
+        setSuccessVersion(version => version + 1);
+        setPreview(false);
         const frame = requestAnimationFrame(() => {
             window.scrollTo({top: 0, behavior: 'instant'});
             downloadButton.current?.focus({preventScroll: true});
@@ -30,8 +33,19 @@ export function ResultCard({output, open, before, compress, onDownload, onOrigin
     const inputSize = output.inputSize ?? before?.size ?? 0;
     const larger = !!compress && inputSize > 0 && output.blob.size > inputSize;
     const saved = compress && inputSize > output.blob.size ? Math.round((1 - output.blob.size / inputSize) * 100) : 0;
-    return <section className="result-screen" aria-labelledby="result-heading">
-        <div className="result-screen-success" aria-hidden="true"><Check size={28}/></div>
+    return <section key={successVersion} className="result-screen" aria-labelledby="result-heading">
+        <div className="result-screen-success" aria-hidden="true">
+            <span className="result-success-halo"/>
+            <span className="result-success-spark result-success-spark-one"/>
+            <span className="result-success-spark result-success-spark-two"/>
+            <span className="result-success-spark result-success-spark-three"/>
+            <span className="result-success-spark result-success-spark-four"/>
+            <svg className="result-success-icon" viewBox="0 0 80 80" fill="none">
+                <circle className="result-success-disc" cx="40" cy="40" r="34"/>
+                <circle className="result-success-ring" cx="40" cy="40" r="34" pathLength="1"/>
+                <path className="result-success-tick" d="M25 40.5 35.5 51 56 30" pathLength="1"/>
+            </svg>
+        </div>
         <h1 id="result-heading">Your {label} is ready</h1>
         <p className="result-screen-file">{output.name} <span>· {formatBytes(output.blob.size)}</span></p>
         {compress && inputSize > 0 && <p className="result-screen-size">{saved > 0 ? `${saved}% smaller · ${formatBytes(inputSize)} → ${formatBytes(output.blob.size)}` : larger ? 'The original is smaller. Download it below, or change your settings.' : 'This PDF is already compact. You can download it or change your settings.'}</p>}
