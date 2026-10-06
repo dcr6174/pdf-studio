@@ -1,3 +1,4 @@
+import {readFormFields,applyFormValues,flattenVisibleForm,type FormValue} from './pdf-forms';
 import {markRotation} from './mark-rotation';
 import {workflowSettings,type WorkflowStepSettings} from './workflow-recipes';
 import {resizeSheet,resizePlacement,splitGroups} from './page-layout';
@@ -8,7 +9,7 @@ import {optimizeJPEGImages} from './optimize-jpeg';
 import {decodePhoto,normalizeCameraFile} from './mobile-image';
 import {addBookmarks,cleanupPDF,removeAnnotations,halvePages,createForm} from './extra-pdf';
 import {replaceExistingText} from './native-text';
-import { PDFDocument, StandardFonts, rgb, degrees, PDFTextField, PDFCheckBox, PDFDropdown, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray } from 'pdf-lib';
+import { PDFDocument, StandardFonts, rgb, degrees, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray } from 'pdf-lib';
 import JSZip from 'jszip';
 import {sensitiveTextCandidates} from './sensitive-text';
 import {pageGeometry,displayPoint,safeLink,arrowHead} from './page-geometry';
@@ -75,7 +76,7 @@ export type Options = {
     margin: string;
     start: string;
     columns: string;
-    fields: Record<string, string | boolean>;
+    fields: Record<string, FormValue>;
     textFontSize?:string;
     textPageSize?:string;
     recipe?:string;
@@ -197,7 +198,7 @@ export async function assemble(files: Loaded[], items: PageItem[], signal?:Abort
         out.addPage(p);
     }
 } if(files.length===1&&files[0].doc){const d=files[0].doc;out.setTitle(d.getTitle()??'');out.setAuthor(d.getAuthor()??'');out.setSubject(d.getSubject()??'');out.setKeywords((d.getKeywords()??'').split(/,\s*/));} return out; }
-export async function fields(bytes: Uint8Array) { const d = await PDFDocument.load(bytes); return d.getForm().getFields().map(f => ({ name: f.getName(), kind: f instanceof PDFTextField ? 'text' : f instanceof PDFCheckBox ? 'checkbox' : f instanceof PDFDropdown ? 'select' : 'unsupported', value: f instanceof PDFTextField ? f.getText() ?? '' : f instanceof PDFCheckBox ? f.isChecked() : f instanceof PDFDropdown ? f.getSelected()[0] ?? '' : '', choices: f instanceof PDFDropdown ? f.getOptions() : [] })); }
+export const fields = readFormFields;
 async function plainPDF(text: string, markdown = false) { const { jsPDF } = await import('jspdf'); const p = new jsPDF(); const font = await fetch('/fonts/NotoSans-Regular.ttf'); if (!font.ok)
     throw new Error('The document font could not be loaded. Please try again.'); const arr = new Uint8Array(await font.arrayBuffer()); let binary = ''; for (let i = 0; i < arr.length; i++)
     binary += String.fromCharCode(arr[i]); p.addFileToVFS('NotoSans.ttf', btoa(binary)); p.addFont('NotoSans.ttf', 'NotoSans', 'normal'); p.setFont('NotoSans'); p.setFontSize(11); let y = 23; for (const raw of text.split('\n')) {
@@ -388,17 +389,8 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if (id === 'form') {
         if(files.length!==1||marks.length||items.length!==files[0].pages||items.some((p,i)=>p.index!==i||p.rotation))throw new Error('Fill forms on the original PDF. Export page changes first and continue with the result.');
         const d = await PDFDocument.load(first.bytes);
-        const form = d.getForm();
-        for (const [name, val] of Object.entries(o.fields)) {
-            const f = form.getField(name);
-            if (f instanceof PDFTextField)
-                f.setText(String(val));
-            else if (f instanceof PDFCheckBox)
-                {if(val)f.check();else f.uncheck();}
-            else if (f instanceof PDFDropdown)
-                f.select(String(val));
-        }
-        if(o.flattenForm)flattenFormSafely(d);
+        await applyFormValues(d,o.fields);
+        if(o.flattenForm)flattenVisibleForm(d);
         return result(await d.save(), `${filename}-filled.pdf`);
     }
     if(id==='compress'&&o.compressTarget?.trim()){
@@ -657,3 +649,4 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
  await rejectBlankOutput(outputPages,sourcePages,probe,signal);
  return output;
 }
+

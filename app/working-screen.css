@@ -1,0 +1,91 @@
+/* Working surfaces: quiet chrome, document first, one visible export action. */
+.task-workspace{min-width:0}.task-canvas{min-width:0}.workspace-view-switch{display:none}
+.document-loaded .tool-note{padding:10px 14px;border-radius:8px;font-size:13px;line-height:1.5;box-shadow:none}
+.document-loaded .settings-panel:not(:has(*)){display:none}
+.document-loaded .settings-panel .field{min-width:0;max-width:100%;width:100%;flex:1 1 220px}
+.document-loaded .settings-panel input,.document-loaded .settings-panel select,.document-loaded .settings-panel textarea{min-width:0;max-width:100%}
+.document-loaded .action-bar{position:sticky;bottom:0;z-index:12;margin-top:20px;border:1px solid var(--border);border-radius:12px;background:var(--card);box-shadow:none;padding:12px 16px}
+.document-loaded .action-bar .primary{min-height:48px}
+.task-workspace.focused-workspace{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start}
+.focused-workspace>.settings-panel{grid-column:2;grid-row:1;display:flex;flex-direction:column;gap:18px;position:sticky;top:88px;padding:20px;margin:0;border:1px solid var(--border);border-radius:12px;box-shadow:none}
+.focused-workspace>.settings-panel .field{flex:none}
+.focused-workspace>.task-canvas{grid-column:1;grid-row:1}
+.focused-workspace .compression-preview{max-width:none;margin:0;border:1px solid var(--border);background:var(--soft);border-radius:12px;padding:16px}
+.focused-workspace .compression-preview img{display:block;max-width:100%;height:auto;margin:auto;background:white}
+.focused-workspace .merge-files{margin-top:0}
+.focused-workspace .page-grid{grid-template-columns:repeat(3,minmax(0,1fr))}
+.pdf-form-editor{display:grid;grid-template-columns:minmax(0,1fr) 300px;gap:24px;align-items:start;min-width:0}
+.form-workbench{min-width:0;border:1px solid var(--border);border-radius:12px;background:var(--card);overflow:hidden}
+.form-toolbar,.form-pager{display:flex;align-items:center;justify-content:space-between;gap:8px;padding:10px 12px;border-bottom:1px solid var(--border);flex-wrap:wrap}
+.form-toolbar button,.form-pager button{display:inline-flex;align-items:center;justify-content:center;gap:6px;min-width:44px;min-height:44px;padding:8px;border-radius:8px;color:var(--foreground);background:transparent}
+.form-toolbar button:disabled,.form-pager button:disabled{opacity:.4}
+.form-view-switch,.form-zoom{display:flex;gap:4px;align-items:center}
+.form-view-switch{padding:3px;background:var(--soft);border-radius:10px}
+.form-view-switch button[aria-pressed=true]{background:var(--primary);color:#fff}
+.form-pager{justify-content:center;padding:6px 12px}
+.form-pager label{display:flex;align-items:center;gap:6px;font-size:13px}.form-pager select{min-width:56px;min-height:44px;border:1px solid var(--border);border-radius:8px;padding:6px}
+.form-page-scroll{overflow:auto;max-height:75dvh;background:var(--soft);padding:16px;overscroll-behavior:contain;scroll-padding:24px}
+.form-page-scroll[hidden]{display:none}.form-page-surface{position:relative;margin-inline:auto;background:#fff;color:#17142e;box-shadow:0 2px 10px #17142e10}.form-page-surface canvas{display:block}
+.form-widget{position:absolute;box-sizing:border-box}.form-widget-control{position:absolute;left:50%;top:50%;transform-origin:center}
+.form-widget input,.form-widget select,.form-widget textarea{display:block;width:100%;height:100%;min-width:0!important;min-height:0!important;box-sizing:border-box;border:1px solid #8576b7;border-radius:2px;padding:0 3px;background:#f4f0ff;color:#17142e;font-family:Arial,sans-serif;font-size:16px;line-height:1.15;box-shadow:none;resize:none}
+.form-widget input:focus,.form-widget select:focus,.form-widget textarea:focus{outline:2px solid #6c42d9;outline-offset:2px;background:#fff;position:relative;z-index:3}
+.form-widget input[type=checkbox],.form-widget input[type=radio]{padding:0;appearance:auto;accent-color:#6c42d9;margin:0;background:#fff}
+.form-widget input:disabled,.form-widget select:disabled,.form-widget textarea:disabled{opacity:1;background:#f2f2f2;color:#52525b}
+.form-options{position:sticky;top:88px;border:1px solid var(--border);border-radius:12px;background:var(--card);padding:22px;min-width:0}
+.form-options h2{font-size:22px;margin:8px 0 10px;letter-spacing:-.5px}.form-options>p{font-size:13px;line-height:1.6;color:var(--muted);margin-bottom:20px}.form-options .field{width:100%;min-width:0}.form-options .field select{min-height:48px;width:100%}
+.form-help{border-top:1px solid var(--border);padding-top:18px;margin-top:18px;font-size:13px}.form-help p,.form-limitations p{font-size:13px;line-height:1.6;color:var(--muted)}
+.form-limitations summary{min-height:48px;display:flex;align-items:center;cursor:pointer;font-size:13px;font-weight:600}.form-limitations{border-top:1px solid var(--border);margin-top:16px}
+.form-status{padding:12px 16px;font-size:14px;line-height:1.5}.form-status p{margin-bottom:10px}
+.form-field-list{padding:22px;display:grid;gap:22px}.form-list-row{min-width:0;display:grid;gap:8px}.form-list-row>label{font-size:14px;font-weight:600;overflow-wrap:anywhere}.form-list-row>label span{font-size:12px;color:var(--muted);font-weight:400}
+.form-list-row>input:not([type=checkbox]),.form-list-row>select,.form-list-row>textarea{width:100%;min-width:0;min-height:48px;font-size:16px;box-sizing:border-box;border:1px solid var(--border);background:var(--card);color:var(--foreground);border-radius:8px;padding:10px 12px}.form-list-row>textarea{min-height:100px}.form-list-row>input[type=checkbox]{width:28px;height:28px;margin:8px 0;accent-color:var(--primary)}.form-list-row small{color:var(--muted);font-size:12px}
+.form-radio-list{display:grid;gap:4px}.form-radio-list label{display:flex;align-items:center;gap:12px;min-height:48px;font-size:16px}.form-radio-list input{width:24px;height:24px;accent-color:var(--primary)}
+@media(max-width:900px){
+ .task-workspace.focused-workspace,.pdf-form-editor{grid-template-columns:minmax(0,1fr);gap:16px}
+ .focused-workspace>.settings-panel{grid-column:1;grid-row:2;position:static}
+ .focused-workspace>.task-canvas{grid-column:1;grid-row:1}
+ .form-options{position:static}.form-toolbar{justify-content:center}.form-toolbar button{min-height:48px}.form-page-scroll{max-height:65dvh}
+}
+@media(max-width:767px){
+ .document-loaded .content{padding-bottom:100px}
+ .workspace-view-switch{display:flex;gap:4px;padding:4px;margin-bottom:16px;background:var(--soft);border-radius:10px}
+ .workspace-view-switch button{flex:1;min-height:48px;border-radius:8px;font-size:14px}.workspace-view-switch button[aria-pressed=true]{background:var(--primary);color:white}
+ .focused-workspace[data-view=preview]>.settings-panel,.focused-workspace[data-view=settings]>.task-canvas{display:none}
+ .focused-workspace>.workspace-view-switch{grid-column:1;grid-row:1}
+ .focused-workspace>.settings-panel,.focused-workspace>.task-canvas{grid-row:2}
+ .focused-workspace>.settings-panel{padding:16px}
+ .focused-workspace .page-grid{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .document-loaded .action-bar{position:fixed;left:0;right:0;bottom:0!important;margin:0;border-radius:0;border-left:0;border-right:0;padding:12px 16px max(12px,env(safe-area-inset-bottom));background:var(--card)}
+ .document-loaded .action-bar>div{display:none}.document-loaded .action-bar .primary{width:100%;min-height:48px}
+ /* Let keyboard focus scroll into view; a hidden fixed export bar cannot cover inputs. */
+ .document-loaded:has(input:focus,textarea:focus,select:focus) .action-bar{position:static;margin-top:16px;border:1px solid var(--border);border-radius:10px}
+ .form-field-list{padding:16px}.form-options{padding:18px}.form-options h2{font-size:20px}
+ .form-pager button{min-width:48px;min-height:48px}.form-page-scroll{scroll-padding-bottom:48px}
+}
+@media(prefers-reduced-motion:reduce){.task-workspace *,.pdf-form-editor *{scroll-behavior:auto;transition:none}}
+
+/* Active tools use the viewport rather than the marketing page's centered column. */
+.studio-shell.document-shell .content{width:100%;max-width:none;margin:0;padding-inline:16px}
+.document-loaded .document-bar{padding:8px 0;margin-bottom:8px}
+.document-loaded .tool-note{margin:0 0 8px;padding:8px 12px}
+.document-loaded .settings-panel[hidden]{display:none}
+.document-loaded .editor-layout,.document-loaded.sign-workspace .editor-layout{grid-template-columns:minmax(0,1fr) 300px;gap:16px}
+.document-loaded .editor-main{padding:8px;background:var(--soft);border-radius:10px}
+.document-loaded .board-scroll{padding:12px;border-radius:8px;max-height:calc(100dvh - 250px);min-height:240px}
+.document-loaded .editor-help{font-size:12px;color:var(--muted);margin:4px 0}
+.document-loaded .editor-help summary{display:flex;align-items:center;min-height:32px;cursor:pointer}
+.document-loaded .editor-help p{margin:0 0 8px}
+.document-loaded .properties,.document-loaded .form-options{top:76px;padding:16px;border-radius:10px}
+.document-loaded .action-bar{margin-top:12px;padding:10px 12px;border-radius:8px}
+.document-loaded .pdf-form-editor,.document-loaded .task-workspace.focused-workspace{gap:16px}
+.document-loaded .form-page-scroll{max-height:calc(100dvh - 300px)}
+@media(max-width:900px){
+ .document-loaded .editor-layout,.document-loaded.sign-workspace .editor-layout{grid-template-columns:minmax(0,1fr)}
+ .document-loaded .board-scroll{max-height:65dvh}
+ .document-loaded .properties,.document-loaded .form-options{position:static}
+}
+@media(max-width:767px){
+ .studio-shell.document-shell .content{padding-inline:10px}
+ .document-loaded .action-bar{margin:0;border-radius:0;padding:10px 12px max(10px,env(safe-area-inset-bottom))}
+ .document-loaded .editor-layout{gap:12px}
+ .document-loaded .form-page-scroll{max-height:60dvh}
+}
