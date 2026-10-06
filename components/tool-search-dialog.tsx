@@ -1,4 +1,5 @@
 'use client';
+import '@/app/tool-search.css';
 import {useRef,useState} from 'react';
 import {Search,FileText} from 'lucide-react';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
