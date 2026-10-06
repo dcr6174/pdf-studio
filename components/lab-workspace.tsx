@@ -21,17 +21,10 @@ import {
   type CloudSettings,
 } from "@/lib/lab-design";
 import "../app/lab/lab-workspace.css";
+import {useExportScreen} from "@/components/use-export-screen";
 
 type Mode = Extract<Experiment, "flipbook" | "word-cloud" | "page-palette">;
 type Region = { x: number; y: number; w: number; h: number };
-function save(blob: Blob, name: string) {
-  const url = URL.createObjectURL(blob);
-  const a = document.createElement("a");
-  a.href = url;
-  a.download = name;
-  a.click();
-  setTimeout(() => URL.revokeObjectURL(url), 1500);
-}
 async function svgPNG(svg: string, width = 1800) {
   const url = URL.createObjectURL(new Blob([svg], { type: "image/svg+xml" }));
   try {
@@ -129,6 +122,7 @@ function SwatchThemes({
   );
 }
 export function LabWorkspace({ mode }: { mode: Mode }) {
+  const {prepare: save, visible: resultVisible, screen: resultScreen} = useExportScreen();
   const tool = experiments.find((t) => t.slug === mode)!;
   const [file, setFile] = useState<File>(),
     [bytes, setBytes] = useState<Uint8Array>(),
@@ -678,6 +672,7 @@ export function LabWorkspace({ mode }: { mode: Mode }) {
       ];
   return (
     <main className={"lab-workspace lab-workspace-" + mode}>
+      <div className="studio-workspace-content" data-export-workspace tabIndex={-1} hidden={resultVisible}>
       <header className="lab-workspace-heading">
         <Link href="/lab">Back to Studio Lab</Link>
         <span className="lab-workspace-beta">BETA</span>
@@ -1590,7 +1585,9 @@ export function LabWorkspace({ mode }: { mode: Mode }) {
         Processed on your device. Download your work before leaving; this
         workspace is not saved.
       </p>
+      </div>{resultScreen}
     </main>
   );
 }
+
 
