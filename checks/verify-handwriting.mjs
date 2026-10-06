@@ -9,7 +9,7 @@ const {createHandwritingPDF,handwritingFonts,handwritingDefaults}=await import('
 const root=new URL('../',import.meta.url),font=id=>new Uint8Array(fs.readFileSync(new URL('public/fonts/handwriting/'+id+'.ttf',root)));
 const contents=doc=>doc.getPages().map(page=>page.node.Contents().asArray().map(ref=>Buffer.from(decodePDFRawStream(doc.context.lookup(ref)).decode()).toString()).join(''));
 assert.equal(handwritingFonts.length,20);
-for(const [id] of handwritingFonts){assert.match(fs.readFileSync(new URL('public/fonts/handwriting/'+id+'-OFL.txt',root),'utf8'),/SIL OPEN FONT LICENSE/);const output=await createHandwritingPDF('Hello notebook! 0123456789',handwritingDefaults,'text-to-handwriting',font(id));const doc=await PDFDocument.load(output.bytes);assert.equal(doc.getPageCount(),1);fs.writeFileSync(new URL('.handwriting-check/font-'+id+'.pdf',root),output.bytes);assert.match(contents(doc)[0],/BT/);assert.match(contents(doc)[0],/Tj|TJ/);assert.ok(doc.getPage(0).node.Resources().get('Font')||contents(doc)[0].includes('Tf'));}
+for(const [id] of handwritingFonts){assert.match(fs.readFileSync(new URL('public/fonts/handwriting/'+id+'-OFL.txt',root),'utf8'),/SIL OPEN FONT LICENSE/);const output=await createHandwritingPDF('Hello notebook! office affinity 0123456789',handwritingDefaults,'text-to-handwriting',font(id));const doc=await PDFDocument.load(output.bytes);assert.equal(doc.getPageCount(),1);fs.writeFileSync(new URL('.handwriting-check/font-'+id+'.pdf',root),output.bytes);assert.equal(execFileSync('pdftotext',[new URL('.handwriting-check/font-'+id+'.pdf',root).pathname,'-']).toString().replace(/\s+/g,' ').trim(),'Hello notebook! office affinity 0123456789',id+': Unicode extraction must preserve the original words');assert.match(contents(doc)[0],/BT/);assert.match(contents(doc)[0],/Tj|TJ/);assert.ok(doc.getPage(0).node.Resources().get('Font')||contents(doc)[0].includes('Tf'));}
 // Independent raster check: compare visible ink to the original font. Text extraction
 // alone missed dropped glyph outlines in Allura, Caveat, Caveat Brush and Kalam.
 for(const [id] of handwritingFonts){
@@ -19,7 +19,7 @@ for(const [id] of handwritingFonts){
  ctx.fillStyle='white';ctx.fillRect(0,0,1000,160);ctx.drawImage(rendered,-55,-58);
  const count=()=>{const data=ctx.getImageData(0,0,725,82).data;let pixels=0;for(let i=0;i<data.length;i+=4)if(data[i]*.299+data[i+1]*.587+data[i+2]*.114<190)pixels++;return pixels;};
  const actual=count();GlobalFonts.registerFromPath(new URL('public/fonts/handwriting/'+id+'.ttf',root).pathname,'Check-'+id);
- ctx.fillStyle='white';ctx.fillRect(0,0,1000,160);ctx.fillStyle='#243c80';ctx.font=`${18*1200/841.89}px "Check-${id}"`;ctx.fillText('Hello notebook! 0123456789',0,50);
+ ctx.fillStyle='white';ctx.fillRect(0,0,1000,160);ctx.fillStyle='#243c80';ctx.font=`${18*1200/841.89}px "Check-${id}"`;ctx.fillText('Hello notebook! office affinity 0123456789',0,50);
  const expected=count();assert.ok(expected>100);assert.ok(actual>expected*.45,`${id}: exported glyphs missing (${actual}/${expected} pixels)`);
 }
 const body=Array.from({length:90},(_,i)=>'Paragraph '+i+': '+('Readable handwritten notes preserve every word. '.repeat(5))).join('\n\n');
