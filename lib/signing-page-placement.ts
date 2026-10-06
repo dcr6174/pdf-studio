@@ -1,6 +1,6 @@
 export type SigningPageScope='current'|'all'|'all-except-last'|'last'|'custom';
 type IdentifiedPage={id:string};
-type SigningMark={id:string;pageId:string;signatureGroup?:string;[key:string]:unknown};
+type SigningMark={id:string;pageId:string;signatureGroup?:string};
 
 export function resolveSigningPages<T extends IdentifiedPage>(pages:readonly T[],sourcePageId:string,scope:SigningPageScope,range:string):T[]{
   let targets:T[];
