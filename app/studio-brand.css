@@ -484,3 +484,7 @@ select,option,[data-slot=select-trigger],[data-slot=select-content],[data-slot=s
 .page-board .mark .resize-handle{width:28px;height:28px;min-width:28px;min-height:28px;border:0;background:transparent;box-shadow:none;border-radius:0}
 .page-board .mark .resize-handle::after{content:"";position:absolute;left:50%;top:50%;width:9px;height:9px;transform:translate(-50%,-50%);background:#6545df;border:1px solid #fff;box-shadow:0 0 0 1px #6545df;border-radius:2px;pointer-events:none}
 @media(pointer:coarse){.page-board .mark .resize-handle{width:32px;height:32px;min-width:32px;min-height:32px}.page-board .mark .resize-handle::after{width:11px;height:11px}}
+
+.native-flow-toggle{display:flex;align-items:flex-start;gap:8px;font-size:.85rem;line-height:1.5;margin:10px 0}.native-flow-toggle input{margin-top:4px;width:auto}.native-draft-actions{display:flex;flex-wrap:wrap;gap:8px;margin:12px 0}.native-hit.ocr-uncertain{border:1px solid #d68b16;background:#fbbf2414}.ocr-corrected-preview{position:absolute;white-space:pre-wrap;overflow-wrap:anywhere;pointer-events:none;color:#172033}.native-controls textarea{width:100%;resize:vertical;min-height:100px}.native-inline textarea{white-space:pre-wrap;overflow-wrap:anywhere}
+
+
