@@ -48,3 +48,26 @@
  .result-success-ring{transform:rotate(-90deg)}
  .result-success-halo,.result-success-spark{display:none;animation:none}
 }
+
+/* Compact shared download dialog. */
+.result-dialog{width:min(540px,calc(100vw - 24px));max-height:calc(100dvh - 24px);overflow-y:auto;overscroll-behavior:contain;padding:24px!important;border-radius:22px!important;background:var(--card,#fff);color:var(--foreground,#25243b)}
+.result-dialog .result-screen{min-height:0;padding:0;width:100%}
+.result-dialog .result-screen-success{width:52px;height:52px;margin:0 auto 12px}
+.result-dialog .result-success-icon{width:50px;height:50px}
+.result-dialog #result-heading{font-size:25px;line-height:1.2;margin:0 24px 8px;text-align:center}
+.result-dialog .result-screen-file{margin:14px 0 6px;padding:12px;border:1px solid var(--border);border-radius:10px;font-size:14px}
+.result-dialog .result-main-actions{display:flex;flex-direction:column;gap:8px;margin:14px 0}
+.result-dialog .result-screen-download{margin:0;min-height:48px;min-width:0;width:100%;font-size:17px;padding:12px 18px}
+.result-dialog button,.result-dialog summary,.result-dialog a{min-height:44px}
+.result-dialog .result-screen-return{gap:12px}
+.result-dialog .result-screen-size{margin:8px auto;font-size:13px}
+.result-dialog .result-screen-details{margin:10px auto}
+.result-dialog .result-screen-details details{padding:8px 0}
+.result-dialog .result-screen-next{border:0;margin:0;padding:8px 0}
+.result-dialog .result-next-details{text-align:left;border-bottom:1px solid var(--border)}
+.result-dialog summary{display:flex;align-items:center;cursor:pointer;font-size:14px}
+.result-dialog .support-message{display:flex;align-items:center;justify-content:space-between;gap:12px;margin-top:12px;padding-top:12px;border-top:1px solid var(--border);font-size:12px}
+.result-dialog .support-message p{margin:0}
+.result-dialog .support-link{display:flex;align-items:center;gap:6px}
+.result-output-warning{font-size:13px;line-height:1.5;background:color-mix(in srgb,#eab308 12%,var(--card));padding:10px;border-radius:8px}
+@media(max-width:600px){.result-dialog{padding:18px!important}.result-dialog #result-heading{font-size:22px}}

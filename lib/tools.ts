@@ -24,10 +24,10 @@ export const tools:Tool[] = [
 ['reverse','Reverse pages','Last page first. Simple.','Pages','reverse'],
 ['duplicate','Duplicate pages','Make a second copy of every page.','Pages','copy'],
 ['interleave','Interleave pages','Weave pages from multiple PDFs.','Pages','merge'],
-['nup','Pages per sheet','Fit 2 or 4 pages on one sheet.','Pages','grid'],
+['nup','Pages per sheet','Fit 2, 4, 6 or 9 pages on one sheet.','Pages','grid'],
 ['crop','Crop margins','Trim the edges of your pages.','Pages','crop','Cropping hides content outside the page boundary; it does not permanently remove it.'],
 ['resize','Resize to A4','Fit every page onto an A4 sheet.','Pages','crop'],
-['flip','Mirror pages','Flip your document horizontally.','Pages','reverse'],
+['flip','Mirror pages','Mirror your pages horizontally or vertically.','Pages','reverse'],
 ['native-text','Edit existing text','Select original text, change it and preview the actual PDF.','Edit & sign','text','Browser text editing. Single-line edits can shrink to fit the original area (minimum half size). Embedded fonts need available characters; scans and nested graphics have limitations. No paragraph reflow. Editing invalidates digital signatures.'],
 ['edit','Edit PDF','Add text, images, highlights and drawings.','Edit & sign','edit','Adds new elements and visual whiteout. Use Edit existing text for actual text replacement; use Redact for content removal.'],
 ['sign','Sign PDF','Draw, type or upload a signature.','Edit & sign','pen','A visual signature, without a certificate or identity verification.'],
@@ -64,10 +64,9 @@ export const tools:Tool[] = [
 ['decrypt','Remove password','Unlock with a password you know.','Privacy','unlock'],
 ['privacy','Privacy scanner','Inspect metadata and text patterns.','Privacy','shield','Pattern matching can miss sensitive data or flag harmless text. Review the document before sharing.'],
 ['clean','Remove metadata','Clear standard document properties.','Privacy','shield','Clears standard title, author, subject, keywords, producer and dates. It is not a complete sanitization of every hidden object.'],
-['hash','Calculate file hash','Calculate a SHA-256 file hash.','Privacy','hash'],
+['hash','Calculate SHA-256','Calculate a SHA-256 file hash.','Privacy','hash'],
 ['zip','Bundle PDFs','Put your PDF files in a ZIP.','Pages','layers'],
 ['repair','Repair readable PDF','Rebuild a readable PDF structure.','Privacy','file','Can resave PDFs that parse successfully. Severely damaged PDFs may not be recoverable.'],
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
 export function accepted(id:string){return id==='images'||id==='scan'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
 export function isMulti(id:string){return ['workflow','merge','organize','interleave','images','scan','compare','zip'].includes(id);}
-

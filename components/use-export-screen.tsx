@@ -6,7 +6,7 @@ export function useExportScreen(afterDownload?: (output: {blob: Blob; name: stri
     const [output, setOutput] = useState<{blob: Blob; name: string}>();
     const [visible, setVisible] = useState(false);
     function prepare(blob: Blob, name: string) {setOutput({blob, name}); setVisible(true);}
-    const screen = output && <ResultCard output={output} open={visible} onSettings={() => {
+    const screen = output && <ResultCard output={output} open={visible} onOpenChange={setVisible} onSettings={() => {
         setVisible(false);
         requestAnimationFrame(() => {window.scrollTo({top: 0, behavior: 'instant'}); document.querySelector<HTMLElement>('[data-export-workspace]')?.focus({preventScroll: true});});
     }} onDownload={() => {
