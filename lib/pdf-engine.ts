@@ -76,6 +76,7 @@ export type Options = {
     quality: string;
     compressTarget?:string;
     compressJPEG?:number;
+    compressMaxDimension?:number;
     angle: string;
     margin: string;
     start: string;
@@ -114,7 +115,7 @@ let pdfjsPromise: Promise<typeof import('pdfjs-dist')> | undefined;
 export async function pdfjs() { if (!pdfjsPromise)
     pdfjsPromise = import('pdfjs-dist').then(m => { m.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'; return m; }); return pdfjsPromise; }
 export async function renderer(bytes: Uint8Array, password?: string) { const task=(await pdfjs()).getDocument({ data: bytes.slice(), password, cMapUrl: '/cmaps/', cMapPacked: true, standardFontDataUrl: '/standard_fonts/', isEvalSupported: false });try{return await task.promise;}catch(e){try{await task.destroy();}catch{}throw e;} }
-async function renderPage(bytes: Uint8Array, index: number, scale = 1, password?: string, rotation=0, signal?:AbortSignal) { signal?.throwIfAborted(); const d = await renderer(bytes, password); try {
+async function renderPage(bytes: Uint8Array, index: number, scale = 1, password?: string, rotation=0, signal?:AbortSignal, shared?:Awaited<ReturnType<typeof renderer>>) { signal?.throwIfAborted(); const d = shared??await renderer(bytes, password); try {
     const p = await d.getPage(index + 1);
     const v = p.getViewport({ scale, rotation:(p.rotate+rotation)%360 });
     if (v.width * v.height > 22000000)
@@ -128,7 +129,7 @@ async function renderPage(bytes: Uint8Array, index: number, scale = 1, password?
     return c;
 }
 finally {
-    await d.destroy();
+    if(!shared)await d.destroy();
 } }
 let activeRenders = 0;
 const renderQueue: (() => void)[] = [];
@@ -420,14 +421,14 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         return result(await d.save(), `${filename}-filled.pdf`);
     }
     if(id==='compress'&&o.compressTarget?.trim()){
-        const target=Number(o.compressTarget)*1000;if(!Number.isFinite(target)||target<=0)throw new Error('Enter a positive target size in KB.');
+        const requested=Number(o.compressTarget)*1000;const target=Math.ceil(requested)-1;if(!Number.isFinite(requested)||requested<=0)throw new Error('Enter a positive target size in KB.');
         const source=unchanged?first.bytes:await out.save();let best:Output=result(source,`${filename}-compress.pdf`,undefined,undefined,source.length);
-        if(source.length>target){const raster=!['compact','images'].includes(o.quality),attempts=raster?[{quality:'compact'},{quality:o.quality,compressJPEG:o.quality==='small'?.45:o.quality==='balanced'?.72:.9},{quality:o.quality,compressJPEG:.35},{quality:o.quality,compressJPEG:.2}]:[{quality:o.quality}];
+        if(source.length>target){const raster=!['compact','images'].includes(o.quality),attempts=o.quality==='compact'?[{quality:'compact'}]:[{quality:'compact'},{quality:'images',compressJPEG:.86},{quality:'images',compressJPEG:.78,compressMaxDimension:2400},{quality:'images',compressJPEG:.68,compressMaxDimension:2000},{quality:'images',compressJPEG:.58,compressMaxDimension:1600},{quality:'images',compressJPEG:.45,compressMaxDimension:1200},...(raster?[{quality:o.quality,compressJPEG:o.quality==='small'?.45:o.quality==='balanced'?.72:.9},{quality:o.quality,compressJPEG:.35},{quality:o.quality,compressJPEG:.2}]:[])];
         for(let i=0;i<attempts.length;i++){signal?.throwIfAborted();const candidate=await processPDF('compress',files,items,marks,{...o,compressTarget:undefined,...attempts[i]},n=>progress(Math.round((i*100+n)/attempts.length)),signal);if(candidate.blob.size<best.blob.size)best=candidate;if(best.blob.size<=target)break;}}
         return {...best,name:`${filename}-${o.compressTarget}kb.pdf`,target:{requestedKB:Number(o.compressTarget),met:best.blob.size<=target},report:`${best.blob.size<=target?'Target reached.':'Target not reached; smallest tested result retained.'} Requested ${o.compressTarget} KB; result ${(best.blob.size/1000).toFixed(1)} KB. ${best.report??'Original source retained unchanged.'} Best-effort size targeting cannot guarantee readability or a specific size; inspect the preview.`};
     }
-    if(id==='compress'&&o.quality==='images'){const source=unchanged?first.bytes:await out.save();const d=await PDFDocument.load(source,{updateMetadata:false});const changed=await optimizeJPEGImages(d,signal);progress(95);const bytes=changed?await d.save({useObjectStreams:true}):source;return result(bytes.length<source.length?bytes:source,`${filename}-images-optimized.pdf`,undefined,bytes.length<source.length?`Optimized ${changed} supported RGB JPEG images. Text, links and form structure retained. JPEG quality is reduced; inspect small image details.`:'No smaller result: original source retained. Only unmasked RGB JPEG streams are supported by this mode.',source.length);}
-    if(id==='compress'&&o.quality==='compact'){progress(90);const baseline=unchanged?first.bytes:await out.save();const compact=unchanged?await PDFDocument.load(first.bytes,{updateMetadata:false}):out;const bytes=await compact.save({useObjectStreams:true});signal?.throwIfAborted();const smaller=bytes.length<baseline.length;return result(smaller?bytes:baseline,`${filename}-compact.pdf`,undefined,smaller?`Reduced from ${baseline.length} to ${bytes.length} bytes. Text and links retained.`:'No size reduction: kept the source unchanged. Try an image preset only if losing searchable text, links and forms is acceptable.',baseline.length);}
+    if(id==='compress'&&o.quality==='images'){const source=unchanged?first.bytes:await out.save();const d=await PDFDocument.load(source,{updateMetadata:false});const changed=await optimizeJPEGImages(d,signal,{quality:o.compressJPEG,maxDimension:o.compressMaxDimension});progress(95);const bytes=changed?await d.save({useObjectStreams:true}):source;return result(bytes.length<source.length?bytes:source,`${filename}-images-optimized.pdf`,undefined,bytes.length<source.length?`Optimized ${changed} supported RGB JPEG images. Text, links and form structure retained. JPEG quality is reduced${o.compressMaxDimension?`; images limited to ${o.compressMaxDimension} pixels on the longest side`:""}; inspect small image details.`:'No smaller result: original source retained. Only unmasked RGB JPEG streams are supported by this mode.',source.length);}
+    if(id==='compress'&&o.quality==='compact'){progress(90);const baseline=unchanged?first.bytes:await out.save();const compact=unchanged?await PDFDocument.load(first.bytes,{updateMetadata:false}):out;const bytes=await compact.save({useObjectStreams:true});signal?.throwIfAborted();const smaller=bytes.length<baseline.length;return result(smaller?bytes:baseline,`${filename}-compact.pdf`,undefined,smaller?`Reduced from ${baseline.length} to ${bytes.length} bytes. Text and links retained.`:'No size reduction: kept the source unchanged. Try Recommended to optimize supported JPEGs while retaining text, links and forms.',baseline.length);}
     if(id==='flatten'&&o.flattenMode!=='image'){const count=out.getForm().getFields().length;flattenFormSafely(out);progress(100);return result(await out.save(),`${filename}-flatten.pdf`,undefined,`${count} form fields made read-only. Selectable text and page sizes retained. Other annotations remain; choose image mode to flatten the entire appearance.`,first.size);}
     if (['jpg', 'png', 'webp', 'compress', 'flatten', 'redact', 'grayscale', 'invert', 'ocr', 'pptx'].includes(id)) {
         const source = id==='compress'&&unchanged?first.bytes:await out.save();
@@ -442,13 +443,14 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         let omittedGlyphs=0;const ocrReview:import('./ocr-review').OCRReviewPage[]=[];
         const ocrSelected=id==='ocr'&&o.ocrRange?new Set(ranges(o.ocrRange,order.length)):undefined;
         let worker: Awaited<ReturnType<typeof import('tesseract.js').createWorker>> | undefined;
+        const compressionReader=id==='compress'?await renderer(source):undefined;
         try {
             const font = id === 'ocr' ? await raster.embedFont(StandardFonts.Helvetica) : undefined;
             for (let i = 0; i < order.length; i++) {
                 signal?.throwIfAborted();await new Promise(resolve=>setTimeout(resolve,0));
                 if(id==='ocr'){let skip=!!ocrSelected&&!ocrSelected.has(i);if(!skip&&o.ocrSkipText!==false){const reader=await renderer(source);try{const text=await (await reader.getPage(i+1)).getTextContent();skip=text.items.some(item=>'str' in item&&item.str.trim().length>0);}finally{await reader.destroy();}}if(skip){const [copied]=await raster.copyPages(out,[i]);raster.addPage(copied);ocrReview.push(null);progress(10+Math.round((i+1)/order.length*85));continue;}}
-                const scale = id === 'compress' ? (o.quality === 'small' ? 1 : o.quality === 'balanced' ? 1.5 : 2) : ['jpg','png','webp'].includes(id) ? Number(o.quality) || 2 : ['flatten','redact','grayscale','invert'].includes(id)?150/72:1.5;
-                const c = await render(source, i, scale,undefined,0,signal);
+                const scale = id === 'compress' ? (o.quality === 'small' ? 150/72 : o.quality === 'balanced' ? 200/72 : 300/72) : ['jpg','png','webp'].includes(id) ? Number(o.quality) || 2 : ['flatten','redact','grayscale','invert'].includes(id)?150/72:1.5;
+                const c = compressionReader?await renderPage(source,i,scale,undefined,0,signal,compressionReader):await render(source, i, scale,undefined,0,signal);
                 const ctx = c.getContext('2d')!;
                 if (id === 'redact') {
                     marks.filter(m => m.pageId === order[i].id && m.kind === 'redact').forEach(m => { ctx.fillStyle = '#000'; ctx.fillRect(m.x * c.width, m.y * c.height, m.w * c.width, m.h * c.height); });
@@ -468,7 +470,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
                     }
                     ctx.putImageData(px, 0, 0);
                 }
-                const jpg = c.toDataURL(id === 'png' ? 'image/png' : id==='webp'?'image/webp':'image/jpeg', id === 'compress' ? (o.quality === 'small' ? .45 : .72) : .92);
+                const jpg = ['jpg','png','webp','pptx'].includes(id)?c.toDataURL(id === 'png' ? 'image/png' : id==='webp'?'image/webp':'image/jpeg', .92):'';
                 if (['jpg','png','webp'].includes(id)) {
                     if(id==='webp'&&!jpg.startsWith('data:image/webp'))throw new Error('This browser cannot encode WebP. Choose PDF to PNG or JPG instead.');
                     z.file(`page-${i + 1}.${id}`, jpg.split(',')[1], { base64: true });
@@ -518,7 +520,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             return {...result(noSaving?source:bytes, `${filename}-${id}.pdf`,undefined,warning,id==='compress'?source.length:files.reduce((total,file)=>total+file.size,0)),...(['flatten','redact','grayscale','invert'].includes(id)?{warnings:['Image-based output: selectable text, links and editable forms are removed. Inspect the result before sharing.']}:{}),...(id==='ocr'?{ocrReview}:{})};
         }
         finally {
-            await worker?.terminate();
+            try{await worker?.terminate();}finally{await compressionReader?.destroy();}
         }
     }
     if (id === 'resize' || id === 'nup' || id === 'flip') {
@@ -683,3 +685,4 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
  await rejectBlankOutput(outputPages,sourcePages,probe,signal);
  return output;
 }
+
