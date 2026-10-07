@@ -1,11 +1,12 @@
 'use client';
+import {brandDownloadName} from '@/lib/export-filename';
 import {useState} from 'react';
 import {ResultCard} from '@/components/result-card';
 
 export function useExportScreen(afterDownload?: (output: {blob: Blob; name: string}) => void) {
     const [output, setOutput] = useState<{blob: Blob; name: string}>();
     const [visible, setVisible] = useState(false);
-    function prepare(blob: Blob, name: string) {setOutput({blob, name}); setVisible(true);}
+    function prepare(blob: Blob, name: string) {setOutput({blob, name:brandDownloadName(name)}); setVisible(true);}
     const screen = output && <ResultCard output={output} open={visible} onOpenChange={setVisible} onSettings={() => {
         setVisible(false);
         requestAnimationFrame(() => {window.scrollTo({top: 0, behavior: 'instant'}); document.querySelector<HTMLElement>('[data-export-workspace]')?.focus({preventScroll: true});});
@@ -17,3 +18,4 @@ export function useExportScreen(afterDownload?: (output: {blob: Blob; name: stri
     }}/>;
     return {prepare, visible, screen};
 }
+
