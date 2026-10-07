@@ -1,4 +1,5 @@
 'use client';
+import {HomeMotionHero} from '@/components/home-motion-hero';
 import {resizeBox,resizeHandles,type ResizeHandle} from '../lib/mark-resize';
 import {StudioHeader} from '@/components/studio-header';
 import {SiteFooter} from '@/components/site-header';
@@ -30,7 +31,7 @@ import { seoPages, seoTools } from '@/lib/seo-tools';
 import {toolMeta,fullTitle} from '@/lib/seo-meta';
 import {syncNavigationMetadata} from '@/lib/navigation-metadata';
 import {Spotlight} from '@/components/spotlight';
-import {Welcome,DailyLine,LocalClock,Greeting} from '@/components/welcome';
+import {DailyLine,LocalClock,Greeting} from '@/components/welcome';
 import {openingDeadline} from '@/lib/open-file-deadline';
 import {normalizeCameraFile} from '@/lib/mobile-image';
 import {ResultCard} from '@/components/result-card';
@@ -385,7 +386,7 @@ function App({initialTool='home',initialHeading,initialOptions}:{initialTool?:st
     
     <fieldset disabled={busy||loading||switchingEditor} inert={busy||loading||switchingEditor?true:undefined} className="studio-controls">
     {view === 'home' ? <>
-        <section className="home-hero"><div className="hero-copy"><Welcome draft={null} busy={busy||loading} onResume={()=>void restoreDraft()} onDelete={async()=>{try{await draft('delete');setSavedDraft(undefined);toast('Saved draft deleted');}catch{toast.error('Could not delete the draft.');}}}/><h1>Free PDF tools:<br/><span>edit, merge, compress, sign.</span></h1><p className="home-benefit-statement">{tools.length} Free PDF Tools. No Sign-Up. No Installation. No Watermarks. Your Files Stay on Your Device. <Link href="/check-it-yourself">Check it yourself</Link></p><button type="button" className="search hero-search tool-search-trigger" aria-haspopup="dialog" onClick={()=>searchAction.current()}><Search size={22} aria-hidden="true"/><span>Search all PDF tools</span></button><p id="search-status" className="search-status" role="status">{searchStatus}</p></div></section>
+        <HomeMotionHero toolCount={tools.length} onSearch={()=>searchAction.current()} searchStatus={searchStatus}/>
         <section className="home-popular" aria-labelledby="popular-tools-title"><div className="home-section-heading"><h2 id="popular-tools-title">Popular tools</h2><p>Start with an everyday task.</p></div><Spotlight className="tool-grid popular-tool-row" item=".tool-card">{popularTools.map(homeToolCard)}</Spotlight></section>
         <section className="home-toolbox" aria-label="Browse PDF tools"><div className="home-section-heading home-catalog-heading"><div className="home-catalog-pills" role="group" aria-label="Tool categories">{groups.filter(g=>g!=='My files').map(category=><button type="button" key={category} aria-pressed={catalogGroup===category} onClick={()=>setCatalogGroup(category)}>{category} <span>{category==='All tools'?tools.length:tools.filter(t=>t.group===category).length}</span></button>)}</div></div>
         <div id="home-tool-grid" className="home-catalog-content" key={searching?search:catalogGroup}>{searching?<Spotlight className="tool-grid" item=".tool-card">{filtered.map(homeToolCard)}</Spotlight>:groups.filter(g=>g!=='All tools'&&g!=='My files'&&(catalogGroup==='All tools'||g===catalogGroup)).map((category,i)=><section className="home-tool-category" key={category} aria-labelledby={'home-category-'+i}><div className="home-category-heading"><h3 id={'home-category-'+i}>{category}</h3><p>{categoryDescriptions[category]}</p></div><Spotlight className="tool-grid" item=".tool-card">{tools.filter(t=>t.group===category).map(homeToolCard)}</Spotlight></section>)}</div>{!filtered.length&&<p className="empty">No tools match “{search}”. Try “merge”, “compress” or “OCR”, or <button type="button" className="link-button" onClick={()=>setSearch('')}>show all tools</button>.</p>}
