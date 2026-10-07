@@ -1,0 +1,29 @@
+.native-text-workspace{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+.native-text-workspace>.studio-header{flex:none}
+.studio-shell.native-text-workspace>.content{flex:1;min-height:0!important;padding:0 312px 0 0!important;overflow:hidden;box-sizing:border-box}
+.native-text-workspace .tool-heading,.native-text-workspace .unified-editor-modes,.native-text-workspace .tool-guide-disclosure{display:none!important}
+.native-text-workspace .studio-workspace-content,.native-text-workspace .studio-controls,.native-text-workspace .task-canvas{display:flex;flex-direction:column;height:100%;min-height:0;margin:0;padding:0}
+.native-text-workspace .task-workspace{display:block!important;flex:1;min-height:0;height:100%;width:100%!important;margin:0!important}
+.native-text-workspace .native-editor{display:flex;flex-direction:column;flex:1;min-height:0;height:100%;border:0;border-radius:0;max-width:none;margin:0;width:100%}
+.native-text-workspace .native-commandbar{display:flex;align-items:center;justify-content:flex-start;gap:16px;flex-wrap:nowrap;flex:none;min-height:64px;padding:8px 180px 8px 16px;box-sizing:border-box;background:var(--card);border-bottom:1px solid var(--border);border-radius:0;overflow-x:auto}
+.native-commandbar .native-paging,.native-commandbar .native-history{display:flex;align-items:center;gap:6px;flex:none}
+.native-commandbar button{display:flex;align-items:center;justify-content:center;min-width:36px;min-height:40px;border:1px solid var(--border);border-radius:8px;background:var(--card)}
+.native-commandbar label{display:flex;align-items:center;gap:6px;white-space:nowrap;font-size:12px}
+.native-commandbar select{min-height:36px;max-width:120px;padding:4px;border:1px solid var(--border);border-radius:6px;background:var(--card);font-size:12px}
+.native-text-workspace .native-layout{display:flex;flex:1;min-height:0;gap:0}
+.native-text-workspace .native-canvas-area{display:flex;flex-direction:column;flex:1;min-width:0;min-height:0}
+.native-text-workspace .native-canvas-hint{flex:none;padding:6px 16px;font-size:12px;background:var(--soft);color:var(--muted)}
+.native-text-workspace .native-canvas-hint span{float:right}
+.native-text-workspace .native-editor .board-scroll{flex:1;min-height:0;max-height:none!important;margin:0;padding:20px;background:var(--soft);overflow:auto;border-radius:0}
+.native-text-workspace .native-page{margin:0 auto;box-shadow:0 4px 20px #00000016}
+#native-text-settings .native-controls{display:grid;gap:14px;padding:0;border:0;border-radius:0;width:100%;box-sizing:border-box;font-size:13px}
+#native-text-settings h2{font-size:16px;margin:0}#native-text-settings .field{min-width:0;margin:0}
+#native-text-settings .native-controls p{font-size:12px;line-height:1.5;margin:0}
+#native-text-settings details>summary{min-height:40px;align-content:center;cursor:pointer;font-size:13px}
+#native-text-settings .native-advanced[open]{display:grid;gap:12px}
+#native-text-settings .native-flow-toggle{display:flex;align-items:flex-start;gap:8px;font-size:12px}#native-text-settings .native-flow-toggle input{width:16px;min-height:16px;flex:none}
+#native-text-settings .native-draft-actions{display:flex;gap:8px;flex-wrap:wrap}#native-text-settings .native-draft-actions button{min-height:44px;flex:1}
+#native-text-settings .native-text-list{max-height:200px;overflow:auto;display:grid;gap:6px}#native-text-settings .native-text-list button{min-height:36px;text-align:left;white-space:normal}
+.native-text-workspace .native-inline textarea{min-height:1.3em;padding:2px;border:1px solid var(--primary);border-radius:2px;background:white;resize:vertical}
+.native-text-workspace .native-error,.native-text-workspace .native-notice{flex:none;margin:0;padding:8px 16px;font-size:12px}
+@media(max-width:1099px){.studio-shell.native-text-workspace>.content{padding:64px 0 0!important}.native-text-workspace .native-commandbar{min-height:56px;padding:6px 64px 6px 8px;gap:10px}.native-text-workspace .native-editor .board-scroll{padding:10px 76px 100px 10px}.native-text-workspace .native-canvas-hint span{display:none}.native-text-workspace .native-paging>button{display:none}.native-text-workspace .native-canvas-hint{padding:6px 10px}}
