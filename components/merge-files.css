@@ -1,0 +1,33 @@
+[data-tool=merge] .content{max-width:1240px;padding-top:24px}
+[data-tool=merge] .tool-heading{display:flex;align-items:center;justify-content:space-between;gap:16px;margin-bottom:20px}
+[data-tool=merge] .tool-heading h1{margin:0}
+[data-tool=merge] .document-bar-name>.secondary{display:none}
+[data-tool=merge] .tool-drop{min-height:280px;border-radius:20px;background:var(--card)}
+[data-tool=merge] .settings-panel:empty{display:none}
+[data-tool=merge] .task-workspace{display:block}
+[data-tool=merge] .merge-focused{margin:0;border:0;background:none;padding:0}
+[data-tool=merge] .merge-list-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}
+[data-tool=merge] .merge-list-heading h2{font-size:1.1rem;margin:0}
+[data-tool=merge] .merge-list-heading p{font-size:.85rem;color:var(--muted);margin-top:4px}
+[data-tool=merge] .merge-document-grid{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));align-items:start;gap:18px;list-style:none;margin:0;padding:0}
+[data-tool=merge] .merge-document-card{display:block;min-width:0;border:1px solid var(--border);background:var(--card);padding:16px;border-radius:18px;box-shadow:0 8px 24px #35146b06}
+[data-tool=merge] .merge-card-top{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+[data-tool=merge] .merge-order{background:var(--blue-soft);color:var(--foreground);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:700}
+[data-tool=merge] .merge-drag{margin-left:auto;touch-action:none;cursor:grab}
+[data-tool=merge] .merge-card-top button,[data-tool=merge] .merge-card-actions button,[data-tool=merge] .merge-inline-page button{display:inline-flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;border-radius:10px}
+[data-tool=merge] .merge-card-top button:hover,[data-tool=merge] .merge-card-actions button:hover{background:var(--soft)}
+[data-tool=merge] .merge-cover{height:180px;display:flex;align-items:center;justify-content:center;padding:12px;background:var(--soft);border-radius:12px;margin-bottom:14px;overflow:hidden}
+[data-tool=merge] .merge-cover img{max-width:100%;max-height:100%;object-fit:contain}
+[data-tool=merge] .merge-file-info{display:grid;gap:5px;min-width:0}
+[data-tool=merge] .merge-file-info b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.95rem}
+[data-tool=merge] .merge-file-info small{color:var(--muted);font-size:.8rem}
+[data-tool=merge] .merge-card-actions{display:flex;align-items:center;gap:4px;margin-top:12px;border-top:1px solid var(--border);padding-top:8px}
+[data-tool=merge] .merge-card-actions button:last-child{margin-left:auto;font-size:.83rem;padding:6px 12px;color:var(--primary)}
+[data-tool=merge] .merge-inline-pages{display:grid;gap:12px;border-top:1px solid var(--border);padding-top:14px;margin-top:8px}
+[data-tool=merge] .merge-inline-page{display:flex;flex-wrap:wrap;align-items:center;gap:8px;font-size:.8rem}
+[data-tool=merge] .merge-page-thumb{width:40px;height:54px;overflow:hidden;display:flex;justify-content:center}
+[data-tool=merge] .merge-inline-page>div:last-child{display:flex;width:100%;justify-content:space-between;background:var(--soft);border-radius:10px}
+[data-tool=merge] .action-bar{position:sticky;bottom:12px;border:1px solid var(--border);border-radius:16px;background:var(--card);padding:14px 18px;margin-top:24px;box-shadow:0 8px 30px #0001;z-index:20}
+[data-tool=merge] .action-bar .primary{background:#7045dc;color:white;min-width:180px}
+@media(max-width:900px){[data-tool=merge] .merge-document-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:600px){[data-tool=merge] .content{padding:18px 16px 0}[data-tool=merge] .tool-heading{flex-wrap:wrap}[data-tool=merge] .merge-document-grid{grid-template-columns:1fr;gap:14px}[data-tool=merge] .merge-cover{height:150px}[data-tool=merge] .merge-list-heading{gap:8px}[data-tool=merge] .merge-list-heading .secondary{white-space:nowrap}[data-tool=merge] .action-bar{bottom:8px;padding:12px;gap:8px}[data-tool=merge] .action-bar>div{width:auto}[data-tool=merge] .action-bar .primary{width:100%;min-height:48px}}
