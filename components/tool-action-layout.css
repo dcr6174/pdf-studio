@@ -69,3 +69,30 @@
 
 .edit-layer-list{display:grid;gap:8px;margin-bottom:16px}.edit-layer-list h3{font-size:14px;margin:0}.edit-layer-list .secondary{justify-content:flex-start;overflow-wrap:anywhere;text-align:left}.edit-layer-list .secondary[aria-pressed=true]{border-color:var(--primary);background:var(--blue-soft)}.edit-layer-list .muted{font-size:13px;line-height:1.5}
 .shared-tool-action-bar .document-workspace{position:static;margin:12px 0;min-width:0}.shared-tool-action-bar .workspace-command,.shared-tool-action-bar .workspace-command-actions,.shared-tool-action-bar .workspace-tools{display:flex;flex-wrap:wrap;padding:8px;gap:8px}.shared-tool-action-bar .workspace-command-actions>.primary{display:none}.shared-tool-action-bar .workspace-page-drawer .workspace-thumbnails{position:static;width:100%;height:auto;max-height:240px;flex-direction:row;padding:8px}.shared-tool-action-bar .workspace-history>div{position:static;width:100%;max-width:260px}
+
+/* The edit canvas uses the viewport rather than an extra marketing-page height. */
+.direct-pdf-sketch{position:absolute;inset:0;width:100%;height:100%;z-index:20;touch-action:none;cursor:crosshair}
+.edit-canvas-fit .task-workspace{margin-left:0!important;width:100%!important}
+.edit-canvas-fit .task-canvas>.editor-toolbar{margin:0;border-radius:0;border-width:0 0 1px;flex-shrink:0;background:var(--card)}
+.edit-canvas-fit .editor-toolbar button[aria-pressed=true]{background:var(--blue-soft);color:var(--primary)}
+@media(min-width:768px){
+ .studio-shell.edit-canvas-fit{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+ .studio-shell.edit-canvas-fit>.studio-header{flex-shrink:0}
+ .studio-shell.document-shell.tool-action-ready.edit-canvas-fit>.content{flex:1;min-height:0!important;height:auto!important;padding:0 312px 0 0!important;overflow:hidden;box-sizing:border-box}
+ .edit-canvas-fit .studio-workspace-content{height:100%;min-height:0;display:flex;flex-direction:column}
+ .edit-canvas-fit .studio-controls{flex:1;min-height:0;display:flex;flex-direction:column;margin:0;padding:0}
+ .edit-canvas-fit .task-workspace{flex:1;min-height:0;margin:0!important}
+ .edit-canvas-fit .task-canvas{display:flex;flex-direction:column;height:100%;min-height:0}
+ .edit-canvas-fit .editor-layout{flex:1;min-height:0;height:auto;gap:0!important;align-items:stretch!important}
+ .edit-canvas-fit .edit-page-rail{display:flex;flex-direction:column;position:static;height:100%;min-height:0;border-radius:0;border-width:0 1px 0 0}
+ .edit-canvas-fit .edit-page-list{flex:1;min-height:0;max-height:none;align-content:start}
+ .edit-canvas-fit .editor-main{display:flex;flex-direction:column;padding:0!important;border-radius:0!important;height:100%;min-height:0}
+ .edit-canvas-fit .board-scroll{flex:1;min-height:0!important;max-height:none!important;margin:0;overflow:auto;border-radius:0!important}
+ .edit-canvas-fit .editor-pager{flex-shrink:0;min-height:44px;padding:4px 8px;box-sizing:border-box;background:var(--card);border-top:1px solid var(--border)}
+ .edit-canvas-fit .tool-guide-disclosure{display:none}
+ .studio-shell.tool-action-ready.document-shell .shared-tool-action-bar{top:var(--studio-header-height,72px)!important;bottom:0!important;height:calc(100dvh - var(--studio-header-height,72px))!important}
+}
+@media(max-width:767px){
+ .edit-canvas-fit .task-canvas>.editor-toolbar{position:sticky;top:calc(var(--studio-header-height,120px) + 64px);z-index:24;overflow-x:auto;flex-wrap:nowrap}
+ .edit-canvas-fit .editor-toolbar button{flex-shrink:0}
+}
