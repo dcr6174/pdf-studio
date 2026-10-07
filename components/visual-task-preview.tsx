@@ -2,10 +2,11 @@
 import Image from '@/components/browser-image';
 import {useEffect,useRef,useState} from 'react';
 import {previewPDF,renderer,render,type Loaded,type PageItem,type Options} from '@/lib/pdf-client';
-export const visualPreviewTools=['crop','nup','numbers','bates','headers','flip','grayscale','invert','rotate','halve'];
+export const sourcePreviewTools=['remove-attachments','remove-links','remove-bookmarks','remove-annotations','split-chapters','blank-check','bookmarks','split','webp','jpg','png','compress','reverse','duplicate','split-all'];
+export const visualPreviewTools=['crop','nup','numbers','bates','headers','flip','grayscale','invert','rotate','halve','viewer',...sourcePreviewTools];
 let queue:Promise<unknown>=Promise.resolve();
 function enqueue<T>(job:()=>Promise<T>){const next=queue.then(job,job);queue=next.catch(()=>{});return next;}
-function Sheet({view,files,items,options,offset,total}:{view:string;files:Loaded[];items:PageItem[];options:Options;offset:number;total:number}){
+function Sheet({view,files,items,options,offset,total,onRotate}:{view:string;files:Loaded[];items:PageItem[];options:Options;offset:number;total:number;onRotate?:()=>void}){
  const root=useRef<HTMLDivElement>(null);const [visible,setVisible]=useState(false);
  const [images,setImages]=useState<string[]>([]);const [error,setError]=useState('');const [busy,setBusy]=useState(true);const [retry,setRetry]=useState(0);
  const key=items.map(p=>p.id+':'+p.rotation).join(',');
@@ -27,18 +28,21 @@ function Sheet({view,files,items,options,offset,total}:{view:string;files:Loaded
   return()=>{clearTimeout(timer);controller.abort();};
  // Page identity includes order and rotation; options trigger a fresh disposable preview.
  },[visible,view,files,key,items,options,offset,total,retry]);
- return <div ref={root} className="visual-preview-sheet" aria-busy={busy}>
-  <div className="visual-preview-status" role="status">{busy?'Updating preview…':view==='nup'?'Sheet '+(Math.floor(offset/(Number(options.columns)||2))+1):'Page '+(offset+1)+' of '+total}</div>
+ return <div ref={root} data-preview-offset={offset} className="visual-preview-sheet" data-reader-columns={view==='viewer'?options.columns:undefined} aria-busy={busy}>
+  <div className="visual-preview-status" role="status">{sourcePreviewTools.includes(view)?'Source page '+(offset+1)+' of '+total+' · inspect changes after export':busy?'Updating preview…':view==='nup'?'Sheet '+(Math.floor(offset/(Number(options.columns)||2))+1):'Page '+(offset+1)+' of '+total}</div>
+  {view==='rotate'&&onRotate&&<button type="button" className="secondary" onClick={onRotate}>Rotate this page 90°</button>}
   {error?<div role="alert" className="visual-preview-error">{error}<button onClick={()=>setRetry(n=>n+1)}>Retry preview</button></div>:images.length?images.map((src,i)=><Image unoptimized width={612} height={792} key={i} src={src} alt={'PDF preview, page '+(offset+1)+(images.length>1?', part '+(i+1):'')} />):<div className="visual-preview-placeholder"/>}
  </div>;
 }
-export function VisualTaskPreview({view,files,pages,options,currentPageId,onPage,mobile}:{view:string;files:Loaded[];pages:PageItem[];options:Options;currentPageId:string;onPage:(id:string)=>void;mobile:boolean}){
- const size=view==='nup'?Number(options.columns)||2:1;
+export function VisualTaskPreview({view,files,pages,options,currentPageId,onPage,mobile,onRotatePage}:{view:string;files:Loaded[];pages:PageItem[];options:Options;currentPageId:string;onPage:(id:string)=>void;mobile:boolean;onRotatePage?:(id:string)=>void}){
+ const scroll=useRef<HTMLDivElement>(null);
+ const size=['nup','viewer'].includes(view)?Number(options.columns)||2:1;
  const active=Math.max(0,pages.findIndex(p=>p.id===currentPageId));const group=Math.floor(active/size);
- const offsets=mobile?Array.from({length:Math.ceil(pages.length/size)},(_,i)=>i*size):[group*size];
+ useEffect(()=>{const frame=requestAnimationFrame(()=>{const host=scroll.current,target=host?.querySelector<HTMLElement>(`[data-preview-offset="${group*size}"]`);if(host&&target)host.scrollTop+=target.getBoundingClientRect().top-host.getBoundingClientRect().top;});return()=>cancelAnimationFrame(frame);},[group,size]);
+ const offsets=Array.from({length:Math.ceil(pages.length/size)},(_,i)=>i*size);
  return <section className="visual-main-preview" aria-label="Document preview">
  {!mobile&&<div className="visual-preview-navigation"><button aria-label="Previous preview page" disabled={group===0} onClick={()=>onPage(pages[(group-1)*size].id)}>‹</button><span>{view==='nup'?'Sheet':'Page'} {group+1} of {Math.ceil(pages.length/size)}</span><button aria-label="Next preview page" disabled={(group+1)*size>=pages.length} onClick={()=>onPage(pages[(group+1)*size].id)}>›</button></div>}
- <div className="visual-preview-scroll" role="region" aria-label="Scrollable document preview" tabIndex={0}>{offsets.map(offset=><Sheet key={view+':'+offset} view={view} files={files} items={pages.slice(offset,offset+size)} options={options} offset={offset} total={pages.length}/>)}</div>
+ <div ref={scroll} className="visual-preview-scroll" role="region" aria-label="Scrollable document preview" tabIndex={0}>{offsets.map(offset=><Sheet key={view+':'+offset} view={view} files={files} items={pages.slice(offset,offset+size)} options={options} offset={offset} total={pages.length} onRotate={onRotatePage?()=>onRotatePage(pages[offset].id):undefined}/>)}</div>
  </section>;
 }
 

@@ -11,12 +11,12 @@ export function MobileWorkspaceControls({files,pageCount,addLabel,onAdd,onSort,o
  const [descending,setDescending]=useState(false);
  return <>
   {(organize||settingsAvailable||addAvailable||onSort&&files.length>1)&&<nav className="mobile-workspace-controls" aria-label="Document controls">
-   {settingsAvailable&&<button type="button" disabled={disabled} onClick={()=>setSettingsOpen(true)} aria-label="Settings" title="Settings" aria-expanded={settingsOpen}><Settings size={20} aria-hidden="true"/></button>}
+   {(settingsAvailable||organize)&&<button type="button" disabled={disabled} onClick={()=>setSettingsOpen(true)} aria-label="Settings" title="Settings" aria-expanded={settingsOpen}><Settings size={20} aria-hidden="true"/></button>}
    {addAvailable&&<button type="button" className="mobile-add-control" disabled={disabled} onClick={onAdd} aria-label={addLabel} title={addLabel}><Plus size={22} aria-hidden="true"/></button>}
    {onSort&&files.length>1&&<button type="button" disabled={disabled} onClick={()=>{onSort(descending);setDescending(value=>!value);}} aria-label={descending?'Sort files Z to A':'Sort files A to Z'} title={descending?'Sort Z–A':'Sort A–Z'}>{descending?<ArrowUpAZ size={20} aria-hidden="true"/>:<ArrowDownAZ size={20} aria-hidden="true"/>}</button>}
   </nav>}
-  <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}><DialogContent className="mobile-workspace-panel">
-   <DialogTitle>Settings</DialogTitle><DialogDescription>Adjust this tool or clear the current workspace.</DialogDescription>
+  <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}><DialogContent fullscreen className="mobile-workspace-panel">
+   <DialogTitle>Document controls</DialogTitle><DialogDescription>Organize pages and adjust this tool.</DialogDescription>
    <p>{files.length} {files.length===1?'file':'files'} · {pageCount} pages</p>
    <WorkspaceFloatingControls pages={organize} disabled={disabled}/>{settingsAvailable&&settings}
    <button type="button" className="secondary" disabled={disabled} onClick={()=>{setSettingsOpen(false);onClear();}}>Clear workspace</button>
@@ -25,4 +25,3 @@ export function MobileWorkspaceControls({files,pageCount,addLabel,onAdd,onSort,o
   {action&&<div className="mobile-workspace-action">{action}</div>}
  </>;
 }
-

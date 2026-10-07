@@ -1,0 +1,6 @@
+'use client';
+import {ArrowUp,ArrowDown,RotateCw,Trash2} from 'lucide-react';
+import type {PageItem} from '@/lib/pdf-client';
+export function MobilePageOrganizer({pages,selection,onSelect,onMove,onRotate,onDelete}:{pages:PageItem[];selection:string[];onSelect:(id:string,selected:boolean)=>void;onMove:(index:number,direction:number)=>void;onRotate:(id:string)=>void;onDelete:(id:string)=>void}){
+ return <div className="mobile-organize-list" role="group" aria-label="Individual page controls">{pages.map((page,i)=><div key={page.id} className="mobile-organize-row"><label><input type="checkbox" checked={selection.includes(page.id)} onChange={e=>onSelect(page.id,e.target.checked)}/>Page {i+1}</label><div><button type="button" className="icon-button" aria-label={`Move page ${i+1} up`} disabled={i===0} onClick={()=>onMove(i,-1)}><ArrowUp size={18}/></button><button type="button" className="icon-button" aria-label={`Move page ${i+1} down`} disabled={i===pages.length-1} onClick={()=>onMove(i,1)}><ArrowDown size={18}/></button><button type="button" className="icon-button" aria-label={`Rotate page ${i+1}`} onClick={()=>onRotate(page.id)}><RotateCw size={18}/></button><button type="button" className="icon-button" aria-label={`Delete page ${i+1}`} onClick={()=>onDelete(page.id)}><Trash2 size={18}/></button></div></div>)}</div>;
+}

@@ -25,3 +25,6 @@ html[data-theme="dark"] .lab-workspace .lab-workspace-heading h1,html[data-theme
 .studio-header.studio-shared .studio-wordmark{display:flex;align-items:center}
 html[data-theme="light"]{--muted-foreground:#6f6480;--muted:#6f6480}
 @media(max-width:480px){.studio-header.studio-shared [aria-label="Main navigation"] a[href="/lab"]{display:none}.studio-header.studio-shared{gap:8px;padding:6px 10px}.tools-directory .filters{position:sticky;top:0;z-index:5;background:var(--card,#fff);padding:8px 0}}
+
+.tools-directory-page.tool-instructions{width:calc(100% - 48px);max-width:none;margin:32px auto;padding:0 0 48px;border:0;box-sizing:border-box}.tools-directory-page .tool-grid{grid-template-columns:repeat(auto-fit,minmax(240px,1fr));gap:16px}
+@media(max-width:600px){.tools-directory-page.tool-instructions{width:calc(100% - 24px);margin-top:20px}.tools-directory-page .tool-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}}
