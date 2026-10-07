@@ -12,3 +12,7 @@ User approved the Alternate & Mix direction on 7 October 2026.
 8. Responsive spacing, readable controls, keyboard navigation and real-device testing before claiming phone verification.
 
 Apply these standards to remaining article drafts. This approval sets the format; it does not supply missing processing evidence or justify publishing unverified content.
+
+## Sample download policy
+
+Every blog and guide should offer tool-specific verified input downloads beside its worked example, using ArticleSamples. For multi-input tools provide separately downloadable source files (PDF A and PDF B here), plus an optional verified output link. Use only samples actually tested with that tool. Never render this component, sample-download panels or blog copy on the main action pages. This is the approved policy for all future articles and guides.
