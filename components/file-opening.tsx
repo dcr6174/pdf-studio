@@ -1,2 +1,4 @@
-/** Local loading illustration; no external requests or simulated percentage. */
-export function FileOpening(){return <div className="file-opening" role="status" aria-live="polite"><div className="file-opening-art" aria-hidden="true"><span className="file-opening-page">PDF</span><span className="file-opening-dot"/><span className="file-opening-dot"/><span className="file-opening-dot"/></div><div><strong>Opening your files…</strong><p>Reading and checking them on your device.</p></div></div>;}
+import {Loader2} from 'lucide-react';
+import './task-progress.css';
+/** Files are opened locally; the animation does not claim a server upload. */
+export function FileOpening(){return <section className="task-progress-screen" aria-label="Opening files"><div className="file-opening-art" aria-hidden="true"><span className="file-opening-page">PDF</span><span className="file-opening-dot"/><span className="file-opening-dot"/><span className="file-opening-dot"/></div><div role="status" aria-live="polite"><h1>Adding your files…</h1><p>Reading and checking them on your device. Please keep this page open.</p></div><button type="button" className="task-progress-loading-button" disabled><Loader2 className="spin" size={18}/>Adding files…</button><div className="task-progress-track" aria-hidden="true"><span/></div></section>;}
