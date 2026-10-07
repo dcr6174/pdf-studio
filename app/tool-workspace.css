@@ -49,7 +49,6 @@
  [data-workspace=compact].document-loaded .action-bar>div{width:100%;flex-shrink:0}
  [data-workspace=compact].document-loaded .action-bar>.primary{margin-top:auto;min-height:60px;width:100%}
  [data-workspace=compact].document-loaded .merge-sidebar-intro p{display:none}
- [data-workspace=compact].document-loaded .settings-panel:not([hidden]){position:fixed;top:210px;bottom:120px;right:0;width:320px;box-sizing:border-box;display:flex;flex-direction:column;flex-wrap:nowrap;overflow:auto;overscroll-behavior:contain;padding:20px 24px;border:0;border-radius:0;z-index:31}
  [data-workspace=compact].document-loaded .settings-panel .field{flex:none;width:100%}
 }
 @media(min-width:1100px) and (max-width:1279px){[data-workspace=compact] .page-grid,[data-workspace=compact] .merge-document-grid{grid-template-columns:repeat(4,minmax(0,1fr))}}
@@ -74,3 +73,28 @@
 .empty-tool .tool-heading p{margin-inline:auto;max-width:640px}
 [data-workspace=compact] .page-actions button{min-width:32px;padding:6px}
 @media(max-width:699px){[data-workspace=compact] .page-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}[data-workspace=compact] .page-actions button{min-width:44px;min-height:44px}}
+
+/* Settings own the guidance; the preview remains a document surface. */
+.settings-panel{min-width:0}
+.settings-panel>*{min-width:0;max-width:100%;flex-shrink:0}
+.settings-panel .field small{display:block;font-size:12px;font-weight:400;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}
+.settings-panel .settings-help{width:100%;min-width:0;border-top:1px solid var(--border);padding-top:12px;font-size:13px;font-weight:400;line-height:1.5}
+.settings-panel .settings-help summary{cursor:pointer;min-height:36px;display:list-item;color:var(--foreground)}
+.settings-panel .settings-help p{margin:8px 0;font-size:12px;line-height:1.5;color:var(--muted);overflow-wrap:anywhere}
+.compression-settings{display:flex;flex-direction:column;gap:18px;width:100%;min-width:0;flex-shrink:0}
+.compression-settings .field{margin:0;width:100%;min-width:0;max-width:none;flex:none}
+.compression-settings select,.compression-settings input{width:100%;min-width:0;max-width:100%;box-sizing:border-box;min-height:44px;border:1px solid var(--border);border-radius:8px;background:var(--background);color:var(--foreground);padding:10px 12px;font:inherit}
+.compression-warning{padding:10px 12px;border:1px solid var(--border);border-radius:8px;font-size:12px;line-height:1.5;overflow-wrap:anywhere}
+@media(min-width:1100px){
+ [data-workspace=compact].document-loaded .settings-panel>*{flex-shrink:0}
+}
+
+/* One flex sidebar owns its settings scroll area and export action. */
+[data-workspace=compact] .action-bar>.settings-panel:not([hidden]){position:static!important;inset:auto!important;display:flex!important;flex-direction:column;align-items:stretch;flex-wrap:nowrap;flex:1 1 auto;min-height:0;width:100%;box-sizing:border-box;margin:0;padding:0;border:0;border-radius:0;box-shadow:none;overflow:auto;overscroll-behavior:contain;gap:18px;z-index:auto}
+[data-workspace=compact] .action-bar>.settings-panel>*{flex-shrink:0}
+[data-workspace=compact] .action-bar>.primary{flex-shrink:0}
+@media(min-width:1100px){[data-workspace=compact].document-loaded .action-bar>.settings-panel:not([hidden]){scrollbar-gutter:stable;padding:4px 4px 16px 0}}
+@media(max-width:1099px){
+ [data-workspace=compact].document-loaded .action-bar{position:static!important;display:flex!important;flex-direction:column;align-items:stretch;gap:18px;margin-top:20px}
+ [data-workspace=compact].document-loaded .action-bar>.settings-panel:not([hidden]){overflow:visible;flex:none;padding:0}
+}

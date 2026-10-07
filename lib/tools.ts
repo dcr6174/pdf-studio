@@ -19,7 +19,7 @@ export const tools:Tool[] = [
 ['organize','Organize pages','Reorder, rotate and remove pages.','Pages','grid'],
 ['split','Split PDF','Extract the pages you need.','Pages','scissors'],
 ['split-all','Split every page','One PDF per page, in a ZIP.','Pages','scissors'],
-['compress','Compress PDF','Compact text or shrink scanned pages.','Pages','compress','Compact mode keeps text and links; image modes remove text search, links and forms. Savings depend on the document.'],
+['compress','Compress PDF','Compact text or shrink scanned pages.','Pages','compress','Recommended optimizes supported JPEGs while keeping text, links and forms. Page-image presets remove these features.'],
 ['rotate','Rotate PDF','Turn pages in the right direction.','Pages','rotate'],
 ['reverse','Reverse pages','Last page first. Simple.','Pages','reverse'],
 ['duplicate','Duplicate pages','Make a second copy of every page.','Pages','copy'],
