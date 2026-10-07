@@ -7,7 +7,13 @@ export function pageGeometry(p:PDFPage,extra=0){
   return {width,height,rotation:r,matrix};
 }
 export function displayPoint(p:PDFPage,u:number,v:number){const g=pageGeometry(p),[a,b,c,d,e,f]=g.matrix,x=u*g.width,y=(1-v)*g.height;return {x:a*x+c*y+e,y:b*x+d*y+f};}
-export function safeLink(value:string){try{const u=new URL(value);return ['http:','https:','mailto:'].includes(u.protocol)?u.href:undefined;}catch{return undefined;}}
+export function safeLink(value:string){
+ const text=value.trim();if(!text||/\s/.test(text))return undefined;
+ const explicit=/^[a-z][a-z\d+.-]*:/i.test(text);
+ try{const u=new URL(explicit?text:'https://'+text);if(!['http:','https:','mailto:'].includes(u.protocol))return undefined;
+ if(!explicit){if(u.username||u.password||!u.hostname.includes('.')||!u.hostname.split('.').every(label=>/^[a-z\d](?:[a-z\d-]*[a-z\d])?$/i.test(label))||!/[a-z]{2,}$/i.test(u.hostname))return undefined;}
+ return u.href;}catch{return undefined;}
+}
 
 
 /** Arrowhead in local top-left normalized coordinates; shared by preview and PDF export. */
