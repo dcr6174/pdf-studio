@@ -3,11 +3,11 @@ import {useState,type ReactNode} from 'react';
 import {Info,Plus} from 'lucide-react';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 
-export function WorkspaceFloatingControls({pages,about,addLabel,onAdd,disabled}:{pages?:ReactNode;about:string;addLabel:string;onAdd:()=>void;disabled:boolean}){
+export function WorkspaceFloatingControls({pages,about,addLabel,onAdd,disabled,docked=false}:{docked?:boolean;pages?:ReactNode;about:string;addLabel:string;onAdd:()=>void;disabled:boolean}){
  const [panel,setPanel]=useState<'pages'|'about'|null>(null);
- return <><nav className="workspace-floating-controls" aria-label="Document shortcuts">
- {pages&&<button type="button" disabled={disabled} onClick={()=>setPanel('pages')} aria-label="Organize pages" title="Organize pages"><OrganizePagesIcon/></button>}
- <button type="button" className="workspace-desktop-info" disabled={disabled} onClick={()=>setPanel('about')} aria-label="About this tool" title="About this tool"><Info size={22}/></button>
+ return <><nav className={`workspace-floating-controls ${docked?'workspace-docked-controls':''}`} aria-label="Document shortcuts">
+ {pages&&<button type="button" disabled={disabled} onClick={()=>setPanel('pages')} aria-label="Organize pages" title="Organize pages"><OrganizePagesIcon/>{docked&&<span>Organize pages</span>}</button>}
+ <button type="button" className="workspace-desktop-info" disabled={disabled} onClick={()=>setPanel('about')} aria-label="About this tool" title="About this tool"><Info size={22}/>{docked&&<span>About this tool</span>}</button>
  <button type="button" className="workspace-mobile-add" disabled={disabled} onClick={onAdd} aria-label={addLabel} title={addLabel}><Plus size={22}/><span>{addLabel}</span></button>
  </nav><Dialog open={panel!==null} onOpenChange={open=>{if(!open)setPanel(null);}}><DialogContent className="workspace-shortcut-panel"><DialogTitle>{panel==='pages'?'Organize pages':'About this tool'}</DialogTitle><DialogDescription>{panel==='pages'?'Changes apply to your current document. Your original files are retained.':about}</DialogDescription>{panel==='pages'&&<div className="page-settings-controls">{pages}</div>}</DialogContent></Dialog></>;
 }

@@ -96,3 +96,13 @@
  .edit-canvas-fit .task-canvas>.editor-toolbar{position:sticky;top:calc(var(--studio-header-height,120px) + 64px);z-index:24;overflow-x:auto;flex-wrap:nowrap}
  .edit-canvas-fit .editor-toolbar button{flex-shrink:0}
 }
+
+/* The action panel owns document shortcuts; keep the canvas clear. */
+.shared-tool-action-bar .tool-action-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.shared-tool-action-bar .tool-action-title-row h2{flex:1;min-width:0;overflow-wrap:anywhere}
+.shared-tool-action-bar .tool-action-clear{flex:none}
+.shared-tool-action-bar .workspace-docked-controls{position:static;display:flex;flex-direction:column;width:100%;max-width:100%;box-sizing:border-box;margin:0 0 16px!important;padding:0;border:0;box-shadow:none;background:transparent;gap:8px}
+.shared-tool-action-bar .workspace-docked-controls button{width:100%;justify-content:flex-start;padding:10px 12px;border:1px solid var(--border);font-size:13px;line-height:1.4;text-align:left}
+.shared-tool-action-bar .workspace-docked-controls svg{flex:none}
+.shared-tool-action-bar .workspace-docked-controls .workspace-mobile-add{display:none}
+.shared-tool-action-bar .task-settings-disclosure>summary{width:100%;justify-content:flex-start;gap:8px;padding:10px 12px;font-size:13px}
