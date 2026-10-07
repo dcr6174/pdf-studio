@@ -27,7 +27,7 @@ export default function CheckItYourself(){
  ]};
  return <SiteFrame><main className="seo-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
-  <h1>Check it yourself: what does PDF Studio send?</h1>
+  <h1>Check it yourself: what does PDF Studio send?</h1><p><Link href="/test-files">Download synthetic test files for all 66 tools</Link></p>
   <p className="lead">PDF Studio is designed to process your files in your browser, not on a server. You can look at what your browser actually sends and judge for yourself. These checks give useful evidence. They are not a guarantee, and their limits are listed below.</p>
 
   <h2>Check 1: watch the Network tab</h2>

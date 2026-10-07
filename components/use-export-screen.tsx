@@ -2,12 +2,13 @@
 import {brandDownloadName} from '@/lib/export-filename';
 import {useState} from 'react';
 import {ResultCard} from '@/components/result-card';
+import {ResultPreview} from '@/components/result-preview';
 
 export function useExportScreen(afterDownload?: (output: {blob: Blob; name: string}) => void) {
-    const [output, setOutput] = useState<{blob: Blob; name: string}>();
+    const [output, setOutput] = useState<{blob: Blob; name: string;title?:string}>();
     const [visible, setVisible] = useState(false);
-    function prepare(blob: Blob, name: string) {setOutput({blob, name:brandDownloadName(name)}); setVisible(true);}
-    const screen = output && <ResultCard output={output} open={visible} onOpenChange={setVisible} onSettings={() => {
+    function prepare(blob: Blob, name: string,title?:string) {setOutput({blob, name:brandDownloadName(name),title}); setVisible(true);}
+    const screen = output && <ResultCard resultTitle={output.title} previewContent={output.blob.type==='application/pdf'?<ResultPreview output={output}/>:undefined} output={output} open={visible} onOpenChange={setVisible} onSettings={() => {
         setVisible(false);
         requestAnimationFrame(() => {window.scrollTo({top: 0, behavior: 'instant'}); document.querySelector<HTMLElement>('[data-export-workspace]')?.focus({preventScroll: true});});
     }} onDownload={() => {
@@ -18,4 +19,3 @@ export function useExportScreen(afterDownload?: (output: {blob: Blob; name: stri
     }}/>;
     return {prepare, visible, screen};
 }
-

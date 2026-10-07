@@ -114,6 +114,7 @@ export type Output = {
     name: string;
     report?: string;
     inputSize?: number;
+    blankCandidates?:number[];
     warnings?:string[];
     target?:{requestedKB:number;met:boolean};
     ocrReview?:import('./ocr-review').OCRReviewPage[];
@@ -270,11 +271,11 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
       if(!unchanged)throw new Error('Use the original single PDF for this cleanup. Export other workspace changes first.');
       const d=await PDFDocument.load(first.bytes,{updateMetadata:false});
       const count=cleanupPDF(d,id as 'remove-bookmarks'|'remove-links'|'remove-attachments');progress(100);
-      return result(count?await d.save():first.bytes,first.name.replace(/\.pdf$/i,'')+'-'+id+'.pdf',undefined,count?`${count} navigation or attachment structures removed. This is not secure redaction.`:'Nothing to remove: original bytes retained.');
+      return result(count?await d.save():first.bytes,first.name.replace(/\.pdf$/i,'')+'-'+id+'.pdf',undefined,count?(id==='remove-links'?`${count} explicit PDF link annotations removed. Printed URLs remain; some readers detect URLs independently.`:id==='remove-bookmarks'?'Document bookmarks removed. Page content and links remain.':`${count} reachable attachment references removed. This is not secure redaction.`):'Nothing to remove: original bytes retained.');
     }
     if(id==='create'){const response=await fetch('/fonts/NotoSans-Regular.ttf');if(!response.ok)throw new Error('The local document font could not load. Retry when online.');const bytes=await textToPDF(o.text,new Uint8Array(await response.arrayBuffer()),{size:Number(o.textFontSize??'11'),paper:o.textPageSize??'a4',signal});progress(100);return result(bytes,'pdf-studio-text.pdf');}
     if(id==='create-form'){const d=await createForm(o.text);return result(await d.save(),'fillable-form.pdf');}
-    if(id==='remove-annotations'){if(files.length!==1||marks.length||items.length!==first.pages||items.some((p,i)=>p.index!==i||p.rotation))throw new Error('Remove annotations on the original single PDF. Export other workspace changes first.');const d=await PDFDocument.load(first.bytes);const count=removeAnnotations(d);return result(await d.save(),'pdf-studio-clean-annotations.pdf',undefined,`${count} annotations removed. Form widgets were kept.`);}
+    if(id==='remove-annotations'){if(files.length!==1||marks.length||items.length!==first.pages||items.some((p,i)=>p.index!==i||p.rotation))throw new Error('Remove annotations on the original single PDF. Export other workspace changes first.');const d=await PDFDocument.load(first.bytes);const count=removeAnnotations(d);return result(await d.save(),'pdf-studio-clean-annotations.pdf',undefined,`${count} non-form annotations removed, including comments, highlights, stamps and links. Fillable fields and their values were kept.`);}
     if(['text','word','html','epub','csv','xlsx','audio','privacy','encrypt'].includes(id)&&items.length){const d=await assemble(files,items,signal);await applyMarks(d,items,marks,signal);const bytes=await d.save();first={...first,bytes,doc:d,pages:d.getPageCount(),size:bytes.length};}
     const filename = (first?.name ?? 'document').replace(/\.[^.]+$/, '');
     if (['create', 'markdown', 'docx', 'sheet', 'ebook'].includes(id)) {
@@ -392,10 +393,24 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if(['images','scan'].includes(id)&&o.imagePaper&&o.imagePaper!=='original'){const sheet=resizeSheet({resizeSize:o.imagePaper,resizeOrientation:o.imageOrientation}),margin=Number(o.imageMargin??20);if(!Number.isFinite(margin)||margin<0||margin>100)throw new Error('Choose an image margin between 0 and 100 pt.');const d=await PDFDocument.create();for(const item of order){const f=files.find(f=>f.id===item.fileId);if(!f?.image)throw new Error('Choose images for this conversion.');const image=await d.embedPng(f.image),p=d.addPage(sheet),scale=Math.min((sheet[0]-margin*2)/image.width,(sheet[1]-margin*2)/image.height);p.drawImage(image,{x:(sheet[0]-image.width*scale)/2,y:(sheet[1]-image.height*scale)/2,width:image.width*scale,height:image.height*scale});p.setRotation(degrees(item.rotation));}return result(await d.save(),`${filename}-images.pdf`,undefined,`${d.getPageCount()} image pages on ${o.imagePaper} sheets. Text recognition was not performed.`);}
     if(id==='split-chapters'){
       if(out.getForm().getFields().length)throw new Error('Flatten fillable fields before splitting chapters, then reopen the result. Editable fields cannot safely be copied into chapter files.');
-      const bytes=await out.save();const d=await renderer(bytes);try{const outline=await d.getOutline();if(!outline?.length)throw new Error('This PDF has no top-level bookmarks. Add bookmarks first, or use Split with page ranges.');const starts=new Set<number>([0]);for(const row of outline){signal?.throwIfAborted();let dest=row.dest;if(typeof dest==='string')dest=await d.getDestination(dest);if(Array.isArray(dest)){const n=typeof dest[0]==='number'?dest[0]:await d.getPageIndex(dest[0]);if(n>=0&&n<out.getPageCount())starts.add(n);}}if(starts.size===1)throw new Error('No usable chapter boundaries were found. Use Split with page ranges instead.');const bounds=[...starts].sort((a,b)=>a-b);bounds.push(out.getPageCount());const zip=new JSZip();for(let i=0;i<bounds.length-1;i++){const part=await PDFDocument.create();const copied=await part.copyPages(out,Array.from({length:bounds[i+1]-bounds[i]},(_,n)=>bounds[i]+n));copied.forEach(p=>part.addPage(p));zip.file(exportFilename(id,'chapter.pdf',`Chapter ${i+1} pages ${bounds[i]+1}-${bounds[i+1]}`),await part.save());progress(Math.round((i+1)/(bounds.length-1)*100));}return{blob:await zip.generateAsync({type:'blob'}),name:`${filename}-chapters.zip`,report:'Split at supported top-level bookmark destinations. Inspect chapter boundaries before sharing.'};}finally{await d.destroy();}
+      const starts=new Set<number>([0]);let bookmarkCount=0;for(const source of files){if(source.image)continue;const sourceReader=await renderer(source.bytes);try{const outline=await sourceReader.getOutline();bookmarkCount+=outline?.length??0;for(const row of outline??[]){signal?.throwIfAborted();let dest=row.dest;if(typeof dest==='string')dest=await sourceReader.getDestination(dest);if(!Array.isArray(dest))continue;const n=typeof dest[0]==='number'?dest[0]:await sourceReader.getPageIndex(dest[0]);const mapped=order.findIndex(page=>page.fileId===source.id&&page.index===n);if(mapped>=0)starts.add(mapped);}}finally{await sourceReader.destroy();}}if(!bookmarkCount)throw new Error('This PDF has no top-level bookmarks. Add bookmarks first, or use Split with page ranges.');if(starts.size===1)throw new Error('No usable chapter boundaries were found. Use Split with page ranges instead.');const bounds=[...starts].sort((a,b)=>a-b);bounds.push(out.getPageCount());const zip=new JSZip();for(let i=0;i<bounds.length-1;i++){const part=await PDFDocument.create();const copied=await part.copyPages(out,Array.from({length:bounds[i+1]-bounds[i]},(_,n)=>bounds[i]+n));copied.forEach(p=>part.addPage(p));zip.file(exportFilename(id,'chapter.pdf',`Chapter ${i+1} pages ${bounds[i]+1}-${bounds[i+1]}`),await part.save());progress(Math.round((i+1)/(bounds.length-1)*100));}return{blob:await zip.generateAsync({type:'blob'}),name:`${filename}-chapters.zip`,report:'Split at supported top-level bookmark destinations. Inspect chapter boundaries before sharing.'};
     }
     if(id==='blank-check'){
-      const bytes=unchanged?first.bytes:await out.save();const candidates:number[]=[];for(let i=0;i<out.getPageCount();i++){const c=await renderPage(bytes,i,.3,undefined,0,signal);try{const ctx=c.getContext('2d')!;const data=ctx.getImageData(0,0,c.width,c.height).data;let dark=0;for(let n=0;n<data.length;n+=4)if(data[n]<245||data[n+1]<245||data[n+2]<245)dark++;if(dark/(c.width*c.height)<.001)candidates.push(i+1);}finally{c.width=0;c.height=0;}progress(Math.round((i+1)/out.getPageCount()*100));}return result(bytes,`${filename}-blank-review.pdf`,undefined,candidates.length?`Possible blank pages: ${candidates.join(', ')}. No pages were deleted. Low-resolution analysis can miss faint or small content. Inspect each candidate in Organize before removing it.`:'No likely blank pages found. No pages were deleted; faint content and scan noise can affect detection.');
+      const bytes=unchanged?first.bytes:await out.save(),candidates:number[]=[];
+      const review=await renderer(bytes);
+      try{for(let i=0;i<review.numPages;i++){
+        signal?.throwIfAborted();const page=await review.getPage(i+1),text=await page.getTextContent();
+        if(text.items.some(item=>'str' in item&&item.str.trim().length>0)){progress(Math.round((i+1)/review.numPages*100));continue;}
+        const viewport=page.getViewport({scale:1}),scale=Math.min(1,Math.sqrt(16000000/(viewport.width*viewport.height)));
+        const c=await renderPage(bytes,i,scale,undefined,0,signal,review);
+        try{const data=c.getContext('2d')!.getImageData(0,0,c.width,c.height).data;let visible=0;
+          for(let n=0;n<data.length;n+=4){if(data[n]<254||data[n+1]<254||data[n+2]<254)visible++;}
+          // Conservative: scan noise keeps a page for review rather than risking faint content.
+          if(visible===0)candidates.push(i+1);
+        }finally{c.width=0;c.height=0;}
+        progress(Math.round((i+1)/review.numPages*100));
+      }}finally{await review.destroy();}
+      return {...result(bytes,`${filename}-blank-review.pdf`,undefined,candidates.length?`Possible blank pages: ${candidates.join(', ')}. No pages were deleted. Text and faint visible pixels are retained. Review each candidate before deleting it.`:'No blank candidates found. No pages were deleted. Faint text and scan noise are treated conservatively as content.'),blankCandidates:candidates};
     }
     if(id==='native-text'){await replaceExistingText(out,o.findText??'',o.replaceText??'');}
     if(['edit','sign','watermark'].includes(id)&&hasOverlappingWidgets(out,order,marks))throw new Error('An added element overlaps a fillable field and could be hidden. Choose Make fields read-only before exporting, or move the element outside the field. Your original remains unchanged.');
@@ -697,8 +712,9 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
 
 /** Bounded, disposable preview. Uses the export transformations without changing source files. */
 export async function previewPDF(id:string,files:Loaded[],items:PageItem[],o:Options,offset:number,total:number,signal?:AbortSignal):Promise<Output>{
- if(!['crop','nup','numbers','bates','headers','flip','grayscale','invert','rotate','halve'].includes(id))throw new Error('Unsupported preview.');
- if(items.length>(id==='nup'?9:1))throw new Error('Preview page limit exceeded.');
+ if(['remove-attachments','remove-links','remove-bookmarks','remove-annotations','split-chapters','blank-check','bookmarks','split','webp','jpg','png','compress','reverse','duplicate','split-all'].includes(id))return processPDFUnchecked('rotate',files,items,[],{...o,range:'',angle:'0'},()=>{},signal,{offset,total});
+ if(!['crop','nup','numbers','bates','headers','flip','grayscale','invert','rotate','halve','viewer'].includes(id))throw new Error('Unsupported preview.');
+ if(items.length>(id==='nup'?9:id==='viewer'?2:1))throw new Error('Preview page limit exceeded.');
  const labels=['numbers','bates','headers','rotate'].includes(id);
  const selected=!labels||ranges(o.range,total).includes(offset);
  return processPDFUnchecked(selected?id:'rotate',files,items,[],{...o,range:'',...(!selected?{angle:'0'}:{})},()=>{},signal,{offset,total});

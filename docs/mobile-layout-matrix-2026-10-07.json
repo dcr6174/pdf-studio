@@ -1,0 +1,2048 @@
+[
+  {
+    "tool": "pdf-to-handwriting",
+    "pattern": "live notebook with stable preview and optional controls",
+    "fixture": "pdf-to-handwriting.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "workflow",
+    "pattern": "ordered steps with direct Add step and a visible Run action",
+    "fixture": "workflow.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "split-chapters",
+    "pattern": "large preview with compact primary action",
+    "fixture": "split-chapters.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "blank-check",
+    "pattern": "large preview with compact primary action",
+    "fixture": "blank-check.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "reader",
+    "pattern": "continuous reader with search and optional left navigation",
+    "fixture": "reader.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "webp",
+    "pattern": "document preview with controls sheet",
+    "fixture": "webp.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "remove-bookmarks",
+    "pattern": "large preview with compact primary action",
+    "fixture": "remove-bookmarks.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "remove-attachments",
+    "pattern": "large preview with compact primary action",
+    "fixture": "remove-attachments.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "remove-links",
+    "pattern": "large preview with compact primary action",
+    "fixture": "remove-links.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "bookmarks",
+    "pattern": "document preview with controls sheet",
+    "fixture": "bookmarks.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "halve",
+    "pattern": "document preview with controls sheet",
+    "fixture": "halve.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "viewer",
+    "pattern": "document preview with controls sheet",
+    "fixture": "viewer.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "remove-annotations",
+    "pattern": "large preview with compact primary action",
+    "fixture": "remove-annotations.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "create-form",
+    "pattern": "direct creation fields and visible export action",
+    "fixture": "create-form.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "merge",
+    "pattern": "file cards with grip handles and optional sorting",
+    "fixture": "merge.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "organize",
+    "pattern": "document preview with controls sheet",
+    "fixture": "organize.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "split",
+    "pattern": "document preview with controls sheet",
+    "fixture": "split.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "split-all",
+    "pattern": "large preview with compact primary action",
+    "fixture": "split-all.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "compress",
+    "pattern": "document preview with controls sheet",
+    "fixture": "compress.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "rotate",
+    "pattern": "document preview with controls sheet",
+    "fixture": "rotate.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "reverse",
+    "pattern": "large preview with compact primary action",
+    "fixture": "reverse.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "duplicate",
+    "pattern": "large preview with compact primary action",
+    "fixture": "duplicate.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "interleave",
+    "pattern": "file cards with grip handles and optional sorting",
+    "fixture": "interleave.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "nup",
+    "pattern": "document preview with controls sheet",
+    "fixture": "nup.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "crop",
+    "pattern": "document preview with controls sheet",
+    "fixture": "crop.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "resize",
+    "pattern": "document preview with controls sheet",
+    "fixture": "resize.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "flip",
+    "pattern": "document preview with controls sheet",
+    "fixture": "flip.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "native-text",
+    "pattern": "document editor with continuous page surface and contextual controls",
+    "fixture": "native-text.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "edit",
+    "pattern": "document editor with continuous page surface and contextual controls",
+    "fixture": "edit.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "sign",
+    "pattern": "document editor with continuous page surface and contextual controls",
+    "fixture": "sign.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "redact",
+    "pattern": "document editor with continuous page surface and contextual controls",
+    "fixture": "redact.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "watermark",
+    "pattern": "document preview with controls sheet",
+    "fixture": "watermark.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "numbers",
+    "pattern": "document preview with controls sheet",
+    "fixture": "numbers.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "bates",
+    "pattern": "document preview with controls sheet",
+    "fixture": "bates.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "headers",
+    "pattern": "document preview with controls sheet",
+    "fixture": "headers.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "flatten",
+    "pattern": "document preview with controls sheet",
+    "fixture": "flatten.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "form",
+    "pattern": "document editor with continuous page surface and contextual controls",
+    "fixture": "form.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "metadata",
+    "pattern": "document preview with controls sheet",
+    "fixture": "metadata.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "scan",
+    "pattern": "file cards with grip handles and optional sorting",
+    "fixture": "scan.jpg",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "images",
+    "pattern": "file cards with grip handles and optional sorting",
+    "fixture": "scan.png",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "jpg",
+    "pattern": "document preview with controls sheet",
+    "fixture": "jpg.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "png",
+    "pattern": "document preview with controls sheet",
+    "fixture": "png.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "text",
+    "pattern": "document preview with controls sheet",
+    "fixture": "text.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "word",
+    "pattern": "document preview with controls sheet",
+    "fixture": "word.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "html",
+    "pattern": "document preview with controls sheet",
+    "fixture": "html.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "epub",
+    "pattern": "document preview with controls sheet",
+    "fixture": "epub.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "pptx",
+    "pattern": "document preview with controls sheet",
+    "fixture": "pptx.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "xlsx",
+    "pattern": "document preview with controls sheet",
+    "fixture": "xlsx.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "csv",
+    "pattern": "document preview with controls sheet",
+    "fixture": "csv.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "create",
+    "pattern": "direct creation fields and visible export action",
+    "fixture": "source.txt",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "markdown",
+    "pattern": "direct creation fields and visible export action",
+    "fixture": "source.md",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "docx",
+    "pattern": "document preview with controls sheet",
+    "fixture": "source.docx",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "sheet",
+    "pattern": "document preview with controls sheet",
+    "fixture": "source.xlsx",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "ebook",
+    "pattern": "document preview with controls sheet",
+    "fixture": "source.epub",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "grayscale",
+    "pattern": "document preview with controls sheet",
+    "fixture": "grayscale.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "invert",
+    "pattern": "document preview with controls sheet",
+    "fixture": "invert.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "ocr",
+    "pattern": "document preview with controls sheet",
+    "fixture": "ocr.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "audio",
+    "pattern": "document preview with controls sheet",
+    "fixture": "audio.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "compare",
+    "pattern": "document preview with controls sheet",
+    "fixture": "compare.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "encrypt",
+    "pattern": "document preview with controls sheet",
+    "fixture": "encrypt.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "decrypt",
+    "pattern": "document preview with controls sheet",
+    "fixture": "encrypted-aes256-r6.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "privacy",
+    "pattern": "document preview with controls sheet",
+    "fixture": "privacy.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "clean",
+    "pattern": "document preview with controls sheet",
+    "fixture": "clean.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "hash",
+    "pattern": "document preview with controls sheet",
+    "fixture": "hash.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "zip",
+    "pattern": "document preview with controls sheet",
+    "fixture": "zip.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  },
+  {
+    "tool": "repair",
+    "pattern": "document preview with controls sheet",
+    "fixture": "repair.pdf",
+    "widths": [
+      320,
+      390,
+      430,
+      768,
+      1100
+    ],
+    "states": [
+      "empty",
+      "opening",
+      "loaded",
+      "controls expanded",
+      "processing",
+      "error",
+      "result"
+    ],
+    "checks": [
+      "No horizontal page overflow",
+      "No duplicate file-add controls",
+      "Primary action remains reachable with bottom safe area",
+      "Organize controls are individually reachable",
+      "No empty Settings wrapper",
+      "Long page counts fit controls",
+      "Keyboard focus remains visible"
+    ],
+    "verification": "physical-device visual checks pending"
+  }
+]
