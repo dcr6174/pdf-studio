@@ -26,7 +26,8 @@ export function ResultCard({output,open,toolId,resultTitle,before,compress,onDow
  const next=[['compress','Compress PDF'],['sign','Sign PDF'],['watermark','Add watermark'],['edit','Edit PDF']].filter(([id])=>id!==toolId).slice(0,3);
  return <section className="merge-result-page export-result-page" aria-labelledby="export-result-heading">
   <div className="merge-result-check" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M10 21 17 28 30 13" pathLength="1"/></svg></div>
-  <h1 id="export-result-heading">{resultTitle??(compress?(reduction>0?'Your PDF has been compressed!':'Compression complete'):`Your ${label} is ready`)}</h1>
+  <h1 id="export-result-heading">{resultTitle??(toolId==='blank-check'?'Blank-page review is ready':compress?(reduction>0?'Your PDF has been compressed!':'Compression complete'):`Your ${label} is ready`)}</h1>
+  {toolId==='blank-check'&&output.report&&<section className="blank-review-summary" role="status"><h2>Review these findings</h2><p>{output.report}</p></section>}
   <p className="merge-result-file">{output.name} · {formatBytes(output.blob.size)}</p>
   
   {output.target&&<p className="export-size-summary" role="status">{output.target.met?'Target met':'Target not met'} · Result {(output.blob.size/1000).toFixed(1)} KB / target {output.target.requestedKB} KB</p>}
@@ -40,7 +41,8 @@ export function ResultCard({output,open,toolId,resultTitle,before,compress,onDow
   {error&&<p className="native-error" role="alert">{error}</p>}
   {compress&&reduction===0&&<details className="merge-result-preview"><summary>How to make it smaller</summary><div><p>This file may already be optimized. Return to settings to try stronger compression or lower image quality. Check text and image clarity before sharing.</p><button className="secondary" onClick={onSettings}>Adjust compression</button></div></details>}
   {pdf&&previewContent&&<details className="merge-result-preview" onToggle={event=>setPreview(event.currentTarget.open)}><summary>Preview {toolId==='merge'?'merged PDF':label}</summary>{preview&&previewContent}</details>}
-  {output.report&&<details className="merge-result-preview" open={!pdf&&output.blob.type.startsWith('text/')}><summary>{pdf?'What changed':'Result details'}</summary><div><pre className="export-report">{output.report}</pre>{!pdf&&<button className="secondary" onClick={()=>{void navigator.clipboard.writeText(output.report!).then(()=>setCopied(true)).catch(()=>setCopyError('Copy unavailable. Select the report text or download the file.'));}}><Copy size={16}/>{copied?'Copied':'Copy report'}</button>}{copyError&&<p role="status">{copyError}</p>}</div></details>}
+  {output.report&&<details className="merge-result-preview" open={toolId==='blank-check'||!pdf&&output.blob.type.startsWith('text/')}><summary>{pdf?'What changed':'Result details'}</summary><div><pre className="export-report">{output.report}</pre>{!pdf&&<button className="secondary" onClick={()=>{void navigator.clipboard.writeText(output.report!).then(()=>setCopied(true)).catch(()=>setCopyError('Copy unavailable. Select the report text or download the file.'));}}><Copy size={16}/>{copied?'Copied':'Copy report'}</button>}{copyError&&<p role="status">{copyError}</p>}</div></details>}
   {pdf&&(onContinue||onNextTool)&&<div className="merge-result-next"><h2>Continue with this PDF</h2><div>{onNextTool?next.map(([id,text])=>{const Icon=toolIcons[id]??FileText;return <button key={id} className="secondary" onClick={()=>onNextTool(id)}><span className={`merge-next-icon merge-next-icon-${id}`}><Icon size={19}/></span>{text}</button>;}):onContinue&&<button className="secondary" onClick={onContinue}><Pencil size={19}/>Continue editing</button>}</div></div>}
  </section>;
 }
+

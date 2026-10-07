@@ -1,6 +1,7 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import './tool-action-layout.css';
+import {exportFilename} from '@/lib/export-filename';
 import {useExportScreen} from '@/components/use-export-screen';
 import {Download,FileUp,ChevronLeft,ChevronRight,RotateCcw,Shuffle} from 'lucide-react';
 import Link from '@/components/browser-link';
@@ -12,6 +13,7 @@ type CustomFont={name:string;bytes:Uint8Array};
 type Result={bytes:Uint8Array;pages:number;text:string;options:HandwritingOptions;font:CustomFont|null};
 const sample='A little space for your ideas.\n\nType your notes here. Choose a handwriting style and make the page your own.';
 export function HandwritingStudio({mode}:{mode:CreativeMode}){
+ const [sourceName,setSourceName]=useState('');
  const [text,setText]=useState(mode==='handwriting-practice'?'The quick brown fox jumps over the lazy dog.\n0123456789':sample);
  const [options,setOptions]=useState<HandwritingOptions>(handwritingDefaults);
  const [customFont,setCustomFont]=useState<CustomFont|null>(null);
@@ -43,11 +45,11 @@ export function HandwritingStudio({mode}:{mode:CreativeMode}){
   try{if(file.size>50*1000*1000)throw new Error('This file exceeds 50 MB. Choose a smaller PDF or text file. Your current notes are retained.');const bytes=new Uint8Array(await file.arrayBuffer());controller.signal.throwIfAborted();let content='';
    if(/\.pdf$/i.test(file.name)){if(new TextDecoder().decode(bytes.slice(0,5))!=='%PDF-')throw new Error('This file is not a valid PDF. Choose a PDF or UTF-8 text file.');const {renderer}=await import('@/lib/pdf-client');const doc=await renderer(bytes);try{if(doc.numPages>100)throw new Error('This PDF has more than 100 pages. Extract a smaller page range and try again. Your notes are retained.');for(let i=1;i<=doc.numPages;i++){controller.signal.throwIfAborted();const items=(await(await doc.getPage(i)).getTextContent()).items;let line='',lastY:number|undefined;for(const item of items){if(!('str'in item))continue;const y=item.transform[5];if(lastY!==undefined&&Math.abs(y-lastY)>3)line+='\n';line+=item.str+(item.hasEOL?'\n':' ');lastY=item.hasEOL?undefined:y;}content+=line.trim()+'\n\n';if(content.length>200000)throw new Error('This PDF contains too much text for a live notebook. Extract fewer pages and try again.');setOpening(true);}if(!content.trim())throw new Error('No selectable text was found. Run OCR first, then import the searchable PDF. Handwriting recognition is not included in this tool.');}finally{await doc.destroy();}}
    else if(/\.txt$/i.test(file.name)){const {decodeTextFile}=await import('@/lib/text-document');content=decodeTextFile(bytes);}else throw new Error('Choose a PDF or .txt file. Images and Word files need conversion first.');
-   if(content.length>200000)throw new Error('This file contains more than 200,000 characters. Split it into smaller notes.');controller.signal.throwIfAborted();setText(content.trim());dirty.current=true;setPage(0);setTab('page');
+   if(content.length>200000)throw new Error('This file contains more than 200,000 characters. Split it into smaller notes.');controller.signal.throwIfAborted();setSourceName(file.name);setText(content.trim());dirty.current=true;setPage(0);setTab('page');
   }catch(e){if(!controller.signal.aborted)setError(e instanceof Error&&/password/i.test(e.message)?'This PDF is password protected. Unlock it first, then import it. Your notes are retained.':e instanceof Error?e.message:'This file could not open. Your notes are retained.');}finally{if(importJob.current===controller){setOpening(false);importJob.current=null;}if(input.current)input.current.value='';}
  }
  async function openFont(file?:File){if(!file)return;try{if(!/\.(ttf|otf)$/i.test(file.name))throw new Error('Choose a TTF or OTF font.');if(file.size>5*1000*1000)throw new Error('This font exceeds 5 MB. Choose a smaller font.');const bytes=new Uint8Array(await file.arrayBuffer());const {default:fontkit}=await import('@pdf-lib/fontkit');fontkit.create(bytes);dirty.current=true;setCustomFont({name:file.name,bytes});setError('');}catch(e){setError(e instanceof Error?e.message:'The font is invalid. Choose another font.');}finally{if(fontInput.current)fontInput.current.value='';}}
- function download(){if(!ready||!result||busy||opening)return;prepare(new Blob([new Uint8Array(result.bytes)],{type:'application/pdf'}),mode==='notebook-maker'?'pdf-studio-notebook.pdf':mode==='handwriting-practice'?'pdf-studio-practice.pdf':'pdf-studio-handwriting.pdf');}
+ function download(){if(!ready||!result||busy||opening)return;prepare(new Blob([new Uint8Array(result.bytes)],{type:'application/pdf'}),mode==='notebook-maker'?'pdf-studio-notebook.pdf':mode==='handwriting-practice'?'pdf-studio-practice.pdf':sourceName?exportFilename('Handwriting','handwriting.pdf','',sourceName):'pdf-studio-handwriting.pdf');}
  return <main className={`handwriting-main ${mode==='pdf-to-handwriting'?'handwriting-tool-action':''}`}><div className="studio-workspace-content" data-export-workspace tabIndex={-1} hidden={resultVisible}>
   <div className="handwriting-title"><div><Link href={mode==='pdf-to-handwriting'?'/tools':'/lab'}>{mode==='pdf-to-handwriting'?'PDF tools':'Studio Lab · Beta'}</Link><h1>{tool.title}</h1><p>{tool.description}</p></div><span className="handwriting-private">Files and text stay on your device</span></div>
   <div className="handwriting-mobile-tabs" role="tablist" aria-label="Notebook workspace">{['page',...(mode==='notebook-maker'?[]:['text']),'style'].map(t=><button key={t} id={'hand-tab-'+t} type="button" role="tab" tabIndex={tab===t?0:-1} onKeyDown={e=>{const tabs=['page',...(mode==='notebook-maker'?[]:['text']),'style'];if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?tabs[0]:e.key==='End'?tabs[tabs.length-1]:tabs[(tabs.indexOf(t)+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];setTab(next);document.getElementById('hand-tab-'+next)?.focus();}}} aria-selected={tab===t} aria-controls={'hand-panel-'+t} onClick={()=>setTab(t)}>{t==='page'?'Preview':t==='text'?'Text':'Style'}</button>)}</div>
@@ -71,3 +73,4 @@ export function HandwritingStudio({mode}:{mode:CreativeMode}){
 
  </div>{resultScreen}</main>;
 }
+

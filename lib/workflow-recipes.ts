@@ -1,4 +1,4 @@
-export const workflowChoices=[['merge','Merge input PDFs'],['rotate','Rotate pages'],['remove','Remove pages'],['reorder','Reorder pages'],['crop','Crop margins'],['reverse','Reverse page order'],['duplicate','Duplicate pages'],['blank','Insert blank page'],['resize','Resize pages'],['numbers','Page numbers'],['bates','Bates numbers'],['headers','Headers and footers'],['flatten','Lock form fields'],['flip','Mirror pages'],['clean','Clear standard metadata'],['compress','Compress PDF']] as const;
+export const workflowChoices=[['merge','Merge input PDFs'],['rotate','Rotate pages'],['watermark','Add watermark'],['remove','Remove pages'],['reorder','Reorder pages'],['crop','Crop margins'],['reverse','Reverse page order'],['duplicate','Duplicate pages'],['blank','Insert blank page'],['resize','Resize pages'],['numbers','Page numbers'],['bates','Bates numbers'],['headers','Headers and footers'],['flatten','Lock form fields'],['flip','Mirror pages'],['clean','Clear standard metadata'],['compress','Compress PDF']] as const;
 export const workflowOperations=workflowChoices.map(([id])=>id);
 export type WorkflowStepSettings={angle?:string;quality?:string;resizeSize?:string;resizeOrientation?:string;range?:string;margin?:string;text?:string;footer?:string;start?:string;numberPosition?:string;numberFormat?:string;labelFontSize?:string;labelMargin?:string;batesDigits?:string;batesSuffix?:string;flipAxis?:string;blankAt?:string};
 export type WorkflowRecipe={version?:1;name:string;steps:string[];disabled:number[];settings?:WorkflowStepSettings[]};
@@ -7,6 +7,7 @@ export function workflowSettings(step:string,value:unknown):WorkflowStepSettings
  const pick=(key:string,allowed:string[],fallback:string)=>{const v=raw[key]??fallback;if(typeof v!=='string'||!allowed.includes(v))throw new Error('This recipe contains an invalid '+key+' setting.');return v;};
  const text=(key:string,fallback='',max=240)=>{const v=raw[key]??fallback;if(typeof v!=='string'||v.length>max)throw new Error('Invalid '+key+' in recipe.');return v;};
  const num=(key:string,fallback:string,min:number,max:number)=>{const v=text(key,fallback);if(!Number.isFinite(Number(v))||Number(v)<min||Number(v)>max)throw new Error('Invalid '+key+' in recipe.');return v;};
+ if(step==='watermark')return {text:text('text','DRAFT',120),angle:num('angle','45',-180,180)};
  if(step==='rotate')return {angle:pick('angle',['90','180','270'],'90')};
  if(step==='compress')return {quality:pick('quality',['compact','images'],'compact')};
  if(step==='resize')return {resizeSize:pick('resizeSize',['a4','letter'],'a4'),resizeOrientation:pick('resizeOrientation',['portrait','landscape'],'portrait')};
@@ -29,6 +30,7 @@ export function readWorkflowRecipe(value:unknown):WorkflowRecipe{
  return {version:1,name:r.name.trim(),steps:[...steps],disabled:[...new Set(disabled)],settings};
 }
 export function workflowStepIssue(step:string,s:WorkflowStepSettings,pages:number,files:number,index:number):string{
+ if(step==='watermark'&&!s.text?.trim())return 'Enter watermark text.';
  if(step==='merge'&&(files<2||index>0))return index?'Merge must be the first step.':'Add a second PDF to merge.';
  if(step==='remove'||step==='reorder'){
   if(!s.range?.trim())return step==='remove'?'Enter the pages to remove.':'Enter the complete page order.';
@@ -40,3 +42,4 @@ export function workflowStepIssue(step:string,s:WorkflowStepSettings,pages:numbe
  if(step==='blank'&&pages&&Number(s.blankAt??1)>pages+1)return `Insert at a position from 1 to ${pages+1}.`;
  return '';
 }
+

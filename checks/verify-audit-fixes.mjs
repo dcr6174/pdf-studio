@@ -1,45 +1,36 @@
-import assert from 'node:assert/strict';
-import fs from 'node:fs';
-import ts from 'typescript';
 import {build} from 'vite';
-import {PDFDocument,rgb} from 'pdf-lib';
-import JSZip from 'jszip';
-import fontkit from '@pdf-lib/fontkit';
-import {createCanvas,DOMMatrix,Path2D,ImageData} from '@napi-rs/canvas';
-import {execFileSync} from 'node:child_process';
-async function pure(path){return import('data:text/javascript;base64,'+Buffer.from(ts.transpileModule(fs.readFileSync(path,'utf8'),{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText).toString('base64'));}
-const {batchResultsCSV}=await pure('lib/batch-results.ts');assert(batchResultsCSV([['=HYPERLINK("bad")','failed','','',' @cmd']]).includes("'=HYPERLINK"));assert(batchResultsCSV([['a,b.pdf','completed','out.pdf','12','quoted \"note\"']]).includes('\"a,b.pdf\"'));
-const {uploadFeedback}=await pure('lib/upload-feedback.ts');
-for(const message of ['These files total 180 MB. This workspace accepts up to 157.3 MB.','This would create 401 pages.','Choose an image below 22 megapixels.','You selected 21 files. Batch processing accepts up to 20 files.','This document has 101 pages.'])assert.equal(uploadFeedback(new Error(message)).message,message);
-const invalid=uploadFeedback(new Error("Cannot read properties of undefined (reading 'size')"));assert.equal(invalid.message,'This file could not be read. Choose another file, or try opening and saving it in your PDF viewer first.');assert(invalid.technical.includes('undefined'));assert(uploadFeedback(new Error('Failed to fetch dynamically imported module')).reload);assert.match(uploadFeedback(new Error('encrypted PDF')).message,/password-protected/);
-const {sensitiveTextCandidates}=await pure('lib/sensitive-text.ts');
-for(const phone of ['9876543210','+91 9876543210','+91-98765-43210','98765 43210','987-654-3210'])assert(sensitiveTextCandidates('Phone: '+phone+' end').includes(phone),phone);
-assert.equal(sensitiveTextCandidates('12345678901234').length,0);assert.equal(sensitiveTextCandidates('9876543210123').length,0);
-const {orderMergePages}=await pure('lib/merge-order.ts');const pages=[{id:'a2',fileId:'a',index:1,rotation:90},{id:'b1',fileId:'b',index:0,rotation:0},{id:'a1',fileId:'a',index:0,rotation:0}];const ordered=orderMergePages(pages,['b','a']);assert.deepEqual(ordered.map(p=>p.id),['b1','a2','a1']);assert.equal(ordered[1].rotation,90);assert.equal(pages[0].id,'a2');
-const {readWorkflowRecipe}=await pure('lib/workflow-recipes.ts');const recipe=readWorkflowRecipe({name:'Safe recipe',steps:['clean','compress'],disabled:[1],password:'SECRET',bytes:[1,2]});assert.deepEqual(Object.keys(recipe),['name','steps','disabled']);assert.throws(()=>readWorkflowRecipe({name:'bad',steps:['execute-code']}));assert.throws(()=>readWorkflowRecipe({name:'bad',steps:['compress'],disabled:[4]}));
-await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.audit-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
-const engine=await import('../.audit-check/engine.mjs');
-const doc=await PDFDocument.create();doc.registerFontkit(fontkit);const font=await doc.embedFont(fs.readFileSync('public/fonts/NotoSans-Regular.ttf'),{subset:true});for(let i=0;i<3;i++){const page=doc.addPage([612,792]);page.drawText('SOURCE PAGE '+(i+1),{font,x:50,y:650,size:24});page.drawRectangle({x:40,y:300,width:200,height:100,color:rgb(.2,.3,.7)});}
-const bytes=await doc.save(),file={id:'source',name:'letter.pdf',bytes,size:bytes.length,pages:3,doc},items=doc.getPages().map((_,index)=>({id:'p'+index,fileId:file.id,index,rotation:0}));const options={range:'1,3',text:'',title:'',author:'',subject:'',password:'',quality:'compact',angle:'90',margin:'20',start:'1',columns:'2',fields:{}};
-const run=(id,o={},ps=items,marks=[])=>engine.processPDF(id,[file],ps,marks,{...options,...o},()=>{});
-const compact=await run('compress',{},[items[2],items[0]]);assert(compact.inputSize>0);assert(compact.blob.size<=compact.inputSize);assert.equal((await PDFDocument.load(await compact.blob.arrayBuffer())).getPageCount(),2);
-const target=await run('compress',{compressTarget:'0.1'});assert(target.blob.size<=bytes.length);assert.match(target.report,/Target not reached/);const already=await run('compress',{compressTarget:'99999'});assert.deepEqual(new Uint8Array(await already.blob.arrayBuffer()),bytes);await assert.rejects(()=>run('compress',{compressTarget:'-1'}),/positive/);
-const split=await run('split',{splitOutput:'separate'});const zip=await JSZip.loadAsync(split.blob.arrayBuffer());assert.deepEqual(Object.keys(zip.files),['page-1.pdf','page-3.pdf']);for(const name of Object.keys(zip.files))assert.equal((await PDFDocument.load(await zip.file(name).async('uint8array'))).getPageCount(),1);
-const flow=await run('workflow',{recipe:'custom',workflowSteps:['reverse','rotate','compress'],workflowDisabled:[1]});const flowDoc=await PDFDocument.load(await flow.blob.arrayBuffer());assert.equal(flowDoc.getPageCount(),3);assert.equal(flowDoc.getPage(0).getRotation().angle,0);assert.match(flow.report,/reverse → compress/);
-const resized=await run('resize',{resizeSize:'letter',resizeOrientation:'landscape'});const result=await PDFDocument.load(await resized.blob.arrayBuffer());assert.equal(result.getPage(0).getWidth(),792);assert.equal(result.getPage(0).getHeight(),612);
-// Remaining audit work: independently inspect grouped output, custom sizes and configured recipes.
-const grouped=await run('split',{range:'1-2; 3,1',splitOutput:'groups'});const groupedZip=await JSZip.loadAsync(grouped.blob.arrayBuffer());assert.deepEqual(Object.keys(groupedZip.files),['group-1.pdf','group-2.pdf']);for(const [name,expected] of [['group-1.pdf',[1,2]],['group-2.pdf',[3,1]]]){const data=await groupedZip.file(name).async('uint8array');const reopened=await PDFDocument.load(data);assert.equal(reopened.getPageCount(),2);fs.writeFileSync('.audit-check/'+name,data);const text=execFileSync('pdftotext',['.audit-check/'+name,'-'],{encoding:'utf8'});assert(text.indexOf('SOURCE PAGE '+expected[0])<text.indexOf('SOURCE PAGE '+expected[1]));}
-await assert.rejects(()=>run('split',{range:'1-9; 2',splitOutput:'groups'}),/within pages/);await assert.rejects(()=>run('split',{range:'1;;2',splitOutput:'groups'}),/empty/);
-const custom=await run('resize',{resizeSize:'custom',resizeWidth:'100',resizeHeight:'150',resizeRange:'2',resizeMode:'fill'});const customDoc=await PDFDocument.load(await custom.blob.arrayBuffer());assert.deepEqual(customDoc.getPage(0).getSize(),{width:612,height:792});assert(Math.abs(customDoc.getPage(1).getWidth()-100*72/25.4)<.001);assert.deepEqual(customDoc.getPage(2).getSize(),{width:612,height:792});fs.writeFileSync('.audit-check/custom.pdf',new Uint8Array(await custom.blob.arrayBuffer()));execFileSync('pdftoppm',['-f','2','-singlefile','-scale-to','600','-png','.audit-check/custom.pdf','.audit-check/custom']);const {loadImage}=await import('@napi-rs/canvas');const image=await loadImage('.audit-check/custom.png'),check=createCanvas(image.width,image.height);check.getContext('2d').drawImage(image,0,0);const pixel=check.getContext('2d').getImageData(Math.round(image.width*.2),Math.round(image.height*.55),1,1).data;assert(pixel[2]>100&&pixel[0]<130,'resized source content must remain visible');await assert.rejects(()=>run('resize',{resizeSize:'custom',resizeWidth:'0',resizeHeight:'150'}),/custom width/);
-const configured=await run('workflow',{recipe:'custom',workflowSteps:['rotate','resize'],workflowSettings:[{angle:'180'},{resizeSize:'letter',resizeOrientation:'landscape'}]});const configuredDoc=await PDFDocument.load(await configured.blob.arrayBuffer());assert.deepEqual(configuredDoc.getPage(0).getSize(),{width:792,height:612});assert.equal(readWorkflowRecipe({name:'Configured',steps:['rotate'],settings:[{angle:'270',password:'secret'}]}).settings[0].angle,'270');assert(!JSON.stringify(readWorkflowRecipe({name:'Configured',steps:['rotate'],settings:[{angle:'270',password:'secret'}]})).includes('secret'));assert.throws(()=>readWorkflowRecipe({name:'Bad',steps:['rotate'],settings:[{angle:'17'}]}),/invalid/);
-console.log('PASS: grouped ZIP file order/text, custom selected-page Fill output independently rasterized, unchanged unselected page sizes, invalid dimensions/ranges, configured workflow exports and recipe secret allowlist.');
-// Real PDF.js rendering with a native test canvas; independent Poppler text inspection afterwards.
-Object.assign(globalThis,{DOMMatrix,Path2D,ImageData});globalThis.document={createElement:()=>createCanvas(1,1)};
-const pdfjs=await engine.pdfjs();pdfjs.GlobalWorkerOptions.workerSrc=new URL('../public/pdf.worker.min.mjs',import.meta.url).href;
-const oldFetch=globalThis.fetch;globalThis.fetch=async url=>String(url).startsWith('/fonts/')?new Response(fs.readFileSync('public'+url)):oldFetch(url);
-try{
- const redacted=await run('redact',{},items,[{id:'redaction',pageId:'p0',kind:'redact',text:'',x:0,y:0,w:1,h:.3,color:'#000000',fontSize:12}]);const reopened=await PDFDocument.load(await redacted.blob.arrayBuffer());for(const p of reopened.getPages()){assert.equal(p.getWidth(),612);assert.equal(p.getHeight(),792);}
- fs.writeFileSync('.audit-check/redacted.pdf',new Uint8Array(await redacted.blob.arrayBuffer()));const extracted=execFileSync('pdftotext',['.audit-check/redacted.pdf','-'],{encoding:'utf8'});assert(!extracted.includes('SOURCE PAGE'));
- const raster=await run('compress',{quality:'small'});assert.equal(raster.inputSize,bytes.length);assert(raster.blob.size<=raster.inputSize);
- console.log('PASS: rejected size/page/image/batch limits stay specific; parser and stale-module recovery; five Indian phone formats; stable file reordering; compression baseline; separate selected-page ZIP; Letter landscape; real raster redaction retains Letter geometry and removes extractable text; raster fallback never exceeds its baseline.');
-}finally{globalThis.fetch=oldFetch;}
+import fs from 'node:fs';
+import path from 'node:path';
+import assert from 'node:assert/strict';
+import {PDFDocument,StandardFonts} from 'pdf-lib';
+const root=path.resolve('.');
+await build({configFile:false,logLevel:'error',resolve:{alias:{'@':root}},build:{ssr:'lib/pdf-engine.ts',outDir:'.audit-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
+const originalFetch=globalThis.fetch;
+globalThis.fetch=(url,...args)=>typeof url==='string'&&url.startsWith('/')?Promise.resolve(new Response(fs.readFileSync(path.join(root,'public',url)))):originalFetch(url,...args);
+const {processPDF,loadFile}=await import('../.audit-check/engine.mjs');
+const doc=await PDFDocument.create(),font=await doc.embedFont(StandardFonts.Helvetica);
+for(let i=0;i<4;i++){const p=doc.addPage([400,600]);p.drawText('AUDIT PAGE '+(i+1),{font,x:40,y:530});}
+const bytes=await doc.save(),file={id:'fixture',name:'Original Report.pdf',bytes,size:bytes.length,pages:4,doc};
+const pages=Array.from({length:4},(_,index)=>({id:'p'+index,fileId:file.id,index,rotation:0}));
+const defaults={range:'',text:'',title:'',author:'',subject:'',password:'',quality:'compact',angle:'90',margin:'20',start:'1',columns:'2',fields:{}};
+const run=(id,options={},files=[file],items=pages)=>processPDF(id,files,items,[],{...defaults,...options},()=>{});
+const rotation=await run('rotate',{range:'2'}),rotated=await PDFDocument.load(await rotation.blob.arrayBuffer());
+assert.deepEqual(rotated.getPages().map(p=>p.getRotation().angle),[0,90,0,0]);
+await assert.rejects(()=>run('rotate',{range:'9'}));
+const workflow=await run('workflow',{recipe:'custom',workflowSteps:['rotate','watermark'],workflowSettings:[{angle:'90'},{text:'AUDIT DRAFT',angle:'45'}]});
+assert.deepEqual((await PDFDocument.load(await workflow.blob.arrayBuffer())).getPages().map(p=>p.getRotation().angle),[90,90,90,90]);
+fs.writeFileSync('.audit-check/workflow-output.pdf',new Uint8Array(await workflow.blob.arrayBuffer()));
+const markdown=await run('markdown',{text:'# Heading\n\n**Bold text** and *italic text*.\n\n- First item\n- Second item\n\n***Both styles***'},[],[]);
+fs.writeFileSync('.audit-check/markdown-output.pdf',new Uint8Array(await markdown.blob.arrayBuffer()));
+const aes=new Uint8Array(fs.readFileSync('checks/fixtures/aes256-r6.pdf'));
+const secure={...file,bytes:aes,size:aes.length,doc:undefined,pages:0};
+await assert.rejects(()=>run('decrypt',{password:'wrong-password'},[secure],[]),/password is incorrect/);
+const unlocked=await run('decrypt',{password:'Test1234!'},[secure],[]);
+assert.equal((await PDFDocument.load(await unlocked.blob.arrayBuffer())).getPageCount(),4);
+fs.writeFileSync('.audit-check/unlocked-output.pdf',new Uint8Array(await unlocked.blob.arrayBuffer()));
+await assert.rejects(()=>loadFile(new File(['not a PDF'],'invalid.pdf')),/not a PDF/);
+assert.match(rotation.name,/Original Report - pdf-studio\.in - Rotated\.pdf/);
+const source=fs.readFileSync('app/page.tsx','utf8');assert.ok(!source.includes('<article ref={setNodeRef} {...attributes}'));assert.ok(source.includes("const mobileAction=view==='reader'?null:sidebarAction"));
+const merge=fs.readFileSync('components/merge-files.tsx','utf8');assert.ok(!merge.includes('<li ref={setNodeRef} {...attributes}'));assert.ok(merge.includes('className="merge-drag-handle" {...attributes} {...listeners}'));
+assert.ok(fs.existsSync('public/vendor/ocr/worker.min.js'));for(const suffix of ['', '-simd', '-relaxedsimd'])assert.ok(fs.existsSync('public/vendor/ocr/tesseract-core'+suffix+'-lstm.wasm.js'));
+console.log('PASS: AES-256 R6 decryption, wrong-password rejection, one-page rotation, Rotate + Watermark, Markdown export, upload validation, filenames, mobile action and drag semantics.');

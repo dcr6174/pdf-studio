@@ -2,6 +2,7 @@ import {PDFDocument,rgb} from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 import {render,renderer} from './pdf-engine';
 import {wrapParagraph} from './text-paragraph';
+import {ocrWorkerOptions} from './ocr-worker-options';
 export type OCRRow={id:string;text:string;originalText:string;x:number;y:number;width:number;height:number;size:number;confidence:number;background:string;rects:{x:number;y:number;width:number;height:number}[]};
 export type OCRPage={index:number;width:number;height:number;image:string;rows:OCRRow[]};
 export type OCROptions={language:string;scale:number;skipText:boolean;signal?:AbortSignal;progress?:(message:string)=>void};
@@ -10,7 +11,7 @@ export async function recognizePages(bytes:Uint8Array,indices:number[],options:O
  let current=0;const results:OCRPage[]=[];const source=await renderer(bytes);
  const cancel=()=>{void worker?.terminate();};options.signal?.addEventListener('abort',cancel,{once:true});
  try{
-  worker=await createWorker(options.language,1,{logger:m=>{if(m.status==='recognizing text')options.progress?.(`Reading page ${current+1}: ${Math.round(m.progress*100)}%`);}});
+  worker=await createWorker(options.language,1,{...ocrWorkerOptions,logger:m=>{if(m.status==='recognizing text')options.progress?.(`Reading page ${current+1}: ${Math.round(m.progress*100)}%`);}});
   for(const index of indices){options.signal?.throwIfAborted();current=index;const page=await source.getPage(index+1);if(options.skipText){const text=await page.getTextContent();if(text.items.some(t=>'str' in t&&t.str.trim())){options.progress?.(`Skipped page ${index+1}: existing text`);continue;}}
    const viewport=page.getViewport({scale:1}),scale=Math.min(options.scale,Math.sqrt(16000000/(viewport.width*viewport.height))),canvas=await render(bytes,index,scale,undefined,0,options.signal);
    try{const {data}=await worker.recognize(canvas,{}, {blocks:true});options.signal?.throwIfAborted();const rows:OCRRow[]=[];
