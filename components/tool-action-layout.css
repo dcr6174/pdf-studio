@@ -190,3 +190,4 @@
  .studio-shell.tool-action-ready.document-shell .content:not(:has(.export-result-page)){padding-bottom:24px!important}
  .shared-tool-action-bar .workspace-inline-organize .page-settings-controls{max-height:none;overflow:visible}
 }
+.rotate-sidebar-settings{display:grid;gap:14px;margin-top:20px}.rotate-sidebar-settings h3{font-size:15px;margin:0}.rotate-sidebar-settings p{font-size:13px;line-height:1.6;color:var(--muted);margin:0}.rotate-all-primary{display:flex;align-items:center;justify-content:center;gap:12px;min-height:64px!important;width:100%;padding:16px!important;border-radius:14px!important;background:#7045dc!important;color:white!important;font-size:15px!important;font-weight:650;white-space:normal}.rotate-all-primary:hover:not(:disabled){background:#6034c8!important}
