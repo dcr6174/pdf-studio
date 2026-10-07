@@ -4,53 +4,51 @@ export const toolArticles2 = [
     "tool": "alternate-and-mix",
     "toolId": "interleave",
     "toolNumber": 23,
-    "cta": "Shuffle smarter. Mix your PDF pages →",
-    "check": "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation.",
-    "limit": "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation.",
+    "cta": "Two stacks. One good story. Interleave PDFs →",
+    "check": "Verify the first, middle and last pairs, and confirm the output count equals the sum of the input counts.",
+    "limit": "Interleaving does not infer which pages belong together, correct scan direction or perform OCR. Prepare the source sequences first.",
     "slug": "how-to-alternate-and-mix",
-    "title": "How to use Interleave pages: a step-by-step guide",
-    "summary": "Combine separately scanned fronts and backs of pages. Learn the current Interleave pages steps, what to check and which limitations matter before you start.",
+    "title": "How to interleave PDF pages: alternate two documents in order",
+    "summary": "Combine two PDF stacks as A1, B1, A2, B2. Learn which file comes first, what happens to leftover pages and how to verify the mixed document.",
     "steps": [
-      "Choose the supported source file or files from your device.",
-      "Choose the PDFs you want to alternate and check their starting order.",
-      "Export and inspect transitions between each source document."
+      "Open Interleave pages and add the PDFs in the intended file order. The first file supplies the first output page.",
+      "Keep the page sequence within each source document deliberate. The output takes one page from each source in turn.",
+      "Run the interleave action and inspect the resulting sequence before downloading. Check the final pages when the inputs have different lengths."
     ],
     "sections": [
       {
-        "heading": "When to use Interleave pages",
+        "heading": "Interleave is different from merge",
         "paragraphs": [
-          "Combine separately scanned fronts and backs of pages.",
-          "Weave pages from multiple PDFs."
+          "A normal merge places all pages of the first document before all pages of the next. Interleaving alternates the documents page by page. Choose interleave when two stacks need to be woven together; choose merge when each document should stay together."
         ]
       },
       {
-        "heading": "Prepare the right input",
+        "heading": "A worked example with unequal files",
         "paragraphs": [
-          "Choose the supported source file or files from your device.",
-          "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation."
+          "Suppose document A contains ALPHA, BRAVO, CHARLIE and DELTA, while B contains ECHO, FOXTROT and GOLF. The intended result is ALPHA, ECHO, BRAVO, FOXTROT, CHARLIE, GOLF, DELTA. DELTA must remain at the end; it should not disappear because B has fewer pages.",
+          "The output should contain seven pages. Checking the total alone is insufficient: open the result and confirm the sequence."
         ]
       },
       {
-        "heading": "Choose a small first run",
+        "heading": "Choose the first source carefully",
         "paragraphs": [
-          "Before using Interleave pages on a long or important document, work with a copy and check one representative example. Pick pages that include the features you care about: small text, rotated content, fillable fields or scanned material.",
-          "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation."
+          "The first source determines the first page of each pair. If you need a front side followed by its back side, arrange the fronts first and the backs second. Use recognizable page labels in a small test before processing a large scan."
         ]
       }
     ],
     "tips": [
-      "Choose the PDFs you want to alternate and check their starting order.",
-      "Export and inspect transitions between each source document.",
-      "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation."
+      "Test with short labelled documents before using a long batch.",
+      "Count the pages in every input and compare their sum with the output.",
+      "Review the last unpaired page when one source is longer."
     ],
     "faq": [
       {
-        "question": "What is this tool useful for?",
-        "answer": "Combine separately scanned fronts and backs of pages."
+        "question": "What if the PDFs have different page counts?",
+        "answer": "The expected sequence retains leftover pages from the longer source. Review those pages rather than assuming both inputs must have the same length."
       },
       {
-        "question": "What should I check in the result?",
-        "answer": "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation."
+        "question": "Does this recreate scanned text?",
+        "answer": "No. Interleaving changes page order. Use OCR separately when a scan needs searchable text."
       }
     ]
   },
@@ -59,44 +57,43 @@ export const toolArticles2 = [
     "tool": "alternate-and-mix",
     "toolId": "interleave",
     "toolNumber": 23,
-    "cta": "Shuffle smarter. Mix your PDF pages →",
-    "check": "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation.",
-    "limit": "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation.",
+    "cta": "Two stacks. One good story. Interleave PDFs →",
+    "check": "Verify the first, middle and last pairs, and confirm the output count equals the sum of the input counts.",
+    "limit": "Interleaving does not infer which pages belong together, correct scan direction or perform OCR. Prepare the source sequences first.",
     "slug": "alternate-and-mix-practical-workflow",
-    "title": "Interleave pages: a practical workflow from input to result",
-    "summary": "Combine separately scanned fronts and backs of pages. Plan the input, run the task and review the result without confusing a completed export with a correct document.",
+    "title": "Combine front and back scans into one correctly ordered PDF",
+    "summary": "Turn separate front-side and back-side scans into a readable document. Check scan direction before alternating the pages.",
     "steps": [
-      "Choose the supported source file or files from your device.",
-      "Choose the PDFs you want to alternate and check their starting order.",
-      "Export and inspect transitions between each source document.",
-      "Review the result against this requirement: Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation."
+      "Inspect both scans and identify their direction before changing anything.",
+      "If necessary, reverse the back-side PDF in Reverse pages, export it and verify that the first back matches the first front.",
+      "Open Interleave pages with fronts first and prepared backs second. Process and check beginning, middle and end pairs."
     ],
     "sections": [
       {
-        "heading": "Define the result you need",
+        "heading": "Understand how the paper was scanned",
         "paragraphs": [
-          "Combine separately scanned fronts and backs of pages.",
-          "For this task, the tool's scope is: Weave pages from multiple PDFs. Use that scope to decide whether Interleave pages is the right starting point."
+          "A single-sided scanner can produce one PDF of fronts and another of backs. The second stack may have been flipped before scanning, leaving the back pages in reverse order. Interleaving an incorrect back sequence creates a document with the right page count and the wrong pairs."
         ]
       },
       {
-        "heading": "What to keep before processing",
+        "heading": "Prepare both stacks",
         "paragraphs": [
-          "Keep the source separately so you can compare it with the result. If you have already edited or organized pages in another tool, check the input requirements below before continuing.",
-          "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation."
+          "Check the first and last page of each scan. Identify which back belongs to the first front. If the back sequence is reversed, correct it with Reverse pages and inspect the exported copy before returning to Interleave pages.",
+          "Remove accidental separator pages only after verifying they are not deliberately blank backs. Missing a legitimate blank back can shift every later pair."
         ]
       },
       {
-        "heading": "Review before handing it off",
+        "heading": "Run a small pairing check",
         "paragraphs": [
-          "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation.",
-          "If the next step is uploading, printing or opening the result in another application, test it there as well. A PDF preview cannot establish how every recipient's application will handle the file."
+          "Add the fronts first, then the prepared backs. Interleave and read the first two pairs in the result. Compare each pair against the paper original or printed numbering.",
+          "For example, fronts 1, 3 and 5 combined with backs 2, 4 and 6 should become 1, 2, 3, 4, 5, 6. If the backs are 6, 4, 2, correct that sequence first."
         ]
       }
     ],
     "tips": [
-      "Use this workflow for: Combine separately scanned fronts and backs of pages.",
-      "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation."
+      "Printed page labels can differ from PDF page positions; check actual content.",
+      "Retain deliberate blank back pages until pairing has been verified.",
+      "Use Rotate PDF separately if scanner orientation makes backs upside down."
     ],
     "faq": [
       {
@@ -114,50 +111,42 @@ export const toolArticles2 = [
     "tool": "alternate-and-mix",
     "toolId": "interleave",
     "toolNumber": 23,
-    "cta": "Shuffle smarter. Mix your PDF pages →",
-    "check": "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation.",
-    "limit": "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation.",
+    "cta": "Two stacks. One good story. Interleave PDFs →",
+    "check": "Verify the first, middle and last pairs, and confirm the output count equals the sum of the input counts.",
+    "limit": "Interleaving does not infer which pages belong together, correct scan direction or perform OCR. Prepare the source sequences first.",
     "slug": "alternate-and-mix-tips-and-troubleshooting",
-    "title": "Interleave pages: useful tips, limitations and troubleshooting",
-    "summary": "Avoid common mistakes with Interleave pages. Check input requirements, understand the output and learn what this tool can and cannot do.",
+    "title": "Interleaved PDF pages in the wrong order? Check these three causes",
+    "summary": "Diagnose reversed source order, backwards back-side scans and missing blank pages before repeating an interleave operation.",
     "steps": [
-      "Confirm the starting requirement: Choose the supported source file or files from your device.",
-      "Repeat the task using its documented controls: Choose the PDFs you want to alternate and check their starting order. Export and inspect transitions between each source document.",
-      "Check the result: Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation."
+      "Locate the first incorrect pair and compare it with the two input documents.",
+      "Check source order, scan direction and whether either stack is missing a page.",
+      "Prepare corrected copies, interleave again and check all affected pairs plus the final remainder."
     ],
     "sections": [
       {
-        "heading": "Start with the supported task",
+        "heading": "Cause 1: the sources start in the wrong order",
         "paragraphs": [
-          "Weave pages from multiple PDFs.",
-          "Combine separately scanned fronts and backs of pages."
+          "If the back page appears before its front, inspect the order in which the source files were added. Start with the source that should supply the first page. A reversed file order changes every pair."
         ]
       },
       {
-        "heading": "Understand the main limitation",
+        "heading": "Cause 2: one source runs backwards",
         "paragraphs": [
-          "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation.",
-          "If your requirement goes beyond this limitation, changing an unrelated setting will not solve it. Keep the source and choose another tool or preparation step before retrying."
+          "If the first front is followed by the last back, the back-side stack probably runs in reverse. Inspect both ends of that input and prepare a correctly reversed copy before interleaving again."
         ]
       },
       {
-        "heading": "Troubleshoot a surprising result",
+        "heading": "Cause 3: a page was omitted",
         "paragraphs": [
-          "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation.",
-          "Compare the result with the original rather than judging it only from the completion message. Repeat with a smaller sample to distinguish a document-specific problem from an issue affecting every input."
-        ]
-      },
-      {
-        "heading": "Report a reproducible problem",
-        "paragraphs": [
-          "Record the browser, the Interleave pages options used, the steps taken and the difference between the expected and actual result. Use a synthetic sample or remove private information before sharing a document for troubleshooting."
+          "If early pairs are correct but later pairs drift, compare the source counts and look for a missing blank back, skipped scan or extra separator. Removing a blank page from only one input can shift every subsequent pair.",
+          "A blank-page detector may flag faint content. Review candidates visually before deleting them, especially handwritten notes and lightly scanned text."
         ]
       }
     ],
     "tips": [
-      "What is this tool useful for? Combine separately scanned fronts and backs of pages.",
-      "What should I check in the result? Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation.",
-      "Check the result when inputs have unequal page counts. Use Merge for consecutive documents rather than alternation."
+      "A correct total page count does not prove correct pairing.",
+      "Keep the original scans so a retry starts from known inputs.",
+      "If a remainder is absent, record source page counts and exact steps as a possible functional bug."
     ],
     "faq": [
       {
