@@ -13,6 +13,7 @@
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --max-warnings 0",
     "db:generate": "drizzle-kit generate",
     "verify": "node checks/verify-engine.mjs",
+    "verify:compression": "node checks/verify-jpeg-optimization.mjs && node checks/verify-compression-targets.mjs",
     "verify:analytics": "node checks/verify-analytics.mjs && node checks/verify-tracker.mjs",
     "verify:studio": "node checks/verify-studio.mjs",
     "build:public": "node scripts/prepare-pdf-assets.mjs && node scripts/generate-site-assets.mjs && vite build --config vite.public.config.ts",
@@ -96,3 +97,4 @@
   },
   "license": "MIT"
 }
+
