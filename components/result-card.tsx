@@ -8,8 +8,8 @@ import {Dialog, DialogContent, DialogTitle, DialogDescription} from '@/component
 import {SupportLink} from '@/components/support-link';
 
 type Output = {blob: Blob; name: string; report?: string; inputSize?: number;warnings?:string[];target?:{requestedKB:number;met:boolean}};
-export function ResultCard({output, open, onOpenChange, before, compress, onDownload, onOriginal, onContinue, onNextTool, onStartOver, onSave, onSettings, onProtect, error, previewContent}: {
-    output: Output; open: boolean; onOpenChange?: (value: boolean) => void;
+export function ResultCard({output, open, onOpenChange, before, compress, onDownload, onOriginal, onContinue, onNextTool, onStartOver, onSave, onSettings, onProtect, error, previewContent, fullPage = false}: {
+    output: Output; fullPage?: boolean; open: boolean; onOpenChange?: (value: boolean) => void;
     before?: {files: number; pages: number; size: number; unit: 'page' | 'image'}; compress?: boolean;
     onDownload: () => void; onOriginal?: () => void; onContinue?: () => void;
     onNextTool?: (id: string) => void; onStartOver?: () => void; onSave?: () => void;
@@ -23,9 +23,10 @@ export function ResultCard({output, open, onOpenChange, before, compress, onDown
             setPreview(false);setCopied(false);setCopyError('');
 
             downloadButton.current?.focus({preventScroll: true});
+            if(fullPage) window.scrollTo({top:0,behavior:'instant'});
         });
         return () => cancelAnimationFrame(frame);
-    }, [open, output]);
+    }, [open, output, fullPage]);
     if (!open) return null;
     const pdf = output.blob.type === 'application/pdf';
     const extension = output.name.split('.').pop()?.toUpperCase();
@@ -33,6 +34,17 @@ export function ResultCard({output, open, onOpenChange, before, compress, onDown
     const inputSize = output.inputSize ?? before?.size ?? 0;
     const larger = !!compress && inputSize > 0 && output.blob.size > inputSize;
     const saved = compress && inputSize > output.blob.size ? Math.round((1 - output.blob.size / inputSize) * 100) : 0;
+    if(fullPage) return <section className="merge-result-page" aria-labelledby="merge-result-heading">
+        <div className="merge-result-check" aria-hidden="true">✓</div>
+        <h1 id="merge-result-heading">Your PDFs have been merged!</h1>
+        <p className="merge-result-file">{output.name} · {formatBytes(output.blob.size)}</p>
+        <button ref={downloadButton} className="primary merge-result-download" onClick={onDownload}><Download size={26}/>Download merged PDF</button>
+        <div className="merge-result-secondary"><button className="link-button" onClick={onSettings}><ArrowLeft size={17}/>Back to files</button>{onSave&&<button className="link-button" onClick={onSave}><FolderOpen size={17}/>Save to My files</button>}</div>
+        {output.warnings?.map(warning=><p key={warning} role="status">{warning}</p>)}
+        {error&&<p className="native-error" role="alert">{error}</p>}
+        {previewContent&&<details className="merge-result-preview" onToggle={event=>setPreview(event.currentTarget.open)}><summary>Preview merged PDF</summary>{preview&&previewContent}</details>}
+        {onNextTool&&<div className="merge-result-next"><h2>Continue with this PDF</h2><div>{[['compress','Compress PDF'],['sign','Sign PDF'],['watermark','Add watermark']].map(([id,text])=><button key={id} className="secondary" onClick={()=>onNextTool(id)}>{text}</button>)}</div></div>}
+    </section>;
     return <Dialog open={open} onOpenChange={value=>{onOpenChange?.(value);if(!value)onSettings();}}><DialogContent className="result-dialog" onOpenAutoFocus={event=>{event.preventDefault();downloadButton.current?.focus();}}><section className="result-screen" aria-labelledby="result-heading">
         <div className="result-screen-success" aria-hidden="true">
             <span className="result-success-halo"/>

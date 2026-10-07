@@ -31,3 +31,22 @@
 [data-tool=merge] .action-bar .primary{background:#7045dc;color:white;min-width:180px}
 @media(max-width:900px){[data-tool=merge] .merge-document-grid{grid-template-columns:repeat(2,minmax(0,1fr))}}
 @media(max-width:600px){[data-tool=merge] .content{padding:18px 16px 0}[data-tool=merge] .tool-heading{flex-wrap:wrap}[data-tool=merge] .merge-document-grid{grid-template-columns:1fr;gap:14px}[data-tool=merge] .merge-cover{height:150px}[data-tool=merge] .merge-list-heading{gap:8px}[data-tool=merge] .merge-list-heading .secondary{white-space:nowrap}[data-tool=merge] .action-bar{bottom:8px;padding:12px;gap:8px}[data-tool=merge] .action-bar>div{width:auto}[data-tool=merge] .action-bar .primary{width:100%;min-height:48px}}
+
+[data-tool=merge] .task-workspace>.settings-panel[hidden]{display:none!important}
+[data-tool=merge] .task-workspace{grid-template-columns:minmax(0,1fr)!important}
+[data-tool=merge] .merge-document-card{cursor:grab}
+[data-tool=merge] .merge-document-card:active{cursor:grabbing}
+[data-tool=merge] .merge-document-card:focus-visible{outline:3px solid #7045dc;outline-offset:3px}
+[data-tool=merge] .merge-remove{margin-left:auto}
+[data-tool=merge] .merge-cover img{pointer-events:none;user-select:none}
+.merge-result-page{max-width:940px;margin:0 auto;padding:64px 24px 80px;text-align:center;min-height:65vh}
+.merge-result-check{width:56px;height:56px;display:grid;place-items:center;margin:0 auto 20px;border-radius:50%;background:#e1f6eb;color:#187644;font-size:30px}
+.merge-result-page h1{font-size:clamp(1.6rem,4vw,2.3rem);margin:0 0 12px}
+.merge-result-file{color:var(--muted);overflow-wrap:anywhere;margin-bottom:28px}
+.merge-result-download{display:inline-flex;align-items:center;justify-content:center;gap:12px;min-height:70px;padding:20px 32px;font-size:1.2rem;background:#7045dc;color:white;border-radius:14px}
+.merge-result-secondary{display:flex;justify-content:center;flex-wrap:wrap;gap:24px;margin:22px 0 36px}
+.merge-result-preview{text-align:left;border:1px solid var(--border);border-radius:12px;padding:16px;margin:24px 0}
+.merge-result-next{background:var(--card);border:1px solid var(--border);padding:24px;border-radius:16px;text-align:left;margin-top:36px}
+.merge-result-next h2{font-size:1rem;margin:0 0 16px}
+.merge-result-next>div{display:flex;flex-wrap:wrap;gap:12px}
+@media(max-width:600px){.merge-result-page{padding:36px 0 48px}.merge-result-download{width:100%;font-size:1rem;padding:16px}.merge-result-next>div{display:grid;grid-template-columns:1fr}.merge-result-secondary{gap:16px}}
