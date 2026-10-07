@@ -23,3 +23,14 @@
 .clean-edit-export{position:fixed;right:max(16px,env(safe-area-inset-right));bottom:max(16px,env(safe-area-inset-bottom));z-index:70;max-width:calc(100vw - 32px)}
 .clean-edit-export>.primary{width:auto!important;min-height:52px;border-radius:16px;padding:14px 20px;box-shadow:0 6px 24px #0003}
 .clean-edit-toolbar button:focus-visible,.clean-edit-panel button:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+
+
+@media(max-width:1099px){
+ .clean-edit-ready .content{padding-top:18px!important;padding-right:76px!important;padding-bottom:calc(100px + env(safe-area-inset-bottom))!important}
+ .clean-edit-toolbar{top:calc(88px + env(safe-area-inset-top));left:auto;right:max(12px,env(safe-area-inset-right));transform:none;flex-direction:column;padding:0;border:0;background:transparent;box-shadow:none;z-index:21}
+ .clean-edit-toolbar button{width:48px;height:48px;border-radius:50%;background:var(--card);box-shadow:0 3px 12px #00000012}
+ .clean-edit-toolbar button[aria-label="Add text or image"]{background:var(--primary);color:white}
+ .clean-edit-panel,.clean-edit-ready .properties{top:calc(88px + env(safe-area-inset-top));right:76px;width:min(360px,calc(100vw - 88px))!important;max-height:calc(100dvh - 200px - env(safe-area-inset-top) - env(safe-area-inset-bottom))}
+ .clean-edit-export{inset:auto 0 0;z-index:22;padding:12px 16px calc(12px + env(safe-area-inset-bottom));border-top:1px solid var(--border);background:var(--card);box-sizing:border-box;max-width:none}
+ .clean-edit-export>.primary{width:100%!important;min-height:52px;border-radius:12px;box-shadow:none}
+}
