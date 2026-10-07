@@ -61,7 +61,12 @@
 }
 
 @media(max-width:1099px){.studio-shell.sign-workspace.tool-action-ready.document-shell .content{padding-right:76px!important}}
-.sign-workspace .tool-heading{display:none}
+.sign-workspace.document-loaded .tool-heading{display:none}
 .sign-workspace .tool-note{font-size:12px}
 .sign-workspace .shared-tool-action-bar .sign-field-tray h2{display:none}
 .sign-workspace .shared-tool-action-bar .properties{position:static!important;padding:0!important;border:0!important}
+
+.studio-shell.sign-workspace.document-loaded .task-workspace{display:block!important;grid-template-columns:minmax(0,1fr)!important}
+.studio-shell.sign-workspace.document-loaded .editor-layout{grid-template-columns:100px minmax(0,1fr)!important;gap:18px!important}
+.studio-shell.sign-workspace.document-loaded .task-canvas{min-width:0;width:100%;grid-column:auto!important}
+@media(max-width:1099px){.studio-shell.sign-workspace.document-loaded .editor-layout{grid-template-columns:minmax(0,1fr)!important}.studio-shell.sign-workspace.document-loaded .edit-page-list{max-height:90px}}
