@@ -98,3 +98,22 @@
  [data-workspace=compact].document-loaded .action-bar{position:static!important;display:flex!important;flex-direction:column;align-items:stretch;gap:18px;margin-top:20px}
  [data-workspace=compact].document-loaded .action-bar>.settings-panel:not([hidden]){overflow:visible;flex:none;padding:0}
 }
+
+/* Optional controls are revealed by one settings icon. */
+[data-workspace=compact] .task-settings-disclosure{width:100%;min-width:0;min-height:0;flex:none;overflow:auto}
+[data-workspace=compact] .task-settings-disclosure[open]{flex:1 1 auto}
+[data-workspace=compact] .task-settings-disclosure>summary{display:flex;align-items:center;gap:8px;cursor:pointer;min-height:44px;padding:10px 12px;border:1px solid var(--border);border-radius:10px;background:var(--soft);color:var(--foreground);font-size:14px;list-style:none}
+[data-workspace=compact] .task-settings-disclosure>summary::-webkit-details-marker{display:none}
+[data-workspace=compact] .task-settings-disclosure>summary:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+[data-workspace=compact] .task-settings-disclosure>.settings-panel:not([hidden]){display:flex;flex-direction:column;position:static;inset:auto;min-height:0;width:100%;margin:0;padding:16px 0;border:0;overflow:visible;gap:16px;font-size:13px}
+[data-workspace=compact] .task-settings-disclosure .settings-panel>*{flex-shrink:0}
+[data-workspace=compact] .organize-page-details>summary[hidden]{display:none!important}
+[data-workspace=compact] .page-settings{border-top:1px solid var(--border);padding-top:12px;min-width:0}
+[data-workspace=compact] .page-settings>summary{cursor:pointer;min-height:36px;font-size:13px;color:var(--foreground)}
+[data-workspace=compact] .page-settings-controls{display:flex;flex-direction:column;gap:10px;padding-top:12px}
+[data-workspace=compact] .page-settings-controls>.row{display:flex;flex-direction:column;align-items:stretch;gap:10px}
+[data-workspace=compact] .page-settings-controls .secondary{width:100%;font-size:12px;padding:8px}
+[data-workspace=compact] .page-settings-controls label.row{flex-direction:row;align-items:center;justify-content:flex-start;font-size:13px}
+@media(max-width:1099px){[data-workspace=compact] .task-settings-disclosure[open]{flex:none;overflow:visible}}
+
+[data-workspace=compact] .task-settings-disclosure:not([open])>.settings-panel{display:none!important}
