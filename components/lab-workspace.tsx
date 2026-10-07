@@ -51,49 +51,6 @@ async function svgPNG(svg: string, width = 1800) {
     URL.revokeObjectURL(url);
   }
 }
-function SamplePage({ number = 1 }: { number?: number }) {
-  return (
-    <svg
-      className="lab-sample-page"
-      viewBox="0 0 420 570"
-      role="img"
-      aria-label="Example travel journal page"
-    >
-      <rect width="420" height="570" fill="#fffaf1" />
-      <text x="34" y="62" fill="#233c50" fontSize="16" letterSpacing="3">
-        FIELD NOTES / {number === 1 ? "01" : "02"}
-      </text>
-      <text x="34" y="112" fill="#263d51" fontSize="38" fontFamily="Georgia">
-        A slower kind
-      </text>
-      <text x="34" y="154" fill="#263d51" fontSize="38" fontFamily="Georgia">
-        of adventure.
-      </text>
-      <rect x="34" y="184" width="352" height="232" rx="5" fill="#d9eaf2" />
-      <circle cx="306" cy="230" r="25" fill="#ffbd88" />
-      <path
-        d="M34 350 L135 223 L247 365 L326 270 L386 352 V416 H34"
-        fill="#93b7af"
-      />
-      <path d="M34 390 L182 284 L299 400 L386 335 V416 H34" fill="#3c7972" />
-      <path d="M34 401 Q200 350 386 400 V416 H34" fill="#326287" />
-      <text x="34" y="455" fill="#537065" fontSize="14">
-        Small moments. Open skies. New stories.
-      </text>
-      {[481, 501, 521].map((y, i) => (
-        <line
-          key={y}
-          x1="34"
-          x2={i === 2 ? "276" : "386"}
-          y1={y}
-          y2={y}
-          stroke="#c7c9b7"
-          strokeWidth="3"
-        />
-      ))}
-    </svg>
-  );
-}
 function SwatchThemes({
   value,
   onChange,
@@ -961,8 +918,8 @@ export function LabWorkspace({ mode }: { mode: Mode }) {
                     )
                   ) : (
                     <>
-                      <SamplePage />
-                      {spread && <SamplePage number={2} />}
+                      <div className="lab-empty-preview">Choose your PDF to preview its pages.</div>
+                      
                     </>
                   )}
                 </div>
