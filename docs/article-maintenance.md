@@ -1,0 +1,5 @@
+# Article and screenshot maintenance
+
+Every tool functionality, button label, settings, or result-screen change must update its related guides in the same release. Review all registered articles for that tool, refresh affected instructions and FAQs, run a small reproducible test, and capture actual input/result screens with the pointer outside the capture. Result screenshots should focus on the result and download action, without the preview panel. Keep source samples and tested output in articles only, never action pages. Record tested date and browser; distinguish engine checks from live processing and mobile emulation from real-device checks. Do not claim a fresh test when reusing earlier evidence.
+
+Release checklist: check exact button labels and source order; verify downloaded page labels and count; update screenshots if behavior or visuals change; confirm desktop and mobile readability, sample links, tool CTAs, metadata, and sitemap; deploy and verify published URLs before proceeding to the next tool batch.
