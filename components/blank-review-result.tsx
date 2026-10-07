@@ -11,7 +11,7 @@ export function BlankReviewResult({output,totalPages,onReview,onDownload,onBack,
  const action=useRef<HTMLButtonElement>(null),[pdf,setPDF]=useState<PDFDocumentProxy>(),[previewError,setPreviewError]=useState('');
  useEffect(()=>{action.current?.focus({preventScroll:true});},[]);
  useEffect(()=>{if(!count)return;let active=true;let opened:PDFDocumentProxy|undefined;void(async()=>{try{opened=await renderer(new Uint8Array(await output.blob.arrayBuffer()));if(active)setPDF(opened);else await opened.destroy();}catch{if(active)setPreviewError('Preview unavailable. Open page review to inspect these pages.');}})();return()=>{active=false;if(opened)void opened.destroy();};},[output,count]);
- return <section className="blank-result" aria-labelledby="export-result-heading">
+ return <section className="blank-result export-result-page" aria-labelledby="export-result-heading">
   <button className="blank-back" onClick={onBack}><ArrowLeft size={16}/>Back to document</button>
   <header className="blank-result-heading"><span className="blank-result-symbol" aria-hidden="true">{count?<ScanSearch size={24}/>:<Check size={24}/>}</span><div><p className="blank-result-eyebrow">BLANK PAGE CHECK</p><h1 id="export-result-heading">{count?`${count} ${count===1?'page needs':'pages need'} a closer look`:'No blank pages found'}</h1><p>{count?'Check the pages below before removing anything.':'Every page contains text or visible content.'}</p></div></header>
   <div className="blank-result-body"><section className="blank-candidates" aria-label="Candidate page previews">
