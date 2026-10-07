@@ -1,3 +1,4 @@
+import {exportFilename} from '@/lib/export-filename';
 import {lineSegments,type ShapePoint} from './shape-geometry';
 import {formattedNumber,labelText} from './task-labels';
 import {workflowOperations,workflowStepIssue} from './workflow-recipes';
@@ -328,7 +329,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     }
     if (id === 'zip') {
         const z = new JSZip();
-        files.forEach((f, i) => z.file(`${i + 1}-${f.name}`, f.bytes));
+        files.forEach((f, i) => z.file(exportFilename(id,f.name,String(i+1)), f.bytes));
         return { blob: await z.generateAsync({ type: 'blob' }), name: 'documents.zip' };
     }
     if (['text', 'word', 'html', 'epub', 'csv', 'xlsx', 'audio', 'privacy'].includes(id)) {
@@ -391,7 +392,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if(['images','scan'].includes(id)&&o.imagePaper&&o.imagePaper!=='original'){const sheet=resizeSheet({resizeSize:o.imagePaper,resizeOrientation:o.imageOrientation}),margin=Number(o.imageMargin??20);if(!Number.isFinite(margin)||margin<0||margin>100)throw new Error('Choose an image margin between 0 and 100 pt.');const d=await PDFDocument.create();for(const item of order){const f=files.find(f=>f.id===item.fileId);if(!f?.image)throw new Error('Choose images for this conversion.');const image=await d.embedPng(f.image),p=d.addPage(sheet),scale=Math.min((sheet[0]-margin*2)/image.width,(sheet[1]-margin*2)/image.height);p.drawImage(image,{x:(sheet[0]-image.width*scale)/2,y:(sheet[1]-image.height*scale)/2,width:image.width*scale,height:image.height*scale});p.setRotation(degrees(item.rotation));}return result(await d.save(),`${filename}-images.pdf`,undefined,`${d.getPageCount()} image pages on ${o.imagePaper} sheets. Text recognition was not performed.`);}
     if(id==='split-chapters'){
       if(out.getForm().getFields().length)throw new Error('Flatten fillable fields before splitting chapters, then reopen the result. Editable fields cannot safely be copied into chapter files.');
-      const bytes=await out.save();const d=await renderer(bytes);try{const outline=await d.getOutline();if(!outline?.length)throw new Error('This PDF has no top-level bookmarks. Add bookmarks first, or use Split with page ranges.');const starts=new Set<number>([0]);for(const row of outline){signal?.throwIfAborted();let dest=row.dest;if(typeof dest==='string')dest=await d.getDestination(dest);if(Array.isArray(dest)){const n=typeof dest[0]==='number'?dest[0]:await d.getPageIndex(dest[0]);if(n>=0&&n<out.getPageCount())starts.add(n);}}if(starts.size===1)throw new Error('No usable chapter boundaries were found. Use Split with page ranges instead.');const bounds=[...starts].sort((a,b)=>a-b);bounds.push(out.getPageCount());const zip=new JSZip();for(let i=0;i<bounds.length-1;i++){const part=await PDFDocument.create();const copied=await part.copyPages(out,Array.from({length:bounds[i+1]-bounds[i]},(_,n)=>bounds[i]+n));copied.forEach(p=>part.addPage(p));zip.file(`chapter-${i+1}-pages-${bounds[i]+1}-${bounds[i+1]}.pdf`,await part.save());progress(Math.round((i+1)/(bounds.length-1)*100));}return{blob:await zip.generateAsync({type:'blob'}),name:`${filename}-chapters.zip`,report:'Split at supported top-level bookmark destinations. Inspect chapter boundaries before sharing.'};}finally{await d.destroy();}
+      const bytes=await out.save();const d=await renderer(bytes);try{const outline=await d.getOutline();if(!outline?.length)throw new Error('This PDF has no top-level bookmarks. Add bookmarks first, or use Split with page ranges.');const starts=new Set<number>([0]);for(const row of outline){signal?.throwIfAborted();let dest=row.dest;if(typeof dest==='string')dest=await d.getDestination(dest);if(Array.isArray(dest)){const n=typeof dest[0]==='number'?dest[0]:await d.getPageIndex(dest[0]);if(n>=0&&n<out.getPageCount())starts.add(n);}}if(starts.size===1)throw new Error('No usable chapter boundaries were found. Use Split with page ranges instead.');const bounds=[...starts].sort((a,b)=>a-b);bounds.push(out.getPageCount());const zip=new JSZip();for(let i=0;i<bounds.length-1;i++){const part=await PDFDocument.create();const copied=await part.copyPages(out,Array.from({length:bounds[i+1]-bounds[i]},(_,n)=>bounds[i]+n));copied.forEach(p=>part.addPage(p));zip.file(exportFilename(id,'chapter.pdf',`Chapter ${i+1} pages ${bounds[i]+1}-${bounds[i+1]}`),await part.save());progress(Math.round((i+1)/(bounds.length-1)*100));}return{blob:await zip.generateAsync({type:'blob'}),name:`${filename}-chapters.zip`,report:'Split at supported top-level bookmark destinations. Inspect chapter boundaries before sharing.'};}finally{await d.destroy();}
     }
     if(id==='blank-check'){
       const bytes=unchanged?first.bytes:await out.save();const candidates:number[]=[];for(let i=0;i<out.getPageCount();i++){const c=await renderPage(bytes,i,.3,undefined,0,signal);try{const ctx=c.getContext('2d')!;const data=ctx.getImageData(0,0,c.width,c.height).data;let dark=0;for(let n=0;n<data.length;n+=4)if(data[n]<245||data[n+1]<245||data[n+2]<245)dark++;if(dark/(c.width*c.height)<.001)candidates.push(i+1);}finally{c.width=0;c.height=0;}progress(Math.round((i+1)/out.getPageCount()*100));}return result(bytes,`${filename}-blank-review.pdf`,undefined,candidates.length?`Possible blank pages: ${candidates.join(', ')}. No pages were deleted. Low-resolution analysis can miss faint or small content. Inspect each candidate in Organize before removing it.`:'No likely blank pages found. No pages were deleted; faint content and scan noise can affect detection.');
@@ -405,7 +406,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if(id==='split'&&o.splitOutput==='groups'){
         if(out.getForm().getFields().length||hasFormWidgets(out))throw new Error('This PDF has fillable fields. Make them read-only in Flatten PDF first, then split the result.');
         const groups=splitGroups(o.range,out.getPageCount()),zip=new JSZip();
-        for(let i=0;i<groups.length;i++){signal?.throwIfAborted();const part=await PDFDocument.create();const copied=await part.copyPages(out,groups[i]);copied.forEach(page=>part.addPage(page));zip.file(`group-${i+1}.pdf`,await part.save());progress(Math.round((i+1)/groups.length*100));}
+        for(let i=0;i<groups.length;i++){signal?.throwIfAborted();const part=await PDFDocument.create();const copied=await part.copyPages(out,groups[i]);copied.forEach(page=>part.addPage(page));zip.file(exportFilename(id,`group-${i+1}.pdf`,`Group ${i+1}`),await part.save());progress(Math.round((i+1)/groups.length*100));}
         return {blob:await zip.generateAsync({type:'blob'}),name:`${filename}-groups.zip`,report:`${groups.length} PDF groups. Repeated pages across different groups are included in each group.`};
     }
     if (id === 'split-all'||id==='split'&&o.splitOutput==='separate') {
@@ -414,7 +415,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         for (let i = 0; i < out.getPageCount(); i++) {
             const d = await PDFDocument.create();
             d.addPage((await d.copyPages(out, [i]))[0]);
-            z.file(`page-${id==='split'?items.indexOf(order[i])+1:i+1}.pdf`, await d.save());
+            z.file(exportFilename(id,'page.pdf',`Page ${id==='split'?items.indexOf(order[i])+1:i+1}`), await d.save());
         }
         return { blob: await z.generateAsync({ type: 'blob' }), name: `${filename}-pages.zip` };
     }
@@ -478,7 +479,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
                 const jpg = ['jpg','png','webp','pptx'].includes(id)?c.toDataURL(id === 'png' ? 'image/png' : id==='webp'?'image/webp':'image/jpeg', .92):'';
                 if (['jpg','png','webp'].includes(id)) {
                     if(id==='webp'&&!jpg.startsWith('data:image/webp'))throw new Error('This browser cannot encode WebP. Choose PDF to PNG or JPG instead.');
-                    z.file(`page-${i + 1}.${id}`, jpg.split(',')[1], { base64: true });
+                    z.file(exportFilename(id,`page.${id}`,`Page ${i+1}`), jpg.split(',')[1], { base64: true });
                 }
                 else if (ppt) {
                     const s = ppt.addSlide();
@@ -661,7 +662,8 @@ export function wrapText(text:string,font:{widthOfTextAtSize:(v:string,s:number)
 
 /** Do not report success for invalid PDF bytes or complete unexpected blank output. */
 export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks:Mark[],o:Options,progress:(n:number)=>void,signal?:AbortSignal):Promise<Output>{
- const output=await processPDFUnchecked(id,files,items,marks,o,progress,signal);
+ const rawOutput=await processPDFUnchecked(id,files,items,marks,o,progress,signal);
+ const output={...rawOutput,name:exportFilename(id,rawOutput.name,'',files[0]?.name??rawOutput.name)};
  if(output.blob.type!=='application/pdf'||id==='encrypt')return output;
  signal?.throwIfAborted();
  const bytes=new Uint8Array(await output.blob.arrayBuffer());
@@ -689,4 +691,5 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
  await rejectBlankOutput(outputPages,sourcePages,probe,signal);
  return output;
 }
+
 
