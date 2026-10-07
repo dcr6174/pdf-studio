@@ -182,3 +182,11 @@
 .studio-shell .edit-page-rail .rail-page-controls select{width:100%;min-width:0;min-height:32px;padding:3px;font-size:12px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--foreground);font-variant-numeric:tabular-nums}
 .studio-shell .edit-page-rail .rail-page-total{font-size:11px;white-space:nowrap;font-variant-numeric:tabular-nums}
 .studio-shell .edit-page-rail .rail-page-controls button:focus-visible,.studio-shell .edit-page-rail .rail-page-controls select:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+
+
+/* Shared sidebar owns the export action, including the dedicated rotate canvas. */
+.tool-action-ready .rotate-save-bar{display:none}
+@media(min-width:1100px){
+ .studio-shell.tool-action-ready.document-shell .content:not(:has(.export-result-page)){padding-bottom:24px!important}
+ .shared-tool-action-bar .workspace-inline-organize .page-settings-controls{max-height:none;overflow:visible}
+}
