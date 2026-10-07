@@ -70,3 +70,6 @@
 .studio-shell.sign-workspace.document-loaded .editor-layout{grid-template-columns:100px minmax(0,1fr)!important;gap:18px!important}
 .studio-shell.sign-workspace.document-loaded .task-canvas{min-width:0;width:100%;grid-column:auto!important}
 @media(max-width:1099px){.studio-shell.sign-workspace.document-loaded .editor-layout{grid-template-columns:minmax(0,1fr)!important}.studio-shell.sign-workspace.document-loaded .edit-page-list{max-height:90px}}
+
+/* Keep mobile signing focused on the active PDF page. */
+@media(max-width:1099px){.studio-shell.sign-workspace.document-loaded .edit-page-rail{display:none!important}}
