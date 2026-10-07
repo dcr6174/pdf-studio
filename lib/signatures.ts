@@ -1,18 +1,22 @@
 /** Crop transparent margins only; never erase white or coloured pixels. */
 export function trimSignature(canvas:HTMLCanvasElement){const ctx=canvas.getContext('2d')!;const {width:w,height:h}=canvas;const data=ctx.getImageData(0,0,w,h).data;let left=w,top=h,right=-1,bottom=-1;for(let y=0;y<h;y++)for(let x=0;x<w;x++)if(data[(y*w+x)*4+3]>0){left=Math.min(left,x);right=Math.max(right,x);top=Math.min(top,y);bottom=Math.max(bottom,y);}if(right<left)throw new Error('This image has no visible signature.');const result=document.createElement('canvas');result.width=right-left+17;result.height=bottom-top+17;result.getContext('2d')!.drawImage(canvas,left,top,right-left+1,bottom-top+1,8,8,right-left+1,bottom-top+1);return result.toDataURL('image/png');}
-export type SignatureStyle='serif'|'sans-serif'|'monospace'|'dancing'|'vibes'|'caveat'|'apple'|'allura'|'sacramento';
+export type SignatureStyle='serif'|'sans-serif'|'monospace'|'dancing'|'vibes'|'caveat'|'apple'|'allura'|'sacramento'|'alexbrush'|'parisienne'|'tangerine'|'pinyon';
 export const signatureStyles:{id:SignatureStyle;label:string;font:string;file?:string;weight?:string;size:number}[]=[
-{id:'serif',label:'Classic',font:'serif',size:64},
-{id:'sans-serif',label:'Simple',font:'sans-serif',size:64},
-{id:'monospace',label:'Typewriter',font:'monospace',size:64},
+{id:'alexbrush',label:'Alex Brush · flowing',font:'PDFS Alex Brush',file:'AlexBrush-Regular.ttf',size:80},
+{id:'parisienne',label:'Parisienne · elegant',font:'PDFS Parisienne',file:'Parisienne-Regular.ttf',size:78},
+{id:'pinyon',label:'Pinyon Script · formal',font:'PDFS Pinyon Script',file:'PinyonScript-Regular.ttf',size:82},
+{id:'tangerine',label:'Tangerine · fine script',font:'PDFS Tangerine',file:'Tangerine-Regular.ttf',size:88},
 {id:'dancing',label:'Dancing',font:'PDFS Dancing Script',file:'DancingScript.ttf',weight:'400 700',size:72},
 {id:'vibes',label:'Elegant',font:'PDFS Great Vibes',file:'GreatVibes-Regular.ttf',size:76},
 {id:'caveat',label:'Casual',font:'PDFS Caveat',file:'Caveat.ttf',weight:'400 700',size:76},
 {id:'apple',label:'Marker',font:'PDFS Homemade Apple',file:'HomemadeApple-Regular.ttf',size:54},
 {id:'allura',label:'Formal',font:'PDFS Allura',file:'Allura-Regular.ttf',size:80},
-{id:'sacramento',label:'Slim',font:'PDFS Sacramento',file:'Sacramento-Regular.ttf',size:84}];
+{id:'sacramento',label:'Slim',font:'PDFS Sacramento',file:'Sacramento-Regular.ttf',size:84},
+{id:'serif',label:'Classic',font:'serif',size:64},
+{id:'sans-serif',label:'Simple',font:'sans-serif',size:64},
+{id:'monospace',label:'Typewriter',font:'monospace',size:64}];
 const loaded=new Map<string,Promise<void>>();
 /** Loads a bundled signature font once. Rejects if the font file cannot be loaded, so a wrong fallback font is never drawn. */
 export function loadSignatureFont(style:SignatureStyle){const def=signatureStyles.find(x=>x.id===style)!;if(!def.file)return Promise.resolve();let p=loaded.get(def.id);if(!p){p=new FontFace(def.font,`url(/fonts/${def.file})`,def.weight?{weight:def.weight}:undefined).load().then(face=>{document.fonts.add(face);});p.catch(()=>loaded.delete(def.id));loaded.set(def.id,p);}return p;}
-export function signatureFromName(name:string,style:SignatureStyle='serif',color='#172638'){const def=signatureStyles.find(x=>x.id===style)||signatureStyles[0];const c=document.createElement('canvas');const text=name.trim();c.width=900;c.height=260;const ctx=c.getContext('2d')!;ctx.font=def.file?`${def.size}px "${def.font}"`:`italic ${def.size}px ${def.font}`;ctx.fillStyle=/^#[0-9a-f]{6}$/i.test(color)?color:'#172638';ctx.fillText(text,24,160,850);return trimSignature(c);}
+export function signatureFromName(name:string,style:SignatureStyle='alexbrush',color='#172638'){const def=signatureStyles.find(x=>x.id===style)||signatureStyles[0];const c=document.createElement('canvas');const text=name.trim();c.width=900;c.height=260;const ctx=c.getContext('2d')!;ctx.font=def.file?`${def.size}px "${def.font}"`:`italic ${def.size}px ${def.font}`;ctx.fillStyle=/^#[0-9a-f]{6}$/i.test(color)?color:'#172638';ctx.fillText(text,24,160,850);return trimSignature(c);}
 export async function signatureFromFile(file:File){if(file.size>10*1024*1024)throw new Error('Choose an image below 10.5 MB.');if(!/\.(png|jpe?g|webp)$/i.test(file.name))throw new Error('Choose a PNG, JPG or WebP image.');const header=new Uint8Array(await file.slice(0,12).arrayBuffer());const magic=(header[0]===137&&header[1]===80&&header[2]===78&&header[3]===71&&header[4]===13&&header[5]===10&&header[6]===26&&header[7]===10)||(header[0]===255&&header[1]===216&&header[2]===255)||(String.fromCharCode(...header.slice(0,4))==='RIFF'&&String.fromCharCode(...header.slice(8,12))==='WEBP');if(!magic)throw new Error('This is not a valid PNG, JPG or WebP image.');if(header[0]===137){if(file.size<24)throw new Error('This PNG image is incomplete.');const size=new DataView(await file.slice(16,24).arrayBuffer());if(size.getUint32(0)*size.getUint32(4)>12000000)throw new Error('Choose an image below 12 megapixels.');}const bitmap=await createImageBitmap(file).catch(()=>{throw new Error('This image could not be decoded. Choose another PNG, JPG or WebP.');});try{if(bitmap.width*bitmap.height>12000000)throw new Error('Choose an image below 12 megapixels.');const c=document.createElement('canvas');c.width=bitmap.width;c.height=bitmap.height;c.getContext('2d')!.drawImage(bitmap,0,0);return trimSignature(c);}finally{bitmap.close();}}

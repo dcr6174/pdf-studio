@@ -28,7 +28,7 @@ export function copySigningMark<T extends SigningMark>(marks:readonly T[],mark:T
   const targets=resolveSigningPages(pages,mark.pageId,scope,range);
   const group=mark.signatureGroup??mark.id;
   const source={...mark,signatureGroup:group} as T;
-  const copies=targets.filter(page=>page.id!==mark.pageId).map(page=>({...source,id:createId(),pageId:page.id}) as T);
-  return {marks:[...marks.filter(item=>item.signatureGroup!==group&&item.id!==mark.id),source,...copies],pageCount:targets.length};
+  const copies=targets.map((page,index)=>({...source,id:page.id===mark.pageId||(!targets.some(p=>p.id===mark.pageId)&&index===0)?mark.id:createId(),pageId:page.id}) as T);
+  return {marks:[...marks.filter(item=>item.signatureGroup!==group&&item.id!==mark.id),...copies],pageCount:targets.length};
 }
 

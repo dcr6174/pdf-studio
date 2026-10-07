@@ -17,9 +17,10 @@ const mark={id:'sig1',pageId:'p2',kind:'image',image:'data:image/png;base64,abc'
 const unrelated={id:'text1',pageId:'p1',kind:'text',text:'Other field'};
 const first=copySigningMark([mark,unrelated],mark,pages,'all','',()=> 'copy');
 assert.equal(first.pageCount,4);
-assert.deepEqual(first.marks.map(m=>m.pageId),['p1','p2','p1','p3','p4']);
+assert.deepEqual(first.marks.map(m=>m.pageId),['p1','p1','p2','p3','p4']);
 assert.equal(first.marks[0].id,'text1');
 assert.ok(first.marks.slice(1).every(m=>m.signatureGroup==='sig1'));
 const repeated=copySigningMark(first.marks,first.marks.find(m=>m.id==='sig1'),pages,'custom','3-4',()=> 'next');
-assert.deepEqual(repeated.marks.filter(m=>m.signatureGroup==='sig1').map(m=>m.pageId),['p2','p3','p4']);
-console.log('PASS: signing page scope selection, range validation, source retention, repeated application and unrelated marks.');
+assert.deepEqual(repeated.marks.filter(m=>m.signatureGroup==='sig1').map(m=>m.pageId),['p3','p4']);
+console.log('PASS: signing page scope selection, range validation, exact target pages, repeated application and unrelated marks.');
+
