@@ -48,6 +48,8 @@ export type Mark = {
     url?: string;
     image?: string;
     readerOnly?:boolean;
+    strokeWidth?:number;
+    sketch?:{points:ShapePoint[];width:number;height:number};
     color: string;
     fontSize: number;
     opacity?:number;
@@ -633,13 +635,13 @@ export async function applyMarks(out:PDFDocument,order:PageItem[],marks:Mark[],s
     let lines:string[];try{lines=wrapText(m.text??'',markFont,m.fontSize,ww);}catch{throw new Error('This font cannot display some characters. Choose Unicode (Noto Sans).');}const lineHeight=m.fontSize*1.2;
     if(lines.length*lineHeight>hh+1)throw new Error('A text box is too small for its text. Increase its height or reduce the font size.');
     for(let n=0;n<lines.length;n++){const text=lines[n],width=markFont.widthOfTextAtSize(text,m.fontSize),offset=m.align==='center'?(ww-width)/2:m.align==='right'?ww-width:0,baseline=yy+hh-m.fontSize-n*lineHeight;p.drawText(text,{x:xx+offset,y:baseline,size:m.fontSize,font:markFont,color,opacity:Math.max(0,Math.min(1,m.opacity??1))});if(m.strike&&text)p.drawLine({start:{x:xx+offset,y:baseline+m.fontSize*.3},end:{x:xx+offset+width,y:baseline+m.fontSize*.3},thickness:Math.max(.5,m.fontSize/16),color});if(m.underline&&text)p.drawLine({start:{x:xx+offset,y:baseline-m.fontSize*.12},end:{x:xx+offset+width,y:baseline-m.fontSize*.12},thickness:Math.max(.5,m.fontSize/16),color});}
-   }else if(m.kind==='highlight')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,color,opacity:.25});
+   }else if(m.kind==='highlight')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,color,opacity:Math.max(.1,Math.min(.9,m.opacity??.25))});
    else if(m.kind==='whiteout')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,color});
    else if(m.kind==='line'||m.kind==='arrow'){
-    for(const segment of lineSegments(m.lineStart,m.lineEnd,ww,hh,m.kind==='arrow'))p.drawLine({start:{x:xx+segment.start.x,y:yy+hh-segment.start.y},end:{x:xx+segment.end.x,y:yy+hh-segment.end.y},thickness:2,color});
+    for(const segment of lineSegments(m.lineStart,m.lineEnd,ww,hh,m.kind==='arrow'))p.drawLine({start:{x:xx+segment.start.x,y:yy+hh-segment.start.y},end:{x:xx+segment.end.x,y:yy+hh-segment.end.y},thickness:Math.max(.5,Math.min(24,m.strokeWidth??2)),color});
    }
-   else if(m.kind==='rectangle')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,borderColor:color,borderWidth:2});
-   else if(m.kind==='ellipse')p.drawEllipse({x:xx+ww/2,y:yy+hh/2,xScale:ww/2,yScale:hh/2,borderColor:color,borderWidth:2});
+   else if(m.kind==='rectangle')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,borderColor:color,borderWidth:Math.max(.5,Math.min(24,m.strokeWidth??2))});
+   else if(m.kind==='ellipse')p.drawEllipse({x:xx+ww/2,y:yy+hh/2,xScale:ww/2,yScale:hh/2,borderColor:color,borderWidth:Math.max(.5,Math.min(24,m.strokeWidth??2))});
    else if(m.kind==='image'&&m.image){const image=await out.embedPng(m.image);p.drawImage(image,{x:xx,y:yy,width:ww,height:hh});}
    else if(m.kind==='link')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,borderColor:color,borderWidth:1});
    p.pushOperators(popGraphicsState());
@@ -687,3 +689,4 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
  await rejectBlankOutput(outputPages,sourcePages,probe,signal);
  return output;
 }
+
