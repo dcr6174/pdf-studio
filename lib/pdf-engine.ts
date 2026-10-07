@@ -2,6 +2,7 @@ import {exportFilename} from '@/lib/export-filename';
 import {lineSegments,type ShapePoint} from './shape-geometry';
 import {formattedNumber,labelText} from './task-labels';
 import {workflowOperations,workflowStepIssue} from './workflow-recipes';
+import {ocrWorkerOptions} from './ocr-worker-options';
 import {taskInputIssue} from './task-readiness';
 import {readFormFields,applyFormValues,flattenVisibleForm,type FormValue} from './pdf-forms';
 import {markRotation} from './mark-rotation';
@@ -172,6 +173,7 @@ finally {
 export async function loadFile(file: File,allowEncryptedReader=false): Promise<Loaded> { file=normalizeCameraFile(file); const bytes = new Uint8Array(await file.arrayBuffer()); const base = { id: crypto.randomUUID(), name: file.name, bytes, size: file.size, pages: 0 }; if (/\.pdf$/i.test(file.name)) {
     if(!new TextDecoder().decode(bytes.slice(0,1024)).includes('%PDF-'))throw new Error('This file is not a PDF. Choose a valid PDF document.');
     let doc:PDFDocument;try{doc=await PDFDocument.load(bytes,{updateMetadata:false});}catch(e){if(String(e).toLowerCase().includes('encrypt')&&allowEncryptedReader)return {...base,readerOnly:true};if(String(e).toLowerCase().includes('encrypt'))throw new Error('This PDF is password protected. Use Remove password with a password you know, then continue editing.');throw new Error('This PDF could not be read. It may be damaged. Try a readable copy or another PDF reader.');}
+    if(!doc.getPageCount())throw new Error('This PDF has no readable pages. Choose another PDF.');
     return { ...base, doc, pages: doc.getPageCount() };
 } if (/\.(png|jpe?g|webp)$/i.test(file.name)) {
     // PNG dimensions can be checked before decoding; all formats are checked before canvas allocation.
@@ -222,7 +224,7 @@ export async function assemble(files: Loaded[], items: PageItem[], signal?:Abort
     }
 } if(files.length===1&&files[0].doc){const d=files[0].doc;out.setTitle(d.getTitle()??'');out.setAuthor(d.getAuthor()??'');out.setSubject(d.getSubject()??'');out.setKeywords((d.getKeywords()??'').split(/,\s*/));} return out; }
 export const fields = readFormFields;
-async function plainPDF(text: string, markdown = false) { const { jsPDF } = await import('jspdf'); const p = new jsPDF(); const font = await fetch('/fonts/NotoSans-Regular.ttf'); if (!font.ok)
+async function plainPDF(text: string, markdown = false) { if(markdown)return (await import('./markdown-pdf')).markdownPDF(text); const { jsPDF } = await import('jspdf'); const p = new jsPDF(); const font = await fetch('/fonts/NotoSans-Regular.ttf'); if (!font.ok)
     throw new Error('The document font could not be loaded. Please try again.'); const arr = new Uint8Array(await font.arrayBuffer()); let binary = ''; for (let i = 0; i < arr.length; i++)
     binary += String.fromCharCode(arr[i]); p.addFileToVFS('NotoSans.ttf', btoa(binary)); p.addFont('NotoSans.ttf', 'NotoSans', 'normal'); p.setFont('NotoSans'); p.setFontSize(11); let y = 23; for (const raw of text.split('\n')) {
     const heading = markdown && /^#{1,3} /.test(raw);
@@ -254,7 +256,8 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         if(step.id==='remove'){const removed=new Set(ranges(step.settings.range??'',currentPages.length));stepPages=currentPages.filter((_,n)=>!removed.has(n));target='organize';}
         if(step.id==='reorder'){stepPages=ranges(step.settings.range??'',currentPages.length).map(n=>currentPages[n]);target='organize';}
         if(step.id==='blank'){const d=await assemble(currentFiles,currentPages,signal,o.flattenForm);const at=Number(step.settings.blankAt??1)-1;d.insertPage(at,[595.28,841.89]);const bytes=await d.save(),file:Loaded={...currentFiles[0],id:crypto.randomUUID(),bytes,size:bytes.length,pages:d.getPageCount(),doc:d};stepFiles=[file];stepPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));target='organize';}
-        try{output=await processPDF(target,stepFiles,stepPages,currentMarks,{...o,range:'',resizeRange:'',quality:'compact',angle:'90',...step.settings},n=>progress(Math.round((i*100+n)/steps.length)),signal);}catch(e){if(signal?.aborted)throw e;throw new Error(`Step ${i+1} (${step.id}) failed: ${e instanceof Error?e.message:'Could not process this step.'} Your original workspace is retained.`);}
+        const stepMarks=step.id==='watermark'?[...currentMarks,...stepPages.map(page=>({id:crypto.randomUUID(),pageId:page.id,kind:'text' as const,x:.175,y:.44,w:.65,h:.12,text:step.settings.text??'DRAFT',color:'#1a293b',fontSize:32,opacity:.22,watermark:true,angle:Number(step.settings.angle??45)}))]:currentMarks;
+        try{output=await processPDF(target,stepFiles,stepPages,stepMarks,{...o,range:'',resizeRange:'',quality:'compact',angle:'90',...step.settings},n=>progress(Math.round((i*100+n)/steps.length)),signal);}catch(e){if(signal?.aborted)throw e;throw new Error(`Step ${i+1} (${step.id}) failed: ${e instanceof Error?e.message:'Could not process this step.'} Your original workspace is retained.`);}
         timings.push(`Step ${i+1}: ${step.id} - completed in ${((Date.now()-started)/1000).toFixed(1)}s`);if(output.report)reports.push(output.report);
         const bytes=new Uint8Array(await output.blob.arrayBuffer()),doc=await PDFDocument.load(bytes,{updateMetadata:false}),file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];
       }
@@ -315,17 +318,14 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         return result(`${first.name}\nSHA-256: ${report}\n`, `${filename}-sha256.txt`, 'text/plain', report);
     }
     if (['encrypt', 'decrypt'].includes(id)) {
+        if(id==='decrypt'){const {unlockPDF}=await import('./unlock-pdf');return result(await unlockPDF(first.bytes,o.password),`${filename}-unlocked.pdf`);}
         const { PDF } = await import('@libpdf/core');
         const p = await PDF.load(first.bytes, { credentials: o.password });
         if (p.isEncrypted && !p.isAuthenticated)
             throw new Error('The password is incorrect. Please try again.');
-        if (id === 'encrypt') {
-            if (o.password.length < 8)
-                throw new Error('Use a password with at least 8 characters.');
-            p.setProtection({ userPassword: o.password, ownerPassword: crypto.randomUUID(), algorithm: 'AES-256' });
-        }
-        else{if(!p.isEncrypted)return result(first.bytes,`${filename}-unlocked.pdf`,undefined,'No password to remove. The original PDF is already unencrypted.');p.removeProtection();}
-        return result(await p.save(), `${filename}-${id === 'encrypt' ? 'protected' : 'unlocked'}.pdf`);
+        if (o.password.length < 8)throw new Error('Use a password with at least 8 characters.');
+        p.setProtection({userPassword:o.password,ownerPassword:crypto.randomUUID(),algorithm:'AES-256'});
+        return result(await p.save(),`${filename}-protected.pdf`);
     }
     if (id === 'zip') {
         const z = new JSZip();
@@ -492,7 +492,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
                     const page = raster.addPage([visible.width,visible.height]);
                     page.drawImage(img, { x: 0, y: 0, width: page.getWidth(), height: page.getHeight() });
                     if (id==='ocr' && font) {
-                        if(!worker)worker = await (await import('tesseract.js')).createWorker(['eng','fra','deu','spa','ita','por'].includes(o.ocrLanguage??'eng')?(o.ocrLanguage??'eng'):'eng', 1, { logger: m => { if (m.status === 'recognizing text')
+                        if(!worker)worker = await (await import('tesseract.js')).createWorker(['eng','fra','deu','spa','ita','por'].includes(o.ocrLanguage??'eng')?(o.ocrLanguage??'eng'):'eng', 1, { ...ocrWorkerOptions,logger: m => { if (m.status === 'recognizing text')
                         reportProgress(Math.round(m.progress * 80) + 10); } });
 
                         const review:NonNullable<import('./ocr-review').OCRReviewPage>={width:page.getWidth(),height:page.getHeight(),image:c.toDataURL('image/jpeg',.9),words:[]};ocrReview.push(review);
@@ -574,9 +574,10 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             throw new Error('The editor font could not be loaded. Please try again.');
         font = await out.embedFont(await response.arrayBuffer(), { subset: true });
     }
+    const rotatePages=id==='rotate'?new Set(ranges(o.range,out.getPageCount())):undefined;
     for (let i = 0; i < out.getPageCount(); i++) {
         const p = out.getPage(i);
-        if (id === 'rotate')
+        if (id === 'rotate'&&rotatePages?.has(i))
             p.setRotation(degrees((p.getRotation().angle + Number(o.angle)) % 360));
         if (id === 'crop') {
             const box=p.getCropBox(),left=Number(o.cropLeft??o.margin),right=Number(o.cropRight??o.margin),top=Number(o.cropTop??o.margin),bottom=Number(o.cropBottom??o.margin);
@@ -698,7 +699,7 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
 export async function previewPDF(id:string,files:Loaded[],items:PageItem[],o:Options,offset:number,total:number,signal?:AbortSignal):Promise<Output>{
  if(!['crop','nup','numbers','bates','headers','flip','grayscale','invert','rotate','halve'].includes(id))throw new Error('Unsupported preview.');
  if(items.length>(id==='nup'?9:1))throw new Error('Preview page limit exceeded.');
- const labels=['numbers','bates','headers'].includes(id);
+ const labels=['numbers','bates','headers','rotate'].includes(id);
  const selected=!labels||ranges(o.range,total).includes(offset);
  return processPDFUnchecked(selected?id:'rotate',files,items,[],{...o,range:'',...(!selected?{angle:'0'}:{})},()=>{},signal,{offset,total});
 }
