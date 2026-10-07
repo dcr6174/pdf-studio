@@ -1,0 +1,20 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import ts from 'typescript';
+import {createRequire} from 'node:module';
+import {PDFDocument,StandardFonts} from 'pdf-lib';
+const require=createRequire(import.meta.url),effects=[];
+const exports={};
+new Function('exports','require',ts.transpileModule(fs.readFileSync('components/inline-pdf-text.tsx','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,jsx:ts.JsxEmit.ReactJSX,target:ts.ScriptTarget.ES2020}}).outputText)(exports,name=>name==='react'?{useRef:()=>({current:null}),useLayoutEffect:fn=>effects.push(fn)}:require(name));
+let value='',finished=0,focused=0,selection;
+const field=exports.InlinePdfText({text:'Existing text',onChange:text=>value=text,onFinish:()=>finished++});
+field.props.ref.current={value:'Existing text',focus:()=>focused++,setSelectionRange:(a,b)=>selection=[a,b],blur:()=>field.props.onBlur()};
+effects.forEach(fn=>fn());assert.equal(focused,1);assert.deepEqual(selection,[13,13]);assert.equal(field.props.autoFocus,true);
+field.props.onChange({target:{value:'Hello PDF\nSecond line'}});assert.equal(value,'Hello PDF\nSecond line');
+for(const key of ['Backspace','Delete','ArrowLeft','Enter']){let stopped=false,prevented=false;field.props.onKeyDown({key,stopPropagation:()=>stopped=true,preventDefault:()=>prevented=true});assert.ok(stopped,'typing keys must not reach element deletion/movement');assert.equal(prevented,false,'ordinary typing and multiline input use native behavior');}
+for(const event of [{key:'Escape'},{key:'Enter',ctrlKey:true}]){let prevented=false;field.props.onKeyDown({...event,stopPropagation(){},preventDefault:()=>prevented=true});assert.ok(prevented);}assert.equal(finished,2);
+const app=fs.readFileSync('app/page.tsx','utf8');assert.ok(app.includes("onClick={()=>addMark('text')}><Type"),'Add text immediately inserts an editable field');assert.ok(app.includes("if(view==='edit'&&mode==='text')e.preventDefault()"),'pointer placement does not steal textarea focus');
+const fit={};new Function('exports',ts.transpileModule(fs.readFileSync('lib/editor-fit.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.CommonJS,target:ts.ScriptTarget.ES2020}}).outputText)(fit);
+const doc=await PDFDocument.create(),page=doc.addPage([595,842]),font=await doc.embedFont(StandardFonts.Helvetica),text=value,size=16,box=fit.fittedTextBox(text,size,595,842,.2,.25,t=>font.widthOfTextAtSize(t,size));
+assert.ok(box.h*842>=text.split('\n').length*size*1.2);for(const [i,line] of text.split('\n').entries())page.drawText(line,{x:119,y:600-i*size*1.2,font,size});assert.equal((await PDFDocument.load(await doc.save())).getPageCount(),1);
+console.log('PASS: immediate text creation, focus/caret setup, native typing and multiline input, isolation from Delete/move shortcuts, finish controls, text bounds and PDF round-trip. Event-handler checks; real browser focus/mobile keyboard verification remains pending.');
