@@ -17,3 +17,5 @@
  .studio-shell .mobile-continuous-pages{height:calc(100dvh - var(--studio-header-height,64px) - 196px)}
  .sign-workspace .mobile-continuous-pages{height:calc(100dvh - var(--studio-header-height,64px) - 184px)}
 }
+
+.link-address-field{display:flex!important;flex-direction:column;gap:8px;min-width:0!important;width:100%;max-width:100%;box-sizing:border-box}.link-address-field input{display:block;min-width:0!important;width:100%!important;max-width:100%;box-sizing:border-box;min-height:44px;font-size:16px}.link-address-field+ p[role=alert]{overflow-wrap:anywhere}
