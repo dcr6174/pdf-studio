@@ -1,4 +1,4 @@
-import {tools,type Tool} from './tools';
+import {tools,groups,type Tool} from './tools';
 
 /**
  * Tool search that understands how people describe a job, not just tool names.
@@ -77,6 +77,8 @@ export const toolKeywords:Record<string,string>={
 };
 
 const STOP=new Set(['pdf','pdfs','a','an','the','to','my','me','i','how','do','can','for','of','in','on','and','or','from','into','file','files','online','free','document','documents','please','want','need','make','get','under','below','than','less','more','with','without','that','this','it','is','are','be','at','by','as']);
+export const commonToolIds=['merge','compress','edit','split','sign','images'];
+export function browseTools(list:Tool[]=tools){return [...commonToolIds.flatMap(id=>list.filter(t=>t.id===id)),...groups.flatMap(group=>list.filter(t=>t.group===group&&!commonToolIds.includes(t.id)))];}
 const popular=new Set(['merge','native-text','sign','compress','organize','images']);
 
 export function normalize(input:string){
@@ -125,9 +127,10 @@ function score(e:Entry,q:string,tokens:string[]){
 /** Ranked results. Every word must match; if none do, shows tools matching some words (mode "any"). */
 export function searchToolsDetailed(query:string,list:Tool[]=tools):SearchResult{
  const q=normalize(query);
- if(!q)return {tools:list,mode:'empty'};
+ if(!q)return {tools:browseTools(list),mode:'empty'};
+ if(/^(?:delete|remove)(?: pdf)? pages?$/.test(q))return {tools:list.filter(t=>t.id==='organize'),mode:'all'};
  const tokens=q.split(' ').filter(t=>!STOP.has(t)&&!/^\d+$/.test(t));
- if(!tokens.length)return {tools:list,mode:'empty'};
+ if(!tokens.length)return {tools:browseTools(list),mode:'empty'};
  const allowed=new Set(list.map(t=>t.id));
  const scored=index.filter(e=>allowed.has(e.tool.id)).map(e=>({e,...score(e,q,tokens)}));
  const rank=(a:typeof scored[number],b:typeof scored[number])=>b.total-a.total||a.e.order-b.e.order;

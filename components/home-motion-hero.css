@@ -77,3 +77,14 @@
 .home-shell .home-motion-hero .motion-buddy{flex:0 0 70px}
 @media(max-width:600px){.home-shell .home-motion-hero .motion-changing-group{gap:6px}.home-shell .home-motion-hero .motion-hero-art{flex:0 0 96px;width:96px}.home-shell .home-motion-hero .motion-buddy{flex-basis:56px}.home-shell .home-motion-hero .motion-document{width:50px;height:46px;flex-basis:50px;margin:5px 0 0 -10px}}
 @media(max-width:360px){.home-shell .home-motion-hero .motion-headline-group{font-size:1.7rem}.home-shell .home-motion-hero .motion-changing-group{gap:4px}}
+
+/* Reserve the longest word; transitions never hide the sentence. */
+.home-shell .home-motion-hero .motion-word-slot{display:inline-grid;grid-template-columns:auto}
+.home-shell .home-motion-hero .motion-word-slot>span{grid-area:1/1;white-space:nowrap}
+.home-shell .home-motion-hero .motion-word-sizer{visibility:hidden;padding:2px 12px 5px;pointer-events:none}
+.home-shell .home-motion-hero .motion-word{animation:hero-word-settle .45s ease both}
+@keyframes hero-word-settle{from{transform:translateY(3px)}to{transform:translateY(0)}}
+@media(max-width:600px){.home-shell .home-motion-hero .motion-word-sizer{padding:3px 9px 5px}}
+@media(prefers-reduced-motion:reduce){.home-shell .home-motion-hero .motion-word{animation:none}}
+
+.home-existing-text-shortcut{text-align:center;margin:16px 0 0;color:var(--muted);font-size:.9rem}.home-existing-text-shortcut .link-button{min-height:44px;margin-left:6px;color:var(--primary)}

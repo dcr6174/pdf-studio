@@ -24,6 +24,8 @@ const cases=[
  ['corrupted','repair'],['dark mode','invert'],['listen','audio'],['compare','compare'],['checksum','hash'],['zip','zip'],['trim margins','crop'],['a4','resize'],
 ];
 for(const [q,expected] of cases)assert.equal(first(q),expected,`"${q}" should find ${expected}, got ${first(q)}`);
+assert.deepEqual(searchTools('').slice(0,6).map(t=>t.id),['merge','compress','edit','split','sign','images']);
+for(const query of ['delete pages','remove pages','delete pdf pages','remove pdf page'])assert.deepEqual(searchTools(query).map(t=>t.id),['organize']);
 assert.equal(searchToolsDetailed('').mode,'empty');assert.equal(searchTools('').length,tools.length);
 assert.equal(searchTools('pdf').length,tools.length,'a generic word alone shows everything');
 assert.equal(searchToolsDetailed('qzxqzx').mode,'none');assert.equal(searchTools('qzxqzx').length,0);
