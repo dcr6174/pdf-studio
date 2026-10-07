@@ -14,7 +14,7 @@ import {FileOpening} from '@/components/file-opening';
 import Link from '@/components/browser-link';
 import Image from '@/components/browser-image';
 import { lazy, Suspense, useCallback, useEffect, useEffectEvent, useRef, useState, type ReactNode } from 'react';
-import { Camera, FileText, Upload, ShieldCheck, Download, Plus, Merge, Scissors, Grid2X2, Minimize2, RotateCw, Copy, ArrowDownUp, Crop, PenLine, Droplets, Hash, Layers, Image as ImageIcon, Code2, BookOpen, Presentation, ScanLine, Volume2, LockKeyhole, UnlockKeyhole, Moon,  X, Trash2, ChevronLeft, ChevronRight,  Loader2, Undo2, MousePointer2, Highlighter, Type, Square, StopCircle, Redo2, Save, ZoomIn, ZoomOut, Circle, Link2 } from 'lucide-react';
+import { Settings2, Camera, FileText, Upload, ShieldCheck, Download, Plus, Merge, Scissors, Grid2X2, Minimize2, RotateCw, Copy, ArrowDownUp, Crop, PenLine, Droplets, Hash, Layers, Image as ImageIcon, Code2, BookOpen, Presentation, ScanLine, Volume2, LockKeyhole, UnlockKeyhole, Moon,  X, Trash2, ChevronLeft, ChevronRight,  Loader2, Undo2, MousePointer2, Highlighter, Type, Square, StopCircle, Redo2, Save, ZoomIn, ZoomOut, Circle, Link2 } from 'lucide-react';
 import { Select, SelectTrigger, SelectValue, SelectContent, SelectItem } from '@/components/ui/select';
 import { Dialog, DialogContent, DialogTitle, DialogDescription } from '@/components/ui/dialog';
 import {TaskProgress} from '@/components/task-progress';
