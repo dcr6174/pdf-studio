@@ -39,7 +39,7 @@
 .edit-three-column .editor-more{margin:0}.edit-three-column .editor-more>summary{min-height:44px;display:flex;align-items:center;padding:8px;cursor:pointer}
 .edit-three-column .editor-help[hidden]{display:none!important}
 .edit-three-column .element-properties>summary{font-size:14px;font-weight:600;min-height:44px;cursor:pointer}
-@media(min-width:768px){
+@media(min-width:1100px){
  .studio-shell.tool-action-ready.document-shell .content:not(:has(.export-result-page)){padding-right:332px!important}
  .studio-shell.tool-action-ready.document-shell .shared-tool-action-bar{position:fixed!important;top:72px!important;right:0!important;left:auto!important;bottom:0!important;width:312px!important;margin:0!important;padding:20px!important;border:0!important;border-left:1px solid var(--border)!important;border-radius:0!important;z-index:30!important;box-shadow:none!important}
  .edit-three-column .content{padding-top:16px!important}
@@ -53,26 +53,7 @@
  .handwriting-tool-action .handwriting-download{width:100%;min-height:56px}
 }
 
-@media(max-width:767px){
- .studio-shell.edit-canvas-fit{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
- .studio-shell.edit-canvas-fit>.studio-header{flex-shrink:0}
- .studio-shell.document-shell.tool-action-ready.edit-canvas-fit>.content{flex:1;min-height:0!important;padding:64px 0 0!important;overflow:hidden;box-sizing:border-box}
- .edit-canvas-fit .mobile-workspace-controls{top:var(--studio-header-height,120px)}
- .edit-canvas-fit .studio-workspace-content{height:100%;min-height:0;display:flex;flex-direction:column}
- .edit-canvas-fit .studio-controls{flex:1;min-height:0;display:flex;flex-direction:column;margin:0;padding:0}
- .edit-canvas-fit .task-workspace{flex:1;min-height:0;margin:0!important}
- .edit-canvas-fit .task-canvas{height:100%;min-height:0;display:flex;flex-direction:column}
- .edit-canvas-fit .task-canvas>.editor-toolbar{position:static!important;flex-shrink:0;flex-wrap:nowrap;overflow-x:auto}
- .edit-canvas-fit .editor-layout{display:flex!important;flex-direction:column;flex:1;min-height:0;height:auto;gap:0!important}
- .edit-canvas-fit .editor-main{display:flex;flex-direction:column;flex:1;min-height:0;height:100%;padding:0!important}
- .mobile-continuous-pages{position:relative;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:8px 8px calc(80px + env(safe-area-inset-bottom));scroll-padding:8px}
- .mobile-continuous-pages>section{margin-bottom:16px}
- .mobile-continuous-pages .board-scroll{height:auto;max-height:none!important;min-height:0!important;overflow:visible;padding:0!important}
- .mobile-page-label{display:block;padding:6px;font-size:12px;color:var(--muted)}
- .edit-canvas-fit .editor-pager[hidden],.edit-canvas-fit .tool-guide-disclosure{display:none!important}
-}
-@media(min-width:768px) and (max-width:1099px){.edit-three-column .editor-layout{grid-template-columns:96px minmax(0,1fr)!important}.edit-page-thumbnail{height:90px}.edit-page-thumbnail img{max-height:90px}.edit-page-list{padding:6px}}
-@media(max-width:767px){
+@media(max-width:1099px){
  .tool-action-ready .shared-tool-action-bar{display:none!important}
  .edit-three-column .editor-layout{grid-template-columns:minmax(0,1fr)!important}
  .edit-page-rail{position:static}.edit-page-rail h2{padding:8px 12px}
@@ -91,11 +72,10 @@
 
 /* The edit canvas uses the viewport rather than an extra marketing-page height. */
 .direct-pdf-sketch{position:absolute;inset:0;width:100%;height:100%;z-index:20;touch-action:none;cursor:crosshair}
-.edit-three-column .mark.text{overflow-wrap:anywhere}
 .edit-canvas-fit .task-workspace{margin-left:0!important;width:100%!important}
 .edit-canvas-fit .task-canvas>.editor-toolbar{margin:0;border-radius:0;border-width:0 0 1px;flex-shrink:0;background:var(--card)}
 .edit-canvas-fit .editor-toolbar button[aria-pressed=true]{background:var(--blue-soft);color:var(--primary)}
-@media(min-width:768px){
+@media(min-width:1100px){
  .studio-shell.edit-canvas-fit{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
  .studio-shell.edit-canvas-fit>.studio-header{flex-shrink:0}
  .studio-shell.document-shell.tool-action-ready.edit-canvas-fit>.content{flex:1;min-height:0!important;height:auto!important;padding:0 312px 0 0!important;overflow:hidden;box-sizing:border-box}
@@ -112,10 +92,46 @@
  .edit-canvas-fit .tool-guide-disclosure{display:none}
  .studio-shell.tool-action-ready.document-shell .shared-tool-action-bar{top:var(--studio-header-height,72px)!important;bottom:0!important;height:calc(100dvh - var(--studio-header-height,72px))!important}
 }
-@media(max-width:767px){
- .edit-three-column .edit-page-rail{display:none!important}
- .edit-canvas-fit .task-canvas>.editor-toolbar{position:sticky;top:calc(var(--studio-header-height,120px) + 64px);z-index:24;overflow-x:auto;flex-wrap:nowrap}
+@media(max-width:1099px){
+ .edit-canvas-fit .task-canvas>.editor-toolbar{position:sticky;top:var(--studio-header-height,64px);z-index:24;overflow-x:auto;flex-wrap:nowrap}
  .edit-canvas-fit .editor-toolbar button{flex-shrink:0}
 }
 
-@media(max-width:767px){.mobile-continuous-pages{max-height:calc(100dvh - var(--studio-header-height,120px) - 160px);min-height:240px}.edit-canvas-fit .mobile-continuous-pages{max-height:none;min-height:0}.editor-pager[hidden]{display:none!important}}
+/* The action panel owns document shortcuts; keep the canvas clear. */
+.shared-tool-action-bar .tool-action-title-row{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
+.shared-tool-action-bar .tool-action-title-row h2{flex:1;min-width:0;overflow-wrap:anywhere}
+.shared-tool-action-bar .tool-action-clear{flex:none}
+.shared-tool-action-bar .workspace-docked-controls{position:static;display:flex;flex-direction:column;width:100%;max-width:100%;box-sizing:border-box;margin:0 0 16px!important;padding:0;border:0;box-shadow:none;background:transparent;gap:8px}
+.shared-tool-action-bar .workspace-docked-controls button{width:100%;justify-content:flex-start;padding:10px 12px;border:1px solid var(--border);font-size:13px;line-height:1.4;text-align:left}
+.shared-tool-action-bar .workspace-docked-controls svg{flex:none}
+.shared-tool-action-bar .workspace-docked-controls .workspace-mobile-add{display:none}
+.shared-tool-action-bar .task-settings-disclosure>summary{width:100%;justify-content:flex-start;gap:8px;padding:10px 12px;font-size:13px}
+
+
+
+@media(max-width:1099px){
+ .studio-shell.edit-canvas-fit{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+ .studio-shell.edit-canvas-fit>.studio-header{flex-shrink:0}
+ .studio-shell.document-shell.tool-action-ready.edit-canvas-fit>.content{flex:1;min-height:0!important;padding:64px 0 0!important;overflow:hidden;box-sizing:border-box}
+ .edit-canvas-fit .mobile-workspace-controls{top:var(--studio-header-height,64px)}
+ .edit-canvas-fit .studio-workspace-content{height:100%;min-height:0;display:flex;flex-direction:column}
+ .edit-canvas-fit .studio-controls{flex:1;min-height:0;display:flex;flex-direction:column;margin:0;padding:0}
+ .edit-canvas-fit .task-workspace{flex:1;min-height:0;margin:0!important}
+ .edit-canvas-fit .task-canvas{height:100%;min-height:0;display:flex;flex-direction:column}
+ .edit-canvas-fit .task-canvas>.editor-toolbar{position:static!important;flex-shrink:0;flex-wrap:nowrap;overflow-x:auto}
+ .edit-canvas-fit .editor-layout{display:flex!important;flex-direction:column;flex:1;min-height:0;height:auto;gap:0!important}
+ .edit-canvas-fit .editor-main{display:flex;flex-direction:column;flex:1;min-height:0;height:100%;padding:0!important}
+ .mobile-continuous-pages{position:relative;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:8px 8px calc(80px + env(safe-area-inset-bottom));scroll-padding:8px}
+ .mobile-continuous-pages>section{margin-bottom:16px}
+ .mobile-continuous-pages .board-scroll{height:auto;max-height:none!important;min-height:0!important;overflow:visible;padding:0!important}
+ .mobile-page-label{display:block;padding:6px;font-size:12px;color:var(--muted)}
+ .edit-canvas-fit .editor-pager[hidden],.edit-canvas-fit .tool-guide-disclosure{display:none!important}
+}
+@media(max-width:1099px){
+ .edit-three-column .edit-page-rail{display:none!important}
+ .edit-canvas-fit .task-canvas>.editor-toolbar{position:sticky;top:calc(var(--studio-header-height,64px) + 64px);z-index:24;overflow-x:auto;flex-wrap:nowrap}
+ .edit-canvas-fit .editor-toolbar button{flex-shrink:0}
+}
+
+@media(max-width:1099px){.mobile-continuous-pages{max-height:calc(100dvh - var(--studio-header-height,64px) - 160px);min-height:240px}.edit-canvas-fit .mobile-continuous-pages{max-height:none;min-height:0}.editor-pager[hidden]{display:none!important}}
+
