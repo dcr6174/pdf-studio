@@ -1,6 +1,6 @@
 'use client';
 import {useState,type ReactNode} from 'react';
-import {Plus,Files,Settings2,X} from 'lucide-react';
+import {Plus,Files,Settings,X} from 'lucide-react';
 import './mobile-workspace-controls.css';
 
 type FileInfo={id:string;name:string;pages:number};
@@ -9,9 +9,9 @@ export function MobileWorkspaceControls({files,pageCount,addLabel,onAdd,settings
  const toggle=(next:'files'|'settings')=>setPanel(current=>current===next?null:next);
  return <>
   <nav className="mobile-workspace-controls" aria-label="Document controls">
-   <button type="button" disabled={disabled} onClick={()=>{setPanel(null);onAdd();}} aria-label={addLabel} title={addLabel}><Plus size={20} aria-hidden="true"/><span>{addLabel==='Replace file'?'Replace':'Add files'}</span></button>
-   <button type="button" disabled={disabled||!files.length} onClick={()=>toggle('files')} aria-expanded={panel==='files'} aria-controls="mobile-workspace-panel"><Files size={20} aria-hidden="true"/><span>Files ({files.length})</span></button>
-   <button type="button" disabled={disabled||!settingsAvailable} onClick={()=>toggle('settings')} aria-expanded={panel==='settings'} aria-controls="mobile-workspace-panel"><Settings2 size={20} aria-hidden="true"/><span>Settings</span></button>
+   <button type="button" disabled={disabled} onClick={()=>{setPanel(null);onAdd();}} aria-label={addLabel} title={addLabel}><Plus size={20} aria-hidden="true"/></button>
+   <button type="button" disabled={disabled||!files.length} onClick={()=>toggle('files')} aria-label={`Files (${files.length})`} title={`Files (${files.length})`} aria-expanded={panel==='files'} aria-controls="mobile-workspace-panel"><Files size={20} aria-hidden="true"/></button>
+   <button type="button" disabled={disabled||!settingsAvailable} onClick={()=>toggle('settings')} aria-label="Settings" title="Settings" aria-expanded={panel==='settings'} aria-controls="mobile-workspace-panel"><Settings size={20} aria-hidden="true"/></button>
   </nav>
   {panel&&<section className="mobile-workspace-panel" id="mobile-workspace-panel" aria-label={panel==='files'?'Open files':'Tool settings'} onKeyDown={e=>{if(e.key==='Escape')setPanel(null);}}>
    <header><h2>{panel==='files'?'Files':'Settings'}</h2><button type="button" onClick={()=>setPanel(null)} aria-label="Close panel"><X size={20}/></button></header>
