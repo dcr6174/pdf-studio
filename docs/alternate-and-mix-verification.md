@@ -1,7 +1,9 @@
 # Alternate & Mix verification — 7 October 2026
 
-Live two-file upload, process, download and text extraction passed: A1, B1, A2, B2, A3 (five pages). Real input/result captures and downloaded output are in public/blog/alternate-and-mix.
+Fresh live browser run after release of source 39b38869a3e915cba6ee2234cd8e903b3e3f5aea: choose A (three pages) and B (two), click Alternate & Mix PDF, download result and extract text. Passed: A1,B1,A2,B2,A3, five pages. Browser: cloud Chrome; exact browser version is unavailable through the supported browser interface. The public site does not expose its deployment SHA; the listed source version identifies the reference release with matching button names.
 
-Repository engine checks passed for reversed file priority (B1,A1,B2,A2,A3) and three inputs (A1,B1,C1,A2,B2,C2,A3), against source commit a65ef7fcedee63f410e5fd5dfdbd9f25edd25e23. Three-file browser processing, forms, encrypted inputs, large-file performance and real-device mobile behavior were not tested.
+New unaltered screenshot captures input-current.jpg and result-current.jpg exclude the pointer through capture bounds. Result capture ends above Preview PDF. tested-output.pdf is the fresh downloaded PDF.
 
-Component checks passed for the title, tool CTA, Play/Pause, scene selection, labelled sequence and contents navigation. Other article drafts remain unpublished.
+Earlier repository engine checks passed reversed file priority and three files. Three-file browser processing, real-device mobile, forms, encrypted inputs and large-file performance remain untested.
+
+Component checks passed title, CTA, Play/Pause, scene selection, labelled page sequence and contents. Content checks passed actual-test anchor, real test before Buddy and animation above scene cards. Remaining article drafts retain their unpublished status; approved format is recorded in article-format.md.
