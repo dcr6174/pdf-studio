@@ -157,3 +157,5 @@
 .mark.text.editing-text:has(.inline-pdf-text:placeholder-shown){min-width:8ch}
 .mark.text.editing-text .resize-handle{display:none}
 
+
+.inline-pdf-text{user-select:text!important;-webkit-user-select:text!important;touch-action:auto;caret-color:currentColor;pointer-events:auto;font-size:inherit!important;line-height:1.3!important}.mark.text.editing-text{user-select:text!important;-webkit-user-select:text!important;touch-action:auto}
