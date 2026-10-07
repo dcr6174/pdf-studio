@@ -1,0 +1,124 @@
+/* Shared viewport geometry for browsing pages, tools and dialogs. */
+:root{--studio-header-height:72px;--studio-action-space:calc(88px + env(safe-area-inset-bottom));--studio-rail-space:76px}
+html{scroll-padding-top:calc(var(--studio-header-height) + 12px)}
+html body .studio-header.studio-shared{position:sticky;top:0;box-sizing:border-box;min-height:var(--studio-header-height);height:var(--studio-header-height);flex-shrink:0}
+html body .studio-header.studio-shared .brand-row-pinned{position:static;display:contents;padding:0;min-height:0;border:0;box-shadow:none}
+.studio-shell .content,.studio-shell .task-canvas,.studio-shell .studio-controls,.studio-shell .studio-workspace-content{min-width:0;box-sizing:border-box}
+.studio-shell .task-canvas>*,.studio-shell .editor-main,.studio-shell .native-canvas-area{min-width:0;max-width:100%}
+.studio-shell.document-shell:is([data-tool=create],[data-tool=markdown],[data-tool=create-form]) .task-canvas{grid-column:1/-1;width:100%}
+@media(max-width:1099px){
+ :root{--studio-header-height:calc(64px + env(safe-area-inset-top))}
+ html body .studio-header.studio-shared{display:flex!important;flex-direction:row!important;flex-wrap:nowrap!important;gap:8px;padding:calc(8px + env(safe-area-inset-top)) max(12px,env(safe-area-inset-right)) 8px max(12px,env(safe-area-inset-left))!important;min-height:var(--studio-header-height)!important;height:var(--studio-header-height)!important}
+ html body .studio-header.studio-shared .studio-brand-row{display:flex!important;align-items:center;justify-content:space-between;gap:8px;width:100%;min-width:0;min-height:0;padding:0!important;position:static!important}
+ html body .studio-header.studio-shared .studio-wordmark{min-width:0;gap:8px}
+ html body .studio-header.studio-shared .wordmark-lockup{width:130px;height:33px;max-width:100%;flex-shrink:1}
+ html body .studio-header.studio-shared .header-end{flex-shrink:0;gap:6px;margin-left:auto}
+ html body .studio-header.studio-shared>nav{display:none!important}
+ html body .studio-header.studio-shared .header-end .source-top{display:inline-flex;min-height:44px;padding:0 8px;font-size:12px}
+ html body .studio-header.studio-shared .tools-panel{top:calc(var(--studio-header-height) + 8px)!important;max-height:calc(100dvh - var(--studio-header-height) - 24px)!important}
+ html body .navigation-drawer[data-slot=dialog-content]{padding-top:calc(var(--studio-header-height) + 16px)!important;padding-bottom:max(12px,env(safe-area-inset-bottom))!important}
+ .studio-shell.document-shell>.content{width:100%;max-width:none;margin:0;min-height:calc(100dvh - var(--studio-header-height));padding:16px 12px 24px!important}
+ .studio-shell.document-shell.mobile-controls-ready>.content{padding-right:var(--studio-rail-space)!important}
+ .studio-shell.document-shell.mobile-controls-ready.mobile-action-ready>.content{padding-bottom:var(--studio-action-space)!important}
+ .studio-shell.document-shell.mobile-controls-ready.writing-workspace>.content{padding-right:12px!important}
+ .studio-shell.document-shell .task-workspace{display:block!important;width:100%;margin:0!important}
+ .studio-shell.document-shell .task-canvas{width:100%;grid-column:auto!important;grid-row:auto!important}
+ .studio-shell.document-shell .editor-layout{display:flex!important;flex-direction:column;gap:12px!important;min-width:0}
+ .studio-shell.document-shell .editor-main{width:100%;padding:8px}
+ .studio-shell.document-shell .properties{position:static;max-height:none;width:100%;order:2}
+ .studio-shell.document-shell .shared-tool-action-bar{display:none!important}
+ .studio-shell.document-shell .tool-heading h1{font-size:clamp(24px,5vw,32px);line-height:1.2}
+ .studio-shell.document-shell.empty-tool .tool-drop{width:100%;padding:24px 16px;min-height:240px}
+ .studio-shell.document-shell .tool-note{overflow-wrap:anywhere}
+ .studio-shell.document-shell .board-scroll{width:100%;min-width:0;min-height:200px;max-height:65dvh;overflow:auto;padding:10px;overscroll-behavior:contain}
+ .studio-shell.document-shell .page-board{min-width:0;box-sizing:border-box}
+ .studio-shell.document-shell .editor-toolbar{gap:4px;padding:8px;min-width:0;max-width:100%;flex-wrap:wrap}
+ .studio-shell.document-shell .editor-toolbar button{min-width:44px;min-height:44px;flex-shrink:0;padding:8px}
+ .studio-shell.document-shell .editor-pager{display:flex;justify-content:center;align-items:center;gap:12px;min-height:44px;font-size:12px}
+ .studio-shell.document-shell .edit-page-rail{position:static;width:100%;max-height:none;padding:0;border:0;order:0}
+ .studio-shell.document-shell .edit-page-rail h2{display:none}
+ .studio-shell.document-shell .edit-page-list{display:flex;max-height:108px;gap:8px;padding:4px;overflow-x:auto;overscroll-behavior:contain}
+ .studio-shell.document-shell .edit-page-list>button{flex:0 0 64px;min-width:64px;min-height:88px;padding:4px}
+ .studio-shell.document-shell .edit-page-thumbnail{height:60px}.studio-shell.document-shell .edit-page-thumbnail img{max-height:60px}
+ .studio-shell.document-shell.edit-canvas-fit{height:auto;min-height:100dvh;overflow:visible;display:block}
+ .studio-shell.document-shell.edit-canvas-fit .task-canvas>.editor-toolbar{position:static;display:flex;flex-wrap:nowrap;overflow-x:auto;scrollbar-width:thin;touch-action:pan-x}
+ .studio-shell.document-shell.sign-workspace .board-scroll{height:auto;max-height:65dvh;min-height:240px}
+ .studio-shell.document-shell.sign-workspace .page-board{max-width:none!important}
+ .studio-shell.document-shell .sign-mobile-tray{gap:6px}
+ .studio-shell.document-shell .sign-mobile-tray button{max-width:100%;min-height:44px}
+ .studio-shell.document-shell .native-layout,.studio-shell.document-shell .pdf-form-editor,.studio-shell.document-shell .ocr-review-grid{display:grid;grid-template-columns:minmax(0,1fr);gap:12px}
+ .studio-shell.document-shell .native-canvas-area{order:0}
+ .studio-shell.document-shell .native-controls{order:1;position:static;max-height:none;border-left:0;border-top:1px solid var(--border);padding:16px}
+ .studio-shell.document-shell .native-editor .board-scroll{height:55dvh;min-height:240px;max-height:65dvh;padding:10px}
+ .studio-shell.document-shell .native-commandbar{gap:8px;padding:8px;flex-wrap:wrap}
+ .studio-shell.document-shell .native-history{padding:0;border:0;flex-wrap:wrap}
+ .studio-shell.mobile-controls-ready .native-export{display:none}
+ .studio-shell.document-shell .form-options{position:static;max-height:none;width:100%;padding:16px}
+ .studio-shell.document-shell .form-page-scroll{max-width:100%;padding:8px;max-height:60dvh}
+ .studio-shell.document-shell .form-toolbar{padding:8px;justify-content:center}
+ .studio-shell.document-shell .form-view-switch,.studio-shell.document-shell .form-zoom{flex-wrap:wrap;justify-content:center}
+ .studio-shell.document-shell .reader-layout{display:flex;flex-direction:column-reverse;gap:16px}
+ .studio-shell.document-shell .reader-layout>aside{min-width:0;max-width:100%}
+ .studio-shell.document-shell .reader-controls{position:static;min-width:0;gap:6px;padding:8px;flex-wrap:wrap}
+ .studio-shell.document-shell .reader-controls button{min-height:44px;padding:8px;font-size:12px}
+ .studio-shell.document-shell .reader-page{width:100%;min-width:0;padding:8px;max-height:65dvh;overflow:auto}
+ .studio-shell.document-shell .compare-grid{grid-template-columns:minmax(0,1fr)}
+ .studio-shell.document-shell .workflow-layout,.studio-shell.document-shell .workflow-layout:has(.workflow-settings){grid-template-columns:minmax(0,1fr)}
+ .studio-shell.document-shell .workflow-library,.studio-shell.document-shell .workflow-settings{border:0;border-top:1px solid var(--border)}
+ .studio-shell.document-shell .workflow-top{flex-wrap:wrap;padding:16px}
+ .studio-shell.document-shell .workflow-canvas{padding:12px}
+ .studio-shell.document-shell .field{min-width:0;max-width:100%;width:100%;flex:none}
+ .studio-shell.document-shell .field input:not([type=checkbox]):not([type=radio]):not([type=color]),.studio-shell.document-shell .field select,.studio-shell.document-shell .field textarea{min-width:0;max-width:100%;width:100%;font-size:16px;box-sizing:border-box}
+ .studio-shell.document-shell .settings-panel .row{flex-wrap:wrap}
+ .studio-shell.document-shell .new-document-context{font-size:12px;overflow-wrap:anywhere}
+ .studio-shell.document-shell .task-canvas>.settings-panel{display:flex;flex-direction:column;gap:16px;margin:0;border:0;padding:0}
+ .studio-shell.document-shell .task-canvas>.settings-panel textarea{min-height:240px}
+ .studio-shell.document-shell .page-caption,.studio-shell.document-shell .merge-file-info{overflow-wrap:anywhere}
+ .studio-shell.document-shell .task-input-hint,.studio-shell.document-shell .form-status{overflow-wrap:anywhere;font-size:13px}
+ .studio-shell.document-shell .result-screen,.studio-shell.document-shell .export-result-page{width:100%;min-width:0;max-width:940px;margin-inline:auto;padding:32px 0 48px;box-sizing:border-box}
+ .studio-shell.document-shell .result-screen-download,.studio-shell.document-shell .merge-result-download{width:100%;min-width:0;white-space:normal;padding:16px;font-size:18px}
+ .studio-shell.document-shell .merge-result-secondary{gap:8px}
+ .studio-shell.document-shell .merge-result-secondary>.secondary{flex:1 1 140px;min-width:0;padding:10px}
+ .studio-shell.document-shell .result-screen-file,.studio-shell.document-shell .merge-result-file{overflow-wrap:anywhere}
+ .studio-shell.document-shell .compression-result-summary{flex-wrap:wrap;text-align:center;gap:16px}
+ .studio-shell.document-shell .compression-savings-copy{max-width:100%}
+ .studio-shell.document-shell .compression-savings-copy>strong{overflow-wrap:anywhere}
+ .handwriting-main.handwriting-tool-action{padding:16px 12px var(--studio-action-space);max-width:100%;width:100%}
+ .handwriting-main.handwriting-tool-action .handwriting-controls{position:static;inset:auto;width:100%;padding:0;max-height:none;border:0;display:contents}
+ .handwriting-main.handwriting-tool-action .handwriting-layout{display:block}
+ .handwriting-main.handwriting-tool-action .handwriting-mobile-tabs{display:flex;gap:8px;margin-bottom:12px}
+ .handwriting-main.handwriting-tool-action .handwriting-mobile-tabs button{flex:1;min-width:0}
+ .handwriting-tool-action .handwriting-layout[data-mobile-tab=page] .handwriting-controls>section,.handwriting-tool-action .handwriting-layout[data-mobile-tab=text] .handwriting-style,.handwriting-tool-action .handwriting-layout[data-mobile-tab=style] .handwriting-text,.handwriting-tool-action .handwriting-layout:not([data-mobile-tab=page]) .handwriting-preview{display:none}
+ .handwriting-main.handwriting-tool-action .handwriting-preview{position:static;min-width:0}
+ .handwriting-main.handwriting-tool-action .handwriting-preview-bar{flex-wrap:wrap}
+ .handwriting-main.handwriting-tool-action .handwriting-paper-stage{height:58dvh;min-height:240px;padding:12px}
+ .handwriting-main.handwriting-tool-action .handwriting-export{position:fixed;inset:auto 0 0;width:100%;max-width:none;display:flex;flex-direction:column;gap:8px;margin:0;border-radius:0;padding:12px 16px calc(12px + env(safe-area-inset-bottom));background:var(--card);border-top:1px solid var(--border);z-index:22}
+ .handwriting-main.handwriting-tool-action .handwriting-export>div{display:block;font-size:12px}
+ .handwriting-main.handwriting-tool-action .handwriting-export>div p{font-size:12px;max-height:64px;overflow:auto}
+ .handwriting-main.handwriting-tool-action .handwriting-download{width:100%;min-height:48px}
+ .studio-shell.mobile-controls-ready:has(input:not([type=checkbox]):not([type=radio]):not([type=range]):focus,textarea:focus,[contenteditable=true]:focus) .mobile-workspace-action{display:none}
+ .handwriting-tool-action:has(textarea:focus) .handwriting-export{position:static;margin-top:12px}
+}
+@media(max-width:600px){
+ .guides-main .guide-cards,.guides-main .guides-popular-grid{grid-template-columns:minmax(0,1fr)!important}
+ .blog-main,.guides-main,.lab-workspace,.tools-directory{min-width:0;max-width:100%;overflow-wrap:anywhere}
+ .blog-main .native-blog-grid{grid-template-columns:minmax(0,1fr)}
+ .studio-shell.home-shell .catalogue-top{flex-direction:column;align-items:stretch}
+ .studio-shell.home-shell .catalogue-top .search{width:100%;max-width:100%}
+ .studio-shell.home-shell .tool-card{min-width:0}
+ .studio-shell.home-shell .tool-card b{overflow-wrap:anywhere}
+ .studio-shell.shelf-shell .shelf-tools{flex-wrap:wrap}
+ .studio-shell.shelf-shell .shelf-grid{grid-template-columns:minmax(0,1fr)}
+ .lab-workspace .lab-toolbar,.lab-workspace .lab-reader-controls{flex-wrap:wrap;min-width:0}
+ .lab-workspace .lab-upload-panel{max-width:100%;min-width:0}
+ .lab-workspace input,.lab-workspace select,.lab-workspace textarea{font-size:16px;max-width:100%;min-width:0}
+ html body .navigation-drawer[data-slot=dialog-content]{width:min(340px,94vw)!important}
+}
+@media(max-width:359px){
+ html body .studio-header.studio-shared .wordmark-lockup{width:110px;height:28px}
+ html body .studio-header.studio-shared .owner-header-link{font-size:11px;padding:6px;min-height:44px}
+ .studio-shell.document-shell .page-grid,.studio-shell.document-shell .merge-document-grid{grid-template-columns:minmax(0,1fr)!important}
+}
+
+@media(max-width:430px){html body .studio-header.studio-shared .header-end:has(.owner-header-link) .install-app{display:none}}
+@media(max-width:1099px) and (max-height:500px){html body .navigation-drawer>.drawer-support{display:none}.studio-shell.document-shell .board-scroll{min-height:160px}}
