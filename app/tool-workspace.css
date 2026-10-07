@@ -69,8 +69,3 @@
 }
 @media(max-width:359px){[data-workspace=compact] .page-grid,[data-workspace=compact] .merge-document-grid{grid-template-columns:1fr}}
 .lab-empty-preview{padding:40px 24px;text-align:center;color:var(--muted)}
-
-.empty-tool .tool-heading{display:block;text-align:center}
-.empty-tool .tool-heading p{margin-inline:auto;max-width:640px}
-[data-workspace=compact] .page-actions button{min-width:32px;padding:6px}
-@media(max-width:699px){[data-workspace=compact] .page-actions{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px}[data-workspace=compact] .page-actions button{min-width:44px;min-height:44px}}

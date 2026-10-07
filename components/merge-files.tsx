@@ -4,11 +4,12 @@ import {CardMouseSensor,CardTouchSensor} from '@/components/document-drag-sensor
 import {DndContext,KeyboardSensor,closestCenter,useSensor,useSensors,type DragEndEvent} from '@dnd-kit/core';
 import {SortableContext,useSortable,sortableKeyboardCoordinates,rectSortingStrategy} from '@dnd-kit/sortable';
 import {CSS} from '@dnd-kit/utilities';
-import {ArrowUp,ArrowDown,Trash2,Plus,RotateCw} from 'lucide-react';
+import {ArrowUp,ArrowDown,Trash2,Plus,RotateCw,Settings,ArrowDownAZ,ArrowDownZA} from 'lucide-react';
 import type {Loaded,PageItem} from '@/lib/pdf-client';
 import {formatBytes} from '@/components/file-facts';
+import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 import './merge-files.css';
-type Props={fileLabel?:string;files:Loaded[];disabled:boolean;onMove:(index:number,direction:number)=>void;onRemove:(id:string)=>void;preview?:(file:Loaded,page?:PageItem)=>ReactNode;retainedPages?:(file:Loaded)=>number;pages?:PageItem[];onRotatePage?:(id:string)=>void;onRemovePage?:(id:string)=>void;onMovePage?:(id:string,direction:number)=>void;onAdd?:()=>void};
+type Props={settings?:ReactNode;onClear?:()=>void;onSort?:(descending:boolean)=>void;fileLabel?:string;files:Loaded[];disabled:boolean;onMove:(index:number,direction:number)=>void;onRemove:(id:string)=>void;preview?:(file:Loaded,page?:PageItem)=>ReactNode;retainedPages?:(file:Loaded)=>number;pages?:PageItem[];onRotatePage?:(id:string)=>void;onRemovePage?:(id:string)=>void;onMovePage?:(id:string,direction:number)=>void;onAdd?:()=>void};
 function FileCard({file,index,props}:{file:Loaded;index:number;props:Props}){
  const [expanded,setExpanded]=useState(false);
  const {setNodeRef,attributes,listeners,transform,transition,isDragging}=useSortable({id:file.id,disabled:props.disabled});
@@ -21,7 +22,10 @@ function FileCard({file,index,props}:{file:Loaded;index:number;props:Props}){
  </li>;
 }
 export function MergeFiles(props:Props){
+ const [settingsOpen,setSettingsOpen]=useState(false);
+ const [descending,setDescending]=useState(false);
  const sensors=useSensors(useSensor(CardMouseSensor,{activationConstraint:{distance:8}}),useSensor(CardTouchSensor,{activationConstraint:{delay:250,tolerance:8}}),useSensor(KeyboardSensor,{coordinateGetter:sortableKeyboardCoordinates}));
  function reorder(e:DragEndEvent){if(props.disabled||!e.over||e.active.id===e.over.id)return;const from=props.files.findIndex(f=>f.id===e.active.id),to=props.files.findIndex(f=>f.id===e.over!.id);if(from>=0&&to>=0)props.onMove(from,to-from);}
- return <section className="merge-files merge-focused" aria-label="Documents in output order"><div className="merge-list-heading"><div><h2>Arrange your {props.fileLabel??'PDFs'}</h2><p>Drag a document to reorder. On touch screens, hold then drag.</p></div><button type="button" className="secondary" disabled={props.disabled} onClick={props.onAdd}><Plus size={18}/>Add {props.fileLabel??'PDFs'}</button></div><DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={reorder}><SortableContext items={props.files.map(f=>f.id)} strategy={rectSortingStrategy}><ol className="merge-document-grid">{props.files.map((file,index)=><FileCard key={file.id} file={file} index={index} props={props}/>)}</ol></SortableContext></DndContext></section>;
+ return <section className="merge-files merge-focused" aria-label="Documents in output order"><div className="merge-list-heading"><div><h2>Arrange your {props.fileLabel??'PDFs'}</h2><p>Drag a document to reorder. On touch screens, hold then drag.</p></div><div className="merge-file-controls"><button type="button" className="merge-settings-trigger" disabled={props.disabled} aria-label="Merge settings" onClick={()=>setSettingsOpen(true)}><Settings size={20}/></button><button type="button" className="merge-add-control" disabled={props.disabled} onClick={props.onAdd} aria-label="Add files"><Plus size={22}/><span>Add {props.fileLabel??'PDFs'}</span></button>{props.onSort&&<button type="button" disabled={props.disabled||props.files.length<2} aria-label={descending?'Sort files Z to A':'Sort files A to Z'} title={descending?'Sort Z–A':'Sort A–Z'} onClick={()=>{props.onSort?.(descending);setDescending(v=>!v);}}>{descending?<ArrowDownZA size={20}/>:<ArrowDownAZ size={20}/>}</button>}</div></div><DndContext sensors={sensors} collisionDetection={closestCenter} onDragEnd={reorder}><SortableContext items={props.files.map(f=>f.id)} strategy={rectSortingStrategy}><ol className="merge-document-grid">{props.files.map((file,index)=><FileCard key={file.id} file={file} index={index} props={props}/>)}</ol></SortableContext></DndContext><div className="merge-desktop-settings">{props.settings}</div>{props.onClear&&<Dialog open={settingsOpen} onOpenChange={setSettingsOpen}><DialogContent className="merge-mobile-settings"><DialogTitle>Merge PDF files</DialogTitle><DialogDescription>Hold a PDF, then drag to change its order.</DialogDescription><p>{props.files.length} files · {props.pages?.length??0} pages</p>{props.settings}<button type="button" className="secondary" disabled={props.disabled} onClick={()=>{setSettingsOpen(false);props.onClear?.();}}>Clear workspace</button><button type="button" className="primary" onClick={()=>setSettingsOpen(false)}>Done</button></DialogContent></Dialog>}</section>;
 }
+
