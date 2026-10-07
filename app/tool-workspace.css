@@ -147,3 +147,24 @@
 .resize-main-content .large-thumb{width:100%;height:100%;min-height:0;margin:0;padding:0;display:flex;align-items:center;justify-content:center;background:white}
 .resize-main-content .large-thumb img{display:block;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain;border:0;box-shadow:none}
 @media(max-width:1099px){.resize-preview-scroll{max-height:calc(100dvh - 210px);padding:10px;touch-action:pan-y}.resize-main-sheet{max-width:100%!important}}
+
+/* Full-size transformation previews with compact controls. */
+.visual-main-preview{min-width:0;width:100%;display:flex;flex-direction:column;gap:8px}
+.visual-preview-navigation{display:flex;justify-content:center;align-items:center;gap:16px;font-size:13px}
+.visual-preview-navigation button{width:36px;height:36px;border:1px solid var(--border,#ddd);border-radius:10px;background:var(--surface,#fff);color:inherit;font-size:24px}
+.visual-preview-scroll{overflow:auto;max-height:calc(100dvh - 190px);padding:8px 16px 24px}
+.visual-preview-sheet{display:flex;flex-direction:column;align-items:center;gap:10px;min-height:45dvh;margin:0 auto 16px}
+.visual-preview-sheet img{display:block;max-width:100%;width:auto;height:auto;max-height:calc(100dvh - 250px);object-fit:contain;box-shadow:0 4px 18px #0002;background:white}
+.visual-preview-status{font-size:12px;color:var(--muted,#777);min-height:18px}
+.visual-preview-error{max-width:420px;padding:16px;display:grid;gap:12px}
+.visual-preview-placeholder{width:min(100%,450px);min-height:45dvh;background:var(--surface,#fff);border-radius:4px}
+.visual-layout-workspace .label-page-preview,
+.visual-layout-workspace .settings-panel small,
+.visual-layout-workspace .settings-panel p:not([role]),
+.visual-layout-workspace .compression-warning,
+.visual-layout-workspace .task-input-hint:not(#task-input-hint){display:none}
+@media(max-width:1099px){
+ .visual-preview-scroll{max-height:none;padding:8px 0 80px;overflow:visible}
+ .visual-preview-sheet img{width:100%;max-height:none}
+ .visual-preview-sheet{margin-bottom:16px}
+}

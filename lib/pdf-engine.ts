@@ -239,7 +239,7 @@ async function plainPDF(text: string, markdown = false) { const { jsPDF } = awai
     }
     y += 2;
 } return new Uint8Array(p.output('arraybuffer')); }
-async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number) => void, signal?:AbortSignal): Promise<Output> {
+async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number) => void, signal?:AbortSignal, previewContext?:{offset:number;total:number}): Promise<Output> {
     signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
     let first = files[0];
     const inputIssue=taskInputIssue(id,files.length,o,false,items.length);if(inputIssue)throw new Error(inputIssue);
@@ -588,13 +588,14 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         }
         if (['numbers', 'bates', 'headers'].includes(id)) {
             if(!ranges(o.range,out.getPageCount()).includes(i))continue;
-            const n=i+(Number(o.start)||1),g=pageGeometry(p),size=Number(o.labelFontSize??11),margin=Number(o.labelMargin??24);
+            const labelIndex=i+(previewContext?.offset??0),labelTotal=previewContext?.total??out.getPageCount();
+            const n=labelIndex+(Number(o.start)||1),g=pageGeometry(p),size=Number(o.labelFontSize??11),margin=Number(o.labelMargin??24);
             if(!Number.isFinite(size)||size<6||size>72||!Number.isFinite(margin)||margin<5||margin>200)throw new Error('Use font size 6-72 pt and inset margin 5-200 pt.');
             const digits=Number(o.batesDigits??6);if(id==='bates'&&(!Number.isInteger(digits)||digits<1||digits>12))throw new Error('Use 1-12 Bates digits.');
-            const t=id==='numbers'?formattedNumber(n,o.numberFormat,out.getPageCount()):id==='bates'?`${o.text||'DOC-'}${String(n).padStart(digits,'0')}${o.batesSuffix??''}`:labelText(o.text,i+1,out.getPageCount());
+            const t=id==='numbers'?formattedNumber(n,o.numberFormat,labelTotal):id==='bates'?`${o.text||'DOC-'}${String(n).padStart(digits,'0')}${o.batesSuffix??''}`:labelText(o.text,labelIndex+1,labelTotal);
             p.pushOperators(pushGraphicsState(),concatTransformationMatrix(...g.matrix as [number,number,number,number,number,number]));
             const draw=(text:string,position:string)=>{if(!text)return;const width=font.widthOfTextAtSize(text,size),x=position.endsWith('right')?g.width-margin-width:position.endsWith('center')?(g.width-width)/2:margin,y=position.startsWith('top')?g.height-margin-size:position.startsWith('middle')?g.height/2:margin;if(x<0||x+width>g.width||y<0||y+size>g.height)throw new Error('The label does not fit this page. Shorten it or reduce the font size.');p.drawText(text,{x,y,size,font,color:rgb(.2,.2,.25)});};
-            if(id==='headers'){draw(t,'top-left');draw(labelText(o.headerCenter??'',i+1,out.getPageCount()),'top-center');draw(labelText(o.headerRight??'',i+1,out.getPageCount()),'top-right');draw(labelText(o.footer??'',i+1,out.getPageCount()),'bottom-left');draw(labelText(o.footerCenter??'',i+1,out.getPageCount()),'bottom-center');draw(labelText(o.footerRight??'',i+1,out.getPageCount()),'bottom-right');}else draw(t,o.numberPosition??'bottom-center');
+            if(id==='headers'){draw(t,'top-left');draw(labelText(o.headerCenter??'',labelIndex+1,labelTotal),'top-center');draw(labelText(o.headerRight??'',labelIndex+1,labelTotal),'top-right');draw(labelText(o.footer??'',labelIndex+1,labelTotal),'bottom-left');draw(labelText(o.footerCenter??'',labelIndex+1,labelTotal),'bottom-center');draw(labelText(o.footerRight??'',labelIndex+1,labelTotal),'bottom-right');}else draw(t,o.numberPosition??'bottom-center');
             p.pushOperators(popGraphicsState());
         }
         progress(10+Math.round((i+1)/out.getPageCount()*85));
@@ -693,3 +694,11 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
 }
 
 
+/** Bounded, disposable preview. Uses the export transformations without changing source files. */
+export async function previewPDF(id:string,files:Loaded[],items:PageItem[],o:Options,offset:number,total:number,signal?:AbortSignal):Promise<Output>{
+ if(!['crop','nup','numbers','bates','headers','flip','grayscale','invert','rotate','halve'].includes(id))throw new Error('Unsupported preview.');
+ if(items.length>(id==='nup'?9:1))throw new Error('Preview page limit exceeded.');
+ const labels=['numbers','bates','headers'].includes(id);
+ const selected=!labels||ranges(o.range,total).includes(offset);
+ return processPDFUnchecked(selected?id:'rotate',files,items,[],{...o,range:'',...(!selected?{angle:'0'}:{})},()=>{},signal,{offset,total});
+}

@@ -8,3 +8,5 @@ export const render:typeof Engine.render=async(...args)=>(await engine()).render
 export const renderer:typeof Engine.renderer=async(...args)=>(await engine()).renderer(...args);
 export const fields:typeof Engine.fields=async(...args)=>(await engine()).fields(...args);
 export const processPDF:typeof Engine.processPDF=async(...args)=>(await engine()).processPDF(...args);
+
+export const previewPDF:typeof Engine.previewPDF=async(...args)=>(await engine()).previewPDF(...args);
