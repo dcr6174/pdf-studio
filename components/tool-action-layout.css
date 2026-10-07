@@ -1,0 +1,71 @@
+/* One shared action area; page thumbnails and canvas occupy the remaining width. */
+.tool-action-ready .content:not(:has(.export-result-page)){padding-bottom:100px}
+.shared-tool-action-bar{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:16px!important;background:var(--card);color:var(--foreground);box-sizing:border-box}
+.shared-tool-action-bar>div{display:block!important;width:100%;margin:0!important}
+.tool-action-heading h2{font-size:20px;line-height:1.3;margin:0 0 8px}
+.tool-action-heading p{font-size:12px;color:var(--muted);overflow-wrap:anywhere;margin:0 0 12px}
+.tool-action-heading .row{display:flex;gap:8px}
+.tool-action-heading button{min-width:44px;min-height:44px;border:1px solid var(--border)}
+.shared-tool-action-bar .tool-action-settings{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
+.shared-tool-action-bar .task-settings-disclosure{width:100%;overflow:visible}
+.shared-tool-action-bar .task-settings-disclosure>summary{display:flex;align-items:center;justify-content:center;width:44px;min-height:44px;box-sizing:border-box;border:1px solid var(--border);border-radius:10px;cursor:pointer;list-style:none;background:var(--soft)}
+.shared-tool-action-bar .task-settings-disclosure>summary::-webkit-details-marker{display:none}
+.shared-tool-action-bar .task-settings-disclosure:not([open])>.settings-panel{display:none!important}
+.shared-tool-action-bar .settings-panel:not([hidden]){position:static!important;display:flex!important;flex-direction:column!important;flex-wrap:nowrap!important;padding:16px 0!important;border:0!important;gap:16px!important;width:100%!important;margin:0!important}
+.shared-tool-action-bar .field,.shared-tool-action-bar .properties .field{min-width:0!important;max-width:none!important;width:100%!important;flex:none!important}
+.shared-tool-action-bar input,.shared-tool-action-bar textarea,.shared-tool-action-bar select{max-width:100%;font-size:16px;box-sizing:border-box}
+.shared-tool-action-bar .tool-action-bottom{flex:none;margin-top:auto!important;padding-top:12px;border-top:1px solid var(--border)}
+.shared-tool-action-bar .tool-action-bottom>.primary{width:100%;min-height:56px;white-space:normal}
+.shared-tool-action-bar .properties{position:static!important;border:0!important;padding:0!important;width:100%!important;max-height:none;box-shadow:none;background:transparent}
+.shared-tool-action-bar .properties .position-grid{display:grid;grid-template-columns:1fr 1fr;gap:8px}
+.edit-three-column .tool-heading,.edit-three-column .tool-note,.edit-three-column .unified-editor-modes{display:none}
+.edit-three-column .task-workspace{display:block!important}
+.edit-three-column .editor-layout{display:grid!important;grid-template-columns:128px minmax(0,1fr)!important;gap:12px!important;align-items:start}
+.edit-three-column .editor-main{min-width:0}
+.edit-page-rail{min-width:0;background:var(--card);border:1px solid var(--border);border-radius:10px;overflow:hidden;position:sticky;top:84px}
+.edit-page-rail h2{display:flex;justify-content:space-between;padding:12px;font-size:13px;border-bottom:1px solid var(--border);margin:0}
+.edit-page-rail h2 span{font-weight:400;color:var(--muted)}
+.edit-page-list{display:grid;gap:10px;padding:10px;max-height:calc(100dvh - 170px);overflow:auto;overscroll-behavior:contain}
+.edit-page-list>button{display:grid;gap:6px;justify-items:center;min-width:0;width:100%;border:2px solid transparent;border-radius:8px;padding:6px;background:var(--soft);color:var(--foreground)}
+.edit-page-list>button[aria-current=page]{border-color:var(--primary);background:var(--blue-soft)}
+.edit-page-list>button:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+.edit-page-thumbnail{width:100%;height:120px;overflow:hidden;pointer-events:none}
+.edit-page-thumbnail .thumb-shell{height:100%;min-height:0}
+.edit-page-thumbnail img{max-height:120px;width:auto!important;max-width:100%;object-fit:contain}
+.edit-page-list>button>span{font-size:12px}
+.edit-three-column .board-scroll{overflow:auto;max-height:calc(100dvh - 270px);min-height:240px}
+.edit-three-column .editor-toolbar{position:sticky;top:0;z-index:4;gap:4px;align-items:center}
+.edit-three-column .editor-toolbar button{min-width:44px;min-height:44px}
+.edit-three-column .editor-more{margin:0}.edit-three-column .editor-more>summary{min-height:44px;display:flex;align-items:center;padding:8px;cursor:pointer}
+.edit-three-column .editor-help[hidden]{display:none!important}
+.edit-three-column .element-properties>summary{font-size:14px;font-weight:600;min-height:44px;cursor:pointer}
+@media(min-width:768px){
+ .studio-shell.tool-action-ready.document-shell .content:not(:has(.export-result-page)){padding-right:332px!important}
+ .studio-shell.tool-action-ready.document-shell .shared-tool-action-bar{position:fixed!important;top:72px!important;right:0!important;left:auto!important;bottom:0!important;width:312px!important;margin:0!important;padding:20px!important;border:0!important;border-left:1px solid var(--border)!important;border-radius:0!important;z-index:30!important;box-shadow:none!important}
+ .edit-three-column .content{padding-top:16px!important}
+ .handwriting-main.handwriting-tool-action{max-width:none;padding-right:332px;padding-bottom:110px}
+ .handwriting-tool-action .handwriting-layout{display:block}
+ .handwriting-tool-action .handwriting-controls{position:fixed;right:0;top:72px;bottom:90px;width:312px;overflow:auto;box-sizing:border-box;padding:16px;background:var(--card);border-left:1px solid var(--border);z-index:30}
+ .handwriting-tool-action .handwriting-controls section{padding:12px;border-radius:8px}
+ .handwriting-tool-action .handwriting-preview{position:static}
+ .handwriting-tool-action .handwriting-export{position:fixed;right:0;bottom:0;width:312px;box-sizing:border-box;border-radius:0;border-width:1px 0 0 1px;margin:0;z-index:31;flex-direction:column;padding:12px}
+ .handwriting-tool-action .handwriting-export>div{display:none}
+ .handwriting-tool-action .handwriting-download{width:100%;min-height:56px}
+}
+@media(min-width:768px) and (max-width:1099px){.edit-three-column .editor-layout{grid-template-columns:96px minmax(0,1fr)!important}.edit-page-thumbnail{height:90px}.edit-page-thumbnail img{max-height:90px}.edit-page-list{padding:6px}}
+@media(max-width:767px){
+ .tool-action-ready .shared-tool-action-bar{display:none!important}
+ .edit-three-column .editor-layout{grid-template-columns:minmax(0,1fr)!important}
+ .edit-page-rail{position:static}.edit-page-rail h2{padding:8px 12px}
+ .edit-page-list{display:flex;max-height:140px;overflow:auto;padding:8px}
+ .edit-page-list>button{flex:0 0 72px;min-height:112px}.edit-page-thumbnail{height:82px}.edit-page-thumbnail img{max-height:82px}
+ .edit-three-column .board-scroll{max-height:60dvh}
+ .mobile-workspace-panel .properties{position:static!important;width:100%!important;max-height:none!important;border:0;padding:0;background:transparent}
+ .mobile-workspace-panel .editor-toolbar{display:flex;flex-wrap:wrap;gap:6px}
+ .handwriting-main.handwriting-tool-action{padding-bottom:110px}
+ .handwriting-tool-action .handwriting-export{position:fixed;bottom:max(12px,env(safe-area-inset-bottom));right:max(12px,env(safe-area-inset-right));left:auto;width:auto;margin:0;padding:0;border:0;z-index:70;background:transparent}
+ .handwriting-tool-action .handwriting-export>div{display:none}.handwriting-tool-action .handwriting-download{box-shadow:0 6px 24px #0003;min-height:52px}
+}
+
+.edit-layer-list{display:grid;gap:8px;margin-bottom:16px}.edit-layer-list h3{font-size:14px;margin:0}.edit-layer-list .secondary{justify-content:flex-start;overflow-wrap:anywhere;text-align:left}.edit-layer-list .secondary[aria-pressed=true]{border-color:var(--primary);background:var(--blue-soft)}.edit-layer-list .muted{font-size:13px;line-height:1.5}
+.shared-tool-action-bar .document-workspace{position:static;margin:12px 0;min-width:0}.shared-tool-action-bar .workspace-command,.shared-tool-action-bar .workspace-command-actions,.shared-tool-action-bar .workspace-tools{display:flex;flex-wrap:wrap;padding:8px;gap:8px}.shared-tool-action-bar .workspace-command-actions>.primary{display:none}.shared-tool-action-bar .workspace-page-drawer .workspace-thumbnails{position:static;width:100%;height:auto;max-height:240px;flex-direction:row;padding:8px}.shared-tool-action-bar .workspace-history>div{position:static;width:100%;max-width:260px}
