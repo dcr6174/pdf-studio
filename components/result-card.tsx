@@ -1,7 +1,7 @@
 'use client';
 
 import {useEffect, useRef, useState, type ReactNode} from 'react';
-import {ArrowLeft, Download, FolderOpen, Pencil, Copy} from 'lucide-react';
+import {ArrowLeft, Download, FolderOpen, Pencil, Copy, Minimize2, Droplets} from 'lucide-react';
 import {formatBytes} from '@/components/file-facts';
 import './result-screen.css';
 import {Dialog, DialogContent, DialogTitle, DialogDescription} from '@/components/ui/dialog';
@@ -35,15 +35,15 @@ export function ResultCard({output, open, onOpenChange, before, compress, onDown
     const larger = !!compress && inputSize > 0 && output.blob.size > inputSize;
     const saved = compress && inputSize > output.blob.size ? Math.round((1 - output.blob.size / inputSize) * 100) : 0;
     if(fullPage) return <section className="merge-result-page" aria-labelledby="merge-result-heading">
-        <div className="merge-result-check" aria-hidden="true">✓</div>
+        <div className="merge-result-check" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M10 21 17 28 30 13" pathLength="1"/></svg></div>
         <h1 id="merge-result-heading">Your PDFs have been merged!</h1>
         <p className="merge-result-file">{output.name} · {formatBytes(output.blob.size)}</p>
         <button ref={downloadButton} className="primary merge-result-download" onClick={onDownload}><Download size={26}/>Download merged PDF</button>
-        <div className="merge-result-secondary"><button className="link-button" onClick={onSettings}><ArrowLeft size={17}/>Back to files</button>{onSave&&<button className="link-button" onClick={onSave}><FolderOpen size={17}/>Save to My files</button>}</div>
+        <div className="merge-result-secondary"><button className="secondary" onClick={onSettings}><ArrowLeft size={17}/>Back to files</button>{onSave&&<button className="secondary" onClick={onSave}><FolderOpen size={17}/>Save to My files</button>}</div>
         {output.warnings?.map(warning=><p key={warning} role="status">{warning}</p>)}
         {error&&<p className="native-error" role="alert">{error}</p>}
         {previewContent&&<details className="merge-result-preview" onToggle={event=>setPreview(event.currentTarget.open)}><summary>Preview merged PDF</summary>{preview&&previewContent}</details>}
-        {onNextTool&&<div className="merge-result-next"><h2>Continue with this PDF</h2><div>{[['compress','Compress PDF'],['sign','Sign PDF'],['watermark','Add watermark']].map(([id,text])=><button key={id} className="secondary" onClick={()=>onNextTool(id)}>{text}</button>)}</div></div>}
+        {onNextTool&&<div className="merge-result-next"><h2>Continue with this PDF</h2><div>{[['compress','Compress PDF'],['sign','Sign PDF'],['watermark','Add watermark']].map(([id,text])=><button key={id} className="secondary" onClick={()=>onNextTool(id)}><span className={`merge-next-icon merge-next-icon-${id}`}>{id==='compress'?<Minimize2 size={19}/>:id==='sign'?<Pencil size={19}/>:<Droplets size={19}/>}</span>{text}</button>)}</div></div>}
     </section>;
     return <Dialog open={open} onOpenChange={value=>{onOpenChange?.(value);if(!value)onSettings();}}><DialogContent className="result-dialog" onOpenAutoFocus={event=>{event.preventDefault();downloadButton.current?.focus();}}><section className="result-screen" aria-labelledby="result-heading">
         <div className="result-screen-success" aria-hidden="true">
