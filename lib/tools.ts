@@ -23,7 +23,7 @@ export const tools:Tool[] = [
 ['rotate','Rotate PDF','Turn pages in the right direction.','Pages','rotate'],
 ['reverse','Reverse pages','Last page first. Simple.','Pages','reverse'],
 ['duplicate','Duplicate pages','Make a second copy of every page.','Pages','copy'],
-['interleave','Interleave pages','Weave pages from multiple PDFs.','Pages','merge'],
+['interleave','Alternate & Mix PDF','Weave pages from multiple PDFs.','Pages','merge'],
 ['nup','Pages per sheet','Fit 2, 4, 6 or 9 pages on one sheet.','Pages','grid'],
 ['crop','Crop margins','Trim the edges of your pages.','Pages','crop','Cropping hides content outside the page boundary; it does not permanently remove it.'],
 ['resize','Resize to A4','Fit every page onto an A4 sheet.','Pages','crop'],
@@ -70,3 +70,4 @@ export const tools:Tool[] = [
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
 export function accepted(id:string){return id==='images'||id==='scan'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
 export function isMulti(id:string){return ['workflow','merge','organize','interleave','images','scan','compare','zip'].includes(id);}
+

@@ -48,7 +48,7 @@ description: "Strip reachable file attachments from a PDF before sharing. Not a 
  "split-every-page": {title: "Split PDF Into Single Pages", description: "Save every page of a PDF as its own file, packed in one ZIP. Free, in your browser."},
  "reverse-pages": {title: "Reverse PDF Page Order", description: "Flip a PDF so the last page comes first. One click, free, runs in your browser."},
  "duplicate-pages": {title: "Duplicate PDF Pages", description: "Make a second copy of every page in a PDF and download the longer file. Free, in your browser."},
- "alternate-and-mix": {title: "Interleave PDFs: Alternate Pages From Two Files", 
+ "alternate-and-mix": {title: "Alternate & Mix PDF: Interleave Pages", 
 description: "Weave pages from several PDFs into one, for example front sides and back sides from two scans. Free, in your browser."},
  "pages-per-sheet": {title: "Put 2 or 4 PDF Pages on One Sheet", description: "Fit 2 or 4 pages onto each sheet to save paper when printing. Free, runs in your browser. Check text size before printing."},
  "crop-margins": {title: "Crop PDF Margins", description: "Trim the edges of your pages. Cropping hides content outside the page boundary but does not delete it, so do not use it to hide secrets."},
@@ -132,3 +132,4 @@ export function fullTitle(title: string) {
   if(title.length<=60)return title;
   return title.slice(0,57).trimEnd()+'...';
 }
+
