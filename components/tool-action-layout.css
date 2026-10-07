@@ -107,3 +107,31 @@
 .shared-tool-action-bar .workspace-docked-controls .workspace-mobile-add{display:none}
 .shared-tool-action-bar .task-settings-disclosure>summary{width:100%;justify-content:flex-start;gap:8px;padding:10px 12px;font-size:13px}
 
+
+
+@media(max-width:1099px){
+ .studio-shell.edit-canvas-fit{height:100dvh;min-height:0;display:flex;flex-direction:column;overflow:hidden}
+ .studio-shell.edit-canvas-fit>.studio-header{flex-shrink:0}
+ .studio-shell.document-shell.tool-action-ready.edit-canvas-fit>.content{flex:1;min-height:0!important;padding:64px 0 0!important;overflow:hidden;box-sizing:border-box}
+ .edit-canvas-fit .mobile-workspace-controls{top:var(--studio-header-height,64px)}
+ .edit-canvas-fit .studio-workspace-content{height:100%;min-height:0;display:flex;flex-direction:column}
+ .edit-canvas-fit .studio-controls{flex:1;min-height:0;display:flex;flex-direction:column;margin:0;padding:0}
+ .edit-canvas-fit .task-workspace{flex:1;min-height:0;margin:0!important}
+ .edit-canvas-fit .task-canvas{height:100%;min-height:0;display:flex;flex-direction:column}
+ .edit-canvas-fit .task-canvas>.editor-toolbar{position:static!important;flex-shrink:0;flex-wrap:nowrap;overflow-x:auto}
+ .edit-canvas-fit .editor-layout{display:flex!important;flex-direction:column;flex:1;min-height:0;height:auto;gap:0!important}
+ .edit-canvas-fit .editor-main{display:flex;flex-direction:column;flex:1;min-height:0;height:100%;padding:0!important}
+ .mobile-continuous-pages{position:relative;flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:8px 8px calc(80px + env(safe-area-inset-bottom));scroll-padding:8px}
+ .mobile-continuous-pages>section{margin-bottom:16px}
+ .mobile-continuous-pages .board-scroll{height:auto;max-height:none!important;min-height:0!important;overflow:visible;padding:0!important}
+ .mobile-page-label{display:block;padding:6px;font-size:12px;color:var(--muted)}
+ .edit-canvas-fit .editor-pager[hidden],.edit-canvas-fit .tool-guide-disclosure{display:none!important}
+}
+@media(max-width:1099px){
+ .edit-three-column .edit-page-rail{display:none!important}
+ .edit-canvas-fit .task-canvas>.editor-toolbar{position:sticky;top:calc(var(--studio-header-height,64px) + 64px);z-index:24;overflow-x:auto;flex-wrap:nowrap}
+ .edit-canvas-fit .editor-toolbar button{flex-shrink:0}
+}
+
+@media(max-width:1099px){.mobile-continuous-pages{max-height:calc(100dvh - var(--studio-header-height,64px) - 160px);min-height:240px}.edit-canvas-fit .mobile-continuous-pages{max-height:none;min-height:0}.editor-pager[hidden]{display:none!important}}
+
