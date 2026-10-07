@@ -15,8 +15,8 @@ export function MobileWorkspaceControls({files,pageCount,addLabel,onAdd,onSort,o
    {addAvailable&&<button type="button" className="mobile-add-control" disabled={disabled} onClick={onAdd} aria-label={addLabel} title={addLabel}><Plus size={22} aria-hidden="true"/></button>}
    {onSort&&files.length>1&&<button type="button" disabled={disabled} onClick={()=>{onSort(descending);setDescending(value=>!value);}} aria-label={descending?'Sort files Z to A':'Sort files A to Z'} title={descending?'Sort Z–A':'Sort A–Z'}>{descending?<ArrowUpAZ size={20} aria-hidden="true"/>:<ArrowDownAZ size={20} aria-hidden="true"/>}</button>}
   </nav>}
-  <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}><DialogContent fullscreen className="mobile-workspace-panel">
-   <DialogTitle>Document controls</DialogTitle><DialogDescription>Organize pages and adjust this tool.</DialogDescription>
+  <Dialog open={settingsOpen} onOpenChange={setSettingsOpen}><DialogContent className="mobile-workspace-panel">
+   <DialogTitle>Tool settings</DialogTitle><DialogDescription>Adjust your tool or organize pages below.</DialogDescription>
    <p>{files.length} {files.length===1?'file':'files'} · {pageCount} pages</p>
    <WorkspaceFloatingControls pages={organize} disabled={disabled}/>{settingsAvailable&&settings}
    <button type="button" className="secondary" disabled={disabled} onClick={()=>{setSettingsOpen(false);onClear();}}>Clear workspace</button>
