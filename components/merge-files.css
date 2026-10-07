@@ -69,7 +69,7 @@
 .merge-sidebar-intro p{font-size:.9rem;line-height:1.6;color:var(--muted)}
 @media(min-width:1100px){
  [data-tool=merge].document-loaded .content:not(:has(.merge-result-page)){padding-right:324px!important}
- [data-tool=merge] .action-bar{position:fixed;top:90px;bottom:0;right:0;width:300px;margin:0;border-radius:0;border-width:0 0 0 1px;padding:24px;display:flex;flex-direction:column;align-items:stretch;gap:24px;box-sizing:border-box;box-shadow:none;z-index:20}
+ [data-tool=merge] .action-bar{position:fixed;top:72px;bottom:0;right:0;width:300px;margin:0;border-radius:0;border-width:0 0 0 1px;padding:24px;display:flex;flex-direction:column;align-items:stretch;gap:24px;box-sizing:border-box;box-shadow:none;z-index:20}
  [data-tool=merge] .action-bar>div{width:100%;justify-content:flex-start}
  [data-tool=merge] .action-bar>.primary{margin-top:auto;width:100%;min-height:64px}
 }
@@ -107,3 +107,12 @@
 [data-tool=merge].document-loaded .content:has(.merge-result-page){padding-inline:clamp(12px,3vw,40px)!important}
 .merge-result-page{width:100%;box-sizing:border-box;margin-inline:auto}
 @media(max-width:1099px){[data-tool=merge] .action-bar>.merge-sidebar-intro{display:block!important;width:100%}.merge-sidebar-intro h1{font-size:1rem;margin:0}.merge-sidebar-intro p{display:none}}
+
+/* Keep reset beside the title and align the panel with the shared header. */
+.merge-sidebar-intro{position:relative}
+.merge-sidebar-intro h1{padding-right:44px}
+.merge-sidebar-intro>.secondary{position:absolute;right:0;top:-8px;width:44px;height:44px;min-height:44px;padding:0;border:0;background:transparent;color:var(--foreground);font-size:0;border-radius:8px}
+.merge-sidebar-intro>.secondary::before{content:"×";font-size:28px;line-height:1;font-weight:400}
+.merge-sidebar-intro>.secondary:hover{background:var(--soft)}
+.merge-sidebar-intro>.secondary:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+@media(max-width:1099px){.merge-sidebar-intro h1{min-height:44px;display:flex;align-items:center}.merge-sidebar-intro>.secondary{top:0}}
