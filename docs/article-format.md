@@ -5,7 +5,7 @@ User approved the Alternate & Mix direction on 7 October 2026.
 1. Clear how-to title and tool CTA at the top. Action pages remain free of article content.
 2. Exact visible button names and input-order steps. Explain correction paths, not vague advice.
 3. Practical worked example and real test evidence before optional Buddy story. Worked example navigation targets the actual tested block.
-4. Tests show the date, browser and source version, and distinguish a fresh processing run from inspection of a published sample. Do not invent test results, screenshots or browser versions. Record limits explicitly.
+4. Tests show the date and browser, and distinguish a fresh processing run from inspection of a published sample. Do not invent test results, screenshots or browser versions. Record limits explicitly.
 5. Refresh real screenshots when names change. Keep the automation pointer outside capture bounds. Result captures focus on completion and download; do not include the preview area. Offer actual output separately for inspection.
 6. Buddy demonstrates each tool’s real action with labelled inputs and output. Put the main animation above supporting scenes; retain independent Buddy story Play/Pause/Replay and reduced-motion support. Do not reuse the interleave sequence for unrelated tools.
 7. Include task-specific troubleshooting, meaningful FAQs, a CTA after the story and another after FAQs.
@@ -25,6 +25,8 @@ Optional article/guide practice workspaces may teach the tool with sample cards.
 
 ## Header Buddy interaction
 
-Article/guide hero Buddy may respond to click, tap and native keyboard activation with a short tool-specific demonstration and celebration. Keep it user-triggered, silent, independent from the larger operation illustration and practice puzzle, and show a static final sequence in reduced-motion mode. Keep the main tool CTA ahead of Buddy on phone layouts. Variants for different tools/articles must depict their actual operation, not reuse an unrelated interleave example.
+Article/guide hero Buddy loops automatically and silently, with no tap prompt or playback controls, independently from the larger operation illustration and practice puzzle. Use vector rendering to stay sharp at 4K and show a static final sequence in reduced-motion mode. Keep the main tool CTA ahead of Buddy on phone layouts. Variants for different tools/articles must depict their actual operation, not reuse an unrelated interleave example.
 
 Use readable source labels (A/B) and page-specific output labels (A1/B1…). Give worked examples, verification notes and sample downloads generous vertical spacing. Diagram headings and arrows must remain readable in dark mode.
+
+Public site pages must not link to the PDF Studio GitHub repository or expose commit identifiers. Keep source references and implementation verification in repository documentation only.
