@@ -65,10 +65,10 @@
 [data-tool=merge] .merge-card-actions{margin-top:8px;padding-top:4px}
 [data-tool=merge] .merge-card-actions button:last-child{min-height:36px;font-size:.75rem}
 .merge-sidebar-intro{display:block!important}
-.merge-sidebar-intro h2{margin:0 0 14px;font-size:1.4rem}
+.merge-sidebar-intro h1{margin:0 0 14px;font-size:1.4rem}
 .merge-sidebar-intro p{font-size:.9rem;line-height:1.6;color:var(--muted)}
 @media(min-width:1100px){
- [data-tool=merge].document-loaded .content{padding-right:324px!important}
+ [data-tool=merge].document-loaded .content:not(:has(.merge-result-page)){padding-right:324px!important}
  [data-tool=merge] .action-bar{position:fixed;top:90px;bottom:0;right:0;width:300px;margin:0;border-radius:0;border-width:0 0 0 1px;padding:24px;display:flex;flex-direction:column;align-items:stretch;gap:24px;box-sizing:border-box;box-shadow:none;z-index:20}
  [data-tool=merge] .action-bar>div{width:100%;justify-content:flex-start}
  [data-tool=merge] .action-bar>.primary{margin-top:auto;width:100%;min-height:64px}
@@ -99,3 +99,11 @@
 @keyframes merge-success-pulse{0%{transform:scale(.9);opacity:.6}75%,100%{transform:scale(1.5);opacity:0}}
 @keyframes merge-success-draw{0%{stroke-dashoffset:1;opacity:0}25%,85%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
 @media(prefers-reduced-motion:reduce){.merge-result-check:before,.merge-result-check path{animation:none}.merge-result-check path{stroke-dashoffset:0}.merge-result-secondary>.secondary,.merge-result-next .secondary,.merge-result-download{transition:none}}
+
+/* The upload title is centered; loaded files own the main workspace. */
+[data-tool=merge].empty-tool .tool-heading{display:block;text-align:center}
+[data-tool=merge].empty-tool .tool-heading p{margin-inline:auto}
+[data-tool=merge] .tool-heading[hidden]{display:none!important}
+[data-tool=merge].document-loaded .content:has(.merge-result-page){padding-inline:clamp(12px,3vw,40px)!important}
+.merge-result-page{width:100%;box-sizing:border-box;margin-inline:auto}
+@media(max-width:1099px){[data-tool=merge] .action-bar>.merge-sidebar-intro{display:block!important;width:100%}.merge-sidebar-intro h1{font-size:1rem;margin:0}.merge-sidebar-intro p{display:none}}

@@ -67,7 +67,7 @@ export function HandwritingStudio({mode}:{mode:CreativeMode}){
   </div>
   <div className="handwriting-export"><div aria-live="polite">{error?<p role="alert" className="handwriting-error">{error}</p>:opening?<p>Reading your file…</p>:busy?<p>Updating your notebook…</p>:<p>{result?`${result.pages} ${result.pages===1?'page':'pages'} · ${(result.bytes.length/1000).toFixed(1)} KB · No added watermark`:'Your text is retained.'}</p>}{(opening||busy)&&<button type="button" onClick={()=>{importJob.current?.abort();buildJob.current?.abort();setOpening(false);setBusy(false);setError('Cancelled. Your text is retained; change a setting to regenerate.');}}>Cancel</button>}</div><button type="button" className="handwriting-download" disabled={!ready||busy||opening} onClick={download}><Download size={20}/>Export PDF</button></div>
   {downloaded&&<div className="handwriting-success" role="status"><p>Your download has started. Check your browser’s downloads.</p><SupportLink success/></div>}
-  <section className="handwriting-help"><h2>How does it work?</h2><ol><li>{mode==='notebook-maker'?'Choose your paper and number of pages.':'Type your words or import selectable text from a PDF.'}</li><li>Choose a style and inspect every page in the live preview.</li><li>Download the PDF shown in your preview.</li></ol><p>Processing stays in your browser. Fonts support different characters; unsupported characters produce a helpful error instead of disappearing. Notes are kept in this tab, not automatically saved. PDF import is text extraction, not original-layout rewriting or handwriting recognition.</p><a href="/fonts/handwriting/sources.json" target="_blank" rel="noopener noreferrer">Font sources and licenses</a></section>
+
  </div>{resultScreen}</main>;
 }
 
