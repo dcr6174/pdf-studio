@@ -159,3 +159,5 @@
 
 
 .inline-pdf-text{user-select:text!important;-webkit-user-select:text!important;touch-action:auto;caret-color:currentColor;pointer-events:auto;font-size:inherit!important;line-height:1.3!important}.mark.text.editing-text{user-select:text!important;-webkit-user-select:text!important;touch-action:auto}
+
+.mark.text:has(.empty-text-placeholder){min-width:8ch;min-height:1.3em;outline:1px dashed var(--primary)}.empty-text-placeholder{display:block;cursor:move;white-space:nowrap;user-select:none}
