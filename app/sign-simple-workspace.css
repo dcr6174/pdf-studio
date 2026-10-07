@@ -70,3 +70,12 @@
 .studio-shell.sign-workspace.document-loaded .editor-layout{grid-template-columns:100px minmax(0,1fr)!important;gap:18px!important}
 .studio-shell.sign-workspace.document-loaded .task-canvas{min-width:0;width:100%;grid-column:auto!important}
 @media(max-width:1099px){.studio-shell.sign-workspace.document-loaded .editor-layout{grid-template-columns:minmax(0,1fr)!important}.studio-shell.sign-workspace.document-loaded .edit-page-list{max-height:90px}}
+
+/* Keep mobile signing focused on the active PDF page. */
+@media(max-width:1099px){.studio-shell.sign-workspace.document-loaded .edit-page-rail{display:none!important}}
+
+@media(max-width:1099px){
+ .studio-shell .mobile-pdf-scroll{display:flex;flex-direction:column;align-items:center;gap:18px;overflow-y:auto;overscroll-behavior:contain;touch-action:pan-y}
+ .studio-shell .mobile-pdf-scroll .page-board{flex:none;max-width:none;margin-block:0;touch-action:pan-y}
+ .studio-shell .mobile-pdf-scroll .mark,.studio-shell .mobile-pdf-scroll .resize-handle{touch-action:none}
+}

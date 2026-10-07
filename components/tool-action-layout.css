@@ -117,3 +117,5 @@
  .edit-canvas-fit .task-canvas>.editor-toolbar{position:sticky;top:calc(var(--studio-header-height,120px) + 64px);z-index:24;overflow-x:auto;flex-wrap:nowrap}
  .edit-canvas-fit .editor-toolbar button{flex-shrink:0}
 }
+
+@media(max-width:767px){.mobile-continuous-pages{max-height:calc(100dvh - var(--studio-header-height,120px) - 160px);min-height:240px}.edit-canvas-fit .mobile-continuous-pages{max-height:none;min-height:0}.editor-pager[hidden]{display:none!important}}
