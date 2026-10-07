@@ -12,9 +12,9 @@ export function SiteFooter({tool='PDF Studio'}:{tool?:string}){
   <nav className="footer-columns" aria-label="Footer navigation">
    <div className="footer-group"><h2>Tools</h2><Link href="/tools">All tools</Link><Link href="/#shelf">My files</Link><Link href="/lab">Lab</Link></div>
    <div className="footer-group"><h2>Learn</h2><Link href="/guides">Guides</Link><Link href="/blog">Blog</Link><Link href="/check-it-yourself">Privacy check</Link></div>
-   <div className="footer-group"><h2>Help</h2><Link href="/help">Help</Link><Link href="/faq">FAQ</Link><Link href="/terms">Terms</Link><Link href="/privacy">Privacy</Link><FooterActions tool={tool} compact/></div>
+   <div className="footer-group"><h2>Support</h2><Link href="/help">Help</Link><Link href="/faq">FAQ</Link><FooterActions tool={tool} compact action="report"/></div>
    <div className="footer-group"><h2>Company</h2><Link href="/about">About</Link><Link href="/contact">Contact</Link><a className="footer-donate" href="https://buymeacoffee.com/dcr6174" target="_blank" rel="noopener noreferrer"><Heart size={17} aria-hidden="true"/>Donate</a></div>
   </nav>
-  <div className="footer-bottom"><span>Files stay on your device</span><span>© 2026 PDF Studio</span></div>
+  <div className="footer-bottom"><span>Files stay on your device</span><div className="footer-legal"><span>© 2026 PDF Studio</span><Link href="/terms">Terms</Link><Link href="/privacy">Privacy</Link><FooterActions tool={tool} compact action="preferences"/></div></div>
  </div></footer>;
 }
