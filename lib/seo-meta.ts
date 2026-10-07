@@ -128,6 +128,7 @@ description: "Make practice sheets with light tracing lines and blank space unde
 /** Adds the brand only when the whole title stays at 60 characters or fewer. */
 export function fullTitle(title: string) {
   const branded = title + ' | PDF Studio';
-  return branded.length <= 60 ? branded : title;
+  if(branded.length<=60)return branded;
+  if(title.length<=60)return title;
+  return title.slice(0,57).trimEnd()+'...';
 }
-

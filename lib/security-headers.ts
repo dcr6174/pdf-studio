@@ -1,0 +1,9 @@
+export function withSecurityHeaders(response:Response,path:string){
+ const headers=new Headers(response.headers);
+ headers.set('X-Content-Type-Options','nosniff');
+ headers.set('Referrer-Policy','strict-origin-when-cross-origin');
+ headers.set('Permissions-Policy','camera=(self), microphone=(), geolocation=(), payment=()');
+ headers.set('Content-Security-Policy',"default-src 'self'; base-uri 'self'; object-src 'none'; frame-ancestors 'none'; script-src 'self' 'unsafe-inline' 'wasm-unsafe-eval' https://static.cloudflareinsights.com; style-src 'self' 'unsafe-inline'; img-src 'self' data: blob:; font-src 'self' data:; worker-src 'self' blob:; connect-src 'self' https://cdn.jsdelivr.net https://tessdata.projectnaptha.com https://cloudflareinsights.com; frame-src 'self' blob:; form-action 'self'");
+ if(path.startsWith('/analytics')||path.startsWith('/api/analytics'))headers.set('X-Robots-Tag','noindex, nofollow');
+ return new Response(response.body,{status:response.status,statusText:response.statusText,headers});
+}

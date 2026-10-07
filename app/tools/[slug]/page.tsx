@@ -1,3 +1,5 @@
+import {canonicalToolRoutes} from '@/lib/canonical-routes';
+import {redirect} from 'next/navigation';
 import Link from '@/components/browser-link';
 import {toolMeta,fullTitle} from '@/lib/seo-meta';
 import {FormLanding} from '@/components/form-landing';
@@ -23,7 +25,7 @@ export async function generateMetadata({params}:{params:Promise<{slug:string}>})
  return {title:{absolute:fullTitle(meta.title)},description:meta.description,alternates:{canonical:'/tools/'+t.slug},twitter:{card:'summary_large_image',images:[image.url],title:fullTitle(meta.title),description:meta.description},openGraph:{images:[image],title:fullTitle(meta.title),description:meta.description,url:'https://pdf-studio.in/tools/'+t.slug}};
 }
 export default async function ToolPage({params}:{params:Promise<{slug:string}>}){
- const {slug}=await params;if(slug==='pdf-to-handwriting')return <div className="creative-shell"><SiteHeader/><HandwritingStudio mode="pdf-to-handwriting"/></div>;const conversion=conversionGuides.find(g=>g.slug===slug);if(conversion)return <ConversionGuide guide={conversion}/>;const t=seoPages.find(t=>t.slug===slug);if(!t)notFound();
+ const {slug}=await params;if(canonicalToolRoutes[slug])redirect('/tools/'+canonicalToolRoutes[slug]);if(slug==='pdf-to-handwriting')return <div className="creative-shell"><SiteHeader/><HandwritingStudio mode="pdf-to-handwriting"/></div>;const conversion=conversionGuides.find(g=>g.slug===slug);if(conversion)return <ConversionGuide guide={conversion}/>;const t=seoPages.find(t=>t.slug===slug);if(!t)notFound();
  const tool=tools.find(x=>x.id===t.id)!,guidance=searchGuidance[t.slug]??toolGuidance[t.id];
  const formats=accepted(t.id).replaceAll('.','').toUpperCase();
  const faq:[string,string][]=[...guidance.faq,
@@ -54,9 +56,6 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
   </section>;
  return <div className="tool-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
-  <Studio initialTool={t.id} initialHeading={t.title} initialOptions={t.slug==='compress-pdf-to-100kb'?{compressTarget:'100'}:undefined} guide={guide}/>
+  <Studio initialTool={t.id} initialHeading={t.title} initialOptions={t.slug==='compress-pdf-to-100kb'?{compressTarget:'100'}:undefined}/>{guide}
  </div>;
 }
-
-
-

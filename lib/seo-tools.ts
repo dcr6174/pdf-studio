@@ -1,3 +1,4 @@
+import {canonicalToolRoutes} from './canonical-routes';
 import { tools } from './tools';
 
 const curatedTools = [
@@ -211,4 +212,4 @@ const keywordPages = [
  {slug:'edit-cv-pdf',id:'native-text',title:'Edit CV PDF',heading:'Fix your CV or resume PDF without retyping it',intro:'Replace a supported single-line phone number, date, job title or typo in your CV PDF, inspect the result, and download without a watermark.',detail:'Works on PDFs with real, selectable text (for example exported from Word or Google Docs). Edits are single-line replacements; OCR can make a scanned CV searchable, but does not guarantee its original visible text can be edited.'},
  {slug:'compress-pdf-to-100kb',id:'compress',title:'Compress PDF to 100 KB',heading:'Get a PDF under 100 KB for forms and job portals',intro:'Shrink a PDF for upload limits such as 100 KB, 200 KB or 500 KB, check the result size, and try a stronger setting if needed.',detail:'There is no guaranteed target size: text-only PDFs may already be small, while photos and scans need an image quality option. The result shows the new size before you download.'},
 ].map(page=>({...page,group:tools.find(tool=>tool.id===page.id)!.group}));
-export const seoPages=[...seoTools,...keywordPages];
+export const seoPages=[...seoTools,...keywordPages].filter(page=>!canonicalToolRoutes[page.slug]);

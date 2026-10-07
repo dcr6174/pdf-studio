@@ -1,3 +1,5 @@
+import {formattedNumber,labelText} from './task-labels';
+import {workflowOperations,workflowStepIssue} from './workflow-recipes';
 import {taskInputIssue} from './task-readiness';
 import {readFormFields,applyFormValues,flattenVisibleForm,type FormValue} from './pdf-forms';
 import {markRotation} from './mark-rotation';
@@ -93,6 +95,11 @@ export type Options = {
     flattenForm?:boolean;
     flattenMode?:'forms'|'image';
     footer?:string;
+    keywords?:string;creator?:string;producer?:string;passwordConfirm?:string;
+    numberPosition?:string;numberFormat?:string;labelFontSize?:string;labelMargin?:string;batesDigits?:string;batesSuffix?:string;
+    headerCenter?:string;headerRight?:string;footerCenter?:string;footerRight?:string;
+    cropTop?:string;cropBottom?:string;cropLeft?:string;cropRight?:string;flipAxis?:string;
+    blankAt?:string;imagePaper?:string;imageMargin?:string;imageOrientation?:string;
 };
 export type Output = {
     blob: Blob;
@@ -228,14 +235,23 @@ async function plainPDF(text: string, markdown = false) { const { jsPDF } = awai
 async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number) => void, signal?:AbortSignal): Promise<Output> {
     signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
     let first = files[0];
-    const inputIssue=taskInputIssue(id,files.length,o);if(inputIssue)throw new Error(inputIssue);
+    const inputIssue=taskInputIssue(id,files.length,o,false,items.length);if(inputIssue)throw new Error(inputIssue);
     if(id==='workflow'){
-      const names=o.recipe==='custom'?(o.workflowSteps??['merge','compress']):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'||o.recipe==='share-ready'?['clean','compress']:o.recipe==='clean-scan'?['ocr']:o.recipe==='email-ready'?['compress']:o.recipe==='print-ready'?['resize']:['merge','compress'];
+      const names=o.recipe==='custom'?(o.workflowSteps??[]):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'||o.recipe==='share-ready'?['clean','compress']:o.recipe==='clean-scan'?['ocr']:o.recipe==='email-ready'?['compress']:o.recipe==='print-ready'?['resize']:['merge','compress'];
       const steps=names.map((id,index)=>({id,settings:workflowSettings(id,o.recipe==='custom'?o.workflowSettings?.[index]:undefined)})).filter((_,index)=>o.recipe!=='custom'||!o.workflowDisabled?.includes(index));
-      if(!steps.length)throw new Error('Add at least one workflow step.');if(steps.length>8)throw new Error('This workflow supports up to 8 steps. Remove extra steps and retry.');if(steps.some(s=>!['merge','rotate','reverse','clean','compress','resize','ocr'].includes(s.id)))throw new Error('This workflow includes an unsupported step. Choose a listed operation.');
-      let currentFiles=files,currentPages=items,currentMarks=marks;let output:Output|undefined;const reports:string[]=[];
-      for(let i=0;i<steps.length;i++){signal?.throwIfAborted();try{output=await processPDF(steps[i].id,currentFiles,currentPages,currentMarks,{...o,range:'',resizeRange:'',quality:'compact',angle:'90',...steps[i].settings},n=>progress(Math.round((i*100+n)/steps.length)),signal);}catch(e){if(signal?.aborted)throw e;throw new Error(`Step ${i+1} (${steps[i].id}) failed: ${e instanceof Error?e.message:'Could not process this step.'} Your original workspace is retained.`);}if(output.report)reports.push(output.report);const bytes=new Uint8Array(await output.blob.arrayBuffer());const doc=await PDFDocument.load(bytes,{updateMetadata:false});const file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];}
-      return {...output!,report:`Completed: ${steps.map(s=>s.id).join(' → ')}. Original workspace retained. ${reports.join(' ')}`};
+      if(!steps.length)throw new Error('Add at least one workflow step.');if(steps.length>8)throw new Error('This workflow supports up to 8 steps. Remove extra steps and retry.');if(steps.some(s=>!workflowOperations.includes(s.id as typeof workflowOperations[number])&&s.id!=='ocr'))throw new Error('This workflow includes an unsupported step. Choose a listed operation.');
+      let currentFiles=files,currentPages=items,currentMarks=marks;let output:Output|undefined;const reports:string[]=[],timings:string[]=[];
+      for(let i=0;i<steps.length;i++){
+        signal?.throwIfAborted();const step=steps[i],started=Date.now();const issue=workflowStepIssue(step.id,step.settings,currentPages.length,currentFiles.length,i);if(issue)throw new Error(`Step ${i+1}: ${issue}`);
+        let target=step.id,stepPages=currentPages,stepFiles=currentFiles;
+        if(step.id==='remove'){const removed=new Set(ranges(step.settings.range??'',currentPages.length));stepPages=currentPages.filter((_,n)=>!removed.has(n));target='organize';}
+        if(step.id==='reorder'){stepPages=ranges(step.settings.range??'',currentPages.length).map(n=>currentPages[n]);target='organize';}
+        if(step.id==='blank'){const d=await assemble(currentFiles,currentPages,signal,o.flattenForm);const at=Number(step.settings.blankAt??1)-1;d.insertPage(at,[595.28,841.89]);const bytes=await d.save(),file:Loaded={...currentFiles[0],id:crypto.randomUUID(),bytes,size:bytes.length,pages:d.getPageCount(),doc:d};stepFiles=[file];stepPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));target='organize';}
+        try{output=await processPDF(target,stepFiles,stepPages,currentMarks,{...o,range:'',resizeRange:'',quality:'compact',angle:'90',...step.settings},n=>progress(Math.round((i*100+n)/steps.length)),signal);}catch(e){if(signal?.aborted)throw e;throw new Error(`Step ${i+1} (${step.id}) failed: ${e instanceof Error?e.message:'Could not process this step.'} Your original workspace is retained.`);}
+        timings.push(`Step ${i+1}: ${step.id} - completed in ${((Date.now()-started)/1000).toFixed(1)}s`);if(output.report)reports.push(output.report);
+        const bytes=new Uint8Array(await output.blob.arrayBuffer()),doc=await PDFDocument.load(bytes,{updateMetadata:false}),file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];
+      }
+      return {...output!,name:(files[0]?.name??'document.pdf').replace(/\.pdf$/i,'')+'-workflow.pdf',inputSize:files.reduce((n,f)=>n+f.size,0),report:`Completed: ${steps.map(s=>s.id).join(' → ')}. Original workspace retained.\n${timings.join('\n')}\n${reports.join('\n')}`};
     }
     if(id==='merge'&&files.length<2)throw new Error('Add at least two PDF files to merge.');
     const unchanged = files.length===1 && !first.image && !marks.length && items.length===first.pages && items.every((p,i)=>p.fileId===first.id&&p.index===i&&p.rotation===0);
@@ -301,8 +317,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
                 throw new Error('Use a password with at least 8 characters.');
             p.setProtection({ userPassword: o.password, ownerPassword: crypto.randomUUID(), algorithm: 'AES-256' });
         }
-        else
-            p.removeProtection();
+        else{if(!p.isEncrypted)return result(first.bytes,`${filename}-unlocked.pdf`,undefined,'No password to remove. The original PDF is already unencrypted.');p.removeProtection();}
         return result(await p.save(), `${filename}-${id === 'encrypt' ? 'protected' : 'unlocked'}.pdf`);
     }
     if (id === 'zip') {
@@ -324,7 +339,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         if (!text.trim())
             throw new Error('No selectable text found. Try the OCR tool first.');
         if (id === 'text' || id === 'audio')
-            return result(text, `${filename}.txt`, 'text/plain', id === 'audio' ? text : undefined);
+            return result(text, `${filename}.txt`, 'text/plain', text);
         if (id === 'word') {
             const { Document, Packer, Paragraph, TextRun } = await import('docx');
             const d = new Document({ sections: [{ children: text.split('\n').map(t => new Paragraph({ children: [new TextRun(t)] })) }] });
@@ -332,14 +347,14 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         }
         const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         if (id === 'html')
-            return result(`<!doctype html><html lang="en"><meta charset="utf-8"><title>${esc(filename)}</title><style>body{max-width:760px;margin:40px auto;padding:20px;font:18px/1.7 system-ui}section{white-space:pre-wrap;border-bottom:1px solid #ddd;padding:30px 0}</style>${texts.map(t => `<section>${esc(t)}</section>`).join('')}</html>`, `${filename}.html`, 'text/html');
+            return result(`<!doctype html><html lang="en"><meta charset="utf-8"><title>${esc(filename)}</title><style>body{max-width:760px;margin:40px auto;padding:20px;font:18px/1.7 system-ui}section{white-space:pre-wrap;border-bottom:1px solid #ddd;padding:30px 0}</style>${texts.map(t => `<section>${esc(t)}</section>`).join('')}</html>`, `${filename}.html`, 'text/html',text.slice(0,3000));
         if (id === 'epub') {
             const z = new JSZip();
             z.file('mimetype', 'application/epub+zip', { compression: 'STORE' });
             z.file('META-INF/container.xml', '<?xml version="1.0"?><container version="1.0" xmlns="urn:oasis:names:tc:opendocument:xmlns:container"><rootfiles><rootfile full-path="OEBPS/content.opf" media-type="application/oebps-package+xml"/></rootfiles></container>');
             z.file('OEBPS/book.xhtml', `<html xmlns="http://www.w3.org/1999/xhtml"><head><title>${esc(filename)}</title></head><body>${texts.map(t => `<p>${esc(t).replace(/\n/g, '<br/>')}</p>`).join('')}</body></html>`);
             z.file('OEBPS/nav.xhtml', '<html xmlns="http://www.w3.org/1999/xhtml" xmlns:epub="http://www.idpf.org/2007/ops"><head><title>Contents</title></head><body><nav epub:type="toc"><ol><li><a href="book.xhtml">Document</a></li></ol></nav></body></html>');
-            z.file('OEBPS/content.opf', `<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="id"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="id">urn:uuid:${crypto.randomUUID()}</dc:identifier><dc:title>${esc(filename)}</dc:title><dc:language>en</dc:language><meta property="dcterms:modified">${new Date().toISOString().slice(0, 19)}Z</meta></metadata><manifest><item id="book" href="book.xhtml" media-type="application/xhtml+xml"/><item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/></manifest><spine><itemref idref="book"/></spine></package>`);
+            z.file('OEBPS/content.opf', `<package xmlns="http://www.idpf.org/2007/opf" version="3.0" unique-identifier="id"><metadata xmlns:dc="http://purl.org/dc/elements/1.1/"><dc:identifier id="id">urn:uuid:${crypto.randomUUID()}</dc:identifier><dc:title>${esc(o.title||filename)}</dc:title><dc:creator>${esc(o.author||'')}</dc:creator><dc:language>en</dc:language><meta property="dcterms:modified">${new Date().toISOString().slice(0, 19)}Z</meta></metadata><manifest><item id="book" href="book.xhtml" media-type="application/xhtml+xml"/><item id="nav" href="nav.xhtml" media-type="application/xhtml+xml" properties="nav"/></manifest><spine><itemref idref="book"/></spine></package>`);
             return { blob: await z.generateAsync({ type: 'blob', mimeType: 'application/epub+zip' }), name: `${filename}.epub` };
         }
         const x = await import('xlsx');
@@ -351,7 +366,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             return result(x.utils.sheet_to_csv(sheet), `${filename}.csv`, 'text/csv',report);
         const w = x.utils.book_new();
         x.utils.book_append_sheet(w, sheet, 'Extracted text');
-        return result(new Uint8Array(x.write(w, { type: 'array', bookType: 'xlsx' })), `${filename}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',report);
+        return {...result(new Uint8Array(x.write(w, { type: 'array', bookType: 'xlsx' })), `${filename}.xlsx`, 'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet',report),warnings:[rows.some(row=>row.length>1)?'Possible table columns detected. This is heuristic extraction; verify all rows and totals.':'No table columns detected. The spreadsheet contains extracted text lines, not reconstructed tables.']};
     }
     if (!items.length && files.some(f => f.pages > 0) && id !== 'form')
         throw new Error('Keep at least one page in your document.');
@@ -367,6 +382,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         throw new Error('Keep at least one page in your document.');
     if(order.length>400)throw new Error('This operation would exceed the 400-page workspace limit. Choose fewer pages.');
     const out = id==='form'?await PDFDocument.load(first.bytes,{updateMetadata:false}):await assemble(files, order,signal,['merge','edit','sign','watermark'].includes(id)&&o.flattenForm);
+    if(['images','scan'].includes(id)&&o.imagePaper&&o.imagePaper!=='original'){const sheet=resizeSheet({resizeSize:o.imagePaper,resizeOrientation:o.imageOrientation}),margin=Number(o.imageMargin??20);if(!Number.isFinite(margin)||margin<0||margin>100)throw new Error('Choose an image margin between 0 and 100 pt.');const d=await PDFDocument.create();for(const item of order){const f=files.find(f=>f.id===item.fileId);if(!f?.image)throw new Error('Choose images for this conversion.');const image=await d.embedPng(f.image),p=d.addPage(sheet),scale=Math.min((sheet[0]-margin*2)/image.width,(sheet[1]-margin*2)/image.height);p.drawImage(image,{x:(sheet[0]-image.width*scale)/2,y:(sheet[1]-image.height*scale)/2,width:image.width*scale,height:image.height*scale});p.setRotation(degrees(item.rotation));}return result(await d.save(),`${filename}-images.pdf`,undefined,`${d.getPageCount()} image pages on ${o.imagePaper} sheets. Text recognition was not performed.`);}
     if(id==='split-chapters'){
       if(out.getForm().getFields().length)throw new Error('Flatten fillable fields before splitting chapters, then reopen the result. Editable fields cannot safely be copied into chapter files.');
       const bytes=await out.save();const d=await renderer(bytes);try{const outline=await d.getOutline();if(!outline?.length)throw new Error('This PDF has no top-level bookmarks. Add bookmarks first, or use Split with page ranges.');const starts=new Set<number>([0]);for(const row of outline){signal?.throwIfAborted();let dest=row.dest;if(typeof dest==='string')dest=await d.getDestination(dest);if(Array.isArray(dest)){const n=typeof dest[0]==='number'?dest[0]:await d.getPageIndex(dest[0]);if(n>=0&&n<out.getPageCount())starts.add(n);}}if(starts.size===1)throw new Error('No usable chapter boundaries were found. Use Split with page ranges instead.');const bounds=[...starts].sort((a,b)=>a-b);bounds.push(out.getPageCount());const zip=new JSZip();for(let i=0;i<bounds.length-1;i++){const part=await PDFDocument.create();const copied=await part.copyPages(out,Array.from({length:bounds[i+1]-bounds[i]},(_,n)=>bounds[i]+n));copied.forEach(p=>part.addPage(p));zip.file(`chapter-${i+1}-pages-${bounds[i]+1}-${bounds[i+1]}.pdf`,await part.save());progress(Math.round((i+1)/(bounds.length-1)*100));}return{blob:await zip.generateAsync({type:'blob'}),name:`${filename}-chapters.zip`,report:'Split at supported top-level bookmark destinations. Inspect chapter boundaries before sharing.'};}finally{await d.destroy();}
@@ -408,7 +424,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         const source=unchanged?first.bytes:await out.save();let best:Output=result(source,`${filename}-compress.pdf`,undefined,undefined,source.length);
         if(source.length>target){const raster=!['compact','images'].includes(o.quality),attempts=raster?[{quality:'compact'},{quality:o.quality,compressJPEG:o.quality==='small'?.45:o.quality==='balanced'?.72:.9},{quality:o.quality,compressJPEG:.35},{quality:o.quality,compressJPEG:.2}]:[{quality:o.quality}];
         for(let i=0;i<attempts.length;i++){signal?.throwIfAborted();const candidate=await processPDF('compress',files,items,marks,{...o,compressTarget:undefined,...attempts[i]},n=>progress(Math.round((i*100+n)/attempts.length)),signal);if(candidate.blob.size<best.blob.size)best=candidate;if(best.blob.size<=target)break;}}
-        return {...best,target:{requestedKB:Number(o.compressTarget),met:best.blob.size<=target},report:`${best.blob.size<=target?'Target reached.':'Target not reached; smallest tested result retained.'} Requested ${o.compressTarget} KB; result ${(best.blob.size/1000).toFixed(1)} KB. ${best.report??'Original source retained unchanged.'} Best-effort size targeting cannot guarantee readability or a specific size; inspect the preview.`};
+        return {...best,name:`${filename}-${o.compressTarget}kb.pdf`,target:{requestedKB:Number(o.compressTarget),met:best.blob.size<=target},report:`${best.blob.size<=target?'Target reached.':'Target not reached; smallest tested result retained.'} Requested ${o.compressTarget} KB; result ${(best.blob.size/1000).toFixed(1)} KB. ${best.report??'Original source retained unchanged.'} Best-effort size targeting cannot guarantee readability or a specific size; inspect the preview.`};
     }
     if(id==='compress'&&o.quality==='images'){const source=unchanged?first.bytes:await out.save();const d=await PDFDocument.load(source,{updateMetadata:false});const changed=await optimizeJPEGImages(d,signal);progress(95);const bytes=changed?await d.save({useObjectStreams:true}):source;return result(bytes.length<source.length?bytes:source,`${filename}-images-optimized.pdf`,undefined,bytes.length<source.length?`Optimized ${changed} supported RGB JPEG images. Text, links and form structure retained. JPEG quality is reduced; inspect small image details.`:'No smaller result: original source retained. Only unmasked RGB JPEG streams are supported by this mode.',source.length);}
     if(id==='compress'&&o.quality==='compact'){progress(90);const baseline=unchanged?first.bytes:await out.save();const compact=unchanged?await PDFDocument.load(first.bytes,{updateMetadata:false}):out;const bytes=await compact.save({useObjectStreams:true});signal?.throwIfAborted();const smaller=bytes.length<baseline.length;return result(smaller?bytes:baseline,`${filename}-compact.pdf`,undefined,smaller?`Reduced from ${baseline.length} to ${bytes.length} bytes. Text and links retained.`:'No size reduction: kept the source unchanged. Try an image preset only if losing searchable text, links and forms is acceptable.',baseline.length);}
@@ -525,21 +541,21 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         else if (id === 'flip') {
             for (const e of embeds) {
                 const p = fresh.addPage([e.width, e.height]);
-                p.drawPage(e, { x: e.width, y: 0, xScale: -1, yScale: 1 });
+                p.drawPage(e,o.flipAxis==='vertical'?{x:0,y:e.height,xScale:1,yScale:-1}:{x:e.width,y:0,xScale:-1,yScale:1});
             }
         }
         else {
             const n = Number(o.columns) || 2;
-            const cols = 2, rows = n === 4 ? 2 : 1;
+            if(![2,4,6,9].includes(n))throw new Error('Choose 2, 4, 6 or 9 pages per sheet.');const cols=n===9?3:2,rows=Math.ceil(n/cols);const sheet:[number,number]=o.resizeOrientation==='portrait'?[595.28,841.89]:[841.89,595.28],margin=Number(o.labelMargin??20);if(!Number.isFinite(margin)||margin<0||margin>100)throw new Error('Choose a sheet margin from 0 to 100 pt.');
             for (let i = 0; i < embeds.length; i += n) {
-                const p = fresh.addPage([841.89, 595.28]);
+                const p = fresh.addPage(sheet);
                 for (let j = 0; j < n && i + j < embeds.length; j++) {
-                    const e = embeds[i + j], cw = 821.89 / cols, ch = 575.28 / rows, s = Math.min((cw - 16) / e.width, (ch - 16) / e.height);
-                    p.drawPage(e, { x: 10 + (j % cols) * cw + (cw - e.width * s) / 2, y: 10 + (rows - 1 - Math.floor(j / cols)) * ch + (ch - e.height * s) / 2, width: e.width * s, height: e.height * s });
+                    const e = embeds[i + j], cw = (sheet[0]-margin*2) / cols, ch = (sheet[1]-margin*2) / rows, s = Math.min((cw - 16) / e.width, (ch - 16) / e.height);
+                    p.drawPage(e, { x: margin + (j % cols) * cw + (cw - e.width * s) / 2, y: margin + (rows - 1 - Math.floor(j / cols)) * ch + (ch - e.height * s) / 2, width: e.width * s, height: e.height * s });
                 }
             }
         }
-        return result(await fresh.save(), `${filename}-${id}.pdf`);
+        return result(await fresh.save(), `${filename}-${id==='nup'?(o.columns+'-per-sheet'):id==='flip'?'mirrored':id}.pdf`);
     }
     let font = await out.embedFont(StandardFonts.Helvetica);
     if (['edit', 'sign', 'watermark', 'headers', 'bates'].includes(id)) {
@@ -551,31 +567,34 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         font = await out.embedFont(await response.arrayBuffer(), { subset: true });
     }
     for (let i = 0; i < out.getPageCount(); i++) {
-        const p = out.getPage(i), w = p.getWidth(), h = p.getHeight();
+        const p = out.getPage(i);
         if (id === 'rotate')
             p.setRotation(degrees((p.getRotation().angle + Number(o.angle)) % 360));
         if (id === 'crop') {
-            const margin = Number(o.margin);
-            if (!Number.isFinite(margin) || margin < 0 || margin * 2 >= Math.min(w, h))
-                throw new Error('Choose a smaller margin in points.');
-            p.setCropBox(margin, margin, w - margin * 2, h - margin * 2);
+            const box=p.getCropBox(),left=Number(o.cropLeft??o.margin),right=Number(o.cropRight??o.margin),top=Number(o.cropTop??o.margin),bottom=Number(o.cropBottom??o.margin);
+            if([left,right,top,bottom].some(n=>!Number.isFinite(n)||n<0)||left+right>=box.width||top+bottom>=box.height)throw new Error('Choose smaller crop margins; at least part of the page must remain.');
+            p.setCropBox(box.x+left,box.y+bottom,box.width-left-right,box.height-top-bottom);
         }
         if (id === 'watermark' && !marks.some(m=>m.watermark)) {
             throw new Error('Place a watermark on the page before exporting.');
         }
         if (['numbers', 'bates', 'headers'].includes(id)) {
-            const n = i + (Number(o.start) || 1);
-            const t = id === 'numbers' ? String(n) : id === 'bates' ? `${o.text || 'DOC-'}${String(n).padStart(6, '0')}` : o.text || 'Document';
-            const g=pageGeometry(p);p.pushOperators(pushGraphicsState(),concatTransformationMatrix(...g.matrix as [number,number,number,number,number,number]));
-            p.drawText(t,{x:24,y:id==='headers'?g.height-24:20,size:11,font,color:rgb(.2,.2,.25)});
-            if(id==='headers'&&o.footer)p.drawText(o.footer,{x:24,y:20,size:11,font,color:rgb(.2,.2,.25)});p.pushOperators(popGraphicsState());
+            if(!ranges(o.range,out.getPageCount()).includes(i))continue;
+            const n=i+(Number(o.start)||1),g=pageGeometry(p),size=Number(o.labelFontSize??11),margin=Number(o.labelMargin??24);
+            if(!Number.isFinite(size)||size<6||size>72||!Number.isFinite(margin)||margin<5||margin>200)throw new Error('Use font size 6-72 pt and inset margin 5-200 pt.');
+            const digits=Number(o.batesDigits??6);if(id==='bates'&&(!Number.isInteger(digits)||digits<1||digits>12))throw new Error('Use 1-12 Bates digits.');
+            const t=id==='numbers'?formattedNumber(n,o.numberFormat,out.getPageCount()):id==='bates'?`${o.text||'DOC-'}${String(n).padStart(digits,'0')}${o.batesSuffix??''}`:labelText(o.text,i+1,out.getPageCount());
+            p.pushOperators(pushGraphicsState(),concatTransformationMatrix(...g.matrix as [number,number,number,number,number,number]));
+            const draw=(text:string,position:string)=>{if(!text)return;const width=font.widthOfTextAtSize(text,size),x=position.endsWith('right')?g.width-margin-width:position.endsWith('center')?(g.width-width)/2:margin,y=position.startsWith('top')?g.height-margin-size:position.startsWith('middle')?g.height/2:margin;if(x<0||x+width>g.width||y<0||y+size>g.height)throw new Error('The label does not fit this page. Shorten it or reduce the font size.');p.drawText(text,{x,y,size,font,color:rgb(.2,.2,.25)});};
+            if(id==='headers'){draw(t,'top-left');draw(labelText(o.headerCenter??'',i+1,out.getPageCount()),'top-center');draw(labelText(o.headerRight??'',i+1,out.getPageCount()),'top-right');draw(labelText(o.footer??'',i+1,out.getPageCount()),'bottom-left');draw(labelText(o.footerCenter??'',i+1,out.getPageCount()),'bottom-center');draw(labelText(o.footerRight??'',i+1,out.getPageCount()),'bottom-right');}else draw(t,o.numberPosition??'bottom-center');
+            p.pushOperators(popGraphicsState());
         }
         progress(10+Math.round((i+1)/out.getPageCount()*85));
     }
     if (id === 'metadata') {
         out.setTitle(o.title);
         out.setAuthor(o.author);
-        out.setSubject(o.subject);
+        out.setSubject(o.subject);out.setKeywords((o.keywords??'').split(',').map(s=>s.trim()).filter(Boolean));out.setCreator(o.creator??'');out.setProducer(o.producer??'');
     }
     if (id === 'clean') {
         out.setTitle('');
@@ -664,4 +683,3 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
  await rejectBlankOutput(outputPages,sourcePages,probe,signal);
  return output;
 }
-
