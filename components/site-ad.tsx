@@ -11,7 +11,7 @@ function AdSlot(){
   const initialize=()=>{
    if(requested.current||!node.isConnected||node.getBoundingClientRect().width===0)return;
    if(node.dataset.adsbygoogleStatus){requested.current=true;return;}
-   requested=true;
+   requested.current=true;
    if(!document.getElementById('pdf-studio-adsense')){
     const script=document.createElement('script');script.id='pdf-studio-adsense';script.async=true;script.crossOrigin='anonymous';
     script.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+AD_CLIENT;
