@@ -37,3 +37,6 @@
 .single-blog-preview .mix-hero-loop-page[data-page="4"]{animation-name:mix-hero-flow-4}@keyframes mix-hero-flow-4{0%,53%{opacity:0;transform:translate(var(--hero-origin-x),-165px)}63%,85%{opacity:1;transform:translate(0,0)}95%,100%{opacity:0;transform:translate(0,0)}}
 
 .single-blog-preview #proof>.mix-test-details{display:flex;flex-wrap:wrap;gap:8px 24px;align-items:center;padding:14px 18px;margin-bottom:24px}
+
+/* Give the article mascot room while retaining a comfortable reading column. */
+.single-blog-preview .mix-hero{grid-template-columns:minmax(0,1fr) minmax(320px,440px);gap:32px}.single-blog-preview .mix-hero-loop{max-width:440px}@media(max-width:850px) and (min-width:641px){.single-blog-preview .mix-hero{grid-template-columns:minmax(0,1fr) 300px;gap:20px}}@media(max-width:640px){.single-blog-preview .mix-hero{grid-template-columns:1fr;gap:16px}.single-blog-preview .mix-hero-loop{max-width:360px}}
