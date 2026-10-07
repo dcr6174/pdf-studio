@@ -134,3 +134,16 @@
 .mobile-workspace-panel .page-settings-controls,.mobile-workspace-panel .page-settings-controls>.row{display:flex;flex-direction:column;align-items:stretch;gap:12px}.mobile-workspace-panel .page-settings-controls label.row{flex-direction:row;align-items:center}
 
 @media(min-width:1100px){[data-workspace=compact].document-loaded .workspace-floating-controls{margin-right:344px}}
+
+/* Resize is a layout task: show the actual page on its destination sheet. */
+.resize-main-preview{width:100%;min-width:0}
+.resize-preview-navigation{display:flex;align-items:center;justify-content:center;gap:16px;margin-bottom:12px;font-size:13px}
+.resize-preview-navigation button{min-width:44px;min-height:44px}
+.resize-preview-scroll{display:flex;flex-direction:column;align-items:center;gap:24px;padding:16px;background:var(--soft);border:1px solid var(--border);border-radius:14px;max-height:calc(100dvh - 190px);overflow:auto;overscroll-behavior:contain}
+.resize-main-page{width:100%;margin:0;display:flex;flex-direction:column;align-items:center;gap:10px}
+.resize-main-page figcaption{font-size:12px;color:var(--muted)}
+.resize-main-sheet{position:relative;width:100%;background:#fff;overflow:hidden;box-shadow:0 6px 22px #00000018;flex:none}
+.resize-main-content{position:absolute}
+.resize-main-content .large-thumb{width:100%;height:100%;min-height:0;margin:0;padding:0;display:flex;align-items:center;justify-content:center;background:white}
+.resize-main-content .large-thumb img{display:block;width:100%!important;height:100%!important;max-width:none!important;max-height:none!important;object-fit:contain;border:0;box-shadow:none}
+@media(max-width:1099px){.resize-preview-scroll{max-height:calc(100dvh - 210px);padding:10px;touch-action:pan-y}.resize-main-sheet{max-width:100%!important}}
