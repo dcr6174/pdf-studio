@@ -16,5 +16,6 @@ export function SiteFooter({tool='PDF Studio'}:{tool?:string}){
    <div className="footer-group"><h2>Company</h2><Link href="/about">About</Link><Link href="/contact">Contact</Link><a className="footer-donate" href="https://buymeacoffee.com/dcr6174" target="_blank" rel="noopener noreferrer"><Heart size={17} aria-hidden="true"/>Donate</a></div>
   </nav>
   <div className="footer-bottom"><span>Files stay on your device</span><div className="footer-legal"><span>© 2026 PDF Studio</span><Link href="/terms">Terms</Link><Link href="/privacy">Privacy</Link><FooterActions tool={tool} compact action="preferences"/></div></div>
+  <div className="footer-codehype"><a href="https://www.codehype.ai/product/pdf-studio?utm_source=codehype_badge" target="_blank" rel="noopener noreferrer"><img src="https://www.codehype.ai/badges/pdf-studio.svg?variant=find-us&v=20" alt="Featured on CodeHype" width="180" height="65" loading="lazy" decoding="async"/></a></div>
  </div></footer>;
 }
