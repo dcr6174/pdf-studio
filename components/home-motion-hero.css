@@ -70,3 +70,10 @@
 .home-shell .home-motion-hero .motion-document,.home-shell .home-motion-hero .motion-task{display:none}
 .home-shell .home-motion-hero .motion-orbit{inset:0;border-radius:50%}
 @media(max-width:600px){.home-shell .home-motion-hero .motion-headline-group{font-size:clamp(1.85rem,7.5vw,2.6rem);gap:6px;margin-bottom:12px}.home-shell .home-motion-hero .motion-static-title{width:100%;text-align:center}.home-shell .home-motion-hero .motion-changing-group{gap:7px;max-width:100%}.home-shell .home-motion-hero .motion-word-slot{margin:0;min-width:0;width:auto;display:inline-block}.home-shell .home-motion-hero .motion-hero-art{flex-basis:56px;width:56px;margin:0}.home-shell .home-motion-hero .buddy-hero,.home-shell .home-motion-hero .buddy-hero svg{width:56px;height:60px}.home-shell .home-motion-hero .motion-word{padding:3px 9px 5px}.home-shell .home-hero.home-motion-hero{padding-inline:8px}}
+
+/* Buddy and animated PDF together beside the rotating word. */
+.home-shell .home-motion-hero .motion-hero-art{flex:0 0 126px;width:126px;flex-direction:row;align-items:center;gap:0}
+.home-shell .home-motion-hero .motion-document{display:block;width:66px;height:58px;flex:0 0 66px;margin:6px 0 0 -10px;overflow:visible}
+.home-shell .home-motion-hero .motion-buddy{flex:0 0 70px}
+@media(max-width:600px){.home-shell .home-motion-hero .motion-changing-group{gap:6px}.home-shell .home-motion-hero .motion-hero-art{flex:0 0 96px;width:96px}.home-shell .home-motion-hero .motion-buddy{flex-basis:56px}.home-shell .home-motion-hero .motion-document{width:50px;height:46px;flex-basis:50px;margin:5px 0 0 -10px}}
+@media(max-width:360px){.home-shell .home-motion-hero .motion-headline-group{font-size:1.7rem}.home-shell .home-motion-hero .motion-changing-group{gap:4px}}
