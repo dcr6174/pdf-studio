@@ -149,3 +149,8 @@
 .merge-desktop-settings:empty{display:none}
 .merge-desktop-settings{margin-top:20px}
 @media(max-width:1099px){.merge-desktop-settings{display:none}}
+
+[data-tool=merge] .merge-card-icon{color:var(--muted)}
+[data-tool=merge] .merge-card-icon:hover{color:var(--primary)}
+[data-tool=merge] .merge-document-card.is-zoomed .merge-cover{height:260px}
+[data-tool=merge] .merge-document-card.is-zoomed .merge-cover img{max-height:100%;max-width:100%}
