@@ -17,7 +17,7 @@ export function SignFieldTray({image,onCreate,onDrop,onPlace,date,compact=false,
  {image?<><DragField label="Your signature" field={{kind:'image',image}} onDrop={onDrop} onPlace={onPlace}><Image unoptimized width={220} height={54} src={image} alt="Your signature" draggable={false}/></DragField><button type="button" className="sign-change-signature" onClick={onCreate}><PenLine size={15}/>Change signature</button></>:<button type="button" className="primary sign-create-button" onClick={onCreate}><Plus size={18}/>Create signature</button>}
  {!compact&&image&&name.trim()&&<p className="signature-owner">{name.trim()}</p>}
  {!compact&&<section className="sign-optional-fields" aria-label="Optional signing fields"><h3>Optional fields</h3>
- <details className="sign-extra"><summary>Name & initials</summary><label className="field">Your name<input value={name} maxLength={80} onChange={e=>setName(e.target.value)} placeholder="Enter your name"/></label></details>
+ <section className="sign-name-fields"><h3>Name & initials</h3><label className="field">Your name<input value={name} maxLength={80} onChange={e=>setName(e.target.value)} placeholder="Enter your name"/></label></section>
  <DragField label="Initials" disabled={!name.trim()} field={{kind:'text',text:name.trim().split(/\s+/).map(word=>word[0]).join('').slice(0,8)}} onDrop={onDrop} onPlace={onPlace}><span className="sign-field-label">Initials</span><span className="sign-field-value">{name.trim()?name.trim().split(/\s+/).map(word=>word[0]).join('').slice(0,8):'Enter your name'}</span></DragField>
  <DragField label="Name" disabled={!name.trim()} field={{kind:'text',text:name.trim()}} onDrop={onDrop} onPlace={onPlace}><Type size={16}/><span className="sign-field-label">Name</span>{name.trim()&&<span className="sign-field-value">{name.trim()}</span>}</DragField>
  <DragField label="Date" field={{kind:'text',text:date}} onDrop={onDrop} onPlace={onPlace}><CalendarDays size={16}/><span className="sign-field-label">Date</span><span className="sign-field-value">{date}</span></DragField>
@@ -27,5 +27,6 @@ export function SignFieldTray({image,onCreate,onDrop,onPlace,date,compact=false,
 
  </section>;
 }
+
 
 
