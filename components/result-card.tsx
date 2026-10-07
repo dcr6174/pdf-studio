@@ -16,12 +16,11 @@ export function ResultCard({output, open, onOpenChange, before, compress, onDown
     onSettings: () => void; onProtect?: () => void; error?: string; previewContent?: ReactNode;
 }) {
     const [preview, setPreview] = useState(false);const [copied,setCopied]=useState(false),[copyError,setCopyError]=useState('');
-    const [successVersion, setSuccessVersion] = useState(0);
     const downloadButton = useRef<HTMLButtonElement>(null);
     useEffect(() => {
         if (!open) return;
         const frame = requestAnimationFrame(() => {
-            setSuccessVersion(version => version + 1);setPreview(false);setCopied(false);setCopyError('');
+            setPreview(false);setCopied(false);setCopyError('');
 
             downloadButton.current?.focus({preventScroll: true});
         });
@@ -34,7 +33,7 @@ export function ResultCard({output, open, onOpenChange, before, compress, onDown
     const inputSize = output.inputSize ?? before?.size ?? 0;
     const larger = !!compress && inputSize > 0 && output.blob.size > inputSize;
     const saved = compress && inputSize > output.blob.size ? Math.round((1 - output.blob.size / inputSize) * 100) : 0;
-    return <Dialog open={open} onOpenChange={value=>{onOpenChange?.(value);if(!value)onSettings();}}><DialogContent className="result-dialog" onOpenAutoFocus={event=>{event.preventDefault();downloadButton.current?.focus();}}><section key={successVersion} className="result-screen" aria-labelledby="result-heading">
+    return <Dialog open={open} onOpenChange={value=>{onOpenChange?.(value);if(!value)onSettings();}}><DialogContent className="result-dialog" onOpenAutoFocus={event=>{event.preventDefault();downloadButton.current?.focus();}}><section className="result-screen" aria-labelledby="result-heading">
         <div className="result-screen-success" aria-hidden="true">
             <span className="result-success-halo"/>
             <span className="result-success-spark result-success-spark-one"/>
