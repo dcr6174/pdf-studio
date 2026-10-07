@@ -1,3 +1,4 @@
+import {lineSegments,type ShapePoint} from './shape-geometry';
 import {formattedNumber,labelText} from './task-labels';
 import {workflowOperations,workflowStepIssue} from './workflow-recipes';
 import {taskInputIssue} from './task-readiness';
@@ -15,7 +16,7 @@ import {replaceExistingText} from './native-text';
 import { PDFDocument, StandardFonts, rgb, degrees, pushGraphicsState, popGraphicsState, concatTransformationMatrix, PDFName, PDFString, PDFArray, PDFDict } from 'pdf-lib';
 import JSZip from 'jszip';
 import {sensitiveTextCandidates} from './sensitive-text';
-import {pageGeometry,displayPoint,safeLink,arrowHead} from './page-geometry';
+import {pageGeometry,displayPoint,safeLink} from './page-geometry';
 export type Loaded = {
     id: string;
     name: string;
@@ -36,6 +37,8 @@ export type Mark = {
     id: string;
     pageId: string;
     signatureGroup?:string;
+    lineStart?:ShapePoint;
+    lineEnd?:ShapePoint;
     kind: 'text' | 'image' | 'highlight' | 'redact' | 'rectangle' | 'ellipse' | 'link' | 'line' | 'arrow' | 'whiteout';
     x: number;
     y: number;
@@ -633,8 +636,7 @@ export async function applyMarks(out:PDFDocument,order:PageItem[],marks:Mark[],s
    }else if(m.kind==='highlight')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,color,opacity:.25});
    else if(m.kind==='whiteout')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,color});
    else if(m.kind==='line'||m.kind==='arrow'){
-    p.drawLine({start:{x:xx,y:yy+hh},end:{x:xx+ww,y:yy},thickness:2,color});
-    if(m.kind==='arrow')for(const point of arrowHead(ww,hh))p.drawLine({start:{x:xx+ww,y:yy},end:{x:xx+point.x*ww,y:yy+hh-point.y*hh},thickness:2,color});
+    for(const segment of lineSegments(m.lineStart,m.lineEnd,ww,hh,m.kind==='arrow'))p.drawLine({start:{x:xx+segment.start.x,y:yy+hh-segment.start.y},end:{x:xx+segment.end.x,y:yy+hh-segment.end.y},thickness:2,color});
    }
    else if(m.kind==='rectangle')p.drawRectangle({x:xx,y:yy,width:ww,height:hh,borderColor:color,borderWidth:2});
    else if(m.kind==='ellipse')p.drawEllipse({x:xx+ww/2,y:yy+hh/2,xScale:ww/2,yScale:hh/2,borderColor:color,borderWidth:2});
@@ -685,4 +687,3 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
  await rejectBlankOutput(outputPages,sourcePages,probe,signal);
  return output;
 }
-

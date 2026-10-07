@@ -72,6 +72,7 @@
 
 /* The edit canvas uses the viewport rather than an extra marketing-page height. */
 .direct-pdf-sketch{position:absolute;inset:0;width:100%;height:100%;z-index:20;touch-action:none;cursor:crosshair}
+.edit-three-column .mark.text{overflow-wrap:anywhere}
 .edit-canvas-fit .task-workspace{margin-left:0!important;width:100%!important}
 .edit-canvas-fit .task-canvas>.editor-toolbar{margin:0;border-radius:0;border-width:0 0 1px;flex-shrink:0;background:var(--card)}
 .edit-canvas-fit .editor-toolbar button[aria-pressed=true]{background:var(--blue-soft);color:var(--primary)}
@@ -93,6 +94,7 @@
  .studio-shell.tool-action-ready.document-shell .shared-tool-action-bar{top:var(--studio-header-height,72px)!important;bottom:0!important;height:calc(100dvh - var(--studio-header-height,72px))!important}
 }
 @media(max-width:767px){
+ .edit-three-column .edit-page-rail{display:none!important}
  .edit-canvas-fit .task-canvas>.editor-toolbar{position:sticky;top:calc(var(--studio-header-height,120px) + 64px);z-index:24;overflow-x:auto;flex-wrap:nowrap}
  .edit-canvas-fit .editor-toolbar button{flex-shrink:0}
 }
