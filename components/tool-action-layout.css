@@ -135,3 +135,25 @@
 
 @media(max-width:1099px){.mobile-continuous-pages{max-height:calc(100dvh - var(--studio-header-height,64px) - 160px);min-height:240px}.edit-canvas-fit .mobile-continuous-pages{max-height:none;min-height:0}.editor-pager[hidden]{display:none!important}}
 
+
+
+/* Compact page navigation leaves the document as the main focus. */
+@media(min-width:1100px){
+ .edit-three-column .editor-layout{grid-template-columns:minmax(0,8%) minmax(0,1fr)!important}
+ .edit-three-column .edit-page-rail{width:100%;max-width:100%;box-sizing:border-box;background:var(--soft)}
+ .edit-three-column .edit-page-rail h2{font-size:12px;padding:10px 8px;gap:4px}
+ .edit-three-column .edit-page-list{padding:10px 6px;gap:12px;scrollbar-width:thin}
+ .edit-three-column .edit-page-list>button{padding:6px;border-radius:10px;border:1px solid transparent;background:transparent;gap:7px}
+ .edit-three-column .edit-page-list>button:hover{background:var(--card)}
+ .edit-three-column .edit-page-list>button[aria-current=page]{border-color:var(--primary);background:var(--blue-soft)}
+ .edit-three-column .edit-page-thumbnail{height:auto;aspect-ratio:3/4;width:100%;border:1px solid var(--border);border-radius:4px;background:white;box-shadow:0 2px 6px #00000012}
+ .edit-three-column .edit-page-thumbnail .thumb-shell{height:100%;min-height:0}
+ .edit-three-column .edit-page-thumbnail img{width:100%!important;height:100%!important;max-height:none;object-fit:contain}
+ .edit-three-column .edit-page-list>button>span{font-size:11px;line-height:1.4;color:var(--muted)}
+ .edit-three-column .edit-page-list>button[aria-current=page]>span{color:var(--primary);font-weight:600}
+}
+.inline-pdf-text{display:block;resize:none;width:100%;height:100%;box-sizing:border-box;margin:0;padding:0;border:0!important;outline:0;background:transparent!important;color:inherit;font:inherit;line-height:1.3;letter-spacing:inherit;text-align:inherit;box-shadow:none!important;overflow:hidden;white-space:pre-wrap;min-width:0!important;min-height:0!important}
+.mark.text.editing-text{min-width:2ch;outline:1px dashed var(--primary);cursor:text}
+.mark.text.editing-text:has(.inline-pdf-text:placeholder-shown){min-width:8ch}
+.mark.text.editing-text .resize-handle{display:none}
+

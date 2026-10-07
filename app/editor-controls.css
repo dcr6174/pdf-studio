@@ -20,3 +20,16 @@
 
 .link-address-field{display:flex!important;flex-direction:column;gap:8px;min-width:0!important;width:100%;max-width:100%;box-sizing:border-box}.link-address-field input{display:block;min-width:0!important;width:100%!important;max-width:100%;box-sizing:border-box;min-height:44px;font-size:16px}.link-address-field+ p[role=alert]{overflow-wrap:anywhere}
 .signature-dialog-small[data-slot=dialog-content]{width:calc(100vw - 32px)!important;max-width:420px!important;padding:18px!important;gap:10px;max-height:calc(100dvh - 32px);overflow:auto}.signature-dialog-small .signature-picker{gap:10px;padding:0}.signature-dialog-small .signature-picker-scroll{padding:0}.signature-dialog-small .signature-picker-scroll>p:first-child{display:none}.signature-dialog-small .signature-option{padding:10px 0!important;margin:0;border:0;border-radius:0;background:transparent}.signature-dialog-small .signature-tabs{padding:3px;margin:0}.signature-dialog-small .signature-option .field{margin:6px 0;min-width:0;max-width:100%;width:100%}.signature-dialog-small .signature-preview{min-height:70px;padding:8px;margin:8px 0}.signature-dialog-small .signature-preview img{max-height:80px}.signature-dialog-small .signature-pad{height:120px!important;max-height:120px!important;margin:8px 0;background:white!important;background-image:none!important}.signature-dialog-small .signature-picker-footer{padding-top:10px;gap:8px}.signature-dialog-small .signature-picker-footer button{min-width:0;padding:8px;font-size:.8rem;min-height:44px;flex:1}.signature-dialog-small .sign-settings-body{grid-template-columns:minmax(0,1fr) 72px;gap:10px;margin:6px 0}.signature-owner{font-size:.875rem;font-weight:600;margin:4px 0;overflow-wrap:anywhere}.sign-selected .sign-placement-tools h3{font-size:.875rem;margin:0}.sign-selected .sign-placement-tools{padding:12px!important;margin:0;background:var(--soft);border:1px solid var(--border);border-radius:12px}.signature-dialog-small .signature-preview{background:white;background-image:none}
+
+
+/* Shared Add files floats above the workspace, clear of document pages. */
+.studio-shell .workspace-add-files,.studio-shell .merge-file-controls .merge-add-control{top:calc(var(--studio-header-height,72px) + 10px)!important;bottom:auto!important}
+@media(min-width:1100px){.edit-canvas-fit .task-canvas>.editor-toolbar{padding-right:180px!important}}
+@media(max-width:1099px){
+ .studio-shell .workspace-add-files,.studio-shell .merge-file-controls .merge-add-control{top:calc(var(--studio-header-height,64px) + 10px)!important;bottom:auto!important;width:44px;height:44px;min-height:44px!important}
+ .edit-canvas-fit .task-canvas>.editor-toolbar{padding-right:64px!important}
+}
+
+.studio-shell .workspace-add-files{z-index:26;min-height:44px!important;min-width:44px;height:44px;padding:8px 14px!important}
+.studio-shell:has(.workspace-add-files) .merge-file-controls .merge-add-control{display:none!important}
+@media(max-width:1099px){.studio-shell:has(.workspace-add-files) .mobile-workspace-controls{top:calc(var(--studio-header-height,64px) + 64px)!important}}
