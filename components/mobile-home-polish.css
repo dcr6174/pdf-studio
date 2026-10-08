@@ -1,11 +1,16 @@
-.mobile-home-inline-search{display:none}
+.mobile-home-inline-search,.mobile-home-heading{display:none}
 /* Phone homepage only. Desktop catalogue and document workspaces are unchanged. */
 @media(max-width:767px){
  .studio-shell.home-shell>.content{padding:12px 18px 32px!important;max-width:520px!important;margin-inline:auto!important;width:100%!important;box-sizing:border-box}
  .home-shell .home-hero.home-motion-hero{display:block!important;min-height:0!important;margin:12px auto 28px!important;padding:12px 0!important;gap:0!important}
  .home-shell .home-motion-hero .hero-copy{text-align:center!important}
+ .home-shell .home-motion-hero .motion-headline-group{display:none!important}
  .home-shell .motion-kicker{display:none}
- .home-shell .motion-headline-group{display:flex!important;flex-direction:column!important;align-items:center!important;gap:4px!important}
+ .home-shell .mobile-home-heading{display:block;margin:0 0 18px}
+ .home-shell .mobile-home-title{margin:0 0 12px;font-size:clamp(25px,7vw,34px);font-weight:750;line-height:1.25;letter-spacing:-.035em;text-wrap:balance}
+ .home-shell .mobile-home-subtitle{margin:0;color:var(--muted);font-size:15px;line-height:1.5}
+
+
  .home-shell .motion-static-title{font-size:clamp(26px,7.5vw,36px)!important;line-height:1.2!important}
  .home-shell .motion-changing-group{display:flex!important;flex-direction:column!important;align-items:center!important;gap:8px!important}
  .home-shell .motion-word-slot{font-size:clamp(28px,8vw,38px)!important;line-height:1.2!important}
