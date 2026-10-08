@@ -40,3 +40,31 @@
 
 /* Give the article mascot room while retaining a comfortable reading column. */
 .single-blog-preview .mix-hero{grid-template-columns:minmax(0,1fr) minmax(320px,440px);gap:32px}.single-blog-preview .mix-hero-loop{max-width:440px}@media(max-width:850px) and (min-width:641px){.single-blog-preview .mix-hero{grid-template-columns:minmax(0,1fr) 300px;gap:20px}}@media(max-width:640px){.single-blog-preview .mix-hero{grid-template-columns:1fr;gap:16px}.single-blog-preview .mix-hero-loop{max-width:360px}}
+
+/* Editorial spacing: reading rhythm, separate controls, and comfortable wrapping. */
+.single-blog-preview .mix-main{padding-bottom:80px}
+.single-blog-preview .mix-hero{padding-block:40px 48px}
+.single-blog-preview .mix-hero .blog-primary-action{margin-block:6px 8px}
+.single-blog-preview .mix-byline{margin-block:18px}
+.single-blog-preview .mix-body>section{margin-block:0 48px}
+.single-blog-preview .mix-body p{line-height:1.8;margin-block:0 20px}
+.single-blog-preview .mix-body h2{margin-bottom:22px}
+.single-blog-preview .mix-body h3{line-height:1.4;margin-block:0 14px}
+.single-blog-preview .mix-body :is(ul,ol){margin-block:18px 24px}
+.single-blog-preview .mix-body li{line-height:1.75}
+.single-blog-preview .mix-body li+li{margin-top:12px}
+.single-blog-preview .mix-steps{gap:20px}
+.single-blog-preview .mix-steps p{margin:0}
+.single-blog-preview .mix-body .mix-tool-invite{margin-block:32px 40px;text-align:center}
+.single-blog-preview .mix-body figure{margin-block:28px 32px}
+.single-blog-preview .mix-body figcaption{line-height:1.6;margin-top:12px}
+.single-blog-preview .mix-faq details{margin-bottom:12px}
+.single-blog-preview .mix-faq summary{padding:18px 20px;line-height:1.55}
+.single-blog-preview .article-samples{margin-block:28px 32px}
+.single-blog-preview .article-samples-grid{gap:16px}
+.single-blog-preview .merge-story-controls{gap:14px;margin-block:24px}
+.single-blog-preview .merge-practice ol{gap:16px}
+.single-blog-preview .merge-practice li{padding:18px;gap:16px}
+.single-blog-preview .merge-practice li+li{margin-top:0}
+.single-blog-preview .merge-practice>.blog-primary-action{margin-top:8px;margin-bottom:20px}
+@media(max-width:767px){.single-blog-preview .mix-main{padding-inline:20px}.single-blog-preview .mix-hero{padding-block:28px 36px}.single-blog-preview .mix-body>section{margin-bottom:36px}.single-blog-preview .mix-body p{line-height:1.75;margin-bottom:18px}.single-blog-preview .mix-body h2{margin-bottom:18px}.single-blog-preview .mix-body .mix-tool-invite{margin-block:28px 32px}.single-blog-preview .merge-practice li{padding:16px}.single-blog-preview .mix-faq summary{padding:16px}}

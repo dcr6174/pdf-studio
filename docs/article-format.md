@@ -30,3 +30,13 @@ Article/guide hero Buddy loops automatically and silently, with no tap prompt or
 Use readable source labels (A/B) and page-specific output labels (A1/B1…). Give worked examples, verification notes and sample downloads generous vertical spacing. Diagram headings and arrows must remain readable in dark mode.
 
 Public site pages must not link to the PDF Studio GitHub repository or expose commit identifiers. Keep source references and implementation verification in repository documentation only.
+
+## Mandatory tool-blog hero and reading rhythm — 8 October 2026
+
+Every new tool blog must have an operation-specific hero animation, not just a bouncing mascot. Reuse the logo-style Buddy and show the actual tool transformation using readable input/output labels. Merge shows all A pages followed by all B pages; Alternate & Mix shows alternating sources. Tailor labels and troubleshooting copy to each article. Never substitute an unrelated tool animation.
+
+The hero plays automatically without tap prompts, loops smoothly and silently, pauses when its tab is hidden, and uses a static meaningful final state for reduced motion. Prefer responsive SVG/code-native vector artwork so it stays sharp at 4K; do not describe a small raster as 4K. Keep the top tool CTA before the illustration in phone reading order. The separate explanatory story retains Play/Pause/Replay. A decorative illustration is never test evidence.
+
+Use generous editorial spacing: approximately 18–20px between paragraphs, 36–48px between sections, 14–16px between nearby controls and 28–40px around tool CTAs. Keep text to a comfortable reading width with line-height around 1.75–1.8. On phones preserve about 20px side gutters and allow labels to wrap. Avoid tightly packed form-like blog layouts.
+
+Before publishing: check the hero describes this tool, inspect desktop and phone layouts, verify paragraph/button separation and reduced-motion behaviour, confirm the worked-example evidence remains honest, and check samples and CTA links. Include these checks in each three-article release.
