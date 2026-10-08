@@ -22,3 +22,31 @@
 
 .drawer-title-row{display:flex;align-items:center;gap:12px}.drawer-title-row h2{margin:0;font-size:20px}.drawer-title-row button{flex:none}
 @media(min-width:1100px){.navigation-drawer[data-slot=dialog-content]{width:min(1000px,calc(100vw - 32px))!important;max-width:none!important}.navigation-drawer-body{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:16px;align-content:start}.drawer-history{grid-column:span 2}.drawer-popular{grid-column:1/-1;display:flex;flex-wrap:wrap;gap:8px}.drawer-popular h2{width:100%;margin:0}.drawer-category summary{padding-inline:8px}.drawer-site-links{grid-column:1/-1;grid-template-columns:repeat(4,1fr)}.drawer-category>a{padding-inline:8px}.drawer-support{margin-top:0}}
+
+
+@media(max-width:767px){
+ .navigation-drawer[data-slot=dialog-content]{width:min(360px,94vw)!important;padding:16px!important;padding-bottom:max(12px,env(safe-area-inset-bottom))!important;gap:12px;z-index:110!important}
+ .studio-header .navigation-drawer-trigger[aria-expanded=true]{visibility:hidden}
+ .navigation-drawer .drawer-title-row{justify-content:space-between;gap:10px}
+ .navigation-drawer .drawer-title-row h2{order:1;font-size:20px}
+ .navigation-drawer .drawer-title-row button{order:2;width:44px;height:44px;border:0;background:var(--soft)}
+ .navigation-drawer-search{min-height:48px;padding:8px 12px}
+ .navigation-drawer-body{padding:0 2px 8px;scrollbar-width:thin}
+ .navigation-drawer .drawer-history{padding:10px 0}
+ .navigation-drawer .drawer-category{border:1px solid var(--border);border-radius:12px;margin-bottom:8px;overflow:hidden}
+ .navigation-drawer .drawer-category summary{min-height:48px;padding:10px 12px;background:var(--soft)}
+ .navigation-drawer .drawer-category>a{min-height:44px;margin:2px 4px;padding:9px 10px;font-size:13px}
+ .navigation-drawer .drawer-popular{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:4px;padding:10px;border:1px solid var(--border)}
+ .navigation-drawer .drawer-popular h2{grid-column:1/-1;padding:0 0 6px}
+ .navigation-drawer .drawer-popular>a{padding:8px;min-height:44px;font-size:12px;gap:6px}
+ .navigation-drawer .drawer-site-links{gap:4px;margin-top:12px;padding-top:12px}
+ .navigation-drawer .drawer-site-links>a{font-size:13px;background:var(--soft)}
+ .navigation-drawer>.drawer-support{padding:12px 0 0;gap:8px}
+ .navigation-drawer .drawer-support>span{display:none}
+ .navigation-drawer .mobile-drawer-install{display:block;padding:0}
+ .navigation-drawer .mobile-drawer-install .install-app{width:100%}
+ .navigation-drawer .mobile-drawer-install .source-top{width:100%;min-height:48px;display:flex;align-items:center;justify-content:center;gap:8px;padding:10px 14px;background:var(--primary);color:white;font-size:15px;font-weight:650;border-radius:14px}
+ .navigation-drawer .mobile-drawer-install .install-button-icon{display:block}
+ .navigation-drawer .mobile-drawer-install .install-help{position:static;max-height:140px;overflow:auto;text-align:left;padding:12px;font-size:12px}
+ .navigation-drawer .drawer-donate{min-height:48px}
+}
