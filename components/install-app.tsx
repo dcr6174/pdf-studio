@@ -1,4 +1,5 @@
 'use client';
+import {Download} from 'lucide-react';
 import {useEffect,useState} from 'react';
 import {INSTALL_CHANGED,INSTALL_KEY,isStudioInstalled,rememberInstall,rememberedInstall,type RelatedApp} from '@/lib/install-state';
 type InstallPrompt=Event & {prompt:()=>Promise<void>;userChoice:Promise<{outcome:string}>};
@@ -23,6 +24,7 @@ export function InstallApp(){
  },[]);
  const manualInstall=typeof navigator!=='undefined'&&/iPad|iPhone|iPod/.test(navigator.userAgent)&&/Safari/.test(navigator.userAgent)&&!/CriOS|FxiOS|EdgiOS/.test(navigator.userAgent);
  if(!checked||installed||(!prompt&&!manualInstall))return null;
- return <div className="install-app"><button className="source-top" onClick={async()=>{if(!prompt){setHelp(h=>!h);return;}try{await prompt.prompt();const choice=await prompt.userChoice;if(choice.outcome==='accepted'){try{rememberInstall(localStorage,true);}catch{}setInstalled(true);setHelp(false);window.dispatchEvent(new CustomEvent(INSTALL_CHANGED,{detail:true}));}}catch{setHelp(true);}finally{pendingInstallPrompt=null;setPrompt(null);window.dispatchEvent(new Event(INSTALL_PROMPT_CONSUMED));}}}>Install app</button>{help&&<div className="install-help" role="status"><b>Install PDF Studio</b><p>Chrome or Edge: open the browser menu and choose Install app if available. On iPhone or iPad, open this site in Safari, tap Share, then Add to Home Screen.</p><p>This version needs an internet connection to load. PDF processing stays on your device.</p><button onClick={()=>setHelp(false)} aria-label="Close installation instructions">Close</button></div>}</div>;
+ return <div className="install-app"><button className="source-top" aria-label="Install PDF Studio" title="Install PDF Studio" onClick={async()=>{if(!prompt){setHelp(h=>!h);return;}try{await prompt.prompt();const choice=await prompt.userChoice;if(choice.outcome==='accepted'){try{rememberInstall(localStorage,true);}catch{}setInstalled(true);setHelp(false);window.dispatchEvent(new CustomEvent(INSTALL_CHANGED,{detail:true}));}}catch{setHelp(true);}finally{pendingInstallPrompt=null;setPrompt(null);window.dispatchEvent(new Event(INSTALL_PROMPT_CONSUMED));}}}><Download className="install-button-icon" size={20} aria-hidden="true"/><span className="install-button-label">Install app</span></button>{help&&<div className="install-help" role="status"><b>Install PDF Studio</b><p>Chrome or Edge: open the browser menu and choose Install app if available. On iPhone or iPad, open this site in Safari, tap Share, then Add to Home Screen.</p><p>This version needs an internet connection to load. PDF processing stays on your device.</p><button onClick={()=>setHelp(false)} aria-label="Close installation instructions">Close</button></div>}</div>;
 }
+
 
