@@ -37,7 +37,7 @@ create:{steps:['Type or paste text, or choose a Unicode text file.','Review the 
     faq: [['Why can I not select a sentence?', 'It may be a scan, outlined artwork or unsupported text structure. OCR adds searchable text but does not reconstruct a fully editable layout.'], ['Does this edit the original text?', 'Supported single-line PDF text objects are changed in the exported PDF. This is different from adding a text overlay.']]
   },
   sign: {
-    steps: ['Open the PDF and choose drawing, typing or image upload to create your signature.', 'Place the signature on the page and adjust its size. Check the location at your chosen zoom and orientation.', 'Export and reopen the PDF to confirm that the signature is on the intended page and does not cover important text.'],
+    steps: ['Open the PDF, enter your name below Organize pages, then choose Create signature. Use Type, Draw or Upload in the popup.', 'Drag the signature, name, initials, date, custom text or uploaded image/stamp onto the PDF. Dates default to DD/MM/YYYY. Move and resize the placed field.', 'Export and reopen the PDF to confirm that the signature is on the intended page and does not cover important text.'],
     useCase: 'Place a visual signature on a document when the recipient accepts this method. Confirm the recipient’s requirements before submitting.',
     checks: 'A signature image is not certificate-based digital signing or identity verification. Use a transparent image when possible and inspect the output before sharing.',
     faq: [['Can I upload my signature?', 'Yes. Choose the image-upload option in the signature controls.'], ['Is this cryptographic signing?', 'No. The tool places a visual signature; it does not issue a certificate or verify identity.']]
