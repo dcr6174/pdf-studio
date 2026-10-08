@@ -125,3 +125,11 @@ body:has(.sign-workspace.edit-canvas-fit)>.site-ad{display:none}
  .sign-workspace .sign-workspace-toolbar{flex:none;position:relative;top:auto;z-index:24;padding-block:7px}
  .sign-workspace .edit-page-rail{padding:0!important}
 }
+
+/* Neutralize generic settings-section padding on the field cards. */
+.sign-workspace .sign-clean-inspector .sign-field-card{padding:0 4px 0 0!important}
+.sign-workspace .sign-clean-inspector .sign-optional-fields{margin:0!important;gap:7px!important}
+.sign-workspace .sign-clean-inspector .sign-field-card .sign-drag-field{min-height:42px!important}
+.sign-workspace .sign-clean-inspector .sign-custom-text,
+.sign-workspace .sign-clean-inspector .sign-artwork,
+.sign-workspace .sign-clean-inspector .sign-date-field{padding:0!important;margin:0!important}
