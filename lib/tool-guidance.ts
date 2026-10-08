@@ -366,3 +366,13 @@ for (const [id, [configure, finish, useCase, checks]] of Object.entries(addition
     faq: [['What is this tool useful for?', useCase], ['What should I check in the result?', checks]]
   };
 }
+
+toolGuidance.edit.steps = [
+ 'Choose your PDF. On a phone, the editing tools are attached below the main header. Tap Text, then tap the page where the text should go; typing starts after placement.',
+ 'Select an element to change its colour, font or other supported properties in the second row. Use the dustbin to delete it or the green tick to finish. Open the toolbar zoom control for zoom and Fit width; the + button adds PDF files.',
+ 'Scroll through the pages, then choose Export PDF. The export bar is hidden while on-page text has focus; finish typing to bring it back. Reopen the download and inspect each change.'
+];
+toolGuidance.edit.faq.push(
+ ['Where are zoom and Options on mobile?', 'Both are in the attached editing toolbar. Open the zoom control for Zoom out, Fit width and Zoom in. Options opens the additional tool choices.'],
+ ['How do I remove added text or a sketch?', 'Select the added element and use the dustbin beside the green tick. This removes the added element, not underlying PDF content.']
+);
