@@ -149,36 +149,3 @@
 .studio-shell .edit-page-rail .rail-title-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.studio-shell .edit-page-rail .rail-title-row h2{padding:0!important}.studio-shell .edit-page-rail .rail-collapse-toggle{position:static!important;flex:none;width:30px;min-height:30px;border-color:var(--primary);background:var(--blue-soft);color:var(--primary);border-radius:8px}.studio-shell .edit-page-rail[data-collapsed=true]>.rail-collapse-toggle{margin:8px auto}
 .studio-shell .edit-page-rail .rail-page-controls{grid-template-columns:26px 26px minmax(38px,1fr) auto;gap:4px;border-radius:9px;background:var(--soft)}.studio-shell .edit-page-rail .rail-page-controls button{border-radius:7px;background:var(--card);color:var(--primary)}
 @media(max-width:767px){.editor-emoji-tray>span{display:none}.editor-emoji-tray{width:100%;box-sizing:border-box}.mobile-edit-context:has(.editor-emoji-tray){padding:0}.mobile-edit-context:has(.editor-emoji-tray) .mobile-edit-selection-actions{display:none}}
-
-/* Signing is a viewport workspace: chrome stays still while documents scroll. */
-html:has(.studio-shell.sign-workspace.edit-canvas-fit),body:has(.studio-shell.sign-workspace.edit-canvas-fit){height:100%;overflow:hidden}
-.studio-shell.sign-workspace.edit-canvas-fit{height:100dvh;min-height:0;overflow:hidden;display:flex;flex-direction:column}
-.studio-shell.sign-workspace.edit-canvas-fit>.studio-header{flex:0 0 var(--studio-header-height,72px);position:relative;top:auto}
-.studio-shell.sign-workspace.edit-canvas-fit>.content{flex:1;min-height:0!important;overflow:hidden}
-.studio-shell.sign-workspace.edit-canvas-fit :is(.studio-workspace-content,.studio-controls,.task-workspace,.task-canvas,.editor-main){display:flex;flex-direction:column;flex:1;min-height:0;height:100%;overflow:hidden}
-.studio-shell.sign-workspace.edit-canvas-fit .editor-layout{flex:1;min-height:0;overflow:hidden;height:auto;align-items:stretch!important}
-.studio-shell.sign-workspace.edit-canvas-fit .sign-workspace-toolbar{position:relative;top:auto;flex:none;z-index:24}
-.studio-shell.sign-workspace.edit-canvas-fit .mobile-continuous-pages{flex:1;height:auto!important;min-height:0;max-height:none;overflow:auto;overscroll-behavior:contain;scrollbar-width:thin;padding:16px!important}
-.studio-shell.sign-workspace.edit-canvas-fit .edit-page-rail{height:100%;min-height:0;overflow:hidden}
-.studio-shell.sign-workspace.edit-canvas-fit .edit-page-list{flex:1;min-height:0;overflow:auto;scrollbar-width:thin}
-.studio-shell.sign-workspace .sign-clean-inspector{display:grid;gap:12px;padding:0}
-.studio-shell.sign-workspace .sign-field-tray{display:grid;gap:8px}
-.studio-shell.sign-workspace .sign-field-tray>.sign-change-signature{justify-self:start;font-size:12px;min-height:30px;margin:0;padding:4px 0}
-.studio-shell.sign-workspace .sign-field-tray>.sign-drag-field{margin:0;min-height:62px;padding:8px 10px;border-radius:10px;border:1px solid var(--border);background:var(--soft)}
-.studio-shell.sign-workspace .sign-field-tray>.sign-drag-field .sign-field-preview img{height:42px;max-width:100%;object-fit:contain}
-.studio-shell.sign-workspace .sign-optional-fields{display:block;margin-top:8px;padding:0;border:1px solid var(--border);border-radius:10px;background:var(--card)}
-.studio-shell.sign-workspace .sign-optional-fields>summary{display:flex;flex-direction:column;gap:3px;padding:10px 12px;min-height:44px;box-sizing:border-box;cursor:pointer;font-size:13px;font-weight:600;list-style:none;position:relative;padding-right:30px}
-.studio-shell.sign-workspace .sign-optional-fields>summary::-webkit-details-marker{display:none}
-.studio-shell.sign-workspace .sign-optional-fields>summary:after{content:'⌄';position:absolute;right:12px;top:12px;color:var(--primary)}
-.studio-shell.sign-workspace .sign-optional-fields[open]>summary:after{content:'⌃'}
-.studio-shell.sign-workspace .sign-optional-fields>summary span{font-size:11px;font-weight:400;color:var(--muted)}
-.studio-shell.sign-workspace .sign-optional-fields:not([open])>:not(summary){display:none!important}
-.studio-shell.sign-workspace .sign-optional-fields[open]{display:grid;gap:8px;padding-bottom:10px}
-.studio-shell.sign-workspace .sign-optional-fields[open]>:not(summary){margin:0 10px}
-.studio-shell.sign-workspace .sign-optional-fields .sign-drag-field{min-height:42px;padding:7px 9px;border-radius:8px}
-.studio-shell.sign-workspace .sign-optional-fields .field{margin:0;gap:6px;font-size:12px}
-.studio-shell.sign-workspace .sign-optional-fields input{min-height:36px;padding:7px 9px;font-size:14px}
-.studio-shell.sign-workspace .sign-selected{padding:12px;border:1px solid var(--border);border-radius:10px;background:var(--soft)}
-.studio-shell.sign-workspace .tool-action-settings{scrollbar-width:thin;padding-right:4px;overscroll-behavior:contain}
-@media(min-width:1100px){.studio-shell.sign-workspace.edit-canvas-fit>.content{padding:0 312px 0 0!important}}
-@media(max-width:1099px){.studio-shell.sign-workspace.edit-canvas-fit>.content{padding:64px 0 var(--studio-action-space,88px)!important}.studio-shell.sign-workspace.edit-canvas-fit .editor-layout{display:flex!important;flex-direction:column}.studio-shell.sign-workspace.edit-canvas-fit .editor-main{padding:0!important}.studio-shell.sign-workspace.edit-canvas-fit .edit-page-rail{height:auto;max-height:112px;flex:none}.studio-shell.sign-workspace.edit-canvas-fit .edit-page-list{overflow-x:auto}.studio-shell.sign-workspace.edit-canvas-fit .sign-mobile-tray{flex:none}.studio-shell.sign-workspace .sign-optional-fields input{font-size:16px}}
