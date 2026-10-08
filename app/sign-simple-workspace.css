@@ -79,3 +79,49 @@
  .studio-shell .mobile-pdf-scroll .page-board{flex:none;max-width:none;margin-block:0;touch-action:pan-y}
  .studio-shell .mobile-pdf-scroll .mark,.studio-shell .mobile-pdf-scroll .resize-handle{touch-action:none}
 }
+
+/* An open signing workspace owns the viewport, not the marketing-page scroll. */
+body:has(.sign-workspace.edit-canvas-fit){overflow:hidden}
+body:has(.sign-workspace.edit-canvas-fit)>.site-ad{display:none}
+.studio-shell.sign-workspace.edit-canvas-fit .content{padding-bottom:0!important}
+.studio-shell.sign-workspace.edit-canvas-fit .studio-workspace-content,
+.studio-shell.sign-workspace.edit-canvas-fit .studio-controls,
+.studio-shell.sign-workspace.edit-canvas-fit .task-workspace,
+.studio-shell.sign-workspace.edit-canvas-fit .task-canvas{min-height:0;overflow:hidden}
+.studio-shell.sign-workspace.edit-canvas-fit .task-workspace{display:flex!important;flex-direction:column}
+.studio-shell.sign-workspace.edit-canvas-fit .task-canvas{flex:1}
+.studio-shell.sign-workspace.edit-canvas-fit .editor-layout{min-height:0;overflow:hidden}
+.studio-shell.sign-workspace.edit-canvas-fit .mobile-continuous-pages{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain}
+.studio-shell.sign-workspace.edit-canvas-fit .mobile-continuous-pages .board-scroll{height:auto!important;min-height:0!important;overflow:visible;border:0;border-radius:0;padding:0;background:transparent}
+.sign-workspace .shared-tool-action-bar{gap:10px!important;padding:14px!important;overflow:hidden}
+.sign-workspace .tool-action-heading{flex:none}
+.sign-workspace .tool-action-heading h2{font-size:18px;margin:0}
+.sign-workspace .tool-action-heading p{margin:5px 0 0}
+.sign-workspace .tool-action-heading>.row:empty{display:none}
+.sign-workspace .tool-action-settings{min-height:0;overflow-y:auto;padding-right:2px}
+.sign-workspace .shared-tool-action-bar .workspace-docked-controls{margin-bottom:10px!important}
+.sign-workspace .shared-tool-action-bar .workspace-docked-controls button{padding:8px 10px;min-height:40px}
+.sign-workspace .sign-field-tray{display:grid;gap:8px}
+.sign-workspace .sign-owner-input{gap:4px;font-size:12px}
+.sign-workspace .sign-owner-input input,.sign-workspace .sign-custom-text input{min-height:36px;padding:7px 9px;font-size:13px}
+.sign-workspace .sign-field-card{margin:0;min-height:42px}
+.sign-workspace .sign-field-card .sign-drag-field{min-height:42px;padding:7px 8px;gap:6px}
+.sign-workspace .sign-field-preview{flex-wrap:nowrap!important;font-size:12px;gap:6px}
+.sign-workspace .sign-field-preview img{height:36px}
+.sign-workspace .sign-field-label{flex:none}
+.sign-workspace .sign-field-value{min-width:0;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-left:auto;max-width:150px;color:var(--muted);font-size:11px}
+.sign-workspace .sign-card-edit{width:30px;height:32px;min-height:32px}
+.sign-workspace .sign-drag-hint{font-size:11px;line-height:1.35}
+.sign-workspace .sign-optional-fields{display:grid;gap:7px}
+.sign-workspace .sign-optional-fields h3{font-size:12px;line-height:1.4;margin:3px 0;color:var(--muted);font-weight:500}
+.sign-workspace .sign-custom-text,.sign-workspace .sign-artwork{gap:5px;margin:0}
+.sign-workspace .sign-custom-text .field{font-size:12px;gap:4px}
+.sign-workspace .sign-date-controls{gap:6px;padding-bottom:0}
+.sign-workspace .sign-artwork>.secondary{min-height:38px;font-size:12px}
+.sign-workspace .tool-action-bottom{padding-top:10px}
+.sign-workspace .tool-action-bottom>.primary{min-height:48px}
+@media(min-width:1100px){
+ .studio-shell.sign-workspace.edit-canvas-fit .editor-layout{gap:0!important}
+ .sign-workspace .sign-workspace-toolbar{flex:none;position:relative;top:auto;z-index:24;padding-block:7px}
+ .sign-workspace .edit-page-rail{padding:0!important}
+}
