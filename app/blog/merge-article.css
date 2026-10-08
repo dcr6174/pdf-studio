@@ -5,7 +5,7 @@
 .merge-operation-hero>svg{display:block;width:100%;height:auto;overflow:visible}
 .merge-operation-buddy{position:absolute;top:12%;left:39%;width:22%;z-index:1;pointer-events:none;animation:merge-hero-breathe 8s ease-in-out infinite}
 .merge-operation-buddy .article-buddy{width:100%;height:auto}
-.merge-hero-label{fill:var(--foreground);font:600 19px system-ui,sans-serif}
+.merge-hero-label{fill:var(--foreground);font:600 26px system-ui,sans-serif}
 .merge-hero-path{stroke:var(--primary);stroke-width:2;opacity:.35}
 .merge-hero-output{fill:var(--card);stroke:var(--border);stroke-width:2}
 .merge-hero-page{transform:translate(var(--source-x),var(--source-y));animation:merge-hero-join 8s ease-in-out var(--page-delay) infinite}
@@ -20,5 +20,5 @@
 @keyframes merge-hero-join{0%,18%{transform:translate(var(--source-x),var(--source-y));opacity:1}45%,84%{transform:translate(var(--output-x),var(--output-y));opacity:1}92%{transform:translate(var(--output-x),var(--output-y));opacity:0}95%{transform:translate(var(--source-x),var(--source-y));opacity:0}100%{transform:translate(var(--source-x),var(--source-y));opacity:1}}
 @keyframes merge-hero-breathe{0%,100%{transform:translateY(0) rotate(-2deg)}45%,80%{transform:translateY(-5px) rotate(2deg)}}
 @media(max-width:900px){.merge-guide .mix-hero{grid-template-columns:minmax(0,1fr);gap:28px}.merge-operation-hero{max-width:560px;justify-self:center}}
-@media(max-width:767px){.merge-operation-hero{padding:14px 8px;border-radius:18px}.merge-operation-hero figcaption{margin-top:10px;font-size:13px}}
+@media(max-width:767px){.merge-operation-hero{padding:14px 8px;border-radius:18px}.merge-operation-hero figcaption{margin-top:10px;font-size:13px}.merge-hero-label{font-size:28px}.merge-hero-page text{font-size:34px}}
 @media(prefers-reduced-motion:reduce){.merge-hero-page{animation:none;transform:translate(var(--output-x),var(--output-y));opacity:1}.merge-operation-buddy{animation:none}}
