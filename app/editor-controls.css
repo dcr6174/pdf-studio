@@ -169,3 +169,27 @@
  .sign-toolbar-pages button{border:0;background:transparent;border-radius:6px}
  .sign-toolbar-pages input{border:0;background:var(--card);border-radius:5px}
 }
+
+/* A signature modal stays above the header and within the usable viewport. */
+.signature-modal-overlay[data-slot=dialog-overlay]{z-index:100}
+.signature-dialog-small[data-slot=dialog-content]{box-sizing:border-box;overflow:hidden;display:flex;flex-direction:column}
+.signature-dialog-small .signature-picker{display:flex;flex-direction:column;min-height:0;max-height:none;overflow:hidden}
+.signature-dialog-small .signature-picker-scroll{min-height:0;overflow-y:auto;overscroll-behavior:contain}
+.signature-dialog-small .signature-picker-footer{flex:none}
+.sign-workspace .sign-date-field{display:grid;gap:6px}
+.sign-workspace .sign-date-controls{display:grid;grid-template-columns:minmax(0,1fr) minmax(0,1fr);gap:8px;padding-bottom:8px}
+.sign-workspace .sign-date-controls .field{font-size:11px;display:grid;gap:4px}
+.sign-workspace .sign-date-controls input,.sign-workspace .sign-date-controls select{width:100%;min-width:0;min-height:36px;padding:5px;font-size:12px;box-sizing:border-box}
+.sign-workspace .sign-date-field .sign-drag-field{margin-bottom:0}
+/* Native editable pagination, matching the supplied navigation unit. */
+.sign-workspace-toolbar .sign-toolbar-pages{display:inline-flex;align-items:center;gap:10px;padding:8px;border:1px solid var(--border);border-radius:12px;background:var(--card);box-shadow:0 1px 3px #00000008;user-select:none}
+.sign-pagination-arrows,.sign-pagination-number{display:flex;align-items:center;gap:4px}
+.sign-pagination-number{gap:8px}
+.sign-workspace-toolbar .sign-pagination-arrows button{width:36px;min-width:36px;height:36px;min-height:36px;padding:0;display:grid;place-items:center;border:1px solid var(--border);border-radius:8px;background:var(--card);color:var(--muted);transition:background .15s,transform .15s}
+.sign-workspace-toolbar .sign-pagination-arrows button:hover:not(:disabled){background:var(--soft)}
+.sign-workspace-toolbar .sign-pagination-arrows button:active:not(:disabled){transform:scale(.95)}
+.sign-workspace-toolbar .sign-pagination-number input{width:48px;height:36px;min-height:36px;border:1px solid var(--border);border-radius:8px;text-align:center;background:var(--card);color:var(--foreground);font-size:14px;font-weight:600;appearance:textfield}
+.sign-pagination-number input::-webkit-outer-spin-button,.sign-pagination-number input::-webkit-inner-spin-button{-webkit-appearance:none;margin:0}
+.sign-pagination-number>span{color:var(--muted);font-size:14px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
+.sign-pagination-number strong{color:var(--foreground);font-weight:600}
+@media(prefers-reduced-motion:reduce){.sign-workspace-toolbar .sign-pagination-arrows button{transition:none}}
