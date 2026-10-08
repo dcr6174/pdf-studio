@@ -376,3 +376,6 @@ toolGuidance.edit.faq.push(
  ['Where are zoom and Options on mobile?', 'Both are in the attached editing toolbar. Open the zoom control for Zoom out, Fit width and Zoom in. Options opens the additional tool choices.'],
  ['How do I remove added text or a sketch?', 'Select the added element and use the dustbin beside the green tick. This removes the added element, not underlying PDF content.']
 );
+
+toolGuidance.reader.steps=['Choose your PDF. On a phone, pages scroll continuously below the attached reading toolbar.','Use the page-number field to jump, the zoom control to fit the page width, or Search and reading options for text search, the outline and bookmarks. The + button adds PDF files.','Read without exporting. On desktop, the existing reading views and download controls remain available. View rotation does not change the PDF.'];
+toolGuidance.rotate.steps=['Choose your PDF and tap Rotate under the page that needs turning. Each tap turns that page clockwise by 90 degrees.','On a phone, Add PDFs and Undo/Redo are attached below the header. Open More rotation options for Rotate all pages or page numbers such as 1, 3-5.','Choose Save rotated PDF, download the result and inspect the orientation of every changed page.'];

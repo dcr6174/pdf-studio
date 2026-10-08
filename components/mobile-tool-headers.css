@@ -1,0 +1,44 @@
+/* Phone toolbars only. Desktop and tablet layouts retain their existing controls. */
+@media(max-width:767px){
+ .studio-shell.document-loaded:is([data-tool=merge],[data-tool=rotate],[data-tool=reader]) .content{padding-top:0!important;padding-inline:0!important}
+ .studio-shell[data-tool=merge].document-loaded .content:not(:has(.merge-result-page)){padding-right:0!important}
+ .studio-shell[data-tool=merge] .merge-list-heading{position:sticky;top:var(--mobile-tool-header-height,64px);z-index:30;padding:8px 16px;margin:0 0 16px;background:var(--card);border-bottom:1px solid var(--border);min-height:52px;box-sizing:border-box}
+ .studio-shell[data-tool=merge] .merge-list-heading>div:first-child{display:none}
+ .studio-shell[data-tool=merge] .merge-file-controls{position:static;inset:auto;flex-direction:row;width:100%;justify-content:flex-end;gap:8px}
+ .studio-shell[data-tool=merge] .merge-file-controls button{width:44px;height:44px;min-height:44px;box-shadow:none;border-radius:10px;flex:none}
+ .studio-shell[data-tool=merge] .merge-settings-trigger{order:2}
+ .studio-shell[data-tool=merge] .merge-file-controls>button:last-child:not(.merge-add-control){order:1}
+ .studio-shell[data-tool=merge] .merge-add-control{order:3}
+ .studio-shell[data-tool=merge] .merge-document-grid{margin-inline:16px}
+ .studio-shell[data-tool=rotate] .rotate-workspace{padding:0 16px}
+ .studio-shell[data-tool=rotate] .rotate-workspace-header{position:sticky;top:var(--mobile-tool-header-height,64px);z-index:30;margin:0 -16px 16px;padding:8px 16px;min-height:52px;background:var(--card);border-bottom:1px solid var(--border);box-sizing:border-box}
+ .studio-shell[data-tool=rotate] .rotate-workspace-header>div:first-child{display:none}
+ .studio-shell[data-tool=rotate] .rotate-workspace-controls{width:100%;gap:8px}
+ .studio-shell[data-tool=rotate] .rotate-workspace-controls button{width:44px;height:44px;min-height:44px;padding:0}
+ .studio-shell[data-tool=rotate] .mobile-toolbar-label{display:none}
+ .studio-shell[data-tool=rotate] .rotate-save-bar{margin-inline:-16px}
+ .studio-shell[data-tool=reader].document-loaded :is(.tool-heading,.file-facts,.back-link,.tool-note,.workspace-add-row,.workspace-add-files,.mobile-workspace-controls,.mobile-workspace-action){display:none!important}
+ .studio-shell[data-tool=reader].document-loaded :is(.task-workspace,.task-canvas){padding:0!important;margin:0!important;width:100%;min-width:0;display:block!important}
+ .reader-mobile-attached{display:flex;flex-direction:column;height:calc(100dvh - var(--mobile-tool-header-height,64px));min-height:0}
+ .reader-mobile-toolbar{display:flex;align-items:center;gap:8px;flex:none;min-height:52px;padding:6px 12px;background:var(--card);border-bottom:1px solid var(--border);box-sizing:border-box;z-index:20}
+ .reader-mobile-toolbar button,.reader-mobile-toolbar summary{display:flex;align-items:center;justify-content:center;min-width:44px;height:44px;border-radius:10px;list-style:none}
+ .reader-mobile-toolbar summary::-webkit-details-marker{display:none}
+ .reader-mobile-page{display:flex;align-items:center;gap:6px;flex:1;min-width:0;font-size:12px;white-space:nowrap}
+ .reader-mobile-page input{width:48px;min-width:0;height:44px;font-size:16px;padding:4px}
+ .reader-mobile-zoom{position:relative;flex:none}
+ .reader-mobile-zoom>div{position:absolute;right:0;top:50px;display:flex;gap:6px;padding:8px;background:var(--card);border:1px solid var(--border);border-radius:12px;width:max-content;max-width:calc(100vw - 24px)}
+ .reader-mobile-zoom>div button{font-size:14px;padding:6px 10px}
+ .reader-mobile-add{background:var(--primary);color:white}
+ .reader-mobile-attached .reader-layout{display:flex!important;flex:1;min-height:0;gap:0}
+ .reader-mobile-attached .reader-page{flex:1;min-height:0;max-height:none;overflow:auto;border-radius:0;padding:12px;overscroll-behavior:contain}
+ .reader-mobile-sheet{max-height:85dvh;overflow:auto;display:grid;gap:16px}
+ .reader-mobile-sheet :is(input,button,select,summary){min-height:44px}
+ .reader-mobile-sheet ul{padding-left:18px}
+ .reader-mobile-attached.reader-focus{height:100dvh;padding:0}
+}
+
+@media(max-width:767px){
+ .studio-shell.document-loaded:is([data-tool=merge],[data-tool=rotate]) :is(.tool-heading,.file-facts,.back-link,.workspace-add-row){display:none!important}
+ .studio-shell[data-tool=reader].document-loaded>footer{display:none!important}
+ .reader-mobile-zoom:not([open])>div{display:none}
+}
