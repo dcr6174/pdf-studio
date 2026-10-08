@@ -26,4 +26,18 @@
  .studio-shell.document-shell.document-loaded.mobile-edit-workspace.edit-canvas-fit .mobile-edit-zoom button:focus-visible,.studio-shell.document-shell.document-loaded.mobile-edit-workspace.edit-canvas-fit .mobile-edit-add:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
  .studio-shell.document-shell.document-loaded.mobile-edit-workspace.edit-canvas-fit .mobile-workspace-controls{top:auto!important;bottom:calc(var(--studio-action-space,88px) + 10px)!important;right:max(10px,env(safe-area-inset-right));flex-direction:row!important;padding:3px;max-height:none}
  .studio-shell.document-shell.document-loaded.mobile-edit-workspace.edit-canvas-fit .signature-placement{flex:none;margin:0;padding:6px 10px;font-size:12px}
+
+ .mobile-edit-workspace .mobile-edit-context{display:flex;align-items:center;min-width:0;border-top:1px solid var(--border)}
+ .mobile-edit-workspace .mobile-edit-context>.drawing-options{flex:1;min-width:0;margin:0!important;display:flex;align-items:center;touch-action:pan-x}
+ .mobile-edit-workspace .mobile-edit-context :is(input,select,button){min-height:44px}
+ .mobile-edit-workspace .mobile-edit-context .field{display:flex;align-items:center;gap:6px;margin:0;flex:none}
+ .mobile-edit-workspace .mobile-edit-context .row{display:flex;flex-wrap:nowrap;gap:4px;flex:none}
+ .mobile-edit-workspace .mobile-edit-context input[type=number]{width:64px}
+ .mobile-edit-workspace .mobile-edit-context select{max-width:150px}
+ .mobile-edit-workspace .mobile-edit-context input[type=color]{width:44px;padding:3px}
+ .mobile-edit-workspace .mobile-edit-context input[type=range]{width:100px}
+ .mobile-edit-workspace .mobile-edit-done,.mobile-edit-workspace .mobile-edit-options{flex:none;display:flex;align-items:center;justify-content:center;gap:4px;min-height:44px;padding:6px 8px;border-radius:8px}
+ .mobile-edit-workspace .mobile-edit-done{color:var(--primary);margin:4px;border:1px solid var(--border)}
+ .mobile-edit-workspace .mobile-edit-options{font-size:12px}
 }
+
