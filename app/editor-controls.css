@@ -115,11 +115,26 @@
  .studio-shell.edit-canvas-fit:not(.sign-workspace) .edit-page-rail{flex:none}
  .studio-shell.edit-canvas-fit:not(.sign-workspace) .edit-page-list{flex-wrap:nowrap;overflow-x:auto;overflow-y:hidden}
 }
-.drawing-settings-menu{position:relative;display:flex;align-items:center;flex:0 0 auto}
-.drawing-settings-menu>summary{list-style:none;display:flex;align-items:center;justify-content:center;min-width:44px;min-height:44px;padding:8px 12px;border:1px solid var(--border);border-radius:8px;background:var(--card);font-size:13px;font-weight:600;cursor:pointer}
-.drawing-settings-menu>summary::-webkit-details-marker{display:none}
-.drawing-settings-menu[open]>summary{border-color:var(--primary);color:var(--primary);background:var(--blue-soft)}
-.drawing-settings-menu .drawing-options{position:absolute;top:calc(100% + 8px);right:0;z-index:50;display:grid;min-width:230px;max-width:min(320px,calc(100vw - 32px));gap:10px;padding:12px;border:1px solid var(--border);border-radius:12px;background:var(--card);box-shadow:0 10px 30px #0002}
-.drawing-settings-menu .drawing-options label{justify-content:space-between;gap:10px}
-.drawing-settings-menu .drawing-options input[type=range]{width:100px}
-@media(max-width:1099px){.drawing-settings-menu .drawing-options{position:fixed;top:auto;right:12px;bottom:calc(var(--studio-action-space,88px) + 12px);max-height:min(50dvh,320px);overflow:auto}}
+
+/* Context controls appear directly beneath the toolbar only while editing. */
+.editor-context-controls{display:flex;align-items:center;gap:6px;flex:none;min-width:0;padding:6px 10px;border-bottom:1px solid var(--border);background:var(--card);overflow-x:auto}
+.editor-context-controls .drawing-options{padding:0;border:0;flex:1;flex-wrap:nowrap;white-space:nowrap;gap:10px;background:transparent}
+.editor-context-controls label.field{margin:0;display:flex;flex-direction:row;align-items:center;gap:8px}
+.editor-context-controls button,.editor-context-controls select,.editor-context-controls input[type=number]{flex:none;min-height:36px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--foreground)}
+.editor-context-controls input[type=number]{width:64px}.editor-context-controls button[aria-pressed=true]{color:var(--primary);background:var(--blue-soft)}
+.organize-five-actions{display:grid;gap:8px;width:100%;min-width:0}
+.organize-five-actions>.secondary{width:100%;min-height:42px;padding:9px 10px;justify-content:center;font-size:13px}
+.studio-shell .edit-page-rail{position:relative}
+.studio-shell .edit-page-rail .rail-collapse-toggle{position:absolute;top:6px;right:6px;z-index:2;display:grid;place-items:center;width:30px;min-height:30px;padding:4px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--foreground)}
+.studio-shell .edit-page-rail .rail-page-header{padding:12px 8px 8px!important}.studio-shell .edit-page-rail .rail-page-header h2{padding-right:30px!important}
+@media(min-width:1100px){
+ .studio-shell.edit-canvas-fit:is(.sign-workspace,.edit-three-column) .editor-layout{grid-template-columns:144px minmax(0,1fr)!important}
+ .studio-shell.edit-canvas-fit .editor-layout:has(.edit-page-rail[data-collapsed=true]){grid-template-columns:40px minmax(0,1fr)!important}
+ .studio-shell.edit-canvas-fit .edit-page-rail[data-collapsed=true]{width:40px!important;min-width:0;max-width:40px}
+ .studio-shell.edit-canvas-fit .edit-page-list{gap:18px!important;padding:12px 10px 20px!important}
+ .studio-shell.edit-canvas-fit .mobile-continuous-pages{flex:1;min-height:0;height:auto!important;padding:16px!important}
+}
+.studio-shell :is(.mobile-continuous-pages,.board-scroll,.edit-page-list,.shared-tool-action-bar,.shared-action-body,.shared-tool-action-body,.tool-action-settings){scrollbar-width:thin;scrollbar-color:var(--border) transparent;scrollbar-gutter:auto}
+.studio-shell :is(.mobile-continuous-pages,.board-scroll,.edit-page-list,.shared-tool-action-bar)::-webkit-scrollbar{width:6px;height:6px}
+.studio-shell :is(.mobile-continuous-pages,.board-scroll,.edit-page-list,.shared-tool-action-bar)::-webkit-scrollbar-thumb{background:var(--border);border-radius:6px}
+.studio-shell .shared-tool-action-bar .workspace-inline-organize{overflow:visible}
