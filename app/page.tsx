@@ -6,6 +6,7 @@ import {ResizePagePreview} from '@/components/resize-page-preview';
 import './sign-simple-workspace.css';
 import {WorkspaceFloatingControls} from '@/components/workspace-floating-controls';
 import {CardMouseSensor,CardTouchSensor} from '@/components/document-drag-sensors';
+import {MobileHomePolish} from '@/components/mobile-home-polish';
 import {HomeMotionHero} from '@/components/home-motion-hero';
 import {resizeBox,resizeHandles,type ResizeHandle} from '../lib/mark-resize';
 import {StudioHeader} from '@/components/studio-header';
@@ -272,7 +273,7 @@ function App({initialTool='home',initialHeading,initialOptions}:{initialTool?:st
         }) => { if (!tools.some(t => t.id === input.toolId))
             throw new Error('Unknown tool'); if (queue.current || busy || loading)
             throw new Error('The workspace is busy'); if(view==='native-text'&&textDirty&&input.toolId!==view)throw new Error('Keep or discard text edits before switching tools.'); navigate(input.toolId); return { opened: input.toolId }; } }, { signal: life.signal })).catch(() => { }); return () => life.abort(); }, [busy, loading,view,textDirty,navigate]);
-    useEffect(()=>{searchAction.current=()=>{if(busy||loading||(view==='native-text'&&textDirty)){toast('Finish processing or keep your text edits before searching.');return;}setSearchOpen(true);};});
+    useEffect(()=>{searchAction.current=()=>{if(busy||loading||(view==='native-text'&&textDirty)){toast('Finish processing or keep your text edits before searching.');return;}if(view==='home'&&matchMedia('(max-width:767px)').matches){document.getElementById('mobile-home-search')?.focus();return;}setSearchOpen(true);};});
     async function ingest(list: File[], target = view, confirmed=false, openMode:'auto'|'replace'|'append'='append') {
       if(target==='scan'||target==='images')list=list.map(normalizeCameraFile);
       const appends=openMode==='append'||(openMode==='auto'&&(isMulti(target)||batchMode||target==='home'));
@@ -480,8 +481,8 @@ function App({initialTool='home',initialHeading,initialOptions}:{initialTool?:st
     <fieldset disabled={busy||loading||switchingEditor} inert={busy||loading||switchingEditor?true:undefined} className="studio-controls" style={busy||loading||output&&resultOpen?{display:'none'}:undefined}>
 
     {mobileControlsReady&&<MobileWorkspaceControls key={view} addAvailable={view==='merge'} organize={view==='edit'?undefined:!newDocument&&pages.length>0?pageOrganizer:undefined} onSort={cardFiles?sortWorkspaceFiles:undefined} onClear={()=>setClearOpen(true)} files={files} pageCount={pages.length} addLabel={"Add files"} onAdd={()=>input.current?.click()} settings={mobileSettings} settingsAvailable={view!=='edit'&&(!newDocument||view==='create-form')} action={mobileAction} disabled={busy||loading||switchingEditor||textDirty}/>}
-    {view === 'home' ? <>
-        <HomeMotionHero toolCount={tools.length} onSearch={()=>searchAction.current()} searchStatus={searchStatus}/>
+    {view === 'home' ? <><MobileHomePolish/>
+        <HomeMotionHero toolCount={tools.length} onSearch={()=>searchAction.current()} searchStatus={searchStatus} inlineSearch={<div className="mobile-home-search-box" role="search"><label htmlFor="mobile-home-search" className="sr-only">Find a PDF tool</label><ScanLine size={20} aria-hidden="true"/><input id="mobile-home-search" type="search" autoComplete="off" placeholder="Search tools — merge, edit, compress…" value={search} aria-controls="home-tool-grid" aria-describedby="search-status" onChange={e=>{setSearch(e.target.value);setCatalogGroup('All tools');}} onKeyDown={e=>{if(e.key==='Enter'&&!e.nativeEvent.isComposing&&filtered.length&&search.trim()){e.preventDefault();navigate(filtered[0].id);}}}/>{search&&<button type="button" aria-label="Clear tool search" onClick={()=>{setSearch('');document.getElementById('mobile-home-search')?.focus();}}><X size={18}/></button>}</div>}/>
         <section className="home-popular" aria-labelledby="popular-tools-title"><div className="home-section-heading"><h2 id="popular-tools-title">Start with a favourite</h2><p>Five everyday tools. One simpler way to work.</p></div><Spotlight className="tool-grid popular-tool-row" item=".tool-card">{popularTools.map(homeToolCard)}</Spotlight><p className="home-existing-text-shortcut">Need to correct an existing sentence? <button className="link-button" onClick={()=>navigate('native-text')}>Edit existing text</button></p></section>
         <section className="home-toolbox" aria-label="Browse PDF tools"><div className="home-section-heading home-catalog-intro"><h2>Every PDF task, in one place</h2><p>Find the right tool and make it yours.</p></div><div className="home-section-heading home-catalog-heading"><div className="home-catalog-pills" role="group" aria-label="Tool categories">{groups.filter(g=>g!=='My files').map(category=><button type="button" key={category} aria-pressed={catalogGroup===category} onClick={()=>setCatalogGroup(category)}>{category} <span>{category==='All tools'?tools.length:tools.filter(t=>t.group===category).length}</span></button>)}</div></div>
         <div id="home-tool-grid" className="home-catalog-content" key={searching?search:catalogGroup}>{searching?<Spotlight className="tool-grid" item=".tool-card">{filtered.map(homeToolCard)}</Spotlight>:groups.filter(g=>g!=='All tools'&&g!=='My files'&&(catalogGroup==='All tools'||g===catalogGroup)).map((category,i)=><section className="home-tool-category" key={category} aria-labelledby={'home-category-'+i}><div className="home-category-heading"><h3 id={'home-category-'+i}>{category}</h3><p>{categoryDescriptions[category]}</p></div><Spotlight className="tool-grid" item=".tool-card">{tools.filter(t=>t.group===category).map(homeToolCard)}</Spotlight></section>)}</div>{!filtered.length&&<p className="empty">No tools match “{search}”. Try “merge”, “compress” or “OCR”, or <button type="button" className="link-button" onClick={()=>setSearch('')}>show all tools</button>.</p>}
@@ -532,6 +533,7 @@ function App({initialTool='home',initialHeading,initialOptions}:{initialTool?:st
     </>;
 }
 export default function Home({initialTool,initialHeading,initialOptions,guide}:{initialTool?:string;initialHeading?:string;initialOptions?:Partial<Options>;guide?:ReactNode}) { return <App initialTool={initialTool} initialHeading={initialHeading} initialOptions={initialOptions} guide={guide}/>; }
+
 
 
 
