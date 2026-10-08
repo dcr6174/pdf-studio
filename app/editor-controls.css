@@ -193,3 +193,13 @@
 .sign-pagination-number>span{color:var(--muted);font-size:14px;font-weight:600;white-space:nowrap;font-variant-numeric:tabular-nums}
 .sign-pagination-number strong{color:var(--foreground);font-weight:600}
 @media(prefers-reduced-motion:reduce){.sign-workspace-toolbar .sign-pagination-arrows button{transition:none}}
+
+/* Reusable signing cards keep editing at the trailing edge, outside the drag target. */
+.sign-field-card{display:flex;align-items:center;gap:4px;border:1px solid var(--border);border-radius:10px;background:var(--soft);margin:8px 0;min-width:0;padding-right:6px}
+.sign-workspace .sign-field-card .sign-drag-field{flex:1;min-width:0;width:auto;border:0;background:none;margin:0;border-radius:9px}
+.sign-card-edit{display:grid;place-items:center;flex:none;width:36px;height:36px;min-height:36px;border:0;border-radius:8px;background:var(--blue-soft);color:var(--primary);cursor:pointer}
+.sign-card-edit:focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+.sign-initials-editor{display:flex;align-items:end;gap:8px}
+.sign-initials-editor .field{flex:1;min-width:0}
+.sign-workspace .sign-field-card .sign-field-preview{flex:1}
+.sign-workspace .sign-field-card .sign-field-preview img{max-width:100%}
