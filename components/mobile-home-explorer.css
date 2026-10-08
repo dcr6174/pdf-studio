@@ -63,14 +63,14 @@
  .mobile-home-explorer .mobile-popular-tile svg{color:var(--category-ink)}
  .mobile-home-explorer .mobile-popular-tile{background:linear-gradient(var(--category-wash),var(--category-wash)),var(--card)}
  .mobile-home-explorer .mobile-catalogue-card{border-left:3px solid var(--category-ink)}
- .home-shell .home-how{display:block!important;padding:24px 0!important;margin:8px 0 24px!important;border-top:1px solid var(--border)}
+ .studio-shell.home-shell .home-how{display:block!important;padding:24px 0!important;margin:8px 0 24px!important;border-top:1px solid var(--border)}
  .home-shell .home-steps{display:grid!important;grid-template-columns:minmax(0,1fr)!important;gap:18px!important;padding:0!important;margin:0!important;list-style:none}
  .home-shell .home-steps li{padding:0!important;min-width:0}
  .home-shell .home-steps li>span{color:var(--primary);font-size:12px}
  .home-shell .home-steps h2{font-size:16px!important;margin:5px 0!important}
  .home-shell .home-steps p{font-size:13px!important;line-height:1.6!important;margin:0;color:var(--muted)}
- .home-shell .home-faq{display:block!important;margin:0 0 28px!important}
- .home-shell .home-daily-footer{display:flex!important;align-items:center!important;flex-direction:column!important;gap:10px!important;text-align:center!important;padding:24px 18px!important}
+ .studio-shell.home-shell .home-faq{display:block!important;margin:0 0 28px!important}
+ .studio-shell.home-shell .home-daily-footer{display:flex!important;align-items:center!important;flex-direction:column!important;gap:10px!important;text-align:center!important;padding:24px 18px!important}
 }
 
 .install-button-icon{display:none}
