@@ -12,10 +12,11 @@ export function MobileHomePolish(){
   const stop=()=>{observer?.disconnect();changes?.disconnect();host.querySelectorAll('[data-mobile-enter]').forEach(node=>node.removeAttribute('data-mobile-enter'));};
   const sync=()=>{stop();if(!media.matches||typeof IntersectionObserver==='undefined')return;
    observer=new IntersectionObserver(entries=>{for(const entry of entries)if(entry.isIntersecting){entry.target.setAttribute('data-mobile-enter','true');observer?.unobserve(entry.target);}},{threshold:.08});
-   const scan=()=>host.querySelectorAll('#home-tool-grid .tool-card').forEach(node=>{if(!seen.has(node)){seen.add(node);observer?.observe(node);}});
+   const scan=()=>host.querySelectorAll('.mobile-home-explorer .mobile-catalogue-card').forEach(node=>{if(!seen.has(node)){seen.add(node);observer?.observe(node);}});
    scan();changes=new MutationObserver(scan);changes.observe(host,{childList:true,subtree:true});
   };
   sync();media.addEventListener('change',sync);return()=>{stop();media.removeEventListener('change',sync);};
  },[]);
  return null;
 }
+
