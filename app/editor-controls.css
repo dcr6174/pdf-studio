@@ -149,3 +149,23 @@
 .studio-shell .edit-page-rail .rail-title-row{display:flex;align-items:center;justify-content:space-between;gap:8px}.studio-shell .edit-page-rail .rail-title-row h2{padding:0!important}.studio-shell .edit-page-rail .rail-collapse-toggle{position:static!important;flex:none;width:30px;min-height:30px;border-color:var(--primary);background:var(--blue-soft);color:var(--primary);border-radius:8px}.studio-shell .edit-page-rail[data-collapsed=true]>.rail-collapse-toggle{margin:8px auto}
 .studio-shell .edit-page-rail .rail-page-controls{grid-template-columns:26px 26px minmax(38px,1fr) auto;gap:4px;border-radius:9px;background:var(--soft)}.studio-shell .edit-page-rail .rail-page-controls button{border-radius:7px;background:var(--card);color:var(--primary)}
 @media(max-width:767px){.editor-emoji-tray>span{display:none}.editor-emoji-tray{width:100%;box-sizing:border-box}.mobile-edit-context:has(.editor-emoji-tray){padding:0}.mobile-edit-context:has(.editor-emoji-tray) .mobile-edit-selection-actions{display:none}}
+
+/* Signing field tray: name first, then reusable draggable fields. */
+.sign-clean-inspector .sign-field-tray>.sign-create-button{display:flex;margin:12px 0}
+.sign-clean-inspector .sign-field-tray>.sign-drag-field{display:flex}
+.sign-owner-input{display:grid;gap:8px}
+.sign-drag-hint{display:block;color:var(--muted);font-size:12px;line-height:1.5}
+.sign-artwork,.sign-custom-text{display:grid;gap:8px;margin-top:6px}
+.sign-artwork>.secondary{width:100%;min-height:44px}
+.sign-optional-fields .sign-field-preview{flex-wrap:wrap}
+@media(min-width:1100px){
+ .studio-shell .edit-page-rail{overflow:visible!important}
+ .studio-shell .edit-page-rail .edit-page-list{overflow-y:auto;min-height:0;max-height:calc(100dvh - 220px)}
+ .studio-shell .edit-page-rail .rail-collapse-toggle{position:absolute!important;right:-10px;top:50%;transform:translateY(-50%);width:20px;min-width:20px;min-height:44px;padding:0;border:0;border-radius:0 5px 5px 0;background:var(--border);color:var(--muted);z-index:30}
+ .studio-shell .edit-page-rail[data-collapsed=true]>.rail-collapse-toggle{margin:0;right:0}
+ .studio-shell.edit-canvas-fit .editor-layout:has(.edit-page-rail[data-collapsed=true]){grid-template-columns:14px minmax(0,1fr)!important}
+ .studio-shell.edit-canvas-fit .edit-page-rail[data-collapsed=true]{width:14px!important;max-width:14px}
+ .sign-toolbar-pages{gap:2px;border:0;border-radius:8px;padding:2px 8px;background:var(--soft)}
+ .sign-toolbar-pages button{border:0;background:transparent;border-radius:6px}
+ .sign-toolbar-pages input{border:0;background:var(--card);border-radius:5px}
+}

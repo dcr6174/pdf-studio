@@ -153,7 +153,7 @@ function App({initialTool='home',initialHeading,initialOptions}:{initialTool?:st
     const [ocrDraft,setOcrDraft]=useState<Output>();
     const [textDirty,setTextDirty]=useState(false);
     const [signatureAsset,setSignatureAsset]=useState<string>(),[signingName,setSigningName]=useState('');
-    const [dateFormat,setDateFormat]=useState<SigningDateFormat>('compact');
+    const [dateFormat,setDateFormat]=useState<SigningDateFormat>('day-first');
     const [sigStyle,setSigStyle]=useState<SignatureStyle>('alexbrush'),[sigInk,setSigInk]=useState('#172638'),[sigPen,setSigPen]=useState(5);
     const [drawingOpen,setDrawingOpen]=useState(false);
     const textController=useRef<TextEditorHandle>(null);

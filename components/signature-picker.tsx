@@ -5,7 +5,7 @@ import {signatureFromName,trimSignature,signatureFromFile,loadSignatureFont,type
 import {SignatureSettings} from '@/components/signature-settings';
 import {savedSignatures,type SavedSignature} from '@/lib/saved-signatures';
 export function SignaturePicker({onSave,onCancel,style,ink,pen,onStyle,onInk,onPen,compact=false,initialName='',onNameChange}:{initialName?:string;onNameChange?:(name:string)=>void;compact?:boolean;onSave:(image:string)=>void;onCancel?:()=>void;style:SignatureStyle;ink:string;pen:number;onStyle:(s:SignatureStyle)=>void;onInk:(c:string)=>void;onPen:(w:number)=>void}){
- const tabs=compact?(['draw','type','upload'] as const):(['draw','type','upload','camera'] as const);
+ const tabs=compact?(['type','draw','upload'] as const):(['type','draw','upload','camera'] as const);
  const [tab,setTab]=useState<'type'|'draw'|'upload'|'camera'>('type');
  const [name,setName]=useState(initialName),[typed,setTyped]=useState(''),[upload,setUpload]=useState(''),[error,setError]=useState(''),[loading,setLoading]=useState(false),[drawn,setDrawn]=useState(false);
  const [saved,setSaved]=useState<SavedSignature[]>([]),[notice,setNotice]=useState('');
