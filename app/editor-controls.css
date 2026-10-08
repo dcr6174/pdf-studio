@@ -159,7 +159,7 @@
 .sign-artwork>.secondary{width:100%;min-height:44px}
 .sign-optional-fields .sign-field-preview{flex-wrap:wrap}
 @media(min-width:1100px){
- .studio-shell .edit-page-rail{overflow:visible!important}
+ .studio-shell .edit-page-rail{position:relative!important;overflow:visible!important}
  .studio-shell .edit-page-rail .edit-page-list{overflow-y:auto;min-height:0;max-height:calc(100dvh - 220px)}
  .studio-shell .edit-page-rail .rail-collapse-toggle{position:absolute!important;right:-10px;top:50%;transform:translateY(-50%);width:20px;min-width:20px;min-height:44px;padding:0;border:0;border-radius:0 5px 5px 0;background:var(--border);color:var(--muted);z-index:30}
  .studio-shell .edit-page-rail[data-collapsed=true]>.rail-collapse-toggle{margin:0;right:0}
