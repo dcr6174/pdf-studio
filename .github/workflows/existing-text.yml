@@ -11,6 +11,7 @@ on:
       - 'lib/vendor/**'
       - 'public/fonts/editing/**'
       - 'checks/verify-text-advanced.mjs'
+      - 'checks/verify-text-worker-build.mjs'
       - '.github/workflows/existing-text.yml'
   workflow_dispatch:
 permissions:
@@ -31,3 +32,4 @@ jobs:
       - run: npm run verify:text
       - run: node checks/verify-react-workflows.mjs
       - run: npm run build:public
+      - run: node checks/verify-text-worker-build.mjs
