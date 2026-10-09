@@ -129,3 +129,14 @@ body:has(.export-result-page) .tool-instructions{display:none}
 .compression-savings-copy small{display:block;margin-top:8px;color:var(--muted,#696374)}
 @media(max-width:600px){.compression-result-summary{gap:18px;margin:28px auto}.compression-savings-ring{width:108px;height:108px;flex-basis:108px}.compression-savings-ring strong{font-size:25px}.compression-savings-copy p{font-size:17px}.compression-savings-copy>strong{font-size:16px}.export-result-page .merge-result-download{width:100%;justify-content:center}}
 @media(max-width:359px){.compression-result-summary{gap:12px}.compression-savings-ring{width:92px;height:92px;flex-basis:92px}.compression-savings-copy p{font-size:15px}}
+
+/* A drop-like success button: a quiet loop and three spacious rings on interaction. */
+button.merge-result-check{padding:0;border:1px solid #bce5ce;cursor:pointer;overflow:visible;background:radial-gradient(circle at 32% 22%,#f8fffb 0%,#dff6e9 55%,#c8ebd9 100%);box-shadow:inset 0 2px 4px #ffffffd9,inset 0 -4px 9px #18764410,0 8px 24px #18764412,0 0 0 8px #eaf9f0;transition:box-shadow .2s ease,transform .2s ease}
+button.merge-result-check:hover{transform:translateY(-2px);box-shadow:inset 0 2px 4px #ffffffd9,0 10px 28px #18764420,0 0 0 8px #eaf9f0}
+button.merge-result-check:focus-visible{outline:3px solid var(--primary);outline-offset:12px}
+.success-click-ripples{position:absolute;inset:0;pointer-events:none;border-radius:50%}
+.success-click-ripples i{position:absolute;inset:0;border:2px solid #47b982;border-radius:50%;box-shadow:0 0 12px #47b98220;opacity:0;animation:success-water-ripple 1.8s cubic-bezier(.16,1,.3,1) both}
+.success-click-ripples i:nth-child(2){animation-delay:.15s;border-color:#79caa2}
+.success-click-ripples i:nth-child(3){animation-delay:.3s;border-color:#a7dec2}
+@keyframes success-water-ripple{0%{transform:scale(.8);opacity:0}12%{opacity:.75}100%{transform:scale(2.4);opacity:0}}
+@media(prefers-reduced-motion:reduce){button.merge-result-check{transition:none}button.merge-result-check:hover{transform:none}.success-click-ripples{display:none}.success-click-ripples i{animation:none}}
