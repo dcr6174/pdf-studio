@@ -66,6 +66,7 @@ export type Mark = {
     align?:'left'|'center'|'right';
 };
 export type Options = {
+    wordMode?:string;wordOCR?:string;wordLanguage?:string;
     splitOutput?:string;
     resizeSize?:string;
     resizeOrientation?:string;
@@ -334,7 +335,8 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         files.forEach((f, i) => z.file(exportFilename(id,f.name,String(i+1)), f.bytes));
         return { blob: await z.generateAsync({ type: 'blob' }), name: 'documents.zip' };
     }
-    if (['text', 'word', 'html', 'epub', 'csv', 'xlsx', 'audio', 'privacy'].includes(id)) {
+    if(id==='word'){const {convertWord}=await import('./word-conversion');return convertWord(first.bytes,filename,o,progress,signal);}
+    if (['text', 'html', 'epub', 'csv', 'xlsx', 'audio', 'privacy'].includes(id)) {
         const texts = await textPages(first.bytes);
         signal?.throwIfAborted();
         const text = texts.join('\n\n');
@@ -349,11 +351,6 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             throw new Error('No selectable text found. Try the OCR tool first.');
         if (id === 'text' || id === 'audio')
             return result(text, `${filename}.txt`, 'text/plain', text);
-        if (id === 'word') {
-            const { Document, Packer, Paragraph, TextRun } = await import('docx');
-            const d = new Document({ sections: [{ children: text.split('\n').map(t => new Paragraph({ children: [new TextRun(t)] })) }] });
-            return { blob: await Packer.toBlob(d), name: `${filename}.docx` };
-        }
         const esc = (t: string) => t.replace(/&/g, '&amp;').replace(/</g, '&lt;').replace(/>/g, '&gt;').replace(/"/g, '&quot;');
         if (id === 'html')
             return result(`<!doctype html><html lang="en"><meta charset="utf-8"><title>${esc(filename)}</title><style>body{max-width:760px;margin:40px auto;padding:20px;font:18px/1.7 system-ui}section{white-space:pre-wrap;border-bottom:1px solid #ddd;padding:30px 0}</style>${texts.map(t => `<section>${esc(t)}</section>`).join('')}</html>`, `${filename}.html`, 'text/html',text.slice(0,3000));

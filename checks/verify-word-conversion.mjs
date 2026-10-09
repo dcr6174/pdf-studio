@@ -1,0 +1,15 @@
+import assert from 'node:assert/strict';
+import {build} from 'vite';
+import JSZip from 'jszip';
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/word-conversion.ts',outDir:'.word-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'word.mjs'}}}});
+const {wordRows,packWordPages}=await import('../.word-check/word.mjs');
+const run=(text,x,y,size=12,style={})=>({text,x,y,size,width:50,font:'Arial',bold:false,italic:false,rtl:false,...style});
+const pages=[{width:612,height:792,runs:[run('Second row',40,120),run('Heading',40,50,24,{bold:true}),run('First row',40,90),run('italic',100,90,12,{italic:true})]},{width:792,height:612,runs:[run('Landscape',40,60)]},{width:792,height:612,runs:[]}];
+assert.deepEqual(wordRows(pages[0].runs).map(row=>row.map(r=>r.text)),[['Heading'],['First row','italic'],['Second row']]);
+const blob=await packWordPages(pages),zip=await JSZip.loadAsync(await blob.arrayBuffer()),xml=await zip.file('word/document.xml').async('string');
+assert.equal((xml.match(/<w:sectPr>/g)||[]).length,3);
+assert(xml.includes('w:w="12240"'));assert(xml.includes('w:w="15840"'));assert(xml.includes('w:h="12240"'));
+assert(xml.indexOf('Heading')<xml.indexOf('First row'));assert(xml.indexOf('First row')<xml.indexOf('Second row'));
+assert(xml.includes('<w:b/>'));assert(xml.includes('<w:i/>'));assert(xml.includes('w:val="48"'));
+assert(xml.includes(' italic'));assert(xml.includes('Landscape'));
+console.log('PASS DOCX reading order, mixed font styles, font sizes, source page dimensions, page boundaries and blank page retention');
