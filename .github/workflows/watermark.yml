@@ -1,0 +1,34 @@
+name: Lab watermark removal
+on:
+  pull_request:
+    paths:
+      - 'lib/watermark-engine.ts'
+      - 'lib/online-text-engine.ts'
+      - 'components/watermark-studio.tsx'
+      - 'components/lab-directory.tsx'
+      - 'app/lab/**'
+      - 'scripts/generate-site-assets.mjs'
+      - 'checks/verify-watermark.mjs'
+      - '.github/workflows/watermark.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - id: install
+        run: npm ci
+      - run: npm run lint
+      - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx tsc --noEmit
+      - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-watermark.mjs
+      - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run build:public
