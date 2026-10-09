@@ -98,12 +98,12 @@
 .merge-next-icon-watermark{background:#fff0e6;color:#a65324}
 .merge-result-secondary>.secondary,.merge-result-next .secondary,.merge-result-download{transition:transform .2s ease,box-shadow .2s ease}
 .merge-result-secondary>.secondary:hover,.merge-result-next .secondary:hover,.merge-result-download:hover{transform:translateY(-2px);box-shadow:0 6px 20px #7045dc20}
-.merge-result-check{position:relative;isolation:isolate}
-.merge-result-check:before{content:"";position:absolute;inset:0;z-index:-1;border:2px solid #65c995;border-radius:50%;animation:merge-success-pulse 3s ease-out infinite}
-.merge-result-check svg{width:36px;height:36px}
-.merge-result-check path{stroke:#187644;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;animation:merge-success-draw 3s ease-in-out infinite}
-@keyframes merge-success-pulse{0%{transform:scale(.9);opacity:.6}75%,100%{transform:scale(1.5);opacity:0}}
-@keyframes merge-success-draw{0%{stroke-dashoffset:1;opacity:0}25%,85%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:0}}
+.merge-result-check{position:relative;isolation:isolate;width:84px;height:84px;margin:0 auto 28px;background:#dff6e9;box-shadow:0 0 0 8px #eaf9f0}
+.merge-result-check:before{content:"";position:absolute;inset:0;z-index:-1;border:3px solid #49b87d;border-radius:50%;animation:merge-success-pulse 2.8s ease-out infinite}
+.merge-result-check svg{width:48px;height:48px}
+.merge-result-check path{stroke:#187644;stroke-width:3;stroke-linecap:round;stroke-linejoin:round;stroke-dasharray:1;animation:merge-success-draw 2.8s ease-in-out infinite}
+@keyframes merge-success-pulse{0%{transform:scale(.95);opacity:.8}65%,100%{transform:scale(1.55);opacity:0}}
+@keyframes merge-success-draw{0%,8%{stroke-dashoffset:1;opacity:.25}32%,90%{stroke-dashoffset:0;opacity:1}100%{stroke-dashoffset:0;opacity:.25}}
 @media(prefers-reduced-motion:reduce){.merge-result-check:before,.merge-result-check path{animation:none}.merge-result-check path{stroke-dashoffset:0}.merge-result-secondary>.secondary,.merge-result-next .secondary,.merge-result-download{transition:none}}
 
 
@@ -129,11 +129,3 @@ body:has(.export-result-page) .tool-instructions{display:none}
 .compression-savings-copy small{display:block;margin-top:8px;color:var(--muted,#696374)}
 @media(max-width:600px){.compression-result-summary{gap:18px;margin:28px auto}.compression-savings-ring{width:108px;height:108px;flex-basis:108px}.compression-savings-ring strong{font-size:25px}.compression-savings-copy p{font-size:17px}.compression-savings-copy>strong{font-size:16px}.export-result-page .merge-result-download{width:100%;justify-content:center}}
 @media(max-width:359px){.compression-result-summary{gap:12px}.compression-savings-ring{width:92px;height:92px;flex-basis:92px}.compression-savings-copy p{font-size:15px}}
-
-/* Click feedback is separate from the result-ready celebration; no delay to file saving. */
-.merge-result-download .download-idle-icon,.merge-result-download .download-click-animation{display:inline-flex;align-items:center;justify-content:center;width:28px;height:28px;flex:none}
-.merge-result-download .download-click-animation{animation:download-arrow-drop .85s ease-in-out}
-.download-started-feedback{margin:14px auto 0;color:var(--foreground);font-size:14px;line-height:1.5;animation:download-feedback-arrive .45s ease-out}
-@keyframes download-arrow-drop{0%{transform:translateY(0)}35%{transform:translateY(8px);opacity:.25}36%{transform:translateY(-8px);opacity:.25}70%,100%{transform:translateY(0);opacity:1}}
-@keyframes download-feedback-arrive{from{opacity:0;transform:translateY(6px)}to{opacity:1;transform:translateY(0)}}
-@media(prefers-reduced-motion:reduce){.merge-result-download .download-click-animation,.download-started-feedback{animation:none}}
