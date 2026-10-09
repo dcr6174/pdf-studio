@@ -39,13 +39,13 @@ export class WatermarkDocument {
  }
  list(index:number){const p=this.page(index);try{return this.objects(p,100000,100000);}finally{this.m.FPDF_ClosePage(p);}}
  inspect(index:number,scale=1.3):WatermarkView{
-  const m=this.m,p=this.page(index);let bitmap=0;
-  try{const pw=m.FPDF_GetPageWidth(p),ph=m.FPDF_GetPageHeight(p);if(!Number.isFinite(pw)||!Number.isFinite(ph)||pw<=0||ph<=0)throw Error('This page has an invalid size.');const safeScale=Math.min(scale,1800/Math.max(pw,ph)),width=Math.max(1,Math.ceil(pw*safeScale)),height=Math.max(1,Math.ceil(ph*safeScale));bitmap=m.FPDFBitmap_Create(width,height,1);if(!bitmap)throw Error('This page is too large to preview.');m.FPDFBitmap_FillRect(bitmap,0,0,width,height,0xffffffff);m.FPDF_RenderPageBitmap(bitmap,p,0,0,width,height,0,1);
+  const m=this.m,p=this.page(index);let bitmap=0,form=0,info=0;
+  try{if(m.FPDF_GetFormType(this.doc)===1){info=m.PDFiumExt_OpenFormFillInfo();form=m.FPDFDOC_InitFormFillEnvironment(this.doc,info);if(!form)throw Error('Form fields could not be previewed.');m.FORM_OnAfterLoadPage(p,form);}const pw=m.FPDF_GetPageWidth(p),ph=m.FPDF_GetPageHeight(p);if(!Number.isFinite(pw)||!Number.isFinite(ph)||pw<=0||ph<=0)throw Error('This page has an invalid size.');const safeScale=Math.min(scale,1800/Math.max(pw,ph)),width=Math.max(1,Math.ceil(pw*safeScale)),height=Math.max(1,Math.ceil(ph*safeScale));bitmap=m.FPDFBitmap_Create(width,height,1);if(!bitmap)throw Error('This page is too large to preview.');m.FPDFBitmap_FillRect(bitmap,0,0,width,height,0xffffffff);m.FPDF_RenderPageBitmap(bitmap,p,0,0,width,height,0,1);if(form)m.FPDF_FFLDraw(form,bitmap,p,0,0,width,height,0,1);
    const buffer=m.FPDFBitmap_GetBuffer(bitmap),stride=m.FPDFBitmap_GetStride(bitmap),rgba=new Uint8ClampedArray(width*height*4);
    for(let y=0;y<height;y++)for(let x=0;x<width;x++){const i=buffer+y*stride+x*4,j=(y*width+x)*4;rgba[j]=m.pdfium.HEAPU8[i+2];rgba[j+1]=m.pdfium.HEAPU8[i+1];rgba[j+2]=m.pdfium.HEAPU8[i];rgba[j+3]=m.pdfium.HEAPU8[i+3];}
    // Stable keys use high-resolution coordinates independent of preview size.
    return {width,height,rgba,...this.objects(p,100000,100000)};
-  }finally{if(bitmap)m.FPDFBitmap_Destroy(bitmap);m.FPDF_ClosePage(p);}
+  }finally{if(form)m.FORM_OnBeforeClosePage(p,form);if(bitmap)m.FPDFBitmap_Destroy(bitmap);m.FPDF_ClosePage(p);if(form)m.FPDFDOC_ExitFormFillEnvironment(form);if(info)m.PDFiumExt_CloseFormFillInfo(info);}
  }
  remove(selections:WatermarkSelection[]){
   if(!selections.length)throw Error('Select a watermark first.');const grouped=new Map<number,WatermarkSelection[]>();

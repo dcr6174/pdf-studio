@@ -25,6 +25,7 @@ async function fixture({mark=true,rotate=false,crop=false}={}){
 }
 for(const variation of [{},{rotate:true},{crop:true},{rotate:true,crop:true}]){
  const source=await fixture(variation),unchanged=source.slice(),original=await openWatermarkDocument(source),clean=await openWatermarkDocument(await fixture({...variation,mark:false}));
+ if(!variation.rotate&&!variation.crop){const v=original.inspect(0);let ink=0;for(let y=Math.ceil(506/594*v.height);y<Math.floor(521/594*v.height);y++)for(let x=Math.ceil(48/420*v.width);x<Math.floor(172/420*v.width);x++){const k=(y*v.width+x)*4;if(v.rgba[k]+v.rgba[k+1]+v.rgba[k+2]<600)ink++;}assert(ink>40,'interactive form field content is visible in the preview');}
  const selection=[];for(let i=0;i<2;i++){const view=original.inspect(i),draft=view.objects.find(o=>o.label==='DRAFT');assert(draft);assert(view.objects.some(o=>o.kind==='image'));assert(draft.left>=0&&draft.top>=0&&draft.left+draft.width<=1&&draft.top+draft.height<=1);assert.equal(original.list(i).objects.find(o=>o.index===draft.index).key,draft.key);selection.push({...draft,page:i});}
  assert.equal(selection[0].key,selection[1].key,'repeated text has stable keys');
  const copy=await openWatermarkDocument(source);copy.remove(selection);const bytes=copy.save(),reopened=await openWatermarkDocument(bytes);
