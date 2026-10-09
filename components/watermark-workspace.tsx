@@ -15,7 +15,7 @@ export function WatermarkWorkspace({initialFile}:{initialFile?:Loaded}){
  let selected:number[]=[],validation='';if(file)try{selected=watermarkPages(settings,file.pages);}catch(e){validation=(e as Error).message;}
  const hasForms=!!file?.doc&&file.doc.getForm().getFields().length>0;
  async function upload(candidates:File[]){if(busy||loading)return;setError('');if(candidates.length!==1){setError('Choose one PDF at a time.');return;}const candidate=candidates[0];if(!/\.pdf$/i.test(candidate.name)){setError('Choose a PDF file.');return;}const version=++loadVersion.current;setLoading(true);try{const {loadFile}=await import('@/lib/pdf-client');const next=await loadFile(candidate);if(!next.doc||!next.pages)throw new Error('This PDF has no readable pages.');if(version!==loadVersion.current)return;setFile(next);setPage(0);setResult(undefined);setSettings(s=>({...s,scope:'all',range:'',flatten:false}));}catch(e){if(version===loadVersion.current)setError((e as Error).message||'This PDF could not open. Try another file.');}finally{if(version===loadVersion.current)setLoading(false);}}
- const currentPreview=!validation&&previewState?.file===file&&previewState.settings===settings&&previewState.page===page?previewState:undefined;
+ const currentPreview=previewState&&!validation&&previewState.file===file&&previewState.settings===settings&&previewState.page===page?previewState:undefined;
  const preview=currentPreview?.url??'',previewError=currentPreview?.error??'',previewBusy=!!file&&!validation&&!currentPreview;
  useEffect(()=>{
   if(!file||validation)return;
