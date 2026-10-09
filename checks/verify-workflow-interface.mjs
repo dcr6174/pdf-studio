@@ -31,5 +31,10 @@ assert.equal(result.getPageCount(),2);
 assert.equal(result.getPage(0).getRotation().angle,270);
 assert.equal(result.getPage(1).getRotation().angle,270);
 assert.equal(first.doc.getPage(0).getRotation().angle,0,'guided changes keep original documents unchanged');
+
+result=await pdf(await run([second,first],['merge','numbers','rotate','watermark'],[{}, {start:'5',numberPosition:'bottom-center'}, {angle:'270'}, {text:'APPROVED',angle:'0'}]));
+assert.equal(result.getPageCount(),2,'library-selected sequence creates one two-page PDF');
+assert.equal(result.getPage(0).getRotation().angle,270,'rotation survives numbering before watermark');
+assert.equal(first.doc.getPage(0).getRotation().angle,0,'reordered sequence keeps originals');
 }finally{globalThis.fetch=originalFetch;}
 console.log('PASS: everyday combine/number, share, print and watermark jobs produce real PDFs.');
