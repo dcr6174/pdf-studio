@@ -205,6 +205,7 @@ function App({initialTool='home',initialHeading,initialOptions}:{initialTool?:st
       if(marks.some(m=>m.kind==='redact')&&!['home','redact','shelf'].includes(id)){setError('Export your redacted PDF and choose Continue editing before switching tools, or remove the redaction regions.');return;}
       if(['sketch-pdf','cut-collect','fold-lab','attachment-map'].includes(id)){if((workspace.getFiles().length||marks.length)&&!window.confirm('Open this dedicated canvas? Download unsaved edits first.'))return;addRecent(id);window.location.assign('/tools/'+seoTools.find(t=>t.id===id)!.slug);return;}
       if(id==='pdf-to-handwriting'){if((workspace.getFiles().length||marks.length)&&!window.confirm('Open PDF to handwriting? Download any unsaved workspace edits first.'))return;window.location.assign(new URL('/tools/pdf-to-handwriting',window.location.origin).href);return;}
+      if(id==='ocr'&&!workspace.getFiles().length){addRecent(id);window.location.assign(new URL('/tools/'+seoTools.find(t=>t.id==='ocr')!.slug,window.location.origin).href);return;}
       if(typeof speechSynthesis!=='undefined')speechSynthesis.cancel();
       toolOptions.current[view]=options;setOptions(toolOptions.current[id]??{...defaults,passwordConfirm:'',quality:['jpg','png','webp'].includes(id)?'2':id==='compress'?'images':'balanced',...(id==='workflow'?{recipe:'custom',workflowSteps:[]}: {})});
       if(tools.some(t=>t.id===id))addRecent(id);
