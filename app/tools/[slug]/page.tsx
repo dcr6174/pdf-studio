@@ -8,7 +8,8 @@ import {conversionGuides} from '@/lib/conversion-guides';
 import type {Metadata} from 'next';
 import {notFound} from 'next/navigation';
 import Studio from '@/app/page';
-import {SiteHeader} from '@/components/site-header';
+import {SiteHeader,SiteFooter} from '@/components/site-header';
+import {OCRStudio} from '@/components/ocr-studio';
 import {HandwritingStudio} from '@/components/handwriting-studio';
 import '@/app/creative/creative.css';
 import {seoPages} from '@/lib/seo-tools';
@@ -29,6 +30,6 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
  ]};
  return <div className="tool-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
-  {['cut-collect','fold-lab','attachment-map'].includes(t.id)?<CreativePdfWorkspace mode={t.id as 'cut-collect'|'fold-lab'|'attachment-map'}/>:t.id==='sketch-pdf'?<div className="creative-shell"><SiteHeader/><LabVisualStudio mode="sketch-pdf" mainTool/></div>:<Studio initialTool={t.id} initialHeading={t.title} initialOptions={t.slug==='compress-pdf-to-100kb'?{compressTarget:'100'}:undefined}/>}
+  {['cut-collect','fold-lab','attachment-map'].includes(t.id)?<CreativePdfWorkspace mode={t.id as 'cut-collect'|'fold-lab'|'attachment-map'}/>:t.id==='sketch-pdf'?<div className="creative-shell"><SiteHeader/><LabVisualStudio mode="sketch-pdf" mainTool/></div>:t.id==='ocr'?<><SiteHeader/><OCRStudio/><SiteFooter tool="Searchable PDF"/></>:<Studio initialTool={t.id} initialHeading={t.title} initialOptions={t.slug==='compress-pdf-to-100kb'?{compressTarget:'100'}:undefined}/>}
  </div>;
 }
