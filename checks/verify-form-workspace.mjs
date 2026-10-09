@@ -32,6 +32,15 @@ const file={id:'form',name:'regression.pdf',bytes,size:bytes.length,pages:2,doc:
 const pages=[0,1].map(index=>({id:`page-${index}`,fileId:'form',index,rotation:0}));
 const values={'Full name':'Asha Rao',Repeated:'Synchronized','Notes':'Line one\nLine two',Accept:true,Delivery:'Post',Country:'India',Languages:['English','Hindi'],Reference:'CHANGED','Hidden secret':'REVEALED'};
 const options={range:'',text:'',title:'',author:'',subject:'',password:'',quality:'balanced',angle:'90',margin:'20',start:'1',columns:'2',fields:values};
+// Organize keeps untouched editable forms and requires consent before page copying.
+const untouched=await processPDF('organize',[file],pages,[],options,()=>{});
+const untouchedDoc=await PDFDocument.load(await untouched.blob.arrayBuffer());
+assert.equal(untouchedDoc.getForm().getFields().length,source.getForm().getFields().length);
+await assert.rejects(()=>processPDF('organize',[file],[pages[0]],[],options,()=>{}),/fillable fields.*read-only fields/);
+const organized=await processPDF('organize',[file],[pages[0]],[],{...options,flattenForm:true},()=>{});
+const organizedDoc=await PDFDocument.load(await organized.blob.arrayBuffer());
+assert.equal(organizedDoc.getPageCount(),1);assert.equal(organizedDoc.getForm().getFields().length,0);
+assert.equal(source.getForm().getTextField('Full name').getText(),'Original name');
 const run=flattenForm=>processPDF('form',[file],pages,[],{...options,flattenForm},()=>{});
 const editable=await run(false),edited=await PDFDocument.load(await editable.blob.arrayBuffer()),saved=edited.getForm();
 assert.equal(saved.getTextField('Full name').getText(),'Asha Rao');assert.equal(saved.getTextField('Repeated').getText(),'Synchronized');
