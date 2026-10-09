@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import {PDFDocument,StandardFonts} from 'pdf-lib';
+import {DOMMatrix,ImageData,Path2D} from '@napi-rs/canvas';
+import JSZip from 'jszip';
+import {build} from 'vite';
+globalThis.DOMMatrix??=DOMMatrix;globalThis.ImageData??=ImageData;globalThis.Path2D??=Path2D;
+globalThis.pdfjsWorker=await import('pdfjs-dist/build/pdf.worker.mjs');
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.word-source-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/word-source.ts',outDir:'.word-source-check',emptyOutDir:false,rollupOptions:{output:{entryFileNames:'source.mjs'}}}});
+const {processPDF}=await import('../.word-source-check/engine.mjs'),{wordSource}=await import('../.word-source-check/source.mjs');
+const pdf=await PDFDocument.create(),font=await pdf.embedFont(StandardFonts.Helvetica);
+for(let n=1;n<=76;n++)pdf.addPage([1190,842]).drawText(`Synthetic audit page ${n}`,{x:40,y:750,font,size:16});
+const root=pdf.context.trailerInfo.Root,catalog=pdf.context.lookup(root).toString(),base=await pdf.save({useObjectStreams:false}),baseText=new TextDecoder().decode(base),previous=/startxref\s+(\d+)\s+%%EOF\s*$/.exec(baseText)[1];
+// An incremental save replaces the same catalogue object at generation 1.
+const object=`\n${root.objectNumber} 1 obj\n${catalog}\nendobj\n`,offset=base.length+new TextEncoder().encode(object).length;
+const update=object+`xref\n${root.objectNumber} 1\n${String(base.length+1).padStart(10,'0')} 00001 n \ntrailer\n<< /Size ${pdf.context.largestObjectNumber+1} /Root ${root.objectNumber} 1 R /Prev ${previous} >>\nstartxref\n${offset}\n%%EOF\n`;
+const bytes=new Uint8Array(base.length+new TextEncoder().encode(update).length);bytes.set(base);bytes.set(new TextEncoder().encode(update),base.length);
+const doc=await PDFDocument.load(bytes,{updateMetadata:false});assert.equal(doc.context.trailerInfo.Root.generationNumber,1);assert.equal(doc.getPageCount(),76);
+const file={id:'incremental',name:'synthetic-audit.pdf',bytes,size:bytes.length,pages:76,doc},items=Array.from({length:76},(_,index)=>({id:String(index),fileId:file.id,index,rotation:0})),options={range:'',text:'',title:'',author:'',subject:'',password:'',quality:'balanced',angle:'0',margin:'20',start:'1',columns:'2',fields:{}};
+assert.strictEqual(await wordSource([file],items,[]),bytes);
+const output=await processPDF('word',[file],items,[],options,()=>{}),zip=await JSZip.loadAsync(await output.blob.arrayBuffer()),xml=await zip.file('word/document.xml').async('string');
+assert.equal((xml.match(/<w:sectPr>/g)||[]).length,76);for(let n=1;n<=76;n++)assert(xml.includes(`Synthetic audit page ${n}</w:t>`));assert(output.report.startsWith('76 source pages'));
+const subset=[items[75],{...items[0],rotation:90}],fresh=await wordSource([file],subset,[]),reopened=await PDFDocument.load(fresh);assert.equal(reopened.getPageCount(),2);assert.equal(reopened.context.trailerInfo.Root.generationNumber,0);
+const changed=await processPDF('word',[file],subset,[],options,()=>{}),changedZIP=await JSZip.loadAsync(await changed.blob.arrayBuffer()),changedXML=await changedZIP.file('word/document.xml').async('string');assert.equal((changedXML.match(/<w:sectPr>/g)||[]).length,2);assert(changedXML.indexOf('Synthetic audit page 76')<changedXML.indexOf('Synthetic audit page 1'));
+console.log('PASS complete PDF-to-Word pipeline: 76-page incremental catalogue retains every page/text; reordered/rotated pages use fresh references');
