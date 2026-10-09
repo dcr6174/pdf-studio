@@ -39,6 +39,7 @@ export type Mark = {
     id: string;
     pageId: string;
     signatureGroup?:string;
+    signingField?:'signature'|'initials'|'name'|'date'|'text'|'stamp';
     lineStart?:ShapePoint;
     lineEnd?:ShapePoint;
     kind: 'text' | 'image' | 'highlight' | 'redact' | 'rectangle' | 'ellipse' | 'link' | 'line' | 'arrow' | 'whiteout';

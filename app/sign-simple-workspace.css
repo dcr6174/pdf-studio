@@ -133,3 +133,51 @@ body:has(.sign-workspace.edit-canvas-fit)>.site-ad{display:none}
 .sign-workspace .sign-clean-inspector .sign-custom-text,
 .sign-workspace .sign-clean-inspector .sign-artwork,
 .sign-workspace .sign-clean-inspector .sign-date-field{padding:0!important;margin:0!important}
+
+/* Reference-style signing tray: stable cards, separate edit actions, real counts. */
+.sign-workspace .sign-reference-tray{display:grid;gap:24px!important}
+.sign-workspace .sign-reference-tray section{padding:0!important;margin:0!important;border:0!important;min-width:0}
+.sign-workspace .sign-reference-tray h3{font-size:14px!important;font-weight:650!important;color:var(--foreground)!important;line-height:1.4;margin:0 0 10px!important}
+.sign-workspace .sign-reference-tray .sign-optional-fields{gap:10px!important}
+.sign-workspace .sign-reference-card{display:flex;align-items:stretch;gap:0;margin:0!important;padding:0!important;min-width:0;border:1px solid color-mix(in srgb,var(--primary) 30%,var(--border));border-radius:10px;background:var(--soft);box-shadow:0 2px 5px #00000006;overflow:hidden}
+.sign-workspace .sign-clean-inspector .sign-reference-card{padding:0!important}
+.sign-workspace .sign-reference-card .sign-drag-field{border:0;border-radius:0;margin:0!important;padding:9px 8px!important;min-height:52px!important;background:transparent;gap:7px;flex:1;min-width:0;width:auto;box-shadow:none}
+.sign-workspace .sign-reference-card .sign-field-grip{width:12px;flex:none;color:var(--muted)}
+.sign-workspace .sign-reference-card .sign-field-icon{width:30px;height:32px;flex:none;display:grid;place-items:center;border-radius:7px;background:var(--primary);color:white}
+.sign-workspace .sign-reference-card .sign-field-preview{display:flex;flex:1;min-width:0;align-items:center;gap:8px;font-size:13px;overflow:hidden}
+.sign-workspace .sign-reference-card .sign-field-label{font-weight:550;color:var(--foreground);font-size:13px}
+.sign-workspace .sign-reference-card .sign-field-value{max-width:110px;font-size:11px;color:var(--muted);margin-left:auto}
+.sign-workspace .sign-reference-card .sign-field-actions{flex:none;width:38px;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:5px;padding:6px 3px;border-left:1px solid var(--border)}
+.sign-workspace .sign-reference-card .sign-card-edit{display:grid;place-items:center;width:30px;height:32px;min-width:30px;min-height:32px;background:var(--blue-soft);color:var(--primary);border:0;border-radius:7px;padding:0}
+.sign-workspace .sign-reference-card .sign-card-edit:hover{background:var(--primary);color:white}
+.sign-workspace .sign-reference-card .sign-field-count{min-width:20px;height:20px;border-radius:50%;display:grid;place-items:center;background:var(--primary);color:white;font-size:11px;font-weight:700;padding:0 3px;box-sizing:border-box;font-variant-numeric:tabular-nums}
+.sign-workspace .sign-reference-card.sign-reference-preview .sign-drag-field{min-height:84px!important}
+.sign-workspace .sign-reference-preview .sign-field-preview{display:grid!important;grid-template-rows:auto 1fr;align-self:stretch;gap:4px!important;padding:5px 7px;border:1px dashed color-mix(in srgb,var(--primary) 25%,var(--border));border-radius:5px}
+.sign-workspace .sign-reference-preview .sign-field-label{font-size:10px;color:var(--primary);align-self:start;text-align:left}
+.sign-workspace .sign-asset-preview{display:flex;align-items:center;justify-content:center;min-width:0;min-height:42px}
+.sign-workspace .sign-reference-preview .sign-asset-preview img{width:100%;max-width:100%;height:42px;object-fit:contain;background:transparent;border-radius:0}
+.sign-workspace .sign-empty-preview{display:flex;align-items:center;justify-content:center;gap:5px;font-size:11px;font-weight:500;color:var(--primary)}
+.sign-workspace .sign-field-empty .sign-field-grip{opacity:.35}
+.sign-workspace .sign-field-empty .sign-drag-field{cursor:pointer}
+.sign-workspace .sign-field-editor{display:grid;gap:10px;background:var(--soft);border:1px solid var(--border);padding:12px!important;border-radius:10px}
+.sign-workspace .sign-field-editor .field{font-size:12px;gap:6px;margin:0}
+.sign-workspace .sign-field-editor input,.sign-workspace .sign-field-editor select{width:100%;min-height:40px;font-size:14px;padding:8px;border:1px solid var(--border);border-radius:7px}
+.sign-workspace .sign-editor-done{justify-self:end;display:flex;align-items:center;gap:5px;min-height:36px;border:0;border-radius:7px;padding:6px 10px;background:var(--blue-soft);color:var(--primary);font-size:12px;font-weight:600}
+.sign-workspace .sign-upload-status{font-size:12px;color:var(--muted)}
+.sign-workspace .sign-reference-tray .sign-date-controls{display:grid;grid-template-columns:1fr;gap:10px}
+.sign-workspace .sign-reference-tray button:focus-visible{outline:2px solid var(--primary);outline-offset:-3px}
+.sign-workspace .tool-action-bottom>.primary{border-radius:12px;min-height:56px!important;font-size:17px;font-weight:650}
+.sign-workspace .shared-tool-action-bar .workspace-docked-controls{flex-direction:row;gap:8px}
+.sign-workspace .shared-tool-action-bar .workspace-docked-controls>button{width:auto;flex:1;justify-content:center;min-width:0;padding:8px 6px;font-size:12px}
+.sign-workspace .sign-selected{border-top:1px solid var(--border);padding-top:16px;margin-top:18px}
+@media(min-width:1100px){
+ .studio-shell.sign-workspace.edit-canvas-fit.document-shell>.content{padding-right:352px!important}
+ .studio-shell.sign-workspace.tool-action-ready.document-shell .shared-tool-action-bar{width:352px!important;padding:18px!important}
+}
+@media(max-width:1099px){
+ .sign-workspace .sign-reference-tray{gap:20px!important}
+ .sign-workspace .sign-reference-card .sign-drag-field{min-height:54px!important}
+ .sign-workspace .sign-reference-card .sign-card-edit{height:40px;min-height:40px}
+ .sign-workspace .sign-reference-card .sign-field-actions{width:42px}
+ .sign-mobile-tray .sign-reference-card{width:100%}
+}

@@ -1,40 +1,49 @@
 'use client';
-import {signatureFromFile} from '@/lib/signatures';
+import {signatureFromFile,signatureFromName,loadSignatureFont} from '@/lib/signatures';
 import Image from '@/components/browser-image';
-import {useRef,useState,type ReactNode,type PointerEvent} from 'react';
+import {useEffect,useRef,useState,type ReactNode,type PointerEvent} from 'react';
 import {createPortal} from 'react-dom';
-import {PenLine,Plus,GripVertical,CalendarDays,Type,Check} from 'lucide-react';
-export type SigningField={kind:'image';image:string}|{kind:'text';text:string};
-function DragField({field,label,children,onDrop,onPlace,action,disabled=false}:{action?:ReactNode;disabled?:boolean;field:SigningField;label:string;children:ReactNode;onDrop:(field:SigningField,x:number,y:number)=>void;onPlace:(field:SigningField)=>void}){
+import {PenLine,GripVertical,CalendarDays,Type,Check,UserRound,Stamp,CaseUpper,Plus} from 'lucide-react';
+import type {Mark} from '@/lib/pdf-client';
+export type SigningFieldRole='signature'|'initials'|'name'|'date'|'text'|'stamp';
+export type SigningField=({kind:'image';image:string}|{kind:'text';text:string})&{role?:SigningFieldRole};
+function DragField({field,label,icon,children,onDrop,onPlace,onEdit,count=0,ready=true,large=false}:{field:SigningField;label:string;icon:ReactNode;children?:ReactNode;onDrop:(field:SigningField,x:number,y:number)=>void;onPlace:(field:SigningField)=>void;onEdit:()=>void;count?:number;ready?:boolean;large?:boolean}){
  const start=useRef<{x:number;y:number;moved:boolean}|undefined>(undefined);const ignoreClick=useRef(false);
  const [ghost,setGhost]=useState<{x:number;y:number}|null>(null);
  function move(e:PointerEvent<HTMLButtonElement>){const s=start.current;if(!s)return;if(Math.hypot(e.clientX-s.x,e.clientY-s.y)>5)s.moved=true;if(s.moved)setGhost({x:e.clientX,y:e.clientY});}
- return <><div className="sign-field-card"><button type="button" className="sign-drag-field" disabled={disabled} aria-label={label+'. Drag onto the PDF or click to place.'} onPointerDown={e=>{if(e.button!==0)return;ignoreClick.current=false;start.current={x:e.clientX,y:e.clientY,moved:false};e.currentTarget.setPointerCapture(e.pointerId);}} onPointerMove={move} onPointerUp={e=>{const s=start.current;start.current=undefined;setGhost(null);if(s?.moved){ignoreClick.current=true;onDrop(field,e.clientX,e.clientY);}}} onPointerCancel={()=>{start.current=undefined;ignoreClick.current=true;setGhost(null);}} onClick={()=>{if(!ignoreClick.current)onPlace(field);}}><GripVertical size={16} aria-hidden="true"/><span className="sign-field-preview">{children}</span></button>{action}</div>{ghost&&createPortal(<div className="sign-drag-ghost" style={{left:ghost.x,top:ghost.y}} aria-hidden="true">{field.kind==='image'?<Image unoptimized width={220} height={54} src={field.image} alt=""/>:field.text}</div>,document.body)}</>;
+ return <><div className={'sign-field-card sign-reference-card'+(large?' sign-reference-preview':'')+(!ready?' sign-field-empty':'')} data-signing-field={field.role}>
+ <button type="button" className="sign-drag-field" aria-label={ready?label+'. Drag onto the PDF or click to place.':'Create '+label.toLowerCase()} onPointerDown={e=>{ignoreClick.current=false;if(e.button!==0||!ready)return;start.current={x:e.clientX,y:e.clientY,moved:false};e.currentTarget.setPointerCapture(e.pointerId);}} onPointerMove={move} onPointerUp={e=>{const s=start.current;start.current=undefined;setGhost(null);if(s?.moved){ignoreClick.current=true;onDrop(field,e.clientX,e.clientY);}}} onPointerCancel={()=>{start.current=undefined;ignoreClick.current=true;setGhost(null);}} onClick={()=>{if(ignoreClick.current){ignoreClick.current=false;return;}if(ready)onPlace(field);else onEdit();}}>
+ <GripVertical className="sign-field-grip" size={17} aria-hidden="true"/><span className="sign-field-icon" aria-hidden="true">{icon}</span>
+ <span className="sign-field-preview"><span className="sign-field-label">{label}</span>{large?<span className="sign-asset-preview">{ready?children:<span className="sign-empty-preview"><Plus size={16}/>{label==='Stamp'?'Upload stamp':'Create '+label.toLowerCase()}</span>}</span>:children}</span>
+ </button>
+ <span className="sign-field-actions"><button type="button" className="sign-card-edit" aria-label={'Edit '+label.toLowerCase()} title={'Edit '+label.toLowerCase()} onClick={onEdit}><PenLine size={17}/></button>{count>0&&<span className="sign-field-count" aria-label={count+' '+label.toLowerCase()+' fields placed'}>{count}</span>}</span>
+ </div>{ghost&&createPortal(<div className="sign-drag-ghost" style={{left:ghost.x,top:ghost.y}} aria-hidden="true">{field.kind==='image'?<Image unoptimized width={220} height={54} src={field.image} alt=""/>:field.text}</div>,document.body)}</>;
 }
-export function SignFieldTray({image,onCreate,onDrop,onPlace,date,compact=false,nameValue,onNameChange,dateSettings}:{dateSettings?:ReactNode;nameValue?:string;onNameChange?:(name:string)=>void;image?:string;onCreate:()=>void;onDrop:(field:SigningField,x:number,y:number)=>void;onPlace:(field:SigningField)=>void;date:string;compact?:boolean}){
+export function SignFieldTray({image,onCreate,onDrop,onPlace,date,compact=false,nameValue,onNameChange,dateSettings,marks=[]}:{dateSettings?:ReactNode;nameValue?:string;onNameChange?:(name:string)=>void;image?:string;onCreate:()=>void;onDrop:(field:SigningField,x:number,y:number)=>void;onPlace:(field:SigningField)=>void;date:string;compact?:boolean;marks?:Mark[]}){
  const uploadInput=useRef<HTMLInputElement>(null);const [artwork,setArtwork]=useState(''),[uploadError,setUploadError]=useState(''),[uploading,setUploading]=useState(false);const uploadRequest=useRef(0);
+ const [editing,setEditing]=useState<SigningFieldRole|null>(null);const [initialsOverride,setInitialsOverride]=useState<string|null>(null),[initialsImage,setInitialsImage]=useState('');
+ const [localName,setLocalName]=useState(''),[customText,setCustomText]=useState('');const name=nameValue??localName;
+ const setName=(value:string)=>{setLocalName(value);onNameChange?.(value);};const initials=initialsOverride??name.trim().split(/\s+/).map(word=>word[0]).join('').slice(0,8);
+ useEffect(()=>{let cancelled=false;setInitialsImage('');if(initials.trim())void loadSignatureFont('alexbrush').then(()=>{if(!cancelled)setInitialsImage(signatureFromName(initials.trim(),'alexbrush'));}).catch(()=>{});return()=>{cancelled=true;};},[initials]);
  async function uploadArtwork(file?:File){if(!file)return;const request=++uploadRequest.current;setUploading(true);setUploadError('');try{const result=await signatureFromFile(file);if(request===uploadRequest.current)setArtwork(result);}catch(error){if(request===uploadRequest.current)setUploadError(error instanceof Error?error.message:'Could not open image.');}finally{if(request===uploadRequest.current)setUploading(false);}}
- const [initialsOverride,setInitialsOverride]=useState<string|null>(null),[editingInitials,setEditingInitials]=useState(false);
- const [localName,setLocalName]=useState('');const [customText,setCustomText]=useState('');const name=nameValue??localName;const setName=(value:string)=>{setLocalName(value);onNameChange?.(value);};const initials=initialsOverride??name.trim().split(/\s+/).map(word=>word[0]).join('').slice(0,8);
- return <section className={compact?'sign-mobile-tray':'sign-field-tray'} aria-label="Signing fields">
- {!compact&&<><h2>Sign your PDF</h2><p>Drag a field onto the page. Drag it again to move; use a corner to resize.</p></>}
- {!compact&&<label className="field sign-owner-input">Your name<input value={name} maxLength={80} autoComplete="name" onChange={e=>setName(e.target.value)} placeholder="Enter your name"/></label>}
- {!image&&<button type="button" className="primary sign-create-button" onClick={onCreate}><PenLine size={18}/>Create signature</button>}
- {image?<><DragField action={<button type="button" className="sign-card-edit" aria-label="Edit signature" title="Edit signature" onClick={onCreate}><PenLine size={17}/></button>} label="Your signature" field={{kind:'image',image}} onDrop={onDrop} onPlace={onPlace}><Image unoptimized width={220} height={54} src={image} alt="Your signature" draggable={false}/></DragField><small className="sign-drag-hint">Drag onto your PDF or click, then tap the page.</small></>:null}
-
- {!compact&&<section className="sign-optional-fields" aria-label="Optional signing fields"><h3>Optional fields</h3>
-
- <DragField action={<button type="button" className="sign-card-edit" aria-label="Edit initials" title="Edit initials" onClick={()=>setEditingInitials(v=>!v)}><PenLine size={17}/></button>} label="Initials" disabled={!initials.trim()} field={{kind:'text',text:initials.trim()}} onDrop={onDrop} onPlace={onPlace}><span className="sign-field-label">Initials</span><span className="sign-field-value">{initials.trim()||'Enter your name'}</span></DragField>
- {editingInitials&&<div className="sign-initials-editor"><label className="field">Initials<input aria-label="Your initials" value={initials} maxLength={8} onChange={e=>setInitialsOverride(e.target.value)}/></label><button type="button" className="sign-card-edit" aria-label="Finish editing initials" onClick={()=>setEditingInitials(false)}><Check size={17}/></button></div>}
- <DragField label="Name" disabled={!name.trim()} field={{kind:'text',text:name.trim()}} onDrop={onDrop} onPlace={onPlace}><Type size={16}/><span className="sign-field-label">Name</span>{name.trim()&&<span className="sign-field-value">{name.trim()}</span>}</DragField>
- <section className="sign-date-field"><DragField label="Date" field={{kind:'text',text:date}} onDrop={onDrop} onPlace={onPlace}><CalendarDays size={16}/><span className="sign-field-label">Date</span><span className="sign-field-value">{date}</span></DragField>
- {dateSettings}</section>
- <section className="sign-custom-text"><label className="field">Text to add<input value={customText} maxLength={160} onChange={e=>setCustomText(e.target.value)} placeholder="Enter text"/></label>{customText.trim()&&<DragField label="Text" field={{kind:'text',text:customText.trim()}} onDrop={onDrop} onPlace={onPlace}><Type size={16}/>{customText.trim()}</DragField>}</section>
- <section className="sign-artwork"><input ref={uploadInput} type="file" hidden accept="image/png,image/jpeg,image/webp" onChange={e=>{void uploadArtwork(e.target.files?.[0]);e.target.value='';}}/>{!artwork&&<button type="button" className="secondary" disabled={uploading} onClick={()=>uploadInput.current?.click()}>{uploading?'Opening image…':'Upload image or stamp'}</button>}{artwork&&<DragField action={<button type="button" className="sign-card-edit" disabled={uploading} aria-label="Edit image or stamp" title="Edit image or stamp" onClick={()=>uploadInput.current?.click()}><PenLine size={17}/></button>} label="Image or stamp" field={{kind:'image',image:artwork}} onDrop={onDrop} onPlace={onPlace}><Image unoptimized width={220} height={54} src={artwork} alt="Image or stamp" draggable={false}/></DragField>}{uploadError&&<p role="alert">{uploadError}</p>}</section>
- </section>}
-
- </section>;
+ const count=(role:SigningFieldRole)=>marks.filter(m=>m.signingField===role||(!m.signingField&&(role==='signature'?m.kind==='image'&&m.image===image:role==='stamp'?m.kind==='image'&&m.image===artwork:false))).length;
+ const toggle=(role:SigningFieldRole)=>setEditing(current=>current===role?null:role);
+ const finish=<button type="button" className="sign-editor-done" aria-label="Done editing field" onClick={()=>setEditing(null)}><Check size={16}/>Done</button>;
+ const signatureCard=<DragField label="Signature" icon={<PenLine size={19}/>} large ready={!!image} count={count('signature')} field={{kind:'image',image:image??'',role:'signature'}} onDrop={onDrop} onPlace={onPlace} onEdit={onCreate}>{image&&<Image unoptimized width={220} height={54} src={image} alt="Your signature" draggable={false}/>}</DragField>;
+ if(compact)return <section className="sign-mobile-tray" aria-label="Signing fields">{signatureCard}</section>;
+ return <section className="sign-field-tray sign-reference-tray" aria-label="Signing fields">
+ <section className="sign-required-fields" aria-label="Required fields"><h3>Required fields</h3>{signatureCard}</section>
+ <section className="sign-optional-fields" aria-label="Optional signing fields"><h3>Optional fields</h3>
+ <DragField label="Initials" icon={<CaseUpper size={19}/>} large ready={!!initialsImage} count={count('initials')} field={{kind:'image',image:initialsImage,role:'initials'}} onDrop={onDrop} onPlace={onPlace} onEdit={()=>toggle('initials')}>{initialsImage&&<Image unoptimized width={180} height={54} src={initialsImage} alt="Your initials" draggable={false}/>}</DragField>
+ {editing==='initials'&&<div className="sign-field-editor"><label className="field">Initials<input aria-label="Your initials" autoFocus value={initials} maxLength={8} onChange={e=>setInitialsOverride(e.target.value)}/></label>{finish}</div>}
+ <DragField label="Name" icon={<UserRound size={19}/>} ready={!!name.trim()} count={count('name')} field={{kind:'text',text:name.trim(),role:'name'}} onDrop={onDrop} onPlace={onPlace} onEdit={()=>toggle('name')}>{name.trim()&&<span className="sign-field-value">{name.trim()}</span>}</DragField>
+ {editing==='name'&&<div className="sign-field-editor"><label className="field">Your name<input aria-label="Your name" autoFocus value={name} maxLength={80} autoComplete="name" onChange={e=>setName(e.target.value)} placeholder="Enter your name"/></label>{finish}</div>}
+ <DragField label="Date" icon={<CalendarDays size={19}/>} count={count('date')} field={{kind:'text',text:date,role:'date'}} onDrop={onDrop} onPlace={onPlace} onEdit={()=>toggle('date')}><span className="sign-field-value">{date}</span></DragField>
+ {editing==='date'&&<div className="sign-field-editor">{dateSettings}{finish}</div>}
+ <DragField label="Text" icon={<Type size={19}/>} ready={!!customText.trim()} count={count('text')} field={{kind:'text',text:customText.trim(),role:'text'}} onDrop={onDrop} onPlace={onPlace} onEdit={()=>toggle('text')}>{customText.trim()&&<span className="sign-field-value">{customText.trim()}</span>}</DragField>
+ {editing==='text'&&<div className="sign-field-editor"><label className="field">Text to add<input aria-label="Text to add" autoFocus value={customText} maxLength={160} onChange={e=>setCustomText(e.target.value)} placeholder="Enter text"/></label>{finish}</div>}
+ <input ref={uploadInput} type="file" hidden accept="image/png,image/jpeg,image/webp" onChange={e=>{void uploadArtwork(e.target.files?.[0]);e.target.value='';}}/>
+ <DragField label="Stamp" icon={<Stamp size={19}/>} large ready={!!artwork&&!uploading} count={count('stamp')} field={{kind:'image',image:artwork,role:'stamp'}} onDrop={onDrop} onPlace={onPlace} onEdit={()=>uploadInput.current?.click()}>{artwork&&<Image unoptimized width={220} height={54} src={artwork} alt="Image or stamp" draggable={false}/>}</DragField>
+ {uploading&&<span role="status" className="sign-upload-status">Opening stamp…</span>}{uploadError&&<p role="alert">{uploadError}</p>}
+ </section></section>;
 }
-
-
-
