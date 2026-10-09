@@ -1,3 +1,6 @@
+import {CreativePdfWorkspace} from '@/components/creative-pdf-workspace';
+import {LabVisualStudio} from '@/components/lab-visual-studio';
+import '@/app/lab/lab.css';
 import {canonicalToolRoutes} from '@/lib/canonical-routes';
 import {redirect} from 'next/navigation';
 import {toolMeta,fullTitle} from '@/lib/seo-meta';
@@ -26,6 +29,6 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
  ]};
  return <div className="tool-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
-  <Studio initialTool={t.id} initialHeading={t.title} initialOptions={t.slug==='compress-pdf-to-100kb'?{compressTarget:'100'}:undefined}/>
+  {['cut-collect','fold-lab','attachment-map'].includes(t.id)?<CreativePdfWorkspace mode={t.id as 'cut-collect'|'fold-lab'|'attachment-map'}/>:t.id==='sketch-pdf'?<div className="creative-shell"><SiteHeader/><LabVisualStudio mode="sketch-pdf" mainTool/></div>:<Studio initialTool={t.id} initialHeading={t.title} initialOptions={t.slug==='compress-pdf-to-100kb'?{compressTarget:'100'}:undefined}/>}
  </div>;
 }
