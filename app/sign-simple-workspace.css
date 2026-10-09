@@ -187,3 +187,21 @@ body:has(.sign-workspace.edit-canvas-fit)>.site-ad{display:none}
 .sign-workspace .sign-selected>.field>small{display:none}
 
 @media(min-width:1100px){.studio-shell.sign-workspace.tool-action-ready .workspace-add-files{right:376px!important}}
+
+
+/* Compact inline field controls, with full readable names. */
+.sign-workspace .sign-reference-tray{gap:10px!important}
+.sign-workspace .sign-reference-tray>h3{margin:0!important;font-size:12px!important}
+.sign-workspace .sign-reference-card .sign-card-edit{width:26px;height:28px;min-width:26px;min-height:28px}
+.sign-workspace .sign-reference-card .sign-name-value{max-width:none;white-space:normal;overflow:visible;text-overflow:clip;text-align:right;overflow-wrap:anywhere;flex:1}
+.sign-workspace .sign-inline-edit{display:flex;align-items:center;gap:8px;padding:9px 8px;flex:1;min-width:0}
+.sign-workspace .sign-inline-edit label{display:grid;gap:4px;flex:1;min-width:0;font-size:12px}
+.sign-workspace .sign-inline-edit input{width:100%;min-width:0;box-sizing:border-box;min-height:36px;padding:6px 8px;border:1px solid var(--border);border-radius:6px;background:var(--background);color:var(--foreground)}
+.sign-workspace .sign-reference-card[data-signing-field="stamp"] img{max-width:100%;width:auto;height:36px;object-fit:contain}
+.sign-workspace .editor-main{position:relative}
+.sign-workspace .sign-mobile-placement-hint{position:absolute;top:76px;left:50%;transform:translateX(-50%);z-index:30;width:max-content;max-width:calc(100% - 24px);box-sizing:border-box;box-shadow:0 4px 16px #0002;pointer-events:none}
+.sign-workspace .sign-mobile-placement-hint button{pointer-events:auto}
+.sign-workspace .sign-mobile-placement-hint button:first-of-type{display:none}
+
+.sign-workspace .sign-field-active{outline:2px solid var(--primary);outline-offset:2px}
+.sign-workspace .sign-reference-card[data-signing-field="date"] .sign-field-icon{display:none}
