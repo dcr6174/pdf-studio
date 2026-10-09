@@ -18,6 +18,8 @@ const eslintConfig = defineConfig([
     "work/**",
     "public/pdf.worker.min.mjs",
     "public/vendor/**",
+    // Upstream bidi tables and fontkit generator runtime retain their licenses.
+    "lib/vendor/**",
     // Transpiled test fixtures; lint their TypeScript sources instead.
     "lib/.verify-*.mjs",
   ]),
@@ -42,4 +44,5 @@ const eslintConfig = defineConfig([
 ]);
 
 export default eslintConfig;
+
 

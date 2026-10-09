@@ -28,7 +28,7 @@ export const tools:Tool[] = [
 ['crop','Crop margins','Trim the edges of your pages.','Pages','crop','Cropping hides content outside the page boundary; it does not permanently remove it.'],
 ['resize','Resize to A4','Fit every page onto an A4 sheet.','Pages','crop'],
 ['flip','Mirror pages','Mirror your pages horizontally or vertically.','Pages','reverse'],
-['native-text','Edit existing text','Select original text, change it and preview the actual PDF.','Edit & sign','text','Browser text editing. Single-line edits can shrink to fit the original area (minimum half size). Embedded fonts need available characters; scans and nested graphics have limitations. No paragraph reflow. Editing invalidates digital signatures.'],
+['native-text','Edit existing text','Select original text, change it and preview the actual PDF.','Edit & sign','text','Edit original text objects, lines and compatible paragraphs. Keep the original font or use an embedded fallback / uploaded TTF or OTF. Nested text is edited when it can be detached safely. OCR reconstruction is a separate, explicit path. Editing invalidates digital signatures.'],
 ['edit','Add text & images','Add text, images and annotations.','Edit & sign','edit','Adds new elements and visual whiteout. Use Edit existing text for actual text replacement; use Redact for content removal.'],
 ['sign','Sign PDF','Draw, type or upload a signature.','Edit & sign','pen','A visual signature, without a certificate or identity verification.'],
 ['redact','Redact PDF','Permanently remove chosen regions.','Edit & sign','shield','Export rebuilds all pages as images and removes original text, links, metadata and forms.'],
@@ -74,4 +74,5 @@ export const tools:Tool[] = [
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
 export function accepted(id:string){return id==='images'||id==='scan'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
 export function isMulti(id:string){return ['workflow','merge','organize','interleave','images','scan','compare','zip'].includes(id);}
+
 

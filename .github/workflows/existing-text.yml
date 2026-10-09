@@ -1,0 +1,33 @@
+name: Existing text editor
+on:
+  pull_request:
+    paths:
+      - 'components/online-text-editor.tsx'
+      - 'components/native-text-workspace.css'
+      - 'lib/online-text-engine.ts'
+      - 'lib/advanced-text-edit.ts'
+      - 'lib/text-*.ts'
+      - 'lib/editing-font-catalog.ts'
+      - 'lib/vendor/**'
+      - 'public/fonts/editing/**'
+      - 'checks/verify-text-advanced.mjs'
+      - '.github/workflows/existing-text.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 25
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: npm ci
+      - run: npm run lint
+      - run: npx tsc --noEmit
+      - run: npm run verify:text
+      - run: node checks/verify-react-workflows.mjs
+      - run: npm run build:public

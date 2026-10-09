@@ -1,0 +1,23 @@
+export const editingFonts=[
+ ['sans','Noto Sans','/fonts/NotoSans-Regular.ttf'],
+ ['sans-bold','Noto Sans Bold','/fonts/editing/NotoSans-Bold.ttf'],
+ ['sans-italic','Noto Sans Italic','/fonts/editing/NotoSans-Italic.ttf'],
+ ['sans-bold-italic','Noto Sans Bold Italic','/fonts/editing/NotoSans-BoldItalic.ttf'],
+ ['serif','Noto Serif','/fonts/editing/NotoSerif-Regular.ttf'],
+ ['devanagari','Hindi / Marathi','/fonts/editing/NotoSansDevanagari-Regular.ttf'],
+ ['tamil','Tamil','/fonts/editing/NotoSansTamil-Regular.ttf'],
+ ['bengali','Bengali','/fonts/editing/NotoSansBengali-Regular.ttf'],
+ ['telugu','Telugu','/fonts/editing/NotoSansTelugu-Regular.ttf'],
+ ['kannada','Kannada','/fonts/editing/NotoSansKannada-Regular.ttf'],
+ ['malayalam','Malayalam','/fonts/editing/NotoSansMalayalam-Regular.ttf'],
+ ['gujarati','Gujarati','/fonts/editing/NotoSansGujarati-Regular.ttf'],
+ ['gurmukhi','Punjabi','/fonts/editing/NotoSansGurmukhi-Regular.ttf'],
+ ['arabic','Arabic','/fonts/editing/NotoSansArabic-Regular.ttf'],
+ ['hebrew','Hebrew','/fonts/editing/NotoSansHebrew-Regular.ttf'],
+ ['thai','Thai','/fonts/editing/NotoSansThai-Regular.ttf'],
+ ['sinhala','Sinhala','/fonts/editing/NotoSansSinhala-Regular.ttf'],
+ ['oriya','Odia','/fonts/editing/NotoSansOriya-Regular.ttf'],
+ ['lao','Lao','/fonts/editing/NotoSansLao-Regular.ttf'],
+ ['emoji','Emoji (monochrome)','/fonts/editing/NotoEmoji-Regular.ttf'],
+ ['symbols','Symbols','/fonts/editing/NotoSansSymbols2-Regular.ttf']
+] as const;

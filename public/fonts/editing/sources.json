@@ -1,0 +1,122 @@
+[
+  {
+    "file": "NotoEmoji-Regular.ttf",
+    "sha256": "415dc6290378574135b64c808dc640c1df7531973290c4970c51fdeb849cb0c5",
+    "source": "https://github.com/googlefonts/noto-emoji/tree/9a5261d871451f9b5183c93483cbd68ed916b1e9/fonts",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSans-Bold.ttf",
+    "sha256": "3a08a47daa00cade516425c15c57615aef2fd418ec9811a7b9f465088f92cc05",
+    "source": "LibreOffice bundled Noto fonts (unmodified), https://github.com/notofonts/noto-fonts",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSans-BoldItalic.ttf",
+    "sha256": "2e34b41a4b9c234b1be7dff6d06cba18811ecb694b41350873edf0ec16a0f0fa",
+    "source": "LibreOffice bundled Noto fonts (unmodified), https://github.com/notofonts/noto-fonts",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSans-Italic.ttf",
+    "sha256": "126522ae1bb9cd92120287fc47dfc74ef981e73931d93e52c565fb7e09b2d74a",
+    "source": "LibreOffice bundled Noto fonts (unmodified), https://github.com/notofonts/noto-fonts",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansArabic-Regular.ttf",
+    "sha256": "ceea25b464a656dc3b26849bab9356740401af62aedf1bfa8b7f0d9b75925b1b",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansBengali-Regular.ttf",
+    "sha256": "6300c5370cd688b0641343de4c786de6d412bb6c578d129dae75e93a0322dcab",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansDevanagari-Regular.ttf",
+    "sha256": "385e78e6359a9d88a0f243d53b1209d7548361ba2194e2b9ec779bcaa7e8949d",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansGujarati-Regular.ttf",
+    "sha256": "8d5c22d7b729ef2839e6d1fe2cde77b2d083907be3659bca63676baa76e01fd6",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansGurmukhi-Regular.ttf",
+    "sha256": "bbde4d85fdfb998eff6921cb2c7a9a7924a1c95560a6aa9a06172530e4f596da",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansHebrew-Regular.ttf",
+    "sha256": "a7fa16fffb27bedb060a0866267c29e9859aeb9c21cc33f5b3aaf6eb062eca85",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansKannada-Regular.ttf",
+    "sha256": "5c804033c57f2c2844b1cd425f45b9a78d81d2f71bf358351b24258ebe168aea",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansLao-Regular.ttf",
+    "sha256": "4a64d40850990992913d4be44b2e87a93d52f76882c1f0c0755edcb12ec57aa2",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansMalayalam-Regular.ttf",
+    "sha256": "42eb462ff13e820ebbeaaec4e7b426bd1de145d02cef8b634f5a3efd376b513c",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansOriya-Regular.ttf",
+    "sha256": "b8d8bd784b9d09c0668233437359913c93a3a83bf37d92ecde859e2bc728a0e0",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansSinhala-Regular.ttf",
+    "sha256": "a966549310b2d3046ba25bbeef11985428ff9356fa656fd6118bc90fb82df031",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansSymbols2-Regular.ttf",
+    "sha256": "630846d528dbe4c4981370a4d0a9475a1fd1491a129bb411f8e157cdb5de13c6",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansTamil-Regular.ttf",
+    "sha256": "6532db33b8b264abe3a098a40619feb489b5ddf5ab1d2b46e72b51eeb548001b",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansTelugu-Regular.ttf",
+    "sha256": "2c05072e8018a9be1cb0582953d9edf9a0cf129cdfb74e611de763b09c411f7f",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSansThai-Regular.ttf",
+    "sha256": "404ddfb5ed0aaa6b6ec8a85700d682978992062d67da93903967b56cbd9a4acc",
+    "source": "https://github.com/notofonts/noto-fonts/tree/main/hinted/ttf",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  },
+  {
+    "file": "NotoSerif-Regular.ttf",
+    "sha256": "19e72cd8d595fae5bd74a5206f5d938512e1183d4fed7abb1ec1be1d7efa5f88",
+    "source": "LibreOffice bundled Noto fonts (unmodified), https://github.com/notofonts/noto-fonts",
+    "license": "SIL Open Font License 1.1; see OFL.txt"
+  }
+]
