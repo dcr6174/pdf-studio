@@ -13,3 +13,6 @@ main.studio-shell[data-tool].document-loaded .content:has(.task-progress-screen)
 .task-progress-screen .task-progress-loading-button{min-height:48px;display:inline-flex;align-items:center;gap:10px;padding:12px 24px;border-radius:12px;opacity:1;background:#7045dc;color:#fff;cursor:wait}
 @keyframes task-progress-slide{0%{transform:translateX(-110%)}100%{transform:translateX(370%)}}
 @media(prefers-reduced-motion:reduce){.task-progress-track>span{animation:none;transform:translateX(80%)}.task-progress-art .spin,.task-progress-loading-button .spin{animation:none}}
+
+/* Processing replaces the editor; its hidden action rail reserves no space. */
+main.studio-shell[data-tool].document-loaded.document-shell.tool-action-ready:has(.task-progress-screen)>.content:not(.export-result-page){padding:0 clamp(12px,3vw,40px)!important;margin-inline:0!important;max-width:none!important;width:100%!important;overflow:auto!important;box-sizing:border-box}
