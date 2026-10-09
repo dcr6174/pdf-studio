@@ -6,6 +6,7 @@ import {printableTools} from '@/lib/lab-printables';
 import {funTools} from '@/lib/fun-lab';
 import {utilityTools} from '@/lib/lab-utilities';
 import {experiments} from '@/lib/lab-tools';
+import {GenieTool} from '@/components/genie-tool';
 
 const featured=[...utilityTools,...printableTools.map(t=>({...t,kind:'Create'})),{slug:'daily-mood-canvas',title:'Daily Mood Canvas',description:'Turn a mood into an expressive canvas, with photo, scribble and export options.',kind:'Create'},{slug:'whiteboard',title:'Whiteboard',description:'A blank canvas for diagrams, doodles and ideas.',kind:'Create'},{slug:'text-to-handwriting',title:'Text to handwriting',description:'Turn your words into handwritten-style notes.',kind:'Create'},{slug:'poster-collage',title:'Poster collage',description:'Build a colourful poster from your PDF pages.',kind:'Create'}];
 const playful=funTools;
@@ -17,8 +18,8 @@ export function LabDirectory(){
  return <>
   <div className="lab-filter" role="group" aria-label="Lab categories">{categories.map(f=><button key={f} aria-pressed={filter===f} onClick={()=>setFilter(f)}>{f}</button>)}</div>
   {(filter==='All'||filter==='Fun & Play')&&<section className="lab-utility-group lab-group-play" id="fun-and-play" aria-labelledby="lab-play-heading">
-   <div className="lab-play-heading"><span className="lab-play-label"><Sparkles size={16} aria-hidden="true"/>Fun & Play</span><h2 id="lab-play-heading">Make something unexpected.</h2><p>Make a quick photo strip, practise your own flashcards, or let the wheel choose your next adventure.</p></div>
-   <div className="creative-grid lab-directory-grid">{playful.map(t=>{const Icon=icons[t.slug]||FlaskConical;return <Link href={'/lab/'+t.slug} key={t.slug}><span className="creative-icon"><Icon size={30} aria-hidden="true"/></span><h3>{t.title}</h3><p>{t.description}</p><span>Try it →</span></Link>;})}</div>
+   <div className="lab-play-heading"><span className="lab-play-label"><Sparkles size={16} aria-hidden="true"/>Fun & Play</span><h2 id="lab-play-heading">Your wish. A little magic.</h2><p>Make a photo strip, practise your flashcards, or let fate pick your next adventure. Tap a lamp to release its tool.</p></div>
+   <div className="lab-genie-shelf">{playful.map((t,index)=><GenieTool key={t.slug} {...t} index={index}/>)}</div>
   </section>}
   {(filter==='All'||filter==='Useful Tools')&&<section className="lab-utility-group" id="useful-tools" aria-labelledby="lab-useful-heading"><h2 id="lab-useful-heading">Useful Tools</h2><div className="creative-grid lab-directory-grid"><Link href="/lab/remove-watermark"><span className="creative-icon"><Layers size={30} aria-hidden="true"/></span><h3>Remove Watermark</h3><p>Select separate text or image watermarks, compare before and after, and save a clean PDF copy.</p><span>Open tool →</span></Link></div></section>}
   {['Focus','Calculate','Create'].filter(g=>filter==='All'||g===filter).map(g=><section className={'lab-utility-group lab-group-'+g.toLowerCase()} key={g}><h2>{g}</h2><div className="creative-grid lab-directory-grid">{featured.filter(t=>t.kind===g).map(t=>{const Icon=icons[t.slug]||FlaskConical;return <Link href={'/lab/'+t.slug} key={t.slug}><span className="creative-icon"><Icon size={30} aria-hidden="true"/></span><h3>{t.title}</h3><p>{t.description}</p><span>Open tool →</span></Link>;})}</div></section>)}
