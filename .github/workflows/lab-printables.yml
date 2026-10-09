@@ -1,0 +1,33 @@
+name: Lab printables
+on:
+  pull_request:
+    paths:
+      - 'lib/lab-printables*.ts'
+      - 'components/lab-printable-studio.tsx'
+      - 'components/lab-directory.tsx'
+      - 'app/lab/**'
+      - 'checks/verify-printables.mjs'
+      - '.github/workflows/lab-printables.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - run: sudo apt-get update && sudo apt-get install -y poppler-utils
+      - id: install
+        run: npm ci
+      - run: npm run lint
+      - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx tsc --noEmit
+      - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-printables.mjs
+      - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run build:public
