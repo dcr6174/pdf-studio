@@ -1,9 +1,13 @@
 export const resizeHandles = ['nw','n','ne','e','se','s','sw','w'] as const;
 export type ResizeHandle = typeof resizeHandles[number];
-type Box = {x:number;y:number;w:number;h:number};
+type Box = {x:number;y:number;w:number;h:number;kind?:string;fontSize?:number};
 const clamp=(v:number,lo:number,hi:number)=>Math.max(lo,Math.min(hi,v));
 /** Normalized displayed-page coordinates; opposite edges stay anchored. */
 export function resizeBox<T extends Box>(b:T,handle:ResizeHandle,dx:number,dy:number,proportional=false):T {
+ if(b.kind==='text'&&handle.length===2){
+  const next=resizeBox({...b,kind:undefined},handle,dx,dy,true);
+  return {...next,kind:b.kind,fontSize:(b.fontSize??16)*next.w/b.w} as T;
+ }
  const west=handle.includes('w'),east=handle.includes('e'),north=handle.includes('n'),south=handle.includes('s');
  if(proportional&&(west||east)&&(north||south)){
   const sx=west?-1:1,sy=north?-1:1;
