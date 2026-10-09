@@ -267,7 +267,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     }
     if(id==='merge'&&files.length<2)throw new Error('Add at least two PDF files to merge.');
     const unchanged = files.length===1 && !first.image && !marks.length && items.length===first.pages && items.every((p,i)=>p.fileId===first.id&&p.index===i&&p.rotation===0);
-    if(unchanged&&!(o.flattenForm&&['edit','sign','form'].includes(id))&&(['organize','edit','sign','merge'].includes(id)||(id==='form'&&!o.flattenForm&&!Object.keys(o.fields).length))){progress(100);return result(first.bytes,first.name,undefined,'No changes: downloaded the original file without rebuilding it.');}
+    if(unchanged&&!(o.flattenForm&&['edit','sign','form','organize'].includes(id))&&(['organize','edit','sign','merge'].includes(id)||(id==='form'&&!o.flattenForm&&!Object.keys(o.fields).length))){progress(100);return result(first.bytes,first.name,undefined,'No changes: downloaded the original file without rebuilding it.');}
     if(['remove-bookmarks','remove-links','remove-attachments'].includes(id)){
       if(!unchanged)throw new Error('Use the original single PDF for this cleanup. Export other workspace changes first.');
       const d=await PDFDocument.load(first.bytes,{updateMetadata:false});
