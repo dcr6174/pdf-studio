@@ -191,3 +191,16 @@
  .shared-tool-action-bar .workspace-inline-organize .page-settings-controls{max-height:none;overflow:visible}
 }
 .rotate-sidebar-settings{display:grid;gap:14px;margin-top:20px}.rotate-sidebar-settings h3{font-size:15px;margin:0}.rotate-sidebar-settings p{font-size:13px;line-height:1.6;color:var(--muted);margin:0}.rotate-all-primary{display:flex;align-items:center;justify-content:center;gap:12px;min-height:64px!important;width:100%;padding:16px!important;border-radius:14px!important;background:#7045dc!important;color:white!important;font-size:15px!important;font-weight:650;white-space:normal}.rotate-all-primary:hover:not(:disabled){background:#6034c8!important}
+
+
+/* Actionable form safety messages stay readable in both themes and at narrow widths. */
+.studio-shell .form-action-alert{border-radius:18px;border:1px solid #e7a3ae;background:#fff1f3;color:#8e2036;flex-wrap:wrap;align-items:flex-start;padding:18px 20px;gap:12px}
+.studio-shell .form-action-alert b{white-space:normal}
+.studio-shell .form-action-alert>span{flex:1 1 280px;line-height:1.6;overflow-wrap:anywhere}
+.studio-shell .form-action-alert .secondary{background:#fff;color:#8e2036;border-color:#e7a3ae;margin-left:0}
+.studio-shell .form-action-alert .icon-button{flex:none}
+.studio-shell .form-handling-control{min-width:0;max-width:none;width:100%}
+.studio-shell .form-handling-control select{width:100%;min-width:0;white-space:normal}
+.studio-shell .form-handling-control small{font-weight:400;line-height:1.6;color:var(--muted)}
+.dark .studio-shell .form-action-alert{background:#351c26;color:#ffd8df;border-color:#985163}
+.dark .studio-shell .form-action-alert .secondary{background:#4a2633;color:#ffd8df;border-color:#985163}
