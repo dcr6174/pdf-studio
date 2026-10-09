@@ -6,7 +6,7 @@ await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',ou
 const {processPDF}=await import('../.workflow-check/engine.mjs');
 async function fixture(id,width,label){const doc=await PDFDocument.create(),font=await doc.embedFont(StandardFonts.Helvetica);doc.addPage([width,600]).drawText(label,{font,x:30,y:550});const bytes=await doc.save();return {id,name:id+'.pdf',doc,bytes,size:bytes.length,pages:1};}
 const first=await fixture('first',400,'FIRST'),second=await fixture('second',500,'SECOND');
-const items=files=>files.map(f=>({id:f.id+'-page',fileId:f.id,index:0,rotation:0}));
+const items=files=>files.flatMap(f=>Array.from({length:f.pages},(_,index)=>({id:f.id+'-page-'+index,fileId:f.id,index,rotation:0})));
 const defaults={range:'',text:'',title:'',author:'',subject:'',password:'',quality:'balanced',angle:'90',margin:'20',start:'1',columns:'2',fields:{},recipe:'custom'};
 const run=(files,workflowSteps,workflowSettings=workflowSteps.map(()=>({})),workflowDisabled=[])=>processPDF('workflow',files,items(files),[],{...defaults,workflowSteps,workflowSettings,workflowDisabled},()=>{});
 const pdf=async out=>PDFDocument.load(await out.blob.arrayBuffer(),{updateMetadata:false});
@@ -38,3 +38,9 @@ assert.equal(result.getPage(0).getRotation().angle,270,'rotation survives number
 assert.equal(first.doc.getPage(0).getRotation().angle,0,'reordered sequence keeps originals');
 }finally{globalThis.fetch=originalFetch;}
 console.log('PASS: everyday combine/number, share, print and watermark jobs produce real PDFs.');
+
+// Full-document sizing must process every page, not only a preview page.
+const tenDoc=await PDFDocument.create();for(let i=0;i<10;i++)tenDoc.addPage([400+i*10,600]);const tenBytes=await tenDoc.save();const tenFile={id:'ten',name:'ten.pdf',doc:tenDoc,bytes:tenBytes,size:tenBytes.length,pages:10};
+result=await pdf(await run([tenFile],['resize'],[{resizeSize:'a4',resizeOrientation:'portrait'}]));assert.equal(result.getPageCount(),10);for(const page of result.getPages()){assert.equal(Math.round(page.getWidth()),595);assert.equal(Math.round(page.getHeight()),842);}assert.equal(tenDoc.getPage(0).getWidth(),400,'full-document resize preserves original');
+result=await pdf(await run([first],['duplicate','remove'],[{}, {range:'2'}]));assert.equal(result.getPageCount(),1,'remove can address pages created by an earlier step');
+console.log('PASS: all ten pages resize to A4 and page ranges use the result of earlier actions.');
