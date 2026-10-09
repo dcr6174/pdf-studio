@@ -3,6 +3,7 @@ on:
   pull_request:
     paths:
       - 'components/online-text-editor.tsx'
+      - 'components/native-inline-text.tsx'
       - 'components/native-text-workspace.css'
       - 'lib/online-text-engine.ts'
       - 'lib/advanced-text-edit.ts'
