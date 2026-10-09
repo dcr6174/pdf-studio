@@ -28,7 +28,7 @@ export function ResultCard({output,open,toolId,resultTitle,before,compress,onDow
  const originalPreferred=larger&&!!onOriginal;
  const next=[['compress','Compress PDF'],['sign','Sign PDF'],['watermark','Add watermark'],['edit','Edit PDF']].filter(([id])=>id!==toolId).slice(0,3);
  return <section className="merge-result-page export-result-page" aria-labelledby="export-result-heading">
-  <button type="button" className="merge-result-check success-pulse-button" aria-label="Celebrate your completed PDF" title="Tap for a ripple" onClick={()=>setRipple(n=>n+1)}><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M10 21 17 28 30 13" pathLength="1"/></svg>{ripple>0&&<span key={ripple} className="success-tap-ripple" aria-hidden="true"/>}</button>
+  <button type="button" className="merge-result-check success-pulse-button" aria-label="Celebrate your completed PDF" title="Tap for a ripple" onClick={()=>setRipple(n=>n+1)}><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M10 21 17 28 30 13" pathLength="1"/></svg>{ripple>0&&<span key={ripple} className="success-click-ripples" aria-hidden="true"><i/><i/><i/></span>}</button>
   <h1 id="export-result-heading">{resultTitle??(compress?(reduction>0?'Your PDF has been compressed!':'Compression complete'):`Your ${label} is ready`)}</h1>
   <p className="merge-result-file">{output.name} · {formatBytes(output.blob.size)}</p>
   
