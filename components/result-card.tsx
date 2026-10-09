@@ -14,8 +14,9 @@ type Props={
 };
 export function ResultCard({output,open,toolId,resultTitle,before,compress,onDownload,onOriginal,onContinue,onNextTool,onSave,onSettings,onProtect,error,previewContent,onReviewCandidates}:Props){
  const [preview,setPreview]=useState(false),[copied,setCopied]=useState(false),[copyError,setCopyError]=useState('');
+ const [downloadFeedback,setDownloadFeedback]=useState(0);
  const downloadButton=useRef<HTMLButtonElement>(null);
- useEffect(()=>{if(!open)return;const frame=requestAnimationFrame(()=>{setPreview(false);setCopied(false);setCopyError('');downloadButton.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});});return()=>cancelAnimationFrame(frame);},[open,output]);
+ useEffect(()=>{if(!open)return;const frame=requestAnimationFrame(()=>{setPreview(false);setCopied(false);setCopyError('');setDownloadFeedback(0);downloadButton.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});});return()=>cancelAnimationFrame(frame);},[open,output]);
  if(!open)return null;
  if(toolId==='blank-check')return <BlankReviewResult output={output} totalPages={before?.pages} onReview={onReviewCandidates} onDownload={onDownload} onBack={onSettings} error={error}/>;
  const pdf=output.blob.type==='application/pdf',ext=output.name.split('.').pop()?.toUpperCase();
@@ -32,7 +33,8 @@ export function ResultCard({output,open,toolId,resultTitle,before,compress,onDow
   <p className="merge-result-file">{output.name} · {formatBytes(output.blob.size)}</p>
   
   {output.target&&<p className="export-size-summary" role="status">{output.target.met?'Target met':'Target not met'} · Result {(output.blob.size/1000).toFixed(1)} KB / target {output.target.requestedKB} KB</p>}
-  <button ref={downloadButton} className="primary merge-result-download" onClick={originalPreferred?onOriginal:onDownload}><Download size={26}/>{originalPreferred?'Download original PDF':toolId==='merge'?'Download merged PDF':compress?'Download compressed PDF':`Download ${label}`}</button>
+  <button ref={downloadButton} className="primary merge-result-download" onClick={()=>{(originalPreferred?onOriginal:onDownload)?.();setDownloadFeedback(n=>n+1);}}><span key={downloadFeedback} className={downloadFeedback?'download-click-animation':'download-idle-icon'} aria-hidden="true"><Download size={26}/></span>{originalPreferred?'Download original PDF':toolId==='merge'?'Download merged PDF':compress?'Download compressed PDF':`Download ${label}`}</button>
+  {downloadFeedback>0&&<p key={downloadFeedback} className="download-started-feedback" role="status">Download started · check your browser’s downloads</p>}
   <div className="merge-result-secondary"><button className="secondary" onClick={onSettings}><ArrowLeft size={17}/>Back to {toolId==='merge'?'files':'workspace'}</button>{onSave&&<button className="secondary" onClick={onSave}><FolderOpen size={17}/>Save to My files</button>}{onOriginal&&<button className="secondary" onClick={originalPreferred?onDownload:onOriginal}><Download size={17}/>{originalPreferred?'Download processed PDF':'Download original PDF'}</button>}{onProtect&&<button className="secondary" onClick={onProtect}>Add password</button>}</div>
   {compress&&inputSize>0&&<div className="compression-result-summary" role="status">
    <div className="compression-savings-ring" aria-hidden="true"><svg viewBox="0 0 120 120"><circle className="compression-ring-track" cx="60" cy="60" r="50"/><circle className="compression-ring-value" cx="60" cy="60" r="50" pathLength="100" strokeDasharray={`${reduction} 100`}/></svg><div><strong>{savingsLabel}</strong><span>SAVED</span></div></div>
