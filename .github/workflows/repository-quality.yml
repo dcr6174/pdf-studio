@@ -1,0 +1,44 @@
+name: Repository quality
+on:
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - id: install
+        run: npm ci
+      - name: Lint with zero warnings
+        run: npm run lint
+      - name: TypeScript
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx tsc --noEmit
+      - name: Prepare independent PDF and GIF inspection
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: |
+          sudo apt-get update
+          sudo apt-get install -y poppler-utils
+          python3 -m pip install Pillow
+      - name: Text editing regressions
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-online-text.mjs && node checks/verify-horizontal-flow.mjs
+      - name: Drawing and Lab regressions
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-daily-mood-canvas.mjs && node checks/verify-lab-visual.mjs
+      - name: Watermark and signature outputs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-watermark.mjs && node checks/verify-signatures.mjs
+      - name: Upload and PDF workflow regressions
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-react-workflows.mjs && node checks/verify-workflow-interface.mjs
+      - name: Production build
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run build:public
