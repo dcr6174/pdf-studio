@@ -14,7 +14,6 @@ export function taskInputIssue(id:string,fileCount:number,o:Pick<Options,'text'|
   const names=o.recipe==='custom'?(o.workflowSteps??[]):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'||o.recipe==='share-ready'?['clean','compress']:o.recipe==='clean-scan'?['ocr']:o.recipe==='email-ready'?['compress']:o.recipe==='print-ready'?['resize']:['merge','compress'];
   const enabled=names.map((name,i)=>({name,index:i})).filter(s=>o.recipe!=='custom'||!o.workflowDisabled?.includes(s.index));
   if(!enabled.length)return 'Add at least one enabled workflow step.';
-  if(names.length>8)return 'Use at most eight workflow steps.';
   let count=pageCount;
   for(let n=0;n<enabled.length;n++){
    const {name,index}=enabled[n];if(!workflowOperations.includes(name as typeof workflowOperations[number])&&name!=='ocr')return 'Choose a supported workflow step.';

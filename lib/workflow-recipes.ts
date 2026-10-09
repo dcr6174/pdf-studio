@@ -22,7 +22,7 @@ export function readWorkflowRecipe(value:unknown):WorkflowRecipe{
  if(!value||typeof value!=='object')throw new Error('That file is not a PDF Studio workflow recipe.');
  const r=value as Record<string,unknown>;
  if(r.version!==undefined&&r.version!==1)throw new Error('This recipe uses an unsupported version.');
- if(typeof r.name!=='string'||!r.name.trim()||r.name.length>80||!Array.isArray(r.steps)||r.steps.length>8||!r.steps.length||r.steps.some(s=>typeof s!=='string'||!workflowOperations.includes(s as typeof workflowOperations[number])))throw new Error('Recipes need a name and one to eight supported steps.');
+ if(typeof r.name!=='string'||!r.name.trim()||r.name.length>80||!Array.isArray(r.steps)||!r.steps.length||r.steps.some(s=>typeof s!=='string'||!workflowOperations.includes(s as typeof workflowOperations[number])))throw new Error('Recipes need a name and at least one supported step.');
  const steps=r.steps as string[],disabled=Array.isArray(r.disabled)?r.disabled:[];
  if(disabled.some(i=>!Number.isInteger(i)||i<0||i>=steps.length))throw new Error('This recipe has invalid disabled steps.');
  if(r.settings!==undefined&&(!Array.isArray(r.settings)||r.settings.length!==steps.length))throw new Error('Recipe settings must match its steps.');

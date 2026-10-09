@@ -1,4 +1,6 @@
 import assert from 'node:assert/strict';
+import ts from 'typescript';
+import vm from 'node:vm';
 import {readFile} from 'node:fs/promises';
 import {build} from 'vite';
 import {PDFDocument,StandardFonts,decodePDFRawStream} from 'pdf-lib';
@@ -44,3 +46,17 @@ const tenDoc=await PDFDocument.create();for(let i=0;i<10;i++)tenDoc.addPage([400
 result=await pdf(await run([tenFile],['resize'],[{resizeSize:'a4',resizeOrientation:'portrait'}]));assert.equal(result.getPageCount(),10);for(const page of result.getPages()){assert.equal(Math.round(page.getWidth()),595);assert.equal(Math.round(page.getHeight()),842);}assert.equal(tenDoc.getPage(0).getWidth(),400,'full-document resize preserves original');
 result=await pdf(await run([first],['duplicate','remove'],[{}, {range:'2'}]));assert.equal(result.getPageCount(),1,'remove can address pages created by an earlier step');
 console.log('PASS: all ten pages resize to A4 and page ranges use the result of earlier actions.');
+
+const recipes={};
+vm.runInNewContext(ts.transpile(await readFile('lib/workflow-recipes.ts','utf8'),{module:ts.ModuleKind.CommonJS}),{exports:recipes,Error});
+const readiness={};
+vm.runInNewContext(ts.transpile(await readFile('lib/task-readiness.ts','utf8'),{module:ts.ModuleKind.CommonJS}),{exports:readiness,Error,require:name=>{assert.equal(name,'./workflow-recipes');return recipes;}});
+const longSteps=['rotate','resize','numbers','clean','reverse','flip','blank','duplicate','compress'];
+const longSettings=longSteps.map(step=>recipes.workflowSettings(step,{}));
+const longRecipe=recipes.readWorkflowRecipe({name:'Long workflow',steps:longSteps,settings:longSettings});
+assert.equal(longRecipe.steps.length,9,'recipes accept more than eight steps');
+assert.equal(readiness.taskInputIssue('workflow',1,{...defaults,workflowSteps:longSteps,workflowSettings:longSettings},false,1),'','readiness accepts more than eight steps');
+result=await pdf(await run([first],longSteps,longSettings));
+assert.equal(result.getPageCount(),4,'all nine steps execute, including blank insertion and duplication');
+assert.equal(first.doc.getPageCount(),1,'long workflow preserves original pages');
+console.log('PASS: more than eight actions accepted by recipes, readiness and the real workflow engine.');
