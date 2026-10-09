@@ -251,7 +251,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if(id==='workflow'){
       const names=o.recipe==='custom'?(o.workflowSteps??[]):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'||o.recipe==='share-ready'?['clean','compress']:o.recipe==='clean-scan'?['ocr']:o.recipe==='email-ready'?['compress']:o.recipe==='print-ready'?['resize']:['merge','compress'];
       const steps=names.map((id,index)=>({id,settings:workflowSettings(id,o.recipe==='custom'?o.workflowSettings?.[index]:undefined)})).filter((_,index)=>o.recipe!=='custom'||!o.workflowDisabled?.includes(index));
-      if(!steps.length)throw new Error('Add at least one workflow step.');if(steps.length>8)throw new Error('This workflow supports up to 8 steps. Remove extra steps and retry.');if(steps.some(s=>!workflowOperations.includes(s.id as typeof workflowOperations[number])&&s.id!=='ocr'))throw new Error('This workflow includes an unsupported step. Choose a listed operation.');
+      if(!steps.length)throw new Error('Add at least one workflow step.');if(steps.some(s=>!workflowOperations.includes(s.id as typeof workflowOperations[number])&&s.id!=='ocr'))throw new Error('This workflow includes an unsupported step. Choose a listed operation.');
       let currentFiles=files,currentPages=items,currentMarks=marks;let output:Output|undefined;const reports:string[]=[],timings:string[]=[];
       for(let i=0;i<steps.length;i++){
         signal?.throwIfAborted();const step=steps[i],started=Date.now();const issue=workflowStepIssue(step.id,step.settings,currentPages.length,currentFiles.length,i);if(issue)throw new Error(`Step ${i+1}: ${issue}`);
