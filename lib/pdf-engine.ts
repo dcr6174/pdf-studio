@@ -549,7 +549,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         await out.flush();
         const fresh = await PDFDocument.create();
         const normalized=await PDFDocument.create();
-        for(const page of out.getPages()){const box=page.getCropBox(),g=pageGeometry(page);const e=await normalized.embedPage(page,{left:box.x,bottom:box.y,right:box.x+box.width,top:box.y+box.height});const q=normalized.addPage([g.width,g.height]);q.drawPage(e,{x:g.rotation===180||g.rotation===270?g.width:0,y:g.rotation===90||g.rotation===180?g.height:0,rotate:degrees(-g.rotation)});}
+        for(const page of out.getPages()){if(!page.node.Contents())page.pushOperators(pushGraphicsState(),popGraphicsState());const box=page.getCropBox(),g=pageGeometry(page);const e=await normalized.embedPage(page,{left:box.x,bottom:box.y,right:box.x+box.width,top:box.y+box.height});const q=normalized.addPage([g.width,g.height]);q.drawPage(e,{x:g.rotation===180||g.rotation===270?g.width:0,y:g.rotation===90||g.rotation===180?g.height:0,rotate:degrees(-g.rotation)});}
         await normalized.flush();
         const embeds=await fresh.embedPages(normalized.getPages());
         if (id === 'resize') {
