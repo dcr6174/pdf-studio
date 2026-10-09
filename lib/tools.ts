@@ -44,7 +44,7 @@ export const tools:Tool[] = [
 ['jpg','PDF to JPG','Export pages as images in a ZIP.','Convert','image'],
 ['png','PDF to PNG','Lossless page images, in a ZIP.','Convert','image'],
 ['text','Extract text','Save selectable text as a TXT file.','Convert','text'],
-['word','PDF to Word','Export document text to DOCX.','Convert','text','Text conversion; original layout and embedded images are not preserved. Use OCR first for scans.'],
+['word','PDF to Word','Convert to editable text or retain page appearance.','Convert','text','Editable text keeps page breaks and basic styles, with automatic scan recognition. Pictures and complex table/column structure are not rebuilt. Page appearance keeps pages as images; their text is not editable.'],
 ['html','PDF to HTML','Export text as a readable webpage.','Convert','code'],
 ['epub','PDF to EPUB','Reflow text for your e-reader.','Convert','book'],
 ['pptx','PDF to PowerPoint','Put each PDF page on a slide.','Convert','slides','Slides are page images, not editable original text or graphics.'],

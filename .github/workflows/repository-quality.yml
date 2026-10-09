@@ -42,6 +42,9 @@ jobs:
       - name: Fillable form page assembly and appearance
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-form-appearance.mjs
+      - name: PDF to Word output regressions
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-word-conversion.mjs
       - name: Production build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npm run build:public

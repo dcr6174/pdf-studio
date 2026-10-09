@@ -65,7 +65,7 @@ description: "Weave pages from several PDFs into one, for example front sides an
 "Change the title, author and subject stored inside a PDF and download the updated copy. Free, runs in your browser."},
  "scan-to-pdf": {title: "Scan to PDF: Photograph Pages Into One PDF", description: "Take photos of paper pages with your phone camera or pick images, adjust crop and perspective, and save one PDF. Run OCR after for searchable text."},
  "extract-text": {title: "Extract Text From a PDF to a TXT File", description: "Save the selectable text of a PDF as a plain text file. Scanned PDFs need OCR first. Free, in your browser."},
- "pdf-to-word": {title: "PDF to Word (DOCX): Text Conversion", description: "Export the text of a PDF as a DOCX file. Layout and images are not preserved. Use OCR first for scans. Free, in your browser."},
+ "pdf-to-word": {title: "PDF to Word: Editable Text or Page Appearance", description: "Convert PDF to DOCX with editable text and basic styles, or retain page appearance as images. Automatic scan recognition available. Processed in your browser."},
  "pdf-to-html": {title: "PDF to HTML: Readable Webpage From Text", description: "Export the text of a PDF as a simple webpage. Layout is not reproduced. Free, in your browser."},
  "pdf-to-epub": {title: "PDF to EPUB: Reflow Text for E-Readers", description: "Convert the text of a PDF into an EPUB that reflows on e-reader screens. Images and original layout are not kept."},
  "pdf-to-powerpoint": {title: "PDF to PowerPoint: One Page per Slide", description: "Put each PDF page on its own PPTX slide. Slides hold page images, so the text and graphics are not editable."},
