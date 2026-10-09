@@ -24,3 +24,5 @@
 
 .human-mobile-job{display:none}.human-create>div{min-width:0}.human-create p{display:block}.human-create strong{white-space:normal}
 @media(max-width:650px){.human-jobs.has-job .human-section-label,.human-jobs.has-job .human-job-list{display:none}.human-jobs.has-job .human-mobile-job{display:flex;flex-direction:column;gap:6px;font-size:14px;font-weight:600}.human-mobile-job select{height:46px;font-size:16px;padding:10px;border:1px solid var(--border);border-radius:10px;color:var(--foreground);background:var(--card)}}
+
+.human-action{border:0;padding:0;margin:0;min-width:0;flex-shrink:0}.human-action:disabled{opacity:.5}@media(max-width:650px){.human-action{width:100%}}
