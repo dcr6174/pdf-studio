@@ -6,3 +6,8 @@
 .ocr-easy-open .ocr-easy-header{margin:12px auto 22px}.ocr-easy-open .ocr-easy-header h1{font-size:36px}.ocr-easy-open .ocr-easy-steps{margin-top:22px}
 [data-theme=dark] .ocr-small-step,[data-theme=dark] .ocr-easy-header>span{color:#bcadff}
 @media(max-width:800px){.ocr-easy-open .ocr-easy-header h1{font-size:27px;margin:10px 0}.ocr-easy-open .ocr-easy-header>span,.ocr-easy-open .ocr-easy-header>p{display:none}.ocr-easy-open .ocr-easy-header{margin:10px auto 18px}.ocr-easy-open .ocr-easy-steps{margin:18px 0 24px}}
+
+
+/* Give the document space immediately below the site header. */
+.ocr-easy{max-width:none;width:100%;padding:10px 24px 32px}.ocr-easy-header,.ocr-easy-open .ocr-easy-header{text-align:left;max-width:none;margin:4px 0 8px}.ocr-easy-header>span{display:none}.ocr-easy-header h1,.ocr-easy-open .ocr-easy-header h1{font-size:28px;margin:4px 0;letter-spacing:-.6px}.ocr-easy-header p{font-size:16px;max-width:none;margin:0}.ocr-easy-steps,.ocr-easy-open .ocr-easy-steps{justify-content:flex-start;margin:10px 0 14px;gap:24px}.ocr-easy-upload{max-width:none;padding:24px}.ocr-document-image{height:calc(100dvh - 235px);min-height:320px}.ocr-easy-controls{top:16px}
+@media(max-width:800px){.ocr-easy{padding:8px 12px 24px}.ocr-easy-header h1,.ocr-easy-open .ocr-easy-header h1{font-size:24px;margin:4px 0}.ocr-easy-header p{font-size:15px}.ocr-easy-steps,.ocr-easy-open .ocr-easy-steps{gap:10px;margin:8px 0 12px;justify-content:space-between}.ocr-easy-controls{padding:18px}.ocr-document-image{height:65dvh}}
