@@ -1,6 +1,6 @@
 'use client';
 import './native-text-workspace.css';
-import {InlinePDFText} from './inline-pdf-text';
+import {InlinePDFText} from './native-inline-text';
 import {useEffect,useImperativeHandle,useRef,useState,type Ref} from 'react';
 import {processPDF,type Loaded,type PageItem,type Mark,type Output} from '@/lib/pdf-client';
 import {TextWorkerClient} from '@/lib/text-worker-client';
