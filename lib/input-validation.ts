@@ -11,6 +11,6 @@ export function validatePages(count:number){if(count>MAX_PAGES)throw new Error(`
 
 export function validateBatch(count:number){if(count>MAX_BATCH)throw new Error(`You selected ${count} files. Batch processing accepts up to ${MAX_BATCH} files. Remove some files and try again.`);}
 export function validateTextInput(bytes:number,pages=0){
- if(bytes>50000000)throw new Error(`This document is ${(bytes/1e6).toFixed(1)} MB. Existing-text editing accepts up to 50 MB. Choose a smaller PDF or split it first.`);
- if(pages>100)throw new Error(`This document has ${pages} pages. Existing-text editing accepts up to 100 pages. Split the document first.`);
+ if(bytes>MAX_BYTES)throw new Error(`This document is ${(bytes/1e6).toFixed(1)} MB. Existing-text editing accepts up to 150 MiB. Choose a smaller PDF or split it first.`);
+ if(pages>MAX_PAGES)throw new Error(`This document has ${pages} pages. Existing-text editing accepts up to ${MAX_PAGES} pages. Split the document first.`);
 }

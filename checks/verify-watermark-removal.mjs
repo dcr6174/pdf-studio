@@ -1,5 +1,5 @@
 import assert from 'node:assert/strict';
-import {readFile,writeFile,mkdir} from 'node:fs/promises';
+import {readFile,writeFile,mkdir,cp} from 'node:fs/promises';
 import {createRequire} from 'node:module';
 import ts from 'typescript';
 import {PDFDocument,StandardFonts,rgb,degrees} from 'pdf-lib';
@@ -7,6 +7,7 @@ import {createCanvas} from '@napi-rs/canvas';
 
 const root=new URL('../',import.meta.url),out=new URL('work/watermark-check/',root);
 await mkdir(out,{recursive:true});
+await cp(new URL('lib/vendor/',root),new URL('vendor/',out),{recursive:true});
 for(const name of ['text-paragraph','online-text-engine','watermark-engine']){
  const source=await readFile(new URL('lib/'+name+'.ts',root),'utf8');
  const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText.replace("'./text-paragraph'","'./text-paragraph.mjs'").replace("'./online-text-engine'","'./online-text-engine.mjs'");
