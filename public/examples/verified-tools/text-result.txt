@@ -1,0 +1,35 @@
+Extract text - Page 1 
+
+PAGE-ID: TEXT-1 
+
+Alpha Bravo Charlie Delta 1234567890
+
+Extract text - Page 2 
+
+PAGE-ID: TEXT-2 
+
+Alpha Bravo Charlie Delta 1234567890
+
+Extract text - Page 3 
+
+PAGE-ID: TEXT-3 
+
+Alpha Bravo Charlie Delta 1234567890
+
+Extract text - Page 4 
+
+PAGE-ID: TEXT-4 
+
+Alpha Bravo Charlie Delta 1234567890
+
+Extract text - Page 5 
+
+PAGE-ID: TEXT-5 
+
+Alpha Bravo Charlie Delta 1234567890
+
+Extract text - Page 6 
+
+PAGE-ID: TEXT-6 
+
+Alpha Bravo Charlie Delta 1234567890

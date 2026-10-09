@@ -1,0 +1,963 @@
+[
+  {
+    "id": "rotate",
+    "input": "/examples/verified-tools/rotate-input.pdf",
+    "output": "/examples/verified-tools/rotate-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "All six pages have a 90° rotation.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/rotate-input.png",
+      "output": "/examples/verified-tools/rotate-result.png"
+    }
+  },
+  {
+    "id": "reverse",
+    "input": "/examples/verified-tools/reverse-input.pdf",
+    "output": "/examples/verified-tools/reverse-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Output starts with source page six.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/reverse-input.png",
+      "output": "/examples/verified-tools/reverse-result.png"
+    }
+  },
+  {
+    "id": "duplicate",
+    "input": "/examples/verified-tools/duplicate-input.pdf",
+    "output": "/examples/verified-tools/duplicate-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Six inputs become twelve pages.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/duplicate-input.png",
+      "output": "/examples/verified-tools/duplicate-result.png"
+    }
+  },
+  {
+    "id": "nup",
+    "input": "/examples/verified-tools/nup-input.pdf",
+    "output": "/examples/verified-tools/nup-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Six inputs become two four-up sheets.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "4",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/nup-input.png",
+      "output": "/examples/verified-tools/nup-result.png"
+    }
+  },
+  {
+    "id": "crop",
+    "input": "/examples/verified-tools/crop-input.pdf",
+    "output": "/examples/verified-tools/crop-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "The crop boundary is narrower than the original page.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/crop-input.png",
+      "output": "/examples/verified-tools/crop-result.png"
+    }
+  },
+  {
+    "id": "resize",
+    "input": "/examples/verified-tools/resize-input.pdf",
+    "output": "/examples/verified-tools/resize-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Output has A4 page width.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/resize-input.png",
+      "output": "/examples/verified-tools/resize-result.png"
+    }
+  },
+  {
+    "id": "flip",
+    "input": "/examples/verified-tools/flip-input.pdf",
+    "output": "/examples/verified-tools/flip-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "All six source pages remain readable in the parsed output.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/flip-input.png",
+      "output": "/examples/verified-tools/flip-result.png"
+    }
+  },
+  {
+    "id": "organize",
+    "input": "/examples/verified-tools/organize-input.pdf",
+    "output": "/examples/verified-tools/organize-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "All six source pages remain readable in the parsed output.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/organize-input.png",
+      "output": "/examples/verified-tools/organize-result.png"
+    }
+  },
+  {
+    "id": "split",
+    "input": "/examples/verified-tools/split-input.pdf",
+    "output": "/examples/verified-tools/split-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Only positions one and three remain.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "1,3",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/split-input.png",
+      "output": "/examples/verified-tools/split-result.png"
+    }
+  },
+  {
+    "id": "split-all",
+    "input": "/examples/verified-tools/split-all-input.pdf",
+    "output": "/examples/verified-tools/split-all-result.zip",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "ZIP contains six readable single-page PDFs.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    }
+  },
+  {
+    "id": "split-chapters",
+    "input": "/examples/verified-tools/split-chapters-input.pdf",
+    "output": "/examples/verified-tools/split-chapters-result.zip",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Alpha and Delta boundaries produce two readable chapter files.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    }
+  },
+  {
+    "id": "halve",
+    "input": "/examples/verified-tools/halve-input.pdf",
+    "output": "/examples/verified-tools/halve-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Six inputs become twelve half-page views.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/halve-input.png",
+      "output": "/examples/verified-tools/halve-result.png"
+    }
+  },
+  {
+    "id": "viewer",
+    "input": "/examples/verified-tools/viewer-input.pdf",
+    "output": "/examples/verified-tools/viewer-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "PDF catalog requests TwoColumnLeft viewing.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/viewer-input.png",
+      "output": "/examples/verified-tools/viewer-result.png"
+    }
+  },
+  {
+    "id": "remove-bookmarks",
+    "input": "/examples/verified-tools/remove-bookmarks-input.pdf",
+    "output": "/examples/verified-tools/remove-bookmarks-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "The document outline is absent.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/remove-bookmarks-input.png",
+      "output": "/examples/verified-tools/remove-bookmarks-result.png"
+    }
+  },
+  {
+    "id": "remove-links",
+    "input": "/examples/verified-tools/remove-links-input.pdf",
+    "output": "/examples/verified-tools/remove-links-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Explicit page link annotations are absent.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/remove-links-input.png",
+      "output": "/examples/verified-tools/remove-links-result.png"
+    }
+  },
+  {
+    "id": "remove-attachments",
+    "input": "/examples/verified-tools/remove-attachments-input.pdf",
+    "output": "/examples/verified-tools/remove-attachments-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Reachable embedded-file name tree is absent.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/remove-attachments-input.png",
+      "output": "/examples/verified-tools/remove-attachments-result.png"
+    }
+  },
+  {
+    "id": "remove-annotations",
+    "input": "/examples/verified-tools/remove-annotations-input.pdf",
+    "output": "/examples/verified-tools/remove-annotations-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Non-form annotations removed; Name field value retained.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/remove-annotations-input.png",
+      "output": "/examples/verified-tools/remove-annotations-result.png"
+    }
+  },
+  {
+    "id": "bookmarks",
+    "input": "/examples/verified-tools/bookmarks-input.pdf",
+    "output": "/examples/verified-tools/bookmarks-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "A document outline was added.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "1 Alpha\n4 Delta",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/bookmarks-input.png",
+      "output": "/examples/verified-tools/bookmarks-result.png"
+    }
+  },
+  {
+    "id": "clean",
+    "input": "/examples/verified-tools/clean-input.pdf",
+    "output": "/examples/verified-tools/clean-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Standard author property is absent.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/clean-input.png",
+      "output": "/examples/verified-tools/clean-result.png"
+    }
+  },
+  {
+    "id": "metadata",
+    "input": "/examples/verified-tools/metadata-input.pdf",
+    "output": "/examples/verified-tools/metadata-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "The requested title is stored.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "Review pack",
+      "author": "Example author",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/metadata-input.png",
+      "output": "/examples/verified-tools/metadata-result.png"
+    }
+  },
+  {
+    "id": "numbers",
+    "input": "/examples/verified-tools/numbers-input.pdf",
+    "output": "/examples/verified-tools/numbers-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Requested label is present in extracted output text.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/numbers-input.png",
+      "output": "/examples/verified-tools/numbers-result.png"
+    }
+  },
+  {
+    "id": "bates",
+    "input": "/examples/verified-tools/bates-input.pdf",
+    "output": "/examples/verified-tools/bates-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Requested label is present in extracted output text.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "CASE-",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/bates-input.png",
+      "output": "/examples/verified-tools/bates-result.png"
+    }
+  },
+  {
+    "id": "headers",
+    "input": "/examples/verified-tools/headers-input.pdf",
+    "output": "/examples/verified-tools/headers-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Requested label is present in extracted output text.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "Review copy",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/headers-input.png",
+      "output": "/examples/verified-tools/headers-result.png"
+    }
+  },
+  {
+    "id": "watermark",
+    "input": "/examples/verified-tools/watermark-input.pdf",
+    "output": "/examples/verified-tools/watermark-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Requested label is present in extracted output text.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "DRAFT",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/watermark-input.png",
+      "output": "/examples/verified-tools/watermark-result.png"
+    }
+  },
+  {
+    "id": "repair",
+    "input": "/examples/verified-tools/repair-input.pdf",
+    "output": "/examples/verified-tools/repair-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "All six source pages remain readable in the parsed output.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/repair-input.png",
+      "output": "/examples/verified-tools/repair-result.png"
+    }
+  },
+  {
+    "id": "hash",
+    "input": "/examples/verified-tools/hash-input.pdf",
+    "output": "/examples/verified-tools/hash-result.txt",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Digest matches an independent SHA-256 calculation.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    }
+  },
+  {
+    "id": "zip",
+    "input": "/examples/verified-tools/zip-input.pdf",
+    "output": "/examples/verified-tools/zip-result.zip",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Archived source bytes match the original.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    }
+  },
+  {
+    "id": "text",
+    "input": "/examples/verified-tools/text-input.pdf",
+    "output": "/examples/verified-tools/text-result.txt",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Extracted content contains the source Alpha text.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    }
+  },
+  {
+    "id": "html",
+    "input": "/examples/verified-tools/html-input.pdf",
+    "output": "/examples/verified-tools/html-result.html",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Extracted content contains the source Alpha text.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    }
+  },
+  {
+    "id": "csv",
+    "input": "/examples/verified-tools/csv-input.pdf",
+    "output": "/examples/verified-tools/csv-result.csv",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Extracted content contains the source Alpha text.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    }
+  },
+  {
+    "id": "word",
+    "input": "/examples/verified-tools/word-input.pdf",
+    "output": "/examples/verified-tools/word-result.docx",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Output package contains its document content part.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    }
+  },
+  {
+    "id": "epub",
+    "input": "/examples/verified-tools/epub-input.pdf",
+    "output": "/examples/verified-tools/epub-result.epub",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Output package contains its document content part.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    }
+  },
+  {
+    "id": "xlsx",
+    "input": "/examples/verified-tools/xlsx-input.pdf",
+    "output": "/examples/verified-tools/xlsx-result.xlsx",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Output package contains its document content part.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    }
+  },
+  {
+    "id": "flatten",
+    "input": "/examples/verified-tools/flatten-input.pdf",
+    "output": "/examples/verified-tools/flatten-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Field values remain as text; editable fields are absent.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/flatten-input.png",
+      "output": "/examples/verified-tools/flatten-result.png"
+    }
+  },
+  {
+    "id": "form",
+    "input": "/examples/verified-tools/form-input.pdf",
+    "output": "/examples/verified-tools/form-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Name field contains Alex after reopening.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {
+        "Name": "Alex"
+      }
+    },
+    "preview": {
+      "input": "/examples/verified-tools/form-input.png",
+      "output": "/examples/verified-tools/form-result.png"
+    }
+  },
+  {
+    "id": "blank-check",
+    "input": "/examples/verified-tools/blank-check-input.pdf",
+    "output": "/examples/verified-tools/blank-check-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "Empty page two is flagged; faint text and scan pages three and four are retained.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/blank-check-input.png",
+      "output": "/examples/verified-tools/blank-check-result.png"
+    }
+  },
+  {
+    "id": "compress",
+    "input": "/examples/verified-tools/compress-input.pdf",
+    "output": "/examples/verified-tools/compress-result.pdf",
+    "date": "2026-10-09",
+    "environment": "Node 24.19.0 · engine revision 65388e2 · PDF.js 4.10.38 · pdf-lib 1.17.1 / Poppler",
+    "check": "All six source pages remain readable in the parsed output.",
+    "scope": "Synthetic engine check. This is not a live browser or phone test.",
+    "options": {
+      "range": "",
+      "text": "",
+      "title": "",
+      "author": "",
+      "subject": "",
+      "password": "",
+      "quality": "compact",
+      "angle": "90",
+      "margin": "20",
+      "start": "1",
+      "columns": "2",
+      "fields": {}
+    },
+    "preview": {
+      "input": "/examples/verified-tools/compress-input.png",
+      "output": "/examples/verified-tools/compress-result.png"
+    }
+  }
+]
