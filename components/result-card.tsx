@@ -14,6 +14,7 @@ type Props={
 };
 export function ResultCard({output,open,toolId,resultTitle,before,compress,onDownload,onOriginal,onContinue,onNextTool,onSave,onSettings,onProtect,error,previewContent,onReviewCandidates}:Props){
  const [preview,setPreview]=useState(false),[copied,setCopied]=useState(false),[copyError,setCopyError]=useState('');
+ const [celebration,setCelebration]=useState(0);
  const downloadButton=useRef<HTMLButtonElement>(null);
  useEffect(()=>{if(!open)return;const frame=requestAnimationFrame(()=>{setPreview(false);setCopied(false);setCopyError('');downloadButton.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});});return()=>cancelAnimationFrame(frame);},[open,output]);
  if(!open)return null;
@@ -27,7 +28,7 @@ export function ResultCard({output,open,toolId,resultTitle,before,compress,onDow
  const originalPreferred=larger&&!!onOriginal;
  const next=[['compress','Compress PDF'],['sign','Sign PDF'],['watermark','Add watermark'],['edit','Edit PDF']].filter(([id])=>id!==toolId).slice(0,3);
  return <section className="merge-result-page export-result-page" aria-labelledby="export-result-heading">
-  <div className="merge-result-check" aria-hidden="true"><svg viewBox="0 0 40 40" fill="none"><path d="M10 21 17 28 30 13" pathLength="1"/></svg></div>
+  <button type="button" className="merge-result-check" aria-label="Replay success ripple" title="Tap for a ripple" onClick={()=>setCelebration(n=>n+1)}><svg viewBox="0 0 40 40" fill="none" aria-hidden="true"><path d="M10 21 17 28 30 13" pathLength="1"/></svg>{celebration>0&&<span key={celebration} className="success-click-ripples" aria-hidden="true"><i/><i/><i/></span>}</button>
   <h1 id="export-result-heading">{resultTitle??(compress?(reduction>0?'Your PDF has been compressed!':'Compression complete'):`Your ${label} is ready`)}</h1>
   <p className="merge-result-file">{output.name} · {formatBytes(output.blob.size)}</p>
   
