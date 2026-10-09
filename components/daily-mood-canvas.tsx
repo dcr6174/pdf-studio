@@ -3,6 +3,7 @@
 import {useCallback,useEffect,useRef,useState} from 'react';
 import type {PointerEvent as ReactPointerEvent} from 'react';
 import {ArrowLeft,CalendarDays,Brush,Eraser,Sparkles,Trash2,Undo2} from 'lucide-react';
+import Link from '@/components/browser-link';
 import {Slider} from '@/components/ui/slider';
 import {renderMoodCanvas} from './mood-canvas-engine';
 import type {Mark,Point} from './mood-canvas-engine';
@@ -27,9 +28,9 @@ export function DailyMoodCanvas(){
   },[]);
   const queueDraw=()=>{if(frame.current===null)frame.current=requestAnimationFrame(()=>{frame.current=null;draw();});};
   useEffect(()=>{
-    setDay(new Intl.DateTimeFormat(undefined,{weekday:'short',month:'short',day:'numeric'}).format(new Date()));
+    const dayTimer=setTimeout(()=>setDay(new Intl.DateTimeFormat(undefined,{weekday:'short',month:'short',day:'numeric'}).format(new Date())),0);
     const observer=new ResizeObserver(draw);if(surface.current)observer.observe(surface.current);draw();
-    return()=>{observer.disconnect();if(frame.current!==null)cancelAnimationFrame(frame.current);};
+    return()=>{clearTimeout(dayTimer);observer.disconnect();if(frame.current!==null)cancelAnimationFrame(frame.current);};
   },[draw]);
   useEffect(()=>{const warn=(e:BeforeUnloadEvent)=>{if(marks.current.length){e.preventDefault();e.returnValue='';}};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn);},[]);
   function point(e:{clientX:number;clientY:number}):Point{const b=surface.current!.getBoundingClientRect();return{x:Math.max(0,Math.min(1,(e.clientX-b.left)/b.width)),y:Math.max(0,Math.min(1,(e.clientY-b.top)/b.height))};}
@@ -57,10 +58,11 @@ export function DailyMoodCanvas(){
       {count===0&&!cleared&&<div className="mood-invitation"><span>YOUR DAILY SCRATCHPAD</span><h1>A little space<br/>to make a <em>start.</em></h1><p>A thought, a doodle, a messy first line.<br/>It all belongs here.</p><span className="mood-invitation-hint">Pick a color. Make your first mark.</span></div>}
       {cursor&&<div aria-hidden="true" className={'mood-cursor '+(tool==='stamp'?'is-stamp':'')} style={{left:cursor.x,top:cursor.y,width:tool==='stamp'?48:tool==='eraser'?size*5:size+10,height:tool==='stamp'?48:tool==='eraser'?size*5:size+10,borderColor:tool==='eraser'?'#595963':color}}>{tool==='stamp'?emoji:null}</div>}
     </div>
-    <header className="mood-header"><div className="mood-brand"><a href="/lab" aria-label="Back to Studio Lab"><ArrowLeft size={18}/></a><div><span>PDF STUDIO <b> / LAB</b></span><strong>Daily mood canvas</strong></div></div><div className="mood-header-right"><span className="mood-date">{day}</span><button className="mood-spark mood-challenge" onClick={dailyChallenge} aria-label="Today’s drawing challenge"><CalendarDays size={17}/><span>Daily challenge</span></button><button className="mood-spark" onClick={spark}><Sparkles size={17}/> Spark</button></div></header>
+    <header className="mood-header"><div className="mood-brand"><Link href="/lab" aria-label="Back to Studio Lab"><ArrowLeft size={18}/></Link><div><span>PDF STUDIO <b> / LAB</b></span><strong>Daily mood canvas</strong></div></div><div className="mood-header-right"><span className="mood-date">{day}</span><button className="mood-spark mood-challenge" onClick={dailyChallenge} aria-label="Today’s drawing challenge"><CalendarDays size={17}/><span>Daily challenge</span></button><button className="mood-spark" onClick={spark}><Sparkles size={17}/> Spark</button></div></header>
     {prompt&&<div className="mood-prompt" role="status"><Sparkles size={18}/><p>{prompt}</p><button aria-label="Dismiss prompt" onClick={()=>setPrompt('')}>×</button></div>}
     <aside className="mood-tray" aria-label="Daily mood anchors"><span>SET THE MOOD</span><div>{moods.map(([stamp,label])=><button key={stamp} aria-label={`Stamp ${label}`} title={label} aria-pressed={tool==='stamp'&&emoji===stamp} onClick={()=>{setTool('stamp');setEmoji(stamp);setNotice(`${label}: tap the canvas to stamp`);}}>{stamp}</button>)}</div><small>{tool==='stamp'?'Tap anywhere to stamp':'A tiny anchor for today'}</small></aside>
     <div className="mood-bottom"><div className="mood-toolbar" role="group" aria-label="Drawing tools"><div className="mood-tool-switch"><button aria-label="Brush" aria-pressed={tool==='brush'} onClick={()=>setTool('brush')}><Brush size={20}/><span>Brush</span></button><button aria-label="Eraser" aria-pressed={tool==='eraser'} onClick={()=>setTool('eraser')}><Eraser size={20}/><span>Eraser</span></button></div><div className="mood-inks" role="group" aria-label="Ink colors">{inks.map(ink=><button key={ink.color} aria-label={ink.name} aria-pressed={color===ink.color} style={{background:ink.color}} onClick={()=>{setColor(ink.color);setTool('brush');}}/>)}</div><div className="mood-size"><span id="mood-size-label">Size</span><Slider aria-labelledby="mood-size-label" min={2} max={18} step={1} value={[size]} onValueChange={v=>setSize(v[0])}/></div><div className="mood-actions"><button aria-label={cleared?'Undo clear':'Undo last mark'} title="Undo" disabled={!count&&!cleared} onClick={undo}><Undo2 size={19}/></button><button aria-label="Clear canvas" title="Clear canvas" disabled={!count} onClick={clear}><Trash2 size={19}/></button></div></div><p className="mood-footnote">No rules. No perfect lines. Just you. <span>Session only · leaving closes your canvas</span></p></div>
     <span className="mood-sr" role="status" aria-live="polite">{notice}</span>
   </main>;
 }
+
