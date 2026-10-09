@@ -1,7 +1,7 @@
 'use client';
 import {InstallApp} from '@/components/install-app';
 import Link from '@/components/browser-link';
-import {useEffect,useState} from 'react';
+import {useEffect,useState,useSyncExternalStore} from 'react';
 import {Menu,Search,FileText,ChevronDown,Heart,Flame,X} from 'lucide-react';
 import {Dialog,DialogContent,DialogTitle,DialogDescription,DialogTrigger} from '@/components/ui/dialog';
 import {tools,groups} from '@/lib/tools';
@@ -11,10 +11,14 @@ import {searchTools} from '@/lib/tool-search';
 import {getRecent,clearRecent} from '@/lib/recent-tools';
 import {shelf,type ShelfFile} from '@/lib/shelf';
 import './tools-drawer.css';
+const mobileQuery='(max-width:767px)';
+function subscribeMobile(onChange:()=>void){const media=matchMedia(mobileQuery);media.addEventListener('change',onChange);return()=>media.removeEventListener('change',onChange);}
+const mobileSnapshot=()=>matchMedia(mobileQuery).matches;
+const desktopSnapshot=()=>false;
 export type NavigationHistory={currentFiles?:string[];draftFiles?:string[];onResume?:()=>void;onRestoreDraft?:()=>void;onOpenSaved?:(file:ShelfFile)=>void};
 export function ToolsDrawer({onSelect,disabled=false,currentFiles=[],draftFiles=[],onResume,onRestoreDraft,onOpenSaved}:{onSelect?:(id:string)=>void;disabled?:boolean}&NavigationHistory){
- const [open,setOpen]=useState(false),[query,setQuery]=useState(''),[mobile,setMobile]=useState(false);
- useEffect(()=>{const media=matchMedia('(max-width:767px)');const sync=()=>setMobile(media.matches);queueMicrotask(sync);media.addEventListener('change',sync);return()=>media.removeEventListener('change',sync);},[]);
+ const [open,setOpen]=useState(false),[query,setQuery]=useState('');
+ const mobile=useSyncExternalStore(subscribeMobile,mobileSnapshot,desktopSnapshot);
  const [recent,setRecent]=useState<string[]>([]),[saved,setSaved]=useState<ShelfFile[]>([]);
  useEffect(()=>{if(!open)return;let alive=true;queueMicrotask(()=>{if(alive)setRecent(getRecent());});shelf('list').then(rows=>{if(alive)setSaved(rows);}).catch(()=>{if(alive)setSaved([]);});return()=>{alive=false;};},[open]);
  const close=()=>{setOpen(false);setQuery('');};

@@ -1,13 +1,13 @@
 'use client';
+import Image from '@/components/browser-image';
 import {useEffect,useRef,useState} from 'react';
 import {ArrowDownToLine,ArrowUpFromLine,Check,ChevronLeft,ChevronRight,FileText,Loader2,Lock,Stamp} from 'lucide-react';
-import Image from '@/components/browser-image';
 import type {Loaded} from '@/lib/pdf-client';
 import {defaultWatermark,watermarkPages,type WatermarkSettings} from '@/lib/watermark-pdf';
 import './watermark-workspace.css';
 
 export function WatermarkWorkspace({initialFile}:{initialFile?:Loaded}){
- const [file,setFile]=useState<Loaded|undefined>(initialFile?.doc?initialFile:undefined),[settings,setSettings]=useState({...defaultWatermark}),[page,setPage]=useState(0),[loading,setLoading]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),[previewError,setPreviewError]=useState(''),[preview,setPreview]=useState(''),[previewBusy,setPreviewBusy]=useState(false),[dragging,setDragging]=useState(false),[result,setResult]=useState<{url:string;name:string}|undefined>();
+ const [file,setFile]=useState<Loaded|undefined>(initialFile?.doc?initialFile:undefined),[settings,setSettings]=useState({...defaultWatermark}),[page,setPage]=useState(0),[loading,setLoading]=useState(false),[busy,setBusy]=useState(false),[error,setError]=useState(''),[previewState,setPreviewState]=useState<{file:Loaded;settings:WatermarkSettings;page:number;url?:string;error?:string}>(),[dragging,setDragging]=useState(false),[result,setResult]=useState<{url:string;name:string}|undefined>();
  const input=useRef<HTMLInputElement>(null),loadVersion=useRef(0),operation=useRef<AbortController|undefined>(undefined);
  useEffect(()=>()=>{loadVersion.current++;operation.current?.abort();},[]);
  useEffect(()=>()=>{if(result)URL.revokeObjectURL(result.url);},[result]);
@@ -15,10 +15,12 @@ export function WatermarkWorkspace({initialFile}:{initialFile?:Loaded}){
  let selected:number[]=[],validation='';if(file)try{selected=watermarkPages(settings,file.pages);}catch(e){validation=(e as Error).message;}
  const hasForms=!!file?.doc&&file.doc.getForm().getFields().length>0;
  async function upload(candidates:File[]){if(busy||loading)return;setError('');if(candidates.length!==1){setError('Choose one PDF at a time.');return;}const candidate=candidates[0];if(!/\.pdf$/i.test(candidate.name)){setError('Choose a PDF file.');return;}const version=++loadVersion.current;setLoading(true);try{const {loadFile}=await import('@/lib/pdf-client');const next=await loadFile(candidate);if(!next.doc||!next.pages)throw new Error('This PDF has no readable pages.');if(version!==loadVersion.current)return;setFile(next);setPage(0);setResult(undefined);setSettings(s=>({...s,scope:'all',range:'',flatten:false}));}catch(e){if(version===loadVersion.current)setError((e as Error).message||'This PDF could not open. Try another file.');}finally{if(version===loadVersion.current)setLoading(false);}}
+ const currentPreview=previewState&&!validation&&previewState.file===file&&previewState.settings===settings&&previewState.page===page?previewState:undefined;
+ const preview=currentPreview?.url??'',previewError=currentPreview?.error??'',previewBusy=!!file&&!validation&&!currentPreview;
  useEffect(()=>{
-  if(!file||validation){let active=true;queueMicrotask(()=>{if(active){setPreview('');setPreviewBusy(false);setPreviewError('');}});return()=>{active=false;};}
-  const controller=new AbortController();queueMicrotask(()=>{if(!controller.signal.aborted){setPreview('');setPreviewBusy(true);setPreviewError('');}});
-  const timer=setTimeout(async()=>{try{const [{watermarkPDF},{render}]=await Promise.all([import('@/lib/watermark-pdf'),import('@/lib/pdf-client')]);const bytes=await watermarkPDF(file.bytes,settings,controller.signal,page);const canvas=await render(bytes,page,Math.min(1.35,900/(file.doc?.getPage(page).getWidth()??612)),undefined,0,controller.signal);if(!controller.signal.aborted)setPreview(canvas.toDataURL('image/png'));canvas.width=0;canvas.height=0;}catch(e){if(!controller.signal.aborted)setPreviewError((e as Error).message||'Preview unavailable.');}finally{if(!controller.signal.aborted)setPreviewBusy(false);}},250);
+  if(!file||validation)return;
+  const controller=new AbortController(),request={file,settings,page};
+  const timer=setTimeout(async()=>{try{const [{watermarkPDF},{render}]=await Promise.all([import('@/lib/watermark-pdf'),import('@/lib/pdf-client')]);const bytes=await watermarkPDF(file.bytes,settings,controller.signal,page);const canvas=await render(bytes,page,Math.min(1.35,900/(file.doc?.getPage(page).getWidth()??612)),undefined,0,controller.signal);if(!controller.signal.aborted)setPreviewState({...request,url:canvas.toDataURL('image/png')});canvas.width=0;canvas.height=0;}catch(e){if(!controller.signal.aborted)setPreviewState({...request,error:(e as Error).message||'Preview unavailable.'});}},250);
   return()=>{clearTimeout(timer);controller.abort();};
  },[file,settings,page,validation]);
  async function download(){if(!file||validation||busy)return;const controller=new AbortController();operation.current=controller;setBusy(true);setError('');setResult(undefined);try{const [{watermarkPDF},{exportFilename}]=await Promise.all([import('@/lib/watermark-pdf'),import('@/lib/export-filename')]);const bytes=await watermarkPDF(file.bytes,settings,controller.signal);const url=URL.createObjectURL(new Blob([bytes as BlobPart],{type:'application/pdf'})),name=exportFilename('watermark',file.name);setResult({url,name});const a=document.createElement('a');a.href=url;a.download=name;document.body.appendChild(a);a.click();a.remove();}catch(e){if(!controller.signal.aborted)setError((e as Error).message||'Could not add the watermark. Please try again.');}finally{if(!controller.signal.aborted)setBusy(false);}}
@@ -43,3 +45,4 @@ export function WatermarkWorkspace({initialFile}:{initialFile?:Loaded}){
   </>}
  </main>;
 }
+

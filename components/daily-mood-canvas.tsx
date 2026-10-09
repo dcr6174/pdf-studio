@@ -1,9 +1,9 @@
 'use client';
+import Link from '@/components/browser-link';
 
-import {useCallback,useEffect,useRef,useState} from 'react';
+import {useCallback,useEffect,useRef,useState,useSyncExternalStore} from 'react';
 import type {PointerEvent as ReactPointerEvent} from 'react';
 import {ArrowLeft,CalendarDays,Brush,Eraser,Sparkles,Trash2,Undo2} from 'lucide-react';
-import Link from '@/components/browser-link';
 import {Slider} from '@/components/ui/slider';
 import {renderMoodCanvas} from './mood-canvas-engine';
 import type {Mark,Point} from './mood-canvas-engine';
@@ -13,12 +13,16 @@ const inks=[{color:'#6246ea',name:'Electric violet'},{color:'#f15c42',name:'Tang
 const moods=[['🔥','Fired up'],['💡','An idea'],['⏳','Taking my time'],['🧘','Finding calm'],['🚀','Making progress']];
 const prompts=['Draw your energy level as a shape.','Write your number one goal in giant letters.','Give your busiest thought a tiny, ridiculous hat.','Draw a path from where you are to where you want to be.','Turn today’s mood into a little weather forecast.','Write three words you want to carry into today.','Draw something imperfect and let it stay that way.','Make a constellation out of your small wins.','Draw what five minutes of calm looks like.','Write a kind note to your future self.'];
 
+function subscribeDay(onChange:()=>void){const timer=window.setInterval(onChange,60000);window.addEventListener('focus',onChange);return()=>{window.clearInterval(timer);window.removeEventListener('focus',onChange);};}
+const daySnapshot=()=>new Intl.DateTimeFormat(undefined,{weekday:'short',month:'short',day:'numeric'}).format(new Date());
+const serverDaySnapshot=()=> 'Today';
 export function DailyMoodCanvas(){
+  const day=useSyncExternalStore(subscribeDay,daySnapshot,serverDaySnapshot);
   const canvas=useRef<HTMLCanvasElement>(null),surface=useRef<HTMLDivElement>(null);
   const marks=useRef<Mark[]>([]),active=useRef<Extract<Mark,{kind:'brush'|'eraser'}>|null>(null);
   const pointer=useRef<number|null>(null),frame=useRef<number|null>(null);
   const [tool,setTool]=useState<'brush'|'eraser'|'stamp'>('brush'),[color,setColor]=useState(inks[0].color),[size,setSize]=useState(6);
-  const [emoji,setEmoji]=useState('🔥'),[count,setCount]=useState(0),[prompt,setPrompt]=useState(''),[day,setDay]=useState('Today');
+  const [emoji,setEmoji]=useState('🔥'),[count,setCount]=useState(0),[prompt,setPrompt]=useState('');
   const [cursor,setCursor]=useState<Point|null>(null),[notice,setNotice]=useState(''),[cleared,setCleared]=useState(false);
   const backup=useRef<Mark[]|null>(null);
   const draw=useCallback(()=>{
@@ -28,9 +32,8 @@ export function DailyMoodCanvas(){
   },[]);
   const queueDraw=()=>{if(frame.current===null)frame.current=requestAnimationFrame(()=>{frame.current=null;draw();});};
   useEffect(()=>{
-    const dayTimer=setTimeout(()=>setDay(new Intl.DateTimeFormat(undefined,{weekday:'short',month:'short',day:'numeric'}).format(new Date())),0);
     const observer=new ResizeObserver(draw);if(surface.current)observer.observe(surface.current);draw();
-    return()=>{clearTimeout(dayTimer);observer.disconnect();if(frame.current!==null)cancelAnimationFrame(frame.current);};
+    return()=>{observer.disconnect();if(frame.current!==null)cancelAnimationFrame(frame.current);};
   },[draw]);
   useEffect(()=>{const warn=(e:BeforeUnloadEvent)=>{if(marks.current.length){e.preventDefault();e.returnValue='';}};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn);},[]);
   function point(e:{clientX:number;clientY:number}):Point{const b=surface.current!.getBoundingClientRect();return{x:Math.max(0,Math.min(1,(e.clientX-b.left)/b.width)),y:Math.max(0,Math.min(1,(e.clientY-b.top)/b.height))};}
