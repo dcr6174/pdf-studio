@@ -181,3 +181,7 @@ body:has(.sign-workspace.edit-canvas-fit)>.site-ad{display:none}
  .sign-workspace .sign-reference-card .sign-field-actions{width:42px}
  .sign-mobile-tray .sign-reference-card{width:100%}
 }
+
+.sign-workspace .sign-reference-card .sign-field-icon svg{color:white!important;stroke:white!important}
+@media(min-width:1100px){.studio-shell.sign-workspace.tool-action-ready.edit-canvas-fit.document-shell>.content{padding:0 352px 0 0!important}}
+.sign-workspace .sign-selected>.field>small{display:none}
