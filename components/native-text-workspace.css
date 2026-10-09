@@ -44,3 +44,4 @@ main.studio-shell.native-text-workspace>.content{width:100%!important;max-width:
 .native-focused .nt-return-to-page{color:var(--nt-accent);text-decoration:underline;padding:4px 0;font:inherit}
 .native-focused .native-hit{cursor:text}
 @media(max-width:680px){.native-focused .native-page.nt-typing{min-width:900px}.native-focused .nt-inline-toolbar button{min-height:42px;padding:10px 14px;font-size:13px}}
+.studio-shell.native-text-workspace .task-workspace{display:flex!important;flex-direction:column!important;gap:0!important;grid-template-columns:none!important}

@@ -24,3 +24,21 @@ for(let page=0;page<4;page++){const d=new OnlineTextDocument(m,paragraphBytes),r
 
 {const formSource=await PDFDocument.create(),p=formSource.addPage([240,150]),font=await formSource.embedFont(StandardFonts.Helvetica);p.drawText('Nested original',{x:20,y:85,size:20,font});const formsPDF=await PDFDocument.create(),[embedded]=await formsPDF.embedPdf(await formSource.save()),page=formsPDF.addPage([612,792]);page.drawPage(embedded,{x:30,y:500});page.drawPage(embedded,{x:30,y:250});const formBytes=await formsPDF.save();const formDoc=new OnlineTextDocument(m,formBytes),objects=formDoc.objects(0);assert.equal(objects.length,2);const result=await editText(formBytes,0,[objects[0].index],'Nested updated',{fit:true});const check=new OnlineTextDocument(m,result.bytes);assert.equal(check.objects(0).filter(o=>o.text==='Nested original').length,1);assert.equal(check.objects(0).filter(o=>o.text==='Nested updated').length,1);check.close();formDoc.close();console.log('PASS repeated form instances edited independently');
 }
+
+// A line break must survive export without replacing neighbouring text.
+for(const value of ['First\nSecond','नमस्ते\nदुनिया']){
+ const source=new OnlineTextDocument(m,bytes),selected=source.objects(0).find(o=>o.text==='Original text');
+ const result=await editText(bytes,0,[selected.index],value,{fit:true,multiline:true});
+ const reopened=new OnlineTextDocument(m,result.bytes),objects=reopened.objects(0),lines=value.split('\n');
+ assert(lines.every(line=>objects.some(o=>o.text===line)));
+ assert(objects.find(o=>o.text===lines[1]).top>objects.find(o=>o.text===lines[0]).top);
+ assert(objects.some(o=>o.text==='Unchanged content'));
+ assert(!objects.some(o=>o.text==='Original text'));
+ reopened.close();source.close();console.log('PASS exported line breaks',value);
+}
+{
+ const source=new OnlineTextDocument(m,bytes),selected=source.objects(0).find(o=>o.text==='Original text');
+ await assert.rejects(()=>editText(bytes,0,[selected.index],'One\nTwo\nThree\nFour',{fit:true,multiline:true}),/overlaps/);
+ assert(source.objects(0).some(o=>o.text==='Original text'));
+ source.close();console.log('PASS line breaks reject overlap and retain original document');
+}
