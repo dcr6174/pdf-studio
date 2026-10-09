@@ -1,0 +1,2 @@
+hash.pdf
+SHA-256: 9fa0eedb7e6f70c2ebef23ba71682cccda16394213a462ce8336562deab27e8e
