@@ -1,41 +1,52 @@
 import assert from 'node:assert/strict';
-import {readFile,writeFile,mkdir} from 'node:fs/promises';
-import {createRequire} from 'node:module';
+import {readFile,writeFile,mkdtemp,rm} from 'node:fs/promises';
+import path from 'node:path';
+import {fileURLToPath,pathToFileURL} from 'node:url';
 import ts from 'typescript';
-import {PDFDocument,StandardFonts,rgb,degrees} from 'pdf-lib';
-import {createCanvas} from '@napi-rs/canvas';
+import {PDFDocument,StandardFonts,degrees} from 'pdf-lib';
 
-const root=new URL('../',import.meta.url),out=new URL('work/watermark-check/',root);
-await mkdir(out,{recursive:true});
-for(const name of ['text-paragraph','online-text-engine','watermark-engine']){
- const source=await readFile(new URL('lib/'+name+'.ts',root),'utf8');
- const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText.replace("'./text-paragraph'","'./text-paragraph.mjs'").replace("'./online-text-engine'","'./online-text-engine.mjs'");
- await writeFile(new URL(name+'.mjs',out),js);
-}
-const require=createRequire(import.meta.url),wasm=await readFile(require.resolve('@embedpdf/pdfium/pdfium.wasm'));
-globalThis.fetch=async url=>{assert.equal(url,'/vendor/pdfium.wasm');return new Response(wasm);};
-const {openWatermarkDocument}=await import(new URL('watermark-engine.mjs',out));
-const logo=createCanvas(80,30);logo.getContext('2d').fillStyle='#158061';logo.getContext('2d').fillRect(0,0,80,30);
-async function fixture({mark=true,rotate=false,crop=false}={}){
- const pdf=await PDFDocument.create(),font=await pdf.embedFont(StandardFonts.Helvetica),image=await pdf.embedPng(logo.toBuffer('image/png'));
- pdf.setTitle('Preserve this title');
- for(let i=0;i<2;i++){const p=pdf.addPage([420,594]);if(rotate)p.setRotation(degrees(90));if(crop)p.setCropBox(20,20,380,554);p.drawText('Important body text '+(i+1),{x:45,y:510,size:15,font});p.drawRectangle({x:45,y:400,width:200,height:30,color:rgb(.1,.4,.7)});if(mark)p.drawText('DRAFT',{x:105,y:260,size:52,font,opacity:.25,rotate:degrees(25)});p.drawImage(image,{x:280,y:40,width:80,height:30});}
- const field=pdf.getForm().createTextField('keep-field');field.setText('keep value');field.addToPage(pdf.getPage(0),{x:45,y:70,width:130,height:22});
- return pdf.save();
-}
-for(const variation of [{},{rotate:true},{crop:true},{rotate:true,crop:true}]){
- const source=await fixture(variation),unchanged=source.slice(),original=await openWatermarkDocument(source),clean=await openWatermarkDocument(await fixture({...variation,mark:false}));
- const selection=[];for(let i=0;i<2;i++){const view=original.inspect(i),draft=view.objects.find(o=>o.label==='DRAFT');assert(draft);assert(view.objects.some(o=>o.kind==='image'));assert(draft.left>=0&&draft.top>=0&&draft.left+draft.width<=1&&draft.top+draft.height<=1);assert.equal(original.list(i).objects.find(o=>o.index===draft.index).key,draft.key);selection.push({...draft,page:i});}
- assert.equal(selection[0].key,selection[1].key,'repeated text has stable keys');
- const copy=await openWatermarkDocument(source);copy.remove(selection);const bytes=copy.save(),reopened=await openWatermarkDocument(bytes);
- for(let i=0;i<2;i++){const got=reopened.inspect(i),expected=clean.inspect(i);assert(!got.objects.some(o=>o.label==='DRAFT'));assert(got.objects.some(o=>o.label==='Important body text '+(i+1)));assert.deepEqual(got.rgba,expected.rgba,'only selected watermark changes rendered pixels');}
- const parsed=await PDFDocument.load(bytes);assert.equal(parsed.getPageCount(),2);assert.equal(parsed.getTitle(),'Preserve this title');assert.equal(parsed.getForm().getTextField('keep-field').getText(),'keep value');assert.deepEqual(parsed.getPage(0).getCropBox(),(await PDFDocument.load(source)).getPage(0).getCropBox());assert.equal(parsed.getPage(0).getRotation().angle,variation.rotate?90:0);assert.deepEqual(source,unchanged);assert(original.list(0).objects.some(o=>o.label==='DRAFT'),'original document unchanged');
- const bad=await openWatermarkDocument(source);assert.throws(()=>bad.remove([selection[0],{...selection[1],key:'stale'}]),/no longer matches/);assert(bad.list(0).objects.some(o=>o.label==='DRAFT'),'validation is atomic');assert.throws(()=>bad.remove([]),/Select/);assert.throws(()=>bad.remove([selection[0],selection[0]]),/repeated/);bad.close();assert.throws(()=>bad.inspect(0),/closed/);
- const imageCopy=await openWatermarkDocument(source),image=imageCopy.list(0).objects.find(o=>o.kind==='image');imageCopy.remove([{...image,page:0}]);const imageSaved=await openWatermarkDocument(imageCopy.save());assert(!imageSaved.list(0).objects.some(o=>o.kind==='image'));assert(imageSaved.list(1).objects.some(o=>o.kind==='image'));assert(imageSaved.list(0).objects.some(o=>o.label==='DRAFT'));
- const single=await openWatermarkDocument(source);single.remove([selection[0]]);const singleSaved=await openWatermarkDocument(single.save());assert(!singleSaved.list(0).objects.some(o=>o.label==='DRAFT'));assert(singleSaved.list(1).objects.some(o=>o.label==='DRAFT'));
- for(const doc of [original,clean,copy,reopened,imageCopy,imageSaved,single,singleSaved])doc.close();
- if(!variation.rotate&&!variation.crop)await writeFile(new URL('source.pdf',out),source);
-}
-const base=await PDFDocument.create();base.addPage([400,500]).drawText('Grouped watermark',{x:40,y:250});const grouped=await PDFDocument.create(),embedded=await grouped.embedPdf(await base.save());grouped.addPage([400,500]).drawPage(embedded[0]);const nested=await openWatermarkDocument(await grouped.save());assert(nested.list(0).hasForms);assert.equal(nested.list(0).objects.length,0);nested.close();
-await assert.rejects(()=>openWatermarkDocument(new TextEncoder().encode('not a PDF')),/could not be opened/);
-console.log('PASS: real text/image deletion, pixel preservation, rotated/cropped pages, form fields, metadata, untouched pages/source, stable matching, stale-selection rejection and grouped-object scope.');
+const root=path.resolve(path.dirname(fileURLToPath(import.meta.url)),'..');
+const directory=await mkdtemp(path.join(root,'checks','.watermark-'));
+const originalFetch=globalThis.fetch;
+try{
+ for(const name of ['watermark-pdf','page-geometry','form-safe']){
+  const source=await readFile(path.join(root,'lib',name+'.ts'),'utf8');
+  const js=ts.transpileModule(source,{compilerOptions:{target:ts.ScriptTarget.ES2022,module:ts.ModuleKind.ESNext}}).outputText.replace(/from '(\.\/[^']+)'/g,"from '$1.mjs'");
+  await writeFile(path.join(directory,name+'.mjs'),js);
+ }
+ const {watermarkPDF,watermarkPages,defaultWatermark}=await import(pathToFileURL(path.join(directory,'watermark-pdf.mjs')).href);
+ const fontBytes=await readFile(path.join(root,'public/fonts/NotoSans-Regular.ttf'));
+ globalThis.fetch=async(url)=>{assert.equal(url,'/fonts/NotoSans-Regular.ttf');return new Response(fontBytes);};
+ const source=await PDFDocument.create(),font=await source.embedFont(StandardFonts.Helvetica);
+ source.setTitle('Watermark regression');
+ for(let i=0;i<3;i++){const page=source.addPage([612,792]);page.drawText('Original page '+(i+1),{font,x:40,y:50,size:14});if(i===1){page.setRotation(degrees(90));page.setCropBox(20,30,560,730);}}
+ const input=await source.save();
+ assert.deepEqual(watermarkPages(defaultWatermark,3),[0,1,2]);
+ assert.deepEqual(watermarkPages({...defaultWatermark,scope:'custom',range:'3, 1-2, 2'},3),[0,1,2]);
+ for(const range of ['', '0','4','2-1','1,,2','one'])assert.throws(()=>watermarkPages({...defaultWatermark,scope:'custom',range},3));
+ assert.throws(()=>watermarkPages({...defaultWatermark,text:' '},3));
+ assert.throws(()=>watermarkPages({...defaultWatermark,opacity:0},3));
+ const canvas=await import('@napi-rs/canvas');
+ globalThis.DOMMatrix=canvas.DOMMatrix;globalThis.ImageData=canvas.ImageData;globalThis.Path2D=canvas.Path2D;
+ const {getDocument}=await import('pdfjs-dist/legacy/build/pdf.mjs');
+ const standardFontDataUrl=path.join(root,'node_modules/pdfjs-dist/standard_fonts/')+path.sep;
+ async function texts(bytes){const doc=await getDocument({data:bytes.slice(),useSystemFonts:false,standardFontDataUrl}).promise;try{const result=[];for(let i=1;i<=doc.numPages;i++)result.push((await (await doc.getPage(i)).getTextContent()).items.map(item=>item.str).join(' '));return result;}finally{await doc.destroy();}}
+ for(const position of ['center','top','bottom'])for(const angle of [45,0,-45]){
+  const bytes=await watermarkPDF(input,{...defaultWatermark,text:'CONFIDENTIAL — Review',position,angle});const out=await PDFDocument.load(bytes);
+  assert.equal(out.getPageCount(),3);assert.equal(out.getTitle(),'Watermark regression');assert.equal(out.getPage(1).getRotation().angle,90);assert.deepEqual(out.getPage(1).getCropBox(),{x:20,y:30,width:560,height:730});
+  assert((await texts(bytes)).every(text=>text.includes('Original page')&&text.includes('CONFIDENTIAL')));
+ }
+ const custom={...defaultWatermark,scope:'custom',range:'2'};
+ const output=await watermarkPDF(input,custom),result=await texts(output);
+ assert(!result[0].includes('DRAFT'));assert(result[1].includes('DRAFT'));assert(!result[2].includes('DRAFT'));
+ const preview=await watermarkPDF(input,custom,undefined,1);
+ async function pixels(bytes){const doc=await getDocument({data:bytes.slice(),useSystemFonts:false,standardFontDataUrl}).promise;try{const page=await doc.getPage(2),viewport=page.getViewport({scale:.7}),surface=canvas.createCanvas(viewport.width,viewport.height);await page.render({canvasContext:surface.getContext('2d'),viewport}).promise;return surface.toBuffer('image/png');}finally{await doc.destroy();}}
+ assert.deepEqual(await pixels(output),await pixels(preview));
+ assert((await texts(await watermarkPDF(input,{...defaultWatermark,text:'A long watermark '.repeat(7).trim(),size:120}))).every(text=>text.includes('A long watermark')));
+ await assert.rejects(()=>watermarkPDF(input,{...defaultWatermark,text:'🚀'}),/cannot display/);
+ const form=await PDFDocument.create(),page=form.addPage([612,792]),field=form.getForm().createTextField('name');field.setText('Alice');field.addToPage(page,{x:150,y:330,width:300,height:35});
+ const formBytes=await form.save(),kept=await PDFDocument.load(await watermarkPDF(formBytes,defaultWatermark));assert.equal(kept.getForm().getTextField('name').getText(),'Alice');
+ const flattened=await PDFDocument.load(await watermarkPDF(formBytes,{...defaultWatermark,flatten:true}));assert.equal(flattened.getForm().getFields().length,0);
+ const controller=new AbortController();controller.abort();await assert.rejects(()=>watermarkPDF(input,defaultWatermark,controller.signal));
+ console.log('Watermark checks passed: page targeting, text preservation, rotation/crops, fitting, preview/export pixels, forms and cancellation.');
+}finally{globalThis.fetch=originalFetch;await rm(directory,{recursive:true,force:true});}

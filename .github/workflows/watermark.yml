@@ -8,7 +8,7 @@ on:
       - 'components/lab-directory.tsx'
       - 'app/lab/**'
       - 'scripts/generate-site-assets.mjs'
-      - 'checks/verify-watermark.mjs'
+      - 'checks/verify-watermark-removal.mjs'
       - '.github/workflows/watermark.yml'
   workflow_dispatch:
 permissions:
@@ -29,6 +29,6 @@ jobs:
       - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npx tsc --noEmit
       - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
-        run: node checks/verify-watermark.mjs
+        run: node checks/verify-watermark-removal.mjs
       - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npm run build:public
