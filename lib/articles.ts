@@ -59,7 +59,12 @@ export const articles:Article[]=
     "tool": "merge-pdf",
     "toolId": "merge",
     "toolNumber": 15,
-    "cta": "Merge my PDFs →"
+    "cta": "Merge my PDFs →",
+    "tags": [
+      "merge",
+      "combine",
+      "join"
+    ]
   },
   {
     "slug": "arrange-pdf-files-and-pages-before-merging",
@@ -126,7 +131,12 @@ export const articles:Article[]=
     "tool": "merge-pdf",
     "toolId": "merge",
     "toolNumber": 15,
-    "cta": "Merge my PDFs →"
+    "cta": "Merge my PDFs →",
+    "tags": [
+      "merge",
+      "combine",
+      "join"
+    ]
   },
   {
     "slug": "fix-pdf-merge-order-forms-and-missing-pages",
@@ -200,7 +210,12 @@ export const articles:Article[]=
     "tool": "merge-pdf",
     "toolId": "merge",
     "toolNumber": 15,
-    "cta": "Merge my PDFs →"
+    "cta": "Merge my PDFs →",
+    "tags": [
+      "merge",
+      "combine",
+      "join"
+    ]
   },
   {
     "slug": "pdf-too-large-for-a-job-portal",
@@ -224,7 +239,11 @@ export const articles:Article[]=
       "Compress PDF",
       "How-to",
       "file size",
-      "upload limits"
+      "upload limits",
+      "smaller",
+      "reduce size",
+      "shrink",
+      "compression"
     ],
     "sections": [
       {
@@ -353,6 +372,11 @@ export const articles:Article[]=
       "Follow the employer’s requested document order.",
       "Check names, dates and source versions.",
       "Keep signed originals separately."
+    ],
+    "tags": [
+      "merge",
+      "combine",
+      "join"
     ]
   },
   {
@@ -375,7 +399,9 @@ export const articles:Article[]=
     "updated": "2026-10-09",
     "tags": [
       "Sign PDF",
-      "How-to"
+      "How-to",
+      "signature",
+      "signing"
     ],
     "sections": [
       {
@@ -989,7 +1015,10 @@ export const articles:Article[]=
     "updated": "2026-10-09",
     "tags": [
       "Images to PDF",
-      "How-to"
+      "How-to",
+      "jpg",
+      "png",
+      "photos"
     ],
     "sections": [
       {
@@ -2048,6 +2077,14 @@ export const articles:Article[]=
         "question": "Does this recreate scanned text?",
         "answer": "No. Interleaving changes page order. Use OCR separately when a scan needs searchable text."
       }
+    ],
+    "tags": [
+      "interleave",
+      "interleaving",
+      "interleve",
+      "weave",
+      "alternate and mix",
+      "front and back scans"
     ]
   },
   {
@@ -2119,6 +2156,14 @@ export const articles:Article[]=
         "question": "What if one scan has fewer pages?",
         "answer": "Remaining pages are retained, but a missing back in the middle can break pairing. Inspect the inputs and restore the missing position before mixing."
       }
+    ],
+    "tags": [
+      "interleave",
+      "interleaving",
+      "interleve",
+      "weave",
+      "alternate and mix",
+      "front and back scans"
     ]
   },
   {
@@ -2197,6 +2242,14 @@ export const articles:Article[]=
         "question": "Does a correct page count prove the result is correct?",
         "answer": "No. The same count can contain wrong pairs or reversed order. Inspect labels and content as well."
       }
+    ],
+    "tags": [
+      "interleave",
+      "interleaving",
+      "interleve",
+      "weave",
+      "alternate and mix",
+      "front and back scans"
     ]
   },
   {
@@ -6708,7 +6761,11 @@ export const articles:Article[]=
       "Compress PDF",
       "Practical example",
       "file size",
-      "upload limits"
+      "upload limits",
+      "smaller",
+      "reduce size",
+      "shrink",
+      "compression"
     ],
     "steps": [
       "Open your PDF and note its original size.",
@@ -6814,7 +6871,11 @@ export const articles:Article[]=
       "Compress PDF",
       "Troubleshooting",
       "file size",
-      "upload limits"
+      "upload limits",
+      "smaller",
+      "reduce size",
+      "shrink",
+      "compression"
     ],
     "steps": [
       "Open your PDF and note its original size.",
@@ -8840,7 +8901,10 @@ export const articles:Article[]=
     "updated": "2026-10-09",
     "tags": [
       "Add text & images",
-      "How-to"
+      "How-to",
+      "annotate",
+      "add text",
+      "insert image"
     ],
     "steps": [
       "Open your PDF and choose the text, image or drawing tool.",
@@ -8917,7 +8981,10 @@ export const articles:Article[]=
     "updated": "2026-10-09",
     "tags": [
       "Add text & images",
-      "Practical example"
+      "Practical example",
+      "annotate",
+      "add text",
+      "insert image"
     ],
     "steps": [
       "Open your PDF and choose the text, image or drawing tool.",
@@ -8994,7 +9061,10 @@ export const articles:Article[]=
     "updated": "2026-10-09",
     "tags": [
       "Add text & images",
-      "Troubleshooting"
+      "Troubleshooting",
+      "annotate",
+      "add text",
+      "insert image"
     ],
     "steps": [
       "Open your PDF and choose the text, image or drawing tool.",
@@ -9071,7 +9141,9 @@ export const articles:Article[]=
     "updated": "2026-10-09",
     "tags": [
       "Sign PDF",
-      "Practical example"
+      "Practical example",
+      "signature",
+      "signing"
     ],
     "steps": [
       "Open your PDF. Enter your name in the signing panel and choose Create signature.",
@@ -9144,7 +9216,9 @@ export const articles:Article[]=
     "updated": "2026-10-09",
     "tags": [
       "Sign PDF",
-      "Troubleshooting"
+      "Troubleshooting",
+      "signature",
+      "signing"
     ],
     "steps": [
       "Open your PDF. Enter your name in the signing panel and choose Create signature.",
@@ -11572,7 +11646,10 @@ export const articles:Article[]=
     "updated": "2026-10-09",
     "tags": [
       "Images to PDF",
-      "Practical example"
+      "Practical example",
+      "jpg",
+      "png",
+      "photos"
     ],
     "steps": [
       "Choose JPG, PNG or WebP images.",
@@ -11649,7 +11726,10 @@ export const articles:Article[]=
     "updated": "2026-10-09",
     "tags": [
       "Images to PDF",
-      "Troubleshooting"
+      "Troubleshooting",
+      "jpg",
+      "png",
+      "photos"
     ],
     "steps": [
       "Choose JPG, PNG or WebP images.",
