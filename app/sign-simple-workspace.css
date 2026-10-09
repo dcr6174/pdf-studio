@@ -204,15 +204,15 @@ body:has(.sign-workspace.edit-canvas-fit)>.site-ad{display:none}
 .sign-workspace .sign-mobile-placement-hint button:first-of-type{display:none}
 
 .sign-workspace .sign-field-active{outline:2px solid var(--primary);outline-offset:2px}
-.sign-workspace .sign-reference-card[data-signing-field="date"] .sign-field-icon{display:none}
+
 
 /* Consistent centered field previews and uncluttered selected-field controls. */
-.sign-workspace .sign-reference-card .sign-field-preview{display:grid!important;grid-template-columns:minmax(0,1fr);justify-items:center;text-align:center;gap:6px;overflow:visible}
+.sign-workspace .sign-reference-card .sign-field-preview{display:flex!important;align-items:center;gap:8px;overflow:visible}
 .sign-workspace .sign-reference-card .sign-field-value{margin:0;max-width:100%;white-space:normal;overflow:visible;text-overflow:clip;text-align:center;overflow-wrap:anywhere;font-size:14px}
 .sign-workspace .sign-reference-card[data-signing-field="name"] .sign-field-value,.sign-workspace .sign-reference-card[data-signing-field="date"] .sign-field-value,.sign-workspace .sign-initials-value{font-weight:700;color:var(--foreground)}
-.sign-workspace .sign-initials-value{font-size:18px;line-height:1.2}
-.sign-workspace .sign-reference-card[data-signing-field="initials"] .sign-drag-field{min-height:64px!important}
-.sign-workspace .sign-reference-card .sign-field-label{text-align:center}
+.sign-workspace .sign-initials-value{font-size:14px;line-height:1.2}
+
+.sign-workspace .sign-reference-card .sign-field-label{text-align:left}
 .sign-workspace .sign-date-controls input{font-size:16px;font-weight:700}
 .sign-workspace .sign-selected{display:grid;gap:14px;padding:16px 0 8px;min-width:0;scroll-margin-top:16px}
 .sign-workspace .sign-selected .field{min-width:0;margin:0;gap:7px}
@@ -223,12 +223,22 @@ body:has(.sign-workspace.edit-canvas-fit)>.site-ad{display:none}
 .sign-workspace .mark.image img{pointer-events:none;object-fit:contain}
 .sign-workspace .resize-handle{z-index:35;touch-action:none}
 @media(min-width:1100px){
- .sign-workspace .sign-workspace-toolbar{display:grid;grid-template-columns:100px minmax(120px,1fr) auto;gap:12px;padding-left:0}
- .sign-workspace .sign-toolbar-pages{width:100px;min-width:0;box-sizing:border-box;border-radius:999px!important;padding:5px 6px!important;gap:3px!important}
+ .sign-workspace .sign-workspace-toolbar{display:grid;grid-template-columns:max-content minmax(120px,1fr) auto;gap:12px;padding-left:0}
+ .sign-workspace .sign-toolbar-pages{width:max-content;min-width:100px;box-sizing:border-box;border-radius:999px!important;padding:5px 8px!important;gap:6px!important}
  .sign-workspace .sign-pagination-arrows{gap:0}
  .sign-workspace .sign-pagination-arrows button{width:24px!important;min-width:24px!important;height:28px!important;min-height:28px!important;padding:0;border-radius:50%}
- .sign-workspace .sign-pagination-number input{width:28px!important;min-width:0;padding:0;text-align:center}
+ .sign-workspace .sign-pagination-number input{width:var(--sign-page-input-width,36px)!important;min-width:36px;padding:4px;text-align:center;box-sizing:border-box}
  .sign-workspace .sign-pagination-number{gap:2px;font-size:12px}
  .sign-workspace .sign-document-select{margin-left:0;min-width:0}
  .sign-workspace .edit-page-rail{top:0!important;margin-top:0;max-height:100%;height:100%;border-radius:14px}
 }
+
+/* Labels stay at the start; only document values are centered. */
+.sign-workspace .sign-reference-card:not(.sign-reference-preview) .sign-field-value{flex:1;min-width:0;text-align:center}
+.sign-workspace .sign-reference-card.sign-reference-preview .sign-field-preview{display:grid!important;justify-items:stretch;text-align:left}
+.sign-workspace .sign-reference-preview .sign-field-label{text-align:left!important}
+.sign-workspace .sign-date-glyph{font-size:14px;font-weight:750;line-height:1;border:1.5px solid currentColor;border-radius:3px;padding:3px 2px}
+.sign-workspace .sign-pagination-arrows,.sign-workspace .sign-pagination-number,.sign-workspace .sign-pagination-number>label,.sign-workspace .sign-pagination-number>span{flex:none}
+.sign-workspace .sign-pagination-number{white-space:nowrap;font-variant-numeric:tabular-nums}
+.sign-workspace .sign-pagination-number input::-webkit-inner-spin-button,.sign-workspace .sign-pagination-number input::-webkit-outer-spin-button{-webkit-appearance:none;margin:0}
+.sign-workspace .sign-pagination-number input{appearance:textfield}
