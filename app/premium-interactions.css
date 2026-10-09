@@ -18,3 +18,7 @@
 @media(hover:hover){.tool-drop:not(:disabled):hover{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 5%,var(--card));box-shadow:0 6px 24px #6341e80a}}
 @media(max-width:640px){.pdf-swipe-disclosure{padding:14px}.pdf-swipe-label{top:8px;font-size:10px}.pdf-swipe-original{left:8px}.pdf-swipe-revised{right:8px}.pdf-swipe-disclosure>summary{gap:8px}.signature-dialog .signature-tabs{gap:8px}}
 @media(prefers-reduced-motion:reduce){.tool-drop,.wm-upload,.watermark-drop,.signature-tabs button{transition:none}.drag-overlay,.merge-document-card .merge-cover,.thumb-shell>img,.signature-dialog[data-state],.signature-modal-overlay[data-state],.signature-option:not([hidden]),.export-result-page .merge-result-check:before,.export-result-page .merge-result-check path,.export-result-page .merge-result-download,.tool-guide-hero[data-tool] .guide-output,.tool-guide-hero[data-tool] .guide-signature-line,.tool-guide-hero[data-tool] .guide-sketch-line,.tool-guide-hero[data-tool] .guide-added-note,.tool-guide-hero[data-tool] .guide-crop-guide,.guide-format-badge{animation:none!important;opacity:1;rotate:none;translate:none;stroke-dashoffset:0}}
+
+/* Compare has no left inspector; reclaim its reserved desktop column. */
+.task-workspace:has(.pdf-swipe-disclosure){grid-template-columns:minmax(0,1fr)}
+.task-workspace:has(.pdf-swipe-disclosure)>.task-canvas{grid-column:1/-1;min-width:0}
