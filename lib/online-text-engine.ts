@@ -58,7 +58,7 @@ export class OnlineTextDocument {
  }catch(e){for(let i=0;i<objects.length;i++)set(objects[i],originals[i]);for(const object of added){m.FPDFPage_RemoveObject(p,object);m.FPDFPageObj_Destroy(object);}for(const item of moved){const q=this.alloc(24);try{m.pdfium.HEAPF32.set(item.matrix,q/4);m.FPDFPageObj_SetMatrix(item.object,q);}finally{this.free(q);}}m.FPDFPage_GenerateContent(p);throw e;}finally{if(t)m.FPDFText_ClosePage(t);m.FPDF_ClosePage(p);}
  }
  /** Replace a horizontal row with real PDF text objects, with atomic rollback. */
- replaceFlow(index:number,indices:number[],value:string,options:{width:number;moveBelow?:boolean;fallbackFont?:Uint8Array}):void{
+ replaceFlow(index:number,indices:number[],value:string,options:{width:number;moveBelow?:boolean;fallbackFont?:Uint8Array;singleLine?:boolean;fit?:boolean;size?:number;color?:string}):void{
   if(!indices.length||new Set(indices).size!==indices.length)throw new Error('Select a horizontal row.');
   const backup=this.save(),view=this.inspect(index,1),rows=indices.map(i=>view.objects.find(o=>o.index===i));
   if(rows.some(o=>!o?.layout))throw new Error('This text is rotated or inside unsupported graphics. Use One text object for a fixed edit.');
@@ -70,12 +70,15 @@ export class OnlineTextDocument {
    if(!Number.isFinite(options.width)||options.width<10||right>m.FPDF_GetPageWidth(p)-2)throw new Error('Keep the text area inside the page.');
    const source=m.FPDFPage_GetObject(p,main.index),q=this.alloc(24);let a:number[];
    try{if(!m.FPDFPageObj_GetMatrix(source,q))throw new Error('Text position unavailable.');a=Array.from(m.pdfium.HEAPF32.slice(q/4,q/4+6));}finally{this.free(q);}
-   let font=m.FPDFTextObj_GetFont(source);const size=main.size??12,physicalSize=size*a![3],lineHeight=physicalSize*1.25;
+   let font=m.FPDFTextObj_GetFont(source);let size=options.size??main.size??12;if(!Number.isFinite(size)||size<4||size>144)throw new Error('Choose a font size between 4 and 144 pt.');let physicalSize=size*a![3],lineHeight=physicalSize*1.25;
    const missing=this.missingCharacters(index,main.index,value.replace(/[\r\n\t]/g,' '));
    if(missing.length){if(!options.fallbackFont)throw new Error('The original font lacks: '+missing.join(' ')+'. Enable Unicode fallback.');fontBuffer=this.alloc(options.fallbackFont.length);m.pdfium.HEAPU8.set(options.fallbackFont,fontBuffer);fontHandle=m.FPDFText_LoadFont(this.doc,fontBuffer,options.fallbackFont.length,2,true);if(!fontHandle)throw new Error('Unicode fallback font could not load.');font=fontHandle;}
    temporary=m.FPDFPageObj_CreateTextObj(this.doc,font,size);if(!temporary)throw new Error('Could not create text.');matrix(temporary,[...a!.slice(0,4),left,a![5]]);
    const measure=(text:string)=>{if(!text)return 0;setText(temporary,text);const b=this.bounds(temporary);return b[2]-b[0];};
-   const wrapped=value.trim()?wrapParagraph(value,options.width,measure,Math.ceil(m.FPDF_GetPageHeight(p)/lineHeight)):[];
+   if(options.singleLine&&value.length>20000)throw new Error('This line is too long. Edit a smaller section.');
+   if(options.singleLine&&/[\r\n]/.test(value))throw new Error('Edit one line at a time.');
+   if(options.singleLine&&value.trim()){const measuredWidth=measure(value),measuredBounds=this.bounds(temporary),oldHeight=Math.max(...selected.map(o=>o.layout!.top))-Math.min(...selected.map(o=>o.layout!.bottom)),measuredHeight=measuredBounds[3]-measuredBounds[1];const factor=Math.min(1,options.width/measuredWidth,oldHeight/measuredHeight);if(factor<.999){if(!options.fit)throw new Error('The new text exceeds the selected area. Enable Fit text or shorten it.');if(factor<.5)throw new Error('This replacement would be too small to read. Shorten it.');size*=factor;physicalSize=size*a![3];lineHeight=physicalSize*1.25;m.FPDFPageObj_Destroy(temporary);temporary=m.FPDFPageObj_CreateTextObj(this.doc,font,size);if(!temporary)throw new Error('Could not fit text.');matrix(temporary,[...a!.slice(0,4),left,a![5]]);}}
+   const wrapped=value.trim()?(options.singleLine?[value]:wrapParagraph(value,options.width,measure,Math.ceil(m.FPDF_GetPageHeight(p)/lineHeight))):[];
    const oldBottom=Math.min(...selected.map(o=>o.layout!.bottom)),oldTop=Math.max(...selected.map(o=>o.layout!.top)),oldHeight=oldTop-oldBottom,newBottom=wrapped.length?a![5]-(wrapped.length-1)*lineHeight-physicalSize*.25:oldTop;
    const newHeight=wrapped.length?oldTop-newBottom:0,delta=newHeight-oldHeight;
    if(wrapped.length&&newBottom<8)throw new Error('Text reaches the bottom of this page. Widen the area, shorten the text, or move it to another page.');
@@ -85,7 +88,7 @@ export class OnlineTextDocument {
    for(const i of [...indices].sort((a,b)=>b-a)){const o=m.FPDFPage_GetObject(p,i);if(!m.FPDFPage_RemoveObject(p,o))throw new Error('Original text could not be removed.');m.FPDFPageObj_Destroy(o);}
    // Removing objects shifts their indices; resolve followers by the original removal offsets.
    if(options.moveBelow&&Math.abs(delta)>.1)for(const o of followers){const shifted=o.index-indices.filter(i=>i<o.index).length;const obj=m.FPDFPage_GetObject(p,shifted);m.FPDFPageObj_Transform(obj,1,0,0,1,0,-delta);}
-   for(let i=0;i<wrapped.length;i++){if(!wrapped[i])continue;const obj=m.FPDFPageObj_CreateTextObj(this.doc,font,size);if(!obj)throw new Error('Could not add a text line.');try{setText(obj,wrapped[i]);matrix(obj,[...a!.slice(0,4),left,a![5]-i*lineHeight]);if(main.color){m.FPDFPageObj_SetFillColor(obj,parseInt(main.color.slice(1,3),16),parseInt(main.color.slice(3,5),16),parseInt(main.color.slice(5,7),16),255);}m.FPDFPage_InsertObject(p,obj);}catch(e){m.FPDFPageObj_Destroy(obj);throw e;}}
+   for(let i=0;i<wrapped.length;i++){if(!wrapped[i])continue;const obj=m.FPDFPageObj_CreateTextObj(this.doc,font,size);if(!obj)throw new Error('Could not add a text line.');try{setText(obj,wrapped[i]);matrix(obj,[...a!.slice(0,4),left,a![5]-i*lineHeight]);const color=options.color??main.color;if(color){if(!/^#[a-f\d]{6}$/i.test(color))throw new Error('Choose a valid text colour.');m.FPDFPageObj_SetFillColor(obj,parseInt(color.slice(1,3),16),parseInt(color.slice(3,5),16),parseInt(color.slice(5,7),16),255);}m.FPDFPage_InsertObject(p,obj);}catch(e){m.FPDFPageObj_Destroy(obj);throw e;}}
    if(!m.FPDFPage_GenerateContent(p))throw new Error('The PDF content could not be regenerated.');
   }catch(e){m.FPDF_ClosePage(p);if(temporary)m.FPDFPageObj_Destroy(temporary);if(fontHandle)m.FPDFFont_Close(fontHandle);if(fontBuffer)this.free(fontBuffer);m.FPDF_CloseDocument(this.doc);this.free(this.pointer);this.pointer=this.alloc(backup.length);m.pdfium.HEAPU8.set(backup,this.pointer);this.doc=m.FPDF_LoadMemDocument(this.pointer,backup.length,'');throw e;
   }
@@ -94,4 +97,5 @@ export class OnlineTextDocument {
  save(){const m=this.m,w=m.PDFiumExt_OpenFileWriter();if(!w)throw new Error('Could not allocate PDF export.');let p=0;try{if(!m.FPDF_SaveAsCopy(this.doc,w,2))throw new Error('Could not export the edited PDF.');const n=m.PDFiumExt_GetFileWriterSize(w);if(!n)throw new Error('Empty PDF export.');p=this.alloc(n);m.PDFiumExt_GetFileWriterData(w,p,n);return m.pdfium.HEAPU8.slice(p,p+n);}finally{if(p)this.free(p);m.PDFiumExt_CloseFileWriter(w);}}
  close(){if(!this.closed){this.m.FPDF_CloseDocument(this.doc);this.free(this.pointer);this.closed=true;}}
 }
+
 
