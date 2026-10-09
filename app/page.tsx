@@ -201,7 +201,10 @@ function App({initialTool='home',initialHeading,initialOptions}:{initialTool?:st
     const opt = (key: keyof Options, value: string) => setOptions(o => ({ ...o, [key]: value }));
     const navigate=useCallback(function navigate(id:string,record=true,committed=false){
       if(busy||loading||id===view)return;
-      if(output?.blob.type==='application/pdf'&&id==='organize'){void continueOutput(id);return;}
+      if(output?.blob.type==='application/pdf'&&id==='organize'){
+        const completed=output;setLoading(true);
+        void (async()=>{try{const f=await loadFile(new File([completed.blob],completed.name));validatePages(f.pages);const nextPages=Array.from({length:f.pages},(_,index)=>({id:crypto.randomUUID(),fileId:f.id,index,rotation:0}));workspace.replace({files:[f],pages:nextPages,marks:[]},'Merged result opened in Organize');setActivePage(nextPages[0]?.id??'');setOptions({...defaults});setView(id);syncLocation(id);setError('');setUploadIssue(undefined);setRawOutput(undefined);setBatchMode(false);setSelected('');setMode('move');addRecent(id);toast.success('Result opened in Organize. Undo restores the original inputs.');}catch(e){setError(e instanceof Error?e.message:'Could not reopen this output.');}finally{setLoading(false);}})();return;
+      }
       if(workspace.getFiles().some(f=>f.readerOnly)&&!['reader','decrypt','hash','zip','home','shelf'].includes(id)){setError('This workspace contains a protected PDF. Use Remove password with a password you know before editing, or clear the workspace to open another document.');return;}
       if(view==='native-text'&&textDirty&&!committed&&id!==view){toast.error("Keep your text edits in the workspace or discard them before switching tools.");return;}
       if(marks.some(m=>m.kind==='redact')&&!['home','redact','shelf'].includes(id)){setError('Export your redacted PDF and choose Continue editing before switching tools, or remove the redaction regions.');return;}
