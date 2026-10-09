@@ -14,6 +14,7 @@ import "./working-screen.css";
 import "./audit-list-one.css";
 import "./revamp.css";
 import "./responsive-layout.css";
+import "./premium-interactions.css";
 
 export const metadata: Metadata = {
   manifest: "/manifest.webmanifest",
