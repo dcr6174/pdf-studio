@@ -26,3 +26,25 @@ const beforeMatrix=matrixOf(angled,angledObject.index);angled.replace(0,angledOb
 const draftBytes=await fixture(),draftDoc=new OnlineTextDocument(m,draftBytes);assert.equal(commitTextDraft(draftDoc,draftBytes),draftBytes,'switching with no draft retains exact bytes');const draftObject=draftDoc.inspect(0).objects.find(o=>o.text==='Original text');const committedDraft=commitTextDraft(draftDoc,draftBytes,{page:0,index:draftObject.index,value:'Edited text',fit:false});const draftReopened=new OnlineTextDocument(m,committedDraft);assert.ok(draftReopened.inspect(0).objects.some(o=>o.text==='Edited text'),'pending inline typing is committed before switching');draftReopened.close();draftDoc.close();
 console.log('Online native text: actual edit/save/reopen, changed raster preview, four page rotations, 45-degree text-object rotation, unaffected text, overflow rollback, fitted longer text and excessive-shrink rollback, unsupported glyphs, multiline, blank and malformed PDFs passed.');
 
+
+// Focused editor: single-line replacements retain original PDF text, with fitting and style controls.
+for(const rotation of [0,90,180,270]){
+ const edited=new OnlineTextDocument(m,await fixture(rotation)),target=edited.inspect(0).objects.find(o=>o.text==='Original text');
+ const width=target.layout.right-target.layout.left;
+ assert.throws(()=>edited.replaceFlow(0,[target.index],'A longer replacement',{width,singleLine:true,fit:false}),/exceeds/);
+ assert.ok(edited.inspect(0).objects.some(o=>o.text==='Original text'),'overflow retains the original');
+ edited.replaceFlow(0,[target.index],'A longer replacement',{width,singleLine:true,fit:true});
+ const reopened=new OnlineTextDocument(m,edited.save());
+ assert.ok(reopened.inspect(0).objects.some(o=>o.text==='A longer replacement'));
+ assert.ok(!reopened.inspect(0).objects.some(o=>o.text==='Original text'));
+ assert.ok(reopened.inspect(0).objects.some(o=>o.text==='Second line'));reopened.close();edited.close();
+}
+const styled=new OnlineTextDocument(m,await fixture()),styleTarget=styled.inspect(0).objects.find(o=>o.text==='Original text'),styleWidth=styleTarget.layout.right-styleTarget.layout.left;
+assert.throws(()=>styled.replaceFlow(0,[styleTarget.index],'Too much text '.repeat(50),{width:styleWidth,singleLine:true,fit:true}),/too small/);
+styled.replaceFlow(0,[styleTarget.index],'Updated',{width:styleWidth,singleLine:true,fit:true,size:14,color:'#7c3aed'});
+const styleSaved=new OnlineTextDocument(m,styled.save()),styleResult=styleSaved.inspect(0).objects.find(o=>o.text==='Updated');
+assert.equal(styleResult.size,14);assert.equal(styleResult.color,'#7c3aed');
+styleSaved.replaceFlow(0,[styleResult.index],'',{width:styleResult.layout.right-styleResult.layout.left,singleLine:true,fit:true});
+assert.ok(!styleSaved.inspect(0).objects.some(o=>o.text==='Updated'));assert.ok(styleSaved.inspect(0).objects.some(o=>o.text==='Second line'));
+styleSaved.close();styled.close();
+console.log('Focused text editor: fitted single-line changes at four rotations, atomic overflow rejection, size/colour and real text deletion passed.');
