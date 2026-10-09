@@ -1,7 +1,7 @@
 'use client';
-import {signatureFromFile,signatureFromName,loadSignatureFont} from '@/lib/signatures';
+import {signatureFromFile} from '@/lib/signatures';
 import Image from '@/components/browser-image';
-import {useEffect,useRef,useState,type ReactNode,type PointerEvent} from 'react';
+import {useRef,useState,type ReactNode,type PointerEvent} from 'react';
 import {createPortal} from 'react-dom';
 import {PenLine,GripVertical,CalendarDays,Type,Check,UserRound,Image as ImageIcon,Upload,CaseUpper,Plus} from 'lucide-react';
 import type {Mark} from '@/lib/pdf-client';
@@ -14,20 +14,19 @@ function DragField({field,label,icon,children,onDrop,onPlace,onEdit,count=0,read
  return <><div className={'sign-field-card sign-reference-card'+(large?' sign-reference-preview':'')+(!ready?' sign-field-empty':'')+(active?' sign-field-active':'')} data-signing-field={field.role}>
  {inlineEditor?<div className="sign-inline-edit"><span className="sign-field-icon">{icon}</span><label>{label}{inlineEditor}</label></div>:<button type="button" className="sign-drag-field" aria-label={ready?label+'. Drag onto the PDF or click to place.':field.role==='stamp'?'Upload image':field.role==='initials'?'Initials from your name':'Create '+label.toLowerCase()} onPointerDown={e=>{ignoreClick.current=false;if(e.button!==0||!ready)return;start.current={x:e.clientX,y:e.clientY,moved:false};e.currentTarget.setPointerCapture(e.pointerId);}} onPointerMove={move} onPointerUp={e=>{const s=start.current;start.current=undefined;setGhost(null);if(s?.moved){ignoreClick.current=true;onDrop(field,e.clientX,e.clientY);}}} onPointerCancel={()=>{start.current=undefined;ignoreClick.current=true;setGhost(null);}} onClick={()=>{if(ignoreClick.current){ignoreClick.current=false;return;}if(ready)onPlace(field);else onEdit();}}>
  <GripVertical className="sign-field-grip" size={17} aria-hidden="true"/><span className="sign-field-icon" aria-hidden="true">{icon}</span>
- <span className="sign-field-preview"><span className="sign-field-label">{label}</span>{large?<span className="sign-asset-preview">{ready?children:<span className="sign-empty-preview"><Plus size={16}/>{field.role==='initials'?'From your name':label==='Image'?'Upload image':'Create '+label.toLowerCase()}</span>}</span>:children}</span>
+ <span className="sign-field-preview"><span className="sign-field-label">{label}</span>{large?<span className="sign-asset-preview">{ready?children:<span className="sign-empty-preview"><Plus size={16}/>{field.role==='initials'?'Initials':label==='Image'?'Upload image':'Create '+label.toLowerCase()}</span>}</span>:children}</span>
  </button>}
  <span className="sign-field-actions">{editable&&(ready||field.role==='date'||field.role==='text'||field.role==='stamp')&&<button type="button" className="sign-card-edit" aria-label={(field.role==='date'?'Choose date':!ready&&field.role==='stamp'?'Upload image':'Edit '+label.toLowerCase())} title={field.role==='date'?'Choose date':'Edit '+label.toLowerCase()} onClick={onEdit}>{field.role==='date'?<CalendarDays size={14}/>:!ready&&field.role==='stamp'?<Upload size={14}/>:<PenLine size={14}/>}</button>}{count>0&&<span className="sign-field-count" aria-label={count+' '+label.toLowerCase()+' fields placed'}>{count}</span>}</span>
  </div>{ghost&&createPortal(<div className="sign-drag-ghost" style={{left:ghost.x,top:ghost.y}} aria-hidden="true">{field.kind==='image'?<Image unoptimized width={220} height={54} src={field.image} alt=""/>:field.text}</div>,document.body)}</>;
 }
 export function SignFieldTray({image,onCreate,onDrop,onPlace,date,compact=false,nameValue,onNameChange,dateSettings,marks=[],signatureActive=false}:{dateSettings?:ReactNode;nameValue?:string;onNameChange?:(name:string)=>void;image?:string;onCreate:()=>void;onDrop:(field:SigningField,x:number,y:number)=>void;onPlace:(field:SigningField)=>void;date:string;compact?:boolean;marks?:Mark[];signatureActive?:boolean}){
  const uploadInput=useRef<HTMLInputElement>(null);const [artwork,setArtwork]=useState(''),[uploadError,setUploadError]=useState(''),[uploading,setUploading]=useState(false);const uploadRequest=useRef(0);
- const [editing,setEditing]=useState<SigningFieldRole|null>(null);const [initialsImage,setInitialsImage]=useState('');
+ const [editing,setEditing]=useState<SigningFieldRole|null>(null);
  const [localName,setLocalName]=useState(''),[customText,setCustomText]=useState('');const name=nameValue??localName;
  const setName=(value:string)=>{setLocalName(value);onNameChange?.(value);};const initials=name.trim().split(/\s+/).map(word=>word[0]).join('').slice(0,8);
- useEffect(()=>{let cancelled=false;setInitialsImage('');if(initials.trim())void loadSignatureFont('alexbrush').then(()=>{if(!cancelled)setInitialsImage(signatureFromName(initials.trim(),'alexbrush'));}).catch(()=>{});return()=>{cancelled=true;};},[initials]);
  async function uploadArtwork(file?:File){if(!file)return;const request=++uploadRequest.current;setUploading(true);setUploadError('');try{const result=await signatureFromFile(file);if(request===uploadRequest.current)setArtwork(result);}catch(error){if(request===uploadRequest.current)setUploadError(error instanceof Error?error.message:'Could not open image.');}finally{if(request===uploadRequest.current)setUploading(false);}}
  const count=(role:SigningFieldRole)=>marks.filter(m=>m.signingField===role||(!m.signingField&&(role==='signature'?m.kind==='image'&&m.image===image:role==='stamp'?m.kind==='image'&&m.image===artwork:false))).length;
- const toggle=(role:SigningFieldRole)=>setEditing(current=>current===role?null:role);
+ const toggle=(role:SigningFieldRole)=>{setEditing(current=>current===role?null:role);if(role==='date')requestAnimationFrame(()=>{const row=document.querySelector<HTMLElement>('[data-signing-field="date"]'),host=row?.closest<HTMLElement>('.tool-action-settings,.mobile-workspace-panel');if(row&&host)host.scrollTo({top:Math.max(0,host.scrollTop+row.getBoundingClientRect().top-host.getBoundingClientRect().top-host.clientHeight*.3),behavior:'smooth'});});};
  const finish=<button type="button" className="sign-editor-done" aria-label="Done editing field" onClick={()=>setEditing(null)}><Check size={16}/>Done</button>;
  const signatureCard=<DragField active={signatureActive} label="Signature" icon={<PenLine size={19}/>} large ready={!!image} count={count('signature')} field={{kind:'image',image:image??'',role:'signature'}} onDrop={onDrop} onPlace={onPlace} onEdit={onCreate}>{image&&<Image unoptimized width={220} height={54} src={image} alt="Your signature" draggable={false}/>}</DragField>;
  if(compact)return <section className="sign-mobile-tray" aria-label="Signing fields">{signatureCard}</section>;
@@ -35,7 +34,7 @@ export function SignFieldTray({image,onCreate,onDrop,onPlace,date,compact=false,
  <h3>Add to document</h3><section className="sign-optional-fields" aria-label="Add to document">{signatureCard}
  <DragField label="Name" icon={<UserRound size={19}/>} ready={!!name.trim()} count={count('name')} field={{kind:'text',text:name.trim(),role:'name'}} onDrop={onDrop} onPlace={onPlace} onEdit={()=>toggle('name')}>{name.trim()&&<span className="sign-field-value sign-name-value">{name.trim()}</span>}</DragField>
  {editing==='name'&&<div className="sign-field-editor"><label className="field">Your name<input aria-label="Your name" autoFocus value={name} maxLength={80} autoComplete="name" onChange={e=>setName(e.target.value)} placeholder="Enter your name"/></label>{finish}</div>}
- <DragField label="Initials" icon={<CaseUpper size={19}/>} editable={false} large ready={!!initialsImage} count={count('initials')} field={{kind:'image',image:initialsImage,role:'initials'}} onDrop={onDrop} onPlace={onPlace} onEdit={()=>{}}>{initialsImage&&<Image unoptimized width={180} height={54} src={initialsImage} alt="Your initials" draggable={false}/>}</DragField>
+ <DragField label="Initials" icon={<CaseUpper size={19}/>} editable={false} large ready={!!initials.trim()} count={count('initials')} field={{kind:'text',text:initials,role:'initials'}} onDrop={onDrop} onPlace={onPlace} onEdit={()=>{}}>{initials&&<span className="sign-initials-value">{initials}</span>}</DragField>
  <DragField label="Date" icon={<CalendarDays size={19}/>} count={count('date')} field={{kind:'text',text:date,role:'date'}} onDrop={onDrop} onPlace={onPlace} onEdit={()=>toggle('date')}><span className="sign-field-value">{date}</span></DragField>
  {editing==='date'&&<div className="sign-field-editor">{dateSettings}{finish}</div>}
  <DragField label="Text" icon={<Type size={19}/>} ready={!!customText.trim()} count={count('text')} field={{kind:'text',text:customText.trim(),role:'text'}} onDrop={onDrop} onPlace={onPlace} onEdit={()=>toggle('text')} inlineEditor={editing==='text'?<input aria-label="Text to add" autoFocus value={customText} maxLength={160} onChange={e=>setCustomText(e.target.value)} onBlur={()=>setEditing(null)} onKeyDown={e=>{if(e.key==='Enter'||e.key==='Escape'){e.preventDefault();setEditing(null);}}} placeholder="Enter text"/>:undefined}>{customText.trim()&&<span className="sign-field-value">{customText.trim()}</span>}</DragField>
@@ -44,4 +43,3 @@ export function SignFieldTray({image,onCreate,onDrop,onPlace,date,compact=false,
  {uploading&&<span role="status" className="sign-upload-status">Opening image…</span>}{uploadError&&<p role="alert">{uploadError}</p>}
  </section></section>;
 }
-
