@@ -25,5 +25,11 @@ result=await pdf(await run([first],['resize','numbers'],[{resizeSize:'letter',re
 const originalFetch=globalThis.fetch;
 const fontBytes=await readFile(new URL('../public/fonts/NotoSans-Regular.ttf',import.meta.url));
 globalThis.fetch=async url=>{assert.equal(url,'/fonts/NotoSans-Regular.ttf');return new Response(fontBytes);};
-try {result=await pdf(await run([first],['watermark','numbers'],[{text:'Approved',angle:'45'},{}]));assert.equal(result.getPageCount(),1);}finally{globalThis.fetch=originalFetch;}
+try {result=await pdf(await run([first],['watermark','numbers'],[{text:'Approved',angle:'45'},{}]));assert.equal(result.getPageCount(),1);
+result=await pdf(await run([second,first],['merge','rotate','watermark'],[{}, {angle:'270'}, {text:'APPROVED',angle:'0'}]));
+assert.equal(result.getPageCount(),2);
+assert.equal(result.getPage(0).getRotation().angle,270);
+assert.equal(result.getPage(1).getRotation().angle,270);
+assert.equal(first.doc.getPage(0).getRotation().angle,0,'guided changes keep original documents unchanged');
+}finally{globalThis.fetch=originalFetch;}
 console.log('PASS: everyday combine/number, share, print and watermark jobs produce real PDFs.');
