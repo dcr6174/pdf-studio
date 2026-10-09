@@ -25,10 +25,11 @@ export function wordParagraphs(page:WordPage):Paragraph[]{
 export async function packWordPages(pages:WordPage[]):Promise<Blob>{
  return Packer.toBlob(new Document({sections:pages.map(page=>({properties:{type:SectionType.NEXT_PAGE,page:{size:{width:Math.round(page.width*20),height:Math.round(page.height*20)},margin:{top:720,bottom:720,left:720,right:720}}},children:wordParagraphs(page).length?wordParagraphs(page):[new Paragraph('')]}))}));
 }
-export async function convertWord(bytes:Uint8Array,name:string,options:Options,progress:(n:number)=>void,signal?:AbortSignal):Promise<Output>{
+export async function convertWord(bytes:Uint8Array,name:string,options:Options,progress:(n:number)=>void,signal?:AbortSignal,expectedPages?:number):Promise<Output>{
  const source=await renderer(bytes),pages:WordPage[]=[],images:{data:Uint8Array;width:number;height:number}[]=[],missing:number[]=[],blank:number[]=[];
  const appearance=options.wordMode==='appearance';
  try{
+  if(expectedPages!==undefined&&source.numPages!==expectedPages)throw new Error(`Conversion stopped: expected ${expectedPages} pages, but the PDF reader found ${source.numPages}. No incomplete Word file was exported.`);
   for(let index=0;index<source.numPages;index++){
    signal?.throwIfAborted();const page=await source.getPage(index+1),viewport=page.getViewport({scale:1});
    if(viewport.width*20>31680||viewport.height*20>31680)throw new Error(`Page ${index+1} exceeds Word's page-size limit. Resize the PDF before converting.`);

@@ -278,7 +278,8 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if(id==='create'){const response=await fetch('/fonts/NotoSans-Regular.ttf');if(!response.ok)throw new Error('The local document font could not load. Retry when online.');const bytes=await textToPDF(o.text,new Uint8Array(await response.arrayBuffer()),{size:Number(o.textFontSize??'11'),paper:o.textPageSize??'a4',signal});progress(100);return result(bytes,'pdf-studio-text.pdf');}
     if(id==='create-form'){const d=await createForm(o.text);return result(await d.save(),'fillable-form.pdf');}
     if(id==='remove-annotations'){if(files.length!==1||marks.length||items.length!==first.pages||items.some((p,i)=>p.index!==i||p.rotation))throw new Error('Remove annotations on the original single PDF. Export other workspace changes first.');const d=await PDFDocument.load(first.bytes);const count=removeAnnotations(d);return result(await d.save(),'pdf-studio-clean-annotations.pdf',undefined,`${count} non-form annotations removed, including comments, highlights, stamps and links. Fillable fields and their values were kept.`);}
-    if(['text','word','html','epub','csv','xlsx','audio','privacy','encrypt'].includes(id)&&items.length){const d=await assemble(files,items,signal);await applyMarks(d,items,marks,signal);const bytes=await d.save();first={...first,bytes,doc:d,pages:d.getPageCount(),size:bytes.length};}
+    if(id==='word'){const {wordSource}=await import('./word-source');const {convertWord}=await import('./word-conversion');return convertWord(await wordSource(files,items,marks,signal),(first?.name??'document').replace(/\.[^.]+$/,''),o,progress,signal,items.length||first.pages);}
+    if(['text','html','epub','csv','xlsx','audio','privacy','encrypt'].includes(id)&&items.length){const d=await assemble(files,items,signal);await applyMarks(d,items,marks,signal);const bytes=await d.save();first={...first,bytes,doc:d,pages:d.getPageCount(),size:bytes.length};}
     const filename = (first?.name ?? 'document').replace(/\.[^.]+$/, '');
     if (['create', 'markdown', 'docx', 'sheet', 'ebook'].includes(id)) {
         let txt = o.text;
@@ -335,7 +336,6 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         files.forEach((f, i) => z.file(exportFilename(id,f.name,String(i+1)), f.bytes));
         return { blob: await z.generateAsync({ type: 'blob' }), name: 'documents.zip' };
     }
-    if(id==='word'){const {convertWord}=await import('./word-conversion');return convertWord(first.bytes,filename,o,progress,signal);}
     if (['text', 'html', 'epub', 'csv', 'xlsx', 'audio', 'privacy'].includes(id)) {
         const texts = await textPages(first.bytes);
         signal?.throwIfAborted();
