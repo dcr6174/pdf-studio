@@ -33,3 +33,14 @@ main.studio-shell.native-text-workspace>.content{width:100%!important;max-width:
 @media(max-width:680px){.native-focused .native-history,.native-focused .native-paging{flex-wrap:nowrap!important;gap:3px!important}.native-focused .native-history>select{width:69px!important;min-width:0!important;max-width:69px!important;font-size:9px!important}.native-focused .native-paging label{gap:3px}.native-focused .native-paging label>select{width:41px!important;min-width:0!important;padding:4px!important}.native-focused .native-commandbar button{width:30px!important;min-width:30px!important;height:34px!important}.native-focused .nt-title h1{font-size:17px;line-height:1.25}.native-focused .nt-header-actions{gap:4px}.native-focused .nt-title>div>span{letter-spacing:.4px}.native-focused .nt-download{flex:none}}
 .native-focused input::placeholder,.native-focused textarea::placeholder{color:var(--nt-muted);opacity:1}
 .native-focused .nt-processing{display:flex;align-items:center;justify-content:space-between;gap:10px;padding:9px 20px;background:var(--nt-soft);color:var(--nt-accent);font-size:12px;flex:none}.nt-processing button{border:1px solid currentColor;border-radius:6px;padding:5px 9px;font-size:11px}
+/* The selected PDF text becomes the editing surface. */
+.native-focused .nt-inline-frame{position:absolute;z-index:5;min-width:24px;outline:2px solid var(--nt-accent);outline-offset:2px;box-shadow:0 0 0 5px #8b5cf61a;overflow:visible}
+.native-focused textarea.nt-inline-input{display:block;box-sizing:border-box;width:100%!important;height:100%!important;min-width:0!important;min-height:1.25em!important;border:0!important;border-radius:0!important;outline:0!important;padding:0!important;margin:0!important;resize:none;box-shadow:none!important;overflow:auto;caret-color:var(--nt-accent);text-align:start}
+.native-focused .nt-inline-toolbar{position:absolute;top:calc(100% + 10px);left:0;display:flex;gap:4px;padding:4px;border:1px solid var(--nt-line);border-radius:9px;background:var(--nt-surface);box-shadow:0 5px 20px #0002;width:max-content;max-width:230px}
+.native-focused .nt-inline-toolbar-above{top:auto;bottom:calc(100% + 10px)}
+.native-focused .nt-inline-toolbar button{font:600 12px/1.2 system-ui;min-height:36px;padding:8px 12px;border-radius:6px;background:var(--nt-soft);color:var(--nt-accent);white-space:nowrap}
+.native-focused .nt-inline-toolbar button:first-child{background:var(--nt-accent);color:white}
+.nt-visually-hidden{position:absolute;width:1px;height:1px;padding:0;margin:-1px;overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0}
+.native-focused .nt-return-to-page{color:var(--nt-accent);text-decoration:underline;padding:4px 0;font:inherit}
+.native-focused .native-hit{cursor:text}
+@media(max-width:680px){.native-focused .native-page.nt-typing{min-width:900px}.native-focused .nt-inline-toolbar button{min-height:42px;padding:10px 14px;font-size:13px}}
