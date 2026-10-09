@@ -16,3 +16,10 @@ result=await pdf(await run([first],['rotate','compress'],[{angle:'90'},{quality:
 await assert.rejects(run([first],['merge']),/second PDF/);await assert.rejects(run([first,second],['compress','merge']),/first step/);await assert.rejects(run([first],['remove'],[{range:'1'}]),/at least one page/);await assert.rejects(run([first],['compress'],[{quality:'compact'}],[0]),/at least one enabled workflow step/);
 assert.equal(first.doc.getPage(0).getRotation().angle,0);assert.equal(first.doc.getPageCount(),1);
 console.log('PASS: actual workflow engine default text retention, merged file order, rotation/settings, disabled steps, invalid sequences, original document preservation.');
+
+// Everyday jobs use the same engine as custom recipes.
+result=await pdf(await run([second,first],['merge','numbers'],[{}, {start:'5',numberPosition:'bottom-center'}]));assert.equal(result.getPageCount(),2);assert.equal(result.getPage(0).getWidth(),500);
+result=await pdf(await run([first],['clean','compress'],[{}, {quality:'compact'}]));assert.equal(result.getPageCount(),1);
+result=await pdf(await run([first],['resize','numbers'],[{resizeSize:'letter',resizeOrientation:'landscape'},{}]));assert.equal(Math.round(result.getPage(0).getWidth()),792);assert.equal(Math.round(result.getPage(0).getHeight()),612);
+result=await pdf(await run([first],['watermark','numbers'],[{text:'Approved',angle:'45'},{}]));assert.equal(result.getPageCount(),1);
+console.log('PASS: everyday combine/number, share, print and watermark jobs produce real PDFs.');
