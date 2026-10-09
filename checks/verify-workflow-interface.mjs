@@ -1,4 +1,5 @@
 import assert from 'node:assert/strict';
+import {readFile} from 'node:fs/promises';
 import {build} from 'vite';
 import {PDFDocument,StandardFonts,decodePDFRawStream} from 'pdf-lib';
 await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.workflow-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
@@ -16,3 +17,13 @@ result=await pdf(await run([first],['rotate','compress'],[{angle:'90'},{quality:
 await assert.rejects(run([first],['merge']),/second PDF/);await assert.rejects(run([first,second],['compress','merge']),/first step/);await assert.rejects(run([first],['remove'],[{range:'1'}]),/at least one page/);await assert.rejects(run([first],['compress'],[{quality:'compact'}],[0]),/at least one enabled workflow step/);
 assert.equal(first.doc.getPage(0).getRotation().angle,0);assert.equal(first.doc.getPageCount(),1);
 console.log('PASS: actual workflow engine default text retention, merged file order, rotation/settings, disabled steps, invalid sequences, original document preservation.');
+
+// Everyday jobs use the same engine as custom recipes.
+result=await pdf(await run([second,first],['merge','numbers'],[{}, {start:'5',numberPosition:'bottom-center'}]));assert.equal(result.getPageCount(),2);assert.equal(result.getPage(0).getWidth(),500);
+result=await pdf(await run([first],['clean','compress'],[{}, {quality:'compact'}]));assert.equal(result.getPageCount(),1);
+result=await pdf(await run([first],['resize','numbers'],[{resizeSize:'letter',resizeOrientation:'landscape'},{}]));assert.equal(Math.round(result.getPage(0).getWidth()),792);assert.equal(Math.round(result.getPage(0).getHeight()),612);
+const originalFetch=globalThis.fetch;
+const fontBytes=await readFile(new URL('../public/fonts/NotoSans-Regular.ttf',import.meta.url));
+globalThis.fetch=async url=>{assert.equal(url,'/fonts/NotoSans-Regular.ttf');return new Response(fontBytes);};
+try {result=await pdf(await run([first],['watermark','numbers'],[{text:'Approved',angle:'45'},{}]));assert.equal(result.getPageCount(),1);}finally{globalThis.fetch=originalFetch;}
+console.log('PASS: everyday combine/number, share, print and watermark jobs produce real PDFs.');
