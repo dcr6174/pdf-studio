@@ -1,0 +1,18 @@
+import assert from 'node:assert/strict';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import ts from 'typescript';
+import {createCanvas} from '@napi-rs/canvas';
+await mkdir('.mood-check',{recursive:true});
+const source=await readFile('components/mood-canvas-engine.ts','utf8');
+await writeFile('.mood-check/engine.mjs',ts.transpileModule(source,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText);
+const {renderMoodCanvas}=await import('../.mood-check/engine.mjs');
+const canvas=createCanvas(800,600),marks=[{kind:'brush',color:'#6246ea',size:8,points:[{x:.2,y:.3},{x:.3,y:.3},{x:.4,y:.3}]}];
+const px=(x,y)=>Array.from(canvas.getContext('2d').getImageData(x,y,1,1).data);
+renderMoodCanvas(canvas,marks,800,600,1);assert.deepEqual(px(240,180),[98,70,234,255]);
+marks.push({kind:'eraser',color:'#000',size:30,points:[{x:.3,y:.3}]});renderMoodCanvas(canvas,marks,800,600,1);assert.equal(px(240,180)[3],0);assert.equal(px(180,180)[3],255);
+marks.pop();renderMoodCanvas(canvas,marks,400,300,2);assert.deepEqual(px(240,180),[98,70,234,255],'normalized strokes survive viewport and DPR changes');
+renderMoodCanvas(canvas,[],400,300,2);assert.equal(px(240,180)[3],0);renderMoodCanvas(canvas,marks,400,300,2);assert.equal(px(240,180)[3],255);
+const calls=[];const context=canvas.getContext('2d'),original=context.fillText.bind(context);context.fillText=(...args)=>{calls.push(args);original(...args);};
+marks.push({kind:'stamp',emoji:'🔥',point:{x:.7,y:.6}});renderMoodCanvas(canvas,marks,400,300,2);assert.deepEqual(calls,[['🔥',280,180]],'emoji placed at the selected normalized location');
+assert.equal(canvas.getContext('2d').globalCompositeOperation,'source-over');
+console.log('PASS: actual canvas pixels for brush, eraser, single-point marks, resize/DPR retention, clear/restore; emoji placement command.');
