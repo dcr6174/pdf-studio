@@ -1,0 +1,30 @@
+name: OCR interface
+on:
+  pull_request:
+    paths:
+      - 'components/ocr-studio.*'
+      - 'components/ocr-review.*'
+      - 'app/tools/[slug]/page.tsx'
+      - '.github/workflows/ocr-interface.yml'
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  verify:
+    runs-on: ubuntu-latest
+    timeout-minutes: 20
+    steps:
+      - uses: actions/checkout@v4
+      - uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+      - id: install
+        run: npm ci
+      - run: npm run lint
+      - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npx tsc --noEmit
+      - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-horizontal-flow.mjs && node checks/verify-ocr-correction.mjs
+      - if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run build:public
