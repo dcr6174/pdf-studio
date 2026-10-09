@@ -67,6 +67,10 @@ export const tools:Tool[] = [
 ['hash','Calculate SHA-256','Calculate a SHA-256 file hash.','Privacy','hash'],
 ['zip','Bundle PDFs','Put your PDF files in a ZIP.','Pages','layers'],
 ['repair','Repair readable PDF','Rebuild a readable PDF structure.','Privacy','file','Can resave PDFs that parse successfully. Severely damaged PDFs may not be recoverable.'],
+['sketch-pdf','Sketch over PDF','Draw and highlight on a spacious PDF canvas.','Edit & sign','pen','Adds visual marks while retaining original page contents. Not redaction.'],
+['cut-collect','PDF Cut & Collect','Collect clippings with their source-page references.','Edit & sign','scissors','Clippings export as images in a new PDF; text is not editable.'],
+['fold-lab','PDF Fold Lab','Make a folded booklet or four cut-out cards per sheet.','Pages','book','Creates an A4 print layout from rendered pages. Test duplex orientation before printing the full pack.'],
+['attachment-map','PDF Attachment Map','Connect supporting PDFs with a clickable document index.','Pages','layers','Creates a combined reading copy with links to supporting documents and main-document sections. Does not embed separate file attachments.'],
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
 export function accepted(id:string){return id==='images'||id==='scan'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
 export function isMulti(id:string){return ['workflow','merge','organize','interleave','images','scan','compare','zip'].includes(id);}

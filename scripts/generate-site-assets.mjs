@@ -42,7 +42,7 @@ const toolGuideSource=await readFile(new URL('app/guides/[slug]/page.tsx',root),
 pages.push(...seoPages.map(page=>({path:'/guides/'+page.slug,content:JSON.stringify(page)+JSON.stringify(searchGuidance[page.slug]??toolGuidance[page.id])+toolGuideSource})));
 pages.push(...['text-to-handwriting','notebook-maker','handwriting-practice'].map(slug=>({path:'/guides/'+slug,content:toolGuideSource})));
 const urls=pages.map(page=>{const hash=createHash('sha256').update(page.content).digest('hex');state[page.path]={hash,lastmod:old[page.path]?.hash===hash?old[page.path].lastmod:today};return `<url><loc>${base+page.path}</loc><lastmod>${state[page.path].lastmod}</lastmod></url>`;});
-urls.push(...['/lab','/lab/text-to-handwriting','/lab/notebook-maker','/lab/handwriting-practice','/lab/flipbook','/lab/word-cloud','/lab/page-palette','/lab/whiteboard','/lab/poster-collage','/lab/pdf-to-gif','/lab/sketch-pdf'].map(path=>`<url><loc>${base+path}</loc></url>`));
+urls.push(...['/lab','/lab/daily-mood-canvas','/lab/pomodoro','/lab/calculator','/lab/finance-calculator','/lab/practice-sheets','/lab/text-to-handwriting','/lab/notebook-maker','/lab/handwriting-practice','/lab/flipbook','/lab/word-cloud','/lab/page-palette','/lab/whiteboard','/lab/poster-collage','/lab/pdf-to-gif','/lab/sketch-pdf'].map(path=>`<url><loc>${base+path}</loc></url>`));
 urls.push(...['/about','/contact','/check-it-yourself','/help','/terms','/faq'].map(path=>`<url><loc>${base+path}</loc></url>`));
 await writeFile(stateURL,JSON.stringify(state,null,2)+'\n');
 await writeFile(new URL('public/sitemap.xml',root),'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.join('\n')+'\n</urlset>\n');

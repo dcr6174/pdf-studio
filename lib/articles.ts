@@ -1,4 +1,4 @@
-export type Article={slug:string;title:string;category:string;tool:string;summary:string;steps:string[];check:string;limit:string;toolId?:string;toolNumber?:number;cta?:string;sections?:{heading:string;paragraphs:string[]}[];tips?:string[];faq?:{question:string;answer:string}[];intent?:string;published?:string;updated?:string;tags?:string[];evidence?:{id:string;input:string;output:string;date:string;environment:string;check:string;scope:string;options:Record<string,unknown>;preview?:{input:string;output:string}};hero?:{input:string;output:string}};
+export type Article={slug:string;title:string;category:string;tool:string;summary:string;steps:string[];check:string;limit:string;toolId?:string;toolNumber?:number;cta?:string;sections?:{heading:string;paragraphs:string[]}[];tips?:string[];faq?:{question:string;answer:string}[];intent?:string;published?:string;updated?:string;tags?:string[];evidence?:{inputs?:{href:string;label:string}[];id:string;input:string;output:string;date:string;environment:string;check:string;scope:string;options:Record<string,unknown>;preview?:{input:string;output:string}};hero?:{input:string;output:string}};
 export const articles:Article[]=
 [
   {
@@ -18076,6 +18076,996 @@ export const articles:Article[]=
         "input": "/examples/verified-tools/repair-input.png",
         "output": "/examples/verified-tools/repair-result.png"
       }
+    }
+  },
+  {
+    "slug": "how-to-collect-pdf-clippings-with-source-references",
+    "title": "How to collect PDF clippings with source-page references",
+    "summary": "Build a concise reading pack from useful passages, diagrams or tables without losing where each excerpt came from.",
+    "category": "Edit & sign",
+    "tool": "pdf-cut-and-collect",
+    "toolId": "cut-collect",
+    "toolNumber": 68,
+    "steps": [
+      "Open one or more PDFs with Add PDFs. Choose a document and page.",
+      "Drag across the preview to select a region, or set Left, Top, Width and Height percentages. Add an optional caption and press Collect selection.",
+      "Repeat on other pages. Move or remove clippings, press Create collection PDF, then Download PDF."
+    ],
+    "check": "Reopen the downloaded PDF. Check page count, readable content and the source filename and page beneath every clipping.",
+    "limit": "Clippings are images. They do not retain selectable text, links or the structure of a source table. Collection is not redaction; your originals remain unchanged.",
+    "intent": "How-to",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "cta": "Open PDF Cut & Collect →",
+    "tags": [
+      "PDF Cut & Collect",
+      "PDF",
+      "free",
+      "browser",
+      "How-to"
+    ],
+    "hero": {
+      "input": "Passages on several pages",
+      "output": "Clips with source references"
+    },
+    "sections": [
+      {
+        "heading": "Start with a deliberate selection",
+        "paragraphs": [
+          "Choose the exact passage you need, including its heading or legend. A tiny excerpt can lose meaning when separated from its surrounding paragraphs. Include table column names and units when collecting numerical data."
+        ]
+      },
+      {
+        "heading": "A source reference is a navigation aid",
+        "paragraphs": [
+          "Each output page includes the original filename and the one-based source page position. These are references to the file you opened, not to printed page labels. Keep the original documents if a reviewer needs to check context."
+        ]
+      },
+      {
+        "heading": "Keep your workflow focused",
+        "paragraphs": [
+          "Upload only the documents required for this task. Files are processed in this browser, and the original documents are not overwritten. Download the result before closing the tab. These dedicated workspaces do not automatically import unsaved changes from another PDF Studio tool.",
+          "If a document is protected, use Remove password with a password you know before opening it here. Large or complex pages can require substantial memory. The workspace accepts PDFs under 50 MB each, at most 12 files, and bounded page counts; split an unusually large document first."
+        ]
+      }
+    ],
+    "tips": [
+      "Keep the originals and use a descriptive filename for the exported copy.",
+      "Each output page includes the original filename and the one-based source page position. These are references to the file you opened, not to printed page labels. Keep the original documents if a reviewer needs to check context."
+    ],
+    "faq": [
+      {
+        "question": "Will my original files change?",
+        "answer": "No. Download a separate result. The source files remain unchanged."
+      },
+      {
+        "question": "Do the files leave my device?",
+        "answer": "No document upload is used. PDF processing runs in your browser."
+      },
+      {
+        "question": "What should I check before sharing?",
+        "answer": "Clippings are images. They do not retain selectable text, links or the structure of a source table. Collection is not redaction; your originals remain unchanged."
+      }
+    ],
+    "evidence": {
+      "id": "new-cut-collect",
+      "input": "/examples/new-tools/alpha-six-pages.pdf",
+      "output": "/examples/new-tools/collected-reference.pdf",
+      "date": "2026-10-09",
+      "environment": "Node.js engine check + independent Poppler render",
+      "scope": "Synthetic output-engine check. This does not certify a physical phone, printer, or fresh browser processing run. The fold input pages were rendered by Poppler for this check.",
+      "check": "One clipping, one output page, with the Alpha filename and source page 1 in the footer.",
+      "options": {
+        "layout": "cut-collect"
+      },
+      "preview": {
+        "input": "/examples/new-tools/alpha-preview.png",
+        "output": "/examples/new-tools/collected-reference-preview.png"
+      }
+    }
+  },
+  {
+    "slug": "build-a-research-excerpt-pack-from-pdfs",
+    "title": "Build a research excerpt pack from several PDFs",
+    "summary": "Gather selected evidence from different documents into one ordered PDF with captions and traceable page references.",
+    "category": "Edit & sign",
+    "tool": "pdf-cut-and-collect",
+    "toolId": "cut-collect",
+    "toolNumber": 68,
+    "steps": [
+      "Open one or more PDFs with Add PDFs. Choose a document and page.",
+      "Drag across the preview to select a region, or set Left, Top, Width and Height percentages. Add an optional caption and press Collect selection.",
+      "Repeat on other pages. Move or remove clippings, press Create collection PDF, then Download PDF."
+    ],
+    "check": "Reopen the downloaded PDF. Check page count, readable content and the source filename and page beneath every clipping.",
+    "limit": "Clippings are images. They do not retain selectable text, links or the structure of a source table. Collection is not redaction; your originals remain unchanged.",
+    "intent": "Practical example",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "cta": "Open PDF Cut & Collect →",
+    "tags": [
+      "PDF Cut & Collect",
+      "PDF",
+      "free",
+      "browser",
+      "Practical example"
+    ],
+    "hero": {
+      "input": "Passages on several pages",
+      "output": "Clips with source references"
+    },
+    "sections": [
+      {
+        "heading": "Make one point per clipping",
+        "paragraphs": [
+          "For a literature review, start with a definition, follow with a supporting chart and finish with a contrasting finding. Collect only what supports your question. Capture enough surrounding material to avoid changing the author’s intended meaning."
+        ]
+      },
+      {
+        "heading": "Arrange before exporting",
+        "paragraphs": [
+          "Use the move controls to put your clippings in the order a reader needs. A caption explains why an excerpt belongs in the pack. The original source and page reference are added automatically beneath it, so the caption can focus on your observation."
+        ]
+      },
+      {
+        "heading": "Keep your workflow focused",
+        "paragraphs": [
+          "Upload only the documents required for this task. Files are processed in this browser, and the original documents are not overwritten. Download the result before closing the tab. These dedicated workspaces do not automatically import unsaved changes from another PDF Studio tool.",
+          "If a document is protected, use Remove password with a password you know before opening it here. Large or complex pages can require substantial memory. The workspace accepts PDFs under 50 MB each, at most 12 files, and bounded page counts; split an unusually large document first."
+        ]
+      }
+    ],
+    "tips": [
+      "Keep the originals and use a descriptive filename for the exported copy.",
+      "Use the move controls to put your clippings in the order a reader needs. A caption explains why an excerpt belongs in the pack. The original source and page reference are added automatically beneath it, so the caption can focus on your observation."
+    ],
+    "faq": [
+      {
+        "question": "Will my original files change?",
+        "answer": "No. Download a separate result. The source files remain unchanged."
+      },
+      {
+        "question": "Do the files leave my device?",
+        "answer": "No document upload is used. PDF processing runs in your browser."
+      },
+      {
+        "question": "What should I check before sharing?",
+        "answer": "Clippings are images. They do not retain selectable text, links or the structure of a source table. Collection is not redaction; your originals remain unchanged."
+      }
+    ],
+    "evidence": {
+      "id": "new-cut-collect",
+      "input": "/examples/new-tools/alpha-six-pages.pdf",
+      "output": "/examples/new-tools/collected-reference.pdf",
+      "date": "2026-10-09",
+      "environment": "Node.js engine check + independent Poppler render",
+      "scope": "Synthetic output-engine check. This does not certify a physical phone, printer, or fresh browser processing run. The fold input pages were rendered by Poppler for this check.",
+      "check": "One clipping, one output page, with the Alpha filename and source page 1 in the footer.",
+      "options": {
+        "layout": "cut-collect"
+      },
+      "preview": {
+        "input": "/examples/new-tools/alpha-preview.png",
+        "output": "/examples/new-tools/collected-reference-preview.png"
+      }
+    }
+  },
+  {
+    "slug": "fix-pdf-clipping-quality-and-selection",
+    "title": "PDF clipping troubleshooting: cut-off text and blurry output",
+    "summary": "Adjust the selection, keep table headings and understand the image quality limit before exporting your collection.",
+    "category": "Edit & sign",
+    "tool": "pdf-cut-and-collect",
+    "toolId": "cut-collect",
+    "toolNumber": 68,
+    "steps": [
+      "Open one or more PDFs with Add PDFs. Choose a document and page.",
+      "Drag across the preview to select a region, or set Left, Top, Width and Height percentages. Add an optional caption and press Collect selection.",
+      "Repeat on other pages. Move or remove clippings, press Create collection PDF, then Download PDF."
+    ],
+    "check": "Reopen the downloaded PDF. Check page count, readable content and the source filename and page beneath every clipping.",
+    "limit": "Clippings are images. They do not retain selectable text, links or the structure of a source table. Collection is not redaction; your originals remain unchanged.",
+    "intent": "Troubleshooting",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "cta": "Open PDF Cut & Collect →",
+    "tags": [
+      "PDF Cut & Collect",
+      "PDF",
+      "free",
+      "browser",
+      "Troubleshooting"
+    ],
+    "hero": {
+      "input": "Passages on several pages",
+      "output": "Clips with source references"
+    },
+    "sections": [
+      {
+        "heading": "Check all four edges",
+        "paragraphs": [
+          "If a line or chart label is missing, enlarge the selection before pressing Collect selection. Percentage fields provide an alternative to touch dragging. Removing a bad clipping and collecting it again is safer than keeping an incomplete excerpt."
+        ]
+      },
+      {
+        "heading": "Understand the rendering limit",
+        "paragraphs": [
+          "The workspace renders a page preview at a bounded resolution to manage browser memory. A very small region from a large page may not contain enough pixels for enlargement. Choose a larger region or keep the source PDF alongside the collection. This feature does not reconstruct editable tables."
+        ]
+      },
+      {
+        "heading": "Keep your workflow focused",
+        "paragraphs": [
+          "Upload only the documents required for this task. Files are processed in this browser, and the original documents are not overwritten. Download the result before closing the tab. These dedicated workspaces do not automatically import unsaved changes from another PDF Studio tool.",
+          "If a document is protected, use Remove password with a password you know before opening it here. Large or complex pages can require substantial memory. The workspace accepts PDFs under 50 MB each, at most 12 files, and bounded page counts; split an unusually large document first."
+        ]
+      }
+    ],
+    "tips": [
+      "Keep the originals and use a descriptive filename for the exported copy.",
+      "The workspace renders a page preview at a bounded resolution to manage browser memory. A very small region from a large page may not contain enough pixels for enlargement. Choose a larger region or keep the source PDF alongside the collection. This feature does not reconstruct editable tables."
+    ],
+    "faq": [
+      {
+        "question": "Will my original files change?",
+        "answer": "No. Download a separate result. The source files remain unchanged."
+      },
+      {
+        "question": "Do the files leave my device?",
+        "answer": "No document upload is used. PDF processing runs in your browser."
+      },
+      {
+        "question": "What should I check before sharing?",
+        "answer": "Clippings are images. They do not retain selectable text, links or the structure of a source table. Collection is not redaction; your originals remain unchanged."
+      }
+    ],
+    "evidence": {
+      "id": "new-cut-collect",
+      "input": "/examples/new-tools/alpha-six-pages.pdf",
+      "output": "/examples/new-tools/collected-reference.pdf",
+      "date": "2026-10-09",
+      "environment": "Node.js engine check + independent Poppler render",
+      "scope": "Synthetic output-engine check. This does not certify a physical phone, printer, or fresh browser processing run. The fold input pages were rendered by Poppler for this check.",
+      "check": "One clipping, one output page, with the Alpha filename and source page 1 in the footer.",
+      "options": {
+        "layout": "cut-collect"
+      },
+      "preview": {
+        "input": "/examples/new-tools/alpha-preview.png",
+        "output": "/examples/new-tools/collected-reference-preview.png"
+      }
+    }
+  },
+  {
+    "slug": "how-to-make-a-folded-pdf-booklet",
+    "title": "How to make a folded PDF booklet from ordinary pages",
+    "summary": "Turn PDF pages into an A4 landscape booklet with a visible sheet plan and blanks added only where needed.",
+    "category": "Pages",
+    "tool": "pdf-fold-lab",
+    "toolId": "fold-lab",
+    "toolNumber": 69,
+    "steps": [
+      "Open one PDF and choose Folded booklet or Four cut-out cards.",
+      "Enter optional source page ranges such as 1, 3-5. For a booklet, review the front/back sheet plan; zero positions are shown as blanks.",
+      "Press Create print PDF and Download PDF. Print a test sheet at 100%; use landscape short-edge duplex for the booklet, then stack and fold."
+    ],
+    "check": "Reopen the downloaded PDF. Check page count, readable content and front/back alignment on a test print.",
+    "limit": "Print layouts contain page images, so selectable text, links and form fields do not survive. A4 paper and a short-edge duplex test are required for the booklet. No printer setting is controlled automatically.",
+    "intent": "How-to",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "cta": "Open PDF Fold Lab →",
+    "tags": [
+      "PDF Fold Lab",
+      "PDF",
+      "free",
+      "browser",
+      "How-to"
+    ],
+    "hero": {
+      "input": "Six reading pages",
+      "output": "Folded print sheet"
+    },
+    "sections": [
+      {
+        "heading": "Why pages look out of order on screen",
+        "paragraphs": [
+          "A booklet places the first and last reading pages together on the outside of a sheet. The inner sheets continue that pattern. With six selected pages, the first sheet front is blank / 1 and its back is 2 / blank; the second sheet front is 6 / 3 and back is 4 / 5. After duplex printing, nesting and folding, the reading order becomes 1 through 6."
+        ]
+      },
+      {
+        "heading": "Test before printing everything",
+        "paragraphs": [
+          "Print only the first front/back sheet at actual size. Use A4 landscape and short-edge flip, then fold it and check that the two sides are upright. Printer drivers can use different labels for duplex orientation. If the test is inverted, change the flip setting before printing the whole pack."
+        ]
+      },
+      {
+        "heading": "Keep your workflow focused",
+        "paragraphs": [
+          "Upload only the documents required for this task. Files are processed in this browser, and the original documents are not overwritten. Download the result before closing the tab. These dedicated workspaces do not automatically import unsaved changes from another PDF Studio tool.",
+          "If a document is protected, use Remove password with a password you know before opening it here. Large or complex pages can require substantial memory. The workspace accepts PDFs under 50 MB each, at most 12 files, and bounded page counts; split an unusually large document first."
+        ]
+      }
+    ],
+    "tips": [
+      "Keep the originals and use a descriptive filename for the exported copy.",
+      "Print only the first front/back sheet at actual size. Use A4 landscape and short-edge flip, then fold it and check that the two sides are upright. Printer drivers can use different labels for duplex orientation. If the test is inverted, change the flip setting before printing the whole pack."
+    ],
+    "faq": [
+      {
+        "question": "Will my original files change?",
+        "answer": "No. Download a separate result. The source files remain unchanged."
+      },
+      {
+        "question": "Do the files leave my device?",
+        "answer": "No document upload is used. PDF processing runs in your browser."
+      },
+      {
+        "question": "What should I check before sharing?",
+        "answer": "Print layouts contain page images, so selectable text, links and form fields do not survive. A4 paper and a short-edge duplex test are required for the booklet. No printer setting is controlled automatically."
+      }
+    ],
+    "evidence": {
+      "id": "new-fold-lab",
+      "input": "/examples/new-tools/alpha-six-pages.pdf",
+      "output": "/examples/new-tools/folded-booklet.pdf",
+      "date": "2026-10-09",
+      "environment": "Node.js engine check + independent Poppler render",
+      "scope": "Synthetic output-engine check. This does not certify a physical phone, printer, or fresh browser processing run. The fold input pages were rendered by Poppler for this check.",
+      "check": "Six Alpha pages produced four landscape output pages, using two duplex sheets and two padded blanks. The printed fold itself needs your printer check.",
+      "options": {
+        "layout": "fold-lab"
+      },
+      "preview": {
+        "input": "/examples/new-tools/alpha-preview.png",
+        "output": "/examples/new-tools/folded-booklet-preview.png"
+      }
+    }
+  },
+  {
+    "slug": "make-four-pdf-revision-cards-per-sheet",
+    "title": "Make four PDF revision cards per A4 sheet",
+    "summary": "Reuse selected PDF pages as cut-out revision cards, handouts or compact reference sheets.",
+    "category": "Pages",
+    "tool": "pdf-fold-lab",
+    "toolId": "fold-lab",
+    "toolNumber": 69,
+    "steps": [
+      "Open one PDF and choose Folded booklet or Four cut-out cards.",
+      "Enter optional source page ranges such as 1, 3-5. For a booklet, review the front/back sheet plan; zero positions are shown as blanks.",
+      "Press Create print PDF and Download PDF. Print a test sheet at 100%; use landscape short-edge duplex for the booklet, then stack and fold."
+    ],
+    "check": "Reopen the downloaded PDF. Check page count, readable content and front/back alignment on a test print.",
+    "limit": "Print layouts contain page images, so selectable text, links and form fields do not survive. A4 paper and a short-edge duplex test are required for the booklet. No printer setting is controlled automatically.",
+    "intent": "Practical example",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "cta": "Open PDF Fold Lab →",
+    "tags": [
+      "PDF Fold Lab",
+      "PDF",
+      "free",
+      "browser",
+      "Practical example"
+    ],
+    "hero": {
+      "input": "Six reading pages",
+      "output": "Folded print sheet"
+    },
+    "sections": [
+      {
+        "heading": "Choose material that survives reduction",
+        "paragraphs": [
+          "A page with a short diagram or summary works better than dense small-print notes. The four-card layout fits each selected page into a quarter of A4 while retaining its aspect ratio. It adds source-page labels and dotted cut guides. The last sheet may have empty spaces."
+        ]
+      },
+      {
+        "heading": "Cut guides are not fold instructions",
+        "paragraphs": [
+          "This layout produces four separate cards. Print at 100%, inspect a test page for readability and cut along the dotted guides. It is different from the folded booklet option, which imposes a reading sequence across both sides of paper."
+        ]
+      },
+      {
+        "heading": "Keep your workflow focused",
+        "paragraphs": [
+          "Upload only the documents required for this task. Files are processed in this browser, and the original documents are not overwritten. Download the result before closing the tab. These dedicated workspaces do not automatically import unsaved changes from another PDF Studio tool.",
+          "If a document is protected, use Remove password with a password you know before opening it here. Large or complex pages can require substantial memory. The workspace accepts PDFs under 50 MB each, at most 12 files, and bounded page counts; split an unusually large document first."
+        ]
+      }
+    ],
+    "tips": [
+      "Keep the originals and use a descriptive filename for the exported copy.",
+      "This layout produces four separate cards. Print at 100%, inspect a test page for readability and cut along the dotted guides. It is different from the folded booklet option, which imposes a reading sequence across both sides of paper."
+    ],
+    "faq": [
+      {
+        "question": "Will my original files change?",
+        "answer": "No. Download a separate result. The source files remain unchanged."
+      },
+      {
+        "question": "Do the files leave my device?",
+        "answer": "No document upload is used. PDF processing runs in your browser."
+      },
+      {
+        "question": "What should I check before sharing?",
+        "answer": "Print layouts contain page images, so selectable text, links and form fields do not survive. A4 paper and a short-edge duplex test are required for the booklet. No printer setting is controlled automatically."
+      }
+    ],
+    "evidence": {
+      "id": "new-fold-lab",
+      "input": "/examples/new-tools/alpha-six-pages.pdf",
+      "output": "/examples/new-tools/folded-booklet.pdf",
+      "date": "2026-10-09",
+      "environment": "Node.js engine check + independent Poppler render",
+      "scope": "Synthetic output-engine check. This does not certify a physical phone, printer, or fresh browser processing run. The fold input pages were rendered by Poppler for this check.",
+      "check": "Six Alpha pages produced four landscape output pages, using two duplex sheets and two padded blanks. The printed fold itself needs your printer check.",
+      "options": {
+        "layout": "fold-lab"
+      },
+      "preview": {
+        "input": "/examples/new-tools/alpha-preview.png",
+        "output": "/examples/new-tools/folded-booklet-preview.png"
+      }
+    }
+  },
+  {
+    "slug": "fix-booklet-printing-order-and-upside-down-backs",
+    "title": "Fix booklet printing: page order, blanks and upside-down backs",
+    "summary": "Use the sheet plan to separate expected booklet imposition from a printer orientation problem.",
+    "category": "Pages",
+    "tool": "pdf-fold-lab",
+    "toolId": "fold-lab",
+    "toolNumber": 69,
+    "steps": [
+      "Open one PDF and choose Folded booklet or Four cut-out cards.",
+      "Enter optional source page ranges such as 1, 3-5. For a booklet, review the front/back sheet plan; zero positions are shown as blanks.",
+      "Press Create print PDF and Download PDF. Print a test sheet at 100%; use landscape short-edge duplex for the booklet, then stack and fold."
+    ],
+    "check": "Reopen the downloaded PDF. Check page count, readable content and front/back alignment on a test print.",
+    "limit": "Print layouts contain page images, so selectable text, links and form fields do not survive. A4 paper and a short-edge duplex test are required for the booklet. No printer setting is controlled automatically.",
+    "intent": "Troubleshooting",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "cta": "Open PDF Fold Lab →",
+    "tags": [
+      "PDF Fold Lab",
+      "PDF",
+      "free",
+      "browser",
+      "Troubleshooting"
+    ],
+    "hero": {
+      "input": "Six reading pages",
+      "output": "Folded print sheet"
+    },
+    "sections": [
+      {
+        "heading": "Expected blanks do not mean pages are missing",
+        "paragraphs": [
+          "Booklets need a multiple of four page positions. Six source pages therefore use eight positions, with two blanks. The visible sheet plan shows where these occur. Source ranges are collected in the order entered, and the sheet-plan numbers refer to that selected sequence."
+        ]
+      },
+      {
+        "heading": "Avoid a second booklet transformation",
+        "paragraphs": [
+          "The downloaded PDF is already imposed. Do not choose another booklet mode in a printer driver, because it will rearrange the pages again. Print it as ordinary A4 landscape sheets, at actual size, duplex short-edge. If your printer has no duplex support, run a small manual front/back test before handling a full stack."
+        ]
+      },
+      {
+        "heading": "Keep your workflow focused",
+        "paragraphs": [
+          "Upload only the documents required for this task. Files are processed in this browser, and the original documents are not overwritten. Download the result before closing the tab. These dedicated workspaces do not automatically import unsaved changes from another PDF Studio tool.",
+          "If a document is protected, use Remove password with a password you know before opening it here. Large or complex pages can require substantial memory. The workspace accepts PDFs under 50 MB each, at most 12 files, and bounded page counts; split an unusually large document first."
+        ]
+      }
+    ],
+    "tips": [
+      "Keep the originals and use a descriptive filename for the exported copy.",
+      "The downloaded PDF is already imposed. Do not choose another booklet mode in a printer driver, because it will rearrange the pages again. Print it as ordinary A4 landscape sheets, at actual size, duplex short-edge. If your printer has no duplex support, run a small manual front/back test before handling a full stack."
+    ],
+    "faq": [
+      {
+        "question": "Will my original files change?",
+        "answer": "No. Download a separate result. The source files remain unchanged."
+      },
+      {
+        "question": "Do the files leave my device?",
+        "answer": "No document upload is used. PDF processing runs in your browser."
+      },
+      {
+        "question": "What should I check before sharing?",
+        "answer": "Print layouts contain page images, so selectable text, links and form fields do not survive. A4 paper and a short-edge duplex test are required for the booklet. No printer setting is controlled automatically."
+      }
+    ],
+    "evidence": {
+      "id": "new-fold-lab",
+      "input": "/examples/new-tools/alpha-six-pages.pdf",
+      "output": "/examples/new-tools/folded-booklet.pdf",
+      "date": "2026-10-09",
+      "environment": "Node.js engine check + independent Poppler render",
+      "scope": "Synthetic output-engine check. This does not certify a physical phone, printer, or fresh browser processing run. The fold input pages were rendered by Poppler for this check.",
+      "check": "Six Alpha pages produced four landscape output pages, using two duplex sheets and two padded blanks. The printed fold itself needs your printer check.",
+      "options": {
+        "layout": "fold-lab"
+      },
+      "preview": {
+        "input": "/examples/new-tools/alpha-preview.png",
+        "output": "/examples/new-tools/folded-booklet-preview.png"
+      }
+    }
+  },
+  {
+    "slug": "how-to-create-a-clickable-pdf-attachment-map",
+    "title": "How to create a clickable PDF attachment map",
+    "summary": "Connect a main document and its supporting PDFs with a readable index and links to the relevant main-document pages.",
+    "category": "Pages",
+    "tool": "pdf-attachment-map",
+    "toolId": "attachment-map",
+    "toolNumber": 70,
+    "steps": [
+      "Add a main PDF first, then supporting PDFs. The first file is the main document.",
+      "For each support, enter a section description and a page position in the main PDF. Use the move controls to arrange the pack.",
+      "Press Create mapped PDF and Download PDF. Click the index document titles and main-section references to check their destinations."
+    ],
+    "check": "Reopen the downloaded PDF. Check page count, readable content and every clickable index destination.",
+    "limit": "This is a combined reading copy, not embedded file attachments. Fill and flatten forms before using it. Original signatures, outlines and embedded attachments are not preserved; keep all original files.",
+    "intent": "How-to",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "cta": "Open PDF Attachment Map →",
+    "tags": [
+      "PDF Attachment Map",
+      "PDF",
+      "free",
+      "browser",
+      "How-to"
+    ],
+    "hero": {
+      "input": "Report and supporting PDF",
+      "output": "Clickable document map"
+    },
+    "sections": [
+      {
+        "heading": "Choose the main document first",
+        "paragraphs": [
+          "The first file supplies the main-document page numbering used by section links. Supporting documents follow in the order shown. You can reorder files, but making a different file first changes what “main page” means. Review all section page values after changing that first file."
+        ]
+      },
+      {
+        "heading": "Two useful links for each support",
+        "paragraphs": [
+          "The document title opens the first page of that supporting PDF in the pack. The line underneath opens the page you entered in the main document. A clear description such as “Evidence for section 2” helps a reader understand the relationship before they click."
+        ]
+      },
+      {
+        "heading": "Keep your workflow focused",
+        "paragraphs": [
+          "Upload only the documents required for this task. Files are processed in this browser, and the original documents are not overwritten. Download the result before closing the tab. These dedicated workspaces do not automatically import unsaved changes from another PDF Studio tool.",
+          "If a document is protected, use Remove password with a password you know before opening it here. Large or complex pages can require substantial memory. The workspace accepts PDFs under 50 MB each, at most 12 files, and bounded page counts; split an unusually large document first."
+        ]
+      }
+    ],
+    "tips": [
+      "Keep the originals and use a descriptive filename for the exported copy.",
+      "The document title opens the first page of that supporting PDF in the pack. The line underneath opens the page you entered in the main document. A clear description such as “Evidence for section 2” helps a reader understand the relationship before they click."
+    ],
+    "faq": [
+      {
+        "question": "Will my original files change?",
+        "answer": "No. Download a separate result. The source files remain unchanged."
+      },
+      {
+        "question": "Do the files leave my device?",
+        "answer": "No document upload is used. PDF processing runs in your browser."
+      },
+      {
+        "question": "What should I check before sharing?",
+        "answer": "This is a combined reading copy, not embedded file attachments. Fill and flatten forms before using it. Original signatures, outlines and embedded attachments are not preserved; keep all original files."
+      }
+    ],
+    "evidence": {
+      "id": "new-attachment-map",
+      "input": "/examples/new-tools/alpha-six-pages.pdf",
+      "output": "/examples/new-tools/mapped-pack.pdf",
+      "date": "2026-10-09",
+      "environment": "Node.js engine check + independent Poppler render",
+      "scope": "Synthetic output-engine check. This does not certify a physical phone, printer, or fresh browser processing run. The fold input pages were rendered by Poppler for this check.",
+      "check": "Six Alpha pages plus one Beta page produced eight pages including the index. All three internal link destinations were checked.",
+      "options": {
+        "layout": "attachment-map"
+      },
+      "preview": {
+        "input": "/examples/new-tools/alpha-preview.png",
+        "output": "/examples/new-tools/mapped-pack-preview.png"
+      },
+      "inputs": [
+        {
+          "href": "/examples/new-tools/beta-support.pdf",
+          "label": "Download Beta supporting PDF"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "build-a-report-and-evidence-pdf-pack",
+    "title": "Build a report-and-evidence PDF pack with a document map",
+    "summary": "Give reviewers a main report, supporting evidence and an index that shows how the documents connect.",
+    "category": "Pages",
+    "tool": "pdf-attachment-map",
+    "toolId": "attachment-map",
+    "toolNumber": 70,
+    "steps": [
+      "Add a main PDF first, then supporting PDFs. The first file is the main document.",
+      "For each support, enter a section description and a page position in the main PDF. Use the move controls to arrange the pack.",
+      "Press Create mapped PDF and Download PDF. Click the index document titles and main-section references to check their destinations."
+    ],
+    "check": "Reopen the downloaded PDF. Check page count, readable content and every clickable index destination.",
+    "limit": "This is a combined reading copy, not embedded file attachments. Fill and flatten forms before using it. Original signatures, outlines and embedded attachments are not preserved; keep all original files.",
+    "intent": "Practical example",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "cta": "Open PDF Attachment Map →",
+    "tags": [
+      "PDF Attachment Map",
+      "PDF",
+      "free",
+      "browser",
+      "Practical example"
+    ],
+    "hero": {
+      "input": "Report and supporting PDF",
+      "output": "Clickable document map"
+    },
+    "sections": [
+      {
+        "heading": "Make evidence easy to trace",
+        "paragraphs": [
+          "Place the report first. Add a receipt, chart or certificate as a supporting PDF, enter a short section description and choose the main-report page that cites it. Repeat for the remaining evidence. The generated index creates a route into the evidence and a route back to the relevant report page."
+        ]
+      },
+      {
+        "heading": "Check the actual pack",
+        "paragraphs": [
+          "In the checked example, Alpha has six pages and Beta has one. The index adds one page, producing an eight-page pack. Alpha starts at pack page 2, Beta at pack page 8, and the reference to Alpha source page 2 opens pack page 3. The output page positions differ from the original-file positions because the index comes first."
+        ]
+      },
+      {
+        "heading": "Keep your workflow focused",
+        "paragraphs": [
+          "Upload only the documents required for this task. Files are processed in this browser, and the original documents are not overwritten. Download the result before closing the tab. These dedicated workspaces do not automatically import unsaved changes from another PDF Studio tool.",
+          "If a document is protected, use Remove password with a password you know before opening it here. Large or complex pages can require substantial memory. The workspace accepts PDFs under 50 MB each, at most 12 files, and bounded page counts; split an unusually large document first."
+        ]
+      }
+    ],
+    "tips": [
+      "Keep the originals and use a descriptive filename for the exported copy.",
+      "In the checked example, Alpha has six pages and Beta has one. The index adds one page, producing an eight-page pack. Alpha starts at pack page 2, Beta at pack page 8, and the reference to Alpha source page 2 opens pack page 3. The output page positions differ from the original-file positions because the index comes first."
+    ],
+    "faq": [
+      {
+        "question": "Will my original files change?",
+        "answer": "No. Download a separate result. The source files remain unchanged."
+      },
+      {
+        "question": "Do the files leave my device?",
+        "answer": "No document upload is used. PDF processing runs in your browser."
+      },
+      {
+        "question": "What should I check before sharing?",
+        "answer": "This is a combined reading copy, not embedded file attachments. Fill and flatten forms before using it. Original signatures, outlines and embedded attachments are not preserved; keep all original files."
+      }
+    ],
+    "evidence": {
+      "id": "new-attachment-map",
+      "input": "/examples/new-tools/alpha-six-pages.pdf",
+      "output": "/examples/new-tools/mapped-pack.pdf",
+      "date": "2026-10-09",
+      "environment": "Node.js engine check + independent Poppler render",
+      "scope": "Synthetic output-engine check. This does not certify a physical phone, printer, or fresh browser processing run. The fold input pages were rendered by Poppler for this check.",
+      "check": "Six Alpha pages plus one Beta page produced eight pages including the index. All three internal link destinations were checked.",
+      "options": {
+        "layout": "attachment-map"
+      },
+      "preview": {
+        "input": "/examples/new-tools/alpha-preview.png",
+        "output": "/examples/new-tools/mapped-pack-preview.png"
+      },
+      "inputs": [
+        {
+          "href": "/examples/new-tools/beta-support.pdf",
+          "label": "Download Beta supporting PDF"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "fix-pdf-map-links-and-main-page-references",
+    "title": "PDF map troubleshooting: wrong section links and form fields",
+    "summary": "Check main-document page positions, reorder safely and prepare forms before creating a linked reading pack.",
+    "category": "Pages",
+    "tool": "pdf-attachment-map",
+    "toolId": "attachment-map",
+    "toolNumber": 70,
+    "steps": [
+      "Add a main PDF first, then supporting PDFs. The first file is the main document.",
+      "For each support, enter a section description and a page position in the main PDF. Use the move controls to arrange the pack.",
+      "Press Create mapped PDF and Download PDF. Click the index document titles and main-section references to check their destinations."
+    ],
+    "check": "Reopen the downloaded PDF. Check page count, readable content and every clickable index destination.",
+    "limit": "This is a combined reading copy, not embedded file attachments. Fill and flatten forms before using it. Original signatures, outlines and embedded attachments are not preserved; keep all original files.",
+    "intent": "Troubleshooting",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "cta": "Open PDF Attachment Map →",
+    "tags": [
+      "PDF Attachment Map",
+      "PDF",
+      "free",
+      "browser",
+      "Troubleshooting"
+    ],
+    "hero": {
+      "input": "Report and supporting PDF",
+      "output": "Clickable document map"
+    },
+    "sections": [
+      {
+        "heading": "Use file positions, not printed labels",
+        "paragraphs": [
+          "A PDF may contain a cover and contents before its printed page 1. The section field expects the actual one-based position in the first PDF. Open that source, count from its first page, and use the correct position. A page outside the main PDF is rejected rather than linked to an unrelated output page."
+        ]
+      },
+      {
+        "heading": "Preserve the originals for interactive work",
+        "paragraphs": [
+          "Copying pages into a reading pack is not a reliable way to preserve editable form fields or digital signatures. This tool refuses unflattened form fields. Complete and flatten forms in a separate copy, inspect their values and add that copy. Keep separately signed or editable originals when they are required."
+        ]
+      },
+      {
+        "heading": "Keep your workflow focused",
+        "paragraphs": [
+          "Upload only the documents required for this task. Files are processed in this browser, and the original documents are not overwritten. Download the result before closing the tab. These dedicated workspaces do not automatically import unsaved changes from another PDF Studio tool.",
+          "If a document is protected, use Remove password with a password you know before opening it here. Large or complex pages can require substantial memory. The workspace accepts PDFs under 50 MB each, at most 12 files, and bounded page counts; split an unusually large document first."
+        ]
+      }
+    ],
+    "tips": [
+      "Keep the originals and use a descriptive filename for the exported copy.",
+      "Copying pages into a reading pack is not a reliable way to preserve editable form fields or digital signatures. This tool refuses unflattened form fields. Complete and flatten forms in a separate copy, inspect their values and add that copy. Keep separately signed or editable originals when they are required."
+    ],
+    "faq": [
+      {
+        "question": "Will my original files change?",
+        "answer": "No. Download a separate result. The source files remain unchanged."
+      },
+      {
+        "question": "Do the files leave my device?",
+        "answer": "No document upload is used. PDF processing runs in your browser."
+      },
+      {
+        "question": "What should I check before sharing?",
+        "answer": "This is a combined reading copy, not embedded file attachments. Fill and flatten forms before using it. Original signatures, outlines and embedded attachments are not preserved; keep all original files."
+      }
+    ],
+    "evidence": {
+      "id": "new-attachment-map",
+      "input": "/examples/new-tools/alpha-six-pages.pdf",
+      "output": "/examples/new-tools/mapped-pack.pdf",
+      "date": "2026-10-09",
+      "environment": "Node.js engine check + independent Poppler render",
+      "scope": "Synthetic output-engine check. This does not certify a physical phone, printer, or fresh browser processing run. The fold input pages were rendered by Poppler for this check.",
+      "check": "Six Alpha pages plus one Beta page produced eight pages including the index. All three internal link destinations were checked.",
+      "options": {
+        "layout": "attachment-map"
+      },
+      "preview": {
+        "input": "/examples/new-tools/alpha-preview.png",
+        "output": "/examples/new-tools/mapped-pack-preview.png"
+      },
+      "inputs": [
+        {
+          "href": "/examples/new-tools/beta-support.pdf",
+          "label": "Download Beta supporting PDF"
+        }
+      ]
+    }
+  },
+  {
+    "slug": "how-to-sketch-directly-on-pdf-pages",
+    "title": "How to sketch directly on PDF pages",
+    "summary": "Use the new canvas-first workspace to draw, highlight and export an annotated copy.",
+    "category": "Edit & sign",
+    "tool": "sketch-over-pdf",
+    "toolId": "sketch-pdf",
+    "toolNumber": 67,
+    "intent": "Practical guide",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "steps": [
+      "Open one PDF in Sketch over PDF.",
+      "Choose Pen or Highlight, ink colour and thickness. Draw on the page. Use Scroll to navigate without drawing.",
+      "Use Previous or Next for another page. Undo, redo or clear marks on the current page.",
+      "Press Download annotated PDF, then Download PDF on the result screen. Use Download this page PNG when you only need the current view."
+    ],
+    "sections": [
+      {
+        "heading": "A canvas for the document",
+        "paragraphs": [
+          "Drawing controls sit above the paper so the canvas can use the available width. On a phone the compact toolbar scrolls horizontally. Pen and Highlight make marks; Scroll lets a touch gesture move through the workspace without adding a stroke.",
+          "Marks are stored separately for each source page while the tab remains open. Switching pages retains them. Undo and redo affect the current page, and Clear page removes that page’s marks. A no-change PDF export returns the original bytes."
+        ]
+      },
+      {
+        "heading": "Keep marks understandable",
+        "paragraphs": [
+          "Choose a visible ink colour that contrasts with the source. Thin pen strokes work for short notes, while highlights use translucent broad strokes. Inspect the result at readable size and avoid obscuring a chart or required form value.",
+          "These marks are annotations in a reading copy. They do not replace original text and do not securely remove sensitive material. Use the dedicated Redact tool when permanent removal is required."
+        ]
+      }
+    ],
+    "check": "Reopen the annotated PDF and inspect every marked page, especially pages with rotation or fillable fields.",
+    "limit": "Sketch adds visible strokes to original page content. If fillable fields could cover your marks, make fields read-only before export. No-change exports return the original bytes. Digital signatures can be invalidated by changes. Work is not automatically saved when the tab closes.",
+    "tips": [
+      "Choose Scroll before navigating with a finger.",
+      "Keep an unmarked original and download before leaving."
+    ],
+    "faq": [
+      {
+        "question": "Can I erase a mistake?",
+        "answer": "Use Undo for the latest stroke or Clear page for all marks on the current page."
+      },
+      {
+        "question": "Why is touching the page drawing instead of scrolling?",
+        "answer": "Pen or Highlight is selected. Choose Scroll in the drawing toolbar."
+      },
+      {
+        "question": "Is drawing over a name a secure redaction?",
+        "answer": "No. Original content remains. Use Redact PDF for permanent content removal."
+      }
+    ],
+    "tags": [
+      "sketch",
+      "draw",
+      "highlight",
+      "annotate",
+      "canvas"
+    ],
+    "cta": "Open Sketch over PDF →",
+    "hero": {
+      "input": "Original PDF page",
+      "output": "Drawn notes and highlights"
+    }
+  },
+  {
+    "slug": "mark-up-a-pdf-for-a-review",
+    "title": "Mark up a PDF for a review",
+    "summary": "Use colour, readable strokes and a separate annotated copy to explain a review.",
+    "category": "Edit & sign",
+    "tool": "sketch-over-pdf",
+    "toolId": "sketch-pdf",
+    "toolNumber": 67,
+    "intent": "Practical guide",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "steps": [
+      "Open one PDF in Sketch over PDF.",
+      "Choose Pen or Highlight, ink colour and thickness. Draw on the page. Use Scroll to navigate without drawing.",
+      "Use Previous or Next for another page. Undo, redo or clear marks on the current page.",
+      "Press Download annotated PDF, then Download PDF on the result screen. Use Download this page PNG when you only need the current view."
+    ],
+    "sections": [
+      {
+        "heading": "A canvas for the document",
+        "paragraphs": [
+          "Drawing controls sit above the paper so the canvas can use the available width. On a phone the compact toolbar scrolls horizontally. Pen and Highlight make marks; Scroll lets a touch gesture move through the workspace without adding a stroke.",
+          "Marks are stored separately for each source page while the tab remains open. Switching pages retains them. Undo and redo affect the current page, and Clear page removes that page’s marks. A no-change PDF export returns the original bytes."
+        ]
+      },
+      {
+        "heading": "Keep marks understandable",
+        "paragraphs": [
+          "Choose a visible ink colour that contrasts with the source. Thin pen strokes work for short notes, while highlights use translucent broad strokes. Inspect the result at readable size and avoid obscuring a chart or required form value.",
+          "These marks are annotations in a reading copy. They do not replace original text and do not securely remove sensitive material. Use the dedicated Redact tool when permanent removal is required."
+        ]
+      }
+    ],
+    "check": "Reopen the annotated PDF and inspect every marked page, especially pages with rotation or fillable fields.",
+    "limit": "Sketch adds visible strokes to original page content. If fillable fields could cover your marks, make fields read-only before export. No-change exports return the original bytes. Digital signatures can be invalidated by changes. Work is not automatically saved when the tab closes.",
+    "tips": [
+      "Choose Scroll before navigating with a finger.",
+      "Keep an unmarked original and download before leaving."
+    ],
+    "faq": [
+      {
+        "question": "Can I erase a mistake?",
+        "answer": "Use Undo for the latest stroke or Clear page for all marks on the current page."
+      },
+      {
+        "question": "Why is touching the page drawing instead of scrolling?",
+        "answer": "Pen or Highlight is selected. Choose Scroll in the drawing toolbar."
+      },
+      {
+        "question": "Is drawing over a name a secure redaction?",
+        "answer": "No. Original content remains. Use Redact PDF for permanent content removal."
+      }
+    ],
+    "tags": [
+      "sketch",
+      "draw",
+      "highlight",
+      "annotate",
+      "canvas"
+    ],
+    "cta": "Open Sketch over PDF →",
+    "hero": {
+      "input": "Original PDF page",
+      "output": "Drawn notes and highlights"
+    }
+  },
+  {
+    "slug": "fix-pdf-sketch-scroll-and-export",
+    "title": "PDF sketch troubleshooting: scrolling, forms and export",
+    "summary": "Choose Scroll when navigating and handle fillable fields before exporting visible marks.",
+    "category": "Edit & sign",
+    "tool": "sketch-over-pdf",
+    "toolId": "sketch-pdf",
+    "toolNumber": 67,
+    "intent": "Practical guide",
+    "published": "2026-10-09",
+    "updated": "2026-10-09",
+    "steps": [
+      "Open one PDF in Sketch over PDF.",
+      "Choose Pen or Highlight, ink colour and thickness. Draw on the page. Use Scroll to navigate without drawing.",
+      "Use Previous or Next for another page. Undo, redo or clear marks on the current page.",
+      "Press Download annotated PDF, then Download PDF on the result screen. Use Download this page PNG when you only need the current view."
+    ],
+    "sections": [
+      {
+        "heading": "A canvas for the document",
+        "paragraphs": [
+          "Drawing controls sit above the paper so the canvas can use the available width. On a phone the compact toolbar scrolls horizontally. Pen and Highlight make marks; Scroll lets a touch gesture move through the workspace without adding a stroke.",
+          "Marks are stored separately for each source page while the tab remains open. Switching pages retains them. Undo and redo affect the current page, and Clear page removes that page’s marks. A no-change PDF export returns the original bytes."
+        ]
+      },
+      {
+        "heading": "Keep marks understandable",
+        "paragraphs": [
+          "Choose a visible ink colour that contrasts with the source. Thin pen strokes work for short notes, while highlights use translucent broad strokes. Inspect the result at readable size and avoid obscuring a chart or required form value.",
+          "These marks are annotations in a reading copy. They do not replace original text and do not securely remove sensitive material. Use the dedicated Redact tool when permanent removal is required."
+        ]
+      }
+    ],
+    "check": "Reopen the annotated PDF and inspect every marked page, especially pages with rotation or fillable fields.",
+    "limit": "Sketch adds visible strokes to original page content. If fillable fields could cover your marks, make fields read-only before export. No-change exports return the original bytes. Digital signatures can be invalidated by changes. Work is not automatically saved when the tab closes.",
+    "tips": [
+      "Choose Scroll before navigating with a finger.",
+      "Keep an unmarked original and download before leaving."
+    ],
+    "faq": [
+      {
+        "question": "Can I erase a mistake?",
+        "answer": "Use Undo for the latest stroke or Clear page for all marks on the current page."
+      },
+      {
+        "question": "Why is touching the page drawing instead of scrolling?",
+        "answer": "Pen or Highlight is selected. Choose Scroll in the drawing toolbar."
+      },
+      {
+        "question": "Is drawing over a name a secure redaction?",
+        "answer": "No. Original content remains. Use Redact PDF for permanent content removal."
+      }
+    ],
+    "tags": [
+      "sketch",
+      "draw",
+      "highlight",
+      "annotate",
+      "canvas"
+    ],
+    "cta": "Open Sketch over PDF →",
+    "hero": {
+      "input": "Original PDF page",
+      "output": "Drawn notes and highlights"
     }
   }
 ];

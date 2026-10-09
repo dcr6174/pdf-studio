@@ -182,7 +182,7 @@ const curatedById = new Map<string, (typeof curatedTools)[number]>(curatedTools.
 export const seoTools = tools.map(tool => {
   const curated = curatedById.get(tool.id);
   if (curated) return { ...curated, group: tool.group };
-  const stableSlugs:Record<string,string>={create:"create-pdf",reader:"pdf-reader",viewer:"reader-layout",interleave:"alternate-and-mix",hash:"file-fingerprint",repair:"resave-pdf"};
+  const stableSlugs:Record<string,string>={"sketch-pdf":"sketch-over-pdf","cut-collect":"pdf-cut-and-collect","fold-lab":"pdf-fold-lab","attachment-map":"pdf-attachment-map",create:"create-pdf",reader:"pdf-reader",viewer:"reader-layout",interleave:"alternate-and-mix",hash:"file-fingerprint",repair:"resave-pdf"};
   const slug = stableSlugs[tool.id] ?? tool.name
     .toLowerCase()
     .replace(/&/g, 'and')

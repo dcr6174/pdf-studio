@@ -621,3 +621,16 @@ Validation: `node checks/verify-lab-visual.mjs` checks actual PNG, PDF and anima
 `checks/verify-audit-fixes.mjs` now reopens and independently inspects grouped files, selected-page custom resize, configured workflow outputs and target-size behavior, alongside the previous regressions. Touch dragging, real mobile bottom sheets, focus behavior and production deployment remain separate release checks. Broader Office fidelity, Indian-language searchable OCR, automatic comparison, existing-page form design and full workflow batch/checkpoint support remain outstanding; this update does not advertise them as implemented.
 
 Workflow also supports **Each file separately** using the shared batch runner. Downloads include successful outputs, `results.csv` with each file's status/size/notes, and `failures.txt` when needed. Failed files retain their originals in the workspace; cancelling preserves the workspace. CSV cells neutralize spreadsheet formulas in untrusted filenames and messages. No intermediate step checkpoints are saved. File-by-file UI interaction still requires a browser/device check.
+
+### 70-tool creative release · 9 October 2026
+
+The main catalogue now includes **70 tools**. Four dedicated workspaces complete the expansion:
+
+- `/tools/sketch-over-pdf`: canvas-first PDF pen/highlighter workspace with undo, redo, scroll mode and PDF/PNG export. `/lab/sketch-pdf` redirects here.
+- `/tools/pdf-cut-and-collect`: drag a region or enter percentage bounds, collect image clippings with source-page references, reorder and export a collection PDF.
+- `/tools/pdf-fold-lab`: A4 landscape duplex booklet imposition or four cut-out cards on portrait A4, with source ranges and a visible sheet plan.
+- `/tools/pdf-attachment-map`: first file is the main document; add section descriptions and main-page references to supporting PDFs, then export a linked index and combined reading copy. This does not embed separate attachments.
+
+Studio Lab is organized as **Focus, Calculate and Create**. It includes a Pomodoro timer, a safe expression calculator, EMI/monthly-savings/compound-interest estimates, Whiteboard, Text to handwriting, combined Practice Sheets & Notebooks, and Poster collage. Existing flipbook, palette, word-cloud and GIF URLs remain under More experiments. A timer is not a system alarm; keep the tab/device awake. Finance estimates exclude fees, taxes, inflation and variable returns.
+
+Twelve new articles give three guides to each of the four additions. New-tool articles include synthetic engine-checked inputs and outputs; none are placed on action pages. Run `node checks/verify-creative-pdf.mjs` to check imposition, output references, link destinations, calculator parsing and finance formulas. Printer behavior and physical-device alarm delivery require device checks.

@@ -4,6 +4,10 @@ import {ArticleBuddy} from '@/components/buddy-tool-story';
 const pageTasks=['rotate','reverse','duplicate','nup','crop','resize','flip','organize','split','split-all','split-chapters','halve'];
 const formats:Record<string,string>={word:'DOCX',text:'TXT',html:'HTML',epub:'EPUB',pptx:'PPTX',xlsx:'XLSX',csv:'CSV',jpg:'JPG',png:'PNG',webp:'WEBP',zip:'ZIP',docx:'PDF',sheet:'PDF',ebook:'PDF',images:'PDF',scan:'PDF',create:'PDF',markdown:'PDF','create-form':'FORM'};
 function Result({id}:{id:string}){
+ if(id==='cut-collect')return <g>{[45,100].map((y,i)=><g key={y}><rect x="14" y={y} width="106" height="35" rx="5" fill="#e8dfff"/><text x="22" y={y+21} fontSize="10" fill="#6a4dff">Clip {i+1} · source p.{i+1}</text></g>)}</g>;
+ if(id==='fold-lab')return <g><rect x="12" y="40" width="112" height="90" rx="4" fill="#e8dfff"/><path d="M68 40v90" stroke="#6a4dff" strokeDasharray="4 3"/><text x="30" y="90" fontSize="20" fill="#6a4dff">6</text><text x="86" y="90" fontSize="20" fill="#6a4dff">3</text><text x="22" y="153" fontSize="11" fill="#6a4dff">Fold after printing</text></g>;
+ if(id==='attachment-map')return <g><rect x="18" y="34" width="100" height="28" rx="5" fill="#6a4dff"/><text x="32" y="52" fill="white" fontSize="12">Main report</text><path d="M68 62v26m-36 0h72" stroke="#9b86ff"/><rect x="12" y="89" width="50" height="42" rx="4" fill="#e8dfff"/><rect x="75" y="89" width="50" height="42" rx="4" fill="#e8dfff"/><text x="23" y="114" fontSize="11" fill="#6a4dff">A →</text><text x="85" y="114" fontSize="11" fill="#6a4dff">B →</text></g>;
+
  if(id==='nup')return <g>{[0,1,2,3].map(i=><g key={i} transform={`translate(${(i%2)*54+13} ${Math.floor(i/2)*64+32})`}><rect width="45" height="56" rx="3" fill="#e7dfff"/><text x="22" y="34" textAnchor="middle" fill="#4b2fe0">{i+1}</text></g>)}</g>;
  if(['reverse','duplicate','split','split-all','split-chapters','halve','organize'].includes(id)){const sequence=id==='reverse'?['3','2','1']:id==='duplicate'?['1','1','2']:id==='split-chapters'?['A','D']:['1','3'];return <g>{sequence.map((n,i)=><g key={i} transform={`translate(${12+i*33} 48)`}><rect width="30" height="86" rx="3" fill="#e7dfff" stroke="#9b86ff"/><text x="15" y="45" textAnchor="middle" fill="#4b2fe0">{n}</text></g>)}</g>}
  return <g transform={id==='flip'?'translate(134 0) scale(-1 1)':''}>
@@ -13,7 +17,7 @@ function Result({id}:{id:string}){
  {id==='watermark'&&<text x="13" y="99" fontSize="20" fill="#6a4dff" opacity=".55" transform="rotate(-24 67 95)">DRAFT</text>}
  {['numbers','bates','headers'].includes(id)&&<text x="15" y="151" fill="#4b2fe0" fontSize="11">{id==='bates'?'CASE-000001':id==='headers'?'Review copy · 1':'Page 1'}</text>}
  {id==='sign'&&<path d="M20 140q17-33 20-8t14-16q-2 25 14 5t11 11l24-5" fill="none" stroke="#6a4dff" strokeWidth="3"/>}
- {id==='edit'&&<text x="17" y="141" fill="#6a4dff" fontSize="14">New note ✓</text>}
+ {id==='sketch-pdf'&&<g><path d="M20 130q15-30 25-3t25-17t30 15" fill="none" stroke="#6a4dff" strokeWidth="4"/><path d="M15 74h95" stroke="#ffc34a" strokeWidth="13" opacity=".5"/></g>}{id==='edit'&&<text x="17" y="141" fill="#6a4dff" fontSize="14">New note ✓</text>}
  {id==='crop'&&<rect x="8" y="28" width="120" height="108" fill="none" stroke="#6a4dff" strokeDasharray="5 3"/>}
  {id==='resize'&&<text x="16" y="153" fontSize="12" fill="#6a4dff">A4 · 210 × 297</text>}
  {['bookmarks','remove-bookmarks','remove-links','remove-attachments','remove-annotations','clean','metadata','privacy'].includes(id)&&<text x="14" y="146" fontSize="11" fill="#6a4dff">{({bookmarks:'Alpha → page 1','remove-bookmarks':'Outline removed','remove-links':'Link actions removed','remove-attachments':'Attachments removed','remove-annotations':'Comments removed',clean:'Properties cleared',metadata:'Title: Review pack',privacy:'Review findings'})[id]}</text>}
