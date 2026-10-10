@@ -35,7 +35,7 @@ export function workflowStepIssue(step:string,s:WorkflowStepSettings,pages:numbe
  if(step==='remove'||step==='reorder'){
   if(!s.range?.trim())return step==='remove'?'Enter the pages to remove.':'Enter the complete page order.';
   const order:number[]=[];
-  for(const part of s.range.split(',')){const m=/^\s*(\d+)(?:\s*-\s*(\d+))?\s*$/.exec(part);if(!m)return 'Use page numbers or ranges, such as 1, 3-5.';const a=Number(m[1]),b=Number(m[2]??m[1]);if(a<1||b<a||(pages&&b>pages))return `Choose pages within 1-${pages||400}.`;for(let n=a;n<=b;n++)order.push(n);}
+  for(const part of s.range.split(',')){const m=/^\s*(\d+)(?:\s*-\s*(\d+))?\s*$/.exec(part);if(!m)return 'Use page numbers or ranges, such as 1, 3-5.';const a=Number(m[1]),b=Number(m[2]??m[1]);if(a<1||b<a||b>(pages||400))return `Choose pages within 1-${pages||400}.`;for(let n=a;n<=b;n++)order.push(n);}
   if(pages&&step==='remove'&&new Set(order).size>=pages)return 'Keep at least one page.';
   if(pages&&step==='reorder'&&(new Set(order).size!==pages||order.length!==pages))return 'Include every page exactly once.';
  }

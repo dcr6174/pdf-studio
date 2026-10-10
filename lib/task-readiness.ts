@@ -30,7 +30,13 @@ export function workflowInputIssues(names:string[],stepSettings:NonNullable<Opti
    if(name==='merge'&&batch){issues.push({index,message:'Merge needs One document mode.'});continue;}
    try{const settings=workflowSettings(name,stepSettings[index]),issue=workflowStepIssue(name,settings,count,fileCount,n);if(issue){issues.push({index,message:issue});if(['remove','blank','duplicate'].includes(name))count=0;continue;}
     if(name==='duplicate'&&count)count*=2;if(name==='blank'&&count)count++;if(name==='remove'&&count){const removed=new Set<number>();for(const part of (settings.range??'').split(',')){const [a,b]=part.split('-').map(Number);for(let i=a;i<=(b||a);i++)removed.add(i);}count-=removed.size;}if(count>400){issues.push({index,message:'This step would exceed the 400-page limit.'});count=0;}
-   }catch(e){issues.push({index,message:(e as Error).message});if(['remove','blank','duplicate'].includes(name))count=0;}
+   }catch(e){issues.push({index,message:workflowSettingMessage((e as Error).message)});if(['remove','blank','duplicate'].includes(name))count=0;}
   }
  return issues;
+}
+
+function workflowSettingMessage(message:string){
+ const labels:Record<string,string>={start:'starting number (1–999999999)',blankAt:'insertion position (1–400)',margin:'trim amount (0–500 points)',batesDigits:'number of digits (1–12)',angle:'rotation angle',text:'text',footer:'footer text',batesSuffix:'suffix',labelFontSize:'font size (6–72)',labelMargin:'label margin (5–200)'};
+ const key=/Invalid (\w+) in recipe\./.exec(message)?.[1];
+ return key&&labels[key]?'Enter a valid '+labels[key]+'.':message;
 }
