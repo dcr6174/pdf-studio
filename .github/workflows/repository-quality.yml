@@ -36,6 +36,9 @@ jobs:
       - name: Image-only Studio Lab outputs
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-image-lab.mjs
+      - name: Image Studio articles and sitemap
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-image-guides.mjs
       - name: Drawing and Lab regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-daily-mood-canvas.mjs && node checks/verify-lab-visual.mjs
@@ -57,4 +60,5 @@ jobs:
       - name: Production build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npm run build:public
+
 

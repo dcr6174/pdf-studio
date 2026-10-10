@@ -925,24 +925,6 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
       )}
     </>
   );
-  const guide = [
-    "image-compressor",
-    "png-to-jpg",
-    "image-to-webp",
-    "jpg-to-png",
-  ].includes(slug)
-    ? "image-formats"
-    : slug === "image-resizer" || slug === "image-crop"
-      ? "resize-or-crop"
-      : slug === "svg-cleaner" || slug === "svg-to-image"
-        ? "safe-svg"
-        : [
-              "favicon-generator",
-              "signature-cleaner",
-              "image-background-remover",
-            ].includes(slug)
-          ? slug
-          : undefined;
   return (
     <ImageWorkspace
       title={tool.title}
@@ -951,7 +933,7 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
       onReset={reset}
       onUndo={undo}
       canUndo={history.length > 0}
-      help={guide ? "/lab/guides/" + guide : undefined}
+      help={"/lab/guides/" + slug}
     >
       <input
         ref={input}
