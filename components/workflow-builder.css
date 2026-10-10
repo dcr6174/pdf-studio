@@ -377,3 +377,25 @@
 .reference-empty.library-empty-drop{border:2px dashed var(--primary);border-radius:12px;padding:28px;width:min(560px,100%);align-self:center;background:var(--soft)}
 .workflow-drag-ghost .reference-step-number{min-width:28px;width:auto;padding:0 4px}
 @media(max-width:700px){.reference-tool-row{gap:0}.workflow-library-drag{min-width:26px;min-height:40px;padding:3px}.reference-tool-row>.reference-tool{gap:5px}.reference-tool-row .reference-tool>svg{display:none}.reference-tool-row .reference-tool>span:nth-child(2){font-size:11px}.reference-empty.library-empty-drop{padding:14px}}
+
+/* Compact, labelled icon controls and a viewport-centred save dialog. */
+.workflow-save-dialog{position:fixed;inset:0;margin:auto;max-width:calc(100vw - 24px);height:fit-content}
+.workflow-toolbar-actions .workflow-icon-button,.workflow-heading-actions .workflow-save-button,.workflow-saved-menu>summary,.workflow-quick-presets>summary{display:flex;align-items:center;justify-content:center;box-sizing:border-box;width:42px;min-width:42px;min-height:42px;padding:8px;gap:0}
+.workflow-toolbar-actions.has-actions>button:first-child{padding:8px;font-size:inherit}
+.workflow-toolbar-actions>button svg{display:block}
+.workflow-toolbar-actions .workflow-toolbar-preview{width:42px;min-width:42px;padding:8px}
+.guided-final-action .workflow-run-button,.workflow-toolbar-actions.has-actions .workflow-run-button{width:46px;min-width:46px;min-height:42px;padding:8px}
+.workflow-run-content{justify-content:center}
+.workflow-quick-presets>summary::marker,.workflow-saved-menu>summary::marker{content:''}
+.workflow-quick-presets>summary::-webkit-details-marker,.workflow-saved-menu>summary::-webkit-details-marker{display:none}
+.workflow-saved-menu{position:relative}
+.workflow-saved-menu>summary{list-style:none;cursor:pointer;border:1px solid var(--border);border-radius:8px;background:var(--card)}
+.workflow-saved-menu>summary:focus-visible{outline:3px solid var(--primary);outline-offset:2px}
+.workflow-saved-menu .workflow-saved-picker{position:absolute;top:calc(100% + 8px);right:0;z-index:30;margin:0;padding:10px;width:min(340px,calc(100vw - 40px));box-sizing:border-box;border:1px solid var(--border);border-radius:10px;background:var(--card);box-shadow:0 8px 24px #0002;gap:6px;flex-wrap:nowrap}
+.workflow-saved-menu .workflow-saved-picker select{flex:1;width:0}
+.workflow-saved-menu .workflow-saved-picker button{width:42px;min-width:42px;padding:8px;display:flex;justify-content:center;align-items:center}
+.reference-step-actions>.secondary{display:flex;align-items:center;justify-content:center;width:34px;min-width:34px;padding:6px}
+.workflow-icon-button{display:inline-flex;align-items:center;justify-content:center;width:42px;min-height:42px;padding:8px}
+@media(max-width:700px){.reference-step-actions>.secondary{width:40px;min-width:40px}.workflow-toolbar-actions.has-actions .workflow-toolbar-preview{width:42px;min-width:42px;padding:8px}.workflow-heading-actions .workflow-save-button{min-height:42px}.workflow-saved-menu .workflow-saved-picker{width:min(280px,calc(100vw - 40px))}}
+
+@media(max-width:700px){.workflow-toolbar-actions{position:relative}.workflow-toolbar-actions .workflow-saved-menu{position:static}.workflow-saved-menu .workflow-saved-picker{left:0;right:auto}}
