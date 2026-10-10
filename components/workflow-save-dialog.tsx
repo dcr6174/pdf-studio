@@ -1,0 +1,9 @@
+'use client';
+import {useEffect,useRef,useState,type FormEvent} from 'react';
+import {Save,X} from 'lucide-react';
+export function WorkflowSaveDialog({initialName,onSave,onClose}:{initialName:string;onSave:(name:string)=>void;onClose:()=>void}){
+ const dialog=useRef<HTMLDialogElement>(null),input=useRef<HTMLInputElement>(null),[name,setName]=useState(initialName),[error,setError]=useState('');
+ useEffect(()=>{const node=dialog.current;node?.showModal();input.current?.focus();input.current?.select();return ()=>node?.close();},[]);
+ function submit(e:FormEvent){e.preventDefault();setError('');try{onSave(name);}catch(e){setError(e instanceof Error?e.message:'Your browser could not save this workflow.');}}
+ return <dialog ref={dialog} className="workflow-save-dialog" aria-labelledby="workflow-save-title" aria-describedby="workflow-save-description" onCancel={e=>{e.preventDefault();onClose();}}><div className="workflow-save-heading"><h2 id="workflow-save-title">Save your workflow</h2><button type="button" aria-label="Close save workflow" onClick={onClose}><X size={20}/></button></div><p id="workflow-save-description">Give it a name to reuse these steps and settings with another PDF. Saved on this browser.</p><form onSubmit={submit}><label className="guided-field">Workflow name<input ref={input} autoComplete="off" maxLength={80} required value={name} onChange={e=>{setName(e.target.value);setError('');}} placeholder="For example, Monthly invoices" aria-invalid={!!error} aria-describedby={error?'workflow-save-error':undefined}/></label>{error&&<p id="workflow-save-error" className="workflow-save-error" role="alert">{error}</p>}<div className="workflow-save-actions"><button type="button" className="secondary" onClick={onClose}>Cancel</button><button type="submit" className="primary"><Save size={17}/>Save workflow</button></div></form></dialog>;
+}
