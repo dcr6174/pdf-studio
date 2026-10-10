@@ -169,3 +169,6 @@ for(const [id,settings] of [['watermark',{text:'COPY',watermarkFont:'times',wate
  assert(gs.entries().some(([,ref])=>Math.abs(output.context.lookup(ref,PDFDict).get(PDFName.of('ca'))?.asNumber()-Number(settings.watermarkOpacity??settings.labelOpacity)/100)<.001),id+' uses selected opacity');
 }
 console.log('PASS: independent crop edges and actual watermark/page-number/header/Bates fonts and opacity.');
+
+for(const quality of ['compact','images','image-small']){assert.equal(recipes.workflowSettings('compress',{quality}).quality,quality);const output=await pdf(await run([first],['compress'],[{quality}]));assert.equal(output.getPageCount(),1);}
+console.log('PASS: all three standalone compression levels accepted and executed in workflows.');
