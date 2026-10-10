@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import {Upload,Download,CheckCircle2,Image as ImageIcon,LoaderCircle} from 'lucide-react';
-import {SiteHeader,SiteFooter} from './site-header';
+import Link from './browser-link';
 import BrowserImage from './browser-image';
 import {fitImage,type SizedImage} from '@/lib/image-size';
 import '@/app/lab/image-size.css';
@@ -13,7 +13,7 @@ export function ImageSizeStudio(){
  function invalidate(){job.current?.abort();job.current=null;setBusy(false);setResult(undefined);setError('');}
  function choose(next?:File){if(!next)return;invalidate();if(!['image/jpeg','image/png','image/webp'].includes(next.type)){setError('Choose a JPG, PNG or WebP image.');return;}setFile(next);}
  async function run(){if(!file)return;job.current?.abort();const controller=new AbortController();job.current=controller;setBusy(true);setError('');setResult(undefined);try{const output=await fitImage(file,{limitKB:Number(limit),format,maxWidth:width?Number(width):undefined,maxHeight:height?Number(height):undefined},controller.signal);if(job.current===controller)setResult(output);}catch(e){if(job.current===controller&&!controller.signal.aborted)setError(e instanceof Error?e.message:'This image could not be resized.');}finally{if(job.current===controller)setBusy(false);}}
- return <div className="image-size-shell"><SiteHeader/><main className="image-size-main"><header><span className="image-size-kicker">Studio Lab · everyday useful</span><h1>Photo & signature size reducer</h1><p>Make an image fit your upload limit. For application forms, photos and signatures.</p></header>
+ return <div className="image-size-shell"><nav className="image-size-top" aria-label="Studio Lab"><Link href="/lab">← Studio Lab</Link><span>Images stay on your device</span></nav><main className="image-size-main"><header><span className="image-size-kicker">Studio Lab · everyday useful</span><h1>Photo & signature size reducer</h1><p>Make an image fit your upload limit. For application forms, photos and signatures.</p></header>
  <div className="image-size-layout"><section className="image-size-preview" aria-label="Image workspace"><input ref={input} type="file" accept="image/jpeg,image/png,image/webp" hidden onChange={e=>{choose(e.target.files?.[0]);e.target.value='';}}/><button className={'image-size-upload'+(dragging?' is-dragging':'')} onClick={()=>input.current?.click()} onDragOver={e=>{e.preventDefault();setDragging(true);}} onDragLeave={()=>setDragging(false)} onDrop={e=>{e.preventDefault();setDragging(false);choose(e.dataTransfer.files[0]);}}><Upload size={24}/><b>{file?'Change image':'Choose or drop an image'}</b><span>JPG, PNG or WebP · processed on your device</span></button>
  {file&&<div className="image-size-comparison"><figure>{originalURL&&<BrowserImage src={originalURL} alt="Original image"/>}<figcaption>Original · {(file.size/1000).toFixed(1)} KB</figcaption></figure>{result&&<figure>{resultURL&&<BrowserImage src={resultURL} alt="Resized image to inspect before uploading"/>}<figcaption>Result · {(result.blob.size/1000).toFixed(1)} KB · {result.width} × {result.height} px</figcaption></figure>}</div>}
  {!file&&<div className="image-size-empty"><ImageIcon size={64}/><p>Your preview will appear here.</p><small>Check your portal’s required format and dimensions first.</small></div>}</section>
@@ -23,5 +23,5 @@ export function ImageSizeStudio(){
  <button className="image-size-run" disabled={!file||busy} onClick={()=>void run()}>{busy?<><LoaderCircle size={18} className="image-size-spinner"/>Making it fit…</>:<>Reduce image size</>}</button>
  {error&&<p role="alert" className="image-size-error">{error}</p>}
  {result&&<section className={'image-size-result'+(result.met?' is-met':'')} role="status"><b>{result.met?<><CheckCircle2 size={18}/>Below {limit} KB</>:'Limit not reached'}</b><p>{result.blob.size.toLocaleString()} bytes · {result.width} × {result.height} pixels{result.original?' · original already fits':''}</p>{!result.met&&<p>Try JPG or a larger limit. This is the smallest tested result.</p>}{resultURL&&<a href={resultURL} download={(file?.name.replace(/\.[^.]+$/,'')??'image')+(result.met?'-under-'+limit+'kb':'-smallest-result')+'.'+(format==='jpeg'?'jpg':'png')}><Download size={18}/>{result.met?'Download image':'Download smallest result'}</a>}</section>}
- <p className="image-size-note">1 KB = 1,000 bytes. We check the actual file size; portal acceptance also depends on format and dimensions. Inspect faces, fine lines and signature readability before uploading.</p></aside></div></main><SiteFooter/></div>;
+ <p className="image-size-note">1 KB = 1,000 bytes. We check the actual file size; portal acceptance also depends on format and dimensions. Inspect faces, fine lines and signature readability before uploading.</p></aside></div></main></div>;
 }

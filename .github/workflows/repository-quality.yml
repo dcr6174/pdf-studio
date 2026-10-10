@@ -33,6 +33,9 @@ jobs:
       - name: Compression and image size regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npm run verify:compression && node checks/verify-image-size.mjs
+      - name: Image-only Studio Lab outputs
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-image-lab.mjs
       - name: Drawing and Lab regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-daily-mood-canvas.mjs && node checks/verify-lab-visual.mjs
