@@ -3,6 +3,7 @@ import {useState} from 'react';
 import Link from '@/components/browser-link';
 import {Search,X,ArrowUpRight,Camera,BookOpen,Sparkles,NotebookPen,Grid3X3,Image as ImageIcon,Paintbrush,Palette,Timer,PenLine} from 'lucide-react';
 const tools=[
+ {slug:'image-size-reducer',title:'Photo & Signature Size Reducer',description:'Fit photos and signatures below 200 KB, 300 KB or your own limit.',group:'Make',output:'Sized JPG / PNG',icon:ImageIcon},
  {slug:'photo-strip',title:'Quick Photo Strip',description:'Turn your favourite photos into a keepsake strip.',group:'Play',output:'Photo strip',icon:Camera},
  {slug:'flashcards',title:'Study Flashcards',description:'Make a deck, practise it, or print it for later.',group:'Learn',output:'Study & print',icon:BookOpen},
  {slug:'decision-wheel',title:'Decision Wheel',description:'Add your choices. Give indecision a little spin.',group:'Play',output:'Spin a choice',icon:Sparkles},
@@ -28,3 +29,4 @@ export function LabDirectory(){
   <p className="lab-endnote">A smaller collection, with room to make something your own.</p>
  </section>;
 }
+
