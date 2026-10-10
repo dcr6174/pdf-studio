@@ -2,3 +2,24 @@
 .compression-size-panel{display:grid;gap:12px;padding:16px;border-radius:12px;background:color-mix(in srgb,#2d9e64 12%,var(--card));border:1px solid color-mix(in srgb,#2d9e64 25%,var(--border));font-size:13px}.compression-size-panel b{display:flex;align-items:baseline;gap:8px;flex-wrap:wrap;font-size:20px}.compression-size-panel s{font-weight:400;font-size:12px;color:var(--muted-foreground,var(--muted))}.compression-size-panel small{font-size:12px;font-weight:500;color:var(--muted-foreground,var(--muted))}.compression-size-panel progress{width:100%;height:7px;accent-color:#2d9e64}
 
 .studio-shell .shared-tool-action-bar .compression-settings small{display:block!important}.studio-shell .shared-tool-action-bar .compression-settings .compression-retained{display:block!important}
+[data-tool=compress] .merge-focused{margin:0;border:0;background:none;padding:0}
+[data-tool=compress] .merge-list-heading{display:flex;justify-content:space-between;align-items:center;gap:16px;margin-bottom:20px}
+[data-tool=compress] .merge-list-heading h2{font-size:1.1rem;margin:0}
+[data-tool=compress] .merge-list-heading p{font-size:.85rem;color:var(--muted);margin-top:4px}
+[data-tool=compress] .merge-document-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,280px));align-items:start;gap:18px;list-style:none;margin:0;padding:0}
+[data-tool=compress] .merge-document-card{display:block;min-width:0;border:1px solid var(--border);background:var(--card);padding:16px;border-radius:18px;box-shadow:0 8px 24px #35146b06}
+[data-tool=compress] .merge-card-top{display:flex;align-items:center;gap:6px;margin-bottom:10px}
+[data-tool=compress] .merge-order{background:var(--blue-soft);color:var(--foreground);width:30px;height:30px;border-radius:50%;display:grid;place-items:center;font-size:.8rem;font-weight:700}
+[data-tool=compress] .merge-cover{height:180px;display:flex;align-items:center;justify-content:center;padding:12px;background:var(--soft);border-radius:12px;margin-bottom:14px;overflow:hidden}
+[data-tool=compress] .merge-cover img{max-width:100%;max-height:100%;object-fit:contain}
+[data-tool=compress] .merge-file-info{display:grid;gap:5px;min-width:0}
+[data-tool=compress] .merge-file-info b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:.95rem}
+[data-tool=compress] .merge-file-info small{font-size:.8rem;color:var(--muted)}
+[data-tool=compress] .merge-card-top button{display:grid;place-items:center;min-width:44px;min-height:44px;border-radius:10px}
+[data-tool=compress] .merge-remove{margin-left:auto}
+[data-tool=compress] .merge-document-card{cursor:grab}
+[data-tool=compress] .merge-document-card:focus-visible{outline:3px solid var(--primary);outline-offset:3px}
+[data-tool=compress] .merge-cover .thumb-shell{width:100%;height:100%;display:flex;align-items:center;justify-content:center}
+[data-tool=compress] .merge-cover img{width:auto!important;height:auto!important;max-width:100%;max-height:100%;object-fit:contain;pointer-events:none;user-select:none}
+@media(max-width:600px){[data-tool=compress] .merge-document-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:12px}[data-tool=compress] .merge-document-card{padding:12px}[data-tool=compress] .merge-cover{height:150px;padding:8px}[data-tool=compress] .merge-order{width:24px;height:24px;flex:none}[data-tool=compress] .merge-card-top{gap:4px}[data-tool=compress] .merge-file-info b{font-size:.8rem}}
+
