@@ -172,3 +172,16 @@ console.log('PASS: independent crop edges and actual watermark/page-number/heade
 
 for(const quality of ['compact','images','image-small']){assert.equal(recipes.workflowSettings('compress',{quality}).quality,quality);const output=await pdf(await run([first],['compress'],[{quality}]));assert.equal(output.getPageCount(),1);}
 console.log('PASS: all three standalone compression levels accepted and executed in workflows.');
+
+const previewExports={};vm.runInNewContext(ts.transpile(await readFile('lib/workflow-preview-operation.ts','utf8'),{module:ts.ModuleKind.CommonJS}),{exports:previewExports});
+const {workflowPreviewOperation}=previewExports;
+assert.equal(workflowPreviewOperation(),'organize');
+assert.equal(workflowPreviewOperation(['rotate'],[0]),'organize');
+assert.equal(workflowPreviewOperation(['rotate','resize'],[0]),'workflow');
+for(const [steps,disabled] of [[[],[]],[['rotate'],[0]]]){
+ const inputPages=items([first]).map(p=>({...p,rotation:90}));
+ const output=await pdf(await processPDF(workflowPreviewOperation(steps,disabled),[first],inputPages,[],{...defaults,workflowSteps:steps,workflowDisabled:disabled},()=>{}));
+ assert.equal(output.getPageCount(),1);assert.equal(output.getPage(0).getRotation().angle,90);
+ assert.deepEqual(output.getPage(0).getCropBox(),first.doc.getPage(0).getCropBox());
+}
+console.log('PASS: Crop-first and disabled-prefix previews assemble one PDF without requiring a merge; workspace rotation and page bounds retained.');
