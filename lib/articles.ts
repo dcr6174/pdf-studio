@@ -7,7 +7,7 @@ export const articles:Article[]=
     "summary": "Combine complete documents in the order you choose, check the page count, and download one PDF.",
     "steps": [
       "Open Merge PDFs and choose at least two PDFs. Use Add PDFs or the + button to add another file.",
-      "Arrange the numbered file cards in output order. Hold and drag a card on your phone; use its grip or keyboard on desktop. Open Edit pages if you need to inspect or change pages inside a file.",
+      "Arrange the numbered file cards in output order. Hold and drag a card on your phone; drag the whole card or use the keyboard on desktop. Open Edit pages if you need to inspect or change pages inside a file.",
       "Press Merge PDFs. Download PDF when processing finishes, then reopen the downloaded file and check its order."
     ],
     "sections": [
@@ -225,11 +225,11 @@ export const articles:Article[]=
     "summary": "Choose a method that fits the document and check the exact size before uploading.",
     "steps": [
       "Open your PDF and note its original size.",
-      "Choose compact mode to retain PDF text and links, or an image-based quality option when those features are less important.",
+      "Choose Keep quality, Balanced (recommended), or Smaller file. For a strict upload cap, open Optional size limit and enter the limit in KB.",
       "Process the file, compare the sizes and inspect small text and images before downloading."
     ],
-    "check": "Image-based modes rebuild pages and can remove selectable text, links and forms. Check readability at normal zoom. Keep the original if the result is larger or the quality is insufficient.",
-    "limit": "Recommended optimizes supported JPEGs while keeping text, links and forms. Page-image presets remove these features.",
+    "check": "All three choices retain selectable text and document controls. Balanced and Smaller file reduce supported images; inspect fine print and compare the actual downloaded bytes with the portal limit. Already optimized PDFs may not shrink.",
+    "limit": "Balanced and Smaller file optimize supported JPEG and PNG/Flate scans while retaining PDF structure. Masked, CMYK and unsupported images are skipped; a size limit is best effort.",
     "toolId": "compress",
     "toolNumber": 19,
     "intent": "How-to",
@@ -249,7 +249,7 @@ export const articles:Article[]=
       {
         "heading": "What this tool actually does",
         "paragraphs": [
-          "Compression depends on what is inside the PDF. Supported JPEG optimization can reduce images while retaining document structure; whole-page image presets exchange searchable and interactive features for a different representation."
+          "Keep quality repacks streams without changing image pixels. Balanced reduces supported images moderately; Smaller file reduces them further. Both support eligible RGB and grayscale JPEG and PNG/Flate scans while preserving text, links and editable forms."
         ]
       },
       {
@@ -287,7 +287,7 @@ export const articles:Article[]=
       },
       {
         "question": "Is compression lossless?",
-        "answer": "Compact mode retains PDF content. JPEG optimization keeps document structure but reduces supported image quality. Whole-page image modes can lose text, links and forms."
+        "answer": "Keep quality leaves image pixels unchanged and repacks PDF data. Balanced and Smaller file are lossy for supported images, while retaining selectable text and document structure. Inspect the download before uploading it."
       },
       {
         "question": "Why is the result not smaller?",
@@ -6769,11 +6769,11 @@ export const articles:Article[]=
     ],
     "steps": [
       "Open your PDF and note its original size.",
-      "Choose compact mode to retain PDF text and links, or an image-based quality option when those features are less important.",
+      "Choose Keep quality, Balanced (recommended), or Smaller file. For a strict upload cap, open Optional size limit and enter the limit in KB.",
       "Process the file, compare the sizes and inspect small text and images before downloading."
     ],
-    "check": "Image-based modes rebuild pages and can remove selectable text, links and forms. Check readability at normal zoom. Keep the original if the result is larger or the quality is insufficient.",
-    "limit": "Recommended optimizes supported JPEGs while keeping text, links and forms. Page-image presets remove these features.",
+    "check": "All three choices retain selectable text and document controls. Balanced and Smaller file reduce supported images; inspect fine print and compare the actual downloaded bytes with the portal limit. Already optimized PDFs may not shrink.",
+    "limit": "Balanced and Smaller file optimize supported JPEG and PNG/Flate scans while retaining PDF structure. Masked, CMYK and unsupported images are skipped; a size limit is best effort.",
     "sections": [
       {
         "heading": "The document and the intended outcome",
@@ -6816,7 +6816,7 @@ export const articles:Article[]=
       },
       {
         "question": "Is compression lossless?",
-        "answer": "Compact mode retains PDF content. JPEG optimization keeps document structure but reduces supported image quality. Whole-page image modes can lose text, links and forms."
+        "answer": "Keep quality leaves image pixels unchanged and repacks PDF data. Balanced and Smaller file are lossy for supported images, while retaining selectable text and document structure. Inspect the download before uploading it."
       },
       {
         "question": "Why is the result not smaller?",
@@ -6879,11 +6879,11 @@ export const articles:Article[]=
     ],
     "steps": [
       "Open your PDF and note its original size.",
-      "Choose compact mode to retain PDF text and links, or an image-based quality option when those features are less important.",
+      "Choose Keep quality, Balanced (recommended), or Smaller file. For a strict upload cap, open Optional size limit and enter the limit in KB.",
       "Process the file, compare the sizes and inspect small text and images before downloading."
     ],
-    "check": "Image-based modes rebuild pages and can remove selectable text, links and forms. Check readability at normal zoom. Keep the original if the result is larger or the quality is insufficient.",
-    "limit": "Recommended optimizes supported JPEGs while keeping text, links and forms. Page-image presets remove these features.",
+    "check": "All three choices retain selectable text and document controls. Balanced and Smaller file reduce supported images; inspect fine print and compare the actual downloaded bytes with the portal limit. Already optimized PDFs may not shrink.",
+    "limit": "Balanced and Smaller file optimize supported JPEG and PNG/Flate scans while retaining PDF structure. Masked, CMYK and unsupported images are skipped; a size limit is best effort.",
     "sections": [
       {
         "heading": "The result is not smaller",
@@ -6900,7 +6900,7 @@ export const articles:Article[]=
       {
         "heading": "Check whether this is the right operation",
         "paragraphs": [
-          "Compression depends on what is inside the PDF. Supported JPEG optimization can reduce images while retaining document structure; whole-page image presets exchange searchable and interactive features for a different representation."
+          "Keep quality repacks streams without changing image pixels. Balanced reduces supported images moderately; Smaller file reduces them further. Both support eligible RGB and grayscale JPEG and PNG/Flate scans while preserving text, links and editable forms."
         ]
       },
       {
@@ -6926,7 +6926,7 @@ export const articles:Article[]=
       },
       {
         "question": "Is compression lossless?",
-        "answer": "Compact mode retains PDF content. JPEG optimization keeps document structure but reduces supported image quality. Whole-page image modes can lose text, links and forms."
+        "answer": "Keep quality leaves image pixels unchanged and repacks PDF data. Balanced and Smaller file are lossy for supported images, while retaining selectable text and document structure. Inspect the download before uploading it."
       },
       {
         "question": "Why is the result not smaller?",
