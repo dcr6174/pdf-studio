@@ -442,3 +442,9 @@
 .workflow-crop-settings .workflow-crop-review{overflow:visible}
 .workflow-crop-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
 @media(max-width:700px){.workflow-crop-settings>header{top:-14px}.workflow-crop-settings .workflow-settings-preview{height:240px}}
+
+/* Keep the empty canvas open, with ready-made workflows at its bottom. */
+.reference-pipeline:not(:has(.reference-steps)){justify-content:flex-start}
+.reference-pipeline:not(:has(.reference-steps)) .reference-empty{flex:1 0 auto;min-height:80px;margin:0;padding:16px}
+.reference-pipeline:not(:has(.reference-steps)) .reference-starts{margin-top:auto;padding:12px 0 0}
+@media(max-width:700px){.reference-pipeline:not(:has(.reference-steps)) .reference-empty{min-height:48px;padding:8px 0}.reference-pipeline:not(:has(.reference-steps)) .reference-starts{padding-top:8px}}
