@@ -2,6 +2,7 @@
 import {useEffect,useMemo,useRef,useState,type CSSProperties} from 'react';
 import {PdfCropEditor,type WorkflowCropControl} from './pdf-crop-editor';
 import Image from '@/components/browser-image';
+import {workflowPreviewOperation} from '@/lib/workflow-preview-operation';
 import {pageGeometry} from '@/lib/page-geometry';
 import {Loader2,ChevronLeft,ChevronRight,RefreshCw,Rows3,ZoomIn,ZoomOut,File as FileIcon} from 'lucide-react';
 import {processPDF,loadFile,render,type Loaded,type PageItem,type Options,type Mark} from '@/lib/pdf-client';
@@ -53,7 +54,7 @@ export function WorkflowPreview({files,pages,marks=noMarks,options,initialView='
   const timer=setTimeout(()=>{void enqueue(async()=>{
    controller.signal.throwIfAborted();
    setSnapshot({request,progress:0});
-   const output=await processPDF(request.options.workflowSteps?.length?'workflow':'merge',request.files,request.pages,request.marks,request.options,n=>{if(!controller.signal.aborted)setSnapshot({request,progress:n});},controller.signal);
+   const output=await processPDF(workflowPreviewOperation(request.options.workflowSteps,request.options.workflowDisabled),request.files,request.pages,request.marks,request.options,n=>{if(!controller.signal.aborted)setSnapshot({request,progress:n});},controller.signal);
    controller.signal.throwIfAborted();
    const file=await loadFile(new File([output.blob],'workflow-preview.pdf',{type:'application/pdf'}));
    controller.signal.throwIfAborted();
