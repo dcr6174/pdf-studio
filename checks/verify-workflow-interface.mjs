@@ -78,3 +78,19 @@ try{
 }finally{globalThis.fetch=originalFetch;}
 assert.equal(first.doc.getPageCount(),1);
 console.log('PASS: all eight predefined workflows run on one or two PDFs, with merge first and originals retained.');
+
+// Missing inputs belong to their own action, including long workflows.
+const sixteen=['rotate','resize','watermark','numbers','flatten','clean','compress','crop','headers','reverse','duplicate','blank','bates','flip','remove','reorder'];
+const sixteenSettings=sixteen.map(step=>recipes.workflowSettings(step,{}));
+let inputIssues=readiness.workflowInputIssues(sixteen,sixteenSettings,[],1,2);
+assert.deepEqual(Array.from(inputIssues,e=>e.index),[14,15]);
+assert.match(inputIssues[0].message,/pages to remove/i);
+assert.match(inputIssues[1].message,/page order/i);
+sixteenSettings[14]={range:'2'};sixteenSettings[15]={range:'1-4'};
+assert.equal(readiness.workflowInputIssues(sixteen,sixteenSettings,[],1,2).length,0,'sixteen valid actions have no action-count restriction');
+assert.equal(readiness.taskInputIssue('workflow',1,{...defaults,workflowSteps:sixteen,workflowSettings:sixteenSettings},false,2),'');
+sixteenSettings[15]={range:'1-5'};
+assert.match(readiness.workflowInputIssues(sixteen,sixteenSettings,[],1,2)[0].message,/4|every page/i,'range bounds follow duplicate, blank and removal');
+assert.equal(readiness.workflowInputIssues(['remove','reorder'],[{range:''},{range:''}],[0],1,2)[0].index,1,'disabled actions need no details');
+assert.equal(readiness.workflowInputIssues(['numbers','watermark'],[{start:''},{text:''}],[],1,2).length,2,'report all missing details together');
+console.log('PASS: per-action missing inputs, sixteen actions, disabled actions and sequential page bounds.');
