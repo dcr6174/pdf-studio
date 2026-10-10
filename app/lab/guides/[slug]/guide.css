@@ -1,0 +1,102 @@
+.image-guide-page {
+  min-height: 100dvh;
+  background: #faf9fd;
+  color: #302a42;
+  font-family: system-ui, sans-serif;
+  padding: 24px;
+}
+.image-guide-page a {
+  color: #6544dc;
+  text-decoration: none;
+}
+.image-guide-page nav {
+  max-width: 940px;
+  margin: auto;
+  display: flex;
+  justify-content: space-between;
+  font-size: 12px;
+}
+.image-guide-page nav span {
+  color: #938aab;
+  font-size: 10px;
+  letter-spacing: 0.12em;
+}
+.image-guide-page article {
+  max-width: 760px;
+  margin: 64px auto;
+}
+.image-guide-page header > p:first-child {
+  color: #7c65c4;
+  font-size: 12px;
+}
+.image-guide-page h1 {
+  font-size: clamp(30px, 5vw, 46px);
+  letter-spacing: -1.4px;
+  line-height: 1.15;
+  max-width: 680px;
+}
+.image-guide-page p {
+  font-size: 15px;
+  line-height: 1.85;
+  color: #777084;
+}
+.image-guide-tools {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  padding: 20px 0 36px;
+}
+.image-guide-tools a {
+  background: #eee8ff;
+  border-radius: 12px;
+  padding: 12px 16px;
+  font-size: 12px;
+}
+.image-guide-page section {
+  display: flex;
+  gap: 22px;
+  padding: 28px 0;
+  border-top: 1px solid #e9e3f1;
+}
+.image-guide-page section > span {
+  font-size: 12px;
+  color: #a797cc;
+  padding-top: 5px;
+}
+.image-guide-page h2 {
+  font-size: 20px;
+  margin: 0;
+}
+.image-guide-page section p {
+  margin-bottom: 0;
+}
+.image-guide-page aside {
+  margin-top: 40px;
+  padding: 28px;
+  border-radius: 20px;
+  background: white;
+  border: 1px solid #e9e3f1;
+}
+.image-guide-page aside a {
+  display: block;
+  font-size: 13px;
+  padding-top: 15px;
+}
+.image-guide-page :focus-visible {
+  outline: 3px solid #9b86ff;
+  outline-offset: 4px;
+}
+@media (max-width: 600px) {
+  .image-guide-page {
+    padding: 20px;
+  }
+  .image-guide-page article {
+    margin-top: 40px;
+  }
+  .image-guide-page section {
+    gap: 12px;
+  }
+  .image-guide-page p {
+    font-size: 14px;
+  }
+}

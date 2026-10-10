@@ -1,76 +1,1265 @@
-'use client';
-import {useEffect,useRef,useState,type PointerEvent} from 'react';
-import {ArrowLeft,Upload,Download,Image as ImageIcon,RefreshCw,Check,LoaderCircle,Plus,Maximize2} from 'lucide-react';
-import Link from './browser-link';
-import {imageTools,type ImageToolSlug} from '@/lib/image-tools';
-import {defaultImageSettings,openImage,renderImage,imageOutputs,contactSheet,makeCanvas,encodeCanvas,type ImageSettings,type ImageOutput} from '@/lib/image-lab';
-import '@/app/lab/image-tools.css';
-type Ready=ImageOutput&{url:string};
-const selectionTools=['image-crop','image-blur','image-pixelate','passport-photo'];
-const dimensionTools=['image-resizer','svg-to-image'];
-const noFormatTools=['svg-cleaner','image-secret-message','favicon-generator','image-color-picker','image-contact-sheet'];
-export function ImageLabStudio({mode}:{mode:ImageToolSlug}){
- const [slug,setSlug]=useState(mode),[settings,setSettings]=useState<ImageSettings>({...defaultImageSettings,format:mode==='image-compressor'?'jpeg':'png',amount:mode==='image-adjustments'||mode==='image-grayscale'?100:30}),[files,setFiles]=useState<File[]>([]),[active,setActive]=useState(0),[loaded,setLoaded]=useState(0),[outputs,setOutputs]=useState<Ready[]>([]),[busy,setBusy]=useState(false),[error,setError]=useState(''),[notice,setNotice]=useState(''),[before,setBefore]=useState(false),[color,setColor]=useState(''),[dragging,setDragging]=useState(false),[bounds,setBounds]=useState({width:800,height:600}),[previewSize,setPreviewSize]=useState({width:1,height:1}),[imageSize,setImageSize]=useState({width:0,height:0});
- const source=useRef<HTMLCanvasElement|null>(null),logo=useRef<HTMLCanvasElement|null>(null),preview=useRef<HTMLCanvasElement>(null),input=useRef<HTMLInputElement>(null),logoInput=useRef<HTMLInputElement>(null),generation=useRef(0),ready=useRef<Ready[]>([]),start=useRef<{x:number;y:number}|null>(null),surface=useRef<HTMLDivElement>(null);
- const tool=imageTools.find(t=>t.slug===slug)!;
- const previewArea=useRef<HTMLDivElement>(null);
- useEffect(()=>{const el=previewArea.current;if(!el)return;const observer=new ResizeObserver(([entry])=>{setBounds({width:Math.max(1,entry.contentRect.width),height:Math.max(1,entry.contentRect.height)});});observer.observe(el);return()=>observer.disconnect();},[]);
- function clearResults(){generation.current++;ready.current.forEach(o=>URL.revokeObjectURL(o.url));ready.current=[];setOutputs([]);setBusy(false);setError('');setNotice('');}
- function update(patch:Partial<ImageSettings>){clearResults();setSettings(s=>({...s,...patch}));}
- function choose(list:File[]){if(!list.length)return;clearResults();if(list.length>20){setError('Choose up to 20 images per batch.');return;}setColor('');setLoaded(0);setFiles(list);setActive(0);}
- useEffect(()=>()=>{generation.current++;source.current?.remove();if(source.current)source.current.width=0;if(logo.current)logo.current.width=0;ready.current.forEach(o=>URL.revokeObjectURL(o.url));},[]);
- useEffect(()=>{let cancelled=false;const file=files[active];if(source.current)source.current.width=0;source.current=null;if(!file){queueMicrotask(()=>{if(!cancelled)setLoaded(0);});return;}
-  void openImage(file).then(canvas=>{if(cancelled){canvas.width=0;return;}source.current=canvas;setImageSize({width:canvas.width,height:canvas.height});setSettings(s=>({...s,rect:{x:0,y:0,width:canvas.width,height:canvas.height},point:{x:canvas.width/2,y:canvas.height/2},width:canvas.width,height:canvas.height}));setLoaded(n=>n+1);setError('');}).catch(e=>{if(!cancelled){setError(e instanceof Error?e.message:'Image could not be opened.');setLoaded(0);}});return()=>{cancelled=true;};
- },[files,active]);
- useEffect(()=>{const canvas=source.current,target=preview.current;if(!canvas||!target)return;const timer=setTimeout(()=>{let rendered:HTMLCanvasElement|undefined;try{rendered=before?canvas:renderImage(canvas,slug,settings,logo.current??undefined);const ratio=Math.min(1,1600/Math.max(rendered.width,rendered.height));target.width=Math.max(1,Math.round(rendered.width*ratio));target.height=Math.max(1,Math.round(rendered.height*ratio));target.getContext('2d')?.drawImage(rendered,0,0,target.width,target.height);setPreviewSize({width:target.width,height:target.height});}catch(e){setError(e instanceof Error?e.message:'Preview unavailable.');}finally{if(rendered&&rendered!==canvas)rendered.width=0;}},120);return()=>clearTimeout(timer);},[loaded,slug,settings,before]);
- useEffect(()=>{const paste=(e:ClipboardEvent)=>{const list=[...(e.clipboardData?.files??[])].filter(f=>f.type.startsWith('image/'));if(list.length&&!['INPUT','TEXTAREA'].includes((e.target as HTMLElement)?.tagName)){e.preventDefault();choose(list);}};window.addEventListener('paste',paste);return()=>window.removeEventListener('paste',paste);});
- function coordinates(e:PointerEvent<HTMLCanvasElement>){const rect=e.currentTarget.getBoundingClientRect(),canvas=source.current!;return{x:Math.max(0,Math.min(canvas.width-1,(e.clientX-rect.left)*canvas.width/rect.width)),y:Math.max(0,Math.min(canvas.height-1,(e.clientY-rect.top)*canvas.height/rect.height))};}
- function pointerDown(e:PointerEvent<HTMLCanvasElement>){if(!source.current)return;const point=coordinates(e);if(slug==='image-color-picker'){const pixel=source.current.getContext('2d')!.getImageData(Math.floor(point.x),Math.floor(point.y),1,1).data;setColor('#'+[...pixel.slice(0,3)].map(v=>v.toString(16).padStart(2,'0')).join('')+' · RGB '+[...pixel.slice(0,3)].join(', '));return;}
-  if(['image-background-remover','image-watermark'].includes(slug)){update({point});return;}
-  if(selectionTools.includes(slug)){if(!before&&['image-crop','passport-photo'].includes(slug)){setBefore(true);setNotice('Drag on the original image to choose an area.');return;}start.current=point;e.currentTarget.setPointerCapture(e.pointerId);setBefore(true);update({rect:{...point,width:1,height:1}});}
- }
- function pointerMove(e:PointerEvent<HTMLCanvasElement>){if(!start.current||!source.current)return;const p=coordinates(e),a=start.current;update({rect:{x:Math.round(Math.min(a.x,p.x)),y:Math.round(Math.min(a.y,p.y)),width:Math.max(1,Math.round(Math.abs(p.x-a.x))),height:Math.max(1,Math.round(Math.abs(p.y-a.y)))}});}
- async function run(){const canvas=source.current,file=files[active];if(!canvas||!file)return;clearResults();const id=generation.current;setBusy(true);try{let result:ImageOutput[]=[];
-  if(slug==='image-contact-sheet')result=[await contactSheet(files,settings)];
-  else if(slug==='image-color-picker'){if(!color)throw Error('Click a pixel on the image first.');result=[{blob:new Blob([JSON.stringify({color},null,2)],{type:'application/json'}),name:'sampled-color.json',note:color}];}
-  else{for(let i=0;i<files.length;i++){if(generation.current!==id)return;setNotice('Processing '+(i+1)+' of '+files.length);const item=files[i];const current:HTMLCanvasElement=i===active?canvas:await openImage(item);try{const batchSettings=i===active?settings:{...settings,rect:{x:settings.rect.x/canvas.width*current.width,y:settings.rect.y/canvas.height*current.height,width:settings.rect.width/canvas.width*current.width,height:settings.rect.height/canvas.height*current.height},point:{x:settings.point.x/canvas.width*current.width,y:settings.point.y/canvas.height*current.height}};result.push(...await imageOutputs(current,item,slug,batchSettings,logo.current??undefined));}finally{if(current!==canvas)current.width=0;}}
-   if(slug==='passport-photo'&&result.length===1){const photo=renderImage(canvas,slug,settings),sheet=makeCanvas(Math.round(6*settings.dpi),Math.round(4*settings.dpi)),ctx=sheet.getContext('2d')!;try{ctx.fillStyle='#fff';ctx.fillRect(0,0,sheet.width,sheet.height);const gap=Math.round(settings.dpi*.1);for(let y=gap;y+photo.height<=sheet.height;y+=photo.height+gap)for(let x=gap;x+photo.width<=sheet.width;x+=photo.width+gap)ctx.drawImage(photo,x,y);result.push({blob:await encodeCanvas(sheet),name:'photo-sheet-6x4.png',width:sheet.width,height:sheet.height,note:'Print at 6 × 4 inches. Verify your application’s current photo rules; this does not certify compliance.'});}finally{photo.width=0;sheet.width=0;}}
+"use client";
+import { useCallback, useEffect, useRef, useState } from "react";
+import {
+  Upload,
+  Plus,
+  Download,
+  LoaderCircle,
+  Check,
+  ArrowLeft,
+  ArrowRight,
+  X,
+  Image as ImageIcon,
+  ShieldCheck,
+  RefreshCw,
+} from "lucide-react";
+import { ImageWorkspace } from "./image-workspace";
+import { ImageViewport } from "./image-viewport";
+import { ImageToolSettings } from "./image-tool-settings";
+import { imageTools, type ImageToolSlug } from "@/lib/image-tools";
+import {
+  defaultImageSettings,
+  openImage,
+  renderImage,
+  imageOutputs,
+  contactSheet,
+  clampRect,
+  opaqueCapacity,
+  packageImageOutputs,
+  decodeImageOutput,
+  cleanSVG,
+  type ImageSettings,
+  type ImageOutput,
+} from "@/lib/image-lab";
+type Item = { id: number; file: File };
+type Ready = ImageOutput & { url: string; fileId: number };
+type View = "original" | "preview" | "final" | "edit";
+type Color = { hex: string; rgb: string; alpha: number };
+const initial = (mode: ImageToolSlug): ImageSettings => ({
+  ...defaultImageSettings,
+  format: ["image-compressor", "png-to-jpg"].includes(mode)
+    ? "jpeg"
+    : mode === "image-to-webp"
+      ? "webp"
+      : "png",
+  amount: ["image-adjustments", "image-grayscale"].includes(mode) ? 100 : 30,
+  backgroundSelected: false,
+  metadataMode: "preserve",
+  signaturePadding: 8,
+  restoreStrokes: [],
+  text: mode === "image-secret-message" ? "" : "Made by me",
+});
+const actionNames: Partial<Record<ImageToolSlug, string>> = {
+  "image-compressor": "Compress images",
+  "image-resizer": "Resize images",
+  "image-crop": "Create crop",
+  "image-background-remover": "Remove background",
+  "favicon-generator": "Generate icons",
+  "image-contact-sheet": "Create contact sheet",
+  "passport-photo": "Create photo sheets",
+  "image-watermark": "Add watermark",
+  "image-secret-message": "Hide message",
+  "image-metadata-remover": "Remove metadata",
+  "image-color-picker": "Export color",
+};
+export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
+  const slug = mode,
+    tool = imageTools.find((t) => t.slug === slug)!;
+  const [settings, setSettings] = useState<ImageSettings>(() => initial(mode)),
+    [files, setFiles] = useState<Item[]>([]),
+    [active, setActive] = useState(0),
+    [source, setSource] = useState<HTMLCanvasElement | null>(null),
+    [preview, setPreview] = useState<HTMLCanvasElement | null>(null),
+    [finalImage, setFinalImage] = useState<HTMLCanvasElement | null>(null),
+    [view, setView] = useState<View>(
+      ["image-crop", "passport-photo", "image-blur", "image-pixelate"].includes(
+        mode,
+      )
+        ? "edit"
+        : "preview",
+    ),
+    [outputs, setOutputs] = useState<Ready[]>([]),
+    [error, setError] = useState(""),
+    [failures, setFailures] = useState<
+      { id: number; name: string; message: string }[]
+    >([]),
+    [notice, setNotice] = useState(""),
+    [busy, setBusy] = useState(false),
+    [previewBusy, setPreviewBusy] = useState(false),
+    [previewBytes, setPreviewBytes] = useState(0),
+    [previewIndex, setPreviewIndex] = useState(0),
+    [resultIndex, setResultIndex] = useState(0),
+    [ratio, setRatio] = useState(0),
+    [aspect, setAspect] = useState(true),
+    [noUpscale, setNoUpscale] = useState(false),
+    [restore, setRestore] = useState(false),
+    [brush, setBrush] = useState(18),
+    [color, setColor] = useState<Color | null>(null),
+    [capacity, setCapacity] = useState(0),
+    [scope, setScope] = useState<"all" | "active">("all"),
+    [history, setHistory] = useState<ImageSettings[]>([]),
+    [dragOver, setDragOver] = useState(false),
+    [logoVersion, setLogoVersion] = useState(0),
+    [logoCanvas, setLogoCanvas] = useState<HTMLCanvasElement | null>(null),
+    [svgReport, setSvgReport] = useState<{
+      raw: string;
+      cleaned: string;
+      removed: number;
+      attributes: number;
+    } | null>(null);
+  const displayedPreview = useRef<HTMLCanvasElement | null>(null);
+  const input = useRef<HTMLInputElement>(null),
+    logoInput = useRef<HTMLInputElement>(null),
+    logo = useRef<HTMLCanvasElement | null>(null),
+    serial = useRef(0),
+    generation = useRef(0),
+    job = useRef<AbortController | null>(null),
+    ready = useRef<Ready[]>([]),
+    initialized = useRef(false),
+    gesture = useRef(false),
+    appendInput = useRef(false),
+    current = useRef(settings),
+    edits = useRef(
+      new Map<
+        number,
+        Pick<
+          ImageSettings,
+          "rect" | "point" | "backgroundSelected" | "restoreStrokes"
+        >
+      >(),
+    );
+  useEffect(() => {
+    current.current = settings;
+  }, [settings]);
+  const selected = files.find((f) => f.id === active),
+    size = { width: source?.width ?? 0, height: source?.height ?? 0 },
+    area = [
+      "image-crop",
+      "image-blur",
+      "image-pixelate",
+      "passport-photo",
+    ].includes(slug),
+    activeOutput = outputs[resultIndex];
+  const clearResults = useCallback(() => {
+    job.current?.abort();
+    generation.current++;
+    ready.current.forEach((o) => URL.revokeObjectURL(o.url));
+    ready.current = [];
+    setOutputs([]);
+    setFailures([]);
+    setBusy(false);
+    setError("");
+    setNotice("");
+  }, []);
+  const update = useCallback(
+    (patch: Partial<ImageSettings>) => {
+      if (!gesture.current)
+        setHistory((h) => [...h.slice(-29), current.current]);
+      clearResults();
+      setSettings((s) => ({ ...s, ...patch }));
+    },
+    [clearResults],
+  );
+  function browse(append = false) {
+    appendInput.current = append;
+    input.current?.click();
   }
-  if(generation.current!==id)return;const mapped=result.map((o,index)=>({...o,name:result.length>1?String(index+1).padStart(2,'0')+'-'+o.name:o.name,url:URL.createObjectURL(o.blob)}));ready.current=mapped;setOutputs(mapped);setNotice(mapped.length+' file'+(mapped.length===1?'':'s')+' ready');
- }catch(e){if(generation.current===id)setError(e instanceof Error?e.message:'Processing failed.');}finally{if(generation.current===id)setBusy(false);}}
- async function zip(){const id=generation.current;try{setBusy(true);const {default:JSZip}=await import('jszip'),zip=new JSZip();outputs.forEach(o=>zip.file(o.name,o.blob));const blob=await zip.generateAsync({type:'blob'});if(id!==generation.current)return;const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=slug+'-results.zip';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);}catch{setError('The ZIP could not be created. Download the files individually.');}finally{if(id===generation.current)setBusy(false);}}
- const number=(label:string,key:'width'|'height'|'amount'|'angle'|'quality'|'opacity'|'contrast'|'saturation'|'columns'|'mmWidth'|'mmHeight'|'dpi',min:number,max:number,step=1)=><label>{label}<input type="number" min={min} max={max} step={step} value={settings[key]} onChange={e=>update({[key]:Math.max(min,Math.min(max,Number(e.target.value)||min))})}/></label>;
- const slider=(label:string,key:'amount'|'quality'|'opacity'|'contrast'|'saturation'|'angle',min:number,max:number)=><label>{label}<span className="il-slider"><input type="range" min={min} max={max} value={settings[key]} onChange={e=>update({[key]:Number(e.target.value)})}/><output>{settings[key]}{key==='angle'?'°':'%'}</output></span></label>;
- const area=selectionTools.includes(slug);
- return <div className="il-shell"><header className="il-top"><Link href="/lab" className="il-back"><ArrowLeft size={18}/>Studio Lab</Link><span className="il-private"><span/> Images stay on your device</span><button onClick={()=>void (surface.current?.requestFullscreen?surface.current.requestFullscreen().catch(()=>setNotice('Fullscreen is unavailable in this browser.')):setNotice('Fullscreen is unavailable in this browser.'))} aria-label="Fullscreen image workspace"><Maximize2 size={18}/></button></header>
- <main className="il-main"><header className="il-heading"><div><span className="il-eyebrow">IMAGE STUDIO / {tool.category.toUpperCase()}</span><h1>{tool.title}</h1><p>{tool.description}</p></div><label className="il-tool-switch"><span>Image tool</span><select value={slug} onChange={e=>{clearResults();if(e.target.value==='image-size-reducer'){const link=document.createElement('a');link.href='/lab/image-size-reducer';link.click();return;}setSlug(e.target.value as ImageToolSlug);setBefore(false);setColor('');setSettings(s=>({...s,format:e.target.value==='image-compressor'?'jpeg':s.format,amount:e.target.value==='image-adjustments'?100:e.target.value==='image-grayscale'?100:30}));}}>{imageTools.map(t=><option key={t.slug} value={t.slug}>{t.title}</option>)}</select></label></header>
- <div className="il-workspace" ref={surface}><section className="il-stage" aria-label="Image canvas" onDragOver={e=>{e.preventDefault();setDragging(true);}} onDragLeave={()=>setDragging(false)} onDrop={e=>{e.preventDefault();setDragging(false);choose([...e.dataTransfer.files]);}}>
-  <div className="il-stage-bar"><span>{files[active]?.name||'Your image workspace'}</span><div>{files.length>1&&<label><span className="il-sr">Preview image</span><select value={active} onChange={e=>{clearResults();setColor('');setLoaded(0);setActive(Number(e.target.value));}}>{files.map((f,i)=><option key={i} value={i}>{i+1}. {f.name}</option>)}</select></label>}{loaded>0&&<button aria-pressed={before} onClick={()=>setBefore(v=>!v)}>{before?'Show result':'Show original'}</button>}<button onClick={()=>input.current?.click()}><Plus size={16}/>{files.length?'Change':'Add image'}</button></div></div>
-  <input ref={input} type="file" accept="image/jpeg,image/png,image/webp,image/gif,image/bmp,image/avif,image/svg+xml" multiple hidden onChange={e=>{choose([...(e.target.files??[])]);e.target.value='';}}/>
-  <div ref={previewArea} className={'il-canvas-area'+(dragging?' is-dragging':'')}>{loaded>0?<div className="il-canvas-wrap" style={{width:Math.min(bounds.width,bounds.height*previewSize.width/previewSize.height),height:Math.min(bounds.height,bounds.width*previewSize.height/previewSize.width)}}><canvas ref={preview} aria-label="Image preview. Drag to select an area; use numeric controls for keyboard editing." onPointerDown={pointerDown} onPointerMove={pointerMove} onPointerUp={()=>{start.current=null;setBefore(false);}} onPointerCancel={()=>{start.current=null;setBefore(false);}}/>{area&&before&&imageSize.width>0&&<div className="il-selection" style={{left:settings.rect.x/imageSize.width*100+'%',top:settings.rect.y/imageSize.height*100+'%',width:settings.rect.width/imageSize.width*100+'%',height:settings.rect.height/imageSize.height*100+'%'}}/>}</div>:<button className="il-drop" onClick={()=>input.current?.click()}><span className="il-drop-icon"><ImageIcon size={38}/></span><h2>Start with an image.</h2><p>Drop it here, browse your files, or paste a photo.</p><span className="il-upload"><Upload size={18}/>Choose images</span><small>JPG · PNG · WebP · SVG · GIF · BMP · AVIF<br/>Up to 20 files · 25 MB each · still images only</small></button>}</div>
-  <div className="il-stage-foot"><span>{loaded?imageSize.width+' × '+imageSize.height+' px · '+((files[active]?.size??0)/1000).toFixed(1)+' KB':'No upload. No account. Just make something.'}</span><span>{area?'Drag to select · exact pixels in controls':slug==='image-background-remover'?'Click the background to erase':slug==='image-watermark'?'Click to place the watermark':slug==='image-color-picker'?'Click to sample a pixel':'Original file stays intact'}</span></div>
- </section>
- <aside className="il-controls" aria-label="Image settings"><div className="il-controls-title"><h2>Make it yours</h2><button aria-label="Reset settings" onClick={()=>{clearResults();const c=source.current;setSettings({...defaultImageSettings,format:slug==='image-compressor'?'jpeg':'png',amount:slug==='image-adjustments'||slug==='image-grayscale'?100:30,...(c?{width:c.width,height:c.height,rect:{x:0,y:0,width:c.width,height:c.height},point:{x:c.width/2,y:c.height/2}}:{})});}}><RefreshCw size={16}/></button></div><div className="il-settings">
- {dimensionTools.includes(slug)&&<><div className="il-pair">{number('Width (px)','width',1,8192)}{number('Height (px)','height',1,8192)}</div><label>Fit<select value={settings.fit} onChange={e=>update({fit:e.target.value as ImageSettings['fit']})}><option value="contain">Fit inside · keep the whole image</option><option value="cover">Fill · crop the edges</option><option value="stretch">Stretch · exact dimensions</option></select></label><p className="il-hint">Enlarging changes the dimensions; it cannot restore missing detail.</p></>}
- {area&&<><p className="il-hint">Drag on the image to select an area. Use these fields for exact placement.</p><div className="il-pair">{(['x','y','width','height'] as const).map(key=><label key={key}>{key==='x'?'Left':key==='y'?'Top':key==='width'?'Area width':'Area height'} (px)<input type="number" min={key==='x'||key==='y'?0:1} max={8192} value={settings.rect[key]} onChange={e=>update({rect:{...settings.rect,[key]:Math.max(key==='x'||key==='y'?0:1,Number(e.target.value)||0)}})}/></label>)}</div></>}
- {slug==='image-rotate'&&<>{slider('Rotation','angle',-180,180)}<div className="il-presets">{[0,90,180,-90].map(a=><button key={a} aria-pressed={settings.angle===a} onClick={()=>update({angle:a})}>{a}°</button>)}</div><label className="il-check"><input type="checkbox" checked={settings.flipX} onChange={e=>update({flipX:e.target.checked})}/>Flip horizontally</label><label className="il-check"><input type="checkbox" checked={settings.flipY} onChange={e=>update({flipY:e.target.checked})}/>Flip vertically</label></>}
- {['image-blur','image-pixelate','image-grayscale','signature-cleaner','image-sharpen','image-background-remover'].includes(slug)&&slider(slug==='image-background-remover'?'Color tolerance':slug==='signature-cleaner'?'Paper cleanup':'Strength','amount',1,100)}
- {slug==='image-adjustments'&&<>{slider('Brightness','amount',10,200)}{slider('Contrast','contrast',0,200)}{slider('Saturation','saturation',0,200)}</>}
- {slug==='image-background-remover'&&<><p className="il-hint">Magic wand for connected, similar colors. Use a plain background; this is not AI portrait segmentation.</p><div className="il-pair"><label>Sample X (px)<input type="number" min="0" value={Math.round(settings.point.x)} onChange={e=>update({point:{...settings.point,x:Number(e.target.value)}})}/></label><label>Sample Y (px)<input type="number" min="0" value={Math.round(settings.point.y)} onChange={e=>update({point:{...settings.point,y:Number(e.target.value)}})}/></label></div></>}
- {['image-watermark','image-id-card','favicon-generator','image-secret-message'].includes(slug)&&<label>{slug==='image-secret-message'?'Secret message':slug==='image-id-card'?'Name':slug==='favicon-generator'?'Site name':'Watermark text'}<textarea rows={2} value={settings.text} onChange={e=>update({text:e.target.value})}/></label>}
- {slug==='image-id-card'&&<label>Membership details<input value={settings.detail} maxLength={55} onChange={e=>update({detail:e.target.value})}/></label>}
- {slug==='image-watermark'&&<><input ref={logoInput} type="file" accept="image/png,image/jpeg,image/webp" hidden onChange={e=>{const f=e.target.files?.[0];if(f)void openImage(f).then(c=>{if(logo.current)logo.current.width=0;logo.current=c;update({});setNotice('Logo loaded');}).catch(err=>setError(String(err)));e.target.value='';}}/><div className="il-presets"><button onClick={()=>logoInput.current?.click()}>Use a logo</button><button onClick={()=>{if(logo.current)logo.current.width=0;logo.current=null;update({});}}>Use text</button></div>{slider('Mark size','amount',5,100)}{slider('Opacity','opacity',5,100)}{slider('Rotation','angle',-90,90)}<label className="il-check"><input type="checkbox" checked={settings.tiled} onChange={e=>update({tiled:e.target.checked})}/>Repeat across image</label><div className="il-pair"><label>Position X<input type="number" value={Math.round(settings.point.x)} onChange={e=>update({point:{...settings.point,x:Number(e.target.value)}})}/></label><label>Position Y<input type="number" value={Math.round(settings.point.y)} onChange={e=>update({point:{...settings.point,y:Number(e.target.value)}})}/></label></div></>}
- {slug==='image-secret-message'&&<><label>Password<input type="password" autoComplete="off" value={settings.password} onChange={e=>update({password:e.target.value})}/></label><label className="il-check"><input type="checkbox" checked={settings.extract} onChange={e=>update({extract:e.target.checked})}/>Read a hidden message</label><p className="il-hint">AES-GCM encrypted text in a lossless PNG. Use the same password to read it. Keep the output unchanged.</p></>}
- {slug==='passport-photo'&&<><div className="il-pair">{number('Width (mm)','mmWidth',10,100)}{number('Height (mm)','mmHeight',10,100)}</div>{number('Print density (DPI)','dpi',72,600)}<p className="il-hint">Exports the crop and a 6 × 4 inch sheet. Choose the current size required by your authority. The selected area is center-cropped to preserve proportions. Print at the stated physical size; the PNG encoder’s DPI tag is not changed.</p></>}
- {slug==='image-contact-sheet'&&<div className="il-pair">{number('Columns','columns',1,6)}{number('Tile width (px)','width',100,1200)}</div>}
- {slug==='image-color-picker'&&<><p className="il-hint">Click anywhere on the image. The sample comes from the original pixels.</p><output className="il-color">{color||'No pixel sampled yet'}</output><button disabled={!color} onClick={()=>void navigator.clipboard.writeText(color).then(()=>setNotice('Color copied')).catch(()=>setNotice('Select and copy the color above.'))}>Copy color</button></>}
- {slug==='signature-cleaner'&&<p className="il-hint">For dark ink on pale paper. Automatically crops around detected strokes. Check thin lines before downloading. Use the size reducer afterward for a strict KB limit.</p>}
- {slug==='image-compressor'&&settings.format==='png'&&<p className="il-hint">PNG keeps the pixels losslessly; its encoder ignores quality. Choose JPG or WebP for quality-based compression.</p>}
- {slug==='image-metadata-remover'&&<p className="il-hint">Exports a new still image from decoded pixels. Source EXIF, GPS and camera tags are not copied. Animation, source color profiles and original compression are not retained.</p>}
- {slug==='svg-cleaner'&&<p className="il-hint">Removes comments, metadata, scripts and external resources. This is conservative cleanup, not SVGO path optimization. Check the preview for missing externally linked content.</p>}
- {slug==='favicon-generator'&&<p className="il-hint">Includes 7 PNG sizes, a multi-size ICO, a manifest and an HTML snippet. Download the ZIP and place the files in your website’s public folder.</p>}
- {!noFormatTools.includes(slug)&&<><label>Export format<select value={slug==='jpg-to-png'?'png':slug==='png-to-jpg'?'jpeg':slug==='image-to-webp'?'webp':settings.format} disabled={['jpg-to-png','png-to-jpg','image-to-webp'].includes(slug)} onChange={e=>update({format:e.target.value as ImageSettings['format']})}><option value="png">PNG · sharp lines & transparency</option><option value="jpeg">JPG · smaller photos</option><option value="webp">WebP · modern & lightweight</option></select></label>{(settings.format!=='png'||['image-to-webp','png-to-jpg'].includes(slug))&&slider('Export quality','quality',10,100)}</>}
- {['image-resizer','svg-to-image','image-rotate','image-background-remover'].includes(slug)&&<label className="il-check"><input type="checkbox" checked={settings.transparent} onChange={e=>update({transparent:e.target.checked})}/>Transparent background</label>}
- {['png-to-jpg','image-watermark','image-resizer','image-rotate','image-background-remover','passport-photo','image-contact-sheet'].includes(slug)&&<label>{slug==='image-watermark'?'Text color':'Background color'}<input type="color" value={settings.background} onChange={e=>update({background:e.target.value})}/></label>}
- </div><div className="il-actions">{error&&<p role="alert" className="il-error">{error}</p>}<button className="il-primary" disabled={!loaded||busy} onClick={()=>void run()}>{busy?<LoaderCircle size={18} className="il-spin"/>:<Check size={18}/>} {busy?'Working…':slug==='image-secret-message'&&settings.extract?'Read message':'Create result'}</button><p role="status" aria-live="polite">{notice||'Preview first. Download when it looks right.'}</p>{outputs.length>0&&<div className="il-results">{outputs.length>1&&<button className="il-download" disabled={busy} onClick={()=>void zip()}><Download size={16}/>Download all ({outputs.length}) · ZIP</button>}{outputs.map((o,i)=><a key={o.url} href={o.url} download={o.name}><Download size={15}/><span>{outputs.length===1?'Download result':o.name}<small>{(o.blob.size/1000).toFixed(1)} KB{o.width?' · '+o.width+' × '+o.height+' px':''}</small></span>{i===0&&<Check size={15}/>}</a>)}{outputs[0]?.note&&<p className="il-hint">{outputs[0].note}</p>}</div>}</div></aside></div></main></div>;
+  function beginGesture() {
+    if (!gesture.current) {
+      setHistory((h) => [...h.slice(-29), current.current]);
+      gesture.current = true;
+    }
+  }
+  function reset() {
+    setHistory((h) => [...h.slice(-29), settings]);
+    clearResults();
+    setRatio(0);
+    setRestore(false);
+    setSettings({
+      ...initial(mode),
+      ...(source
+        ? {
+            width: source.width,
+            height: source.height,
+            rect: { x: 0, y: 0, width: source.width, height: source.height },
+            point: { x: source.width / 2, y: source.height / 2 },
+          }
+        : {}),
+      ...(slug === "image-contact-sheet" ? { width: 400 } : {}),
+    });
+  }
+  function undo() {
+    const previous = history.at(-1);
+    if (!previous) return;
+    clearResults();
+    setSettings(previous);
+    setHistory((h) => h.slice(0, -1));
+  }
+  function choose(list: File[], append = false) {
+    if (!list.length) return;
+    if (list.length + (append ? files.length : 0) > 20) {
+      setError(
+        "Choose up to 20 images in a workspace. Your existing images have been kept.",
+      );
+      return;
+    }
+    clearResults();
+    const next = list.map((file) => ({ id: ++serial.current, file }));
+    if (!append) {
+      initialized.current = false;
+      edits.current.clear();
+      setHistory([]);
+      setFiles(next);
+      setActive(next[0].id);
+      setPreviewIndex(0);
+      setResultIndex(0);
+      setColor(null);
+    } else {
+      setFiles((f) => [...f, ...next]);
+      setNotice(
+        next.length + " image" + (next.length === 1 ? "" : "s") + " added",
+      );
+    }
+  }
+  function selectFile(id: number) {
+    if (id === active) return;
+    edits.current.set(active, {
+      rect: settings.rect,
+      point: settings.point,
+      backgroundSelected: settings.backgroundSelected,
+      restoreStrokes: settings.restoreStrokes,
+    });
+    if (job.current) clearResults();
+    setHistory([]);
+    setActive(id);
+    setRestore(false);
+    setColor(null);
+    setView(area ? "edit" : "preview");
+  }
+  function removeFile(id: number) {
+    if (job.current) clearResults();
+    else {
+      const keep = ready.current.filter((o) => o.fileId !== id);
+      ready.current
+        .filter((o) => o.fileId === id)
+        .forEach((o) => URL.revokeObjectURL(o.url));
+      ready.current = keep;
+      setOutputs(keep);
+      setFailures((f) => f.filter((x) => x.id !== id));
+      setResultIndex(0);
+      setError("");
+    }
+    const next = files.filter((f) => f.id !== id);
+    setFiles(next);
+    edits.current.delete(id);
+    if (id === active) {
+      setActive(next[0]?.id ?? 0);
+      setHistory([]);
+    }
+    if (!next.length) initialized.current = false;
+  }
+  function reorder(id: number, delta: number) {
+    clearResults();
+    setFiles((items) => {
+      const next = [...items],
+        at = next.findIndex((f) => f.id === id),
+        target = Math.max(0, Math.min(next.length - 1, at + delta));
+      [next[at], next[target]] = [next[target], next[at]];
+      return next;
+    });
+  }
+  useEffect(() => {
+    let canceled = false,
+      decoded: HTMLCanvasElement | undefined;
+    queueMicrotask(() => {
+      if (!canceled) {
+        setSource(null);
+        setSvgReport(null);
+      }
+    });
+    if (!selected) return;
+    void openImage(selected.file)
+      .then(async (canvas) => {
+        decoded = canvas;
+        if (canceled) {
+          canvas.width = 0;
+          return;
+        }
+        const saved = edits.current.get(selected.id);
+        setSource(canvas);
+        setSettings((s) => ({
+          ...s,
+          ...(!initialized.current
+            ? {
+                width: slug === "image-contact-sheet" ? 400 : canvas.width,
+                height: canvas.height,
+                format: ["image-compressor", "png-to-jpg"].includes(slug)
+                  ? "jpeg"
+                  : slug === "image-to-webp"
+                    ? "webp"
+                    : "png",
+              }
+            : {}),
+          rect: saved?.rect ?? {
+            x: 0,
+            y: 0,
+            width: canvas.width,
+            height: canvas.height,
+          },
+          point: saved?.point ?? { x: canvas.width / 2, y: canvas.height / 2 },
+          backgroundSelected: saved?.backgroundSelected ?? false,
+          restoreStrokes: saved?.restoreStrokes ?? [],
+        }));
+        initialized.current = true;
+        setCapacity(
+          slug === "image-secret-message"
+            ? opaqueCapacity(
+                canvas
+                  .getContext("2d")!
+                  .getImageData(0, 0, canvas.width, canvas.height),
+              )
+            : 0,
+        );
+        setError("");
+        if (
+          /\.svg$/i.test(selected.file.name) ||
+          selected.file.type === "image/svg+xml"
+        ) {
+          const raw = await selected.file.text(),
+            cleaned = cleanSVG(raw),
+            a = new DOMParser().parseFromString(raw, "image/svg+xml"),
+            b = new DOMParser().parseFromString(cleaned, "image/svg+xml");
+          if (!canceled)
+            setSvgReport({
+              raw,
+              cleaned,
+              removed:
+                a.querySelectorAll("*").length - b.querySelectorAll("*").length,
+              attributes:
+                [...a.querySelectorAll("*")].reduce(
+                  (n, e) => n + e.attributes.length,
+                  0,
+                ) -
+                [...b.querySelectorAll("*")].reduce(
+                  (n, e) => n + e.attributes.length,
+                  0,
+                ),
+            });
+        }
+      })
+      .catch((e) => {
+        if (!canceled) {
+          setError(
+            e instanceof Error ? e.message : "This image could not be opened.",
+          );
+          setSource(null);
+        }
+      });
+    return () => {
+      canceled = true;
+      if (decoded) decoded.width = 0;
+    };
+    // Active inspection never resets shared target dimensions.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [selected?.id]);
+  function effective(s: ImageSettings, canvas: HTMLCanvasElement) {
+    if (noUpscale && ["image-resizer", "svg-to-image"].includes(slug)) {
+      const scale = Math.min(
+        1,
+        s.width / canvas.width,
+        s.height / canvas.height,
+      );
+      return {
+        ...s,
+        width: Math.max(1, Math.round(canvas.width * scale)),
+        height: Math.max(1, Math.round(canvas.height * scale)),
+      };
+    }
+    return s;
+  }
+  useEffect(() => {
+    let canceled = false,
+      rendered: HTMLCanvasElement | undefined;
+    queueMicrotask(() => {
+      if (!canceled) {
+        setPreviewBusy(!!source);
+        setPreviewBytes(0);
+        if (!source) {
+          setPreview(null);
+          if (displayedPreview.current) displayedPreview.current.width = 0;
+          displayedPreview.current = null;
+        }
+      }
+    });
+    const timer = setTimeout(() => {
+      if (!source || !selected) return;
+      void (async () => {
+        try {
+          let output: ImageOutput | undefined;
+          if (slug === "image-contact-sheet")
+            output = await contactSheet(
+              files.map((x) => x.file),
+              settings,
+            );
+          else if (
+            ["image-secret-message", "image-color-picker"].includes(slug) ||
+            restore
+          )
+            rendered = renderImage(source, "jpg-to-png", {
+              ...settings,
+              format: "png",
+            });
+          else {
+            const candidates = await imageOutputs(
+              source,
+              selected.file,
+              slug,
+              effective(settings, source),
+              logo.current ?? undefined,
+            );
+            output =
+              candidates[
+                slug === "favicon-generator"
+                  ? 6
+                  : Math.min(previewIndex, candidates.length - 1)
+              ];
+          }
+          if (output && output.blob.type.startsWith("image/")) {
+            rendered = await decodeImageOutput(output.blob);
+            if (!canceled) setPreviewBytes(output.blob.size);
+          }
+          if (canceled) {
+            if (rendered && rendered !== displayedPreview.current)
+              rendered.width = 0;
+            return;
+          }
+          if (rendered) {
+            const previous = displayedPreview.current;
+            displayedPreview.current = rendered;
+            setPreview(rendered);
+            if (previous && previous !== rendered) previous.width = 0;
+          }
+          setPreviewBusy(false);
+        } catch (e) {
+          if (!canceled) {
+            setPreviewBusy(false);
+            setError(e instanceof Error ? e.message : "Preview unavailable.");
+          }
+        }
+      })();
+    }, 180);
+    return () => {
+      canceled = true;
+      clearTimeout(timer);
+      if (rendered && rendered !== displayedPreview.current) rendered.width = 0;
+    };
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [source, settings, files, previewIndex, logoVersion, noUpscale, restore]);
+  useEffect(() => {
+    let canceled = false,
+      decoded: HTMLCanvasElement | undefined;
+    queueMicrotask(() => {
+      if (!canceled) setFinalImage(null);
+    });
+    if (
+      activeOutput?.blob.type.startsWith("image/") &&
+      activeOutput.blob.type !== "image/x-icon"
+    ) {
+      void decodeImageOutput(activeOutput.blob)
+        .then((canvas) => {
+          decoded = canvas;
+          if (canceled) canvas.width = 0;
+          else setFinalImage(canvas);
+        })
+        .catch(() => {});
+    }
+    return () => {
+      canceled = true;
+      if (decoded) decoded.width = 0;
+    };
+  }, [activeOutput]);
+  useEffect(() => {
+    const paste = (e: ClipboardEvent) => {
+      if (["INPUT", "TEXTAREA"].includes((e.target as HTMLElement)?.tagName))
+        return;
+      const items = [...(e.clipboardData?.files ?? [])].filter((f) =>
+        f.type.startsWith("image/"),
+      );
+      if (items.length) {
+        e.preventDefault();
+        choose(items, files.length > 0);
+      }
+    };
+    window.addEventListener("paste", paste);
+    return () => window.removeEventListener("paste", paste);
+  });
+  useEffect(
+    () => () => {
+      job.current?.abort();
+      generation.current++;
+      ready.current.forEach((o) => URL.revokeObjectURL(o.url));
+      if (logo.current) logo.current.width = 0;
+      if (displayedPreview.current) displayedPreview.current.width = 0;
+    },
+    [],
+  );
+  function sample(x: number, y: number) {
+    if (!source) return;
+    const px = Math.max(0, Math.min(source.width - 1, Math.round(x))),
+      py = Math.max(0, Math.min(source.height - 1, Math.round(y))),
+      d = source.getContext("2d")!.getImageData(px, py, 1, 1).data;
+    clearResults();
+    setSettings((s) => ({ ...s, point: { x: px, y: py } }));
+    setColor({
+      hex:
+        "#" +
+        [...d.slice(0, 3)].map((v) => v.toString(16).padStart(2, "0")).join(""),
+      rgb: [...d.slice(0, 3)].join(", "),
+      alpha: d[3],
+    });
+  }
+  async function copy(value: string) {
+    try {
+      await navigator.clipboard.writeText(value);
+      setNotice("Copied");
+    } catch {
+      setNotice(
+        "Copy is unavailable here. Select the displayed value to copy it.",
+      );
+    }
+  }
+  async function run(only?: number[]) {
+    if (!source || !selected) return;
+    if (slug === "image-background-remover" && !settings.backgroundSelected) {
+      setError("Choose a background sample first.");
+      return;
+    }
+    if (slug === "image-color-picker" && !color) {
+      setError("Choose a pixel or enter sample coordinates first.");
+      return;
+    }
+    const retained = only
+      ? outputs.filter((o) => !only.includes(o.fileId))
+      : [];
+    clearResults();
+    const id = generation.current,
+      controller = new AbortController();
+    job.current = controller;
+    setBusy(true);
+    const result: Ready[] = retained.map((o) => ({
+        ...o,
+        url: URL.createObjectURL(o.blob),
+      })),
+      failed: { id: number; name: string; message: string }[] = [];
+    const targets = only
+      ? files.filter((f) => only.includes(f.id))
+      : scope === "active" && slug !== "image-contact-sheet"
+        ? files.filter((f) => f.id === active)
+        : files;
+    let canceled = false;
+    const add = (items: ImageOutput[], fileId: number) => {
+      for (const o of items)
+        result.push({ ...o, fileId, url: URL.createObjectURL(o.blob) });
+    };
+    try {
+      if (slug === "image-color-picker") {
+        add(
+          [
+            {
+              blob: new Blob(
+                [
+                  JSON.stringify(
+                    {
+                      hex: color!.hex,
+                      rgb: color!.rgb.split(", ").map(Number),
+                      alpha: color!.alpha,
+                      x: Math.round(settings.point.x),
+                      y: Math.round(settings.point.y),
+                    },
+                    null,
+                    2,
+                  ),
+                ],
+                { type: "application/json" },
+              ),
+              name: "sampled-color.json",
+              note: color!.hex,
+            },
+          ],
+          active,
+        );
+      } else if (slug === "image-contact-sheet") {
+        const valid: File[] = [];
+        for (const item of targets) {
+          controller.signal.throwIfAborted();
+          setNotice(
+            "Checking " +
+              (valid.length + failed.length + 1) +
+              " of " +
+              targets.length,
+          );
+          try {
+            if (item.id !== active) {
+              const decoded = await openImage(item.file);
+              decoded.width = 0;
+            }
+            valid.push(item.file);
+          } catch (e) {
+            failed.push({
+              id: item.id,
+              name: item.file.name,
+              message: e instanceof Error ? e.message : "Could not open image.",
+            });
+          }
+        }
+        if (valid.length)
+          add([await contactSheet(valid, settings, controller.signal)], active);
+      } else
+        for (let i = 0; i < targets.length; i++) {
+          controller.signal.throwIfAborted();
+          const item = targets[i];
+          setNotice("Processing " + (i + 1) + " of " + targets.length);
+          let canvas: HTMLCanvasElement | undefined;
+          try {
+            canvas = item.id === active ? source : await openImage(item.file);
+            const sx = canvas.width / source.width,
+              sy = canvas.height / source.height,
+              s =
+                item.id === active
+                  ? settings
+                  : {
+                      ...settings,
+                      rect: {
+                        x: Math.round(settings.rect.x * sx),
+                        y: Math.round(settings.rect.y * sy),
+                        width: Math.round(settings.rect.width * sx),
+                        height: Math.round(settings.rect.height * sy),
+                      },
+                      point: {
+                        x: settings.point.x * sx,
+                        y: settings.point.y * sy,
+                      },
+                      restoreStrokes:
+                        edits.current.get(item.id)?.restoreStrokes ?? [],
+                    };
+            const items = await imageOutputs(
+              canvas,
+              item.file,
+              slug,
+              effective(s, canvas),
+              logo.current ?? undefined,
+            );
+            add(
+              packageImageOutputs(
+                items,
+                slug,
+                item.file,
+                files.findIndex((f) => f.id === item.id),
+                files.length,
+              ),
+              item.id,
+            );
+          } catch (e) {
+            if (controller.signal.aborted) throw e;
+            failed.push({
+              id: item.id,
+              name: item.file.name,
+              message: e instanceof Error ? e.message : "Processing failed.",
+            });
+          } finally {
+            if (canvas && canvas !== source) canvas.width = 0;
+          }
+          await new Promise((resolve) => setTimeout(resolve, 0));
+        }
+    } catch (e) {
+      if (controller.signal.aborted) canceled = true;
+      else setError(e instanceof Error ? e.message : "Processing failed.");
+    } finally {
+      if (generation.current !== id) {
+        result.forEach((o) => URL.revokeObjectURL(o.url));
+        return;
+      }
+      ready.current = result;
+      setOutputs(result);
+      setFailures(failed);
+      setResultIndex(
+        slug === "favicon-generator" ? Math.min(6, result.length - 1) : 0,
+      );
+      setView("final");
+      setBusy(false);
+      job.current = null;
+      setNotice(
+        (canceled ? "Stopped · " : "") +
+          result.length +
+          " file" +
+          (result.length === 1 ? "" : "s") +
+          " ready" +
+          (failed.length ? " · " + failed.length + " need attention" : ""),
+      );
+    }
+  }
+  async function zip() {
+    const id = generation.current;
+    setBusy(true);
+    setNotice("Packing your files…");
+    try {
+      const { default: JSZip } = await import("jszip"),
+        archive = new JSZip();
+      outputs.forEach((o) => archive.file(o.name, o.blob));
+      const blob = await archive.generateAsync({ type: "blob" });
+      if (generation.current !== id) return;
+      const url = URL.createObjectURL(blob),
+        a = document.createElement("a");
+      a.href = url;
+      a.download = slug + "-results.zip";
+      a.click();
+      setTimeout(() => URL.revokeObjectURL(url), 30000);
+      setNotice(outputs.length + " files downloaded");
+    } catch {
+      setError("ZIP creation failed. Individual files are still available.");
+    } finally {
+      if (generation.current === id) setBusy(false);
+    }
+  }
+  const shown =
+      view === "final"
+        ? (finalImage ?? source)
+        : view === "original" || view === "edit" || restore
+          ? source
+          : preview,
+    hasImage = !!source;
+  const empty = (
+    <div className="iw-empty">
+      <div className="iw-empty-art">
+        <ImageIcon size={35} />
+        <i />
+        <span>✦</span>
+      </div>
+      <span className="iw-eyebrow">YOUR EVERYDAY IMAGE STUDIO</span>
+      <h2>A little room to create.</h2>
+      <p>{tool.description}</p>
+      <button className="iw-primary" onClick={() => browse()}>
+        <Upload size={17} />
+        Choose images
+      </button>
+      <small>
+        Or drop or paste here · up to 20 files · 25 MB each
+        <br />
+        JPG, PNG, WebP, SVG, GIF, BMP, AVIF · still-image editing
+      </small>
+      <span className="iw-empty-trust">
+        <ShieldCheck size={14} />
+        Image processing stays on your device
+      </span>
+    </div>
+  );
+  const controls = (
+    <ImageToolSettings
+      slug={slug}
+      s={settings}
+      size={size}
+      update={(patch) => {
+        update(patch);
+        if (patch.rect && area) setView("edit");
+      }}
+      ratio={ratio}
+      setRatio={setRatio}
+      aspect={aspect}
+      setAspect={setAspect}
+      percent={source ? Math.round((settings.width / source.width) * 100) : 100}
+      resizePercent={(n) => {
+        if (source)
+          update({
+            width: Math.min(
+              8192,
+              Math.max(1, Math.round((source.width * n) / 100)),
+            ),
+            height: Math.min(
+              8192,
+              Math.max(1, Math.round((source.height * n) / 100)),
+            ),
+          });
+      }}
+      noUpscale={noUpscale}
+      setNoUpscale={(v) => {
+        clearResults();
+        setNoUpscale(v);
+      }}
+      logo={!!logoCanvas}
+      chooseLogo={() => logoInput.current?.click()}
+      clearLogo={() => {
+        if (logo.current) logo.current.width = 0;
+        logo.current = null;
+        setLogoCanvas(null);
+        setLogoVersion((v) => v + 1);
+        clearResults();
+      }}
+      color={color}
+      sample={sample}
+      copy={(v) => void copy(v)}
+      capacity={capacity}
+      restore={restore}
+      setRestore={(v) => {
+        setRestore(v);
+        setView(v ? "original" : "preview");
+      }}
+      brush={brush}
+      setBrush={setBrush}
+      batch={files.length > 1}
+      scope={scope}
+      setScope={(v) => {
+        clearResults();
+        setScope(v);
+      }}
+      previewIndex={previewIndex}
+      setPreviewIndex={(v) => {
+        setPreviewIndex(v);
+        setView("preview");
+      }}
+    />
+  );
+  const actions = (
+    <>
+      {error && (
+        <p role="alert" className="iw-error">
+          {error}
+        </p>
+      )}
+      {busy ? (
+        <>
+          <button className="iw-primary" disabled>
+            <LoaderCircle size={17} className="iw-spin" />
+            Working…
+          </button>
+          <button className="iw-secondary" onClick={() => job.current?.abort()}>
+            Stop processing
+          </button>
+        </>
+      ) : outputs.length > 0 ? (
+        <>
+          {outputs.length > 1 ? (
+            <button className="iw-primary" onClick={() => void zip()}>
+              <Download size={17} />
+              Download all ({outputs.length}) · ZIP
+            </button>
+          ) : (
+            <a
+              className="iw-primary"
+              href={outputs[0].url}
+              download={outputs[0].name}
+            >
+              <Download size={17} />
+              Download result
+            </a>
+          )}
+          <button className="iw-reprocess" onClick={() => void run()}>
+            <RefreshCw size={13} />
+            Process again
+          </button>
+        </>
+      ) : (
+        <button
+          className="iw-primary"
+          disabled={!hasImage}
+          onClick={() => void run()}
+        >
+          <Check size={17} />
+          {slug === "image-secret-message" && settings.extract
+            ? "Read message"
+            : (actionNames[slug] ?? "Create result")}
+        </button>
+      )}
+      <p className="iw-status" role="status" aria-live="polite">
+        {notice ||
+          (!hasImage
+            ? "Choose an image to begin"
+            : previewBusy
+              ? "Updating encoded preview…"
+              : previewBytes
+                ? "Preview · " + (previewBytes / 1000).toFixed(1) + " KB"
+                : "Original stays intact")}
+      </p>
+      {failures.length > 0 && (
+        <details className="iw-failures" open>
+          <summary>
+            {failures.length} image{failures.length === 1 ? "" : "s"} need
+            attention
+          </summary>
+          {failures.map((f) => (
+            <p key={f.id}>
+              <b>{f.name}</b>
+              <br />
+              {f.message}
+              <button onClick={() => removeFile(f.id)}>
+                Remove this image
+              </button>
+            </p>
+          ))}
+          {slug !== "image-contact-sheet" && (
+            <button
+              className="iw-secondary"
+              onClick={() => void run(failures.map((f) => f.id))}
+            >
+              Retry failed images
+            </button>
+          )}
+        </details>
+      )}
+      {outputs.length > 1 && (
+        <details className="iw-file-downloads">
+          <summary>Individual downloads</summary>
+          {outputs.map((o) => (
+            <a key={o.url} href={o.url} download={o.name}>
+              <Download size={13} />
+              <span>
+                {o.name}
+                <small>{(o.blob.size / 1000).toFixed(1)} KB</small>
+              </span>
+            </a>
+          ))}
+        </details>
+      )}
+    </>
+  );
+  const guide = [
+    "image-compressor",
+    "png-to-jpg",
+    "image-to-webp",
+    "jpg-to-png",
+  ].includes(slug)
+    ? "image-formats"
+    : slug === "image-resizer" || slug === "image-crop"
+      ? "resize-or-crop"
+      : slug === "svg-cleaner" || slug === "svg-to-image"
+        ? "safe-svg"
+        : [
+              "favicon-generator",
+              "signature-cleaner",
+              "image-background-remover",
+            ].includes(slug)
+          ? slug
+          : undefined;
+  return (
+    <ImageWorkspace
+      title={tool.title}
+      controls={controls}
+      actions={actions}
+      onReset={reset}
+      onUndo={undo}
+      canUndo={history.length > 0}
+      help={guide ? "/lab/guides/" + guide : undefined}
+      toolMenu={
+        <div className="iw-tool-menu">
+          <h1 className="iw-sr-only">{tool.title}</h1>
+          <label className="iw-sr-only" htmlFor="image-tool-menu">
+            Image tool
+          </label>
+          <select
+            id="image-tool-menu"
+            value={slug}
+            onChange={(e) =>
+              window.location.assign(
+                new URL("/lab/" + e.target.value, window.location.origin).href,
+              )
+            }
+          >
+            {imageTools.map((t) => (
+              <option key={t.slug} value={t.slug}>
+                {t.title}
+              </option>
+            ))}
+          </select>
+        </div>
+      }
+    >
+      <input
+        ref={input}
+        type="file"
+        accept="image/jpeg,image/png,image/webp,image/svg+xml,image/gif,image/bmp,image/avif"
+        multiple
+        hidden
+        onChange={(e) => {
+          choose([...(e.target.files ?? [])], appendInput.current);
+          e.target.value = "";
+        }}
+      />
+      <input
+        ref={logoInput}
+        type="file"
+        accept="image/png,image/jpeg,image/webp"
+        hidden
+        onChange={(e) => {
+          const file = e.target.files?.[0];
+          if (file)
+            void openImage(file)
+              .then((c) => {
+                if (logo.current) logo.current.width = 0;
+                logo.current = c;
+                setLogoCanvas(c);
+                setLogoVersion((v) => v + 1);
+                clearResults();
+                setNotice("Logo loaded");
+              })
+              .catch((e) => setError(String(e)));
+          e.target.value = "";
+        }}
+      />
+      <div
+        className={"iw-canvas-area" + (dragOver ? " iw-dragover" : "")}
+        onDragOver={(e) => {
+          e.preventDefault();
+          setDragOver(true);
+        }}
+        onDragLeave={() => setDragOver(false)}
+        onDrop={(e) => {
+          e.preventDefault();
+          setDragOver(false);
+          choose([...e.dataTransfer.files], files.length > 0);
+        }}
+      >
+        {hasImage && (
+          <div className="iw-stage-top">
+            <span className="iw-filename">{selected?.file.name}</span>
+            <div className="iw-view-tabs" aria-label="Image view">
+              {(
+                [
+                  "original",
+                  ...(area ? ["edit"] : []),
+                  "preview",
+                  ...(outputs.length ? ["final"] : []),
+                ] as View[]
+              ).map((v) => (
+                <button
+                  key={v}
+                  aria-pressed={view === v}
+                  onClick={() => {
+                    setView(v);
+                    if (v !== "original") setRestore(false);
+                  }}
+                >
+                  {v === "original"
+                    ? svgReport
+                      ? "Safe source"
+                      : "Original"
+                    : v === "edit"
+                      ? "Select area"
+                      : v === "final"
+                        ? "Final result"
+                        : "Preview"}
+                </button>
+              ))}
+            </div>
+            <button className="iw-replace" onClick={() => browse(false)}>
+              Replace
+            </button>
+          </div>
+        )}
+        <ImageViewport
+          image={shown}
+          rect={
+            view === "edit" && area
+              ? clampRect(settings.rect, size.width, size.height)
+              : undefined
+          }
+          ratio={ratio}
+          onRect={
+            view === "edit" && area
+              ? (r) => update({ rect: clampRect(r, size.width, size.height) })
+              : undefined
+          }
+          onPoint={
+            hasImage &&
+            (view === "original" || view === "preview" || view === "edit") &&
+            !restore &&
+            [
+              "image-watermark",
+              "image-background-remover",
+              "image-color-picker",
+            ].includes(slug)
+              ? (p) => {
+                  if (slug === "image-color-picker") sample(p.x, p.y);
+                  else update({ point: p, backgroundSelected: true });
+                }
+              : undefined
+          }
+          pointDrag={slug === "image-watermark"}
+          point={
+            (slug === "image-color-picker" && color) ||
+            (slug === "image-background-remover" && settings.backgroundSelected)
+              ? settings.point
+              : undefined
+          }
+          onStroke={
+            restore
+              ? (p) =>
+                  update({
+                    restoreStrokes: [
+                      ...(current.current.restoreStrokes ?? []),
+                      { ...p, radius: brush / 2 },
+                    ],
+                  })
+              : undefined
+          }
+          onStart={beginGesture}
+          onEnd={() => {
+            gesture.current = false;
+          }}
+          label={
+            view === "edit"
+              ? "Original image with editable selection. Numeric selection controls are in settings."
+              : view === "final"
+                ? "Final processed image decoded from the download."
+                : view === "preview"
+                  ? "Encoded preview. Changes are applied only to exported copies."
+                  : "Original decoded image."
+          }
+          empty={
+            source ? undefined : selected ? (
+              <div className="iw-empty">
+                <LoaderCircle className="iw-spin" />
+                <p>
+                  {error
+                    ? "This image could not be opened."
+                    : "Opening your image…"}
+                </p>
+                {error && (
+                  <button
+                    className="iw-secondary"
+                    onClick={() => browse(false)}
+                  >
+                    Choose another image
+                  </button>
+                )}
+              </div>
+            ) : (
+              empty
+            )
+          }
+          addControl={
+            files.length ? (
+              <button onClick={() => browse(true)} aria-label="Add images">
+                <Plus size={17} />
+                <span>Add images</span>
+              </button>
+            ) : undefined
+          }
+        />
+        {hasImage && (
+          <div className="iw-stage-bottom">
+            <span>
+              {view === "final" && activeOutput
+                ? `${activeOutput.width ?? size.width} × ${activeOutput.height ?? size.height} px · ${(activeOutput.blob.size / 1000).toFixed(1)} KB`
+                : `${size.width} × ${size.height} px · ${((selected?.file.size ?? 0) / 1000).toFixed(1)} KB original`}
+            </span>
+            <span>
+              {view === "final"
+                ? activeOutput?.blob.type.startsWith("image/")
+                  ? "Final downloaded pixels"
+                  : "Text result · original shown"
+                : view === "edit"
+                  ? "Drag selection or handles"
+                  : restore
+                    ? "Paint to restore original pixels"
+                    : previewBusy
+                      ? "Updating preview…"
+                      : previewBytes
+                        ? `Encoded preview · ${(previewBytes / 1000).toFixed(1)} KB`
+                        : "Original stays intact"}
+            </span>
+          </div>
+        )}
+      </div>
+      {files.length > 1 && (
+        <div className="iw-files" aria-label="Workspace images">
+          {files.map((f, i) => (
+            <div
+              className={"iw-file" + (f.id === active ? " iw-file-active" : "")}
+              key={f.id}
+            >
+              <button
+                aria-pressed={f.id === active}
+                onClick={() => selectFile(f.id)}
+                aria-label={"Preview " + f.file.name}
+              >
+                <span>{i + 1}</span>
+                {f.file.name}
+              </button>
+              {slug === "image-contact-sheet" && (
+                <>
+                  <button
+                    aria-label={"Move " + f.file.name + " earlier"}
+                    disabled={i === 0}
+                    onClick={() => reorder(f.id, -1)}
+                  >
+                    <ArrowLeft size={13} />
+                  </button>
+                  <button
+                    aria-label={"Move " + f.file.name + " later"}
+                    disabled={i === files.length - 1}
+                    onClick={() => reorder(f.id, 1)}
+                  >
+                    <ArrowRight size={13} />
+                  </button>
+                </>
+              )}
+              <button
+                aria-label={"Remove " + f.file.name}
+                onClick={() => removeFile(f.id)}
+              >
+                <X size={13} />
+              </button>
+            </div>
+          ))}
+        </div>
+      )}
+      {outputs.length > 1 && view === "final" && (
+        <div className="iw-results-strip" aria-label="Generated results">
+          {outputs
+            .filter((o) => o.width)
+            .map((o) => (
+              <button
+                key={o.url}
+                aria-pressed={o === activeOutput}
+                onClick={() => setResultIndex(outputs.indexOf(o))}
+              >
+                {slug === "favicon-generator"
+                  ? o.width + " px"
+                  : o.name.includes("sheet")
+                    ? "Photo sheet"
+                    : o.name}
+                <small>
+                  {o.width} × {o.height}
+                </small>
+              </button>
+            ))}
+        </div>
+      )}
+      {view === "final" && activeOutput?.note && (
+        <p className="iw-result-note">{activeOutput.note}</p>
+      )}
+      {svgReport && (
+        <details className="iw-svg-report">
+          <summary>
+            SVG cleanup report · {svgReport.removed} elements and{" "}
+            {Math.max(0, svgReport.attributes)} attributes removed
+          </summary>
+          <p>
+            The source preview is sanitized for safe decoding. Compare the text
+            below to inspect changes. Showing at most 20,000 characters per
+            version.
+          </p>
+          <div>
+            <section>
+              <h3>Source markup</h3>
+              <pre>{svgReport.raw.slice(0, 20000)}</pre>
+            </section>
+            <section>
+              <h3>Cleaned markup</h3>
+              <pre>{svgReport.cleaned.slice(0, 20000)}</pre>
+            </section>
+          </div>
+        </details>
+      )}
+    </ImageWorkspace>
+  );
 }
