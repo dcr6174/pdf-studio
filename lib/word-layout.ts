@@ -79,7 +79,7 @@ export function taggedTables(tree:StructureNode|null,runs:WordRun[]):WordTable[]
 
 /** A visual fallback must retain complete intersecting words and tables, never crop their content. */
 export function preserveRegionContent(regions:Box[],runs:WordRun[],tables:WordTable[],width:number,height:number):Box[]{
- let result=regions.map(b=>({...b})),changed=true;
+ const result=regions.map(b=>({...b}));let changed=true;
  const textBox=(r:WordRun):Box=>({x:r.x-1,y:r.y-r.size-2,width:r.width+2,height:r.size+5});
  const candidates=[...runs.map(textBox),...tables.map(t=>t.box)];
  const bounded=(b:Box):Box=>{const x=Math.max(0,b.x),y=Math.max(0,b.y);return {x,y,width:Math.max(0,Math.min(width,b.x+b.width)-x),height:Math.max(0,Math.min(height,b.y+b.height)-y)};};
