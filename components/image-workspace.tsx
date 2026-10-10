@@ -1,7 +1,6 @@
 "use client";
 import { useEffect, useRef, useState, type ReactNode } from "react";
 import {
-  ArrowLeft,
   SlidersHorizontal,
   X,
   Undo2,
@@ -9,10 +8,10 @@ import {
   Maximize2,
 } from "lucide-react";
 import Link from "./browser-link";
+import { ImageToolPicker } from "./image-tool-picker";
 import "@/app/lab/image-tools.css";
 type Props = {
   title: string;
-  toolMenu?: ReactNode;
   children: ReactNode;
   controls: ReactNode;
   actions: ReactNode;
@@ -24,7 +23,6 @@ type Props = {
 /** Shared image-only layout; no document processors or global PDF styles. */
 export function ImageWorkspace({
   title,
-  toolMenu,
   children,
   controls,
   actions,
@@ -64,7 +62,7 @@ export function ImageWorkspace({
     <>
       <div className="iw-panel-heading">
         <div>
-          <span className="iw-eyebrow">SETTINGS</span>
+          <span className="iw-eyebrow">MAKE IT YOURS</span>
           <h2>{title}</h2>
         </div>
         {mobile ? (
@@ -97,13 +95,19 @@ export function ImageWorkspace({
     <div className="iw-root" ref={root}>
       <header className="iw-header">
         <Link href="/lab" className="iw-brand">
-          <ArrowLeft size={17} />
+          <span className="iw-brand-mark" aria-hidden="true">
+            <i />
+            <i />
+            <i />
+            <i />
+          </span>
           <span>
             Studio <b>Lab</b>
+            <small>IMAGE WORKSPACE</small>
           </span>
         </Link>
         <span className="iw-divider" />
-        {toolMenu ?? <h1>{title}</h1>}
+        <ImageToolPicker title={title} />
         <div className="iw-header-actions">
           <span className="iw-local">
             <i />

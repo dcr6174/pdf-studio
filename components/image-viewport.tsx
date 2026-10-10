@@ -339,7 +339,7 @@ export function ImageViewport({
         <>
           <canvas
             ref={canvas}
-            className="iv-canvas"
+            className={"iv-canvas" + (checker ? " iv-artboard-checker" : "")}
             style={{ width: iw * scale, height: ih * scale, left, top }}
             aria-label={label}
           />

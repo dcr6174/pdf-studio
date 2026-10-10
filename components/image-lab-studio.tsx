@@ -730,13 +730,17 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
     hasImage = !!source;
   const empty = (
     <div className="iw-empty">
-      <div className="iw-empty-art">
+      <div className="iw-empty-art" aria-hidden="true">
         <ImageIcon size={35} />
         <i />
         <span>✦</span>
       </div>
       <span className="iw-eyebrow">YOUR EVERYDAY IMAGE STUDIO</span>
-      <h2>A little room to create.</h2>
+      <h2>
+        Make something
+        <br />
+        <em>beautiful.</em>
+      </h2>
       <p>{tool.description}</p>
       <button className="iw-primary" onClick={() => browse()}>
         <Upload size={17} />
@@ -948,29 +952,6 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
       onUndo={undo}
       canUndo={history.length > 0}
       help={guide ? "/lab/guides/" + guide : undefined}
-      toolMenu={
-        <div className="iw-tool-menu">
-          <h1 className="iw-sr-only">{tool.title}</h1>
-          <label className="iw-sr-only" htmlFor="image-tool-menu">
-            Image tool
-          </label>
-          <select
-            id="image-tool-menu"
-            value={slug}
-            onChange={(e) =>
-              window.location.assign(
-                new URL("/lab/" + e.target.value, window.location.origin).href,
-              )
-            }
-          >
-            {imageTools.map((t) => (
-              <option key={t.slug} value={t.slug}>
-                {t.title}
-              </option>
-            ))}
-          </select>
-        </div>
-      }
     >
       <input
         ref={input}
