@@ -27,9 +27,9 @@ export function workflowInputIssues(names:string[],stepSettings:NonNullable<Opti
   const issues:{index:number;message:string}[]=[];
   for(let n=0;n<enabled.length;n++){
    const {name,index}=enabled[n];if(!workflowOperations.includes(name as typeof workflowOperations[number])&&name!=='ocr'){issues.push({index,message:'Choose a supported workflow step.'});continue;}
-   if(name==='merge'&&batch){issues.push({index,message:'Merge needs One document mode.'});continue;}
-   try{const settings=workflowSettings(name,stepSettings[index]),issue=workflowStepIssue(name,settings,count,fileCount,n);if(issue){issues.push({index,message:issue});if(['remove','blank','duplicate'].includes(name))count=0;continue;}
-    if(name==='duplicate'&&count)count*=2;if(name==='blank'&&count)count++;if(name==='remove'&&count){const removed=new Set<number>();for(const part of (settings.range??'').split(',')){const [a,b]=part.split('-').map(Number);for(let i=a;i<=(b||a);i++)removed.add(i);}count-=removed.size;}if(count>400){issues.push({index,message:'This step would exceed the 400-page limit.'});count=0;}
+   if(['merge','interleave'].includes(name)&&batch){issues.push({index,message:'Merge needs One document mode.'});continue;}
+   try{const settings=workflowSettings(name,stepSettings[index]),issue=workflowStepIssue(name,settings,count,fileCount,n);if(issue){issues.push({index,message:issue});if(['remove','extract','odd','even','blank','duplicate','halve','nup'].includes(name))count=0;continue;}
+    if(['duplicate','halve'].includes(name)&&count)count*=2;if(name==='odd'&&count)count=Math.ceil(count/2);if(name==='even'&&count)count=Math.floor(count/2);if(name==='nup'&&count)count=Math.ceil(count/Number(settings.columns??2));if(name==='blank'&&count)count++;if(['remove','extract'].includes(name)&&count){const removed=new Set<number>();for(const part of (settings.range??'').split(',')){const [a,b]=part.split('-').map(Number);for(let i=a;i<=(b||a);i++)removed.add(i);}count=name==='extract'?removed.size:count-removed.size;}if(count>400){issues.push({index,message:'This step would exceed the 400-page limit.'});count=0;}
    }catch(e){issues.push({index,message:workflowSettingMessage((e as Error).message)});if(['remove','blank','duplicate'].includes(name))count=0;}
   }
  return issues;

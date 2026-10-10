@@ -3,7 +3,7 @@ import ts from 'typescript';
 import vm from 'node:vm';
 import {readFile} from 'node:fs/promises';
 import {build} from 'vite';
-import {PDFDocument,StandardFonts,decodePDFRawStream} from 'pdf-lib';
+import {PDFDocument,StandardFonts,decodePDFRawStream,PDFName,PDFDict,PDFArray} from 'pdf-lib';
 await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.workflow-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
 const {processPDF}=await import('../.workflow-check/engine.mjs');
 async function fixture(id,width,label){const doc=await PDFDocument.create(),font=await doc.embedFont(StandardFonts.Helvetica);doc.addPage([width,600]).drawText(label,{font,x:30,y:550});const bytes=await doc.save();return {id,name:id+'.pdf',doc,bytes,size:bytes.length,pages:1};}
@@ -63,21 +63,22 @@ console.log('PASS: more than eight actions accepted by recipes, readiness and th
 
 const presetExports={};
 vm.runInNewContext(ts.transpile(await readFile('lib/workflow-presets.ts','utf8'),{module:ts.ModuleKind.CommonJS}),{exports:presetExports,require:name=>{assert.equal(name,'./workflow-recipes');return recipes;}});
-assert.equal(presetExports.workflowPresets.length,8);
+assert.equal(presetExports.workflowPresets.length,10);
 globalThis.fetch=async url=>{assert.equal(url,'/fonts/NotoSans-Regular.ttf');return new Response(fontBytes);};
 try{
  for(const preset of presetExports.workflowPresets){
   for(const inputs of [[first],[first,second]]){
    const state=presetExports.workflowPresetState(preset,inputs.length);
+   if(preset.id==='selected-pages')state.settings[state.steps.indexOf('extract')]={range:`1-${inputs.length}`};
    assert.equal(readiness.taskInputIssue('workflow',inputs.length,{...defaults,workflowSteps:state.steps,workflowSettings:state.settings},false,inputs.length),'',preset.id+' is ready');
    const processed=await pdf(await run(inputs,state.steps,state.settings));
-   assert.equal(processed.getPageCount(),inputs.length,preset.id+' retains all pages');
+   assert.equal(processed.getPageCount(),preset.id==='save-paper'?Math.ceil(inputs.length/2):inputs.length,preset.id+' creates the expected pages');
    if(inputs.length>1)assert.equal(state.steps[0],'merge',preset.id+' combines inputs first');
   }
  }
 }finally{globalThis.fetch=originalFetch;}
 assert.equal(first.doc.getPageCount(),1);
-console.log('PASS: all eight predefined workflows run on one or two PDFs, with merge first and originals retained.');
+console.log('PASS: all ten predefined workflows run on one or two PDFs, with merge first and originals retained.');
 
 // Missing inputs belong to their own action, including long workflows.
 const sixteen=['rotate','resize','watermark','numbers','flatten','clean','compress','crop','headers','reverse','duplicate','blank','bates','flip','remove','reorder'];
@@ -94,3 +95,43 @@ assert.match(readiness.workflowInputIssues(sixteen,sixteenSettings,[],1,2)[0].me
 assert.equal(readiness.workflowInputIssues(['remove','reorder'],[{range:''},{range:''}],[0],1,2)[0].index,1,'disabled actions need no details');
 assert.equal(readiness.workflowInputIssues(['numbers','watermark'],[{start:''},{text:''}],[],1,2).length,2,'report all missing details together');
 console.log('PASS: per-action missing inputs, sixteen actions, disabled actions and sequential page bounds.');
+
+// Every listed operation must run through the real PDF workflow engine.
+assert.equal(recipes.workflowChoices.length,30);
+const seeds={remove:{range:'10'},reorder:{range:'10,1-9'},extract:{range:'1,3-5'},metadata:{title:'Invoice',author:'PDF Studio',subject:'Quarterly report'},bookmarks:{text:'1 Introduction\n3 Details'}};
+globalThis.fetch=async url=>{assert.equal(url,'/fonts/NotoSans-Regular.ttf');return new Response(fontBytes);};
+try{
+ for(const [operation] of recipes.workflowChoices){
+  const inputs=['merge','interleave'].includes(operation)?[second,first]:[tenFile];
+  const settings=recipes.workflowSettings(operation,seeds[operation]);
+  assert.equal(readiness.taskInputIssue('workflow',inputs.length,{...defaults,workflowSteps:[operation],workflowSettings:[settings]},false,inputs.reduce((n,f)=>n+f.pages,0)),'',operation+' readiness');
+  const doc=await pdf(await run(inputs,[operation],[settings]));
+  const expected={merge:2,interleave:2,remove:9,extract:4,odd:5,even:5,halve:20,nup:5,duplicate:20,blank:11}[operation]??10;
+  assert.equal(doc.getPageCount(),expected,operation+' page count');
+  if(operation==='extract')assert.deepEqual(doc.getPages().map(p=>p.getWidth()),[400,420,430,440]);
+  if(operation==='odd')assert.equal(doc.getPage(1).getWidth(),420);
+  if(operation==='even')assert.equal(doc.getPage(0).getWidth(),410);
+  if(operation==='interleave')assert.deepEqual(doc.getPages().map(p=>p.getWidth()),[500,400]);
+  if(operation==='halve')assert.equal(doc.getPage(0).getCropBox().width,200);
+  if(operation==='viewer')assert.equal(doc.catalog.get(PDFName.of('PageLayout')).toString(),'/SinglePage');
+  if(operation==='metadata'){assert.equal(doc.getTitle(),'Invoice');assert.equal(doc.getAuthor(),'PDF Studio');}
+  if(operation==='bookmarks')assert.equal(doc.catalog.lookup(PDFName.of('Outlines'),PDFDict).lookup(PDFName.of('Count')).asNumber(),2);
+ }
+}finally{globalThis.fetch=originalFetch;}
+await assert.rejects(run([first],['interleave']),/second PDF/);
+await assert.rejects(run([first,second],['rotate','interleave']),/first step/);
+await assert.rejects(run([first],['even']),/no even pages/);
+assert.equal(readiness.taskInputIssue('workflow',1,{...defaults,workflowSteps:['nup','remove'],workflowSettings:[{columns:'4'},{range:'4'}]},false,10).includes('1-3'),true);
+assert.equal(readiness.taskInputIssue('workflow',1,{...defaults,workflowSteps:['extract','bookmarks'],workflowSettings:[{range:'1,3'},{text:'3 Missing page'}]},false,10).includes('valid page'),true);
+result=await pdf(await run([tenFile],['bookmarks','remove-bookmarks'],[{text:'1 Introduction\n3 Details'},{}]));
+assert.equal(result.catalog.has(PDFName.of('Outlines')),false);
+const rich=await PDFDocument.create();const richPage=rich.addPage([400,600]);richPage.drawText('CONTENT');const richForm=rich.getForm();richForm.createTextField('Name').addToPage(richPage,{x:20,y:200,width:100,height:30});richForm.getTextField('Name').setText('Alice');
+const richAnnots=richPage.node.lookup(PDFName.of('Annots'),PDFArray);
+for(const subtype of ['Link','Text'])richAnnots.push(rich.context.register(rich.context.obj({Type:'Annot',Subtype:subtype,Rect:[20,20,60,50],Contents:'Example',...(subtype==='Link'?{A:{S:'URI',URI:'https://example.com'}}:{})})));
+await rich.attach(new Uint8Array([65,66,67]),'example.txt');const richBytes=await rich.save();const richFile={id:'rich',name:'rich.pdf',bytes:richBytes,size:richBytes.length,pages:1,doc:rich};
+const annotations=doc=>doc.getPage(0).node.lookup(PDFName.of('Annots'),PDFArray).asArray().map(ref=>doc.context.lookup(ref,PDFDict).get(PDFName.of('Subtype')).toString());
+result=await pdf(await run([richFile],['remove-links']));assert.equal(annotations(result).includes('/Link'),false);assert.equal(annotations(result).includes('/Text'),true);
+result=await pdf(await run([richFile],['remove-annotations']));assert.deepEqual(annotations(result),['/Widget']);assert.equal(result.getForm().getTextField('Name').getText(),'Alice');
+result=await pdf(await run([richFile],['remove-attachments']));assert.equal(result.catalog.lookup(PDFName.of('Names'),PDFDict).has(PDFName.of('EmbeddedFiles')),false);
+assert.equal(tenDoc.getPageCount(),10);assert.equal(rich.getForm().getTextField('Name').getText(),'Alice');
+console.log('PASS: all thirty operations, ten presets, page transformations, alternating PDFs, bookmarks, metadata and targeted cleanup with originals retained.');
