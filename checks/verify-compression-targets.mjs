@@ -71,3 +71,10 @@ const graph=await PDFDocument.create(),payload=new Uint8Array(2048).fill(37),fir
 const holder=graph.context.obj({Nested:{Refs:[second,different]}});graph.context.register(holder);
 assert.equal(await deduplicateStreams(graph),1);const refs=holder.lookup(PDFName.of('Nested')).lookup(PDFName.of('Refs'));assert.equal(refs.get(0),first);assert.equal(refs.get(1),different);assert.ok(graph.context.lookup(different));assert.equal(graph.context.lookup(second),undefined);
 console.log('PASS nested array references redirected; distinct stream dictionaries preserved.');
+// Workflow exports can contain completely unfiltered page-content streams.
+const rawDoc=await PDFDocument.create(),rawPage=rawDoc.addPage([595,842]);rawPage.drawText('Unfiltered workflow text retained',{x:40,y:780});const unfiltered=await PDFDocument.load(await rawDoc.save());
+for(const [ref,obj] of unfiltered.context.enumerateIndirectObjects())if(obj instanceof PDFRawStream&&obj.dict.get(PDFName.of('Filter'))?.toString()==='/FlateDecode'){
+ const {decodePDFRawStream}=await import('pdf-lib');const decoded=decodePDFRawStream(obj).getBytes(),dict=obj.dict.clone();dict.delete(PDFName.of('Filter'));dict.delete(PDFName.of('DecodeParms'));const padded=new Uint8Array(decoded.length+200000);padded.set(decoded);padded.fill(32,decoded.length);dict.set(PDFName.of('Length'),PDFNumber.of(padded.length));unfiltered.context.assign(ref,PDFRawStream.of(dict,padded));
+}
+const rawSource=await unfiltered.save(),rawResult=await run(rawSource,10000,{quality:'compact',compressTarget:''});assert.ok(rawResult.blob.size<rawSource.length*.1);assert.match(await text(await rawResult.blob.arrayBuffer()),/Unfiltered workflow text retained/);assert.equal((await PDFDocument.load(await rawResult.blob.arrayBuffer())).getPageCount(),1);
+console.log('PASS unfiltered workflow page streams compressed losslessly with selectable text retained.');
