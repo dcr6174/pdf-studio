@@ -18,7 +18,7 @@ export function SketchPDFWorkspace(p:Props){
  const locked=p.busy||p.drawing;
  function open(files:FileList|null){setDragging(false);p.upload(files);}
  function changePage(next:number){p.setPage(next);viewport.current?.scrollTo({top:0,left:0});}
- const exportButtons=<><button className="sketch-save" disabled={locked||!p.ready} onClick={()=>p.save(true)}><Download size={18}/>Download PDF</button><button className="sketch-save-image" aria-label="Save page as PNG" disabled={locked||!p.ready} onClick={()=>p.save(false)}><span className="sketch-png-long">Save page as PNG</span><span className="sketch-png-short" aria-hidden="true">Page PNG</span></button></>;
+ const exportButtons=<><button className="sketch-save" disabled={locked||!p.ready} onClick={()=>p.save(true)}><Download size={18}/>Create sketched PDF</button><button className="sketch-save-image" aria-label="Save page as PNG" disabled={locked||!p.ready} onClick={()=>p.save(false)}><span className="sketch-png-long">Save page as PNG</span><span className="sketch-png-short" aria-hidden="true">Page PNG</span></button></>;
  return <main className={'sketch-workspace '+(p.file?'has-document':'is-empty')}>
    <div data-export-workspace tabIndex={-1} hidden={p.resultVisible}>
      <input ref={input} className="sketch-hidden-input" type="file" accept=".pdf,application/pdf" aria-label="Open PDF for sketching" disabled={locked} onChange={e=>{open(e.target.files);e.target.value='';}}/>
@@ -47,3 +47,4 @@ export function SketchPDFWorkspace(p:Props){
    {p.resultScreen}
  </main>;
 }
+

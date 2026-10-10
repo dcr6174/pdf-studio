@@ -1,3 +1,5 @@
+import {preserveOutlines,remapPageLinks} from './pdf-navigation';
+import {epubHTMLText} from './epub-text';
 import {drawWorkflowWatermark} from './workflow-watermark';
 import {exportFilename} from '@/lib/export-filename';
 import {lineSegments,type ShapePoint} from './shape-geometry';
@@ -67,7 +69,7 @@ export type Mark = {
     align?:'left'|'center'|'right';
 };
 export type Options = {
-    wordMode?:string;wordOCR?:string;wordLanguage?:string;
+    bookmarkMode?:'append'|'replace';sheetNames?:string[];wordMode?:string;wordOCR?:string;wordLanguage?:string;
     splitOutput?:string;
     resizeSize?:string;
     resizeOrientation?:string;
@@ -227,7 +229,7 @@ export async function assemble(files: Loaded[], items: PageItem[], signal?:Abort
         p.setRotation(degrees((p.getRotation().angle + item.rotation) % 360));
         out.addPage(p);
     }
-} if(files.length===1&&files[0].doc){const d=files[0].doc;out.setTitle(d.getTitle()??'');out.setAuthor(d.getAuthor()??'');out.setSubject(d.getSubject()??'');out.setKeywords((d.getKeywords()??'').split(/,\s*/));} return out; }
+} if(files.length===1&&files[0].doc){const d=files[0].doc;out.setTitle(d.getTitle()??'');out.setAuthor(d.getAuthor()??'');out.setSubject(d.getSubject()??'');out.setKeywords((d.getKeywords()??'').split(/,\s*/));} preserveOutlines(out,sources,items);remapPageLinks(out,sources,items);return out; }
 export const fields = readFormFields;
 async function plainPDF(text: string, markdown = false) { if(markdown)return (await import('./markdown-pdf')).markdownPDF(text); const { jsPDF } = await import('jspdf'); const p = new jsPDF(); const font = await fetch('/fonts/NotoSans-Regular.ttf'); if (!font.ok)
     throw new Error('The document font could not be loaded. Please try again.'); const arr = new Uint8Array(await font.arrayBuffer()); let binary = ''; for (let i = 0; i < arr.length; i++)
@@ -295,7 +297,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         if (id === 'sheet') {
             const x = await import('xlsx');
             const w = x.read(first.bytes);
-            txt = x.utils.sheet_to_csv(w.Sheets[w.SheetNames[0]]);
+            const names=o.sheetNames??w.SheetNames; if(!names.length||names.some(name=>!w.SheetNames.includes(name)))throw new Error('Choose at least one valid spreadsheet sheet.');txt=names.map(name=>`${name}\n${x.utils.sheet_to_csv(w.Sheets[name])}`).join('\n\n');
         }
         if (id === 'ebook') {
             const z = await JSZip.loadAsync(first.bytes);
@@ -312,14 +314,14 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
                 const href = item?.getAttribute('href');
                 if (href && z.file(dir + decodeURIComponent(href))) {
                     const html = await z.file(dir + decodeURIComponent(href))!.async('string');
-                    chunks.push(new DOMParser().parseFromString(html, 'text/html').body.textContent ?? '');
+                    chunks.push(epubHTMLText(html));
                 }
             }
             txt = chunks.join('\n\n');
         }
         if (!txt.trim())
             throw new Error('Add some text or choose a document with readable text.');
-        return result(await plainPDF(txt, id === 'markdown'), `${filename}.pdf`);
+        return {...result(await plainPDF(txt, id === 'markdown'), `${filename}.pdf`),...(['docx','sheet','ebook'].includes(id)?{warnings:[id==='docx'?'Text-only conversion: images, tables and original page layout are not preserved.':id==='sheet'?'Selected sheets are exported as text rows. Charts, images, formulas and spreadsheet layout are not reconstructed.':'EPUB text is reflowed. Images, styles and original page layout are not preserved.']}:{} )};
     }
     if (id === 'hash') {
         const h = await crypto.subtle.digest('SHA-256', first.bytes.slice().buffer as ArrayBuffer);
@@ -338,7 +340,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     }
     if (id === 'zip') {
         const z = new JSZip();
-        files.forEach((f, i) => z.file(exportFilename(id,f.name,String(i+1)), f.bytes));
+        const used=new Set<string>();files.forEach(f=>{const original=f.name.split(/[\\/]/).pop()||'document.pdf';let name=original,n=2;while(used.has(name.toLowerCase()))name=original.replace(/(\.[^.]+)?$/,(_,extension='')=>` (${n++})${extension}`);used.add(name.toLowerCase());z.file(name,f.bytes);});
         return { blob: await z.generateAsync({ type: 'blob' }), name: 'documents.zip' };
     }
     if (['text', 'html', 'epub', 'csv', 'xlsx', 'audio', 'privacy'].includes(id)) {
@@ -418,7 +420,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if(id==='native-text'){await replaceExistingText(out,o.findText??'',o.replaceText??'');}
     if(['edit','sign','watermark'].includes(id)&&hasOverlappingWidgets(out,order,marks))throw new Error('An added element overlaps a fillable field and could be hidden. Choose Make fields read-only before exporting, or move the element outside the field. Your original remains unchanged.');
     if(id!=='form')await applyMarks(out,order,marks,signal);
-    if(id==='bookmarks'){addBookmarks(out,o.text);return result(await out.save(),`${filename}-bookmarks.pdf`);}
+    if(id==='bookmarks'){addBookmarks(out,o.text,o.bookmarkMode??'append');return result(await out.save(),`${filename}-bookmarks.pdf`);}
     if(id==='halve'){const d=await halvePages(out);return result(await d.save(),`${filename}-halves.pdf`);}
     if(id==='viewer'){out.catalog.set(PDFName.of('PageLayout'),PDFName.of(o.columns==='2'?'TwoColumnLeft':'SinglePage'));return result(await out.save(),`${filename}-viewer.pdf`);}
     if(id==='split'&&o.splitOutput==='groups'){
@@ -584,7 +586,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
                 }
             }
         }
-        return result(await fresh.save(), `${filename}-${id==='nup'?(o.columns+'-per-sheet'):id==='flip'?'mirrored':id}.pdf`);
+        return {...result(await fresh.save(), `${filename}-${id==='nup'?(o.columns+'-per-sheet'):id==='flip'?'mirrored':id}.pdf`),warnings:['Rebuilt page appearance: bookmarks and editable forms are not retained. Links on rebuilt pages are removed. Keep the original for navigation.']};
     }
     const selectedFont=id==='watermark'?o.workflowWatermark?.watermarkFont:['numbers','bates','headers'].includes(id)?o.labelFont:undefined;
     const standardFonts:Record<string,StandardFonts>={helvetica:StandardFonts.Helvetica,times:StandardFonts.TimesRoman,courier:StandardFonts.Courier};
@@ -615,7 +617,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             const n=labelIndex+(Number(o.start)||1),g=pageGeometry(p),size=Number(o.labelFontSize??11),margin=Number(o.labelMargin??24);
             if(!Number.isFinite(size)||size<6||size>72||!Number.isFinite(margin)||margin<5||margin>200)throw new Error('Use font size 6-72 pt and inset margin 5-200 pt.');
             const digits=Number(o.batesDigits??6);if(id==='bates'&&(!Number.isInteger(digits)||digits<1||digits>12))throw new Error('Use 1-12 Bates digits.');
-            const t=id==='numbers'?formattedNumber(n,o.numberFormat,labelTotal):id==='bates'?`${o.text||'DOC-'}${String(n).padStart(digits,'0')}${o.batesSuffix??''}`:labelText(o.text,labelIndex+1,labelTotal);
+            const t=id==='numbers'?formattedNumber(n,o.numberFormat,labelTotal):id==='bates'?`${o.text??''}${String(n).padStart(digits,'0')}${o.batesSuffix??''}`:labelText(o.text,labelIndex+1,labelTotal);
             p.pushOperators(pushGraphicsState(),concatTransformationMatrix(...g.matrix as [number,number,number,number,number,number]));
             const hex=/^#[0-9a-f]{6}$/i.test(o.labelColor??'')?o.labelColor!.slice(1):'333340',labelColor=rgb(parseInt(hex.slice(0,2),16)/255,parseInt(hex.slice(2,4),16)/255,parseInt(hex.slice(4,6),16)/255);
             const opacity=Number(o.labelOpacity??100);if(!Number.isFinite(opacity)||opacity<1||opacity>100)throw new Error('Use text opacity between 1 and 100%.');
@@ -728,4 +730,5 @@ export async function previewPDF(id:string,files:Loaded[],items:PageItem[],o:Opt
  const selected=!labels||ranges(o.range,total).includes(offset);
  return processPDFUnchecked(selected?id:'rotate',files,items,[],{...o,range:'',...(!selected?{angle:'0'}:{})},()=>{},signal,{offset,total});
 }
+
 

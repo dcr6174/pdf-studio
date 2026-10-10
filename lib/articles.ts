@@ -4571,8 +4571,8 @@ export const articles:Article[]=
       "Enter one page number and bookmark title per line, using positions in the file.",
       "Preview the page references, then export a PDF with a new outline."
     ],
-    "check": "Existing outline entries are replaced. Check bookmark destinations in a reader that displays PDF outlines.",
-    "limit": "One bookmark per line: page number followed by its title. Replaces the exported outline.",
+    "check": "New entries append by default; choose Replace existing bookmarks to remove the previous outline. Check bookmark destinations in a reader that displays PDF outlines.",
+    "limit": "One bookmark per line: page number followed by its title. Appends by default; Replace is an explicit choice.",
     "sections": [
       {
         "heading": "What this tool actually does",
@@ -4583,7 +4583,7 @@ export const articles:Article[]=
       {
         "heading": "Choose the controls for your document",
         "paragraphs": [
-          "Enter a valid page position and title for each bookmark. Keep titles short enough to scan in a sidebar; export replaces the previous outline rather than merging two competing outlines."
+          "Enter a valid page position and title for each bookmark. Keep titles short enough to scan in a sidebar; review the before/after outline and choose whether to append or replace existing bookmarks."
         ]
       },
       {
@@ -4600,7 +4600,7 @@ export const articles:Article[]=
       }
     ],
     "tips": [
-      "Enter a valid page position and title for each bookmark. Keep titles short enough to scan in a sidebar; export replaces the previous outline rather than merging two competing outlines.",
+      "Enter a valid page position and title for each bookmark. Keep titles short enough to scan in a sidebar; review the before/after outline and choose whether to append or replace existing bookmarks.",
       "Compare the destination with the PDF position, not a printed page number that may start after a cover. Update the entry and check it again after export.",
       "Use a page number within the document and a nonempty title. Start with one simple entry to isolate a formatting problem."
     ],
@@ -4619,7 +4619,7 @@ export const articles:Article[]=
       },
       {
         "question": "What should I check in the result?",
-        "answer": "Existing outline entries are replaced. Check bookmark destinations in a reader that displays PDF outlines."
+        "answer": "New entries append by default; choose Replace existing bookmarks to remove the previous outline. Check bookmark destinations in a reader that displays PDF outlines."
       }
     ],
     "hero": {
@@ -4675,8 +4675,8 @@ export const articles:Article[]=
       "Enter one page number and bookmark title per line, using positions in the file.",
       "Preview the page references, then export a PDF with a new outline."
     ],
-    "check": "Existing outline entries are replaced. Check bookmark destinations in a reader that displays PDF outlines.",
-    "limit": "One bookmark per line: page number followed by its title. Replaces the exported outline.",
+    "check": "New entries append by default; choose Replace existing bookmarks to remove the previous outline. Check bookmark destinations in a reader that displays PDF outlines.",
+    "limit": "One bookmark per line: page number followed by its title. Appends by default; Replace is an explicit choice.",
     "sections": [
       {
         "heading": "The document and the intended outcome",
@@ -4693,7 +4693,7 @@ export const articles:Article[]=
       {
         "heading": "Choose only the settings this case needs",
         "paragraphs": [
-          "Enter a valid page position and title for each bookmark. Keep titles short enough to scan in a sidebar; export replaces the previous outline rather than merging two competing outlines."
+          "Enter a valid page position and title for each bookmark. Keep titles short enough to scan in a sidebar; review the before/after outline and choose whether to append or replace existing bookmarks."
         ]
       },
       {
@@ -4704,7 +4704,7 @@ export const articles:Article[]=
       }
     ],
     "tips": [
-      "Enter a valid page position and title for each bookmark. Keep titles short enough to scan in a sidebar; export replaces the previous outline rather than merging two competing outlines.",
+      "Enter a valid page position and title for each bookmark. Keep titles short enough to scan in a sidebar; review the before/after outline and choose whether to append or replace existing bookmarks.",
       "Compare the destination with the PDF position, not a printed page number that may start after a cover. Update the entry and check it again after export.",
       "Use a page number within the document and a nonempty title. Start with one simple entry to isolate a formatting problem."
     ],
@@ -4723,7 +4723,7 @@ export const articles:Article[]=
       },
       {
         "question": "What should I check in the result?",
-        "answer": "Existing outline entries are replaced. Check bookmark destinations in a reader that displays PDF outlines."
+        "answer": "New entries append by default; choose Replace existing bookmarks to remove the previous outline. Check bookmark destinations in a reader that displays PDF outlines."
       }
     ],
     "hero": {
@@ -4779,8 +4779,8 @@ export const articles:Article[]=
       "Enter one page number and bookmark title per line, using positions in the file.",
       "Preview the page references, then export a PDF with a new outline."
     ],
-    "check": "Existing outline entries are replaced. Check bookmark destinations in a reader that displays PDF outlines.",
-    "limit": "One bookmark per line: page number followed by its title. Replaces the exported outline.",
+    "check": "New entries append by default; choose Replace existing bookmarks to remove the previous outline. Check bookmark destinations in a reader that displays PDF outlines.",
+    "limit": "One bookmark per line: page number followed by its title. Appends by default; Replace is an explicit choice.",
     "sections": [
       {
         "heading": "A bookmark opens the wrong section",
@@ -4808,7 +4808,7 @@ export const articles:Article[]=
       }
     ],
     "tips": [
-      "Enter a valid page position and title for each bookmark. Keep titles short enough to scan in a sidebar; export replaces the previous outline rather than merging two competing outlines.",
+      "Enter a valid page position and title for each bookmark. Keep titles short enough to scan in a sidebar; review the before/after outline and choose whether to append or replace existing bookmarks.",
       "Compare the destination with the PDF position, not a printed page number that may start after a cover. Update the entry and check it again after export.",
       "Use a page number within the document and a nonempty title. Start with one simple entry to isolate a formatting problem."
     ],
@@ -4827,7 +4827,7 @@ export const articles:Article[]=
       },
       {
         "question": "What should I check in the result?",
-        "answer": "Existing outline entries are replaced. Check bookmark destinations in a reader that displays PDF outlines."
+        "answer": "New entries append by default; choose Replace existing bookmarks to remove the previous outline. Check bookmark destinations in a reader that displays PDF outlines."
       }
     ],
     "hero": {
@@ -14899,19 +14899,19 @@ export const articles:Article[]=
       "Choose an XLSX, XLS or CSV input and check which sheet contains your data.",
       "Export and inspect the printed text rows."
     ],
-    "check": "Only the first sheet is converted. Charts, complex styling and original print layout are not preserved.",
-    "limit": "Text-based conversion of the first sheet. Complex styling and charts are not preserved.",
+    "check": "Choose sheets in the action panel; all sheets are selected by default. Charts, images, complex styling and original print layout are not preserved.",
+    "limit": "Text-based conversion of the selected sheets. Complex styling and charts are not preserved.",
     "sections": [
       {
         "heading": "What this tool actually does",
         "paragraphs": [
-          "Spreadsheet to PDF is text-based and uses the first sheet. It does not faithfully print charts, complex cell styling or a workbook’s entire multi-sheet design."
+          "Spreadsheet to PDF is text-based and includes the sheets selected in the action panel. It does not faithfully print charts, complex cell styling or a workbook’s entire multi-sheet design."
         ]
       },
       {
         "heading": "Choose the controls for your document",
         "paragraphs": [
-          "Put the intended data on the first sheet in a copy. Use short column headings and inspect long values that may wrap; retain the workbook for formulas and further editing."
+          "Select the sheets containing your intended data in the action panel. Use short column headings and inspect long values that may wrap; retain the workbook for formulas and further editing."
         ]
       },
       {
@@ -14928,7 +14928,7 @@ export const articles:Article[]=
       }
     ],
     "tips": [
-      "Put the intended data on the first sheet in a copy. Use short column headings and inspect long values that may wrap; retain the workbook for formulas and further editing.",
+      "Select the sheets containing your intended data in the action panel. Use short column headings and inspect long values that may wrap; retain the workbook for formulas and further editing.",
       "Check which sheet is first in the workbook copy. This operation does not infer the active business worksheet.",
       "Use the spreadsheet application’s own PDF export when those visual features are required. A row-based PDF is suitable for simpler reading copies."
     ],
@@ -14947,7 +14947,7 @@ export const articles:Article[]=
       },
       {
         "question": "What should I check in the result?",
-        "answer": "Only the first sheet is converted. Charts, complex styling and original print layout are not preserved."
+        "answer": "Choose sheets in the action panel; all sheets are selected by default. Charts, images, complex styling and original print layout are not preserved."
       }
     ],
     "hero": {
@@ -14976,8 +14976,8 @@ export const articles:Article[]=
       "Choose an XLSX, XLS or CSV input and check which sheet contains your data.",
       "Export and inspect the printed text rows."
     ],
-    "check": "Only the first sheet is converted. Charts, complex styling and original print layout are not preserved.",
-    "limit": "Text-based conversion of the first sheet. Complex styling and charts are not preserved.",
+    "check": "Choose sheets in the action panel; all sheets are selected by default. Charts, images, complex styling and original print layout are not preserved.",
+    "limit": "Text-based conversion of the selected sheets. Complex styling and charts are not preserved.",
     "sections": [
       {
         "heading": "The document and the intended outcome",
@@ -14994,7 +14994,7 @@ export const articles:Article[]=
       {
         "heading": "Choose only the settings this case needs",
         "paragraphs": [
-          "Put the intended data on the first sheet in a copy. Use short column headings and inspect long values that may wrap; retain the workbook for formulas and further editing."
+          "Select the sheets containing your intended data in the action panel. Use short column headings and inspect long values that may wrap; retain the workbook for formulas and further editing."
         ]
       },
       {
@@ -15005,7 +15005,7 @@ export const articles:Article[]=
       }
     ],
     "tips": [
-      "Put the intended data on the first sheet in a copy. Use short column headings and inspect long values that may wrap; retain the workbook for formulas and further editing.",
+      "Select the sheets containing your intended data in the action panel. Use short column headings and inspect long values that may wrap; retain the workbook for formulas and further editing.",
       "Check which sheet is first in the workbook copy. This operation does not infer the active business worksheet.",
       "Use the spreadsheet application’s own PDF export when those visual features are required. A row-based PDF is suitable for simpler reading copies."
     ],
@@ -15024,7 +15024,7 @@ export const articles:Article[]=
       },
       {
         "question": "What should I check in the result?",
-        "answer": "Only the first sheet is converted. Charts, complex styling and original print layout are not preserved."
+        "answer": "Choose sheets in the action panel; all sheets are selected by default. Charts, images, complex styling and original print layout are not preserved."
       }
     ],
     "hero": {
@@ -15053,8 +15053,8 @@ export const articles:Article[]=
       "Choose an XLSX, XLS or CSV input and check which sheet contains your data.",
       "Export and inspect the printed text rows."
     ],
-    "check": "Only the first sheet is converted. Charts, complex styling and original print layout are not preserved.",
-    "limit": "Text-based conversion of the first sheet. Complex styling and charts are not preserved.",
+    "check": "Choose sheets in the action panel; all sheets are selected by default. Charts, images, complex styling and original print layout are not preserved.",
+    "limit": "Text-based conversion of the selected sheets. Complex styling and charts are not preserved.",
     "sections": [
       {
         "heading": "The wrong sheet appears",
@@ -15071,7 +15071,7 @@ export const articles:Article[]=
       {
         "heading": "Check whether this is the right operation",
         "paragraphs": [
-          "Spreadsheet to PDF is text-based and uses the first sheet. It does not faithfully print charts, complex cell styling or a workbook’s entire multi-sheet design."
+          "Spreadsheet to PDF is text-based and includes the sheets selected in the action panel. It does not faithfully print charts, complex cell styling or a workbook’s entire multi-sheet design."
         ]
       },
       {
@@ -15082,7 +15082,7 @@ export const articles:Article[]=
       }
     ],
     "tips": [
-      "Put the intended data on the first sheet in a copy. Use short column headings and inspect long values that may wrap; retain the workbook for formulas and further editing.",
+      "Select the sheets containing your intended data in the action panel. Use short column headings and inspect long values that may wrap; retain the workbook for formulas and further editing.",
       "Check which sheet is first in the workbook copy. This operation does not infer the active business worksheet.",
       "Use the spreadsheet application’s own PDF export when those visual features are required. A row-based PDF is suitable for simpler reading copies."
     ],
@@ -15101,7 +15101,7 @@ export const articles:Article[]=
       },
       {
         "question": "What should I check in the result?",
-        "answer": "Only the first sheet is converted. Charts, complex styling and original print layout are not preserved."
+        "answer": "Choose sheets in the action panel; all sheets are selected by default. Charts, images, complex styling and original print layout are not preserved."
       }
     ],
     "hero": {

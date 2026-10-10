@@ -51,6 +51,9 @@ jobs:
       - name: PDF to Word output regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-word-conversion.mjs && node checks/verify-word-source.mjs && node checks/verify-word-layout.mjs
+      - name: Desktop audit output regressions
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-desktop-audit.mjs
       - name: Production build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npm run build:public

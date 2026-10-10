@@ -136,7 +136,7 @@ const curatedTools = [
     "title": "Add PDF bookmarks",
     "heading": "Create a clickable document outline",
     "intro": "Enter a page number and title on each line, then export a PDF with bookmarks.",
-    "detail": "Supports 100 bookmarks and valid page numbers. The exported outline replaces the previous outline."
+    "detail": "Supports 100 bookmarks and valid page numbers. New bookmarks append by default. Choose Replace existing bookmarks explicitly to replace the outline."
   },
   {
     "slug": "split-pdf-in-half",
