@@ -365,3 +365,15 @@
  .workflow-toolbar-actions.has-actions>button:first-child{font-size:11px;padding:7px 5px}
 }
 @media(prefers-reduced-motion:reduce){.workflow-drag-ghost{scroll-behavior:auto}}
+
+/* Sidebar operations can be clicked or placed directly into the action sequence. */
+.reference-tool-row{display:flex;align-items:center;gap:2px;min-width:0;flex:none;border-radius:7px}
+.reference-tool-row>.reference-tool{flex:1;min-width:0;padding-right:4px}
+.workflow-library-drag{display:grid;place-items:center;flex:none;min-width:30px;min-height:44px;padding:4px;border:0;border-radius:6px;background:transparent;color:var(--muted);cursor:grab;touch-action:none;user-select:none}
+.workflow-library-drag:hover:not(:disabled){color:var(--primary);background:var(--soft)}
+.workflow-library-drag:active{cursor:grabbing}
+.reference-tool-row.library-is-dragging{background:var(--soft);outline:2px solid var(--primary)}
+.reference-pipeline.library-drag-over{background:color-mix(in srgb,var(--soft) 45%,var(--card))}
+.reference-empty.library-empty-drop{border:2px dashed var(--primary);border-radius:12px;padding:28px;width:min(560px,100%);align-self:center;background:var(--soft)}
+.workflow-drag-ghost .reference-step-number{min-width:28px;width:auto;padding:0 4px}
+@media(max-width:700px){.reference-tool-row{gap:0}.workflow-library-drag{min-width:26px;min-height:40px;padding:3px}.reference-tool-row>.reference-tool{gap:5px}.reference-tool-row .reference-tool>svg{display:none}.reference-tool-row .reference-tool>span:nth-child(2){font-size:11px}.reference-empty.library-empty-drop{padding:14px}}
