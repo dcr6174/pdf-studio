@@ -432,3 +432,13 @@
 .workflow-preview-zoom{display:flex;align-items:center;justify-content:center;gap:4px;flex:none}.workflow-preview-zoom button{display:flex;align-items:center;justify-content:center;min-height:30px;min-width:32px;padding:4px;font-size:11px;border:1px solid var(--border);border-radius:6px;background:var(--card);color:var(--foreground)}.workflow-preview-paper .workflow-scroll-page{width:calc(100% * var(--workflow-zoom,1));max-width:none}.workflow-preview-paper.workflow-is-zoomed:not(.workflow-continuous-review){display:block}.workflow-preview-paper.workflow-is-zoomed:not(.workflow-continuous-review) .workflow-result-sheet{width:calc(100% * var(--workflow-zoom,1));height:auto;display:block;max-width:none}.workflow-preview-paper.workflow-is-zoomed:not(.workflow-continuous-review) .workflow-result-sheet img{width:100%!important;height:auto!important;max-width:none}.workflow-crop-review{overflow:auto;min-height:0}.workflow-watermark-presets button[aria-pressed=true]{border-color:var(--primary);background:var(--soft);color:var(--primary)}
 
 .workflow-settings-preview.workflow-crop-panel{height:420px;max-height:60dvh}.workflow-crop-panel .workflow-crop-review{flex:1}.workflow-crop-panel .pdf-crop-editor p{margin-top:0}@media(max-width:700px){.workflow-settings-preview.workflow-crop-panel{height:350px;max-height:46dvh}}
+
+/* Crop controls and rectangle share one scroll area, so the preview cannot squeeze out inputs. */
+.workflow-settings-panel.workflow-crop-settings{overflow:auto;display:block;scrollbar-width:thin}
+.workflow-crop-settings>header{position:sticky;top:-14px;background:var(--card);z-index:2;padding:8px 0}
+.workflow-crop-settings .reference-settings{overflow:visible;min-height:auto;padding-right:0}
+.workflow-crop-settings .workflow-settings-preview{height:300px}
+.workflow-crop-settings .workflow-settings-preview.workflow-crop-panel{height:auto;max-height:none}
+.workflow-crop-settings .workflow-crop-review{overflow:visible}
+.workflow-crop-values{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px}
+@media(max-width:700px){.workflow-crop-settings>header{top:-14px}.workflow-crop-settings .workflow-settings-preview{height:240px}}
