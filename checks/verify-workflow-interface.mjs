@@ -146,8 +146,12 @@ try{
  for(const page of styledPDF.getPages()){
   const stream=page.node.Contents().asArray().map(ref=>Buffer.from(decodePDFRawStream(styledPDF.context.lookup(ref)).decode()).toString()).join('');
   assert.equal((stream.match(/ Tj/g)??[]).length,2,'one source text and exactly one watermark per page');
-  assert.match(stream,/48 Tf/,'configured text size');assert.match(stream,/0\\.9372549019607843 0\\.2 0\\.26666666666666666 rg/,'configured RGB color');
-  assert.match(stream,/0\\.9063077870366499 0\\.42261826174069944 -0\\.42261826174069944 0\\.9063077870366499/,'configured 25-degree angle');
+  assert.match(stream,/48 Tf/,'configured text size');
+  const colorRows=stream.split('\n').filter(line=>line.endsWith(' rg')).map(line=>line.split(' ').slice(0,3).map(Number));
+  assert(colorRows.some(([r,g,b])=>Math.abs(r-239/255)<1e-8&&Math.abs(g-51/255)<1e-8&&Math.abs(b-68/255)<1e-8),'configured RGB color');
+  const matrices=stream.split('\n').filter(line=>line.endsWith(' cm')).map(line=>line.split(' ').slice(0,6).map(Number));
+  const stamp=matrices.find(([a,b])=>Math.abs(a-Math.cos(25*Math.PI/180))<1e-8&&Math.abs(b-Math.sin(25*Math.PI/180))<1e-8);
+  assert(stamp,'configured 25-degree angle');assert(stamp[4]>page.getWidth()/2&&stamp[5]<page.getHeight()/2,'bottom-right placement');
   const states=page.node.Resources().lookup(PDFName.of('ExtGState'),PDFDict);assert(states.entries().some(([,ref])=>styledPDF.context.lookup(ref).lookup(PDFName.of('ca')).asNumber()===.65),'configured opacity');
  }
  const cropped=await pdf(await run([first],['crop','rotate','watermark'],[{margin:'20'},{angle:'270'},styled]));assert.equal(cropped.getPage(0).getRotation().angle,270);assert.equal(cropped.getPage(0).getCropBox().width,360);

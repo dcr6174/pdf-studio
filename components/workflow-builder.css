@@ -423,3 +423,5 @@
 .reference-tool-row .reference-tool>span:nth-child(2){word-break:normal;overflow-wrap:normal}.workflow-settings-preview .workflow-preview-paper:not(.workflow-continuous-review) .workflow-result-sheet{height:100%;min-height:0;display:flex;justify-content:center}.workflow-settings-preview .workflow-preview-paper:not(.workflow-continuous-review) .workflow-result-sheet img{height:100%!important;width:auto;max-width:100%;object-fit:contain}
 
 .workflow-settings-preview{height:300px}.workflow-settings-preview .workflow-preview-modes{padding:2px;gap:2px}.workflow-settings-preview .workflow-preview-modes button{min-height:30px;padding:5px;font-size:10px}.workflow-settings-preview .workflow-preview-caption{white-space:nowrap;overflow:hidden;text-overflow:ellipsis;min-height:14px}@media(max-width:700px){.workflow-settings-preview{height:240px}.workflow-settings-preview .workflow-preview-modes{align-self:auto}}
+
+.workflow-scroll-sheet{width:100%;background:var(--card)}.workflow-scroll-sheet .workflow-result-sheet{min-height:0;width:100%;height:100%}.workflow-scroll-sheet .workflow-page-placeholder{width:100%;height:100%;box-sizing:border-box;aspect-ratio:auto}
