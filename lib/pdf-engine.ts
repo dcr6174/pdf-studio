@@ -448,8 +448,8 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     }
     if(id==='compress'&&['images','image-small','compact'].includes(o.quality)){
         const source=unchanged?first.bytes:await out.save();
-        const {bytes,images:changed,streams}=await compressDocument(source,o.quality,o.compressJPEG,o.compressMaxDimension,signal);progress(95);const smaller=bytes.length<source.length;
-        return result(bytes,`${filename}-compressed.pdf`,undefined,smaller?`Optimized ${changed} supported embedded images and ${streams} lossless streams. Selectable text, links, bookmarks and editable forms retained.${changed?' Image quality is reduced; check scanned fine print.':''}`:'No smaller result: original source retained. Already optimized documents may not shrink. Masked, indexed, CMYK and other unsupported images stay unchanged.',source.length);
+        const {bytes,images:changed,streams,duplicates}=await compressDocument(source,o.quality,o.compressJPEG,o.compressMaxDimension,signal);progress(95);const smaller=bytes.length<source.length;
+        return result(bytes,`${filename}-compressed.pdf`,undefined,smaller?`Optimized ${changed} supported embedded images and ${streams} lossless streams; removed ${duplicates} duplicate streams. Selectable text, links, bookmarks and editable forms retained.${changed?' Image quality is reduced; check scanned fine print.':''}`:'No smaller result: original source retained. Already optimized documents may not shrink. Masked, indexed, CMYK and other unsupported images stay unchanged.',source.length);
     }
     if(id==='flatten'&&o.flattenMode!=='image'){const count=out.getForm().getFields().length;flattenFormSafely(out);progress(100);return result(await out.save(),`${filename}-flatten.pdf`,undefined,`${count} form fields made read-only. Selectable text and page sizes retained. Other annotations remain; choose image mode to flatten the entire appearance.`,first.size);}
     if (['jpg', 'png', 'webp', 'compress', 'flatten', 'redact', 'grayscale', 'invert', 'ocr', 'pptx'].includes(id)) {

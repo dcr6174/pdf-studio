@@ -58,3 +58,16 @@ for(const invalid of ['0','-1','abc','Infinity'])await assert.rejects(()=>run(by
 const controller=new AbortController();controller.abort();await assert.rejects(()=>run(bytes,100,{},controller.signal),{name:'AbortError'});
 console.log('PASS resize/decode dimensions, impossible-target reporting, compact-only preservation, invalid targets and cancellation. Native canvas fixture; real-browser quality requires separate validation.');
 
+// Byte-identical embedded resources must share one stream without changing page references.
+const duplicateDoc=await PDFDocument.create();
+for(let i=0;i<2;i++){const page=duplicateDoc.addPage([595,842]),jpg=await duplicateDoc.embedJpg(photo.toBuffer('image/jpeg',100));page.drawImage(jpg,{x:40,y:100,width:300,height:400});page.drawText('Shared image page '+(i+1),{x:40,y:780});}
+const duplicateSource=await duplicateDoc.save(),duplicateResult=await run(duplicateSource,10000,{quality:'compact',compressTarget:''}),sharedDoc=await PDFDocument.load(await duplicateResult.blob.arrayBuffer());
+assert.equal(sharedDoc.getPageCount(),2);assert.ok(duplicateResult.blob.size<duplicateSource.length*.6);assert.equal(sharedDoc.context.enumerateIndirectObjects().filter(([,o])=>o instanceof PDFRawStream&&o.dict.get(PDFName.of('Subtype'))?.toString()==='/Image').length,1);
+assert.match(await text(await duplicateResult.blob.arrayBuffer()),/Shared image page 1/);
+console.log('PASS duplicate embedded image streams shared across two intact pages.');
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/deduplicate-streams.ts',outDir:'.stream-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'streams.mjs'}}}});
+const {deduplicateStreams}=await import('../.stream-check/streams.mjs');
+const graph=await PDFDocument.create(),payload=new Uint8Array(2048).fill(37),first=graph.context.register(graph.context.stream(payload,{Marker:1})),second=graph.context.register(graph.context.stream(payload,{Marker:1})),different=graph.context.register(graph.context.stream(payload,{Marker:2}));
+const holder=graph.context.obj({Nested:{Refs:[second,different]}});graph.context.register(holder);
+assert.equal(await deduplicateStreams(graph),1);const refs=holder.lookup(PDFName.of('Nested')).lookup(PDFName.of('Refs'));assert.equal(refs.get(0),first);assert.equal(refs.get(1),different);assert.ok(graph.context.lookup(different));assert.equal(graph.context.lookup(second),undefined);
+console.log('PASS nested array references redirected; distinct stream dictionaries preserved.');
