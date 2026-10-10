@@ -1,6 +1,6 @@
-export const workflowChoices=[['merge','Merge input PDFs'],['rotate','Rotate pages'],['watermark','Add watermark'],['remove','Remove pages'],['reorder','Reorder pages'],['crop','Crop margins'],['reverse','Reverse page order'],['duplicate','Duplicate pages'],['blank','Insert blank page'],['resize','Resize pages'],['numbers','Page numbers'],['bates','Bates numbers'],['headers','Headers and footers'],['flatten','Lock form fields'],['flip','Mirror pages'],['clean','Clear standard metadata'],['compress','Compress PDF']] as const;
+export const workflowChoices=[['merge','Merge input PDFs'],['rotate','Rotate pages'],['watermark','Add watermark'],['remove','Remove pages'],['reorder','Reorder pages'],['crop','Crop margins'],['reverse','Reverse page order'],['duplicate','Duplicate pages'],['blank','Insert blank page'],['resize','Resize pages'],['numbers','Page numbers'],['bates','Bates numbers'],['headers','Headers and footers'],['flatten','Lock form fields'],['flip','Mirror pages'],['clean','Clear standard metadata'],['compress','Compress PDF'],['extract','Keep selected pages'],['odd','Keep odd pages'],['even','Keep even pages'],['interleave','Alternate PDFs'],['halve','Split wide pages'],['nup','Pages per sheet'],['viewer','Reading layout'],['metadata','Set document details'],['bookmarks','Add bookmarks'],['remove-links','Remove clickable links'],['remove-bookmarks','Remove bookmarks'],['remove-attachments','Remove embedded files'],['remove-annotations','Remove comments']] as const;
 export const workflowOperations=workflowChoices.map(([id])=>id);
-export type WorkflowStepSettings={angle?:string;quality?:string;resizeSize?:string;resizeOrientation?:string;range?:string;margin?:string;text?:string;footer?:string;start?:string;numberPosition?:string;numberFormat?:string;labelFontSize?:string;labelMargin?:string;batesDigits?:string;batesSuffix?:string;flipAxis?:string;blankAt?:string};
+export type WorkflowStepSettings={angle?:string;quality?:string;resizeSize?:string;resizeOrientation?:string;range?:string;margin?:string;text?:string;footer?:string;start?:string;numberPosition?:string;numberFormat?:string;labelFontSize?:string;labelMargin?:string;batesDigits?:string;batesSuffix?:string;flipAxis?:string;blankAt?:string;columns?:string;title?:string;author?:string;subject?:string};
 export type WorkflowRecipe={version?:1;name:string;steps:string[];disabled:number[];settings?:WorkflowStepSettings[]};
 export function workflowSettings(step:string,value:unknown):WorkflowStepSettings{
  const raw=value&&typeof value==='object'?value as Record<string,unknown>:{};
@@ -11,7 +11,11 @@ export function workflowSettings(step:string,value:unknown):WorkflowStepSettings
  if(step==='rotate')return {angle:pick('angle',['90','180','270'],'90')};
  if(step==='compress')return {quality:pick('quality',['compact','images'],'compact')};
  if(step==='resize')return {resizeSize:pick('resizeSize',['a4','letter'],'a4'),resizeOrientation:pick('resizeOrientation',['portrait','landscape'],'portrait')};
- if(step==='remove'||step==='reorder')return {range:text('range')};
+ if(step==='remove'||step==='reorder'||step==='extract')return {range:text('range')};
+ if(step==='nup')return {columns:pick('columns',['2','4','6','9'],'2')};
+ if(step==='viewer')return {columns:pick('columns',['1','2'],'1')};
+ if(step==='metadata')return {title:text('title'),author:text('author'),subject:text('subject')};
+ if(step==='bookmarks')return {text:text('text','',8000)};
  if(step==='blank')return {blankAt:num('blankAt','1',1,400)};
  if(step==='crop')return {margin:num('margin','20',0,500)};
  if(step==='flip')return {flipAxis:pick('flipAxis',['horizontal','vertical'],'horizontal')};
@@ -32,13 +36,22 @@ export function readWorkflowRecipe(value:unknown):WorkflowRecipe{
 export function workflowStepIssue(step:string,s:WorkflowStepSettings,pages:number,files:number,index:number):string{
  if(step==='watermark'&&!s.text?.trim())return 'Enter watermark text.';
  if(step==='merge'&&(files<2||index>0))return index?'Merge must be the first step.':'Add a second PDF to merge.';
- if(step==='remove'||step==='reorder'){
-  if(!s.range?.trim())return step==='remove'?'Enter the pages to remove.':'Enter the complete page order.';
+ if(step==='remove'||step==='reorder'||step==='extract'){
+  if(!s.range?.trim())return step==='remove'?'Enter the pages to remove.':step==='extract'?'Enter the pages to keep.':'Enter the complete page order.';
   const order:number[]=[];
   for(const part of s.range.split(',')){const m=/^\s*(\d+)(?:\s*-\s*(\d+))?\s*$/.exec(part);if(!m)return 'Use page numbers or ranges, such as 1, 3-5.';const a=Number(m[1]),b=Number(m[2]??m[1]);if(a<1||b<a||b>(pages||400))return `Choose pages within 1-${pages||400}.`;for(let n=a;n<=b;n++)order.push(n);}
   if(pages&&step==='remove'&&new Set(order).size>=pages)return 'Keep at least one page.';
   if(pages&&step==='reorder'&&(new Set(order).size!==pages||order.length!==pages))return 'Include every page exactly once.';
  }
+ if(step==='even'&&pages===1)return 'There are no even pages. Add more pages or remove this action.';
+ if(step==='interleave'&&(files<2||index>0))return index?'Alternate PDFs must be the first step.':'Add a second PDF to alternate pages.';
+ if(step==='bookmarks'){
+  const rows=(s.text??'').split('\n').map(v=>v.trim()).filter(Boolean);
+  if(!rows.length)return 'Enter a page number and bookmark title, one per line.';
+  if(rows.length>100)return 'Use at most 100 bookmarks.';
+  if(rows.some(row=>{const m=/^(\d+)\s+(.+)$/.exec(row);return !m||Number(m[1])<1||Number(m[1])>(pages||400);}))return 'Use a valid page number and title, such as 1 Introduction.';
+ }
+ if(step==='metadata'&&![s.title,s.author,s.subject].some(v=>v?.trim()))return 'Enter a title, author or subject.';
  if(step==='blank'&&pages&&Number(s.blankAt??1)>pages+1)return `Insert at a position from 1 to ${pages+1}.`;
  return '';
 }

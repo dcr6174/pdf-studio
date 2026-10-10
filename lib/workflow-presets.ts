@@ -9,6 +9,8 @@ export const workflowPresets:WorkflowPreset[]=[
  {id:'print-number',label:'Print & number',description:'Fit to A4, then add page numbers.',steps:[{id:'resize'},{id:'numbers'}]},
  {id:'confidential',label:'Confidential copy',description:'Add CONFIDENTIAL and clear standard metadata.',steps:[{id:'watermark',settings:{text:'CONFIDENTIAL',angle:'45'}},{id:'clean'}]},
  {id:'filled-form',label:'Save filled form',description:'Make form fields read-only, clear metadata and compress.',steps:[{id:'flatten'},{id:'clean'},{id:'compress'}]}
+ ,{id:'save-paper',label:'Save paper',description:'Print two PDF pages on each sheet.',steps:[{id:'nup',settings:{columns:'2'}}]}
+ ,{id:'selected-pages',label:'Extract & number',description:'Choose the pages to keep, then number them.',steps:[{id:'extract'},{id:'numbers'}]}
 ];
 export function workflowPresetState(preset:WorkflowPreset,fileCount:number){
  const chosen=fileCount>1?[{id:'merge'},...preset.steps]:preset.steps;

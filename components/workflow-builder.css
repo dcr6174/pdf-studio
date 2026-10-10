@@ -216,3 +216,72 @@
 @media(prefers-reduced-motion:reduce){.workflow-run-button,.workflow-run-fill{transition:none}.workflow-run-button:hover:not(:disabled){transform:none}.workflow-run-button:hover:not(:disabled) .workflow-run-sheen,.workflow-run-button .spin{animation:none}}
 
 .reference-steps>li.needs-details{border-color:#d99028;background:#fffdf8}.workflow-step-error{margin:0;padding:10px 18px;color:#854a0e;background:#fff2d8;font-size:14px;line-height:1.5}.reference-settings input[aria-invalid=true]{border-color:#d99028}.workflow-status .link-button{margin-left:12px;min-height:36px}.workflow-status:has(.link-button){display:flex;align-items:center;flex-wrap:wrap;gap:4px}
+
+/* One searchable operation library and ten visible starting workflows. */
+.studio-shell[data-tool=workflow] .content{padding:8px 10px 0}
+.guided-workflow:not(.workflow-upload){height:calc(100dvh - 84px);min-height:0;border-radius:8px}
+.reference-library{display:flex;flex-direction:column;overflow:hidden;padding:14px 10px}
+.workflow-library-heading{display:flex;align-items:center;justify-content:space-between;gap:8px;margin:0 6px 10px;flex:none}
+.workflow-library-heading h3{margin:0;font-size:15px}
+.workflow-library-heading>span{font-size:12px;background:var(--soft);color:var(--muted);border-radius:20px;padding:3px 8px}
+.workflow-search{display:flex;align-items:center;gap:7px;flex:none;min-width:0;min-height:42px;margin:0 2px 8px;border:1px solid var(--border);border-radius:8px;padding:0 9px;background:var(--card);color:var(--muted)}
+.workflow-search:focus-within{border-color:var(--primary)}
+.workflow-search input{width:100%;min-width:0;border:0;outline:0;background:transparent;color:var(--foreground);font:inherit;font-size:13px;padding:10px 0}
+.workflow-search input::-webkit-search-cancel-button{display:none}
+.workflow-search button{display:grid;place-items:center;flex:none;min-height:32px;min-width:32px;padding:0;background:transparent;border:0;color:var(--muted)}
+.reference-library>p{margin:0 6px 10px;flex:none}
+.reference-tool-grid{overflow:auto;min-height:0;flex:1;scrollbar-width:thin;padding-right:3px;overscroll-behavior:contain}
+.reference-tool{flex:none;min-height:44px}
+.reference-tool>span:nth-child(2){overflow-wrap:anywhere}
+.workflow-search-empty{font-size:13px;text-align:center;color:var(--muted);line-height:1.6}
+.workflow-search-empty button{display:block;margin:8px auto}
+.reference-starts{display:block;width:100%;padding:14px 0 0}
+.reference-starts>span{display:block;font-size:12px;color:var(--muted);margin-bottom:9px}
+.workflow-preset-grid{display:grid;grid-template-columns:repeat(5,minmax(0,1fr));gap:7px;width:100%}
+.reference-starts .workflow-preset{display:flex;align-items:flex-start;flex-direction:column;justify-content:center;gap:5px;text-align:left;min-height:66px;padding:10px 12px;border:1px solid var(--border);border-radius:9px;background:var(--card);color:var(--foreground);transition:background .15s,border-color .15s}
+.workflow-preset strong{font-size:12px;line-height:1.4}
+.workflow-preset small{font-size:11px;color:var(--muted);line-height:1.45}
+.workflow-preset:hover:not(:disabled){background:var(--soft);border-color:var(--primary)}
+.reference-starts>.link-button{margin-top:8px}
+.reference-pipeline{padding:16px 20px}
+.reference-empty{padding:16px}
+.guided-field textarea{font:inherit;font-size:16px;width:100%;min-height:100px;padding:9px 11px;border:1px solid var(--border);border-radius:7px;background:var(--card);color:var(--foreground);resize:vertical}
+.workflow-bookmarks{grid-column:1/-1}
+.reference-settings textarea[aria-invalid=true]{border-color:#d99028}
+@media(min-width:701px) and (max-width:1100px){.workflow-preset-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.reference-starts .workflow-preset{min-height:48px}.workflow-preset small{display:none}}
+@media(max-width:700px){
+ .studio-shell[data-tool=workflow] .content{padding:4px 5px 0}
+ .guided-workflow:not(.workflow-upload){height:calc(100dvh - 78px);min-height:0}
+ .guided-layout{overflow:hidden;display:flex}
+ .guided-controls{display:flex;flex:1;overflow:hidden}
+ .reference-workspace{flex:1;min-height:0;height:100%;width:100%;overflow:hidden}
+ .reference-library{flex:none;height:190px;overflow:hidden;padding:8px 9px}
+ .workflow-library-heading{margin-bottom:5px}
+ .workflow-search{min-height:36px;margin-bottom:4px}
+ .workflow-search input{font-size:16px;padding:7px 0}
+ .reference-library>p{display:none}
+ .reference-tool-grid{grid-template-columns:1fr 1fr;gap:3px 7px}
+ .reference-tool{min-height:40px;padding:6px 3px}
+ .reference-pipeline{flex:1;min-height:0;overflow:auto;overscroll-behavior:contain;padding:10px}
+ .reference-pipeline-heading{margin-bottom:9px}
+ .reference-pipeline-heading p{display:none}
+ .reference-pipeline:not(:has(.reference-steps)){justify-content:flex-start}
+ .reference-pipeline:not(:has(.reference-steps)) .reference-empty{margin:0 0 8px;min-height:0;padding:4px 0}
+ .reference-empty>svg{display:none}
+ .reference-empty h4{margin:0;font-size:15px}
+ .reference-empty p{margin:5px 0 0;font-size:12px}
+ .reference-starts{padding-top:8px;margin-top:0}
+ .workflow-preset-grid{grid-template-columns:repeat(2,minmax(0,1fr));gap:5px}
+ .reference-starts .workflow-preset{min-height:39px;padding:7px 9px;border-radius:7px}
+ .workflow-preset small{display:none}
+ .workflow-status{font-size:12px;line-height:1.45;padding:6px 10px}
+ .workflow-status .link-button{margin-left:0;padding:0;min-height:28px}
+ .workflow-toolbar-actions{flex-wrap:nowrap}
+ .workflow-toolbar-actions button{padding:8px 7px}
+ .guided-final-action .workflow-run-button{min-width:130px;padding:8px 10px}
+}
+@media(max-width:360px){.workflow-toolbar-actions{gap:4px}.workflow-toolbar-actions>button{font-size:11px;padding:7px 5px}.guided-final-action .workflow-run-button{min-width:118px;font-size:11px}}
+@media(prefers-reduced-motion:reduce){.workflow-preset{transition:none}}
+
+@media(max-width:700px){.reference-library{height:180px}.reference-empty{gap:6px}.reference-pipeline:not(:has(.reference-steps)) .reference-empty{margin-bottom:5px}.reference-starts .workflow-preset{min-height:36px;padding:6px 8px}.reference-starts>span{margin-bottom:6px}.workflow-toolbar-actions button{white-space:nowrap}.workflow-toolbar-actions .workflow-run-button{white-space:nowrap}.reference-pipeline:not(:has(.reference-steps)) .reference-starts{padding-top:4px}}
+@media(max-width:360px){.workflow-toolbar-actions>button svg{display:none}.guided-final-action .workflow-run-button{min-width:110px;padding:8px 7px}}
