@@ -14,6 +14,7 @@ const {seoPages}=await import(asModule(seoSource.replace("'./tools'",JSON.string
 const {conversionGuides}=await import(asModule(await readFile(new URL('lib/conversion-guides.ts',root),'utf8')));
 const {searchGuidance}=await import(asModule(await readFile(new URL('lib/search-guidance.ts',root),'utf8')));
 const {articles}=await import(asModule(await readFile(new URL('lib/articles.ts',root),'utf8')));
+const {imageGuides}=await import(asModule(await readFile(new URL('lib/image-guides.ts',root),'utf8')));
 const {imageTools}=await import(asModule(await readFile(new URL('lib/image-tools.ts',root),'utf8')));
 const {comparisons}=await import(asModule(await readFile(new URL('lib/comparisons.ts',root),'utf8')));
 GlobalFonts.registerFromPath(new URL('public/fonts/NotoSans-Regular.ttf',root).pathname,'Studio Sans');
@@ -42,6 +43,7 @@ const pages=[...articles.map(a=>({path:'/blog/'+a.slug,content:JSON.stringify(a)
 const toolGuideSource=await readFile(new URL('app/guides/[slug]/page.tsx',root),'utf8');
 pages.push(...seoPages.map(page=>({path:'/guides/'+page.slug,content:JSON.stringify(page)+JSON.stringify(searchGuidance[page.slug]??toolGuidance[page.id])+toolGuideSource})));
 pages.push(...['text-to-handwriting','notebook-maker','handwriting-practice'].map(slug=>({path:'/guides/'+slug,content:toolGuideSource})));
+pages.push(...imageGuides.map(g=>({path:'/lab/guides/'+g.slug,content:JSON.stringify(g)+JSON.stringify(imageTools.filter(t=>g.tools.includes(t.slug)))+''})));
 const urls=pages.map(page=>{const hash=createHash('sha256').update(page.content).digest('hex');state[page.path]={hash,lastmod:old[page.path]?.hash===hash?old[page.path].lastmod:today};return `<url><loc>${base+page.path}</loc><lastmod>${state[page.path].lastmod}</lastmod></url>`;});
 urls.push(...['/lab','/lab/image-size-reducer','/lab/remove-watermark','/lab/mini-zine-maker','/lab/photo-booth-strips','/lab/custom-bingo','/lab/giant-poster','/lab/photo-coloring-page','/lab/printable-flashcards','/lab/daily-mood-canvas','/lab/photo-strip','/lab/flashcards','/lab/decision-wheel','/lab/pomodoro','/lab/calculator','/lab/finance-calculator','/lab/practice-sheets','/lab/text-to-handwriting','/lab/notebook-maker','/lab/handwriting-practice','/lab/flipbook','/lab/word-cloud','/lab/page-palette','/lab/whiteboard','/lab/poster-collage','/lab/pdf-to-gif','/lab/sketch-pdf'].map(path=>`<url><loc>${base+path}</loc></url>`));
 urls.push(...imageTools.filter(t=>t.slug!=='image-size-reducer').map(t=>`<url><loc>${base+'/lab/'+t.slug}</loc></url>`));
