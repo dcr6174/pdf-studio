@@ -29,3 +29,5 @@
 [data-tool=compress] .shared-tool-action-bar{gap:10px!important}[data-tool=compress] .shared-tool-action-bar .settings-panel:not([hidden]){padding:0!important;gap:10px!important}[data-tool=compress] .tool-action-heading p{margin-bottom:0}[data-tool=compress] .tool-action-bottom{padding-top:10px}
 
 @media(min-width:1100px){[data-tool=compress] .workspace-add-row{display:none!important}[data-tool=compress] .merge-file-controls{position:static;display:flex;flex-direction:row;align-items:center;gap:8px;flex:none}[data-tool=compress] .merge-file-controls .merge-add-control{display:inline-flex!important;min-height:44px;padding:8px 12px;background:var(--primary);color:#fff}[data-tool=compress] .merge-file-controls button{min-width:44px;min-height:44px}}
+
+@media(min-width:1100px){.studio-shell.document-shell.tool-action-ready[data-tool=compress] .task-canvas .workspace-add-files{display:none!important}.studio-shell.document-shell.tool-action-ready[data-tool=compress] .task-canvas .merge-file-controls .merge-add-control{display:inline-flex!important;min-height:44px;padding:8px 12px;background:var(--primary);color:#fff}}
