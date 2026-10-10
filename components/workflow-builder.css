@@ -306,3 +306,74 @@
 @media(max-width:700px){.workflow-heading-actions{gap:6px}.workflow-heading-actions>span{display:none}.workflow-heading-actions .workflow-save-button{min-height:40px;font-size:12px}.workflow-saved-picker{flex-wrap:wrap;gap:6px}.workflow-saved-picker select{width:100%}.workflow-save-dialog{padding:16px}.workflow-save-actions{justify-content:stretch}.workflow-save-actions button{flex:1;justify-content:center}.reference-pipeline-heading h3{font-size:15px}}
 
 .workflow-saved-picker>button{flex:none;min-height:42px;font-size:12px;padding:8px 10px}.workflow-saved-picker>label{flex:none}@media(max-width:700px){.workflow-saved-picker>label{width:100%}.workflow-saved-picker select{width:auto;flex:1}}
+
+/* The action list stays compact; examples move to a toolbar menu while editing. */
+.reference-pipeline:has(.reference-steps){padding:12px 16px}
+.reference-pipeline:has(.reference-steps) .reference-pipeline-heading{margin-bottom:10px}
+.reference-steps{gap:6px}
+.reference-steps>li{padding:6px 10px;border-radius:8px}
+.reference-step-heading,.reference-step-heading.can-drag{min-height:44px;gap:8px}
+.reference-step-heading h4{font-size:14px;line-height:1.3}
+.reference-step-heading p{margin-top:2px;font-size:12px;line-height:1.4;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.reference-step-actions button{min-height:34px;min-width:34px;padding:6px}
+.reference-step-actions .reference-preview-step{padding-inline:8px}
+.reference-settings{margin-top:8px;padding-top:8px;gap:10px}
+.reference-settings .guided-field{gap:5px;font-size:12px}
+.reference-settings .guided-field input,.reference-settings .guided-field select{min-height:40px;padding:7px 9px}
+.reference-tool-icon{position:relative}
+.workflow-parity-icon{position:absolute;right:-3px;bottom:-1px;width:12px;height:12px;display:grid;place-items:center;font-size:9px;font-weight:700;line-height:1;background:var(--card);border-radius:3px}
+.icon-remove,.icon-remove-links,.icon-remove-bookmarks,.icon-remove-attachments,.icon-remove-annotations{color:#bc6378}
+.icon-reorder,.icon-reverse,.icon-duplicate,.icon-blank,.icon-extract,.icon-odd,.icon-even,.icon-interleave{color:#8061de}
+.icon-crop,.icon-halve,.icon-nup,.icon-viewer,.icon-flip{color:#5385a9}
+.icon-bates,.icon-headers,.icon-bookmarks,.icon-metadata{color:#b17b35}
+.can-drag-row{cursor:grab}
+.can-drag-row:not(:has(.reference-settings)){touch-action:none;user-select:none;-webkit-user-select:none}
+.reference-steps>li.is-dragging{opacity:1;background:var(--soft);border:2px solid var(--primary);padding:5px 9px;box-shadow:0 5px 18px #6a4dff30;cursor:grabbing}
+.reference-steps>li.is-dragging .reference-step-heading{cursor:grabbing}
+.reference-steps li.drop-before::before{top:-5px}
+.reference-steps li.drop-after::after{bottom:-5px}
+.workflow-drag-ghost{position:fixed;top:0;left:0;width:280px;max-width:calc(100vw - 16px);display:flex;align-items:center;gap:9px;min-height:52px;padding:10px 12px;box-sizing:border-box;background:var(--card);color:var(--foreground);border:2px solid var(--primary);border-radius:9px;box-shadow:0 8px 28px #211b3633;z-index:1000;pointer-events:none}
+.workflow-drag-ghost strong{font-size:14px;overflow:hidden;text-overflow:ellipsis;white-space:nowrap}
+.workflow-drag-ghost>svg{color:var(--primary);flex:none}
+.workflow-quick-presets{position:relative;flex:none}
+.workflow-quick-presets summary{list-style:none;display:flex;align-items:center;justify-content:center;gap:6px;min-height:40px;padding:8px 12px;border:1px solid var(--border);border-radius:9px;font-size:13px;cursor:pointer;background:var(--card);color:var(--foreground);white-space:nowrap}
+.workflow-quick-presets summary::-webkit-details-marker{display:none}
+.workflow-menu-short{display:none}
+.workflow-quick-presets[open] summary{border-color:var(--primary);background:var(--soft)}
+.workflow-quick-preset-list{position:absolute;top:calc(100% + 8px);right:0;z-index:30;display:grid;grid-template-columns:1fr 1fr;gap:5px;width:320px;max-width:calc(100vw - 24px);padding:10px;background:var(--card);border:1px solid var(--border);border-radius:10px;box-shadow:0 8px 28px #0002}
+.workflow-quick-preset-list button{min-height:40px;padding:8px;text-align:left;border:0;border-radius:6px;background:var(--card);color:var(--foreground);font-size:12px}
+.workflow-quick-preset-list button:hover:not(:disabled){background:var(--soft);color:var(--primary)}
+.reference-pipeline:has(.reference-steps) .reference-starts:empty{display:none}
+.reference-pipeline:has(.reference-steps) .reference-starts{padding-top:8px}
+@media(min-width:1101px){.reference-step-heading p{max-width:100%}}
+@media(max-width:700px){
+ .reference-pipeline:has(.reference-steps){padding:10px}
+ .reference-step-heading{gap:6px}
+ .reference-step-heading>.reference-tool-icon{display:grid;width:20px}
+ .reference-step-heading>div:first-of-type{flex-basis:calc(100% - 92px)}
+ .reference-step-actions{gap:4px}
+ .reference-step-actions button{min-height:40px;min-width:40px}
+ .reference-step-heading p{white-space:normal}
+ .workflow-quick-presets summary{min-height:40px;padding:7px 6px;font-size:11px;gap:3px}
+ .workflow-menu-long{display:none}.workflow-menu-short{display:inline}
+ .workflow-toolbar-actions.has-actions{gap:4px;flex-wrap:nowrap}
+ .workflow-toolbar-actions.has-actions .workflow-toolbar-preview{width:40px;min-width:40px;padding:7px}
+ .workflow-toolbar-actions.has-actions .workflow-toolbar-preview>span{display:none}
+ .workflow-toolbar-actions.has-actions .workflow-toolbar-preview>svg{display:block}
+ .workflow-quick-preset-list{position:fixed;top:160px;left:12px;right:12px;width:auto;max-width:none}
+ .workflow-toolbar-actions.has-actions .workflow-run-button{min-width:110px;padding:8px 7px;font-size:11px}
+ .workflow-toolbar-actions.has-actions>button:first-child{font-size:11px;padding:7px 5px}
+}
+@media(prefers-reduced-motion:reduce){.workflow-drag-ghost{scroll-behavior:auto}}
+
+/* Sidebar operations can be clicked or placed directly into the action sequence. */
+.reference-tool-row{display:flex;align-items:center;gap:2px;min-width:0;flex:none;border-radius:7px}
+.reference-tool-row>.reference-tool{flex:1;min-width:0;padding-right:4px}
+.workflow-library-drag{display:grid;place-items:center;flex:none;min-width:30px;min-height:44px;padding:4px;border:0;border-radius:6px;background:transparent;color:var(--muted);cursor:grab;touch-action:none;user-select:none}
+.workflow-library-drag:hover:not(:disabled){color:var(--primary);background:var(--soft)}
+.workflow-library-drag:active{cursor:grabbing}
+.reference-tool-row.library-is-dragging{background:var(--soft);outline:2px solid var(--primary)}
+.reference-pipeline.library-drag-over{background:color-mix(in srgb,var(--soft) 45%,var(--card))}
+.reference-empty.library-empty-drop{border:2px dashed var(--primary);border-radius:12px;padding:28px;width:min(560px,100%);align-self:center;background:var(--soft)}
+.workflow-drag-ghost .reference-step-number{min-width:28px;width:auto;padding:0 4px}
+@media(max-width:700px){.reference-tool-row{gap:0}.workflow-library-drag{min-width:26px;min-height:40px;padding:3px}.reference-tool-row>.reference-tool{gap:5px}.reference-tool-row .reference-tool>svg{display:none}.reference-tool-row .reference-tool>span:nth-child(2){font-size:11px}.reference-empty.library-empty-drop{padding:14px}}
