@@ -214,3 +214,5 @@
 @keyframes workflow-button-sheen{to{left:130%}}
 @media(max-width:700px){.workflow-preview-modes{align-self:stretch}.workflow-preview-modes button{flex:1;padding-inline:8px}.workflow-preset-list{grid-template-columns:1fr}.workflow-preview-file{justify-content:flex-start}.guided-final-action .workflow-run-button{min-width:150px}}
 @media(prefers-reduced-motion:reduce){.workflow-run-button,.workflow-run-fill{transition:none}.workflow-run-button:hover:not(:disabled){transform:none}.workflow-run-button:hover:not(:disabled) .workflow-run-sheen,.workflow-run-button .spin{animation:none}}
+
+.reference-steps>li.needs-details{border-color:#d99028;background:#fffdf8}.workflow-step-error{margin:0;padding:10px 18px;color:#854a0e;background:#fff2d8;font-size:14px;line-height:1.5}.reference-settings input[aria-invalid=true]{border-color:#d99028}.workflow-status .link-button{margin-left:12px;min-height:36px}.workflow-status:has(.link-button){display:flex;align-items:center;flex-wrap:wrap;gap:4px}

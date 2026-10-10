@@ -14,14 +14,23 @@ export function taskInputIssue(id:string,fileCount:number,o:Pick<Options,'text'|
   const names=o.recipe==='custom'?(o.workflowSteps??[]):o.recipe==='rotate-compact'?['rotate','compress']:o.recipe==='metadata-compact'||o.recipe==='share-ready'?['clean','compress']:o.recipe==='clean-scan'?['ocr']:o.recipe==='email-ready'?['compress']:o.recipe==='print-ready'?['resize']:['merge','compress'];
   const enabled=names.map((name,i)=>({name,index:i})).filter(s=>o.recipe!=='custom'||!o.workflowDisabled?.includes(s.index));
   if(!enabled.length)return 'Add at least one enabled workflow step.';
-  let count=pageCount;
-  for(let n=0;n<enabled.length;n++){
-   const {name,index}=enabled[n];if(!workflowOperations.includes(name as typeof workflowOperations[number])&&name!=='ocr')return 'Choose a supported workflow step.';
-   if(name==='merge'&&batch)return 'Merge needs One document mode.';
-   try{const settings=workflowSettings(name,o.recipe==='custom'?o.workflowSettings?.[index]:undefined),issue=workflowStepIssue(name,settings,count,fileCount,n);if(issue)return `Step ${index+1}: ${issue}`;
-    if(name==='duplicate')count*=2;if(name==='blank')count++;if(name==='remove'&&count){const removed=new Set<number>();for(const part of (settings.range??'').split(',')){const [a,b]=part.split('-').map(Number);for(let i=a;i<=(b||a);i++)removed.add(i);}count-=removed.size;}if(count>400)return `Step ${index+1} would exceed the 400-page limit.`;
-   }catch(e){return `Step ${index+1}: ${(e as Error).message}`;}
-  }
+  const first=workflowInputIssues(names,o.recipe==='custom'?(o.workflowSettings??[]):[],o.recipe==='custom'?(o.workflowDisabled??[]):[],fileCount,pageCount,batch)[0];
+  if(first)return `Step ${first.index+1}: ${first.message}`;
  }
  return '';
+}
+
+/** Report each action's missing details while tracking the pages produced by earlier actions. */
+export function workflowInputIssues(names:string[],stepSettings:NonNullable<Options['workflowSettings']>,disabled:number[],fileCount:number,pageCount:number,batch=false){
+ const enabled=names.map((name,index)=>({name,index})).filter(s=>!disabled.includes(s.index));
+  let count=pageCount;
+  const issues:{index:number;message:string}[]=[];
+  for(let n=0;n<enabled.length;n++){
+   const {name,index}=enabled[n];if(!workflowOperations.includes(name as typeof workflowOperations[number])&&name!=='ocr'){issues.push({index,message:'Choose a supported workflow step.'});continue;}
+   if(name==='merge'&&batch){issues.push({index,message:'Merge needs One document mode.'});continue;}
+   try{const settings=workflowSettings(name,stepSettings[index]),issue=workflowStepIssue(name,settings,count,fileCount,n);if(issue){issues.push({index,message:issue});if(['remove','blank','duplicate'].includes(name))count=0;continue;}
+    if(name==='duplicate'&&count)count*=2;if(name==='blank'&&count)count++;if(name==='remove'&&count){const removed=new Set<number>();for(const part of (settings.range??'').split(',')){const [a,b]=part.split('-').map(Number);for(let i=a;i<=(b||a);i++)removed.add(i);}count-=removed.size;}if(count>400){issues.push({index,message:'This step would exceed the 400-page limit.'});count=0;}
+   }catch(e){issues.push({index,message:(e as Error).message});if(['remove','blank','duplicate'].includes(name))count=0;}
+  }
+ return issues;
 }
