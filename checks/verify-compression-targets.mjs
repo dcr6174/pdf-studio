@@ -31,7 +31,7 @@ const field=d.getForm().createTextField('Applicant');field.setText('CV Applicant
 const link=d.context.register(d.context.obj({Type:'Annot',Subtype:'Link',Rect:[40,730,250,745],A:{S:'URI',URI:PDFString.of('https://example.test/cv')}}));p.node.addAnnot(link);
 const bytes=await d.save();assert.ok(bytes.length>200000);
 for(const target of [200,100]){
- const result=await run(bytes,target),out=new Uint8Array(await result.blob.arrayBuffer());
+ const result=await run(bytes,target,{quality:target===100?'image-small':'images'}),out=new Uint8Array(await result.blob.arrayBuffer());
  assert.equal(result.target.met,true);assert.ok(out.length<target*1000);assert.ok(out.length<bytes.length);
  const reopened=await PDFDocument.load(out);assert.equal(reopened.getPageCount(),1);assert.equal(reopened.getForm().getTextField('Applicant').getText(),'CV Applicant');
  assert.match(await text(out),/CV Applicant - Software Engineer/);
@@ -55,3 +55,4 @@ const compact=await run(bytes,100,{quality:'compact'});assert.equal(compact.targ
 for(const invalid of ['0','-1','abc','Infinity'])await assert.rejects(()=>run(bytes,invalid),/positive target/);
 const controller=new AbortController();controller.abort();await assert.rejects(()=>run(bytes,100,{},controller.signal),{name:'AbortError'});
 console.log('PASS resize/decode dimensions, impossible-target reporting, compact-only preservation, invalid targets and cancellation. Native canvas fixture; real-browser quality requires separate validation.');
+

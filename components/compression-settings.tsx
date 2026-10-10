@@ -1,17 +1,19 @@
 'use client';
+import {useEffect,useState} from 'react';
+import {compressDocument} from '../lib/compress-document';
 import type {Options} from '../lib/pdf-engine';
-
-export function CompressionSettings({options,onChange}:{options:Options;onChange:(update:(current:Options)=>Options)=>void}) {
- const raster=['small','balanced','high'].includes(options.quality);
+import './compression-settings.css';
+const presets=[{value:'compact',name:'Keep quality',hint:'Repack the PDF without changing image pixels.'},{value:'images',name:'Balanced',hint:'Smaller images. Keep text, links and forms.'},{value:'image-small',name:'Smaller file',hint:'Stronger image reduction. Check fine print.'}];
+export function CompressionSettings({options,onChange,source,originalSize}:{source?:Uint8Array;originalSize?:number;options:Options;onChange:(update:(current:Options)=>Options)=>void}){
+ const selected=presets.some(p=>p.value===options.quality)?options.quality:'images';
+ const [estimate,setEstimate]=useState<{key:string;size:number;source:Uint8Array}|undefined>();
+ const estimateKey=selected+':'+(options.compressJPEG??'')+':'+(options.compressMaxDimension??'');
+ useEffect(()=>{if(!source||source.length>20*1024*1024||options.compressTarget)return;const controller=new AbortController();const timeout=setTimeout(()=>{void compressDocument(source,selected,options.compressJPEG,options.compressMaxDimension,controller.signal).then(result=>{if(!controller.signal.aborted)setEstimate({key:estimateKey,size:result.bytes.length,source});}).catch(()=>{});},450);return()=>{clearTimeout(timeout);controller.abort();};},[source,selected,options.compressJPEG,options.compressMaxDimension,options.compressTarget,estimateKey]);
+ const size=estimate?.key===estimateKey&&estimate.source===source?estimate.size:undefined;
  return <section className="compression-settings" aria-label="Compression settings">
-  <label className="field"><span>Compression method</span><select value={raster?'small':options.quality} onChange={e=>onChange(o=>({...o,quality:e.target.value}))}>
-   <option value="images">Optimize images · keep text and forms</option>
-   <option value="compact">Repack PDF · keep image quality</option>
-   <option value="small">Rebuild as images · smaller file</option>
-  </select></label>
-  {options.quality==='images'&&<fieldset className="compression-presets"><legend>Image quality</legend>{[{name:'Clear',quality:.86,size:3000},{name:'Balanced',quality:.72,size:2400},{name:'Compact',quality:.5,size:1600}].map(p=><button type="button" key={p.name} className="secondary" aria-pressed={(options.compressJPEG??.72)===p.quality} onClick={()=>onChange(o=>({...o,compressJPEG:p.quality,compressMaxDimension:p.size}))}>{p.name}</button>)}<small>Only supported JPEG images change. Check fine print and image detail.</small></fieldset>}
-  <label className="field"><span>Target size (KB, optional)</span><input type="number" min="1" step="1" inputMode="numeric" value={options.compressTarget??''} onChange={e=>onChange(o=>({...o,compressTarget:e.target.value}))} placeholder="No size limit" aria-describedby="compression-size-help"/><small id="compression-size-help">Best effort. Check the final size and readability.</small></label>
-  {raster&&<p className="compression-warning" role="status">Page-image output removes searchable text, links and editable fields.</p>}
-  <details className="settings-help"><summary>How compression works</summary><p>Recommended reduces supported JPEG images while keeping text, links and editable fields.</p><p>Targets are best effort. Some documents need a larger limit to remain readable. Check the exported PDF before sharing.</p><p>If compression makes the file larger, the original is retained.</p></details>
+  <fieldset className="compression-levels"><legend>Compression level</legend>{presets.map(p=><label key={p.value} className={'compression-level'+(selected===p.value?' is-selected':'')}><input type="radio" name="compression-level" value={p.value} checked={selected===p.value} onChange={()=>onChange(o=>({...o,quality:p.value,compressJPEG:undefined,compressMaxDimension:undefined}))}/><span><b>{p.name}{p.value==='images'&&<small>Recommended</small>}</b><span>{p.hint}</span></span></label>)}</fieldset>
+  {!!originalSize&&<div className="compression-size-panel" role="status"><span>{size!==undefined&&!options.compressTarget?'Expected file size':'Original file size'}</span><b>{((size??originalSize)/1000).toFixed(1)} KB {size!==undefined&&!options.compressTarget&&<><s>{(originalSize/1000).toFixed(1)} KB</s><small>{Math.round((1-size/originalSize)*100)}% smaller</small></>}</b>{size!==undefined&&!options.compressTarget?<progress value={Math.max(.01,1-size/originalSize)} max="1"/>:<small>{source&&source.length<=20*1024*1024&&!options.compressTarget?'Checking this level…':'Final size is checked after compression.'}</small>}</div>}
+  <p className="compression-retained">All three keep selectable text and document controls. Your original stays unchanged.</p>
+  <details className="compression-more"><summary>Optional size limit</summary><label className="field"><span>Keep below (KB)</span><input type="number" min="1" step="1" inputMode="numeric" value={options.compressTarget??''} onChange={e=>onChange(o=>({...o,compressTarget:e.target.value}))} placeholder="For example, 200"/><small>Best effort within your chosen level. 1 KB = 1,000 bytes. A strict limit may need Smaller file.</small></label></details>
  </section>;
 }

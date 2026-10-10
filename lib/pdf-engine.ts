@@ -11,7 +11,7 @@ import {resizeSheet,resizePlacement,splitGroups} from './page-layout';
 import {pixelsHaveInk,rejectBlankOutput} from './output-integrity';
 import {textToPDF} from './text-document';
 import {flattenFormSafely,hasFormWidgets,hasOverlappingWidgets} from './form-safe';
-import {optimizeJPEGImages} from './optimize-jpeg';
+import {compressDocument} from './compress-document';
 import {decodePhoto,normalizeCameraFile} from './mobile-image';
 import {addBookmarks,cleanupPDF,removeAnnotations,halvePages,createForm} from './extra-pdf';
 import {replaceExistingText} from './native-text';
@@ -442,12 +442,15 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if(id==='compress'&&o.compressTarget?.trim()){
         const requested=Number(o.compressTarget)*1000;const target=Math.ceil(requested)-1;if(!Number.isFinite(requested)||requested<=0)throw new Error('Enter a positive target size in KB.');
         const source=unchanged?first.bytes:await out.save();let best:Output=result(source,`${filename}-compress.pdf`,undefined,undefined,source.length);
-        if(source.length>target){const raster=!['compact','images'].includes(o.quality),attempts=o.quality==='compact'?[{quality:'compact'}]:[{quality:'compact'},{quality:'images',compressJPEG:.86},{quality:'images',compressJPEG:.78,compressMaxDimension:2400},{quality:'images',compressJPEG:.68,compressMaxDimension:2000},{quality:'images',compressJPEG:.58,compressMaxDimension:1600},{quality:'images',compressJPEG:.45,compressMaxDimension:1200},...(raster?[{quality:o.quality,compressJPEG:o.quality==='small'?.45:o.quality==='balanced'?.72:.9},{quality:o.quality,compressJPEG:.35},{quality:o.quality,compressJPEG:.2}]:[])];
+        if(source.length>target){const raster=!['compact','images','image-small'].includes(o.quality),attempts=o.quality==='compact'?[{quality:'compact'}]:[{quality:'compact'},{quality:'images',compressJPEG:.86,compressMaxDimension:3000},{quality:'images',compressJPEG:.76,compressMaxDimension:2400},{quality:'images',compressJPEG:.68,compressMaxDimension:2000},...(o.quality==='image-small'||raster?[{quality:'images',compressJPEG:.58,compressMaxDimension:1600},{quality:'images',compressJPEG:.45,compressMaxDimension:1200}]:[]),...(raster?[{quality:o.quality,compressJPEG:o.quality==='small'?.45:o.quality==='balanced'?.72:.9},{quality:o.quality,compressJPEG:.35},{quality:o.quality,compressJPEG:.2}]:[])];
         for(let i=0;i<attempts.length;i++){signal?.throwIfAborted();const candidate=await processPDF('compress',files,items,marks,{...o,compressTarget:undefined,...attempts[i]},n=>progress(Math.round((i*100+n)/attempts.length)),signal);if(candidate.blob.size<best.blob.size)best=candidate;if(best.blob.size<=target)break;}}
         return {...best,name:`${filename}-${o.compressTarget}kb.pdf`,target:{requestedKB:Number(o.compressTarget),met:best.blob.size<=target},report:`${best.blob.size<=target?'Target reached.':'Target not reached; smallest tested result retained.'} Requested ${o.compressTarget} KB; result ${(best.blob.size/1000).toFixed(1)} KB. ${best.report??'Original source retained unchanged.'} Best-effort size targeting cannot guarantee readability or a specific size; inspect the preview.`};
     }
-    if(id==='compress'&&o.quality==='images'){const source=unchanged?first.bytes:await out.save();const d=await PDFDocument.load(source,{updateMetadata:false});const changed=await optimizeJPEGImages(d,signal,{quality:o.compressJPEG,maxDimension:o.compressMaxDimension});progress(95);const bytes=changed?await d.save({useObjectStreams:true}):source;return result(bytes.length<source.length?bytes:source,`${filename}-images-optimized.pdf`,undefined,bytes.length<source.length?`Optimized ${changed} supported RGB JPEG images. Text, links and form structure retained. JPEG quality is reduced${o.compressMaxDimension?`; images limited to ${o.compressMaxDimension} pixels on the longest side`:""}; inspect small image details.`:'No smaller result: original source retained. Only unmasked RGB JPEG streams are supported by this mode.',source.length);}
-    if(id==='compress'&&o.quality==='compact'){progress(90);const baseline=unchanged?first.bytes:await out.save();const compact=unchanged?await PDFDocument.load(first.bytes,{updateMetadata:false}):out;const bytes=await compact.save({useObjectStreams:true});signal?.throwIfAborted();const smaller=bytes.length<baseline.length;return result(smaller?bytes:baseline,`${filename}-compact.pdf`,undefined,smaller?`Reduced from ${baseline.length} to ${bytes.length} bytes. Text and links retained.`:'No size reduction: kept the source unchanged. Try Recommended to optimize supported JPEGs while retaining text, links and forms.',baseline.length);}
+    if(id==='compress'&&['images','image-small','compact'].includes(o.quality)){
+        const source=unchanged?first.bytes:await out.save();
+        const {bytes,images:changed,streams}=await compressDocument(source,o.quality,o.compressJPEG,o.compressMaxDimension,signal);progress(95);const smaller=bytes.length<source.length;
+        return result(bytes,`${filename}-compressed.pdf`,undefined,smaller?`Optimized ${changed} supported embedded images and ${streams} lossless streams. Selectable text, links, bookmarks and editable forms retained.${changed?' Image quality is reduced; check scanned fine print.':''}`:'No smaller result: original source retained. Already optimized documents may not shrink. Masked, indexed, CMYK and other unsupported images stay unchanged.',source.length);
+    }
     if(id==='flatten'&&o.flattenMode!=='image'){const count=out.getForm().getFields().length;flattenFormSafely(out);progress(100);return result(await out.save(),`${filename}-flatten.pdf`,undefined,`${count} form fields made read-only. Selectable text and page sizes retained. Other annotations remain; choose image mode to flatten the entire appearance.`,first.size);}
     if (['jpg', 'png', 'webp', 'compress', 'flatten', 'redact', 'grayscale', 'invert', 'ocr', 'pptx'].includes(id)) {
         const source = id==='compress'&&unchanged?first.bytes:await out.save();
@@ -717,3 +720,4 @@ export async function previewPDF(id:string,files:Loaded[],items:PageItem[],o:Opt
  const selected=!labels||ranges(o.range,total).includes(offset);
  return processPDFUnchecked(selected?id:'rotate',files,items,[],{...o,range:'',...(!selected?{angle:'0'}:{})},()=>{},signal,{offset,total});
 }
+
