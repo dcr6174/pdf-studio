@@ -1,13 +1,8 @@
 .iw-root {
-  --iw-accent: #6d4aff;
-  --iw-ink: #242334;
-  --iw-muted: #747484;
   box-sizing: border-box;
   height: 100dvh;
   min-height: 0;
-  background: #f5f5f8;
   color: var(--iw-ink);
-  font-family: Inter, system-ui, sans-serif;
   overflow: hidden;
   display: flex;
   flex-direction: column;
@@ -36,13 +31,8 @@
   border: 1px solid #e6e5ed;
   background: #fff;
   color: inherit;
-  border-radius: 9px;
-  min-height: 34px;
   padding: 7px 10px;
   cursor: pointer;
-}
-.iw-root button:hover {
-  background: #f0edff;
 }
 .iw-root button:disabled {
   opacity: 0.45;
@@ -50,34 +40,22 @@
 }
 .iw-root :focus-visible {
   outline: 3px solid #9b86ff;
-  outline-offset: 3px;
 }
 .iw-root a {
   text-decoration: none;
   color: var(--iw-accent);
 }
 .iw-header {
-  height: 64px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 16px;
-  padding: 0 24px;
-  border-bottom: 1px solid #e9e8ef;
-  background: #fff;
 }
 .iw-brand {
   display: flex;
   align-items: center;
-  gap: 10px;
-  color: var(--iw-ink) !important;
   white-space: nowrap;
 }
-.iw-brand b {
-  color: var(--iw-accent);
-}
 .iw-divider {
-  height: 22px;
   border-left: 1px solid #e3e2ea;
 }
 .iw-header h1 {
@@ -96,20 +74,13 @@
   margin-left: auto;
   display: flex;
   align-items: center;
-  gap: 7px;
 }
 .iw-local {
-  font-size: 11px;
-  color: var(--iw-muted);
   display: flex;
   align-items: center;
   gap: 6px;
-  margin-right: 10px;
 }
 .iw-local i {
-  width: 6px;
-  height: 6px;
-  background: #24a47b;
   border-radius: 50%;
 }
 .iw-gear {
@@ -117,21 +88,15 @@
 }
 .iw-layout {
   display: grid;
-  grid-template-columns: minmax(0, 1fr) 308px;
-  gap: 16px;
-  padding: 16px;
   flex: 1;
   min-height: 0;
 }
 .iw-stage,
 .iw-panel {
-  border: 1px solid #e4e3ec;
-  border-radius: 18px;
   overflow: hidden;
   background: white;
   min-width: 0;
   min-height: 0;
-  box-shadow: 0 4px 20px #24233404;
   animation: iw-enter 0.22s ease-out;
 }
 .iw-stage {
@@ -147,55 +112,31 @@
   display: flex;
   align-items: center;
   justify-content: space-between;
-  gap: 12px;
-  padding: 18px 20px;
-  border-bottom: 1px solid #efedf4;
   flex-shrink: 0;
 }
-.iw-eyebrow {
-  font-size: 9px;
-  letter-spacing: 0.15em;
-  color: #8a879b;
-  font-weight: 700;
-}
 .iw-panel-heading h2 {
-  font-size: 15px;
-  line-height: 1.35;
   margin: 5px 0 0;
 }
 .iw-settings {
-  padding: 20px;
   overflow: auto;
   min-height: 0;
   flex: 1;
   display: flex;
   flex-direction: column;
-  gap: 16px;
   scrollbar-width: thin;
 }
 .iw-settings label {
   display: flex;
   flex-direction: column;
-  gap: 7px;
-  font-size: 12px;
-  font-weight: 550;
-  color: #555266;
 }
 .iw-settings input:not([type="range"]):not([type="checkbox"]),
 .iw-settings select,
 .iw-settings textarea {
   width: 100%;
-  min-height: 38px;
-  border: 1px solid #e1dfe9;
-  border-radius: 9px;
-  background: #fff;
-  padding: 8px 10px;
   color: #242334;
-  font-size: 12px;
 }
 .iw-settings textarea {
   resize: vertical;
-  min-height: 68px;
 }
 .iw-settings input[type="color"] {
   padding: 4px !important;
@@ -204,7 +145,6 @@
   flex-direction: row;
   align-items: center;
   gap: 9px;
-  font-weight: 400;
   line-height: 1.5;
 }
 .iw-check input {
@@ -220,15 +160,12 @@
 .iw-range {
   display: flex;
   align-items: center;
-  gap: 10px;
 }
 .iw-range input {
   width: 100%;
   accent-color: var(--iw-accent);
 }
 .iw-range output {
-  font-size: 11px;
-  min-width: 40px;
   text-align: right;
   font-variant-numeric: tabular-nums;
 }
@@ -237,7 +174,6 @@
   padding-top: 12px;
 }
 .iw-settings summary {
-  font-size: 12px;
   cursor: pointer;
   font-weight: 600;
   padding: 3px 0;
@@ -247,61 +183,39 @@
   flex-direction: column;
   gap: 13px;
 }
-.iw-settings details[open] > :not(summary) {
-  margin-top: 12px;
-}
 .iw-hint {
-  font-size: 11px;
-  line-height: 1.65;
-  color: #7c788c;
   margin: 0;
 }
 .iw-guide {
-  font-size: 11px;
   line-height: 1.5;
 }
 .iw-presets,
 .iw-segments {
   display: flex;
-  gap: 5px;
 }
 .iw-presets button,
 .iw-segments button {
   flex: 1;
   font-size: 12px;
 }
-.iw-root [aria-pressed="true"] {
-  background: #eee9ff;
-  border-color: #c8baff;
-  color: #6440e3;
-}
 .iw-actions {
-  padding: 16px 20px;
-  border-top: 1px solid #eae7f1;
   flex-shrink: 0;
   max-height: 40%;
   overflow: auto;
-  background: #fff;
 }
 .iw-primary {
   width: 100%;
-  min-height: 44px !important;
-  background: var(--iw-accent) !important;
   color: white !important;
   border: 0 !important;
   font-weight: 600 !important;
-  font-size: 13px !important;
-  box-shadow: 0 5px 14px #6d4aff25;
   display: flex !important;
   align-items: center;
   justify-content: center;
   gap: 8px;
-  border-radius: 11px;
   padding: 12px;
   text-decoration: none;
 }
 .iw-primary:hover {
-  background: #5c38ed !important;
   transform: translateY(-1px);
 }
 .iw-secondary {
@@ -312,9 +226,7 @@
   margin-top: 8px;
 }
 .iw-status {
-  font-size: 11px;
   color: var(--iw-muted);
-  line-height: 1.5;
   margin: 9px 0 0;
   overflow-wrap: anywhere;
 }
@@ -411,7 +323,6 @@
 }
 .iv-canvas {
   position: absolute;
-  box-shadow: 0 8px 30px #24233416;
 }
 .iv-hand {
   cursor: grab;
@@ -421,29 +332,16 @@
 }
 .iv-toolbar {
   position: absolute;
-  bottom: 14px;
-  left: 14px;
   display: flex;
   align-items: center;
-  gap: 2px;
   border: 1px solid #e2dfeb;
-  border-radius: 12px;
-  padding: 4px;
-  background: #ffffffed;
-  box-shadow: 0 4px 18px #211d3b0c;
   z-index: 3;
 }
 .iv-toolbar button {
   border: 0;
-  min-width: 28px;
-  min-height: 30px;
-  padding: 5px;
 }
 .iv-toolbar output {
-  font-size: 10px;
-  min-width: 38px;
   text-align: center;
-  color: #625c76;
 }
 .iv-toolbar > span {
   height: 18px;
@@ -451,20 +349,13 @@
   margin: 0 3px;
 }
 .iv-toolbar i {
-  font-size: 10px;
   font-style: normal;
 }
 .iv-add {
   position: absolute;
-  right: 14px;
-  bottom: 14px;
   z-index: 3;
 }
 .iv-add button {
-  min-height: 40px;
-  border-radius: 12px;
-  box-shadow: 0 4px 16px #24233410;
-  font-size: 11px;
   background: #fff;
 }
 .iv-selection {
@@ -508,10 +399,8 @@
   top: 8px;
   transform: translateX(-50%);
   white-space: nowrap;
-  background: #322a50d9;
   color: #fff;
   font-size: 10px;
-  border-radius: 5px;
   padding: 4px 7px;
   pointer-events: none;
 }
@@ -643,32 +532,10 @@
 }
 .iw-empty {
   margin: auto;
-  max-width: 390px;
   text-align: center;
-  padding: 32px 24px;
-}
-.iw-empty h2 {
-  font-size: 25px;
-  letter-spacing: -0.7px;
-  margin: 20px 0 10px;
-}
-.iw-empty p {
-  font-size: 13px;
-  line-height: 1.7;
-  color: var(--iw-muted);
-}
-.iw-empty .iw-primary {
-  max-width: 210px;
-  margin: 22px auto 10px;
 }
 .iw-empty-art {
-  display: flex;
-  justify-content: center;
   color: #8463ff;
-}
-.iw-empty small {
-  font-size: 10px;
-  color: var(--iw-muted);
 }
 .iw-drop {
   outline: 3px dashed #9376ff;
@@ -919,46 +786,26 @@
   min-width: 0;
 }
 .iw-stage-top {
-  height: 54px;
   flex-shrink: 0;
   display: flex;
   align-items: center;
-  gap: 12px;
-  padding: 0 16px;
-  border-bottom: 1px solid #eeedf3;
-  background: #fff;
 }
 .iw-filename {
-  font-size: 11px;
-  color: #625b76;
-  max-width: 210px;
   overflow: hidden;
   text-overflow: ellipsis;
   white-space: nowrap;
 }
 .iw-view-tabs {
   display: flex;
-  gap: 3px;
   margin-left: auto;
 }
 .iw-view-tabs button {
-  font-size: 11px;
-  padding: 5px 8px;
   border: 0;
-  min-height: 31px;
-}
-.iw-replace {
-  font-size: 10px !important;
 }
 .iw-stage-bottom {
   display: flex;
   justify-content: space-between;
   gap: 10px;
-  font-size: 10px;
-  color: #827b92;
-  background: white;
-  padding: 9px 16px;
-  border-top: 1px solid #eeedf3;
   flex-shrink: 0;
 }
 .iw-dragover {
@@ -971,10 +818,6 @@
   margin-top: 7px;
   font-size: 11px !important;
   color: #7b708e !important;
-}
-.iw-file-active {
-  border-color: #c5b4ff !important;
-  background: #f8f5ff;
 }
 .iw-file-downloads a {
   display: flex !important;
@@ -1017,19 +860,10 @@
   margin-top: 5px;
 }
 .iw-empty-art {
-  width: 92px;
-  height: 92px;
-  border-radius: 25px;
-  background: linear-gradient(145deg, #f2ecff, #e9e4ff);
   display: flex;
   align-items: center;
   justify-content: center;
   margin: auto;
-  box-shadow: 0 12px 28px #6d4aff0e;
-}
-.iw-empty-art svg {
-  width: 38px;
-  height: 38px;
 }
 .iw-spin {
   animation: iw-spin 1s linear infinite;
@@ -1236,7 +1070,7 @@
 .iw-eyebrow {
   font-size: 9px;
   letter-spacing: 1.7px;
-  color: #7b8094;
+  color: #697086;
   font-weight: 650;
 }
 .iw-settings {
@@ -1259,6 +1093,7 @@
   padding: 11px 12px;
   min-height: 42px;
   font-size: 13px;
+  font-weight: 400;
   box-shadow: 0 1px 2px #20222e03;
   transition:
     border-color 0.18s,
@@ -1291,7 +1126,7 @@
   cursor: pointer;
 }
 .iw-hint {
-  color: #767c8d;
+  color: #687085;
   font-size: 12px;
   line-height: 1.7;
 }
@@ -1315,7 +1150,7 @@
   margin-top: auto;
   padding-top: 12px;
   font-size: 12px;
-  color: #737a8e !important;
+  color: #657087 !important;
 }
 .iw-presets,
 .iw-segments {
@@ -1526,7 +1361,7 @@
 .iw-empty .iw-eyebrow {
   display: block;
   margin-top: 36px;
-  color: #7a849a;
+  color: #667188;
   font-size: 9px;
   letter-spacing: 2px;
 }
@@ -1538,7 +1373,7 @@
   display: block;
   font-size: 11px;
   line-height: 1.9;
-  color: #778198;
+  color: #657087;
 }
 .iw-empty-art {
   width: 128px;
@@ -1603,7 +1438,7 @@
   align-items: center;
   gap: 7px;
   margin-top: 20px;
-  color: #82908a;
+  color: #63766c;
   font-size: 11px;
 }
 .iw-picker {
@@ -1688,7 +1523,7 @@
 }
 .iw-tool-navigation-note {
   margin: 12px 26px 0;
-  color: #7c8599;
+  color: #69758b;
   font-size: 11px;
 }
 .iw-tool-list {
@@ -1702,7 +1537,7 @@
   font-size: 10px;
   letter-spacing: 1px;
   text-transform: uppercase;
-  color: #8590a6;
+  color: #6c778b;
   margin: 20px 10px 9px;
 }
 .iw-tool-list a {
@@ -1726,7 +1561,7 @@
 }
 .iw-tool-list small {
   display: block;
-  color: #818b9e;
+  color: #667188;
   font-size: 11px;
   line-height: 1.5;
   margin-top: 3px;
@@ -1737,7 +1572,7 @@
 .iw-tool-no-results {
   padding: 20px 12px;
   font-size: 13px;
-  color: #747e95;
+  color: #667188;
 }
 @media (max-width: 1100px) {
   .iw-layout {
