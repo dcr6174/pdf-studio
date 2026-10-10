@@ -60,3 +60,21 @@ result=await pdf(await run([first],longSteps,longSettings));
 assert.equal(result.getPageCount(),4,'all nine steps execute, including blank insertion and duplication');
 assert.equal(first.doc.getPageCount(),1,'long workflow preserves original pages');
 console.log('PASS: more than eight actions accepted by recipes, readiness and the real workflow engine.');
+
+const presetExports={};
+vm.runInNewContext(ts.transpile(await readFile('lib/workflow-presets.ts','utf8'),{module:ts.ModuleKind.CommonJS}),{exports:presetExports,require:name=>{assert.equal(name,'./workflow-recipes');return recipes;}});
+assert.equal(presetExports.workflowPresets.length,8);
+globalThis.fetch=async url=>{assert.equal(url,'/fonts/NotoSans-Regular.ttf');return new Response(fontBytes);};
+try{
+ for(const preset of presetExports.workflowPresets){
+  for(const inputs of [[first],[first,second]]){
+   const state=presetExports.workflowPresetState(preset,inputs.length);
+   assert.equal(readiness.taskInputIssue('workflow',inputs.length,{...defaults,workflowSteps:state.steps,workflowSettings:state.settings},false,inputs.length),'',preset.id+' is ready');
+   const processed=await pdf(await run(inputs,state.steps,state.settings));
+   assert.equal(processed.getPageCount(),inputs.length,preset.id+' retains all pages');
+   if(inputs.length>1)assert.equal(state.steps[0],'merge',preset.id+' combines inputs first');
+  }
+ }
+}finally{globalThis.fetch=originalFetch;}
+assert.equal(first.doc.getPageCount(),1);
+console.log('PASS: all eight predefined workflows run on one or two PDFs, with merge first and originals retained.');
