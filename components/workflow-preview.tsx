@@ -31,7 +31,7 @@ function PageControls({page,count,onChange,original=false}:{page:number;count:nu
 /** Originals render directly. Changes use a disposable output from the same engine as Run workflow. */
 export function WorkflowPreview({files,pages,marks=noMarks,options,initialView='changes',issue}:{files:Loaded[];pages:PageItem[];marks?:Mark[];options:Options;initialView?:'original'|'changes';issue?:string}){
  const [view,setView]=useState(initialView),[retry,setRetry]=useState(0),[selectedPage,setSelectedPage]=useState(0),[selectedOriginalPage,setSelectedOriginalPage]=useState(0),[selectedFile,setSelectedFile]=useState(''),[snapshot,setSnapshot]=useState<Snapshot>();
- const cached=useRef<Snapshot>();
+ const cached=useRef<Snapshot|undefined>(undefined);
  const request=useMemo(()=>({files,pages,marks,options,retry}),[files,pages,marks,options,retry]);
  const mode=issue?'original':view;
  useEffect(()=>{
