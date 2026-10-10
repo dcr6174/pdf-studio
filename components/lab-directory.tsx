@@ -2,8 +2,9 @@
 import {useState} from 'react';
 import Link from '@/components/browser-link';
 import {Search,X,ArrowUpRight,Camera,BookOpen,Sparkles,NotebookPen,Grid3X3,Image as ImageIcon,Paintbrush,Palette,Timer,PenLine} from 'lucide-react';
+import {imageTools} from '@/lib/image-tools';
 const tools=[
- {slug:'image-size-reducer',title:'Photo & Signature Size Reducer',description:'Fit photos and signatures below 200 KB, 300 KB or your own limit.',group:'Make',output:'Sized JPG / PNG',icon:ImageIcon},
+ ...imageTools.map(t=>({...t,group:'Images',output:t.category,icon:ImageIcon})),
  {slug:'photo-strip',title:'Quick Photo Strip',description:'Turn your favourite photos into a keepsake strip.',group:'Play',output:'Photo strip',icon:Camera},
  {slug:'flashcards',title:'Study Flashcards',description:'Make a deck, practise it, or print it for later.',group:'Learn',output:'Study & print',icon:BookOpen},
  {slug:'decision-wheel',title:'Decision Wheel',description:'Add your choices. Give indecision a little spin.',group:'Play',output:'Spin a choice',icon:Sparkles},
@@ -17,16 +18,16 @@ const tools=[
  {slug:'pomodoro',title:'Focus Timer',description:'Make time for focused work and proper breaks.',group:'Learn',output:'Focus session',icon:Timer},
  {slug:'text-to-handwriting',title:'Text to Handwriting',description:'Give typed notes a handwritten-style finish.',group:'Make',output:'Styled notes',icon:PenLine},
 ];
-const categories=['All','Make','Learn','Play'];
+const categories=['All','Images','Make','Learn','Play'];
 export function LabDirectory(){
  const [filter,setFilter]=useState('All');const [query,setQuery]=useState('');
  const shown=tools.filter(t=>(filter==='All'||t.group===filter)&&`${t.title} ${t.description} ${t.output} ${t.group}`.toLowerCase().includes(query.trim().toLowerCase()));
  return <section className="lab-discovery" aria-labelledby="lab-tools-heading">
   <div className="lab-discovery-top"><div><span className="lab-kicker">Small tools. Real possibilities.</span><h2 id="lab-tools-heading">Find your next little project.</h2></div><label className="lab-search"><Search size={20} aria-hidden="true"/><span className="lab-sr-only">Search Lab tools</span><input type="search" value={query} onChange={e=>setQuery(e.target.value)} placeholder="Photos, flashcards, colouring…"/>{query&&<button onClick={()=>setQuery('')} aria-label="Clear search"><X size={18}/></button>}</label></div>
-  <div className="lab-browse-row"><div className="lab-segments" role="group" aria-label="Lab categories">{categories.map(f=><button key={f} aria-pressed={filter===f} onClick={()=>setFilter(f)}>{f==='Make'?'Make & print':f==='Learn'?'Focus & learn':f==='Play'?'Just for fun':'Everything'}</button>)}</div><p role="status" aria-live="polite">{shown.length} {shown.length===1?'tool':'tools'}</p></div>
+  <div className="lab-browse-row"><div className="lab-segments" role="group" aria-label="Lab categories">{categories.map(f=><button key={f} aria-pressed={filter===f} onClick={()=>setFilter(f)}>{f==='Images'?'Image tools':f==='Make'?'Make & print':f==='Learn'?'Focus & learn':f==='Play'?'Just for fun':'Everything'}</button>)}</div><p role="status" aria-live="polite">{shown.length} {shown.length===1?'tool':'tools'}</p></div>
   <div className="lab-curated-grid">{shown.map(t=>{const Icon=t.icon;return <Link key={t.slug} href={'/lab/'+t.slug} className={'lab-project lab-tone-'+t.group.toLowerCase()}><div className="lab-project-top"><span className="lab-project-icon"><Icon size={24} aria-hidden="true"/></span><span className="lab-output">{t.output}</span><ArrowUpRight size={18} aria-hidden="true"/></div><h3>{t.title}</h3><p>{t.description}</p><span className="lab-project-go">Let’s try it <span aria-hidden="true">→</span></span></Link>;})}</div>
   {!shown.length&&<div className="lab-empty"><h3>No tools match that yet.</h3><p>Try “photo”, “print” or “study”, or browse everything.</p><button onClick={()=>{setQuery('');setFilter('All');}}>Show all tools</button></div>}
-  <p className="lab-endnote">A smaller collection, with room to make something your own.</p>
+  <p className="lab-endnote">25 image tools. Plenty of room to make something your own.</p>
  </section>;
 }
 

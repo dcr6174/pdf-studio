@@ -14,6 +14,7 @@ const {seoPages}=await import(asModule(seoSource.replace("'./tools'",JSON.string
 const {conversionGuides}=await import(asModule(await readFile(new URL('lib/conversion-guides.ts',root),'utf8')));
 const {searchGuidance}=await import(asModule(await readFile(new URL('lib/search-guidance.ts',root),'utf8')));
 const {articles}=await import(asModule(await readFile(new URL('lib/articles.ts',root),'utf8')));
+const {imageTools}=await import(asModule(await readFile(new URL('lib/image-tools.ts',root),'utf8')));
 const {comparisons}=await import(asModule(await readFile(new URL('lib/comparisons.ts',root),'utf8')));
 GlobalFonts.registerFromPath(new URL('public/fonts/NotoSans-Regular.ttf',root).pathname,'Studio Sans');
 const logo=await loadImage(new URL('public/brand/pdf-studio-logo-v5.png',root).pathname);
@@ -43,6 +44,7 @@ pages.push(...seoPages.map(page=>({path:'/guides/'+page.slug,content:JSON.string
 pages.push(...['text-to-handwriting','notebook-maker','handwriting-practice'].map(slug=>({path:'/guides/'+slug,content:toolGuideSource})));
 const urls=pages.map(page=>{const hash=createHash('sha256').update(page.content).digest('hex');state[page.path]={hash,lastmod:old[page.path]?.hash===hash?old[page.path].lastmod:today};return `<url><loc>${base+page.path}</loc><lastmod>${state[page.path].lastmod}</lastmod></url>`;});
 urls.push(...['/lab','/lab/image-size-reducer','/lab/remove-watermark','/lab/mini-zine-maker','/lab/photo-booth-strips','/lab/custom-bingo','/lab/giant-poster','/lab/photo-coloring-page','/lab/printable-flashcards','/lab/daily-mood-canvas','/lab/photo-strip','/lab/flashcards','/lab/decision-wheel','/lab/pomodoro','/lab/calculator','/lab/finance-calculator','/lab/practice-sheets','/lab/text-to-handwriting','/lab/notebook-maker','/lab/handwriting-practice','/lab/flipbook','/lab/word-cloud','/lab/page-palette','/lab/whiteboard','/lab/poster-collage','/lab/pdf-to-gif','/lab/sketch-pdf'].map(path=>`<url><loc>${base+path}</loc></url>`));
+urls.push(...imageTools.filter(t=>t.slug!=='image-size-reducer').map(t=>`<url><loc>${base+'/lab/'+t.slug}</loc></url>`));
 urls.push(...['/about','/contact','/check-it-yourself','/help','/terms','/faq'].map(path=>`<url><loc>${base+path}</loc></url>`));
 await writeFile(stateURL,JSON.stringify(state,null,2)+'\n');
 await writeFile(new URL('public/sitemap.xml',root),'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.join('\n')+'\n</urlset>\n');
