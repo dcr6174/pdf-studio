@@ -158,3 +158,14 @@ try{
  assert.equal(first.doc.getPage(0).getRotation().angle,0,'original rotation retained');
 }finally{globalThis.fetch=originalFetch;}
 console.log('PASS: custom workflow watermark size, RGB color, angle, opacity, one stamp per page, crop/rotation chain and legacy defaults.');
+
+const edgeCrop=await pdf(await run([first],['crop'],[{cropTop:'12',cropRight:'24',cropBottom:'36',cropLeft:'48'}]));
+assert.deepEqual(edgeCrop.getPage(0).getCropBox(),{x:48,y:36,width:328,height:552});
+for(const [id,settings] of [['watermark',{text:'COPY',watermarkFont:'times',watermarkOpacity:'45'}],['numbers',{labelFont:'courier',labelOpacity:'65'}],['headers',{text:'HEADER',labelFont:'times',labelOpacity:'45'}],['bates',{text:'REF',labelFont:'courier',labelOpacity:'65'}]]){
+ const output=await pdf(await run([first],[id],[settings])),page=output.getPage(0),resources=page.node.Resources();
+ const fonts=resources.lookup(PDFName.of('Font'),PDFDict);
+ assert(fonts.entries().some(([,ref])=>output.context.lookup(ref,PDFDict).get(PDFName.of('BaseFont'))?.toString().includes(settings.watermarkFont==='times'||settings.labelFont==='times'?'Times':'Courier')),id+' uses selected font');
+ const gs=resources.lookup(PDFName.of('ExtGState'),PDFDict);
+ assert(gs.entries().some(([,ref])=>Math.abs(output.context.lookup(ref,PDFDict).get(PDFName.of('ca'))?.asNumber()-Number(settings.watermarkOpacity??settings.labelOpacity)/100)<.001),id+' uses selected opacity');
+}
+console.log('PASS: independent crop edges and actual watermark/page-number/header/Bates fonts and opacity.');

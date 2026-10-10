@@ -8,7 +8,7 @@ export function drawWorkflowWatermark(doc:PDFDocument,font:PDFFont,raw:WorkflowS
  const hex=s.watermarkColor!.slice(1),color=rgb(parseInt(hex.slice(0,2),16)/255,parseInt(hex.slice(2,4),16)/255,parseInt(hex.slice(4,6),16)/255);
  for(const page of doc.getPages()){
   const g=pageGeometry(page),pad=Math.min(24,g.width*.06,g.height*.06);
-  let size=Number(s.watermarkSize),width=font.widthOfTextAtSize(text,size),height=font.heightAtSize(size);
+  let size=Number(s.watermarkSize),width:number;try{width=font.widthOfTextAtSize(text,size);}catch{throw new Error('This font cannot show some characters. Choose Noto Sans in the watermark settings.');}let height=font.heightAtSize(size);
   const bw=Math.abs(c)*width+Math.abs(sn)*height,bh=Math.abs(sn)*width+Math.abs(c)*height;
   const scale=Math.min(1,(g.width-2*pad)/Math.max(1,bw),(g.height-2*pad)/Math.max(1,bh));
   size*=scale;width*=scale;height*=scale;

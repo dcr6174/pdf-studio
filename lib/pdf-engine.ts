@@ -108,7 +108,7 @@ export type Options = {
     flattenMode?:'forms'|'image';
     footer?:string;
     keywords?:string;creator?:string;producer?:string;passwordConfirm?:string;
-    numberPosition?:string;numberFormat?:string;labelColor?:string;headerPosition?:string;footerPosition?:string;labelFontSize?:string;labelMargin?:string;batesDigits?:string;batesSuffix?:string;
+    numberPosition?:string;numberFormat?:string;labelColor?:string;headerPosition?:string;footerPosition?:string;labelFontSize?:string;labelFont?:string;labelOpacity?:string;labelMargin?:string;batesDigits?:string;batesSuffix?:string;
     headerCenter?:string;headerRight?:string;footerCenter?:string;footerRight?:string;
     cropTop?:string;cropBottom?:string;cropLeft?:string;cropRight?:string;flipAxis?:string;
     blankAt?:string;imagePaper?:string;imageMargin?:string;imageOrientation?:string;
@@ -586,14 +586,14 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         }
         return result(await fresh.save(), `${filename}-${id==='nup'?(o.columns+'-per-sheet'):id==='flip'?'mirrored':id}.pdf`);
     }
-    let font = await out.embedFont(StandardFonts.Helvetica);
-    if (['edit', 'sign', 'watermark', 'headers', 'bates'].includes(id)) {
-        const fontkit = (await import('@pdf-lib/fontkit')).default;
-        out.registerFontkit(fontkit);
-        const response = await fetch('/fonts/NotoSans-Regular.ttf');
-        if (!response.ok)
-            throw new Error('The editor font could not be loaded. Please try again.');
-        font = await out.embedFont(await response.arrayBuffer(), { subset: true });
+    const selectedFont=id==='watermark'?o.workflowWatermark?.watermarkFont:['numbers','bates','headers'].includes(id)?o.labelFont:undefined;
+    const standardFonts:Record<string,StandardFonts>={helvetica:StandardFonts.Helvetica,times:StandardFonts.TimesRoman,courier:StandardFonts.Courier};
+    let font=await out.embedFont(standardFonts[selectedFont??'']??StandardFonts.Helvetica);
+    if(selectedFont==='noto'||(!selectedFont&&['edit','sign','watermark','headers','bates'].includes(id))){
+        const fontkit=(await import('@pdf-lib/fontkit')).default;out.registerFontkit(fontkit);
+        const response=await fetch('/fonts/NotoSans-Regular.ttf',{signal});
+        if(!response.ok)throw new Error('The editor font could not be loaded. Please try again.');
+        font=await out.embedFont(await response.arrayBuffer(),{subset:true});
     }
     if(id==='watermark'&&o.workflowWatermark)drawWorkflowWatermark(out,font,o.workflowWatermark);
     const rotatePages=id==='rotate'?new Set(ranges(o.range,out.getPageCount())):undefined;
@@ -618,7 +618,8 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             const t=id==='numbers'?formattedNumber(n,o.numberFormat,labelTotal):id==='bates'?`${o.text||'DOC-'}${String(n).padStart(digits,'0')}${o.batesSuffix??''}`:labelText(o.text,labelIndex+1,labelTotal);
             p.pushOperators(pushGraphicsState(),concatTransformationMatrix(...g.matrix as [number,number,number,number,number,number]));
             const hex=/^#[0-9a-f]{6}$/i.test(o.labelColor??'')?o.labelColor!.slice(1):'333340',labelColor=rgb(parseInt(hex.slice(0,2),16)/255,parseInt(hex.slice(2,4),16)/255,parseInt(hex.slice(4,6),16)/255);
-            const draw=(text:string,position:string)=>{if(!text)return;const width=font.widthOfTextAtSize(text,size),x=position.endsWith('right')?g.width-margin-width:position.endsWith('center')?(g.width-width)/2:margin,y=position.startsWith('top')?g.height-margin-size:position.startsWith('middle')?g.height/2:margin;if(x<0||x+width>g.width||y<0||y+size>g.height)throw new Error('The label does not fit this page. Shorten it or reduce the font size.');p.drawText(text,{x,y,size,font,color:labelColor});};
+            const opacity=Number(o.labelOpacity??100);if(!Number.isFinite(opacity)||opacity<1||opacity>100)throw new Error('Use text opacity between 1 and 100%.');
+            const draw=(text:string,position:string)=>{if(!text)return;let width:number;try{width=font.widthOfTextAtSize(text,size);}catch{throw new Error('This font cannot show some characters. Choose Noto Sans in the action settings.');}const x=position.endsWith('right')?g.width-margin-width:position.endsWith('center')?(g.width-width)/2:margin,y=position.startsWith('top')?g.height-margin-size:position.startsWith('middle')?g.height/2:margin;if(x<0||x+width>g.width||y<0||y+size>g.height)throw new Error('The label does not fit this page. Shorten it or reduce the font size.');p.drawText(text,{x,y,size,font,color:labelColor,opacity:opacity/100});};
             if(id==='headers'){draw(t,'top-'+(o.headerPosition??'left'));draw(labelText(o.headerCenter??'',labelIndex+1,labelTotal),'top-center');draw(labelText(o.headerRight??'',labelIndex+1,labelTotal),'top-right');draw(labelText(o.footer??'',labelIndex+1,labelTotal),'bottom-'+(o.footerPosition??'left'));draw(labelText(o.footerCenter??'',labelIndex+1,labelTotal),'bottom-center');draw(labelText(o.footerRight??'',labelIndex+1,labelTotal),'bottom-right');}else draw(t,o.numberPosition??'bottom-center');
             p.pushOperators(popGraphicsState());
         }
