@@ -6,13 +6,13 @@ export async function decodedImage(page:PDFPageProxy,id:unknown):Promise<Uint8Ar
  const image=typeof id==='string'?(store.has(id)?store.get(id):undefined):id;
  if(!image||typeof image!=='object')return;
  const {width,height,bitmap,data,kind}=image as {width:number;height:number;bitmap?:ImageBitmap;data?:Uint8Array;kind?:number};
- if(!width||!height||width*height>16000000)return;
+ if(!Number.isInteger(width)||!Number.isInteger(height)||width<=0||height<=0||width*height>16000000)return;
  const canvas=document.createElement('canvas');canvas.width=width;canvas.height=height;
  try{const ctx=canvas.getContext('2d');if(!ctx)return;
   if(bitmap)ctx.drawImage(bitmap,0,0);else if(data){const pixels=ctx.createImageData(width,height),out=pixels.data;
-   if(kind===ImageKind.RGBA_32BPP)out.set(data);
-   else if(kind===ImageKind.RGB_24BPP){for(let i=0,j=0;i<out.length;i+=4,j+=3){out[i]=data[j];out[i+1]=data[j+1];out[i+2]=data[j+2];out[i+3]=255;}}
-   else if(kind===ImageKind.GRAYSCALE_1BPP){const stride=Math.ceil(width/8);for(let y=0;y<height;y++)for(let x=0;x<width;x++){const v=data[y*stride+(x>>3)]&(128>>(x&7))?255:0,i=(y*width+x)*4;out[i]=out[i+1]=out[i+2]=v;out[i+3]=255;}}
+   if(kind===ImageKind.RGBA_32BPP){if(data.length!==width*height*4)return;out.set(data);}
+   else if(kind===ImageKind.RGB_24BPP){if(data.length!==width*height*3)return;for(let i=0,j=0;i<out.length;i+=4,j+=3){out[i]=data[j];out[i+1]=data[j+1];out[i+2]=data[j+2];out[i+3]=255;}}
+   else if(kind===ImageKind.GRAYSCALE_1BPP){const stride=Math.ceil(width/8);if(data.length!==stride*height)return;for(let y=0;y<height;y++)for(let x=0;x<width;x++){const v=data[y*stride+(x>>3)]&(128>>(x&7))?255:0,i=(y*width+x)*4;out[i]=out[i+1]=out[i+2]=v;out[i+3]=255;}}
    else return;ctx.putImageData(pixels,0,0);
   }else return;
   return await canvasPNG(canvas);
