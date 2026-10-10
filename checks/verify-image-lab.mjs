@@ -23,3 +23,20 @@ const carrier=createCanvas(400,240),c=carrier.getContext('2d');c.drawImage(sourc
 assert.throws(()=>lab.makeCanvas(8192,8192),/24 megapixels/);assert.throws(()=>lab.makeCanvas(0,1));assert.throws(()=>lab.extractMessage(ctx.getImageData(0,0,400,240)),/No Studio Lab/);assert.throws(()=>lab.embedMessage(new ImageData(1,1),encrypted),/too large/);
 assert.deepEqual(lab.clampRect({x:390,y:230,width:100,height:100},400,240),{x:390,y:230,width:10,height:10});
 console.log('PASS: image formats, crop/resize/rotation dimensions, background transparency, grayscale pixels, passport dimensions, ICO directory, AES-GCM wrong-password rejection, PNG steganography roundtrip with transparent pixels, invalid selection and memory limits. SVG cleanup and interactive/batch layouts are separately verified in a real browser.');
+// Manifest paths must still resolve after UI packaging, including batched sources.
+const manifest=JSON.parse(await icons.find(o=>o.name==='site.webmanifest').blob.text());
+for(const total of [1,2]){const packaged=lab.packageImageOutputs(icons,'favicon-generator',file,0,total),prefix=total===1?'':'01-fixture/';assert(manifest.icons.every(icon=>packaged.some(o=>o.name===prefix+icon.src)));assert(packaged.some(o=>o.name===prefix+'favicon.ico'));}
+assert.equal(portrait.length,2);assert.deepEqual([portrait[1].width,portrait[1].height],[1800,1200]);
+const untouched=lab.renderImage(source,'image-background-remover',{...settings,backgroundSelected:false});assert.equal(untouched.getContext('2d').getImageData(0,0,1,1).data[3],255);
+const restored=lab.renderImage(source,'image-background-remover',{...settings,backgroundSelected:true,restoreStrokes:[{x:5,y:5,radius:4}]});assert.equal(restored.getContext('2d').getImageData(5,5,1,1).data[3],255);assert.equal(restored.getContext('2d').getImageData(0,0,1,1).data[3],0);
+// Descriptive metadata is removed without changing encoded PNG/JPEG/WebP payloads.
+const png=source.toBuffer('image/png'),textChunk=Buffer.alloc(21);textChunk.writeUInt32BE(9);textChunk.write('tEXt',4);textChunk.write('GPS\0place',8);
+const taggedPNG=new File([png.subarray(0,33),textChunk,png.subarray(33)],'gps.png',{type:'image/png'});
+const cleanPNG=await lab.imageOutputs(source,taggedPNG,'image-metadata-remover',{...settings,metadataMode:'preserve'});assert.deepEqual(Buffer.from(await cleanPNG[0].blob.arrayBuffer()),png);
+const jpg=source.toBuffer('image/jpeg',90),comment=Buffer.from([255,254,0,5,71,80,83]),taggedJPG=new File([jpg.subarray(0,2),comment,jpg.subarray(2)],'gps.jpg',{type:'image/jpeg'});
+const cleanJPG=await lab.imageOutputs(source,taggedJPG,'image-metadata-remover',{...settings,metadataMode:'preserve'});assert.deepEqual(Buffer.from(await cleanJPG[0].blob.arrayBuffer()),jpg);
+const webp=source.toBuffer('image/webp',90),xmp=Buffer.alloc(12);xmp.write('XMP ');xmp.writeUInt32LE(3,4);xmp.write('GPS',8);const taggedWebP=Buffer.concat([webp,xmp]);taggedWebP.writeUInt32LE(taggedWebP.length-8,4);
+const cleanWebP=await lab.imageOutputs(source,new File([taggedWebP],'gps.webp',{type:'image/webp'}),'image-metadata-remover',{...settings,metadataMode:'preserve'});assert.deepEqual(Buffer.from(await cleanWebP[0].blob.arrayBuffer()),webp);
+const exif=Buffer.from([69,120,105,102,0,0,73,73,42,0,8,0,0,0,1,0,18,1,3,0,1,0,0,0,6,0,0,0,0,0,0,0]),app1=Buffer.alloc(exif.length+4);app1[0]=255;app1[1]=225;app1.writeUInt16BE(exif.length+2,2);exif.copy(app1,4);
+await assert.rejects(()=>lab.imageOutputs(source,new File([jpg.subarray(0,2),app1,jpg.subarray(2)],'rotated.jpg',{type:'image/jpeg'}),'image-metadata-remover',{...settings,metadataMode:'preserve'}),/EXIF rotation/);
+console.log('PASS: single/batch favicon manifest filenames, passport crop plus print sheet, explicit background sampling, pixel restoration, metadata payload preservation for PNG/JPEG/WebP, and EXIF orientation rejection.');
