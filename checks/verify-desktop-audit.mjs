@@ -1,0 +1,55 @@
+import assert from 'node:assert/strict';
+import {readFile,mkdir,writeFile} from 'node:fs/promises';
+import {build} from 'vite';
+import {createRequire} from 'node:module';
+import {PDFDocument,PDFName,PDFDict,PDFArray,PDFString} from 'pdf-lib';
+import {DOMParser as XMLParser} from '@xmldom/xmldom';
+import {DOMMatrix,ImageData,Path2D} from '@napi-rs/canvas';
+import * as XLSX from 'xlsx';
+import JSZip from 'jszip';
+
+globalThis.DOMMatrix=DOMMatrix;globalThis.ImageData=ImageData;globalThis.Path2D=Path2D;
+globalThis.DOMParser=class {parseFromString(text,type){const doc=new XMLParser().parseFromString(text,type==='text/html'?'application/xhtml+xml':type);doc.body=doc.getElementsByTagName('body')[0];return doc;}};
+const nativeFetch=globalThis.fetch;
+globalThis.fetch=async(url,...args)=>String(url).startsWith('/fonts/')?new Response(await readFile('public'+url)):nativeFetch(url,...args);
+await build({configFile:false,logLevel:'error',plugins:[{name:'fixture-fonts',transform(code,id){if(id.endsWith('/lib/pdf-engine.ts'))return {code:code.replace(/standardFontDataUrl:\s*['"]\/standard_fonts\/['"]/g,'standardFontDataUrl: '+JSON.stringify(new URL('../node_modules/pdfjs-dist/standard_fonts/',import.meta.url).pathname)),map:null};}}],build:{ssr:'lib/pdf-engine.ts',outDir:'.desktop-audit-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-navigation.ts',outDir:'.desktop-navigation-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'navigation.mjs'}}}});
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/extra-pdf.ts',outDir:'.desktop-extra-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'extra.mjs'}}}});
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/epub-text.ts',outDir:'.desktop-epub-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'epub.mjs'}}}});
+const {processPDF,pdfjs}=await import('../.desktop-audit-check/engine.mjs');
+const {readOutline,writeOutline}=await import('../.desktop-navigation-check/navigation.mjs');
+const {halvePages}=await import('../.desktop-extra-check/extra.mjs');
+const {epubHTMLText}=await import('../.desktop-epub-check/epub.mjs');
+const reader=await pdfjs();reader.GlobalWorkerOptions.workerSrc=createRequire(import.meta.url).resolve('pdfjs-dist/build/pdf.worker.min.mjs');
+async function text(bytes){const d=await reader.getDocument({data:new Uint8Array(bytes),standardFontDataUrl:new URL('../node_modules/pdfjs-dist/standard_fonts/',import.meta.url).pathname}).promise;try{const pages=[];for(let i=1;i<=d.numPages;i++)pages.push((await (await d.getPage(i)).getTextContent()).items.map(item=>item.str??'').join(' '));return pages.join('\n');}finally{await d.destroy();}}
+const defaults={range:'',text:'',title:'',author:'',subject:'',password:'',quality:'compact',angle:'0',margin:'20',start:'1',columns:'2',fields:{}};
+const k=PDFName.of;
+async function fixture(id,count){const doc=await PDFDocument.create();for(let i=0;i<count;i++){const p=doc.addPage([400,600]);p.drawText(`${id} PAGE ${i+1}`,{x:30,y:550});}writeOutline(doc,[{title:id+' first',page:0,children:[{title:id+' child',page:count-1,children:[]}]}]);const p=doc.getPage(0);p.node.set(k('Annots'),doc.context.obj([doc.context.register(doc.context.obj({Type:'Annot',Subtype:'Link',Rect:[20,20,80,40],Dest:[doc.getPage(count-1).ref,'Fit']})),doc.context.register(doc.context.obj({Type:'Annot',Subtype:'Link',Rect:[250,20,300,40],A:{S:'URI',URI:PDFString.of('https://example.test')}}))]));const bytes=await doc.save();return {id,name:id+'.pdf',bytes,size:bytes.length,pages:count,doc};}
+const a=await fixture('A',3),b=await fixture('B',2);
+const items=file=>Array.from({length:file.pages},(_,index)=>({id:file.id+index,fileId:file.id,index,rotation:0}));
+const run=(id,files=[a],options={},pages=files.flatMap(items))=>processPDF(id,files,pages,[],{...defaults,...options},()=>{});
+const reopen=async output=>PDFDocument.load(await output.blob.arrayBuffer());
+const merged=await reopen(await run('merge',[b,a]));assert.equal(merged.getPageCount(),5);const outlines=readOutline(merged);assert.deepEqual(outlines.map(row=>[row.title,row.page,row.children[0].page]),[['B first',0,1],['A first',2,4]]);
+const firstLink=merged.getPage(0).node.lookup(k('Annots'),PDFArray).lookup(0,PDFDict).lookup(k('Dest'),PDFArray);assert.equal(firstLink.get(0).toString(),merged.getPage(1).ref.toString());
+const reversed=await reopen(await run('reverse'));assert.equal(readOutline(reversed)[0].page,2);assert.equal(readOutline(reversed)[0].children[0].page,0);assert.match(await text(await reversed.save()),/A PAGE 3[\s\S]*A PAGE 2[\s\S]*A PAGE 1/);
+const duplicate=await reopen(await run('duplicate'));assert.equal(duplicate.getPageCount(),6);assert.equal(readOutline(duplicate)[0].children[0].page,4);
+const appended=await reopen(await run('bookmarks',[a],{text:'2 New chapter'}));assert.deepEqual(readOutline(appended).map(row=>row.title),['A first','New chapter']);assert.equal(readOutline(appended)[0].children[0].title,'A child');
+const replaced=await reopen(await run('bookmarks',[a],{text:'2 Replacement',bookmarkMode:'replace'}));assert.deepEqual(readOutline(replaced).map(row=>row.title),['Replacement']);
+await assert.rejects(()=>run('bookmarks',[a],{text:'99 Invalid'}),/valid page/);
+const bates=await run('bates',[a],{text:''}),batesText=await text(await bates.blob.arrayBuffer());assert.match(batesText,/000001/);assert.doesNotMatch(batesText,/DOC-/);assert.match(await text(await (await run('bates',[a],{text:'DOC-'})).blob.arrayBuffer()),/DOC-000001/);
+const halves=await halvePages(a.doc);const left=halves.getPage(0).node.lookup(k('Annots'),PDFArray),right=halves.getPage(1).node.lookup(k('Annots'),PDFArray);assert.equal(left.size(),1);assert.equal(right.size(),1);assert.equal(left.lookup(0,PDFDict).lookup(k('Dest'),PDFArray).get(0).toString(),halves.getPage(4).ref.toString());
+assert.equal(epubHTMLText('<html><body><p>Sentence 123.</p><h2>A - PAGE 2</h2><p>Second <em>paragraph</em>.</p><script>bad()</script></body></html>'),'Sentence 123.\n\nA - PAGE 2\n\nSecond paragraph.');
+const z=new JSZip();z.file('book.opf','<package><manifest><item id="one" href="page.xhtml"/></manifest><spine><itemref idref="one"/></spine></package>');z.file('page.xhtml','<html><body><p>Sentence 123.</p><h2>A - PAGE 2</h2></body></html>');const ebookBytes=await z.generateAsync({type:'uint8array'});const ebook=await run('ebook',[{id:'ebook',name:'book.epub',bytes:ebookBytes,size:ebookBytes.length,pages:0}],{},[]);assert.match(await text(await ebook.blob.arrayBuffer()),/Sentence 123\.\s+A - PAGE 2/);
+const w=XLSX.utils.book_new();XLSX.utils.book_append_sheet(w,XLSX.utils.aoa_to_sheet([['FIRST_ONLY',123]]),'First');XLSX.utils.book_append_sheet(w,XLSX.utils.aoa_to_sheet([['SECOND_ONLY',456]]),'Second');const bytes=new Uint8Array(XLSX.write(w,{type:'array',bookType:'xlsx'})),sheet={id:'sheet',name:'sheets.xlsx',bytes,size:bytes.length,pages:0};
+const all=await run('sheet',[sheet],{},[]);assert.match(await text(await all.blob.arrayBuffer()),/FIRST_ONLY[\s\S]*SECOND_ONLY/);const only=await run('sheet',[sheet],{sheetNames:['Second']},[]);assert.doesNotMatch(await text(await only.blob.arrayBuffer()),/FIRST_ONLY/);assert.match(await text(await only.blob.arrayBuffer()),/SECOND_ONLY/);await assert.rejects(()=>run('sheet',[sheet],{sheetNames:[]},[]),/at least one/);
+const zip=await JSZip.loadAsync(await (await run('zip',[a,{...b,name:'A.pdf'}])).blob.arrayBuffer());assert.deepEqual(Object.keys(zip.files),['A.pdf','A (2).pdf']);assert.deepEqual(await zip.file('A.pdf').async('uint8array'),a.bytes);
+assert.ok((await run('flip')).warnings.some(w=>/links.*removed/i.test(w)));
+await mkdir('.desktop-audit-fixtures',{recursive:true});await writeFile('.desktop-audit-fixtures/A.pdf',a.bytes);await writeFile('.desktop-audit-fixtures/B.pdf',b.bytes);await writeFile('.desktop-audit-fixtures/merged.pdf',await merged.save());await writeFile('.desktop-audit-fixtures/reversed.pdf',await reversed.save());await writeFile('.desktop-audit-fixtures/halves.pdf',await halves.save());
+console.log('PASS: nested outlines and internal destinations survive merge/reverse/duplicate; append/replace and invalid bookmarks; exact Bates prefixes; half-page link clipping; EPUB paragraph boundaries; all/selected spreadsheet sheets; byte-identical ZIP with collision naming; explicit mirror loss warning.');
+
+await build({configFile:false,logLevel:'error',build:{ssr:'lib/result-summary.ts',outDir:'.desktop-result-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'result.mjs'}}}});
+const {describeChange}=await import('../.desktop-result-check/result.mjs');
+assert.equal(describeChange(1000000,4200,true).headline,'99.6% smaller');
+assert.equal(describeChange(1000000,1,true).headline,'99.9% smaller');
+assert.equal(describeChange(1000,1000,true).headline,'About the same size');
+console.log('PASS: nonempty compression outputs never display 100% reduction.');

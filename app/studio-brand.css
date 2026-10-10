@@ -1,4 +1,7 @@
 /* PDF Studio: vivid tools on a quiet working canvas. */
+[data-theme=dark] .home-existing-text-shortcut .link-button{color:#c4b5fd}
+[data-theme=dark] .home-existing-text-shortcut .link-button:hover{color:#ddd6fe}
+.home-existing-text-shortcut .link-button:focus-visible{outline:2px solid currentColor;outline-offset:4px;border-radius:3px}
 :root{--background:#f7f8fc;--foreground:#25243b;--card:#fff;--sidebar:#fff;--soft:#eeedf7;--border:#e3e1ef;--muted:#656279;--primary:#6535d8;--blue-soft:#f0eaff;--shadow:0 8px 28px #38206409}
 [data-theme=dark]{--background:#141220;--foreground:#f4f0ff;--card:#211e32;--sidebar:#1b182b;--soft:#302b45;--border:#45405b;--muted:#bab3ce;--primary:#8250d4;--blue-soft:#342650;--shadow:0 8px 28px #0002}
 .app-sidebar{--sidebar:#fff;--foreground:#302944;--muted:#6d647d;--soft:#f3eefb;--border:#e9e3f1;--primary:#6535d8;--blue-soft:#eee5ff;background:var(--sidebar);color:var(--foreground)}
@@ -546,3 +549,4 @@ select,option,[data-slot=select-trigger],[data-slot=select-content],[data-slot=s
 .new-document-context span{font-size:.85rem;color:var(--muted);line-height:1.5}
 @media(max-width:767px){.home-shell .content{padding-top:8px}.home-shell .home-hero{margin-bottom:14px}.home-shell .home-catalog-pills{flex-wrap:wrap;justify-content:flex-start}.home-shell .home-catalog-pills button{padding-inline:14px}}
 @media(prefers-reduced-motion:reduce){.home-catalog-content{animation:none}.home-shell .home-catalog-pills button{transition:none}.home-shell .home-catalog-pills button:hover{transform:none}}
+

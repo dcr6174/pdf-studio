@@ -1,4 +1,13 @@
 /* One shared action area; page thumbnails and canvas occupy the remaining width. */
+/* Desktop precision work: Redact owns the available document column. */
+@media(min-width:1100px){
+ .studio-shell[data-tool=redact] .editor-layout{display:grid!important;grid-template-columns:minmax(0,1fr)!important;width:100%;min-width:0}
+ .studio-shell[data-tool=redact] .editor-main{width:100%;min-width:0}
+ .studio-shell[data-tool=redact] .board-scroll{width:100%;box-sizing:border-box}
+}
+.sheet-selection{display:grid;gap:12px;min-width:0}
+.sheet-selection label{display:flex;align-items:center;gap:10px;min-height:44px;overflow-wrap:anywhere}
+.sheet-selection input{width:20px!important;min-height:20px!important;flex:none}
 .tool-action-ready .content:not(:has(.export-result-page)){padding-bottom:100px}
 .shared-tool-action-bar{display:flex!important;flex-direction:column!important;align-items:stretch!important;gap:16px!important;background:var(--card);color:var(--foreground);box-sizing:border-box}
 .shared-tool-action-bar>div{display:block!important;width:100%;margin:0!important}
@@ -206,3 +215,4 @@
 .dark .studio-shell .form-action-alert .secondary{background:#4a2633;color:#ffd8df;border-color:#985163}
 
 .tool-action-identity{display:flex;align-items:center;gap:10px;min-width:0}.tool-action-identity h2{min-width:0}.tool-action-symbol{display:flex;align-items:center;justify-content:center;flex:none;width:48px;height:48px;border-radius:12px;background:var(--soft);color:var(--primary)}
+

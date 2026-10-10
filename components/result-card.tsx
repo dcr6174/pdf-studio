@@ -24,7 +24,7 @@ export function ResultCard({output,open,toolId,resultTitle,before,compress,onDow
  const inputSize=output.inputSize??before?.size??0;
  const larger=!!compress&&inputSize>0&&output.blob.size>inputSize;
  const reduction=compress&&inputSize>0?Math.max(0,Math.min(100,(1-output.blob.size/inputSize)*100)):0;
- const saved=Math.round(reduction),savingsLabel=reduction>0&&saved===0?'<1%':`${saved}%`;
+ const saved=output.blob.size>0?Math.min(99.9,Math.round(reduction*10)/10):100,savingsLabel=reduction>0&&saved===0?'<0.1%':`${saved}%`;
  const originalPreferred=larger&&!!onOriginal;
  const next=[['compress','Compress PDF'],['sign','Sign PDF'],['watermark','Add watermark'],['edit','Edit PDF']].filter(([id])=>id!==toolId).slice(0,3);
  return <section className="merge-result-page export-result-page" aria-labelledby="export-result-heading">
@@ -47,4 +47,5 @@ export function ResultCard({output,open,toolId,resultTitle,before,compress,onDow
   {pdf&&(onContinue||onNextTool)&&<div className="merge-result-next"><h2>Continue with this PDF</h2><div>{onNextTool?next.map(([id,text])=>{const Icon=toolIcons[id]??FileText;return <button key={id} className="secondary" onClick={()=>onNextTool(id)}><span className={`merge-next-icon merge-next-icon-${id}`}><Icon size={19}/></span>{text}</button>;}):onContinue&&<button className="secondary" onClick={onContinue}><Pencil size={19}/>Continue editing</button>}</div></div>}
  </section>;
 }
+
 

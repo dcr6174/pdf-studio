@@ -10,7 +10,7 @@ export const tools:Tool[] = [
 ['remove-bookmarks','Remove bookmarks','Remove the document navigation outline.','Pages','book','Original single PDF only. Page content and links remain; removing navigation does not remove sensitive text.'],
 ['remove-attachments','Remove embedded files','Remove reachable embedded file attachments.','Privacy','shield','Removes attachment name trees, associated-file references and file-attachment annotations. Not complete sanitization; unreachable historical bytes may remain.'],
 ['remove-links','Remove PDF links','Remove clickable page link annotations.','Privacy','shield','Keeps visible text, comments and form widgets. Text that looks like a URL remains visible. Original single PDF only.'],
-['bookmarks','Add bookmarks','Create a clickable document outline.','Pages','book','One bookmark per line: page number followed by its title. Replaces the exported outline.'],
+['bookmarks','Add bookmarks','Create a clickable document outline.','Pages','book','One bookmark per line: page number followed by its title. Appends by default; choose Replace to remove the existing outline.'],
 ['halve','Split pages in half','Separate left and right halves of each page.','Pages','scissors','Uses CropBox boundaries; content outside each visible half is hidden, not securely removed. Rotations are retained.'],
 ['viewer','Reading layout preference','Choose single-page or two-column viewing.','Pages','book','Sets a PDF viewer preference. Some readers ignore it.'],
 ['remove-annotations','Remove annotations','Remove comments, highlights, links and stamps.','Privacy','shield','Works on the original single PDF; preserves form widgets. Export other workspace changes first.'],
@@ -26,7 +26,7 @@ export const tools:Tool[] = [
 ['interleave','Alternate & Mix PDF','Weave pages from multiple PDFs.','Pages','merge'],
 ['nup','Pages per sheet','Fit 2, 4, 6 or 9 pages on one sheet.','Pages','grid'],
 ['crop','Crop margins','Trim the edges of your pages.','Pages','crop','Cropping hides content outside the page boundary; it does not permanently remove it.'],
-['resize','Resize to A4','Fit every page onto an A4 sheet.','Pages','crop'],
+['resize','Resize pages','Fit selected pages onto A4 or US Letter.','Pages','crop'],
 ['flip','Mirror pages','Mirror your pages horizontally or vertically.','Pages','reverse'],
 ['native-text','Edit existing text','Select original text, change it and preview the actual PDF.','Edit & sign','text','Edit original text objects, lines and compatible paragraphs. Keep the original font or use an embedded fallback / uploaded TTF or OTF. Nested text is edited when it can be detached safely. OCR reconstruction is a separate, explicit path. Editing invalidates digital signatures.'],
 ['edit','Add text & images','Add text, images and annotations.','Edit & sign','edit','Adds new elements and visual whiteout. Use Edit existing text for actual text replacement; use Redact for content removal.'],
@@ -53,7 +53,7 @@ export const tools:Tool[] = [
 ['create','Text to PDF','Turn typed text or a text file into a PDF.','Convert','plus'],
 ['markdown','Markdown to PDF','Headings, lists and readable text.','Convert','code','Basic Markdown formatting; complex tables and embedded images are not supported.'],
 ['docx','Word to PDF','Convert DOCX text into a PDF.','Convert','text','Reflows text; original Word layout, images and styling are not preserved. Legacy .doc is not supported.'],
-['sheet','Spreadsheet to PDF','Print spreadsheet rows to a PDF.','Convert','grid','Text-based conversion of the first sheet. Complex styling and charts are not preserved.'],
+['sheet','Spreadsheet to PDF','Print spreadsheet rows to a PDF.','Convert','grid','Choose which sheets to include. Text rows are exported; charts, images and original styling are not preserved.'],
 ['ebook','EPUB to PDF','Turn book text into a document.','Convert','book','Reflows text; ebook styling and illustrations are not preserved.'],
 ['grayscale','Grayscale PDF','Make pages black and white.','Convert','droplet','Rebuilds pages as images. Text search, links and forms are lost.'],
 ['invert','Invert colours','Create a dark version of your PDF.','Convert','moon','Rebuilds pages as images. Text search, links and forms are lost.'],
@@ -74,5 +74,6 @@ export const tools:Tool[] = [
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
 export function accepted(id:string){return id==='images'||id==='scan'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
 export function isMulti(id:string){return ['workflow','merge','organize','interleave','images','scan','compare','zip'].includes(id);}
+
 
 

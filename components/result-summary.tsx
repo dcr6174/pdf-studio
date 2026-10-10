@@ -28,7 +28,7 @@ function useAfterPages(blob:Blob|undefined,known?:number){
 export function ResultSummary({compress,before,afterSize,afterBlob,afterLabel,afterPages:knownPages}:{compress:boolean;before:Side;afterSize:number;afterBlob?:Blob;afterLabel:string;afterPages?:number}){
  const afterPages=useAfterPages(afterBlob,knownPages);
  const change=describeChange(before.size,afterSize,compress);
- const saved=before.size-afterSize,pct=before.size>0?Math.abs(saved)/before.size*100:0;
+ const saved=before.size-afterSize,pct=before.size>0?Math.abs(saved)/before.size*100:0;const percent=saved>0&&afterSize>0?Math.min(99.9,pct):pct;
  const precise=(n:number)=>new Intl.NumberFormat('en',{maximumFractionDigits:2}).format(n/1000)+' KB';
  const beforeDetail=[before.files>1?plural(before.files,'file'):'',before.pages>0?plural(before.pages,before.unit):''].filter(Boolean).join(' · ');
  const afterDetail=[afterLabel,afterPages!==undefined?plural(afterPages,'page'):''].filter(Boolean).join(' · ');
@@ -36,6 +36,7 @@ export function ResultSummary({compress,before,afterSize,afterBlob,afterLabel,af
   <div className="rs-col"><span className="rs-tag">Before</span><b>{precise(before.size)}</b><span className="rs-detail">{beforeDetail||'\u00a0'}</span></div>
   <ArrowRight className="rs-arrow" size={22} aria-hidden="true"/>
   <div className="rs-col rs-after"><span className="rs-tag">After</span><b>{precise(afterSize)}</b><span className="rs-detail">{afterDetail||'\u00a0'}</span></div>
-  {compress&&<><p className="rs-savings">{saved>0?`Saved ${precise(saved)} · ${pct.toFixed(1)}%`:saved===0?'No size change':`Added ${precise(-saved)} · ${pct.toFixed(1)}%`}</p><p className="rs-headline"><strong>{saved<0?'This version is larger. Download the original for the smaller file.':saved===0?'No size change. Your PDF may already be optimized.':pct<1?'Only slightly smaller. Your PDF may already be optimized.':`Your PDF is ${pct.toFixed(1)}% smaller.`}</strong></p></> }
+  {compress&&<><p className="rs-savings">{saved>0?`Saved ${precise(saved)} · ${percent.toFixed(1)}%`:saved===0?'No size change':`Added ${precise(-saved)} · ${percent.toFixed(1)}%`}</p><p className="rs-headline"><strong>{saved<0?'This version is larger. Download the original for the smaller file.':saved===0?'No size change. Your PDF may already be optimized.':pct<1?'Only slightly smaller. Your PDF may already be optimized.':`Your PDF is ${percent.toFixed(1)}% smaller.`}</strong></p></> }
  </section>;
 }
+
