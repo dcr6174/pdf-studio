@@ -135,3 +135,22 @@ result=await pdf(await run([richFile],['remove-annotations']));assert.deepEqual(
 result=await pdf(await run([richFile],['remove-attachments']));assert.equal(result.catalog.lookup(PDFName.of('Names'),PDFDict).has(PDFName.of('EmbeddedFiles')),false);
 assert.equal(tenDoc.getPageCount(),10);assert.equal(rich.getForm().getTextField('Name').getText(),'Alice');
 console.log('PASS: all thirty operations, ten presets, page transformations, alternating PDFs, bookmarks, metadata and targeted cleanup with originals retained.');
+
+// New settings affect real PDF content and remain compatible with old recipes.
+const styled={text:'COPY',angle:'25',watermarkColor:'#ef3344',watermarkOpacity:'65',watermarkSize:'48',watermarkPosition:'bottom-right'};
+assert.equal(recipes.workflowSettings('watermark',{}).watermarkOpacity,'22');
+for(const invalid of [{watermarkColor:'red'},{watermarkOpacity:'0'},{watermarkSize:'200'},{angle:'181'},{watermarkPosition:'outside'}])assert.throws(()=>recipes.workflowSettings('watermark',invalid));
+globalThis.fetch=async url=>{assert.equal(url,'/fonts/NotoSans-Regular.ttf');return new Response(fontBytes);};
+try{
+ const styledPDF=await pdf(await run([first,second],['merge','watermark'],[{},styled]));
+ for(const page of styledPDF.getPages()){
+  const stream=page.node.Contents().asArray().map(ref=>Buffer.from(decodePDFRawStream(styledPDF.context.lookup(ref)).decode()).toString()).join('');
+  assert.equal((stream.match(/ Tj/g)??[]).length,2,'one source text and exactly one watermark per page');
+  assert.match(stream,/48 Tf/,'configured text size');assert.match(stream,/0\\.9372549019607843 0\\.2 0\\.26666666666666666 rg/,'configured RGB color');
+  assert.match(stream,/0\\.9063077870366499 0\\.42261826174069944 -0\\.42261826174069944 0\\.9063077870366499/,'configured 25-degree angle');
+  const states=page.node.Resources().lookup(PDFName.of('ExtGState'),PDFDict);assert(states.entries().some(([,ref])=>styledPDF.context.lookup(ref).lookup(PDFName.of('ca')).asNumber()===.65),'configured opacity');
+ }
+ const cropped=await pdf(await run([first],['crop','rotate','watermark'],[{margin:'20'},{angle:'270'},styled]));assert.equal(cropped.getPage(0).getRotation().angle,270);assert.equal(cropped.getPage(0).getCropBox().width,360);
+ assert.equal(first.doc.getPage(0).getRotation().angle,0,'original rotation retained');
+}finally{globalThis.fetch=originalFetch;}
+console.log('PASS: custom workflow watermark size, RGB color, angle, opacity, one stamp per page, crop/rotation chain and legacy defaults.');

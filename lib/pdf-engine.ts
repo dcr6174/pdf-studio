@@ -1,3 +1,4 @@
+import {drawWorkflowWatermark} from './workflow-watermark';
 import {exportFilename} from '@/lib/export-filename';
 import {lineSegments,type ShapePoint} from './shape-geometry';
 import {formattedNumber,labelText} from './task-labels';
@@ -97,6 +98,7 @@ export type Options = {
     workflowSteps?:string[];
     workflowDisabled?:number[];
     workflowSettings?:WorkflowStepSettings[];
+    workflowWatermark?:WorkflowStepSettings;
     templateFields?:import('./template-document').TemplateField[];
     ocrLanguage?:string;
     ocrRange?:string;
@@ -106,7 +108,7 @@ export type Options = {
     flattenMode?:'forms'|'image';
     footer?:string;
     keywords?:string;creator?:string;producer?:string;passwordConfirm?:string;
-    numberPosition?:string;numberFormat?:string;labelFontSize?:string;labelMargin?:string;batesDigits?:string;batesSuffix?:string;
+    numberPosition?:string;numberFormat?:string;labelColor?:string;headerPosition?:string;footerPosition?:string;labelFontSize?:string;labelMargin?:string;batesDigits?:string;batesSuffix?:string;
     headerCenter?:string;headerRight?:string;footerCenter?:string;footerRight?:string;
     cropTop?:string;cropBottom?:string;cropLeft?:string;cropRight?:string;flipAxis?:string;
     blankAt?:string;imagePaper?:string;imageMargin?:string;imageOrientation?:string;
@@ -262,8 +264,8 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         if(['remove-links','remove-bookmarks','remove-attachments','remove-annotations'].includes(step.id)&&currentFiles.length!==1){const d=await assemble(currentFiles,currentPages,signal,o.flattenForm),bytes=await d.save();const file:Loaded={...currentFiles[0],id:crypto.randomUUID(),bytes,size:bytes.length,pages:d.getPageCount(),doc:d};stepFiles=[file];stepPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));}
         if(step.id==='reorder'){stepPages=ranges(step.settings.range??'',currentPages.length).map(n=>currentPages[n]);target='organize';}
         if(step.id==='blank'){const d=await assemble(currentFiles,currentPages,signal,o.flattenForm);const at=Number(step.settings.blankAt??1)-1;d.insertPage(at,[595.28,841.89]);const bytes=await d.save(),file:Loaded={...currentFiles[0],id:crypto.randomUUID(),bytes,size:bytes.length,pages:d.getPageCount(),doc:d};stepFiles=[file];stepPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));target='organize';}
-        const stepMarks=step.id==='watermark'?[...currentMarks,...stepPages.map(page=>({id:crypto.randomUUID(),pageId:page.id,kind:'text' as const,x:.175,y:.44,w:.65,h:.12,text:step.settings.text??'DRAFT',color:'#1a293b',fontSize:32,opacity:.22,watermark:true,angle:Number(step.settings.angle??45)}))]:currentMarks;
-        try{output=await processPDF(target,stepFiles,stepPages,stepMarks,{...o,range:'',resizeRange:'',quality:'compact',angle:'90',...step.settings},n=>progress(Math.round((i*100+n)/steps.length)),signal);}catch(e){if(signal?.aborted)throw e;throw new Error(`Step ${i+1} (${step.id}) failed: ${e instanceof Error?e.message:'Could not process this step.'} Your original workspace is retained.`);}
+        const stepMarks=currentMarks;
+        try{output=await processPDF(target,stepFiles,stepPages,stepMarks,{...o,range:'',resizeRange:'',quality:'compact',angle:'90',...step.settings,...(step.id==='watermark'?{workflowWatermark:step.settings}:{})},n=>progress(Math.round((i*100+n)/steps.length)),signal);}catch(e){if(signal?.aborted)throw e;throw new Error(`Step ${i+1} (${step.id}) failed: ${e instanceof Error?e.message:'Could not process this step.'} Your original workspace is retained.`);}
         timings.push(`Step ${i+1}: ${step.id} - completed in ${((Date.now()-started)/1000).toFixed(1)}s`);if(output.report)reports.push(output.report);
         const bytes=new Uint8Array(await output.blob.arrayBuffer()),doc=await PDFDocument.load(bytes,{updateMetadata:false}),file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];
       }
@@ -593,6 +595,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             throw new Error('The editor font could not be loaded. Please try again.');
         font = await out.embedFont(await response.arrayBuffer(), { subset: true });
     }
+    if(id==='watermark'&&o.workflowWatermark)drawWorkflowWatermark(out,font,o.workflowWatermark);
     const rotatePages=id==='rotate'?new Set(ranges(o.range,out.getPageCount())):undefined;
     for (let i = 0; i < out.getPageCount(); i++) {
         const p = out.getPage(i);
@@ -603,7 +606,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             if([left,right,top,bottom].some(n=>!Number.isFinite(n)||n<0)||left+right>=box.width||top+bottom>=box.height)throw new Error('Choose smaller crop margins; at least part of the page must remain.');
             p.setCropBox(box.x+left,box.y+bottom,box.width-left-right,box.height-top-bottom);
         }
-        if (id === 'watermark' && !marks.some(m=>m.watermark)) {
+        if (id === 'watermark' && !o.workflowWatermark && !marks.some(m=>m.watermark)) {
             throw new Error('Place a watermark on the page before exporting.');
         }
         if (['numbers', 'bates', 'headers'].includes(id)) {
@@ -614,8 +617,9 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
             const digits=Number(o.batesDigits??6);if(id==='bates'&&(!Number.isInteger(digits)||digits<1||digits>12))throw new Error('Use 1-12 Bates digits.');
             const t=id==='numbers'?formattedNumber(n,o.numberFormat,labelTotal):id==='bates'?`${o.text||'DOC-'}${String(n).padStart(digits,'0')}${o.batesSuffix??''}`:labelText(o.text,labelIndex+1,labelTotal);
             p.pushOperators(pushGraphicsState(),concatTransformationMatrix(...g.matrix as [number,number,number,number,number,number]));
-            const draw=(text:string,position:string)=>{if(!text)return;const width=font.widthOfTextAtSize(text,size),x=position.endsWith('right')?g.width-margin-width:position.endsWith('center')?(g.width-width)/2:margin,y=position.startsWith('top')?g.height-margin-size:position.startsWith('middle')?g.height/2:margin;if(x<0||x+width>g.width||y<0||y+size>g.height)throw new Error('The label does not fit this page. Shorten it or reduce the font size.');p.drawText(text,{x,y,size,font,color:rgb(.2,.2,.25)});};
-            if(id==='headers'){draw(t,'top-left');draw(labelText(o.headerCenter??'',labelIndex+1,labelTotal),'top-center');draw(labelText(o.headerRight??'',labelIndex+1,labelTotal),'top-right');draw(labelText(o.footer??'',labelIndex+1,labelTotal),'bottom-left');draw(labelText(o.footerCenter??'',labelIndex+1,labelTotal),'bottom-center');draw(labelText(o.footerRight??'',labelIndex+1,labelTotal),'bottom-right');}else draw(t,o.numberPosition??'bottom-center');
+            const hex=/^#[0-9a-f]{6}$/i.test(o.labelColor??'')?o.labelColor!.slice(1):'333340',labelColor=rgb(parseInt(hex.slice(0,2),16)/255,parseInt(hex.slice(2,4),16)/255,parseInt(hex.slice(4,6),16)/255);
+            const draw=(text:string,position:string)=>{if(!text)return;const width=font.widthOfTextAtSize(text,size),x=position.endsWith('right')?g.width-margin-width:position.endsWith('center')?(g.width-width)/2:margin,y=position.startsWith('top')?g.height-margin-size:position.startsWith('middle')?g.height/2:margin;if(x<0||x+width>g.width||y<0||y+size>g.height)throw new Error('The label does not fit this page. Shorten it or reduce the font size.');p.drawText(text,{x,y,size,font,color:labelColor});};
+            if(id==='headers'){draw(t,'top-'+(o.headerPosition??'left'));draw(labelText(o.headerCenter??'',labelIndex+1,labelTotal),'top-center');draw(labelText(o.headerRight??'',labelIndex+1,labelTotal),'top-right');draw(labelText(o.footer??'',labelIndex+1,labelTotal),'bottom-'+(o.footerPosition??'left'));draw(labelText(o.footerCenter??'',labelIndex+1,labelTotal),'bottom-center');draw(labelText(o.footerRight??'',labelIndex+1,labelTotal),'bottom-right');}else draw(t,o.numberPosition??'bottom-center');
             p.pushOperators(popGraphicsState());
         }
         progress(10+Math.round((i+1)/out.getPageCount()*85));
