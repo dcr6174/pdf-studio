@@ -4,7 +4,7 @@
   --iw-muted: #747484;
   box-sizing: border-box;
   height: 100dvh;
-  min-height: 420px;
+  min-height: 0;
   background: #f5f5f8;
   color: var(--iw-ink);
   font-family: Inter, system-ui, sans-serif;
@@ -757,7 +757,7 @@
 }
 @media (max-width: 760px) {
   .iw-root {
-    min-height: 340px;
+    min-height: 0;
   }
   .iw-header {
     height: 56px;
@@ -1080,5 +1080,14 @@
 @media (prefers-reduced-motion: reduce) {
   .iw-spin {
     animation: none !important;
+  }
+}
+
+.iw-header-reset {
+  display: none !important;
+}
+@media (max-width: 760px) {
+  .iw-panel {
+    display: none;
   }
 }

@@ -79,6 +79,11 @@ export function ImageWorkspace({
       </div>
       <div className="iw-settings">
         {controls}
+        {mobile && (
+          <button className="iw-secondary" onClick={onReset}>
+            Reset settings
+          </button>
+        )}
         {help && (
           <Link className="iw-guide" href={help}>
             How to use this tool ↗

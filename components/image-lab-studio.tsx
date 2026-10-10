@@ -107,6 +107,7 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
       removed: number;
       attributes: number;
     } | null>(null);
+  const displayedPreview = useRef<HTMLCanvasElement | null>(null);
   const input = useRef<HTMLInputElement>(null),
     logoInput = useRef<HTMLInputElement>(null),
     logo = useRef<HTMLCanvasElement | null>(null),
@@ -383,7 +384,11 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
       if (!canceled) {
         setPreviewBusy(!!source);
         setPreviewBytes(0);
-        setPreview(null);
+        if (!source) {
+          setPreview(null);
+          if (displayedPreview.current) displayedPreview.current.width = 0;
+          displayedPreview.current = null;
+        }
       }
     });
     const timer = setTimeout(() => {
@@ -424,10 +429,16 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
             if (!canceled) setPreviewBytes(output.blob.size);
           }
           if (canceled) {
-            if (rendered) rendered.width = 0;
+            if (rendered && rendered !== displayedPreview.current)
+              rendered.width = 0;
             return;
           }
-          if (rendered) setPreview(rendered);
+          if (rendered) {
+            const previous = displayedPreview.current;
+            displayedPreview.current = rendered;
+            setPreview(rendered);
+            if (previous && previous !== rendered) previous.width = 0;
+          }
           setPreviewBusy(false);
         } catch (e) {
           if (!canceled) {
@@ -440,7 +451,7 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
     return () => {
       canceled = true;
       clearTimeout(timer);
-      if (rendered) rendered.width = 0;
+      if (rendered && rendered !== displayedPreview.current) rendered.width = 0;
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [source, settings, files, previewIndex, logoVersion, noUpscale, restore]);
@@ -488,6 +499,7 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
       generation.current++;
       ready.current.forEach((o) => URL.revokeObjectURL(o.url));
       if (logo.current) logo.current.width = 0;
+      if (displayedPreview.current) displayedPreview.current.width = 0;
     },
     [],
   );
@@ -746,7 +758,10 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
       slug={slug}
       s={settings}
       size={size}
-      update={update}
+      update={(patch) => {
+        update(patch);
+        if (patch.rect && area) setView("edit");
+      }}
       ratio={ratio}
       setRatio={setRatio}
       aspect={aspect}

@@ -212,6 +212,14 @@ export function ImageToolSettings(p: Props) {
       )}
       {area && (
         <>
+          <button
+            className="iw-secondary"
+            onClick={() =>
+              update({ rect: { x: 0, y: 0, width: 1, height: 1 } })
+            }
+          >
+            Draw new selection
+          </button>
           <label>
             Aspect ratio
             <select
