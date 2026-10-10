@@ -33,7 +33,7 @@ description: "Export a copy of your PDF without comments, stamps, highlights and
 "Clear the standard title, author, subject, keywords, producer and date fields and download a clean copy. Free, in your browser."},
  "pdf-to-handwriting": {title: "PDF to Handwriting: Handwritten-Style Notes", description: 
 "Turn selectable PDF text into handwritten-style notes on new paper. Layout, images and tables are not kept. Scans need OCR first."},
- "pdf-workflows": {title: "PDF Workflows: Chain Steps, Download One Result", description: 
+ "pdf-workflows": {title: "PDF Workflow Automation: Chain Steps, Download One Result", description: 
 "Pick a preset or arrange supported PDF steps in your own order, review them and download a single result. Free, in your browser."},
  "split-by-chapters": {title: "Split PDF by Chapters Using Bookmarks", description: "Split a PDF at its top-level bookmarks into separate files. Needs a PDF with usable bookmarks. Check chapter boundaries afterwards."},
  "find-possible-blank-pages": {title: "Find Blank Pages in a PDF", description: "Review pages that look blank, then decide what to do. Nothing is deleted automatically, and very faint content can be missed."},
