@@ -3,7 +3,7 @@ import ts from 'typescript';
 import vm from 'node:vm';
 import {readFile} from 'node:fs/promises';
 import {build} from 'vite';
-import {PDFDocument,StandardFonts,decodePDFRawStream,PDFName,PDFDict,PDFArray} from 'pdf-lib';
+import {PDFDocument,StandardFonts,decodePDFRawStream,PDFName,PDFDict,PDFArray,PDFNumber} from 'pdf-lib';
 await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.workflow-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
 const {processPDF}=await import('../.workflow-check/engine.mjs');
 async function fixture(id,width,label){const doc=await PDFDocument.create(),font=await doc.embedFont(StandardFonts.Helvetica);doc.addPage([width,600]).drawText(label,{font,x:30,y:550});const bytes=await doc.save();return {id,name:id+'.pdf',doc,bytes,size:bytes.length,pages:1};}
@@ -185,3 +185,16 @@ for(const [steps,disabled] of [[[],[]],[['rotate'],[0]]]){
  assert.deepEqual(output.getPage(0).getCropBox(),first.doc.getPage(0).getCropBox());
 }
 console.log('PASS: Crop-first and disabled-prefix previews assemble one PDF without requiring a merge; workspace rotation and page bounds retained.');
+
+for(const count of [1,20]){
+ const malformed=await PDFDocument.create();for(let i=0;i<3;i++)malformed.addPage([400,600]);malformed.catalog.Pages().set(PDFName.of('Count'),PDFNumber.of(count));
+ const bytes=await malformed.save(),doc=await PDFDocument.load(bytes),file={id:'stale-count',name:'stale-count.pdf',bytes,doc,size:bytes.length,pages:doc.getPageCount()},before=bytes.slice();
+ for(const angle of ['0','90','180','270']){
+  assert.equal(recipes.workflowSettings('rotate',{angle}).angle,angle);
+  const result=await pdf(await run([file],['rotate'],[{angle}]));
+  assert.equal(result.getPageCount(),3);assert.equal(result.catalog.Pages().Count().asNumber(),3);
+  assert(result.getPages().every(page=>page.getRotation().angle===Number(angle)));
+ }
+ assert.deepEqual(bytes,before,'repair does not mutate source bytes');
+}
+console.log('PASS: stale PDF page counts repaired, every page retained, all four rotation states and originals preserved.');

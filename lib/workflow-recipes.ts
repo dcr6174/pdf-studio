@@ -8,7 +8,7 @@ export function workflowSettings(step:string,value:unknown):WorkflowStepSettings
  const text=(key:string,fallback='',max=240)=>{const v=raw[key]??fallback;if(typeof v!=='string'||v.length>max)throw new Error('Invalid '+key+' in recipe.');return v;};
  const num=(key:string,fallback:string,min:number,max:number)=>{const v=text(key,fallback);if(!Number.isFinite(Number(v))||Number(v)<min||Number(v)>max)throw new Error('Invalid '+key+' in recipe.');return v;};
  if(step==='watermark'){const watermarkColor=text('watermarkColor','#1a293b');if(!/^#[0-9a-f]{6}$/i.test(watermarkColor))throw new Error('Choose a valid watermark color.');return {text:text('text','DRAFT',120),angle:num('angle','45',-180,180),watermarkColor,watermarkFont:pick('watermarkFont',['noto','helvetica','times','courier'],'noto'),watermarkOpacity:num('watermarkOpacity','22',1,100),watermarkSize:num('watermarkSize','32',6,96),watermarkPosition:pick('watermarkPosition',['top-left','top-center','top-right','middle-left','middle-center','middle-right','bottom-left','bottom-center','bottom-right'],'middle-center')};}
- if(step==='rotate')return {angle:pick('angle',['90','180','270'],'90')};
+ if(step==='rotate')return {angle:pick('angle',['0','90','180','270'],'90')};
  if(step==='compress')return {quality:pick('quality',['compact','images','image-small'],'compact')};
  if(step==='resize')return {resizeSize:pick('resizeSize',['a4','letter'],'a4'),resizeOrientation:pick('resizeOrientation',['portrait','landscape'],'portrait')};
  if(step==='remove'||step==='reorder'||step==='extract')return {range:text('range')};
