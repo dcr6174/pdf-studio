@@ -463,3 +463,5 @@
 /* Small settings use only their content height, leaving the rest for review. */
 .workflow-settings-panel:has(.workflow-rotate-main),.workflow-settings-panel:has(.workflow-no-settings){grid-template-rows:auto auto minmax(0,1fr)}
 .workflow-settings-panel:has(.workflow-rotate-main)>.reference-settings,.workflow-settings-panel:has(.workflow-no-settings)>.reference-settings{overflow:visible}
+
+.workflow-rotate-main{gap:0}.workflow-rotate-swoosh{animation:workflow-rotate-swoosh .25s ease-out}@keyframes workflow-rotate-swoosh{from{transform:rotate(-90deg) scale(.9)}to{transform:rotate(0) scale(1)}}@media(prefers-reduced-motion:reduce){.workflow-rotate-swoosh{animation:none}}
