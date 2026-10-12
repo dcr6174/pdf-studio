@@ -198,3 +198,29 @@ for(const count of [1,20]){
  assert.deepEqual(bytes,before,'repair does not mutate source bytes');
 }
 console.log('PASS: stale PDF page counts repaired, every page retained, all four rotation states and originals preserved.');
+
+const revisedDoc=await PDFDocument.create();const revisedFont=await revisedDoc.embedFont(StandardFonts.Helvetica);
+for(let i=0;i<3;i++)revisedDoc.addPage([400,600]).drawText('REVISION PAGE '+(i+1),{font:revisedFont,x:30,y:500});
+const originalCatalog=revisedDoc.context.trailerInfo.Root,baseBytes=await revisedDoc.save({useObjectStreams:false});
+const prev=Number(new TextDecoder().decode(baseBytes).match(/startxref\s+(\d+)\s+%%EOF\s*$/)?.[1]);
+const updateText=originalCatalog.objectNumber+' 1 obj\n'+revisedDoc.catalog.toString()+'\nendobj\n';
+const update=new TextEncoder().encode(updateText),xrefOffset=baseBytes.length+update.length;
+const tail=new TextEncoder().encode('xref\n'+originalCatalog.objectNumber+' 1\n'+String(baseBytes.length).padStart(10,'0')+' 00001 n \ntrailer\n<< /Size '+(revisedDoc.context.largestObjectNumber+1)+' /Root '+originalCatalog.objectNumber+' 1 R /Prev '+prev+' >>\nstartxref\n'+xrefOffset+'\n%%EOF');
+const revisionBytes=new Uint8Array(baseBytes.length+update.length+tail.length);revisionBytes.set(baseBytes);revisionBytes.set(update,baseBytes.length);revisionBytes.set(tail,baseBytes.length+update.length);
+const revision=await PDFDocument.load(revisionBytes,{updateMetadata:false});
+assert.equal(revision.getPageCount(),3);
+assert(revision.context.enumerateIndirectObjects().filter(([ref])=>ref.objectNumber===originalCatalog.objectNumber).length===2);
+const revisionFile={id:'revision',name:'revision.pdf',bytes:revisionBytes,doc:revision,pages:3,size:revisionBytes.length},sourceCopy=revisionBytes.slice();
+const {execFileSync}=await import('node:child_process'),{mkdtemp,writeFile,rm}=await import('node:fs/promises'),{tmpdir}=await import('node:os'),{join}=await import('node:path');
+const revisionTemp=await mkdtemp(join(tmpdir(),'workflow-revision-'));
+try{for(const angle of ['0','90','180','270']){
+ const output=await run([revisionFile],['rotate'],[{angle}]),bytes=new Uint8Array(await output.blob.arrayBuffer()),doc=await PDFDocument.load(bytes,{updateMetadata:false});
+ const numbers=doc.context.enumerateIndirectObjects().map(([ref])=>ref.objectNumber);
+ assert.equal(new Set(numbers).size,numbers.length,'each object number appears once');
+ assert.equal(doc.getPageCount(),3);assert(doc.getPages().every(page=>page.getRotation().angle===Number(angle)));
+ const path=join(revisionTemp,'rotated-'+angle+'.pdf');await writeFile(path,bytes);
+ const text=execFileSync('pdftotext',['-raw',path,'-'],{encoding:'utf8'});
+ for(let i=1;i<=3;i++)assert(text.replace(/\s/g,'').includes('REVISIONPAGE'+i),'independent reader retains every page');
+}}finally{await rm(revisionTemp,{recursive:true,force:true});}
+assert.deepEqual(revisionBytes,sourceCopy,'incremental source bytes retained');
+console.log('PASS: incremental object generations export valid PDFs in all rotation states, with independent text extraction and originals retained.');
