@@ -1,0 +1,39 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="430" height="1020" viewBox="0 0 430 1020">
+<style>text{font-family:Arial,sans-serif;fill:#172033}.muted{fill:#526175}.white{fill:white}.note{font-size:14px;fill:#6341e8}</style>
+<rect x="0" y="0" width="430" height="1020" rx="0" fill="#f4f5f8" stroke="#dce1e8"/>
+<text x="24" y="32" font-size="14" class="muted">REFERENCE CONCEPT • not a browser screenshot</text>
+<rect x="24" y="58" width="382" height="140" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="44" y="98" font-size="22" class="">Small tasks. Beautifully simple.</text>
+<text x="44" y="135" font-size="15" class="muted">Edit a photo. Make something to print.</text>
+<text x="44" y="164" font-size="14" class="note">1  Short introduction; no decorative scrolling.</text>
+<rect x="24" y="218" width="382" height="52" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="40" y="251" font-size="16" class="">Search tools — try “smaller photo”</text>
+<text x="24" y="300" font-size="14" class="note">2  Tappable suggestions + arrow keys + Enter.</text>
+<text x="24" y="328" font-size="22" class="">Start here</text>
+<rect x="24.0" y="346" width="185.0" height="70" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="36.0" y="374" font-size="18" class="">✦</text>
+<text x="36.0" y="398" font-size="12" class="">Compress images</text>
+<rect x="221.0" y="346" width="185.0" height="70" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="233.0" y="374" font-size="18" class="">✦</text>
+<text x="233.0" y="398" font-size="12" class="">Resize images</text>
+<rect x="24.0" y="428" width="185.0" height="70" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="36.0" y="456" font-size="18" class="">✦</text>
+<text x="36.0" y="480" font-size="12" class="">Crop image</text>
+<rect x="221.0" y="428" width="185.0" height="70" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="233.0" y="456" font-size="18" class="">✦</text>
+<text x="233.0" y="480" font-size="12" class="">Fit a KB limit</text>
+<rect x="24.0" y="510" width="185.0" height="70" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="36.0" y="538" font-size="18" class="">✦</text>
+<text x="36.0" y="562" font-size="12" class="">Remove plain background</text>
+<rect x="221.0" y="510" width="185.0" height="70" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="233.0" y="538" font-size="18" class="">✦</text>
+<text x="233.0" y="562" font-size="12" class="">Photo strip</text>
+<text x="24" y="610" font-size="14" class="note">3  Editorial shortcuts, not a popularity claim.</text>
+<rect x="24" y="632" width="382" height="44" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="36" y="660" font-size="12" class="">All  ·  Images  ·  Make &amp; print  ·  Focus  ·  Play</text>
+<rect x="24" y="692" width="382" height="60" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="40" y="728" font-size="14" class="">Rotate &amp; flip — straighten a photo</text>
+<rect x="24" y="762" width="382" height="60" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="40" y="798" font-size="14" class="">Image blur — soften an area</text>
+<text x="24" y="996" font-size="14" class="note">4  Mobile catalogue uses simple full-width rows.</text>
+</svg>
