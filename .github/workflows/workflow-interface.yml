@@ -23,6 +23,8 @@ jobs:
         with:
           node-version: '22'
           cache: npm
+      - name: Install independent PDF reader
+        run: sudo apt-get update && sudo apt-get install -y poppler-utils
       - id: install
         run: npm ci
       - run: npx eslint components/workflow-builder.tsx
