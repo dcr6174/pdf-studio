@@ -459,3 +459,7 @@
 .workflow-settings-panel.workflow-crop-settings{display:grid;overflow:hidden}.workflow-crop-settings>header{position:static;padding:0}.workflow-crop-settings .reference-settings{overflow:auto;min-height:0}.workflow-crop-settings .workflow-crop-review{overflow:auto;min-height:0}.workflow-crop-panel .workflow-crop-review{flex:1}
 
 .workflow-settings-panel:not(:has(>.workflow-settings-preview)){grid-template-rows:auto minmax(0,1fr)}
+
+/* Small settings use only their content height, leaving the rest for review. */
+.workflow-settings-panel:has(.workflow-rotate-main),.workflow-settings-panel:has(.workflow-no-settings){grid-template-rows:auto auto minmax(0,1fr)}
+.workflow-settings-panel:has(.workflow-rotate-main)>.reference-settings,.workflow-settings-panel:has(.workflow-no-settings)>.reference-settings{overflow:visible}
