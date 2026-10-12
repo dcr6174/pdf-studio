@@ -8,7 +8,7 @@ This is a scoped audit and low-risk maintenance PR, not certification of every p
 
 Evidence labels below:
 
-- **Live**: observed in the existing production site in desktop Chrome, around 1360 CSS pixels wide. Production still runs the baseline; these tests are not a deployment of the PR.
+- **Live**: observed in the existing production site in desktop Chrome, around 1360 CSS pixels wide. These observations describe the existing production site, not a deployment of the PR. Other main-branch releases occurred during the audit, so the exact production commit was not pinned for each browser step.
 - **Source/SSR**: code inspection, compiled route/component rendering or CSS breakpoint checks. These are not physical-device interaction tests.
 - **Engine/output**: synthetic files processed and independently reopened or raster-compared. No personal documents were used for live smoke tests.
 
