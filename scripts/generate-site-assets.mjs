@@ -49,7 +49,7 @@ pages.push(...imageGuides.map(g=>({path:'/lab/guides/'+g.slug,content:JSON.strin
 const entries=pages.map(page=>{const hash=createHash('sha256').update(page.content).digest('hex');state[page.path]={hash,lastmod:old[page.path]?.hash===hash?old[page.path].lastmod:today};return {path:page.path,lastmod:state[page.path].lastmod};});
 entries.push(...['/lab','/lab/image-size-reducer','/lab/remove-watermark','/lab/mini-zine-maker','/lab/photo-booth-strips','/lab/custom-bingo','/lab/giant-poster','/lab/photo-coloring-page','/lab/printable-flashcards','/lab/daily-mood-canvas','/lab/photo-strip','/lab/flashcards','/lab/decision-wheel','/lab/pomodoro','/lab/calculator','/lab/finance-calculator','/lab/practice-sheets','/lab/text-to-handwriting','/lab/notebook-maker','/lab/handwriting-practice','/lab/flipbook','/lab/word-cloud','/lab/page-palette','/lab/whiteboard','/lab/poster-collage','/lab/pdf-to-gif','/lab/sketch-pdf'].map(path=>({path})));
 entries.push(...imageTools.filter(t=>t.slug!=='image-size-reducer').map(t=>({path:'/lab/'+t.slug})));
-entries.push(...['/about','/contact','/check-it-yourself','/help','/terms','/faq'].map(path=>`<url><loc>${base+path}</loc></url>`));
+entries.push(...['/about','/contact','/check-it-yourself','/help','/terms','/faq'].map(path=>({path})));
 const urls=canonicalSitemapEntries(entries,canonicalToolRoutes).map(({path,lastmod})=>`<url><loc>${base+path}</loc>${lastmod?`<lastmod>${lastmod}</lastmod>`:''}</url>`);
 await writeFile(stateURL,JSON.stringify(state,null,2)+'\n');
 await writeFile(new URL('public/sitemap.xml',root),'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.join('\n')+'\n</urlset>\n');
