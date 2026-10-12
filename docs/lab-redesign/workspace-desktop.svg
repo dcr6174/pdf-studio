@@ -1,0 +1,28 @@
+<svg xmlns="http://www.w3.org/2000/svg" width="1080" height="720" viewBox="0 0 1080 720">
+<style>text{font-family:Arial,sans-serif;fill:#172033}.muted{fill:#526175}.white{fill:white}.note{font-size:14px;fill:#6341e8}</style>
+<rect x="0" y="0" width="1080" height="720" rx="0" fill="#f4f5f8" stroke="#dce1e8"/>
+<text x="24" y="32" font-size="14" class="muted">REFERENCE CONCEPT • not a browser screenshot</text>
+<rect x="16" y="50" width="1048" height="58" rx="12" fill="#202838" stroke="#dce1e8"/>
+<text x="32" y="86" font-size="20" class="white">Crop image</text>
+<rect x="24" y="128" width="710" height="450" rx="12" fill="#e8ecf1" stroke="#dce1e8"/>
+<rect x="70" y="164" width="620" height="295" rx="12" fill="#e3eddc" stroke="#dce1e8"/>
+<text x="88" y="220" font-size="24" class="">Your image</text>
+<rect x="95" y="240" width="565" height="130" rx="2" fill="none" stroke="#6341e8"/>
+<text x="40" y="152" font-size="14" class="">Original   Select area   Preview</text>
+<rect x="44" y="492" width="670" height="48" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="60" y="522" font-size="16" class="">−     Fit     1:1     +</text>
+<text x="40" y="560" font-size="14" class="muted">300 × 400 px · Preview</text>
+<rect x="760" y="128" width="296" height="450" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="780" y="165" font-size="22" class="">Image settings</text>
+<text x="780" y="207" font-size="15" class="">Aspect ratio</text>
+<rect x="780" y="219" width="256" height="44" rx="12" fill="#fff" stroke="#dce1e8"/>
+<text x="794" y="247" font-size="16" class="">Free selection</text>
+<text x="780" y="294" font-size="16" class="">Exact selection (pixels)</text>
+<text x="780" y="330" font-size="16" class="">Left 0     Top 0</text>
+<text x="780" y="362" font-size="16" class="">Width 300   Height 400</text>
+<text x="780" y="399" font-size="15" class="">PNG · keeps transparency</text>
+<rect x="780" y="484" width="256" height="54" rx="12" fill="#6341e8" stroke="#dce1e8"/>
+<text x="814" y="517" font-size="17" class="white">Create crop</text>
+<text x="24" y="630" font-size="16" class="note">1  Continuous canvas • 2  Compact inspector • 3  One task-specific action</text>
+<text x="24" y="666" font-size="16" class="note">After processing: Final result + actual dimensions/bytes + Download PNG.</text>
+</svg>
