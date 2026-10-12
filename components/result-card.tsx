@@ -4,6 +4,7 @@ import {ArrowLeft,Download,FolderOpen,Pencil,Copy,FileText} from 'lucide-react';
 import {formatBytes} from '@/components/file-facts';
 import {toolIcons} from '@/lib/tool-icons';
 import './result-screen.css';
+import {PrivacyResult} from './privacy-result';
 import {BlankReviewResult} from './blank-review-result';
 
 type Output={blob:Blob;name:string;report?:string;inputSize?:number;warnings?:string[];blankCandidates?:number[];target?:{requestedKB:number;met:boolean}};
@@ -18,6 +19,7 @@ export function ResultCard({output,open,toolId,resultTitle,before,compress,onDow
  const downloadButton=useRef<HTMLButtonElement>(null);
  useEffect(()=>{if(!open)return;const frame=requestAnimationFrame(()=>{setPreview(false);setCopied(false);setCopyError('');downloadButton.current?.focus({preventScroll:true});window.scrollTo({top:0,behavior:'instant'});});return()=>cancelAnimationFrame(frame);},[open,output]);
  if(!open)return null;
+ if(toolId==='privacy')return <PrivacyResult output={output} onDownload={onDownload} onBack={onSettings}/>;
  if(toolId==='blank-check')return <BlankReviewResult output={output} totalPages={before?.pages} onReview={onReviewCandidates} onDownload={onDownload} onBack={onSettings} error={error}/>;
  const pdf=output.blob.type==='application/pdf',ext=output.name.split('.').pop()?.toUpperCase();
  const label=pdf?'PDF':ext&&ext.length<=5?ext:'file';
@@ -37,7 +39,7 @@ export function ResultCard({output,open,toolId,resultTitle,before,compress,onDow
   <div className="merge-result-secondary"><button className="secondary" onClick={onSettings}><ArrowLeft size={17}/>Back to {toolId==='merge'?'files':toolId==='workflow'?'workflow':'workspace'}</button>{onSave&&<button className="secondary" onClick={onSave}><FolderOpen size={17}/>Save to My files</button>}{onOriginal&&<button className="secondary" onClick={originalPreferred?onDownload:onOriginal}><Download size={17}/>{originalPreferred?'Download processed PDF':'Download original PDF'}</button>}{onProtect&&<button className="secondary" onClick={onProtect}>Add password</button>}</div>
   {compress&&inputSize>0&&<div className="compression-result-summary" role="status">
    <div className="compression-savings-ring" aria-hidden="true"><svg viewBox="0 0 120 120"><circle className="compression-ring-track" cx="60" cy="60" r="50"/><circle className="compression-ring-value" cx="60" cy="60" r="50" pathLength="100" strokeDasharray={`${reduction} 100`}/></svg><div><strong>{savingsLabel}</strong><span>SAVED</span></div></div>
-   <div className="compression-savings-copy"><p>{reduction>0?`Your PDF is ${savingsLabel} smaller!`:larger?'The original PDF is smaller.':'Your PDF is already compact.'}</p><strong>{formatBytes(inputSize)} <span aria-hidden="true">→</span> {formatBytes(output.blob.size)}</strong>{reduction===0&&<small>{larger?'Download the original for the smallest file.':'No size reduction with these settings.'}</small>}</div>
+   <div className="compression-savings-copy"><p>{reduction>0?`Your PDF is ${savingsLabel} smaller!`:larger?'The original PDF is smaller.':'Your PDF is already compact.'}</p><strong>{formatBytes(inputSize)} <span aria-hidden="true">→</span> {formatBytes(output.blob.size)}</strong><small>{before&&before.size!==inputSize?`Savings compare with the PDF sent to compression after page changes. Uploaded files: ${formatBytes(before.size)}.`:'Savings compare with the uploaded PDF.'}</small>{reduction===0&&<small>{larger?'Download the original for the smallest file.':'No size reduction with these settings.'}</small>}</div>
   </div>}
   {output.warnings?.map(warning=><p className="export-warning" key={warning} role="status">{warning}</p>)}
   {error&&<p className="native-error" role="alert">{error}</p>}

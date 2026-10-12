@@ -4,6 +4,8 @@
 
 Free online PDF tools in a shared document workspace. Core tools require no account or subscription and add no watermark. Documents are processed on your device.
 
+The PDF catalogue count is derived from `lib/tools.ts` (`PDF_TOOL_COUNT`). Lab tools and search/SEO aliases are separate collections and are not added to that count.
+
 ## Latest improvements
 
 - **New brand, Page Buddy (v5):** a friendly soft-3D page with a folded-corner tuft and a simple face, with an Outfit Bold lowercase "pdf studio" wordmark converted to shapes. Light and dark lockups in the header swap with the theme; favicon (SVG + ICO), Apple touch, PWA and maskable icons, footer, dashboard and social images all use it. Full kit and rules: [docs/BRAND-V5.md](docs/BRAND-V5.md).
