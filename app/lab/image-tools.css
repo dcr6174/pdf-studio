@@ -1789,3 +1789,231 @@
     display: none;
   }
 }
+/* Readable task controls. Image-only scope; processors and PDF styling unchanged. */
+.iw-root {
+  font-size: 15px;
+}
+.iw-settings {
+  font-size: 15px;
+}
+.iw-settings label,
+.iw-settings summary {
+  font-size: 15px;
+}
+.iw-settings input,
+.iw-settings select,
+.iw-settings textarea {
+  font-size: 16px;
+}
+.iw-settings small,
+.iw-settings p,
+.iw-status {
+  font-size: 14px;
+  line-height: 1.5;
+}
+.iw-root button {
+  min-height: 44px;
+}
+.iw-view-tabs button {
+  font-size: 13px;
+  min-height: 44px;
+}
+.iw-empty p {
+  font-size: 16px;
+}
+.iw-empty small {
+  font-size: 14px;
+}
+.iw-empty h2 {
+  font-size: clamp(26px, 3vw, 38px);
+  line-height: 1.2;
+}
+.iw-settings-launch {
+  display: none;
+}
+.iw-stage-bottom {
+  font-size: 13px;
+  line-height: 1.4;
+}
+.iw-primary {
+  font-size: 15px !important;
+}
+.iw-filename {
+  font-size: 14px;
+  overflow-wrap: anywhere;
+}
+.iw-header-actions .iw-gear span {
+  display: inline;
+}
+@media (max-width: 760px) {
+  .iw-header-actions .iw-gear {
+    display: none !important;
+  }
+  .iw-mobile-action {
+    display: grid;
+    grid-template-columns: auto minmax(0, 1fr);
+    align-items: start;
+    gap: 12px;
+    max-height: 38dvh;
+    overflow-y: auto;
+  }
+  .iw-settings-launch {
+    display: inline-flex !important;
+    flex-direction: column;
+    border-radius: 10px;
+    min-width: 76px;
+    min-height: 64px !important;
+    font-size: 14px;
+  }
+  .iw-mobile-action > div {
+    min-width: 0;
+  }
+  .iw-mobile-action .iw-status {
+    font-size: 13px;
+    margin: 8px 0 0;
+  }
+  .iw-picker-trigger span {
+    font-size: 14px;
+  }
+  .iw-header-actions button {
+    min-width: 44px;
+    height: 44px;
+  }
+  .iw-brand {
+    display: none;
+  }
+  .iw-stage-top {
+    gap: 6px;
+  }
+  .iw-filename {
+    font-size: 13px;
+    max-width: none;
+    flex-basis: 100%;
+  }
+  .iw-view-tabs button {
+    font-size: 12px;
+    min-height: 44px;
+    padding: 6px 10px;
+  }
+  .iw-stage-bottom {
+    font-size: 12px;
+    flex-wrap: wrap;
+  }
+  .iv-toolbar {
+    left: 8px;
+    right: 8px;
+    bottom: 8px;
+    justify-content: center;
+    flex-wrap: wrap;
+    max-width: 100%;
+  }
+  .iv-toolbar button {
+    min-width: 40px;
+    min-height: 44px;
+  }
+  .iv-toolbar output {
+    font-size: 12px;
+  }
+  .iv-add {
+    top: 10px;
+    bottom: auto;
+    right: 12px;
+  }
+  .iv-add button {
+    font-size: 13px;
+    gap: 6px;
+    min-height: 44px;
+    padding: 8px 12px;
+  }
+  .iw-empty {
+    padding: 20px;
+    max-width: 420px;
+  }
+  .iw-empty-art,
+  .iw-empty > .iw-eyebrow {
+    display: none;
+  }
+  .iw-empty p {
+    font-size: 15px;
+  }
+  .iw-empty small,
+  .iw-empty-trust {
+    font-size: 13px;
+  }
+  .iw-dialog {
+    max-height: 85dvh;
+  }
+  .iw-settings {
+    overflow-wrap: anywhere;
+  }
+}
+@media (max-height: 600px) {
+  .iw-root {
+    height: auto;
+    min-height: 100dvh;
+    overflow: visible;
+  }
+  .iw-layout {
+    min-height: 420px;
+  }
+  .iw-stage {
+    min-height: 350px;
+  }
+  .iw-empty {
+    padding: 16px;
+  }
+  .iw-empty-art {
+    display: none;
+  }
+  .iw-panel {
+    max-height: none;
+  }
+  .iw-mobile-action {
+    max-height: none;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .iw-root *,
+  .lab-home * {
+    scroll-behavior: auto !important;
+    animation: none !important;
+    transition: none !important;
+  }
+}
+.iw-root .iw-settings label,
+.iw-root .iw-settings summary {
+  font-size: 15px !important;
+}
+.iw-root .iw-settings input,
+.iw-root .iw-settings select,
+.iw-root .iw-settings textarea {
+  font-size: 16px !important;
+}
+.iw-root .iw-settings small,
+.iw-root .iw-settings p {
+  font-size: 14px !important;
+  line-height: 1.5;
+}
+.iw-root .iw-header-actions button {
+  min-height: 44px;
+}
+.iw-stage-top .iw-replace {
+  font-size: 13px;
+  white-space: nowrap;
+}
+@media (max-width: 760px) {
+  .iw-root .iw-stage-top > .iw-replace {
+    display: inline-flex !important;
+    font-size: 12px;
+    min-height: 44px;
+  }
+  .iw-stage-top .iw-view-tabs {
+    flex: 1;
+  }
+  .iw-root .iw-stage-bottom span:last-child {
+    display: inline;
+  }
+  .iw-root .iw-stage-top {
+    height: auto;
+  }
+}
