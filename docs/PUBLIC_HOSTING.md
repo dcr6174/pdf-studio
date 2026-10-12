@@ -1,6 +1,6 @@
 # PDF Studio on pdf-studio.in
 
-Prepared 30 September 2026. The public Cloudflare build is implemented and builds successfully. This repository contains the public hosting source. Your Cloudflare account deployment, domain activation and live browser verification are still pending.
+Standalone Cloudflare Workers hosting guide. The public site at https://pdf-studio.in/ was reachable during the 12 October 2026 audit. Account bindings, runtime secrets and DNS configuration must still be checked in the owner’s account before changing a deployment.
 
 ## What goes where
 

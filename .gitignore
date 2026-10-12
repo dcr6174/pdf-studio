@@ -43,3 +43,7 @@
 /.home-check/
 
 /.document-*-check/
+
+# Reproducible root-level regression outputs; keep checks/fixtures tracked.
+/.*-check/
+/.*-fixtures/
