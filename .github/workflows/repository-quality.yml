@@ -54,7 +54,13 @@ jobs:
       - name: Desktop audit output regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-desktop-audit.mjs
+      - name: Site maintenance regressions
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-site-maintenance.mjs && node checks/verify-responsive-layout.mjs
       - name: Production build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npm run build:public
 
+      - name: Generated sitemap coverage
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-review-sitemap.mjs
