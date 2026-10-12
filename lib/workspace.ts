@@ -1,8 +1,10 @@
 'use client';
 import {useRef,useState,type SetStateAction} from 'react';
-import type {Loaded,PageItem,Mark} from './pdf-engine';
+import type {Loaded,PageItem,Mark,Options} from './pdf-engine';
 import {WorkspaceHistory} from './workspace-history';
 export type DocumentState={files:Loaded[];pages:PageItem[];marks:Mark[]};
+export type DraftState=DocumentState&{tool?:string;options?:Partial<Options>};
+export function draftContext(state:DocumentState,tool:string,options:Options):DraftState{const safe={...options};delete (safe as Partial<Options>).password;delete safe.passwordConfirm;return {...state,tool,options:{...safe,password:'',passwordConfirm:''}};}
 const empty=():DocumentState=>({files:[],pages:[],marks:[]});
 export function useWorkspace(){
   const history=useRef(new WorkspaceHistory(empty()));
@@ -18,10 +20,10 @@ export function useWorkspace(){
     replace:(v:DocumentState,label='Document replaced')=>{history.current.set(v,'',Date.now(),label);publish();},
     clear:()=>{history.current.reset(empty());publish();}};
 }
-// Explicit save only. No credentials or tool options are persisted.
-export async function draft(action:'get'|'save'|'delete',state?:DocumentState):Promise<DocumentState|undefined>{
+// Explicit save only. Preserve tool context; never persist password credentials.
+export async function draft(action:'get'|'save'|'delete',state?:DraftState):Promise<DraftState|undefined>{
   const db=await new Promise<IDBDatabase>((resolve,reject)=>{const r=indexedDB.open('openpdf-draft',1);r.onupgradeneeded=()=>r.result.createObjectStore('draft');r.onsuccess=()=>resolve(r.result);r.onerror=()=>reject(r.error);});
-  try{return await new Promise((resolve,reject)=>{const tx=db.transaction('draft',action==='get'?'readonly':'readwrite'),store=tx.objectStore('draft');let value:DocumentState|undefined;
+  try{return await new Promise((resolve,reject)=>{const tx=db.transaction('draft',action==='get'?'readonly':'readwrite'),store=tx.objectStore('draft');let value:DraftState|undefined;
     if(action==='save'&&state)store.put({...state,files:state.files.map(file=>({id:file.id,name:file.name,bytes:file.bytes,size:file.size,pages:file.pages,image:file.image}))},'workspace');
     else if(action==='delete')store.delete('workspace');
     else {const r=store.get('workspace');r.onsuccess=()=>value=r.result;}

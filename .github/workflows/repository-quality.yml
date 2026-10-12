@@ -54,6 +54,9 @@ jobs:
       - name: Desktop audit output regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-desktop-audit.mjs
+      - name: Recovery, routes, messages and Unicode text
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-audit-recovery.mjs && node checks/verify-tool-navigation.mjs && node checks/verify-tool-expectations.mjs && node checks/verify-text-document.mjs
       - name: Canonical sitemap regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-sitemap-canonical.mjs
