@@ -54,6 +54,9 @@ jobs:
       - name: Desktop audit output regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-desktop-audit.mjs
+      - name: Canonical sitemap regressions
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-sitemap-canonical.mjs
       - name: Production build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npm run build:public
