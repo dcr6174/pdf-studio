@@ -45,7 +45,7 @@ export function inputGame(s:GameState,input:GameInput){
  if(s.mode==='merge'&&['left','right','up','down'].includes(input.type))move2048(s,input.type as 'left'|'right'|'up'|'down');
  if(s.mode==='slide'){
   const empty=s.board.indexOf(0);let next=i;if(input.type==='left')next=empty%4>0?empty-1:-1;if(input.type==='right')next=empty%4<3?empty+1:-1;if(input.type==='up')next=empty>=4?empty-4:-1;if(input.type==='down')next=empty<12?empty+4:-1;
-  if(next>=0&&next<16&&Math.abs(Math.floor(next/4)-Math.floor(empty/4))+Math.abs(next%4-empty%4)===1){[s.board[next],s.board[empty]]=[s.board[empty],s.board[next]];s.moves++;s.score=Math.max(0,1000-s.moves*5);if(s.board.every((v,j)=>v===(j+1)%16))finish(s,true,'Every tile in its place!');}
+  if(next>=0&&next<16&&Math.abs(Math.floor(next/4)-Math.floor(empty/4))+Math.abs(next%4-empty%4)===1){[s.board[next],s.board[empty]]=[s.board[empty],s.board[next]];s.moves++;if(s.board.every((v,j)=>v===(j+1)%16)){s.score=Math.max(1,1000-s.moves*5);finish(s,true,'Every tile in its place!');}}
  }
  if(s.mode==='memory'&&input.type==='cell'&&i>=0&&i<12&&!s.matched.includes(i)&&!s.selected.includes(i)&&s.selected.length<2){s.selected.push(i);if(s.selected.length===2){s.moves++;if(s.board[s.selected[0]]===s.board[s.selected[1]]){s.matched.push(...s.selected);s.selected=[];s.score+=Math.max(5,100-s.moves*2);s.message='A perfect pair!';if(s.matched.length===12)finish(s,true,'Six pairs. Brilliant memory.');}else{s.cooldown=.85;s.message='Remember these two.';}}}
  if(s.mode==='odd'&&input.type==='cell'&&i>=0&&i<16){if(i===s.target){s.score++;s.level++;s.message='Spotted!';odd(s);}else{s.time+=2;s.score=Math.max(0,s.score-1);s.message='Two seconds lost. Look closely.';}}
