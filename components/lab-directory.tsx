@@ -353,8 +353,10 @@ export function LabDirectory() {
         </div>
       )}
       <p className="lab-endnote">
-        {imageTools.length} image tools. Originals stay on your device.
+        {imageTools.length} image tools. Originals stay on your device.{" "}
+        <Link href="/lab/guides">Read the Image Studio guides ↗</Link>
       </p>
     </section>
   );
 }
+
