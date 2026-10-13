@@ -1,3 +1,5 @@
+import {normalizePDFObjectNumbers} from './pdf-object-numbers';
+import {repairPageTreeCounts} from './pdf-page-tree';
 import {preserveOutlines,remapPageLinks} from './pdf-navigation';
 import {epubHTMLText} from './epub-text';
 import {drawWorkflowWatermark} from './workflow-watermark';
@@ -127,10 +129,10 @@ export type Output = {
 };
 let pdfjsPromise: Promise<typeof import('pdfjs-dist')> | undefined;
 export async function pdfjs() { if (!pdfjsPromise)
-    pdfjsPromise = import('pdfjs-dist').then(m => { m.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'; return m; }); return pdfjsPromise; }
+    pdfjsPromise = import('pdfjs-dist').then(m => { m.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'; return m; }).catch(error=>{pdfjsPromise=undefined;throw error;}); return pdfjsPromise; }
 export async function renderer(bytes: Uint8Array, password?: string) { const task=(await pdfjs()).getDocument({ data: bytes.slice(), password, cMapUrl: '/cmaps/', cMapPacked: true, standardFontDataUrl: '/standard_fonts/', isEvalSupported: false });try{return await task.promise;}catch(e){try{await task.destroy();}catch{}throw e;} }
-async function renderPage(bytes: Uint8Array, index: number, scale = 1, password?: string, rotation=0, signal?:AbortSignal, shared?:Awaited<ReturnType<typeof renderer>>) { signal?.throwIfAborted(); const d = shared??await renderer(bytes, password); try {
-    const p = await d.getPage(index + 1);
+async function renderPage(bytes: Uint8Array, index: number, scale = 1, password?: string, rotation=0, signal?:AbortSignal, shared?:Awaited<ReturnType<typeof renderer>>) { signal?.throwIfAborted(); let d = shared??await renderer(bytes, password); try {
+    const p = await (async()=>{try{return await d.getPage(index+1);}catch(error){if(shared||!Number.isInteger(index)||index<0)throw error;const repaired=await PDFDocument.load(bytes,{updateMetadata:false});if(!repairPageTreeCounts(repaired)||index>=repaired.getPageCount())throw error;const corrected=await repaired.save();await d.destroy();d=await renderer(corrected,password);return d.getPage(index+1);}})();
     const v = p.getViewport({ scale, rotation:(p.rotate+rotation)%360 });
     if (v.width * v.height > 22000000)
         throw new Error('This page is too large to render. Choose a lower resolution.');
@@ -212,7 +214,7 @@ export function ranges(value: string, count: number) { if (!value.trim())
 } return [...new Set(out)]; }
 function blob(bytes: Uint8Array | string, type = 'application/pdf') { return new Blob([typeof bytes === 'string' ? bytes : bytes.slice().buffer as ArrayBuffer], { type }); }
 const result = (b: Uint8Array | string, name: string, type?: string, report?: string, inputSize?: number): Output => ({ blob: blob(b, type), name, report, inputSize });
-export async function assemble(files: Loaded[], items: PageItem[], signal?:AbortSignal, flattenForms=false) { if(files.length===1&&!files[0].image&&items.length===files[0].pages&&items.every((p,i)=>p.fileId===files[0].id&&p.index===i)){const d=await PDFDocument.load(files[0].bytes,{updateMetadata:false});for(const item of items){signal?.throwIfAborted();const p=d.getPage(item.index);p.setRotation(degrees((p.getRotation().angle+item.rotation)%360));}if(flattenForms&&hasFormWidgets(d))flattenFormSafely(d);return d;} const sources=new Map<string,PDFDocument>();for(const f of files){if(f.image)continue;const src=await PDFDocument.load(f.bytes,{updateMetadata:false});if(src.getForm().getFields().length||hasFormWidgets(src)){if(!flattenForms)throw new Error('This PDF contains fillable fields. Copying or rearranging these pages safely requires read-only fields. Choose “Make fields read-only” in the action panel, or use Flatten PDF first. Your originals are unchanged.');try{flattenFormSafely(src);}catch{throw new Error('These form appearances could not be flattened safely. Fill and save the PDF in its original form editor, then try again.');}}sources.set(f.id,src);}const out = await PDFDocument.create(); for (const item of items) {
+export async function assemble(files: Loaded[], items: PageItem[], signal?:AbortSignal, flattenForms=false) { if(files.length===1&&!files[0].image&&items.length===files[0].pages&&items.every((p,i)=>p.fileId===files[0].id&&p.index===i)){const d=await PDFDocument.load(files[0].bytes,{updateMetadata:false});normalizePDFObjectNumbers(d);repairPageTreeCounts(d);for(const item of items){signal?.throwIfAborted();const p=d.getPage(item.index);p.setRotation(degrees((p.getRotation().angle+item.rotation)%360));}if(flattenForms&&hasFormWidgets(d))flattenFormSafely(d);return d;} const sources=new Map<string,PDFDocument>();for(const f of files){if(f.image)continue;const src=await PDFDocument.load(f.bytes,{updateMetadata:false});normalizePDFObjectNumbers(src);repairPageTreeCounts(src);if(src.getForm().getFields().length||hasFormWidgets(src)){if(!flattenForms)throw new Error('This PDF contains fillable fields. Copying or rearranging these pages safely requires read-only fields. Choose “Make fields read-only” in the action panel, or use Flatten PDF first. Your originals are unchanged.');try{flattenFormSafely(src);}catch{throw new Error('These form appearances could not be flattened safely. Fill and save the PDF in its original form editor, then try again.');}}sources.set(f.id,src);}const out = await PDFDocument.create(); for (const item of items) {
     signal?.throwIfAborted();await new Promise(resolve=>setTimeout(resolve,0));
     const f = files.find(f => f.id === item.fileId);
     if (!f)

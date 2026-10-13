@@ -77,3 +77,6 @@ export function isMulti(id:string){return ['workflow','merge','organize','interl
 
 
 
+
+/** PDF catalogue only; Lab tools and SEO aliases are separate collections. */
+export const PDF_TOOL_COUNT=tools.length;

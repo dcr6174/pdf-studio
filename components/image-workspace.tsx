@@ -62,7 +62,7 @@ export function ImageWorkspace({
     <>
       <div className="iw-panel-heading">
         <div>
-          <span className="iw-eyebrow">MAKE IT YOURS</span>
+          <span className="iw-eyebrow">IMAGE SETTINGS</span>
           <h2>{title}</h2>
         </div>
         {mobile ? (
@@ -149,6 +149,7 @@ export function ImageWorkspace({
             onClick={() => setOpen(true)}
           >
             <SlidersHorizontal size={18} />
+            <span>Settings</span>
           </button>
         </div>
       </header>
@@ -163,7 +164,19 @@ export function ImageWorkspace({
         )}
         {mobile && (
           <>
-            <footer className="iw-mobile-action">{actions}</footer>
+            <footer className="iw-mobile-action">
+              <button
+                ref={gear}
+                className="iw-settings-launch"
+                aria-haspopup="dialog"
+                aria-expanded={open}
+                onClick={() => setOpen(true)}
+              >
+                <SlidersHorizontal size={18} />
+                <span>Settings</span>
+              </button>
+              <div>{actions}</div>
+            </footer>
             <dialog
               ref={dialog}
               className="iw-dialog"

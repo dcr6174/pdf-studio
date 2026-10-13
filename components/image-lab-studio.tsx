@@ -59,6 +59,19 @@ const actionNames: Partial<Record<ImageToolSlug, string>> = {
   "passport-photo": "Create photo sheets",
   "image-watermark": "Add watermark",
   "image-secret-message": "Hide message",
+  "image-rotate": "Rotate and flip images",
+  "image-blur": "Blur images",
+  "image-pixelate": "Pixelate images",
+  "image-grayscale": "Create grayscale images",
+  "jpg-to-png": "Convert to PNG",
+  "png-to-jpg": "Convert to JPG",
+  "image-to-webp": "Convert to WebP",
+  "svg-to-image": "Convert SVG to image",
+  "svg-cleaner": "Clean SVG",
+  "signature-cleaner": "Clean signature",
+  "image-id-card": "Create ID card",
+  "image-adjustments": "Apply image adjustments",
+  "image-sharpen": "Sharpen images",
   "image-metadata-remover": "Remove metadata",
   "image-color-picker": "Export color",
 };
@@ -688,13 +701,25 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
       setView("final");
       setBusy(false);
       job.current = null;
+      const completedIds = new Set(result.map((o) => o.fileId));
+      const originalBytes = files
+        .filter((f) => completedIds.has(f.id))
+        .reduce((n, f) => n + f.file.size, 0);
+      const resultBytes = result.reduce((n, o) => n + o.blob.size, 0);
+      const sizeFeedback =
+        slug === "image-compressor" && originalBytes > 0 && result.length > 0
+          ? resultBytes < originalBytes
+            ? ` · ${Math.round((1 - resultBytes / originalBytes) * 100)}% smaller than the original${completedIds.size === 1 ? "" : "s"}`
+            : " · No size reduction. Try a lower quality or a different format."
+          : "";
       setNotice(
         (canceled ? "Stopped · " : "") +
           result.length +
           " file" +
           (result.length === 1 ? "" : "s") +
           " ready" +
-          (failed.length ? " · " + failed.length + " need attention" : ""),
+          (failed.length ? " · " + failed.length + " need attention" : "") +
+          sizeFeedback,
       );
     }
   }
@@ -714,7 +739,7 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
       a.download = slug + "-results.zip";
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 30000);
-      setNotice(outputs.length + " files downloaded");
+      setNotice("Download started · check your browser’s downloads");
     } catch {
       setError("ZIP creation failed. Individual files are still available.");
     } finally {
@@ -736,11 +761,7 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
         <span>✦</span>
       </div>
       <span className="iw-eyebrow">YOUR EVERYDAY IMAGE STUDIO</span>
-      <h2>
-        Make something
-        <br />
-        <em>beautiful.</em>
-      </h2>
+      <h2>{tool.title}</h2>
       <p>{tool.description}</p>
       <button className="iw-primary" onClick={() => browse()}>
         <Upload size={17} />
@@ -851,9 +872,15 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
               className="iw-primary"
               href={outputs[0].url}
               download={outputs[0].name}
+              onClick={() =>
+                setNotice("Download started · check your browser’s downloads")
+              }
             >
               <Download size={17} />
-              Download result
+              Download{" "}
+              {outputs[0].blob.type === "image/jpeg"
+                ? "JPG"
+                : (outputs[0].name.split(".").at(-1)?.toUpperCase() ?? "file")}
             </a>
           )}
           <button className="iw-reprocess" onClick={() => void run()}>
@@ -1013,7 +1040,7 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
               ))}
             </div>
             <button className="iw-replace" onClick={() => browse(false)}>
-              Replace
+              Choose new images
             </button>
           </div>
         )}
@@ -1117,7 +1144,7 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
             <span>
               {view === "final"
                 ? activeOutput?.blob.type.startsWith("image/")
-                  ? "Final downloaded pixels"
+                  ? "Finished result · ready to download"
                   : "Text result · original shown"
                 : view === "edit"
                   ? "Drag selection or handles"
@@ -1226,3 +1253,4 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
     </ImageWorkspace>
   );
 }
+

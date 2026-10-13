@@ -3,7 +3,7 @@ import ts from 'typescript';
 import vm from 'node:vm';
 import {readFile} from 'node:fs/promises';
 import {build} from 'vite';
-import {PDFDocument,StandardFonts,decodePDFRawStream,PDFName,PDFDict,PDFArray} from 'pdf-lib';
+import {PDFDocument,StandardFonts,decodePDFRawStream,PDFName,PDFDict,PDFArray,PDFNumber} from 'pdf-lib';
 await build({configFile:false,logLevel:'error',build:{ssr:'lib/pdf-engine.ts',outDir:'.workflow-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
 const {processPDF}=await import('../.workflow-check/engine.mjs');
 async function fixture(id,width,label){const doc=await PDFDocument.create(),font=await doc.embedFont(StandardFonts.Helvetica);doc.addPage([width,600]).drawText(label,{font,x:30,y:550});const bytes=await doc.save();return {id,name:id+'.pdf',doc,bytes,size:bytes.length,pages:1};}
@@ -185,3 +185,42 @@ for(const [steps,disabled] of [[[],[]],[['rotate'],[0]]]){
  assert.deepEqual(output.getPage(0).getCropBox(),first.doc.getPage(0).getCropBox());
 }
 console.log('PASS: Crop-first and disabled-prefix previews assemble one PDF without requiring a merge; workspace rotation and page bounds retained.');
+
+for(const count of [1,20]){
+ const malformed=await PDFDocument.create();for(let i=0;i<3;i++)malformed.addPage([400,600]);malformed.catalog.Pages().set(PDFName.of('Count'),PDFNumber.of(count));
+ const bytes=await malformed.save(),doc=await PDFDocument.load(bytes),file={id:'stale-count',name:'stale-count.pdf',bytes,doc,size:bytes.length,pages:doc.getPageCount()},before=bytes.slice();
+ for(const angle of ['0','90','180','270']){
+  assert.equal(recipes.workflowSettings('rotate',{angle}).angle,angle);
+  const result=await pdf(await run([file],['rotate'],[{angle}]));
+  assert.equal(result.getPageCount(),3);assert.equal(result.catalog.Pages().Count().asNumber(),3);
+  assert(result.getPages().every(page=>page.getRotation().angle===Number(angle)));
+ }
+ assert.deepEqual(bytes,before,'repair does not mutate source bytes');
+}
+console.log('PASS: stale PDF page counts repaired, every page retained, all four rotation states and originals preserved.');
+
+const revisedDoc=await PDFDocument.create();const revisedFont=await revisedDoc.embedFont(StandardFonts.Helvetica);
+for(let i=0;i<3;i++)revisedDoc.addPage([400,600]).drawText('REVISION PAGE '+(i+1),{font:revisedFont,x:30,y:500});
+const originalCatalog=revisedDoc.context.trailerInfo.Root,baseBytes=await revisedDoc.save({useObjectStreams:false});
+const prev=Number(new TextDecoder().decode(baseBytes).match(/startxref\s+(\d+)\s+%%EOF\s*$/)?.[1]);
+const updateText=originalCatalog.objectNumber+' 1 obj\n'+revisedDoc.catalog.toString()+'\nendobj\n';
+const update=new TextEncoder().encode(updateText),xrefOffset=baseBytes.length+update.length;
+const tail=new TextEncoder().encode('xref\n'+originalCatalog.objectNumber+' 1\n'+String(baseBytes.length).padStart(10,'0')+' 00001 n \ntrailer\n<< /Size '+(revisedDoc.context.largestObjectNumber+1)+' /Root '+originalCatalog.objectNumber+' 1 R /Prev '+prev+' >>\nstartxref\n'+xrefOffset+'\n%%EOF');
+const revisionBytes=new Uint8Array(baseBytes.length+update.length+tail.length);revisionBytes.set(baseBytes);revisionBytes.set(update,baseBytes.length);revisionBytes.set(tail,baseBytes.length+update.length);
+const revision=await PDFDocument.load(revisionBytes,{updateMetadata:false});
+assert.equal(revision.getPageCount(),3);
+assert(revision.context.enumerateIndirectObjects().filter(([ref])=>ref.objectNumber===originalCatalog.objectNumber).length===2);
+const revisionFile={id:'revision',name:'revision.pdf',bytes:revisionBytes,doc:revision,pages:3,size:revisionBytes.length},sourceCopy=revisionBytes.slice();
+const {execFileSync}=await import('node:child_process'),{mkdtemp,writeFile,rm}=await import('node:fs/promises'),{tmpdir}=await import('node:os'),{join}=await import('node:path');
+const revisionTemp=await mkdtemp(join(tmpdir(),'workflow-revision-'));
+try{for(const angle of ['0','90','180','270']){
+ const output=await run([revisionFile],['rotate'],[{angle}]),bytes=new Uint8Array(await output.blob.arrayBuffer()),doc=await PDFDocument.load(bytes,{updateMetadata:false});
+ const numbers=doc.context.enumerateIndirectObjects().map(([ref])=>ref.objectNumber);
+ assert.equal(new Set(numbers).size,numbers.length,'each object number appears once');
+ assert.equal(doc.getPageCount(),3);assert(doc.getPages().every(page=>page.getRotation().angle===Number(angle)));
+ const path=join(revisionTemp,'rotated-'+angle+'.pdf');await writeFile(path,bytes);
+ const text=execFileSync('pdftotext',['-raw',path,'-'],{encoding:'utf8'});
+ for(let i=1;i<=3;i++)assert(text.replace(/\s/g,'').includes('REVISIONPAGE'+i),'independent reader retains every page');
+}}finally{await rm(revisionTemp,{recursive:true,force:true});}
+assert.deepEqual(revisionBytes,sourceCopy,'incremental source bytes retained');
+console.log('PASS: incremental object generations export valid PDFs in all rotation states, with independent text extraction and originals retained.');

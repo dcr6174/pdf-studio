@@ -2,6 +2,7 @@
 import {SpreadsheetSheets} from './spreadsheet-sheets';
 import {PDFName,PDFDict,PDFArray,PDFString,PDFHexString} from 'pdf-lib';
 import {readOutline} from '@/lib/pdf-navigation';
+import {splitOutputHint} from '@/lib/tool-expectations';
 import {WordConversionOptions} from './word-conversion-options';
 import {useEffect,useState} from 'react';
 import type {Loaded,Options} from '@/lib/pdf-client';
@@ -54,7 +55,7 @@ export function TaskOptions({view,options:o,onChange,files,pages,width,height}:{
  if(view==='interleave')return <p>Pages alternate in file order. Any unmatched trailing pages are kept at the end.</p>;
  if(view==='sign')return <p>This adds a visual signature, not a certificate-backed digital signature.</p>;
  if(view==='markdown')return <p>Supports headings, lists and bold/italic text. Links, images, tables and HTML remain literal text; review the export.</p>;
- if(view==='split')return <p role="status">{o.splitOutput==='one'?'One PDF with the selected pages.':o.splitOutput==='separate'?'One PDF per selected page in a ZIP.':'One PDF per semicolon-separated group in a ZIP.'}</p>;
+ if(view==='split')return <p role="status">{splitOutputHint(o.splitOutput)}</p>;
  if(['jpg','png','webp'].includes(view))return <p>{pages} page images · page 1 approximately {Math.round(width*(Number(o.quality)||2))} × {Math.round(height*(Number(o.quality)||2))} pixels.</p>;
  return null;
 }

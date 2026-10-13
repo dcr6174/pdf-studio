@@ -216,3 +216,16 @@
 
 .tool-action-identity{display:flex;align-items:center;gap:10px;min-width:0}.tool-action-identity h2{min-width:0}.tool-action-symbol{display:flex;align-items:center;justify-content:center;flex:none;width:48px;height:48px;border-radius:12px;background:var(--soft);color:var(--primary)}
 
+
+/* Redact has no page rail: keep its document column and toolbar full width. */
+@media(min-width:1100px){
+ .studio-shell[data-tool=redact].edit-canvas-fit.document-loaded .task-workspace{display:flex!important;flex-direction:column!important;flex:1;min-height:0;grid-template-columns:none!important;width:100%!important}
+ .studio-shell[data-tool=redact].edit-canvas-fit.document-loaded .task-canvas{width:100%!important;min-width:0}
+ .studio-shell[data-tool=redact].edit-canvas-fit.document-loaded .editor-layout{display:flex!important;flex-direction:column;grid-template-columns:minmax(0,1fr)!important;width:100%!important;min-width:0;flex:1}
+ .studio-shell[data-tool=redact].edit-canvas-fit.document-loaded .editor-main{width:100%!important;min-width:0;flex:1}
+ .studio-shell[data-tool=redact].edit-canvas-fit.document-loaded .board-scroll{width:100%!important;box-sizing:border-box}
+ .studio-shell[data-tool=redact].edit-canvas-fit.document-loaded .file-facts{flex:none!important;height:auto!important;min-height:0!important;padding:8px 16px!important;margin:0!important;border-radius:0}
+ .studio-shell[data-tool=redact].edit-canvas-fit.document-loaded .tool-note,.studio-shell[data-tool=redact].edit-canvas-fit.document-loaded .task-input-hint{display:none!important}
+ .studio-shell[data-tool=redact].edit-canvas-fit.document-loaded .editor-toolbar{display:flex!important;flex-direction:row!important;flex-wrap:wrap;flex:none;width:100%;box-sizing:border-box}
+ .studio-shell[data-tool=redact].edit-canvas-fit.document-loaded .tool-heading{flex:none;padding:8px 16px!important;margin:0!important}
+}

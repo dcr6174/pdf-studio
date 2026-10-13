@@ -1,0 +1,359 @@
+{
+  "base_commit": "7df4970dd722d291be3386aacee047ec6ee1b36a",
+  "live_directory_count": 37,
+  "image_tools": 25,
+  "route_count": 50,
+  "redirect": "/lab/sketch-pdf -> /tools/sketch-over-pdf",
+  "tools": [
+    {
+      "slug": "image-size-reducer",
+      "title": "Photo & Signature Size Reducer",
+      "source": "lib/image-tools.ts",
+      "line": 3,
+      "description": "Fit an image below your form\u2019s maximum KB limit."
+    },
+    {
+      "slug": "image-compressor",
+      "title": "Image Compressor",
+      "source": "lib/image-tools.ts",
+      "line": 4,
+      "description": "Compress a batch by quality, with actual output sizes."
+    },
+    {
+      "slug": "image-resizer",
+      "title": "Image Resizer",
+      "source": "lib/image-tools.ts",
+      "line": 5,
+      "description": "Resize by pixels with fit, fill or stretch."
+    },
+    {
+      "slug": "image-crop",
+      "title": "Image Crop",
+      "source": "lib/image-tools.ts",
+      "line": 6,
+      "description": "Drag a crop directly on the image, or enter exact pixels."
+    },
+    {
+      "slug": "image-rotate",
+      "title": "Rotate & Flip",
+      "source": "lib/image-tools.ts",
+      "line": 7,
+      "description": "Straighten a photo or flip it horizontally or vertically."
+    },
+    {
+      "slug": "image-blur",
+      "title": "Image Blur",
+      "source": "lib/image-tools.ts",
+      "line": 8,
+      "description": "Soften the whole image or a selected rectangular area."
+    },
+    {
+      "slug": "image-pixelate",
+      "title": "Image Pixelate",
+      "source": "lib/image-tools.ts",
+      "line": 9,
+      "description": "Obscure a selected area with adjustable pixel blocks."
+    },
+    {
+      "slug": "image-grayscale",
+      "title": "Grayscale",
+      "source": "lib/image-tools.ts",
+      "line": 10,
+      "description": "Dial in a black-and-white finish."
+    },
+    {
+      "slug": "image-background-remover",
+      "title": "Plain Background Remover",
+      "source": "lib/image-tools.ts",
+      "line": 11,
+      "description": "Click a plain background to erase connected matching pixels."
+    },
+    {
+      "slug": "jpg-to-png",
+      "title": "JPG to PNG",
+      "source": "lib/image-tools.ts",
+      "line": 12,
+      "description": "Convert JPG pixels to PNG without removing the background."
+    },
+    {
+      "slug": "png-to-jpg",
+      "title": "PNG to JPG",
+      "source": "lib/image-tools.ts",
+      "line": 13,
+      "description": "Make a JPG with your chosen background color."
+    },
+    {
+      "slug": "image-to-webp",
+      "title": "Image to WebP",
+      "source": "lib/image-tools.ts",
+      "line": 14,
+      "description": "Create lightweight WebP images with a quality setting."
+    },
+    {
+      "slug": "svg-to-image",
+      "title": "SVG to Image",
+      "source": "lib/image-tools.ts",
+      "line": 15,
+      "description": "Render a self-contained SVG at your chosen dimensions."
+    },
+    {
+      "slug": "svg-cleaner",
+      "title": "SVG Cleaner",
+      "source": "lib/image-tools.ts",
+      "line": 16,
+      "description": "Remove comments, metadata and unsafe external content."
+    },
+    {
+      "slug": "image-watermark",
+      "title": "Image Watermark",
+      "source": "lib/image-tools.ts",
+      "line": 17,
+      "description": "Place text or a logo once or in a repeated pattern."
+    },
+    {
+      "slug": "image-metadata-remover",
+      "title": "Image Metadata Remover",
+      "source": "lib/image-tools.ts",
+      "line": 18,
+      "description": "Remove descriptive metadata; preserve JPG, PNG or WebP image data."
+    },
+    {
+      "slug": "image-secret-message",
+      "title": "Secret Message in PNG",
+      "source": "lib/image-tools.ts",
+      "line": 19,
+      "description": "Hide and read a password-encrypted text message in a PNG."
+    },
+    {
+      "slug": "passport-photo",
+      "title": "Passport Photo Layout",
+      "source": "lib/image-tools.ts",
+      "line": 20,
+      "description": "Crop to a custom millimeter size and create a photo sheet."
+    },
+    {
+      "slug": "signature-cleaner",
+      "title": "Signature Cleaner",
+      "source": "lib/image-tools.ts",
+      "line": 21,
+      "description": "Crop blank paper and clean a dark signature scan."
+    },
+    {
+      "slug": "image-id-card",
+      "title": "ID Card Designer",
+      "source": "lib/image-tools.ts",
+      "line": 22,
+      "description": "Create a simple photo card with name and membership details."
+    },
+    {
+      "slug": "image-color-picker",
+      "title": "Image Color Picker",
+      "source": "lib/image-tools.ts",
+      "line": 23,
+      "description": "Click any pixel to read its HEX and RGB values."
+    },
+    {
+      "slug": "favicon-generator",
+      "title": "Favicon Generator",
+      "source": "lib/image-tools.ts",
+      "line": 24,
+      "description": "Export PNG icons, a multi-size ICO and a web manifest."
+    },
+    {
+      "slug": "image-contact-sheet",
+      "title": "Photo Contact Sheet",
+      "source": "lib/image-tools.ts",
+      "line": 25,
+      "description": "Arrange a batch into one labeled image sheet."
+    },
+    {
+      "slug": "image-adjustments",
+      "title": "Brightness & Contrast",
+      "source": "lib/image-tools.ts",
+      "line": 26,
+      "description": "Balance brightness, contrast and saturation."
+    },
+    {
+      "slug": "image-sharpen",
+      "title": "Image Sharpen",
+      "source": "lib/image-tools.ts",
+      "line": 27,
+      "description": "Apply a controlled sharpening filter to fine details."
+    },
+    {
+      "slug": "flipbook",
+      "title": "PDF Flipbook",
+      "source": "lib/lab-tools.ts",
+      "line": 2,
+      "description": "Read pages with a gentle turn animation and export an offline HTML book."
+    },
+    {
+      "slug": "word-cloud",
+      "title": "PDF Word cloud",
+      "source": "lib/lab-tools.ts",
+      "line": 3,
+      "description": "Explore frequent words in selectable PDF text and export a colorful SVG."
+    },
+    {
+      "slug": "page-palette",
+      "title": "Page palette",
+      "source": "lib/lab-tools.ts",
+      "line": 4,
+      "description": "Extract representative colors from a PDF page and copy their hex values."
+    },
+    {
+      "slug": "poster-collage",
+      "title": "Poster collage",
+      "source": "lib/lab-tools.ts",
+      "line": 5,
+      "description": "Arrange PDF pages on a colorful poster and download PNG or PDF."
+    },
+    {
+      "slug": "pdf-to-gif",
+      "title": "PDF to GIF",
+      "source": "lib/lab-tools.ts",
+      "line": 6,
+      "description": "Turn selected PDF pages into an animated GIF with adjustable speed."
+    },
+    {
+      "slug": "sketch-pdf",
+      "title": "Sketch over a PDF",
+      "source": "lib/lab-tools.ts",
+      "line": 7,
+      "description": "Draw and highlight directly on PDF pages, then export your annotated document."
+    },
+    {
+      "slug": "whiteboard",
+      "title": "Whiteboard",
+      "source": "lib/lab-tools.ts",
+      "line": 8,
+      "description": "Draw diagrams on a blank canvas and export PNG, PDF or an editable scene."
+    },
+    {
+      "slug": "pomodoro",
+      "title": "Focus timer",
+      "source": "lib/lab-utilities.ts",
+      "line": 1,
+      "description": "A Pomodoro timer with focus sessions, breaks and an optional alarm."
+    },
+    {
+      "slug": "calculator",
+      "title": "Everyday calculator",
+      "source": "lib/lab-utilities.ts",
+      "line": 1,
+      "description": "Calculate with brackets, decimals and clear keyboard input."
+    },
+    {
+      "slug": "finance-calculator",
+      "title": "Finance calculator",
+      "source": "lib/lab-utilities.ts",
+      "line": 1,
+      "description": "Estimate EMI, monthly savings growth and compound interest."
+    },
+    {
+      "slug": "practice-sheets",
+      "title": "Practice Sheets & Notebooks",
+      "source": "lib/lab-utilities.ts",
+      "line": 1,
+      "description": "Make tracing sheets or printable ruled, grid and dotted paper."
+    },
+    {
+      "slug": "mini-zine-maker",
+      "title": "Mini Zine Maker",
+      "source": "lib/lab-printables.ts",
+      "line": 2,
+      "description": "Eight pictures or PDF pages. One sheet. A tiny book to fold and keep."
+    },
+    {
+      "slug": "photo-booth-strips",
+      "title": "Photo Booth Strip Maker",
+      "source": "lib/lab-printables.ts",
+      "line": 3,
+      "description": "Turn four favourite photos into classic, captioned photo strips."
+    },
+    {
+      "slug": "custom-bingo",
+      "title": "Custom Bingo Maker",
+      "source": "lib/lab-printables.ts",
+      "line": 4,
+      "description": "Make unique bingo cards for your party, classroom or movie night."
+    },
+    {
+      "slug": "giant-poster",
+      "title": "Giant Poster Maker",
+      "source": "lib/lab-printables.ts",
+      "line": 5,
+      "description": "Turn one picture into a wall-sized poster using your home printer."
+    },
+    {
+      "slug": "photo-coloring-page",
+      "title": "Photo to Coloring Page",
+      "source": "lib/lab-printables.ts",
+      "line": 6,
+      "description": "Turn a photo into printable black-and-white outlines."
+    },
+    {
+      "slug": "printable-flashcards",
+      "title": "Printable Flashcard Maker",
+      "source": "lib/lab-printables.ts",
+      "line": 7,
+      "description": "Build question-and-answer cards and print aligned fronts and backs."
+    },
+    {
+      "slug": "photo-strip",
+      "title": "Quick Photo Strip",
+      "source": "lib/fun-lab.ts",
+      "line": 2,
+      "description": "Rearrange your photos into one downloadable PNG strip."
+    },
+    {
+      "slug": "flashcards",
+      "title": "Study Flashcards",
+      "source": "lib/fun-lab.ts",
+      "line": 3,
+      "description": "Write question-and-answer cards, practise, shuffle and print."
+    },
+    {
+      "slug": "decision-wheel",
+      "title": "Decision Wheel",
+      "source": "lib/fun-lab.ts",
+      "line": 4,
+      "description": "Spin your choices, pick a winner and optionally eliminate it."
+    },
+    {
+      "slug": "text-to-handwriting",
+      "title": "Text to handwriting",
+      "source": "lib/handwriting.ts",
+      "line": 10,
+      "description": "Type or paste text onto a live notebook and download a handwritten-style PDF."
+    },
+    {
+      "slug": "notebook-maker",
+      "title": "Notebook maker",
+      "source": "lib/handwriting.ts",
+      "line": 12,
+      "description": "Create printable ruled, dotted, grid or plain paper."
+    },
+    {
+      "slug": "handwriting-practice",
+      "title": "Handwriting practice",
+      "source": "lib/handwriting.ts",
+      "line": 13,
+      "description": "Create light tracing lines with space to practise underneath."
+    },
+    {
+      "slug": "daily-mood-canvas",
+      "title": "Daily Mood Canvas",
+      "source": "app/lab/daily-mood-canvas/page.tsx",
+      "line": 1,
+      "description": "Draw, stamp and export a daily mood canvas."
+    },
+    {
+      "slug": "remove-watermark",
+      "title": "Remove PDF Watermark",
+      "source": "app/lab/remove-watermark/page.tsx",
+      "line": 1,
+      "description": "Separate-object PDF watermark removal."
+    }
+  ]
+}
