@@ -36,6 +36,10 @@ Automated seeded engine checks cover complete win/loss conditions, restart throu
 
 ## Visual and performance evidence
 
+![Ten distinctive game previews](arcade-evidence/ten-game-previews.png)
+
+Catalogue artwork rendered from the proposed SVG component outside the browser. This is artwork evidence, not a mobile screenshot.
+
 ![Code-rendered canvas comparison](arcade-evidence/canvas-before-after.png)
 
 This comparison renders baseline and proposed drawing code with the same seed using native CPU canvas. It is not a browser screenshot or proof of mobile layout. It has no mouse pointer. SVG catalogue artwork and DOM board animations require browser verification after a review build is available.
@@ -44,7 +48,7 @@ This comparison renders baseline and proposed drawing code with the same seed us
 
 ## Validation and release gate
 
-Local PASS: `node checks/verify-arcade.mjs`, `node checks/verify-arcade-ui.mjs`, `node checks/verify-arcade-improvements.mjs`; strict Arcade subset TypeScript; targeted ESLint including sitemap generator. Full-repository lint, TypeScript, PDF/image checks and production build are delegated to the existing GitHub quality workflows; inspect PR checks for their final result.
+Local PASS: `node checks/verify-arcade.mjs`, `node checks/verify-arcade-ui.mjs`, `node checks/verify-arcade-improvements.mjs`; strict Arcade subset TypeScript; targeted ESLint including sitemap generator. Full-repository CI PASS on the initial code commit: zero-warning lint, TypeScript, all existing PDF/image/output and upload/workflow regressions, new Arcade checks, three production-build workflows and generated sitemap coverage. A subsequent shadow-cost reduction also passes targeted local checks; inspect PR checks for the final-head recheck.
 
 Remaining: updated desktop/phone browser screenshots; real Android/iOS gestures, landscape/keyboard/safe areas; measured before/after device FPS; full manual rounds and every pause/leave/resume path. A local browser preview was unavailable in this environment, so no after-layout or real-device claims are made. PR remains separate from main pending review.
 
