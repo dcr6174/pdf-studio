@@ -66,6 +66,9 @@ jobs:
       - name: Site maintenance regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-site-maintenance.mjs && node checks/verify-responsive-layout.mjs
+      - name: Arcade mechanics and route regressions
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-arcade.mjs
       - name: Production build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npm run build:public
@@ -75,4 +78,5 @@ jobs:
 
       - name: Generated sitemap coverage
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
-        run: node checks/verify-review-sitemap.mjs && node checks/verify-image-guides.mjs
+        run: node checks/verify-review-sitemap.mjs && node checks/verify-image-guides.mjs && node checks/verify-arcade-routes.mjs
+

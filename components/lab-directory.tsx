@@ -18,6 +18,7 @@ import {
 } from "lucide-react";
 import { imageTools } from "@/lib/image-tools";
 const tools = [
+  {slug:"arcade",title:"Studio Arcade",description:"Ten quick games: Snake, 2048, Buddy Stack and more.",group:"Play",output:"Free browser games",icon:Grid3X3},
   ...imageTools.map((t) => ({
     ...t,
     group: "Images",
@@ -359,4 +360,5 @@ export function LabDirectory() {
     </section>
   );
 }
+
 

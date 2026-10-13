@@ -1,0 +1,12 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+import ts from 'typescript';
+const module=text=>'data:text/javascript;base64,'+Buffer.from(ts.transpileModule(text,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText).toString('base64');
+const {arcadeGames}=await import(module(fs.readFileSync('lib/arcade-catalog.ts','utf8')));
+const xml=fs.readFileSync('public/sitemap.xml','utf8'),urls=[...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
+for(const route of ['/lab/arcade',...arcadeGames.map(g=>'/lab/arcade/'+g.slug)])assert.equal(urls.filter(u=>u==='https://pdf-studio.in'+route).length,1,'canonical indexed route: '+route);
+const {imageTools}=await import(module(fs.readFileSync('lib/image-tools.ts','utf8')));
+const imageModule=module('export const imageTools='+JSON.stringify(imageTools));
+const {isAdvertisingPage}=await import(module(fs.readFileSync('lib/advertising.ts','utf8').replace("'./image-tools'",JSON.stringify(imageModule))));
+assert(!isAdvertisingPage('/lab/arcade'));for(const g of arcadeGames)assert(!isAdvertisingPage('/lab/arcade/'+g.slug));assert(isAdvertisingPage('/blog'),'existing editorial ads remain enabled');
+console.log('PASS: Arcade directory and all ten games are indexed exactly once; Arcade ad loader is disabled without changing editorial ad eligibility.');

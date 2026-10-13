@@ -6,6 +6,7 @@ import { Sparkles, ArrowDown } from "lucide-react";
 import "../creative/creative.css";
 import "./lab.css";
 import "./discovery.css";
+import "./arcade-entry.css";
 export const metadata = pageMeta(
   "/lab",
   "Studio Lab — make, learn and play",
@@ -44,9 +45,11 @@ export default function Lab() {
             </p>
           </div>
         </header>
+        <section className="lab-arcade-entry" aria-labelledby="lab-arcade-heading"><div><span className="lab-kicker">TAKE A PROPER LITTLE BREAK</span><h2 id="lab-arcade-heading">Studio Arcade</h2><p>Ten free games. Stack, toss, match, slide and chase a new best score.</p></div><Link href="/lab/arcade">Explore the Arcade ↗</Link></section>
         <LabDirectory />
       </main>
       <SiteFooter />
     </div>
   );
 }
+

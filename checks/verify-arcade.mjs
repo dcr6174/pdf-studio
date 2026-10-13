@@ -1,0 +1,25 @@
+import assert from 'node:assert/strict';
+import fs from 'node:fs';
+let engine,catalog;
+// CI uses the pinned TypeScript compiler; Node 24 can run the pure engine locally.
+try{const {default:ts}=await import('typescript');const module=text=>'data:text/javascript;base64,'+Buffer.from(ts.transpileModule(text,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText).toString('base64');engine=await import(module(fs.readFileSync('lib/arcade-engine.ts','utf8')));catalog=await import(module(fs.readFileSync('lib/arcade-catalog.ts','utf8')));}catch(error){if(error.code!=='ERR_MODULE_NOT_FOUND')throw error;engine=await import('../lib/arcade-engine.ts');catalog=await import('../lib/arcade-catalog.ts');}
+const {createGame,inputGame,tickGame,collapse,attachBubble,restoreBoard}=engine;
+assert.equal(catalog.arcadeGames.length,10);assert.equal(new Set(catalog.arcadeGames.map(g=>g.slug)).size,10);assert.equal(new Set(catalog.arcadeGames.map(g=>g.mode)).size,10);
+for(const g of catalog.arcadeGames){const s=createGame(g.mode,17);assert.deepEqual(s,createGame(g.mode,17),'seeded reproduction: '+g.slug);for(let i=0;i<100;i++)tickGame(s,.016);assert(Number.isFinite(s.score)&&Number.isFinite(s.time));}
+// Each pair merges only once; a blocked move must not add a random tile.
+assert.deepEqual(collapse([2,2,2,2]),{line:[4,4,0,0],score:8});assert.deepEqual(collapse([4,0,4,4]),{line:[8,4,0,0],score:8});
+let s=createGame('merge',1);s.board=[2,0,0,0,...Array(12).fill(0)];inputGame(s,{type:'left'});assert.equal(s.board.filter(Boolean).length,1);inputGame(s,{type:'right'});assert.equal(s.board[3],2);assert.equal(s.board.filter(Boolean).length,2);inputGame(s,{type:'undo'});assert.equal(s.board.filter(Boolean).length,1);assert.equal(s.board[0],2);
+s.board=[2,4,2,4,4,2,4,2,2,4,2,4,4,2,4,2];inputGame(s,{type:'left'});assert(s.over);assert(!restoreBoard('merge',{board:Array(16).fill(3)},1));assert(restoreBoard('merge',{board:[2,...Array(15).fill(0)],score:4},1));
+// Legal sliding shuffles have even-width puzzle parity and cannot move remote tiles.
+function solvable(board){let inversions=0;const a=board.filter(Boolean);for(let i=0;i<a.length;i++)for(let j=i+1;j<a.length;j++)if(a[i]>a[j])inversions++;return (inversions+4-Math.floor(board.indexOf(0)/4))%2===1;}
+for(let seed=0;seed<100;seed++){s=createGame('slide',seed);assert(solvable(s.board));}s=createGame('slide',1);s.board=[1,2,3,4,5,6,7,8,9,10,11,12,13,14,0,15];inputGame(s,{type:'cell',index:0});assert.equal(s.moves,0);inputGame(s,{type:'right'});assert(s.won);assert.equal(s.moves,1);
+// Duplicate taps and a third card cannot bypass the mismatch cooldown.
+s=createGame('memory',1);inputGame(s,{type:'cell',index:0});inputGame(s,{type:'cell',index:0});assert.equal(s.selected.length,1);const wrong=s.board.findIndex(v=>v!==s.board[0]);inputGame(s,{type:'cell',index:wrong});inputGame(s,{type:'cell',index:5});assert.equal(s.selected.length,2);for(let i=0;i<20;i++)tickGame(s,.05);assert.equal(s.selected.length,0);for(let v=0;v<6;v++){const ids=s.board.map((n,i)=>n===v?i:-1).filter(i=>i>=0);ids.forEach(index=>inputGame(s,{type:'cell',index}));}assert(s.won&&s.matched.length===12);
+s=createGame('stack',1);s.paddle=120;inputGame(s,{type:'action'});assert.equal(s.score,2);assert.equal(s.blocks[1].w,160);s.paddle=350;inputGame(s,{type:'action'});assert(s.over&&!s.won);
+s=createGame('toss',1);s.moves=9;s.target=200;s.ball={x:200,y:159,vx:0,vy:30};s.wind=0;tickGame(s,.04);assert(s.won);assert.equal(s.score,1);assert.equal(s.moves,10);
+s=createGame('bubbles',1);s.board=Array(48).fill(-1);s.board[0]=1;s.board[1]=1;attachBubble(s,{x:162,y:54,vx:0,vy:0,color:1});assert(s.won);assert.equal(s.score,30);
+s=createGame('snake',1);inputGame(s,{type:'left'});assert.deepEqual(s.queued,{x:1,y:0});s.fruit={x:7,y:8};for(let i=0;i<4;i++)tickGame(s,.05);assert.equal(s.score,1);assert.equal(s.snake.length,4);s.snake=[{x:15,y:8}];s.accumulator=.2;tickGame(s,.01);assert(s.over);
+s=createGame('breaker',1);s.blocks=[{x:190,y:80,w:30,h:20,color:0}];s.ball={x:200,y:100,vx:0,vy:-100};tickGame(s,.01);assert(s.won);assert.equal(s.score,10);s=createGame('breaker',1);s.lives=1;s.ball={x:1,y:520,vx:0,vy:100};tickGame(s,.01);assert(s.over&&!s.won);
+s=createGame('odd',1);inputGame(s,{type:'cell',index:s.target});assert.equal(s.score,1);inputGame(s,{type:'cell',index:(s.target+1)%16});assert.equal(s.score,0);assert.equal(s.time,2);s.time=59.99;tickGame(s,.02);assert(s.won);
+s=createGame('runner',1);inputGame(s,{type:'action'});tickGame(s,.05);assert(s.playerY<420);s.playerY=420;s.playerV=0;s.obstacles=[{x:70,y:420}];tickGame(s,.01);assert(s.over);const previous=s.time;tickGame(s,.05);assert.equal(s.time,previous,'finished games stop their clock');
+console.log('PASS: 10 distinct seeded games; 2048 merges/blocked moves/undo/loss; solvable sliding boards; memory cooldown/win; stack overlap; toss completion; bubble clusters; Snake growth/reversal/collision; breaker lives/win; odd-one penalties/time; runner jump/collision.');
