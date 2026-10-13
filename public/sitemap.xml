@@ -404,7 +404,6 @@
 <url><loc>https://pdf-studio.in/lab/whiteboard</loc></url>
 <url><loc>https://pdf-studio.in/lab/poster-collage</loc></url>
 <url><loc>https://pdf-studio.in/lab/pdf-to-gif</loc></url>
-<url><loc>https://pdf-studio.in/lab/sketch-pdf</loc></url>
 <url><loc>https://pdf-studio.in/lab/image-compressor</loc></url>
 <url><loc>https://pdf-studio.in/lab/image-resizer</loc></url>
 <url><loc>https://pdf-studio.in/lab/image-crop</loc></url>
@@ -435,4 +434,5 @@
 <url><loc>https://pdf-studio.in/help</loc></url>
 <url><loc>https://pdf-studio.in/terms</loc></url>
 <url><loc>https://pdf-studio.in/faq</loc></url>
+<url><loc>https://pdf-studio.in/lab/sketch-pdf</loc></url>
 </urlset>

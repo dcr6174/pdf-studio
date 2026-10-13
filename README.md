@@ -15,6 +15,8 @@
 - Preserve compatible documents when switching tools; preview exports, download, or explicitly save them to **My files**.
 - Desktop right action sidebar; compact mobile controls with Add Files, contextual settings and a reachable main action. Theme selection, keyboard controls and reduced-motion handling are included.
 
+The PDF catalogue count is derived from `lib/tools.ts` (`PDF_TOOL_COUNT`); Lab tools and SEO aliases are separate collections.
+
 The catalogue and accepted file types are defined in [lib/tools.ts](lib/tools.ts); public routes are defined in [lib/seo-tools.ts](lib/seo-tools.ts). Availability does not imply support for every PDF or full Office-layout fidelity.
 
 ## Privacy and data handling
@@ -139,3 +141,4 @@ The Page Buddy v5 assets are in `public/brand/`. Follow [docs/BRAND-V5.md](docs/
 ## License
 
 Application code is [MIT licensed](LICENSE). Dependencies, engines, fonts and vendored assets retain their own licenses: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+

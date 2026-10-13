@@ -129,7 +129,7 @@ export type Output = {
 };
 let pdfjsPromise: Promise<typeof import('pdfjs-dist')> | undefined;
 export async function pdfjs() { if (!pdfjsPromise)
-    pdfjsPromise = import('pdfjs-dist').then(m => { m.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'; return m; }); return pdfjsPromise; }
+    pdfjsPromise = import('pdfjs-dist').then(m => { m.GlobalWorkerOptions.workerSrc = '/pdf.worker.min.mjs'; return m; }).catch(error=>{pdfjsPromise=undefined;throw error;}); return pdfjsPromise; }
 export async function renderer(bytes: Uint8Array, password?: string) { const task=(await pdfjs()).getDocument({ data: bytes.slice(), password, cMapUrl: '/cmaps/', cMapPacked: true, standardFontDataUrl: '/standard_fonts/', isEvalSupported: false });try{return await task.promise;}catch(e){try{await task.destroy();}catch{}throw e;} }
 async function renderPage(bytes: Uint8Array, index: number, scale = 1, password?: string, rotation=0, signal?:AbortSignal, shared?:Awaited<ReturnType<typeof renderer>>) { signal?.throwIfAborted(); let d = shared??await renderer(bytes, password); try {
     const p = await (async()=>{try{return await d.getPage(index+1);}catch(error){if(shared||!Number.isInteger(index)||index<0)throw error;const repaired=await PDFDocument.load(bytes,{updateMetadata:false});if(!repairPageTreeCounts(repaired)||index>=repaired.getPageCount())throw error;const corrected=await repaired.save();await d.destroy();d=await renderer(corrected,password);return d.getPage(index+1);}})();
