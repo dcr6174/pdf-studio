@@ -44,3 +44,16 @@ for(const tool of ['jpg','png','webp']){const control=MobileToolPrimaryControls(
 assert.equal(MobileToolPrimaryControls({...common,tool:'reader'}),null,'Reader retains dedicated controls');
 const desktopPresets=await readFile('components/compression-settings.tsx','utf8');assert(desktopPresets.includes("compressionPresets as presets"),'desktop and mobile share exact engine values');
 console.log('PASS: actual compression selector renders three canonical options, selection callbacks/disabled state, page-range entry, image resolutions and dedicated-tool fallback. SSR/component checks, not phone gestures.');
+
+// A real header-owned dock avoids conflicting fixed-position offsets.
+const dockSource=await readFile('components/mobile-workspace-controls.tsx','utf8');
+assert(dockSource.includes('createPortal(<div className="mobile-toolbar-dock">{controls}</div>,header)'));
+const dockRules=[];css.walkRules(rule=>{if(rule.selector.includes('.mobile-toolbar-dock'))dockRules.push(rule);});
+for(const width of [320,390,768,1099]){
+ const parent=dockRules.find(rule=>rule.selector.endsWith('.studio-header>.mobile-toolbar-dock')&&active(rule,width));assert(parent,'dock exists only in compact layout');
+ assert(parent.nodes.some(d=>d.prop==='top'&&d.value==='100%'),'dock starts at actual header boundary');
+ const child=dockRules.find(rule=>rule.selector.endsWith('.mobile-toolbar-dock>.mobile-workspace-controls')&&active(rule,width));
+ for(const [prop,value] of [['position','static'],['margin','0'],['inset','auto']])assert(child.nodes.some(d=>d.prop===prop&&d.value===value&&d.important),'clear old floating '+prop);
+}
+assert(dockRules.every(rule=>!active(rule,1366)),'desktop toolbar behavior unchanged');
+console.log('PASS: shared toolbar mounts into its own header and resets floating offsets/margins; desktop unaffected. Structural/CSS checks, not physical-phone geometry.');
