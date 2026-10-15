@@ -1,0 +1,91 @@
+/* Shared device adaptation. Document geometry and export engines are untouched. */
+:root{--studio-viewport-height:100dvh;--studio-viewport-top:0px;--studio-toolbar-height:56px}
+body :is(.studio-shell,.blog-main,.guides-main,.tools-directory,.lab-workspace,.creative-pdf-main,.iw-root){min-width:0;box-sizing:border-box}
+body :is(.blog-main,.guides-main) :is(pre,table){max-width:100%;overflow-x:auto}
+body :is(.blog-main,.guides-main) :is(img,video){max-width:100%;height:auto}
+body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
+
+@media(max-width:1099px){
+ :root{--studio-rail-space:0px}
+ /* Modal settings must cover the sticky header rather than disappear beneath it. */
+ html body [data-slot=dialog-overlay]{z-index:80}
+ html body [data-slot=dialog-content]{z-index:81}
+ html body [data-slot=dialog-close]{min-width:44px;min-height:44px;display:grid;place-items:center}
+ /* One attached row replaces floating stacks and their empty canvas gutter. */
+ html body .studio-shell.document-shell .mobile-workspace-controls{
+  display:flex;position:fixed;top:var(--studio-header-height);bottom:auto;
+  left:0;right:0;width:auto;height:var(--studio-toolbar-height);max-height:none;
+  flex-direction:row;align-items:center;justify-content:flex-end;gap:8px;
+  padding:6px max(12px,env(safe-area-inset-right)) 6px max(12px,env(safe-area-inset-left));
+  border-bottom:1px solid var(--border);background:var(--card);box-sizing:border-box;
+  overflow-x:auto;overflow-y:hidden;z-index:31;
+ }
+ html body .studio-shell.document-shell .mobile-workspace-controls button{width:44px;height:44px;min-width:44px;min-height:44px;box-shadow:none;border-radius:10px;flex:none}
+ html body .studio-shell.document-shell .mobile-workspace-controls button[aria-label="Settings"]{order:1}
+ html body .studio-shell.document-shell .mobile-workspace-controls button[aria-label^="Sort files"]{order:2}
+ html body .studio-shell.document-shell .mobile-workspace-controls .mobile-add-control{order:3}
+ html body .studio-shell.document-shell.mobile-controls-ready:not(.mobile-edit-workspace):not([data-tool=reader]):has(.mobile-workspace-controls)>.content{
+  padding-inline:max(12px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right))!important;
+  padding-top:calc(var(--studio-toolbar-height) + 12px)!important;
+ }
+ html body .studio-shell[data-tool=merge].mobile-controls-ready .merge-list-heading{display:none!important}
+ html body .studio-shell.document-loaded.mobile-controls-ready:not(.mobile-edit-workspace) :is(.workspace-add-row,.workspace-add-files){display:none!important}
+ html body .studio-shell.document-shell.mobile-controls-ready>.content{padding-right:max(12px,env(safe-area-inset-right))!important}
+ /* Rotation retains Undo/Redo below the shared toolbar, with one Add and export. */
+ html body .studio-shell[data-tool=rotate].mobile-controls-ready .rotate-workspace-header{position:static;top:auto;margin-top:0}
+ html body .studio-shell[data-tool=rotate].mobile-controls-ready .rotate-workspace-controls [aria-label="Add PDF files"],
+ html body .studio-shell[data-tool=rotate].mobile-controls-ready .rotate-save-bar{display:none!important}
+ /* Reader owns its own attached toolbar. Avoid a duplicate/empty shared row. */
+ html body .studio-shell[data-tool=reader].document-loaded .mobile-workspace-controls{display:none!important}
+ html body .studio-shell[data-tool=reader].document-loaded>.content{padding:0!important}
+ html body .reader-mobile-attached{height:calc(var(--studio-viewport-height) - var(--mobile-tool-header-height,var(--studio-header-height)));min-height:0}
+ html body .reader-mobile-attached.reader-focus{height:var(--studio-viewport-height)}
+ html body .reader-mobile-toolbar{padding-inline:max(8px,env(safe-area-inset-left)) max(8px,env(safe-area-inset-right));gap:4px}
+ html body .reader-mobile-page{gap:4px}
+ html body .reader-mobile-attached .reader-page{min-width:0;scroll-padding-bottom:24px}
+ /* The edit toolbar is already in the flex layout directly below the header. */
+ html body .studio-shell.document-loaded.mobile-edit-workspace.edit-canvas-fit{height:var(--studio-viewport-height)!important}
+ html body .studio-shell.document-loaded.mobile-edit-workspace .mobile-continuous-pages{padding-bottom:calc(var(--studio-action-space) + 16px)!important}
+ html[data-studio-keyboard=open] body .studio-shell.document-loaded.mobile-edit-workspace .mobile-continuous-pages{padding-bottom:24px!important}
+ html body .studio-shell .mobile-workspace-action{padding-inline:max(12px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right))}
+ html[data-studio-keyboard=open] body :is(.mobile-workspace-action,.iw-mobile-action){display:none!important}
+ html[data-studio-keyboard=open] body .handwriting-tool-action .handwriting-export{position:static}
+ html[data-studio-keyboard=open] body [data-slot=dialog-content]:not([data-fullscreen=true]){top:calc(var(--studio-viewport-top) + var(--studio-viewport-height)/2)!important;max-height:calc(var(--studio-viewport-height) - 24px)!important;overflow-y:auto}
+ /* Settings remain scrollable on short landscape screens and above keyboards. */
+ html body :is(.mobile-workspace-panel,.reader-mobile-sheet)[data-slot=dialog-content]{
+  top:calc(var(--studio-viewport-top) + var(--studio-viewport-height)/2)!important;
+  width:min(520px,calc(100% - 24px))!important;max-width:calc(100% - 24px)!important;
+  min-height:0!important;height:auto!important;max-height:calc(var(--studio-viewport-height) - 24px)!important;
+  overflow:auto!important;overscroll-behavior:contain;scroll-padding-block:24px;
+ }
+ html body .mobile-workspace-panel .settings-panel :is(input:not([type=checkbox]):not([type=radio]):not([type=color]):not([type=range]),select,textarea){box-sizing:border-box;width:100%;min-width:0;max-width:100%}
+ html body .mobile-workspace-panel .settings-panel input:is([type=checkbox],[type=radio]){width:auto}
+ html body .studio-shell .workspace-filename b{max-width:100%;overflow-wrap:anywhere}
+ html body .studio-shell .document-workspace :is(button,summary){min-height:44px}
+ html body .studio-shell .workspace-command-actions{max-width:100%;flex-wrap:wrap}
+ html body .lab-workspace :is(.lab-toolbar,.lab-reader-controls){flex-wrap:wrap}
+ html body :is(.lab-workspace,.creative-pdf-main) :is(input,select,textarea){max-width:100%;min-width:0;font-size:16px;box-sizing:border-box}
+ html body .creative-pdf-layout{grid-template-columns:minmax(0,1fr)}
+ html body .creative-pdf-controls{position:static;max-height:none}
+ html body .creative-pdf-title{flex-wrap:wrap}
+ html body :is(.blog-main,.guides-main,.tools-directory){padding-inline:max(16px,env(safe-area-inset-left)) max(16px,env(safe-area-inset-right));overflow-wrap:anywhere}
+}
+@media(max-width:760px){
+ html body .iw-root{height:var(--studio-viewport-height);min-height:0}
+ html body .iw-dialog{max-height:calc(var(--studio-viewport-height) - 16px);overflow-y:auto}
+ html body .iw-root :is(.iv-toolbar button,.iw-view-tabs button){min-width:44px;min-height:44px}
+ html body .iw-root .iv-toolbar{max-width:calc(100% - 76px);overflow-x:auto}
+}
+@media(max-width:380px){
+ html body .studio-header.studio-shared .wordmark-lockup{width:110px;height:28px}
+ html body .studio-header.studio-shared .header-end{gap:4px}
+ html body .studio-shell .reader-mobile-page input{width:40px}
+}
+@media(max-width:1099px) and (max-height:500px){
+ :root{--studio-action-space:calc(68px + env(safe-area-inset-bottom))}
+ html body .studio-shell .mobile-workspace-action{padding-block:8px calc(8px + env(safe-area-inset-bottom))}
+ html body .studio-shell .mobile-workspace-action>.primary{min-height:44px;padding-block:10px}
+ html body .studio-shell.mobile-edit-workspace .mobile-edit-context{height:48px!important;min-height:48px!important;max-height:48px!important}
+ html body .studio-shell.mobile-edit-workspace .mobile-edit-context>.drawing-options{height:48px!important;max-height:48px!important}
+ html body .studio-shell.mobile-edit-workspace :is(.mobile-edit-done,.mobile-edit-delete){margin-block:2px!important}
+}

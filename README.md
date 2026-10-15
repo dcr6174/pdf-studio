@@ -13,7 +13,7 @@
 - Convert supported text, Office and image inputs; export PDF text, page images and other supported formats; recognize scanned text with OCR.
 - Read and search PDFs, compare documents, make booklets, collect clippings and build linked document packs.
 - Preserve compatible documents when switching tools; preview exports, download, or explicitly save them to **My files**.
-- Desktop right action sidebar; compact mobile controls with Add Files, contextual settings and a reachable main action. Theme selection, keyboard controls and reduced-motion handling are included.
+- Desktop right action sidebar; attached compact toolbars below 1100px with Add Files, contextual settings and a reachable main action. Visible-viewport sizing supports browser bars, orientation changes and on-screen keyboards without treating pinch zoom as a keyboard. Theme selection, keyboard controls and reduced-motion handling are included.
 
 The PDF catalogue count is derived from `lib/tools.ts` (`PDF_TOOL_COUNT`); Lab tools and SEO aliases are separate collections.
 
@@ -141,4 +141,5 @@ The Page Buddy v5 assets are in `public/brand/`. Follow [docs/BRAND-V5.md](docs/
 ## License
 
 Application code is [MIT licensed](LICENSE). Dependencies, engines, fonts and vendored assets retain their own licenses: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
 
