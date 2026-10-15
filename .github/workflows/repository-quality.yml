@@ -68,7 +68,7 @@ jobs:
         run: node checks/verify-site-maintenance.mjs && node checks/verify-responsive-layout.mjs
       - name: Arcade mechanics and route regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
-        run: node checks/verify-arcade.mjs && node checks/verify-arcade-ui.mjs
+        run: node checks/verify-arcade.mjs && node checks/verify-arcade-ui.mjs && node checks/verify-arcade-improvements.mjs
       - name: Production build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npm run build:public
