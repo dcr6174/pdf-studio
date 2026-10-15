@@ -1,5 +1,5 @@
-/* Phone toolbars only. Desktop and tablet layouts retain their existing controls. */
-@media(max-width:767px){
+/* Compact toolbars share the workspace breakpoint; full desktop starts at 1100px. */
+@media(max-width:1099px){
  .studio-shell.document-loaded:is([data-tool=merge],[data-tool=rotate],[data-tool=reader]) .content{padding-top:0!important;padding-inline:0!important}
  .studio-shell[data-tool=merge].document-loaded .content:not(:has(.merge-result-page)){padding-right:0!important}
  .studio-shell[data-tool=merge] .merge-list-heading{position:sticky;top:var(--mobile-tool-header-height,64px);z-index:30;padding:8px 16px;margin:0 0 16px;background:var(--card);border-bottom:1px solid var(--border);min-height:52px;box-sizing:border-box}
@@ -37,8 +37,9 @@
  .reader-mobile-attached.reader-focus{height:100dvh;padding:0}
 }
 
-@media(max-width:767px){
+@media(max-width:1099px){
  .studio-shell.document-loaded:is([data-tool=merge],[data-tool=rotate]) :is(.tool-heading,.file-facts,.back-link,.workspace-add-row){display:none!important}
  .studio-shell[data-tool=reader].document-loaded>footer{display:none!important}
  .reader-mobile-zoom:not([open])>div{display:none}
 }
+
