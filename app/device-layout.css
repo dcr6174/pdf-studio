@@ -7,6 +7,9 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
 
 @media(max-width:1099px){
  :root{--studio-rail-space:0px}
+ /* Modal settings must cover the sticky header rather than disappear beneath it. */
+ html body [data-slot=dialog-overlay]{z-index:80}
+ html body [data-slot=dialog-content]{z-index:81}
  /* One attached row replaces floating stacks and their empty canvas gutter. */
  html body .studio-shell.document-shell .mobile-workspace-controls{
   display:flex;position:fixed;top:var(--studio-header-height);bottom:auto;
@@ -20,13 +23,17 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
  html body .studio-shell.document-shell .mobile-workspace-controls button[aria-label="Settings"]{order:1}
  html body .studio-shell.document-shell .mobile-workspace-controls button[aria-label^="Sort files"]{order:2}
  html body .studio-shell.document-shell .mobile-workspace-controls .mobile-add-control{order:3}
- html body .studio-shell.document-shell.mobile-controls-ready:not(.mobile-edit-workspace):not([data-tool=reader])>.content{
+ html body .studio-shell.document-shell.mobile-controls-ready:not(.mobile-edit-workspace):not([data-tool=reader]):has(.mobile-workspace-controls)>.content{
   padding-inline:max(12px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right))!important;
   padding-top:calc(var(--studio-toolbar-height) + 12px)!important;
  }
  html body .studio-shell[data-tool=merge].mobile-controls-ready .merge-list-heading{display:none!important}
  html body .studio-shell.document-loaded.mobile-controls-ready:not(.mobile-edit-workspace) :is(.workspace-add-row,.workspace-add-files){display:none!important}
  html body .studio-shell.document-shell.mobile-controls-ready>.content{padding-right:max(12px,env(safe-area-inset-right))!important}
+ /* Rotation retains Undo/Redo below the shared toolbar, with one Add and export. */
+ html body .studio-shell[data-tool=rotate].mobile-controls-ready .rotate-workspace-header{position:static;top:auto;margin-top:0}
+ html body .studio-shell[data-tool=rotate].mobile-controls-ready .rotate-workspace-controls [aria-label="Add PDF files"],
+ html body .studio-shell[data-tool=rotate].mobile-controls-ready .rotate-save-bar{display:none!important}
  /* Reader owns its own attached toolbar. Avoid a duplicate/empty shared row. */
  html body .studio-shell[data-tool=reader].document-loaded .mobile-workspace-controls{display:none!important}
  html body .studio-shell[data-tool=reader].document-loaded>.content{padding:0!important}

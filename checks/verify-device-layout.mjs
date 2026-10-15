@@ -21,7 +21,7 @@ for(const width of [320,390,768,820,1024,1099,1100,1366,1920]){
  assert.equal(toolbar.some(([p,v])=>p==='top'&&v==='var(--studio-header-height)'),width<1100,'toolbar attaches below header');
 }
 const header=await readFile('components/use-mobile-tool-header.ts','utf8');assert(header.includes("matchMedia('(max-width:1099px)')"));
-const app=await readFile('app/page.tsx','utf8');assert(app.includes("view!=='workflow'&&view!=='rotate'&&!ocrDraft"),'Rotate keeps its own toolbar/export rather than two control rows');
+const app=await readFile('app/page.tsx','utf8');assert(app.includes("const mobileAction=view==='reader'?null:sidebarAction"),'Rotate retains the reachable shared export action');
 assert(app.includes("addAvailable={!newDocument&&view!=='edit'}"),'shared toolbar retains Add Files while edit owns its own Add');
 const layout=await readFile('app/layout.tsx','utf8');assert(layout.includes('<ResponsiveViewport/>'));assert(layout.includes('interactiveWidget:"resizes-content"'));assert(!layout.includes('userScalable:false'));
-console.log('PASS: 9 viewport geometries, browser-bar/keyboard separation, pinch-zoom stability, invalid measurement fallback, compact/desktop toolbar boundaries, dedicated Rotate controls and root viewport integration. CSS/math/source checks, not real-device browser geometry.');
+console.log('PASS: 9 viewport geometries, browser-bar/keyboard separation, pinch-zoom stability, invalid measurement fallback, compact/desktop toolbar boundaries, Rotate export preservation and root viewport integration. CSS/math/source checks, not real-device browser geometry.');
