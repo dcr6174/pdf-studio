@@ -10,6 +10,7 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
  /* Modal settings must cover the sticky header rather than disappear beneath it. */
  html body [data-slot=dialog-overlay]{z-index:80}
  html body [data-slot=dialog-content]{z-index:81}
+ html body [data-slot=dialog-close]{min-width:44px;min-height:44px;display:grid;place-items:center}
  /* One attached row replaces floating stacks and their empty canvas gutter. */
  html body .studio-shell.document-shell .mobile-workspace-controls{
   display:flex;position:fixed;top:var(--studio-header-height);bottom:auto;
@@ -57,7 +58,7 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
   min-height:0!important;height:auto!important;max-height:calc(var(--studio-viewport-height) - 24px)!important;
   overflow:auto!important;overscroll-behavior:contain;scroll-padding-block:24px;
  }
- html body .mobile-workspace-panel .settings-panel :is(input,select,textarea){box-sizing:border-box;width:100%;min-width:0;max-width:100%}
+ html body .mobile-workspace-panel .settings-panel :is(input:not([type=checkbox]):not([type=radio]):not([type=color]):not([type=range]),select,textarea){box-sizing:border-box;width:100%;min-width:0;max-width:100%}
  html body .mobile-workspace-panel .settings-panel input:is([type=checkbox],[type=radio]){width:auto}
  html body .studio-shell .workspace-filename b{max-width:100%;overflow-wrap:anywhere}
  html body .studio-shell .document-workspace :is(button,summary){min-height:44px}
@@ -84,6 +85,7 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
  :root{--studio-action-space:calc(68px + env(safe-area-inset-bottom))}
  html body .studio-shell .mobile-workspace-action{padding-block:8px calc(8px + env(safe-area-inset-bottom))}
  html body .studio-shell .mobile-workspace-action>.primary{min-height:44px;padding-block:10px}
- html body .studio-shell .mobile-edit-context{height:48px;min-height:48px;max-height:48px}
- html body .studio-shell .mobile-edit-context>.drawing-options{height:48px;max-height:48px}
+ html body .studio-shell.mobile-edit-workspace .mobile-edit-context{height:48px!important;min-height:48px!important;max-height:48px!important}
+ html body .studio-shell.mobile-edit-workspace .mobile-edit-context>.drawing-options{height:48px!important;max-height:48px!important}
+ html body .studio-shell.mobile-edit-workspace :is(.mobile-edit-done,.mobile-edit-delete){margin-block:2px!important}
 }
