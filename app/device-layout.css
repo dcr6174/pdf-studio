@@ -7,6 +7,10 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
 
 @media(max-width:1099px){
  :root{--studio-rail-space:0px}
+ /* Header owns this dock: no viewport offset can open a gap between the two. */
+ html body .studio-shell.document-shell .studio-header:has(>.mobile-toolbar-dock){overflow:visible!important}
+ html body .studio-shell.document-shell .studio-header>.mobile-toolbar-dock{position:absolute;top:100%;left:0;right:0;margin:0!important;padding:0!important;border:0;z-index:31}
+ html body .studio-shell.document-shell .mobile-toolbar-dock>.mobile-workspace-controls{display:flex!important;position:static!important;inset:auto!important;width:100%!important;max-width:none;margin:0!important;transform:none!important;border-radius:0!important}
  /* Modal settings must cover the sticky header rather than disappear beneath it. */
  html body [data-slot=dialog-overlay]{z-index:80}
  html body [data-slot=dialog-content]{z-index:81}
