@@ -59,7 +59,9 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
  html body .mobile-workspace-panel .compression-levels{display:none}
  /* Dedicated editor/reader chrome meets the same measured header edge. */
  html body .studio-shell.document-loaded.mobile-edit-workspace.edit-canvas-fit .mobile-edit-chrome{position:fixed!important;top:var(--studio-header-bottom,var(--studio-header-height));left:0;right:0;width:100%;margin:0!important;box-sizing:border-box}
- html body .studio-shell .mobile-edit-toolbar-spacer{flex:none;width:100%;pointer-events:none}
+ html body .studio-shell.mobile-edit-workspace{--studio-edit-toolbar-space:52px}
+ html body .studio-shell.mobile-edit-workspace:has(.mobile-edit-context){--studio-edit-toolbar-space:108px}
+ html body .studio-shell.document-shell.document-loaded.mobile-edit-workspace.edit-canvas-fit>.content{padding-top:var(--studio-edit-toolbar-space)!important}
  html body .studio-shell[data-tool=reader] .reader-mobile-attached{margin:0!important;padding:var(--studio-toolbar-height) 0 0!important;box-sizing:border-box}
  html body .reader-mobile-toolbar{position:fixed;top:var(--studio-header-bottom,var(--studio-header-height));left:0;right:0;height:var(--studio-toolbar-height);min-height:var(--studio-toolbar-height);margin:0;padding-block:5px;box-sizing:border-box}
  html body .reader-mobile-attached.reader-focus .reader-mobile-toolbar{top:0}
