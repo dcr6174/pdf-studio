@@ -4,7 +4,7 @@ import {compressDocument} from '../lib/compress-document';
 import type {Options} from '../lib/pdf-engine';
 import './compression-settings.css';
 import {describeChange} from '../lib/result-summary';
-const presets=[{value:'compact',name:'Keep quality',hint:'Lossless repacking. Original image quality.'},{value:'images',name:'Balanced',hint:'Smaller images. Text stays selectable.'},{value:'image-small',name:'Smaller file',hint:'Stronger image reduction. Check fine print.'}];
+import {compressionPresets as presets} from '@/lib/compression-presets';
 export function CompressionSettings({options,onChange,source,originalSize}:{source?:Uint8Array;originalSize?:number;options:Options;onChange:(update:(current:Options)=>Options)=>void}){
  const selected=presets.some(p=>p.value===options.quality)?options.quality:'images';
  const [estimate,setEstimate]=useState<{key:string;size:number;source:Uint8Array}|undefined>();
@@ -19,4 +19,5 @@ export function CompressionSettings({options,onChange,source,originalSize}:{sour
 
  </section>;
 }
+
 

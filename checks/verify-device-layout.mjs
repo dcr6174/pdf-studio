@@ -18,10 +18,29 @@ function active(rule,width,height=844){for(let p=rule.parent;p;p=p.parent){if(p.
 for(const width of [320,390,768,820,1024,1099,1100,1366,1920]){
  const toolbar=[];css.walkRules(r=>{if(r.selector==='html body .studio-shell.document-shell .mobile-workspace-controls'&&active(r,width))r.walkDecls(d=>toolbar.push([d.prop,d.value]));});
  assert.equal(toolbar.some(([p,v])=>p==='flex-direction'&&v==='row'),width<1100,'compact controls agree with workspace breakpoint at '+width);
- assert.equal(toolbar.some(([p,v])=>p==='top'&&v==='var(--studio-header-height)'),width<1100,'toolbar attaches below header');
+ assert.equal(toolbar.some(([p,v])=>p==='top'&&v==='var(--studio-header-bottom,var(--studio-header-height))'),width<1100,'toolbar attaches below header');
 }
 const header=await readFile('components/use-mobile-tool-header.ts','utf8');assert(header.includes("matchMedia('(max-width:1099px)')"));
 const app=await readFile('app/page.tsx','utf8');assert(app.includes("const mobileAction=view==='reader'?null:sidebarAction"),'Rotate retains the reachable shared export action');
 assert(app.includes("addAvailable={!newDocument&&view!=='edit'}"),'shared toolbar retains Add Files while edit owns its own Add');
 const layout=await readFile('app/layout.tsx','utf8');assert(layout.includes('<ResponsiveViewport/>'));assert(layout.includes('interactiveWidget:"resizes-content"'));assert(!layout.includes('userScalable:false'));
 console.log('PASS: 9 viewport geometries, browser-bar/keyboard separation, pinch-zoom stability, invalid measurement fallback, compact/desktop toolbar boundaries, Rotate export preservation and root viewport integration. CSS/math/source checks, not real-device browser geometry.');
+
+// Server-render and exercise the actual compact controls without invoking PDF engines.
+const {createElement}=await import('react');
+const {renderToStaticMarkup}=await import('react-dom/server');
+const presetsSource=ts.transpileModule(await readFile('lib/compression-presets.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;
+const presetsURL='data:text/javascript;base64,'+Buffer.from(presetsSource).toString('base64');
+const primarySource=ts.transpileModule(await readFile('components/mobile-tool-primary-controls.tsx','utf8'),{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022,jsx:ts.JsxEmit.ReactJSX}}).outputText.replace(/(["'])@\/lib\/compression-presets\1/g,JSON.stringify(presetsURL)).replace(/(["'])react\/jsx-runtime\1/g,JSON.stringify(import.meta.resolve('react/jsx-runtime')));
+const {MobileToolPrimaryControls}=await import('data:text/javascript;base64,'+Buffer.from(primarySource).toString('base64'));
+let selected='',range='';const common={tool:'compress',quality:'images',range:'',disabled:false,onQuality:value=>selected=value,onRange:value=>range=value};
+const html=renderToStaticMarkup(createElement(MobileToolPrimaryControls,common));
+assert(html.includes('aria-label="Compression level"'));assert.equal((html.match(/<option/g)||[]).length,3);
+for(const [value,name] of [['compact','Keep quality'],['images','Balanced'],['image-small','Smaller file']]){assert(html.includes('value="'+value+'"'));assert(html.includes(name));}
+for(const value of ['compact','images','image-small']){MobileToolPrimaryControls(common).props.onChange({target:{value}});assert.equal(selected,value);}
+assert(MobileToolPrimaryControls({...common,disabled:true}).props.disabled);
+MobileToolPrimaryControls({...common,tool:'split'}).props.onChange({target:{value:'1, 3-5'}});assert.equal(range,'1, 3-5');
+for(const tool of ['jpg','png','webp']){const control=MobileToolPrimaryControls({...common,tool,quality:'2'});assert.equal(control.props.value,'2');assert.equal(control.props.children.length,3);}
+assert.equal(MobileToolPrimaryControls({...common,tool:'reader'}),null,'Reader retains dedicated controls');
+const desktopPresets=await readFile('components/compression-settings.tsx','utf8');assert(desktopPresets.includes("compressionPresets as presets"),'desktop and mobile share exact engine values');
+console.log('PASS: actual compression selector renders three canonical options, selection callbacks/disabled state, page-range entry, image resolutions and dedicated-tool fallback. SSR/component checks, not phone gestures.');

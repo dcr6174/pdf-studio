@@ -69,6 +69,7 @@ import {FileFacts} from '@/components/file-facts';
 import {BookmarkEditor} from '@/components/bookmark-editor';
 import {TaskOptions} from '@/components/task-options';
 import {CompressionSettings} from '@/components/compression-settings';
+import {MobileToolPrimaryControls} from '@/components/mobile-tool-primary-controls';
 import {MobileEditToolbar} from '@/components/mobile-edit-toolbar';
 import {MobileContinuousPages} from '@/components/mobile-continuous-pages';
 import {DirectPdfShape} from '@/components/direct-pdf-shape';
@@ -518,7 +519,7 @@ function App({initialTool='home',initialHeading,initialOptions}:{initialTool?:st
     
     <fieldset disabled={busy||loading||switchingEditor} inert={busy||loading||switchingEditor?true:undefined} className="studio-controls" style={busy||loading||output&&resultOpen?{display:'none'}:undefined}>
 
-    {mobileControlsReady&&<MobileWorkspaceControls initialFocusId={formHandling?'form-handling-choice':undefined} key={view} addAvailable={!newDocument&&view!=='edit'} organize={view==='edit'?undefined:!newDocument&&pages.length>0?pageOrganizer:undefined} onSort={cardFiles?sortWorkspaceFiles:undefined} onClear={()=>setClearOpen(true)} files={files} pageCount={pages.length} addLabel={"Add files"} onAdd={()=>input.current?.click()} settings={mobileSettings} settingsAvailable={view!=='edit'&&(!newDocument||view==='create-form')} action={mobileAction} disabled={busy||loading||switchingEditor||textDirty}/>}
+    {mobileControlsReady&&<MobileWorkspaceControls primaryControls={['compress','split','jpg','png','webp'].includes(view)?<MobileToolPrimaryControls tool={view} quality={options.quality} range={options.range} disabled={busy||loading||switchingEditor||textDirty} onRange={value=>opt('range',value)} onQuality={quality=>setOptions(o=>({...o,quality,...(view==='compress'?{compressJPEG:undefined,compressMaxDimension:undefined}:{})}))}/>:undefined} initialFocusId={formHandling?'form-handling-choice':undefined} key={view} addAvailable={!newDocument&&view!=='edit'} organize={view==='edit'?undefined:!newDocument&&pages.length>0?pageOrganizer:undefined} onSort={cardFiles?sortWorkspaceFiles:undefined} onClear={()=>setClearOpen(true)} files={files} pageCount={pages.length} addLabel={"Add files"} onAdd={()=>input.current?.click()} settings={mobileSettings} settingsAvailable={view!=='edit'&&(!newDocument||view==='create-form')} action={mobileAction} disabled={busy||loading||switchingEditor||textDirty}/>}
     {view === 'home' ? <><MobileHomeExplorer onNavigate={navigate}/><MobileHomePolish/><div className="desktop-home-content">
         <HomeMotionHero toolCount={tools.length} onSearch={()=>searchAction.current()} searchStatus={searchStatus}/>
         <section className="home-popular" aria-labelledby="popular-tools-title"><div className="home-section-heading"><h2 id="popular-tools-title">Start with a favourite</h2><p>Five everyday tools. One simpler way to work.</p></div><Spotlight className="tool-grid popular-tool-row" item=".tool-card">{popularTools.map(homeToolCard)}</Spotlight><p className="home-existing-text-shortcut">Need to correct an existing sentence? <button className="link-button" onClick={()=>navigate('native-text')}>Edit existing text</button></p></section>
