@@ -6,11 +6,12 @@ import './mobile-workspace-controls.css';
 import {WorkspaceFloatingControls} from '@/components/workspace-floating-controls';
 
 type FileInfo={id:string;name:string;pages:number};
-export function MobileWorkspaceControls({files,pageCount,addLabel,onAdd,onSort,onClear,settings,settingsAvailable,action,disabled,organize,initialFocusId,addAvailable=true}:{files:FileInfo[];pageCount:number;addLabel:string;onAdd:()=>void;onSort?:(descending:boolean)=>void;onClear:()=>void;settings:ReactNode;settingsAvailable:boolean;action:ReactNode;disabled:boolean;organize?:ReactNode;initialFocusId?:string;addAvailable?:boolean}) {
+export function MobileWorkspaceControls({files,pageCount,addLabel,onAdd,onSort,onClear,settings,settingsAvailable,action,disabled,organize,initialFocusId,addAvailable=true,primaryControls}:{files:FileInfo[];pageCount:number;addLabel:string;onAdd:()=>void;onSort?:(descending:boolean)=>void;onClear:()=>void;settings:ReactNode;settingsAvailable:boolean;action:ReactNode;disabled:boolean;organize?:ReactNode;initialFocusId?:string;addAvailable?:boolean;primaryControls?:ReactNode}) {
  const [settingsOpen,setSettingsOpen]=useState(false);
  const [descending,setDescending]=useState(false);
  return <>
-  {(organize||settingsAvailable||addAvailable||onSort&&files.length>1)&&<nav className="mobile-workspace-controls" aria-label="Document controls">
+  {(primaryControls||organize||settingsAvailable||addAvailable||onSort&&files.length>1)&&<nav className="mobile-workspace-controls" aria-label="Document controls">
+   {primaryControls&&<div className="mobile-toolbar-primary">{primaryControls}</div>}
    {(settingsAvailable||organize)&&<button type="button" disabled={disabled} onClick={()=>setSettingsOpen(true)} aria-label="Settings" title="Settings" aria-expanded={settingsOpen}><Settings size={20} aria-hidden="true"/></button>}
    {addAvailable&&<button type="button" className="mobile-add-control" disabled={disabled} onClick={onAdd} aria-label={addLabel} title={addLabel}><Plus size={22} aria-hidden="true"/></button>}
    {onSort&&files.length>1&&<button type="button" disabled={disabled} onClick={()=>{onSort(descending);setDescending(value=>!value);}} aria-label={descending?'Sort files Z to A':'Sort files A to Z'} title={descending?'Sort Z–A':'Sort A–Z'}>{descending?<ArrowUpAZ size={20} aria-hidden="true"/>:<ArrowDownAZ size={20} aria-hidden="true"/>}</button>}
@@ -25,3 +26,4 @@ export function MobileWorkspaceControls({files,pageCount,addLabel,onAdd,onSort,o
   {action&&<div className="mobile-workspace-action">{action}</div>}
  </>;
 }
+

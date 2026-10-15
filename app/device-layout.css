@@ -13,26 +13,27 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
  html body [data-slot=dialog-close]{min-width:44px;min-height:44px;display:grid;place-items:center}
  /* One attached row replaces floating stacks and their empty canvas gutter. */
  html body .studio-shell.document-shell .mobile-workspace-controls{
-  display:flex;position:fixed;top:var(--studio-header-height);bottom:auto;
+  display:flex;position:fixed;top:var(--studio-header-bottom,var(--studio-header-height));bottom:auto;
   left:0;right:0;width:auto;height:var(--studio-toolbar-height);max-height:none;
-  flex-direction:row;align-items:center;justify-content:flex-end;gap:8px;
+  flex-direction:row;align-items:center;justify-content:flex-start;gap:8px;
   padding:6px max(12px,env(safe-area-inset-right)) 6px max(12px,env(safe-area-inset-left));
   border-bottom:1px solid var(--border);background:var(--card);box-sizing:border-box;
   overflow-x:auto;overflow-y:hidden;z-index:31;
  }
+ html body .studio-shell.document-shell .mobile-workspace-controls:not(:has(.mobile-toolbar-primary))>:first-child{margin-left:auto}
  html body .studio-shell.document-shell .mobile-workspace-controls button{width:44px;height:44px;min-width:44px;min-height:44px;box-shadow:none;border-radius:10px;flex:none}
  html body .studio-shell.document-shell .mobile-workspace-controls button[aria-label="Settings"]{order:1}
  html body .studio-shell.document-shell .mobile-workspace-controls button[aria-label^="Sort files"]{order:2}
  html body .studio-shell.document-shell .mobile-workspace-controls .mobile-add-control{order:3}
  html body .studio-shell.document-shell.mobile-controls-ready:not(.mobile-edit-workspace):not([data-tool=reader]):has(.mobile-workspace-controls)>.content{
   padding-inline:max(12px,env(safe-area-inset-left)) max(12px,env(safe-area-inset-right))!important;
-  padding-top:calc(var(--studio-toolbar-height) + 12px)!important;
+  padding-top:var(--studio-toolbar-height)!important;
  }
  html body .studio-shell[data-tool=merge].mobile-controls-ready .merge-list-heading{display:none!important}
  html body .studio-shell.document-loaded.mobile-controls-ready:not(.mobile-edit-workspace) :is(.workspace-add-row,.workspace-add-files){display:none!important}
  html body .studio-shell.document-shell.mobile-controls-ready>.content{padding-right:max(12px,env(safe-area-inset-right))!important}
  /* Rotation retains Undo/Redo below the shared toolbar, with one Add and export. */
- html body .studio-shell[data-tool=rotate].mobile-controls-ready .rotate-workspace-header{position:static;top:auto;margin-top:0}
+ html body .studio-shell[data-tool=rotate].mobile-controls-ready .rotate-workspace-header{position:sticky;top:calc(var(--studio-header-bottom,var(--studio-header-height)) + var(--studio-toolbar-height));margin-top:0}
  html body .studio-shell[data-tool=rotate].mobile-controls-ready .rotate-workspace-controls [aria-label="Add PDF files"],
  html body .studio-shell[data-tool=rotate].mobile-controls-ready .rotate-save-bar{display:none!important}
  /* Reader owns its own attached toolbar. Avoid a duplicate/empty shared row. */
@@ -51,6 +52,17 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
  html[data-studio-keyboard=open] body :is(.mobile-workspace-action,.iw-mobile-action){display:none!important}
  html[data-studio-keyboard=open] body .handwriting-tool-action .handwriting-export{position:static}
  html[data-studio-keyboard=open] body [data-slot=dialog-content]:not([data-fullscreen=true]){top:calc(var(--studio-viewport-top) + var(--studio-viewport-height)/2)!important;max-height:calc(var(--studio-viewport-height) - 24px)!important;overflow-y:auto}
+ /* Primary choices are visible without opening settings. */
+ html body .studio-shell.document-shell .mobile-toolbar-primary{order:0;flex:1 0 120px;min-width:120px;max-width:230px;margin-right:auto}
+ html body .studio-shell.document-shell :is(.mobile-toolbar-choice,.mobile-toolbar-range){display:block;width:100%;min-width:0;height:44px;min-height:44px;box-sizing:border-box;border:1px solid var(--border);border-radius:9px;background:var(--background);color:var(--foreground);font:inherit;font-size:16px;padding:8px}
+ html body .studio-shell.document-shell :is(.mobile-toolbar-choice,.mobile-toolbar-range):focus-visible{outline:2px solid var(--primary);outline-offset:2px}
+ html body .mobile-workspace-panel .compression-levels{display:none}
+ /* Dedicated editor/reader chrome meets the same measured header edge. */
+ html body .studio-shell.document-loaded.mobile-edit-workspace.edit-canvas-fit .mobile-edit-chrome{position:fixed!important;top:var(--studio-header-bottom,var(--studio-header-height));left:0;right:0;width:100%;margin:0!important;box-sizing:border-box}
+ html body .studio-shell .mobile-edit-toolbar-spacer{flex:none;width:100%;pointer-events:none}
+ html body .studio-shell[data-tool=reader] .reader-mobile-attached{margin:0!important;padding:var(--studio-toolbar-height) 0 0!important;box-sizing:border-box}
+ html body .reader-mobile-toolbar{position:fixed;top:var(--studio-header-bottom,var(--studio-header-height));left:0;right:0;height:var(--studio-toolbar-height);min-height:var(--studio-toolbar-height);margin:0;padding-block:5px;box-sizing:border-box}
+ html body .reader-mobile-attached.reader-focus .reader-mobile-toolbar{top:0}
  /* Settings remain scrollable on short landscape screens and above keyboards. */
  html body :is(.mobile-workspace-panel,.reader-mobile-sheet)[data-slot=dialog-content]{
   top:calc(var(--studio-viewport-top) + var(--studio-viewport-height)/2)!important;

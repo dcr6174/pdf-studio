@@ -16,12 +16,15 @@ export function ResponsiveViewport(){
    root.style.setProperty('--studio-viewport-height',state.height+'px');
    root.style.setProperty('--studio-viewport-top',state.top+'px');
    root.dataset.studioKeyboard=state.keyboard?'open':'closed';
+   const header=document.querySelector<HTMLElement>('.studio-header.studio-shared');
+   if(header)root.style.setProperty('--studio-header-bottom',Math.max(0,header.getBoundingClientRect().bottom)+'px');
   };
   const schedule=()=>{if(!frame)frame=requestAnimationFrame(update);};
-  update();window.addEventListener('resize',schedule);window.addEventListener('orientationchange',schedule);
+  const header=document.querySelector('.studio-header.studio-shared'),observer=new ResizeObserver(schedule);if(header)observer.observe(header);
+  update();window.addEventListener('scroll',schedule,{passive:true});window.addEventListener('resize',schedule);window.addEventListener('orientationchange',schedule);
   viewport?.addEventListener('resize',schedule);viewport?.addEventListener('scroll',schedule);
   document.addEventListener('focusin',schedule);document.addEventListener('focusout',schedule);
-  return()=>{cancelAnimationFrame(frame);window.removeEventListener('resize',schedule);window.removeEventListener('orientationchange',schedule);viewport?.removeEventListener('resize',schedule);viewport?.removeEventListener('scroll',schedule);document.removeEventListener('focusin',schedule);document.removeEventListener('focusout',schedule);root.style.removeProperty('--studio-viewport-height');root.style.removeProperty('--studio-viewport-top');delete root.dataset.studioKeyboard;};
+  return()=>{cancelAnimationFrame(frame);observer.disconnect();window.removeEventListener('scroll',schedule);root.style.removeProperty('--studio-header-bottom');window.removeEventListener('resize',schedule);window.removeEventListener('orientationchange',schedule);viewport?.removeEventListener('resize',schedule);viewport?.removeEventListener('scroll',schedule);document.removeEventListener('focusin',schedule);document.removeEventListener('focusout',schedule);root.style.removeProperty('--studio-viewport-height');root.style.removeProperty('--studio-viewport-top');delete root.dataset.studioKeyboard;};
  },[]);
  return null;
 }
