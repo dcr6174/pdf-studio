@@ -57,3 +57,15 @@ for(const width of [320,390,768,1099]){
 }
 assert(dockRules.every(rule=>!active(rule,1366)),'desktop toolbar behavior unchanged');
 console.log('PASS: shared toolbar mounts into its own header and resets floating offsets/margins; desktop unaffected. Structural/CSS checks, not physical-phone geometry.');
+
+// Regression: legacy inset:0 + height:100dvh stretched the signature popup.
+const signatureSelector='html body .signature-dialog.signature-dialog-small[data-slot=dialog-content]';
+for(const [width,height] of [[320,568],[390,844],[390,390],[844,390],[1099,768]]){
+ const rules=[];css.walkRules(rule=>{if(rule.selector===signatureSelector&&active(rule,width,height))rules.push(rule);});
+ assert.equal(rules.length,1,'one compact signature geometry rule');
+ const values=new Map(rules[0].nodes.filter(node=>node.type==='decl').map(d=>[d.prop,[d.value,d.important]]));
+ for(const [prop,value] of [['inset','auto'],['height','auto'],['min-height','0'],['bottom','auto'],['transform','translateX(-50%)'],['max-height','calc(var(--studio-viewport-height) - 16px)']])assert.deepEqual(values.get(prop),[value,true],'reset legacy signature '+prop);
+ assert.equal(values.get('top')[0],'calc(var(--studio-viewport-top) + 8px)','keyboard viewport owns top edge');
+}
+css.walkRules(rule=>{if(rule.selector===signatureSelector)assert(!active(rule,1366),'desktop signature layout unchanged');});
+console.log('PASS: signature popup clears full-screen insets and height, uses visible keyboard viewport, and leaves desktop unchanged. CSS/source checks; real keyboard layout remains a device check.');

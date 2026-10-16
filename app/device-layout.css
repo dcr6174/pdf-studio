@@ -140,3 +140,25 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
  html body .studio-shell.sign-workspace.document-loaded .mobile-continuous-pages{height:auto!important;max-height:none!important;min-height:0!important;flex:1;padding:8px 10px calc(var(--studio-action-space,88px) + 12px)!important;overflow:auto!important;touch-action:pan-x pan-y}
  html body .studio-shell.sign-workspace .sign-mobile-placement-hint{top:8px}
 }
+
+/* Signature dialogs must not inherit the legacy full-screen inset/height pair. */
+@media(max-width:1099px){
+ html body .signature-dialog.signature-dialog-small[data-slot=dialog-content]{
+  inset:auto!important;top:calc(var(--studio-viewport-top) + 8px)!important;
+  left:50%!important;right:auto!important;bottom:auto!important;
+  transform:translateX(-50%)!important;translate:none!important;margin:0!important;
+  width:min(420px,calc(100% - 24px))!important;max-width:calc(100% - 24px)!important;
+  height:auto!important;min-height:0!important;max-height:calc(var(--studio-viewport-height) - 16px)!important;
+  display:flex!important;flex-direction:column;gap:8px;padding:16px!important;
+  border-radius:16px!important;box-sizing:border-box;overflow:hidden!important;
+ }
+ html body .signature-dialog.signature-dialog-small>[data-slot=dialog-title],
+ html body .signature-dialog.signature-dialog-small>[data-slot=dialog-description]{flex:none;margin:0;padding-right:36px}
+ html body .signature-dialog.signature-dialog-small>.signature-picker{flex:0 1 auto;min-height:0;max-height:none;overflow:hidden;gap:8px}
+ html body .signature-dialog.signature-dialog-small .signature-picker-scroll{flex:1 1 auto;min-height:0;overflow-y:auto;overscroll-behavior:contain;scroll-padding-block:12px;padding:0 2px}
+ html body .signature-dialog.signature-dialog-small .signature-picker-footer{flex:0 0 auto;display:flex;flex-wrap:wrap;gap:8px;padding:8px 0 0;margin:0;background:var(--card)}
+ html body .signature-dialog.signature-dialog-small .signature-picker-footer button{min-height:44px;min-width:0;flex:1 1 80px}
+ html body .signature-dialog.signature-dialog-small input:not([type=color]),
+ html body .signature-dialog.signature-dialog-small select{font-size:16px}
+ html body .signature-dialog.signature-dialog-small .signature-tabs{top:0;margin:0}
+}
