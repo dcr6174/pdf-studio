@@ -107,3 +107,36 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
  html body .studio-shell.mobile-edit-workspace .mobile-edit-context>.drawing-options{height:48px!important;max-height:48px!important}
  html body .studio-shell.mobile-edit-workspace :is(.mobile-edit-done,.mobile-edit-delete){margin-block:2px!important}
 }
+
+/* Mobile Sign: one header-owned signature control and one compact document row. */
+@media(max-width:1099px){
+ html body .studio-shell.sign-workspace.document-loaded.edit-canvas-fit{height:var(--studio-viewport-height)!important;min-height:0!important;overflow:hidden}
+ html body .studio-shell.sign-workspace.document-loaded.edit-canvas-fit>.content{margin:0!important;padding:var(--studio-toolbar-height) 0 0!important;min-height:0!important;flex:1;overflow:hidden}
+ html body .studio-shell.sign-workspace.document-loaded :is(.studio-workspace-content,.studio-controls,.task-workspace,.task-canvas,.editor-layout,.editor-main){margin:0!important;padding:0!important;gap:0!important;min-height:0!important;min-width:0;max-width:100%;border-radius:0!important}
+ html body .studio-shell.sign-workspace.document-loaded .sign-workspace-toolbar{position:static!important;top:auto!important;display:flex;flex-wrap:nowrap;flex:none;height:56px;min-height:56px;margin:0!important;padding:5px 8px!important;gap:8px;overflow-x:auto;overflow-y:hidden;touch-action:pan-x;background:var(--card)}
+ html body .studio-shell.sign-workspace .sign-workspace-toolbar .sign-toolbar-pages{flex:none;padding:0!important;gap:4px!important;border:0;box-shadow:none;background:transparent}
+ html body .studio-shell.sign-workspace .sign-pagination-arrows{gap:2px}
+ html body .studio-shell.sign-workspace .sign-workspace-toolbar button{width:44px;min-width:44px;height:44px;min-height:44px;padding:0}
+ html body .studio-shell.sign-workspace .sign-pagination-number{gap:4px}
+ html body .studio-shell.sign-workspace .sign-pagination-number input{width:42px!important;min-width:42px;height:44px!important;min-height:44px!important;font-size:16px}
+ html body .studio-shell.sign-workspace .sign-document-select{flex:1 0 120px;min-width:120px;margin:0}
+ html body .studio-shell.sign-workspace .sign-document-select select{height:44px;font-size:16px}
+ html body .studio-shell.sign-workspace .sign-toolbar-actions{flex:none;width:auto;margin:0;padding:0;border:0;background:transparent}
+ html body .studio-shell.sign-workspace .sign-toolbar-field{flex:1 1 120px;max-width:260px;min-width:120px;margin:0 auto 0 0}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-mobile-tray{display:block;margin:0;padding:0}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-reference-card{height:44px;min-height:44px;border:0;background:var(--soft);border-radius:8px;box-shadow:none}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-drag-field{width:auto;min-width:0;flex:1 1 auto;height:44px;min-height:44px!important;padding:0 8px!important;gap:6px;margin:0!important}
+ html body .studio-shell.sign-workspace .sign-toolbar-field :is(.sign-field-grip,.sign-field-label){display:none}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-field-icon{height:30px;width:26px;background:transparent;color:var(--primary)}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-field-icon svg{stroke:var(--primary)!important}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-field-preview{display:flex!important;border:0;padding:0;gap:0}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-asset-preview{min-height:0;height:36px;width:100%}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-empty-preview{font-size:12px;white-space:nowrap}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-asset-preview img{height:32px}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-field-actions:empty{display:none}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-field-actions{width:auto;flex-direction:row;padding:0;border:0}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-card-edit{width:44px;height:44px;min-width:44px;min-height:44px}
+ html body .studio-shell.sign-workspace .sign-toolbar-field .sign-field-count{display:none}
+ html body .studio-shell.sign-workspace.document-loaded .mobile-continuous-pages{height:auto!important;max-height:none!important;min-height:0!important;flex:1;padding:8px 10px calc(var(--studio-action-space,88px) + 12px)!important;overflow:auto!important;touch-action:pan-x pan-y}
+ html body .studio-shell.sign-workspace .sign-mobile-placement-hint{top:8px}
+}
