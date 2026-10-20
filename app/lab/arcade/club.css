@@ -1,0 +1,154 @@
+/* Arcade-only styles. The sixty-game layout never changes document workspaces. */
+.arcade-shell .game-emblem{display:block;width:100%;height:100%;max-height:190px;filter:drop-shadow(0 10px 16px #0003)}
+.arcade-shell .game-emblem.is-compact{width:80px;height:80px;flex-shrink:0}
+.arcade-shell .club-main{width:100%;max-width:none;padding:24px clamp(16px,3vw,64px) calc(40px + env(safe-area-inset-bottom));margin:0 auto}
+.arcade-shell .club-heading{display:flex;gap:24px;align-items:center;margin:24px 0 32px}
+.arcade-shell .club-heading h1{font-size:clamp(30px,3vw,52px);line-height:1.12;letter-spacing:-.04em;margin:8px 0 12px}
+.arcade-shell .club-heading p{color:#c7bdd8;line-height:1.7;margin:0;max-width:70ch}
+.arcade-shell .club-layout{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,320px);gap:clamp(24px,3vw,56px);align-items:start}
+.arcade-shell .club-playfield{position:relative;min-width:0;background:#201c31;border:1px solid #ffffff25;border-radius:24px;padding:clamp(16px,2.3vw,36px);overflow:hidden}
+.arcade-shell .club-stats{display:flex;flex-wrap:wrap;gap:16px 36px;border-bottom:1px solid #ffffff20;padding-bottom:20px;margin-bottom:24px}
+.arcade-shell .club-stats span{display:grid;gap:6px;color:#beb5ce;font-size:12px}
+.arcade-shell .club-stats b{color:#f3ebff;font-size:clamp(18px,2vw,26px);font-variant-numeric:tabular-nums}
+.arcade-shell .club-play-inner{display:flex;flex-direction:column;align-items:center;gap:24px;min-height:450px}
+.arcade-shell .club-play-inner[inert]{max-height:480px;overflow:hidden;visibility:hidden}
+.arcade-shell .club-play-inner p{line-height:1.7;margin:0}
+.arcade-shell .club-row{display:flex;gap:12px;flex-wrap:wrap;justify-content:center}
+.arcade-shell .club-primary{background:#c6adff;color:#241632;border-color:#c6adff;min-height:48px;padding:12px 24px}
+.arcade-shell .club-primary:hover:not(:disabled){background:#e0cfff}
+.arcade-shell .club-message{margin:24px 0 0;min-height:44px;line-height:1.65;color:#d8cee8}
+.arcade-shell .club-curtain{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;justify-content:center;gap:24px;background:#201c31;padding:clamp(24px,4vw,60px);text-align:center;z-index:3}
+.arcade-shell .club-curtain h2{margin:0;font-size:clamp(24px,3vw,38px)}
+.arcade-shell .club-curtain p{max-width:60ch;line-height:1.8;margin:0;color:#d1c6e1}
+.arcade-shell .club-finish{display:flex;flex-wrap:wrap;gap:20px;align-items:center;padding:28px;background:#382d50;border-radius:18px;margin-top:20px}
+.arcade-shell .club-finish h2,.arcade-shell .club-finish p{width:100%;margin:0;line-height:1.7}
+.arcade-shell .club-sidebar{display:grid;gap:24px;position:sticky;top:24px}
+.arcade-shell .club-controls,.arcade-shell .club-help{background:#211d34;border:1px solid #ffffff25;padding:20px;border-radius:18px}
+.arcade-shell .club-controls{display:flex;gap:12px;flex-wrap:wrap}
+.arcade-shell .club-controls h2{font-size:17px;margin:0 0 8px;width:100%}
+.arcade-shell .club-controls label{display:grid;gap:10px;font-size:13px;color:#cfc4e2;width:100%;margin-top:12px}
+.arcade-shell .club-controls select{background:#302640;color:#f3edff;border:1px solid #ffffff38;padding:12px;border-radius:10px;min-height:44px;width:100%}
+.arcade-shell .club-help summary{font-weight:700;cursor:pointer;min-height:32px}
+.arcade-shell .club-help p{font-size:14px;line-height:1.8;color:#c9bddb;margin:20px 0 0}
+.arcade-shell .club-browse-link{padding:16px 0;color:#d4c2f6}
+.arcade-shell .club-board{display:grid;grid-template-columns:repeat(var(--club-cols),minmax(0,1fr));width:min(100%,min(74vh,820px));gap:3px;padding:8px;background:#372c4b;border-radius:12px;position:relative}
+.arcade-shell .club-board button{min-width:0;min-height:0;aspect-ratio:1;padding:0;border-radius:5px;border:0;position:relative;font-size:clamp(18px,3vw,45px);display:grid;place-items:center;color:#fbf5ff}
+.arcade-shell .club-board .light-square{background:#c6bad2;color:#29203a}
+.arcade-shell .club-board .dark-square{background:#766089;color:#fff0e9}
+.arcade-shell .club-board button:disabled{opacity:1}
+.arcade-shell .club-board button[data-piece='1']{color:#fff8e7;text-shadow:0 1px 2px #34263e,0 0 1px #34263e}
+.arcade-shell .club-board button[data-piece='-1']{color:#21182d;text-shadow:0 1px 1px #fff7}
+.arcade-shell .club-board button[data-picked=true]{outline:4px solid #ffd682;outline-offset:-4px}
+.arcade-shell .club-board button[data-legal=true]{box-shadow:inset 0 0 0 3px #d8ffc5}
+.arcade-shell .club-board button[data-void=true]{visibility:hidden}
+.arcade-shell .club-legal-dot{width:16%;height:16%;background:#5ce99c;border-radius:50%}
+.arcade-shell .kind-chess button{font-family:Georgia,serif;font-size:clamp(22px,4vw,62px)}
+.arcade-shell .kind-checkers button{font-size:clamp(24px,4vw,50px)}
+.arcade-shell .kind-connect{width:min(100%,900px);background:#446d99;border-radius:22px;gap:10px;padding:18px}
+.arcade-shell .kind-connect button{border-radius:50%;background:#1b2d48;color:#ffe099;font-size:clamp(24px,5vw,64px)}
+.arcade-shell .kind-connect button[data-piece='-1']{color:#f49e9e}
+.arcade-shell .club-drop-row{display:grid;grid-template-columns:repeat(7,1fr);gap:6px;width:min(100%,900px);padding:0 18px}
+.arcade-shell .club-drop-row button{padding:8px 2px}
+.arcade-shell .kind-reversi button{background:#437a65;color:#fff3dc;border-radius:2px;font-size:clamp(24px,4vw,58px)}
+.arcade-shell .kind-pegs{width:min(100%,720px);background:#3c513e;gap:8px;padding:20px}
+.arcade-shell .kind-pegs button{border-radius:50%;background:#243b31;color:#e3c787;font-size:clamp(22px,4vw,55px)}
+.arcade-shell .kind-nonogram{width:min(90%,600px);margin-left:30px;background:#4b3c67;gap:3px}
+.arcade-shell .kind-nonogram button{background:#d7cde2;color:#392752!important;font-size:clamp(22px,4vw,60px);text-shadow:none!important}
+.arcade-shell .club-col-clues{display:grid;grid-template-columns:repeat(5,1fr);width:min(90%,600px);margin-left:30px;text-align:center;color:#e8dbff}
+.arcade-shell .club-row-clue{position:absolute;right:calc(100% + 14px);font-size:13px;color:#e8dbff;white-space:nowrap}
+.arcade-shell .kind-mines button{background:#8776a3;border:2px outset #b8a4d1;font-size:clamp(18px,2.5vw,29px)}
+.arcade-shell .kind-mines button[data-mark='1']{background:#3c3352;border:1px solid #76638a;color:#f5e6ba;text-shadow:none}
+.arcade-shell .kind-sokoban{background:#343145;width:min(100%,720px)}
+.arcade-shell .kind-sokoban button{background:#65557a;color:#ffe3a1;text-shadow:none;border-radius:3px}
+.arcade-shell .kind-sokoban button[data-wall=true]{background:#282237;box-shadow:inset 0 0 0 3px #44334f}
+.arcade-shell .kind-sokoban button[data-goal=true]{background:#598672;box-shadow:inset 0 0 0 3px #9dd9af}
+.arcade-shell .club-direction{display:grid;grid-template-columns:repeat(4,52px);gap:10px;justify-content:center}
+.arcade-shell .club-sport{display:block;width:100%;max-height:calc(100dvh - 220px);min-height:270px;border-radius:20px;touch-action:none;user-select:none}
+.arcade-shell .club-sport-controls{display:flex;gap:20px;flex-wrap:wrap;align-items:center;justify-content:center;width:100%}
+.arcade-shell .club-sport-controls label{display:flex;gap:12px;align-items:center;flex:1 1 240px;color:#e0d4ed;font-size:13px;min-width:0}
+.arcade-shell .club-sport-controls input{min-width:60px;flex:1;accent-color:#c5a8ff;min-height:44px}
+.arcade-shell .club-sport-controls output{min-width:38px;font-variant-numeric:tabular-nums}
+.arcade-shell .club-dots{position:relative;width:min(90%,650px);aspect-ratio:1;margin:20px}
+.arcade-shell .club-dots i{position:absolute;width:13px;height:13px;background:#e7dcfb;border-radius:50%;transform:translate(-50%,-50%);pointer-events:none;z-index:2}
+.arcade-shell .club-edge{position:absolute;transform:translate(-50%,-50%);padding:0;border:0;background:#66567d;border-radius:6px;z-index:1}
+.arcade-shell .club-edge.horizontal{width:25%;height:44px;min-height:44px;transform:translate(0,-50%)}
+.arcade-shell .club-edge.vertical{height:25%;width:44px;min-height:0;transform:translate(-50%,0)}
+.arcade-shell .club-edge:before{content:'';position:absolute;background:#bba3dc;inset:19px 4px;border-radius:5px}
+.arcade-shell .club-edge.vertical:before{inset:4px 19px}
+.arcade-shell .club-edge.claimed:before{background:#f6e9ff}
+.arcade-shell .club-claimed{position:absolute;width:25%;height:25%;display:grid;place-items:center;border:16px solid #201c31;font-size:32px}
+.arcade-shell .club-oceans{display:grid;grid-template-columns:1fr 1fr;gap:24px;width:100%}
+.arcade-shell .club-oceans section{min-width:0}
+.arcade-shell .club-oceans h3{margin:0 0 16px;font-size:16px}
+.arcade-shell .club-oceans .club-board{width:100%;gap:2px;background:#33445c;padding:5px}
+.arcade-shell .club-board .club-sea{background:#375a78;color:#e0f0ff;text-shadow:none;font-size:clamp(15px,2.5vw,27px)}
+.arcade-shell .club-board .club-sea.ship{background:#718b9b}
+.arcade-shell .club-board .club-sea.hit{background:#b26678}
+.arcade-shell .club-board .club-sea.miss{background:#223c57;color:#abcce2}
+.arcade-shell .club-race{width:min(100%,780px);max-height:75vh;display:block}
+.arcade-shell .club-race-tokens{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:12px;width:100%}
+.arcade-shell .club-race-tokens button{display:grid;gap:8px;padding:12px 6px}
+.arcade-shell .club-race-tokens small{font-weight:400;font-size:11px}
+.arcade-shell .club-mancala{display:flex;width:100%;align-items:stretch;gap:20px;background:#6d4c42;padding:24px;border-radius:48px}
+.arcade-shell .club-pits{display:grid;grid-template-columns:repeat(6,minmax(0,1fr));gap:12px;flex:1;min-width:0}
+.arcade-shell .club-pits button{aspect-ratio:1;min-height:44px;padding:8px;border-radius:50%;display:grid;gap:4px;background:#4b3637}
+.arcade-shell .club-pits button span{font-size:12px;letter-spacing:1px;color:#e8c78d;line-height:1.2;overflow-wrap:anywhere}
+.arcade-shell .club-store{border-radius:50%;padding:18px 12px;background:#3e3036;font-size:12px;text-align:center;display:grid;place-content:center;gap:12px}
+.arcade-shell .club-store b{font-size:28px;color:#ffe2a8}
+.arcade-shell .club-domino{display:inline-grid;grid-template-columns:1fr 1fr;background:#f2e8d3;color:#34273e;border-radius:5px;min-width:62px;min-height:38px;border:2px solid #ccbbad;align-items:center;font-size:19px;text-shadow:none}
+.arcade-shell .club-domino b{display:grid;place-content:center;padding:6px}
+.arcade-shell .club-domino b+b{border-left:1px solid #806877}
+.arcade-shell .club-domino-line,.arcade-shell .club-domino-hand{display:flex;flex-wrap:wrap;gap:10px;justify-content:center;width:100%}
+.arcade-shell .club-domino-hand button{padding:5px}
+.arcade-shell .club-domino-hand .picked{outline:3px solid #ffe099}
+.arcade-shell .club-dice{display:flex;gap:12px;justify-content:center;flex-wrap:wrap}
+.arcade-shell .club-dice button{font-size:clamp(30px,5vw,64px);padding:4px 12px;background:#f1e8d7;color:#34243e}
+.arcade-shell .club-dice small{display:block;font-size:12px;margin-top:4px}
+.arcade-shell .club-dice button[aria-pressed=true]{background:#bda0ef;outline:3px solid #ffe099}
+.arcade-shell .club-scorecard{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));gap:10px;width:100%}
+.arcade-shell .club-scorecard button{display:flex;justify-content:space-between;gap:20px;text-align:left}
+.arcade-shell .club-scorecard button:disabled{opacity:.75}
+.arcade-shell .club-snakes{display:grid;grid-template-columns:repeat(10,1fr);width:min(100%,760px);background:#604678;padding:8px;border-radius:15px;gap:3px}
+.arcade-shell .club-snakes>div{aspect-ratio:1;background:#aa91b5;color:#30233e;position:relative;display:flex;align-items:center;justify-content:center}
+.arcade-shell .club-snakes>div.alt{background:#d5c3a9}
+.arcade-shell .club-snakes small{position:absolute;left:3px;top:2px;font-size:10px}
+.arcade-shell .club-snakes b{font-size:25px;text-shadow:0 1px 2px #241631}
+.arcade-shell .club-simon{display:grid;grid-template-columns:repeat(2,minmax(0,1fr));width:min(100%,640px);gap:20px}
+.arcade-shell .club-simon button{aspect-ratio:1;background:color-mix(in srgb,var(--pad-color) 45%,#251c39);font-size:28px;min-height:70px;display:flex;align-items:center;justify-content:center;gap:10px}
+.arcade-shell .club-simon .lit{background:var(--pad-color);box-shadow:0 0 35px color-mix(in srgb,var(--pad-color) 45%,transparent);color:#35243d}
+.arcade-shell .club-burrows{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:22px;width:min(100%,780px)}
+.arcade-shell .club-burrows button{aspect-ratio:1;background:#3b4d3e;border:0;display:grid;place-content:center;min-height:64px;border-radius:50%}
+.arcade-shell .club-burrows span{width:clamp(42px,6vw,90px);height:clamp(48px,7vw,100px);display:grid;place-content:center;border-radius:20px;font-size:38px;background:#b194e8;color:#342442}
+.arcade-shell .club-burrows .decoy{background:#d47d89;color:#321d2f}
+.arcade-shell .club-burrows .empty{visibility:hidden}
+@media(min-width:1000px){
+ .arcade-shell .arcade-main,.arcade-shell .arcade-game-main,.arcade-shell .puzzle-main{max-width:none;width:100%;padding-left:clamp(24px,3vw,72px);padding-right:clamp(24px,3vw,72px)}
+ .arcade-shell .arcade-grid{grid-template-columns:repeat(auto-fit,minmax(260px,1fr));gap:24px}
+ .arcade-shell .arcade-hero{grid-template-columns:1.6fr 1fr;gap:60px}
+ .arcade-shell .arcade-hero-art{justify-self:center}
+ .arcade-shell .arcade-game-layout{grid-template-columns:minmax(0,1fr) minmax(260px,320px);justify-content:stretch;gap:36px}
+ .arcade-shell .arcade-play-area{max-width:none;width:100%}
+ .arcade-shell .arcade-stage{width:min(100%,min(68vh,760px));max-width:none}
+ .arcade-shell .arcade-stage:has(.arcade-board){width:min(100%,min(75vh,900px))}
+ .arcade-shell .puzzle-workspace{padding:32px}
+ .arcade-shell .puzzle-play-area{display:grid;grid-template-columns:minmax(0,1fr) minmax(260px,380px);align-items:start;justify-items:center;column-gap:48px;row-gap:28px}
+ .arcade-shell .puzzle-play-area>.puzzle-grid{grid-column:1;grid-row:1 / span 5;width:min(100%,min(75vh,980px))}
+ .arcade-shell .puzzle-play-area>.puzzle-crossword{grid-row:2 / span 5}
+ .arcade-shell .puzzle-play-area>.puzzle-clue-tabs{grid-column:1 / -1;grid-row:1}
+ .arcade-shell .puzzle-play-area>.puzzle-targets,.arcade-shell .puzzle-play-area>.puzzle-keypad,.arcade-shell .puzzle-play-area>.puzzle-shapes,.arcade-shell .puzzle-play-area>.puzzle-tray,.arcade-shell .puzzle-play-area>.puzzle-piece-tray,.arcade-shell .puzzle-play-area>.puzzle-submit{grid-column:2;width:100%;max-width:none}
+ .arcade-shell .puzzle-play-area>.puzzle-letter-rack,.arcade-shell .puzzle-play-area>.puzzle-word-groups,.arcade-shell .puzzle-play-area>.puzzle-card-columns,.arcade-shell .puzzle-play-area>.puzzle-foundations,.arcade-shell .puzzle-play-area>.puzzle-quote{grid-column:1;max-width:none}
+ .arcade-shell .puzzle-play-area>.puzzle-goal{grid-column:1 / -1;width:100%}
+ .arcade-shell .puzzle-picture{max-height:none}
+}
+@media(max-width:900px){.arcade-shell .club-layout{grid-template-columns:1fr;gap:20px}.arcade-shell .club-sidebar{position:static;grid-template-columns:1fr 1fr}.arcade-shell .club-browse-link{grid-column:1 / -1}.arcade-shell .club-sport{max-height:none}.arcade-shell .club-board{width:min(100%,700px)}.arcade-shell .club-main{padding:16px}.arcade-shell .club-heading{margin:20px 0}.arcade-shell .club-controls h2{width:100%}}
+@media(max-width:600px){.arcade-shell .club-main{padding:12px max(12px,env(safe-area-inset-left)) calc(28px + env(safe-area-inset-bottom))}.arcade-shell .club-heading{gap:14px;margin:16px 0 24px;align-items:flex-start}.arcade-shell .club-heading .game-emblem{width:55px;height:55px}.arcade-shell .club-heading h1{font-size:29px}.arcade-shell .club-heading p{font-size:13px}.arcade-shell .club-playfield{padding:14px;border-radius:18px}.arcade-shell .club-stats{gap:14px 20px;margin-bottom:18px;padding-bottom:14px}.arcade-shell .club-stats b{font-size:18px}.arcade-shell .club-play-inner{min-height:300px;gap:20px}.arcade-shell .club-play-inner[inert]{max-height:400px}.arcade-shell .club-curtain{padding:24px;gap:18px}.arcade-shell .club-curtain p{font-size:13px;line-height:1.7}.arcade-shell .club-curtain .game-emblem{width:60px;height:60px}.arcade-shell .club-sidebar{display:flex;flex-direction:column;gap:18px}.arcade-shell .club-controls{padding:16px;gap:10px}.arcade-shell .club-controls h2{display:none}.arcade-shell .club-controls label{margin-top:6px}.arcade-shell .club-sport{min-height:0;border-radius:12px}.arcade-shell .club-sport-controls{gap:12px}.arcade-shell .club-sport-controls label{flex-basis:100%;font-size:12px}.arcade-shell .club-oceans{grid-template-columns:1fr;gap:20px}.arcade-shell .club-oceans section+section .club-board{max-width:280px}.arcade-shell .club-oceans h3{font-size:14px;margin:0 0 10px}.arcade-shell .club-board{gap:2px;padding:5px}.arcade-shell .club-race-tokens{gap:6px}.arcade-shell .club-race-tokens button{font-size:12px;padding:10px 4px}.arcade-shell .club-mancala{padding:12px;gap:8px;border-radius:22px}.arcade-shell .club-pits{gap:5px;grid-template-columns:repeat(3,minmax(0,1fr))}.arcade-shell .club-pits button{padding:5px;min-width:42px;min-height:48px}.arcade-shell .club-store{padding:10px 7px;font-size:10px}.arcade-shell .club-pits button span{font-size:9px}.arcade-shell .club-store b{font-size:23px}.arcade-shell .club-snakes small{font-size:8px}.arcade-shell .club-snakes b{font-size:18px}.arcade-shell .club-burrows{gap:12px}.arcade-shell .club-dice{gap:8px}.arcade-shell .club-dice button{padding:5px 8px;font-size:35px}.arcade-shell .club-scorecard{grid-template-columns:1fr}.arcade-shell .club-row-clue{right:calc(100% + 9px);font-size:11px}.arcade-shell .club-col-clues{font-size:12px}.arcade-shell .kind-connect{padding:10px;gap:7px}.arcade-shell .club-drop-row{padding:0 10px;gap:4px}.arcade-shell .club-drop-row button{min-width:0;min-height:44px}.arcade-shell .club-message{font-size:13px}.arcade-shell .club-simon{gap:12px}.arcade-shell .club-dots{margin:20px;width:85%}.arcade-shell .club-claimed{border-width:13px}.arcade-shell .club-board button[data-picked=true]{outline-width:3px;outline-offset:-3px}}
+@media(prefers-reduced-motion:reduce){.arcade-shell .club-simon .lit{background:#3b2d4b;box-shadow:none;outline:4px solid #ffe8a5;color:#fff3d7}.arcade-shell .game-emblem{filter:none}}
+
+.arcade-shell .arcade-title{display:flex;gap:20px;align-items:center}
+.arcade-shell .puzzle-heading{position:relative;padding-right:110px}
+.arcade-shell .puzzle-heading-icon{position:absolute;right:0;top:0}
+@media(max-width:600px){.arcade-shell .arcade-title{gap:14px}.arcade-shell .arcade-title .game-emblem{width:52px;height:52px}.arcade-shell .puzzle-heading{padding-right:72px}.arcade-shell .puzzle-heading-icon .game-emblem{width:55px;height:55px}}
+
+.arcade-shell .club-snakes{position:relative}
+.arcade-shell .club-snakes-paths{position:absolute;inset:8px;width:calc(100% - 16px);height:calc(100% - 16px);pointer-events:none;opacity:.8}
+.arcade-shell .club-snakes>div b,.arcade-shell .club-snakes>div small{z-index:2}
