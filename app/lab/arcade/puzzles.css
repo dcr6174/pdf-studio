@@ -3,3 +3,13 @@
 @media(prefers-reduced-motion:no-preference){.arcade-shell .puzzle-workspace button{transition:background-color .12s,border-color .12s,box-shadow .12s}.arcade-shell .puzzle-finish{animation:puzzle-arrive .2s ease-out}@keyframes puzzle-arrive{from{opacity:0;transform:translateY(8px)}to{opacity:1;transform:none}}}
 
 .arcade-shell .puzzle-workspace:is([data-phase=ready],[data-phase=paused]) .puzzle-play-area{height:220px;min-height:220px;max-height:220px;overflow:hidden;visibility:hidden}
+
+.arcade-shell .puzzle-campaign{display:flex;flex-wrap:wrap;gap:12px;align-items:center;margin:20px 0;color:var(--foreground);font-size:.85rem}
+.arcade-shell .puzzle-campaign details{width:100%}
+.arcade-shell .puzzle-campaign summary{cursor:pointer;padding:12px 0;min-height:44px}
+.arcade-shell .puzzle-rounds{display:grid;grid-template-columns:repeat(auto-fill,minmax(72px,1fr));gap:8px;max-height:240px;overflow:auto;padding:8px}
+.arcade-shell .puzzle-rounds button{min-height:64px;display:grid;place-content:center;border:1px solid var(--puzzle-accent,#a78bfa);background:var(--card);color:var(--foreground);border-radius:12px}
+.arcade-shell .puzzle-rounds button[aria-current]{outline:2px solid #a78bfa}
+.arcade-shell .puzzle-rounds small{font-size:.65rem;color:inherit}
+.arcade-shell .puzzle-earned{color:#d5a000;font-size:2rem}
+.arcade-shell .puzzle-earned small{display:block;font-size:.85rem;color:var(--foreground)}

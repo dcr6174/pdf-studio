@@ -6,7 +6,7 @@
 
 ## Features
 
-- **Studio Arcade:** 10 original arcade favourites plus 27 original word/puzzle entries. Includes word wheels, mini crosswords, category cards, word search, Sudoku, picture puzzles, tile matching and more. New puzzles share reusable mechanics and bounded content packs; they are browser adaptations, not copies of commercial apps. See [the game map and validation limits](docs/ARCADE_PUZZLES_2026_10_20.md).
+- **Studio Arcade:** 10 original arcade favourites plus 27 original word/puzzle entries. Includes word wheels, mini crosswords, category cards, word search, Sudoku, picture puzzles, tile matching and more. New puzzles include growing board sizes, longer card/path rounds, bonus words, stars and validated in-progress saves. They share reusable mechanics and bounded authored content packs; they are browser adaptations, not copies of commercial apps. See [the game map and validation limits](docs/ARCADE_PUZZLES_2026_10_20.md).
 
 
 - Merge, split, organize, rotate, reverse and duplicate pages; alternate pages from different PDFs; manage local bookmarks and page links.
