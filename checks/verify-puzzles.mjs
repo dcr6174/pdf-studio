@@ -31,3 +31,24 @@ s=createPuzzle('crossword-sprint');s={...s,seconds:119};s=act(s,{type:'tick',sec
 assert.equal(restorePuzzleProgress({version:1,slug:'x',level:-1,best:0},'x'),null);assert.equal(restorePuzzleProgress({version:1,slug:'x',level:1,best:NaN},'x'),null);assert.deepEqual(restorePuzzleProgress({version:1,slug:'x',level:2,best:10},'x'),{level:2,best:10});
 for(let seed=0;seed<20;seed++){for(const slug of ['hex-escape','paw-parks']){let p=createPuzzle(slug,seed%5,seed);if(p.family==='hex'){let guard=0;while(p.status==='playing'&&guard++<30){const i=p.board.findIndex((v,i)=>v&&hexFree(p,i));assert(i>=0);p=act(p,{type:'cell',index:i});}assert.equal(p.status,'won');}else{p.selected=[...p.answer];assert.equal(queenConflicts(p).length,0);}}}
 console.log('PASS: 27 seeded games; complete rounds across the puzzle families; Sudoku uniqueness; word targets; arrow and puppy solvability; line clearing; tray loss/undo; timer loss; invalid save rejection. Pure-engine checks, not phone/browser playtests.');
+// Solve the unmodified opening block round using only legal placement actions.
+{
+ let p=createPuzzle('block-bloom');
+ for(let move=0;move<80&&p.status==='playing';move++){
+  let chosen=null,best=-Infinity;
+  for(let k=0;k<3;k++){if(p.usedShapes.includes(k))continue;
+   for(let i=0;i<64;i++){
+    const shape=p.shapes[k],x=i%8,y=Math.floor(i/8);
+    if(shape.some(([dx,dy])=>x+dx>=8||y+dy>=8||p.board[(y+dy)*8+x+dx]))continue;
+    const next=act(act({...p,history:[]},{type:'shape',index:k}),{type:'cell',index:i});
+    let value=(next.score-p.score)*100;
+    for(let n=0;n<8;n++){let row=0,col=0;for(let j=0;j<8;j++){row+=!!next.board[n*8+j];col+=!!next.board[j*8+n];}value+=row*row+col*col;}
+    value-=next.board.reduce((v,n,i)=>v+(n?Math.floor(i/8)*.2+i%8*.1:0),0);
+    if(value>best){best=value;chosen=next;}
+   }
+  }
+  assert(chosen,'a legal block placement remains');p=chosen;
+ }
+ assert.equal(p.status,'won','unmodified seeded block round completes');
+}
+console.log('PASS: complete seeded Block Bloom round through legal shape selections/placements.');
