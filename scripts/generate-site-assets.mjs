@@ -18,6 +18,7 @@ const {searchGuidance}=await import(asModule(await readFile(new URL('lib/search-
 const {articles}=await import(asModule(await readFile(new URL('lib/articles.ts',root),'utf8')));
 const {imageGuides}=await import(asModule(await readFile(new URL('lib/image-guides.ts',root),'utf8')));
 const {arcadeGames}=await import(asModule(await readFile(new URL('lib/arcade-catalog.ts',root),'utf8')));
+const {puzzleGames}=await import(asModule(await readFile(new URL('lib/puzzle-catalog.ts',root),'utf8')));
 const {imageTools}=await import(asModule(await readFile(new URL('lib/image-tools.ts',root),'utf8')));
 const {comparisons}=await import(asModule(await readFile(new URL('lib/comparisons.ts',root),'utf8')));
 GlobalFonts.registerFromPath(new URL('public/fonts/NotoSans-Regular.ttf',root).pathname,'Studio Sans');
@@ -48,8 +49,10 @@ pages.push(...seoPages.map(page=>({path:'/guides/'+page.slug,content:JSON.string
 pages.push(...['text-to-handwriting','notebook-maker','handwriting-practice'].map(slug=>({path:'/guides/'+slug,content:toolGuideSource})));
 pages.push({path:'/lab/guides',content:(await readFile(new URL('app/lab/guides/page.tsx',root),'utf8'))+(await readFile(new URL('components/image-guide-directory.tsx',root),'utf8'))+JSON.stringify(imageGuides)});
 pages.push(...imageGuides.map(g=>({path:'/lab/guides/'+g.slug,content:JSON.stringify(g)+JSON.stringify(imageTools.filter(t=>g.tools.includes(t.slug)))+''})));
+const puzzleSource=(await readFile(new URL('components/puzzle-game.tsx',root),'utf8'))+(await readFile(new URL('lib/puzzle-engine.ts',root),'utf8'))+(await readFile(new URL('lib/puzzle-data.ts',root),'utf8'))+(await readFile(new URL('components/puzzle-artwork.tsx',root),'utf8'))+(await readFile(new URL('app/lab/arcade/puzzles.css',root),'utf8'));
+pages.push(...puzzleGames.map(game=>({path:'/lab/arcade/'+game.slug,content:JSON.stringify(game)+puzzleSource})));
 const arcadeSource=(await readFile(new URL('components/arcade-game.tsx',root),'utf8'))+(await readFile(new URL('lib/arcade-engine.ts',root),'utf8'))+(await readFile(new URL('lib/arcade-draw.ts',root),'utf8'))+(await readFile(new URL('lib/arcade-presentation.ts',root),'utf8'))+(await readFile(new URL('app/lab/arcade/arcade.css',root),'utf8'));
-pages.push({path:'/lab/arcade',content:(await readFile(new URL('components/arcade-directory.tsx',root),'utf8'))+(await readFile(new URL('components/arcade-artwork.tsx',root),'utf8'))+(await readFile(new URL('app/lab/arcade/arcade.css',root),'utf8'))+JSON.stringify(arcadeGames)},...arcadeGames.map(game=>({path:'/lab/arcade/'+game.slug,content:JSON.stringify(game)+arcadeSource})));
+pages.push({path:'/lab/arcade',content:(await readFile(new URL('components/arcade-directory.tsx',root),'utf8'))+(await readFile(new URL('components/arcade-artwork.tsx',root),'utf8'))+(await readFile(new URL('app/lab/arcade/arcade.css',root),'utf8'))+JSON.stringify([...arcadeGames,...puzzleGames])},...arcadeGames.map(game=>({path:'/lab/arcade/'+game.slug,content:JSON.stringify(game)+arcadeSource})));
 const entries=pages.map(page=>{const hash=createHash('sha256').update(page.content).digest('hex');state[page.path]={hash,lastmod:old[page.path]?.hash===hash?old[page.path].lastmod:today};return {path:page.path,lastmod:state[page.path].lastmod};});
 entries.push(...['/lab','/lab/image-size-reducer','/lab/remove-watermark','/lab/mini-zine-maker','/lab/photo-booth-strips','/lab/custom-bingo','/lab/giant-poster','/lab/photo-coloring-page','/lab/printable-flashcards','/lab/daily-mood-canvas','/lab/photo-strip','/lab/flashcards','/lab/decision-wheel','/lab/pomodoro','/lab/calculator','/lab/finance-calculator','/lab/practice-sheets','/lab/text-to-handwriting','/lab/notebook-maker','/lab/handwriting-practice','/lab/flipbook','/lab/word-cloud','/lab/page-palette','/lab/whiteboard','/lab/poster-collage','/lab/pdf-to-gif','/lab/sketch-pdf'].map(path=>({path})));
 entries.push(...imageTools.filter(t=>t.slug!=='image-size-reducer').map(t=>({path:'/lab/'+t.slug})));
@@ -58,6 +61,7 @@ const urls=canonicalSitemapEntries(entries,canonicalToolRoutes).map(({path,lastm
 await writeFile(stateURL,JSON.stringify(state,null,2)+'\n');
 await writeFile(new URL('public/sitemap.xml',root),'<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+urls.join('\n')+'\n</urlset>\n');
 console.log(`Generated ${seoPages.length+conversionGuides.length+1} social images and ${urls.length} sitemap URLs with content-tracked lastmod.`);
+
 
 
 

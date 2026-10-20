@@ -45,11 +45,12 @@ export default function Lab() {
             </p>
           </div>
         </header>
-        <section className="lab-arcade-entry" aria-labelledby="lab-arcade-heading"><div><span className="lab-kicker">TAKE A PROPER LITTLE BREAK</span><h2 id="lab-arcade-heading">Studio Arcade</h2><p>Ten free games. Stack, toss, match, slide and chase a new best score.</p></div><Link href="/lab/arcade">Explore the Arcade ↗</Link></section>
+        <section className="lab-arcade-entry" aria-labelledby="lab-arcade-heading"><div><span className="lab-kicker">TAKE A PROPER LITTLE BREAK</span><h2 id="lab-arcade-heading">Studio Arcade</h2><p>37 free games. Word puzzles, Sudoku, picture puzzles and arcade favourites.</p></div><Link href="/lab/arcade">Explore the Arcade ↗</Link></section>
         <LabDirectory />
       </main>
       <SiteFooter />
     </div>
   );
 }
+
 

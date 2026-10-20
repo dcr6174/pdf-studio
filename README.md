@@ -6,6 +6,9 @@
 
 ## Features
 
+- **Studio Arcade:** 10 original arcade favourites plus 27 original word/puzzle entries. Includes word wheels, mini crosswords, category cards, word search, Sudoku, picture puzzles, tile matching and more. New puzzles share reusable mechanics and bounded content packs; they are browser adaptations, not copies of commercial apps. See [the game map and validation limits](docs/ARCADE_PUZZLES_2026_10_20.md).
+
+
 - Merge, split, organize, rotate, reverse and duplicate pages; alternate pages from different PDFs; manage local bookmarks and page links.
 - Compress PDFs with three primary choices: **Keep quality**, **Balanced** and **Smaller file**, plus an optional best-effort KB limit.
 - Add text, images, drawings, watermarks and visual signatures; edit supported original PDF text in a separate editor.
@@ -141,5 +144,6 @@ The Page Buddy v5 assets are in `public/brand/`. Follow [docs/BRAND-V5.md](docs/
 ## License
 
 Application code is [MIT licensed](LICENSE). Dependencies, engines, fonts and vendored assets retain their own licenses: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
 
 
