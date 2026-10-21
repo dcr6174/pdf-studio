@@ -6,6 +6,8 @@
 
 ## Features
 
+- **Buddy’s Paper Garden (Arcade only):** an optional daily creation shared by all 60 games. Earn local XP, cosmetic Stars and milestone choices across a forgiving 30-visit chapter. No streak loss, account, purchases or PDF-tool integration. IndexedDB transactions prevent duplicate same-day rewards across tabs; progress depends on this device’s clock and is lost when site data is cleared. See [the garden guide](docs/ARCADE_GARDEN.md).
+
 - **Studio Arcade:** 60 original browser games: 10 arcade favourites, 27 word/puzzle entries and 23 sports/board/logic games. Includes basketball, mini golf, chess, checkers, Ludo-style races, dominoes and more, with a distinct SVG emblem for every title and full-width desktop workspaces. Includes word wheels, mini crosswords, category cards, word search, Sudoku, picture puzzles, tile matching and more. New puzzles include growing board sizes, longer card/path rounds, bonus words, stars and validated in-progress saves. They share reusable mechanics and bounded authored content packs; they are browser adaptations, not copies of commercial apps. See [the puzzle map](docs/ARCADE_PUZZLES_2026_10_20.md) and [the 60-game expansion and validation limits](docs/ARCADE_60_GAMES_2026_10_20.md).
 
 
@@ -144,6 +146,7 @@ The Page Buddy v5 assets are in `public/brand/`. Follow [docs/BRAND-V5.md](docs/
 ## License
 
 Application code is [MIT licensed](LICENSE). Dependencies, engines, fonts and vendored assets retain their own licenses: [THIRD_PARTY_NOTICES.md](THIRD_PARTY_NOTICES.md).
+
 
 
 
