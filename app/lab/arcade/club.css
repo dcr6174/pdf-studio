@@ -170,7 +170,7 @@
 .arcade-shell .puzzle-cell.is-covered{opacity:.5;filter:saturate(.4)}
 .arcade-shell .club-controls details p{overflow-wrap:anywhere;line-height:1.8;max-height:200px;overflow:auto}
 @media(min-width:1000px){
-.arcade-shell .club-sport{max-height:max(280px,calc(100dvh - 330px));width:auto;max-width:100%;margin:auto}
+.arcade-shell .club-sport{max-height:max(180px,calc(100dvh - 450px));width:auto;max-width:100%;margin:auto}
 .arcade-shell .club-board,.arcade-shell .club-race{max-width:min(100%,max(320px,calc(100dvh - 285px)))}
 .arcade-shell .arcade-game-header,.arcade-shell .puzzle-heading{margin-bottom:14px}
 .arcade-shell .arcade-stage{height:max(320px,calc(100dvh - 270px));min-height:0}
