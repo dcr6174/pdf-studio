@@ -152,3 +152,41 @@
 .arcade-shell .club-snakes{position:relative}
 .arcade-shell .club-snakes-paths{position:absolute;inset:8px;width:calc(100% - 16px);height:calc(100% - 16px);pointer-events:none;opacity:.8}
 .arcade-shell .club-snakes>div b,.arcade-shell .club-snakes>div small{z-index:2}
+/* Shared compact chrome: leave space for play, keep help optional. */
+.arcade-shell .arcade-hero{min-height:0;padding:24px 28px;margin-bottom:20px}
+.arcade-shell .arcade-hero h1{font-size:clamp(28px,3.2vw,48px);line-height:1.12}
+.arcade-shell .arcade-hero-art{max-height:130px;transform:scale(.65);transform-origin:center}
+.arcade-shell .arcade-curated{display:grid;gap:20px;margin:20px 0 28px}
+.arcade-shell .arcade-curated h2{font-size:20px;margin:0 0 12px}
+.arcade-shell .arcade-shortlist{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:12px}
+.arcade-shell .arcade-shortlist a{display:flex;align-items:center;gap:10px;padding:12px;border:1px solid #9d80ce66;border-radius:14px;color:inherit;text-decoration:none;background:#8c6acb15;min-height:52px}
+.arcade-shell .arcade-shortlist .game-emblem{width:42px;height:42px;flex:none}
+.arcade-shell .club-heading{margin-bottom:12px;gap:14px}
+.arcade-shell .club-heading h1{font-size:clamp(24px,3vw,38px);margin:4px 0}
+.arcade-shell .club-heading p{margin:4px 0;max-width:70ch}
+.arcade-shell .club-play-inner{min-height:0}
+.arcade-shell .club-help summary,.arcade-shell .puzzle-help summary{min-height:44px;cursor:pointer}
+.arcade-shell .puzzle-cell.is-picked{box-shadow:inset 0 0 0 3px #7751d8;background:#d7c7ff;color:#201435}
+.arcade-shell .puzzle-cell.is-covered{opacity:.5;filter:saturate(.4)}
+.arcade-shell .club-controls details p{overflow-wrap:anywhere;line-height:1.8;max-height:200px;overflow:auto}
+@media(min-width:1000px){
+.arcade-shell .club-sport{max-height:max(280px,calc(100dvh - 330px));width:auto;max-width:100%;margin:auto}
+.arcade-shell .club-board,.arcade-shell .club-race{max-width:min(100%,max(320px,calc(100dvh - 285px)))}
+.arcade-shell .arcade-game-header,.arcade-shell .puzzle-heading{margin-bottom:14px}
+.arcade-shell .arcade-stage{height:max(320px,calc(100dvh - 270px));min-height:0}
+.arcade-shell .arcade-recommendations{display:none}
+}
+@media(max-width:600px){
+.arcade-shell .arcade-hero{padding:20px}
+.arcade-shell .arcade-hero-art{display:none}
+.arcade-shell .arcade-shortlist{grid-template-columns:repeat(2,minmax(0,1fr))}
+.arcade-shell .arcade-shortlist a{font-size:14px;padding:10px;gap:8px}
+.arcade-shell .club-heading p{font-size:14px}
+}
+.arcade-shell .puzzle-wheel{position:relative;display:block;width:280px;height:280px;max-width:100%;margin:20px auto;touch-action:none}
+.arcade-shell .puzzle-wheel button{position:absolute;left:calc(50% - 26px);top:calc(50% - 26px);width:52px;height:52px;min-width:0;transform:rotate(var(--letter-angle)) translateY(-102px) rotate(calc(-1 * var(--letter-angle)));border-radius:50%;font-size:24px;touch-action:none}
+.arcade-shell .arcade-next{display:none}
+
+.arcade-shell .board-memory .arcade-tile{aspect-ratio:auto;min-height:44px}
+.arcade-shell .arcade-game-sidebar label{display:flex;flex-wrap:wrap;align-items:center;gap:10px;margin:12px 0}
+.arcade-shell .arcade-game-sidebar select{min-height:44px;max-width:100%;padding:8px;border-radius:9px}
