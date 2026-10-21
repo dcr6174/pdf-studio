@@ -33,3 +33,9 @@ s=createClub('pocket-mini-golf');s=act(s,{type:'shoot',angle:0,power:350});for(l
 s=createClub('neon-air-hockey');s.x=300;s.y=22;s.vx=0;s.vy=-200;stepSport(s,.03);assert.equal(s.score[0],1,'top goal scores');s=createClub('disc-drop-plinko');s=act(s,{type:'shoot',angle:0,power:0});for(let n=0;n<2000&&s.active;n++)stepSport(s,1/120);assert(!s.active);assert(s.score[0]>0);
 s=createClub('buddy-burrows');const at=s.board[0];s=act(s,{type:'cell',index:at});assert.equal(s.score[0],10);s=act(s,{type:'cell',index:at});assert.equal(s.score[0],10,'no double score');for(let n=0;n<1201;n++)stepSport(s,.05);assert.equal(s.status,'won');
 console.log('PASS: 23 games, complete board matches, chess mate/castling/en passant, checkers forced chains/crowning, unique nonograms, safe mines, scorecards, memory sequences, crate solvability, real sports trajectories and validated saves. Engine tests, not physical-phone certification.');
+
+// Review regressions: strategic opponents retain immediate tactical wins.
+s=createClub('four-in-orbit');s.turn=-1;s.board[35]=s.board[36]=s.board[37]=-1;let strategic=computerAction(s,'strategic');assert.equal(strategic.index,3);s=act(s,strategic);assert.equal(s.winner,-1);
+s=createClub('moon-disc-reversi');s.turn=-1;assert(reversiMoves(s.board,-1).includes(computerAction(s,'strategic').index));
+s=createClub('crate-escape');const oldPushes=s.strokes;assert.equal(oldPushes,0);
+console.log('PASS: strategic Connect Four wins, strategic Reversi chooses legal moves, crate push counter starts clean.');
