@@ -1,6 +1,6 @@
 import {SiteHeader,SiteFooter} from '@/components/site-header';
 import Link from '@/components/browser-link';
-import {ArrowLeft,ArrowRight,Camera,Crop,FileImage,Layers,LockKeyhole,Palette,RefreshCw,Sparkles,SlidersHorizontal,Zap} from 'lucide-react';
+import {ArrowLeft,ArrowRight,Camera,Crop,LockKeyhole,Palette,RefreshCw,Sparkles,SlidersHorizontal,Zap} from 'lucide-react';
 import {imageTools} from '@/lib/image-tools';
 import {pageMeta} from '@/lib/page-meta';
 import '../../creative/creative.css';
