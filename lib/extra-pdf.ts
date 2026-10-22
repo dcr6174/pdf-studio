@@ -1,4 +1,4 @@
-import {preserveOutlines,remapPageLinks} from './pdf-navigation';
+import {preserveOutlines,remapPageLinks,preservePageLabels} from './pdf-navigation';
 import {PDFDocument,PDFName,PDFArray,PDFDict,PDFHexString,PDFNumber,rgb,StandardFonts} from 'pdf-lib';
 export function addBookmarks(doc:PDFDocument,input:string,mode:'append'|'replace'='append'){const rows=input.split('\n').map(v=>v.trim()).filter(Boolean);if(!rows.length)throw new Error('Add at least one bookmark: page number followed by a title.');if(rows.length>100)throw new Error('Use at most 100 bookmarks.');const parsed=rows.map(line=>{const m=line.match(/^(\d+)\s+(.+)$/);if(!m||Number(m[1])<1||Number(m[1])>doc.getPageCount())throw new Error('Each bookmark needs a valid page number and title, such as 1 Introduction.');return{page:Number(m[1])-1,title:m[2]};});const existing=mode==='append'?doc.catalog.lookupMaybe(PDFName.of('Outlines'),PDFDict):undefined;const root=existing??doc.context.obj({Type:'Outlines',Count:0}),rootRef=existing?(doc.catalog.get(PDFName.of('Outlines')) instanceof PDFDict?doc.context.register(root):doc.catalog.get(PDFName.of('Outlines'))!):doc.context.register(root),nodes=parsed.map(v=>doc.context.obj({Title:PDFHexString.fromText(v.title),Parent:rootRef,Dest:[doc.getPage(v.page).ref,'Fit']})),refs=nodes.map(n=>doc.context.register(n));nodes.forEach((n,i)=>{if(i)n.set(PDFName.of('Prev'),refs[i-1]);if(i+1<refs.length)n.set(PDFName.of('Next'),refs[i+1]);});const last=root.lookupMaybe(PDFName.of('Last'),PDFDict);if(last){last.set(PDFName.of('Next'),refs[0]);nodes[0].set(PDFName.of('Prev'),root.get(PDFName.of('Last'))!);}else root.set(PDFName.of('First'),refs[0]);root.set(PDFName.of('Last'),refs[refs.length-1]);const prior=root.lookupMaybe(PDFName.of('Count'),PDFNumber)?.asNumber()??0;root.set(PDFName.of('Count'),PDFNumber.of(Math.abs(prior)+parsed.length));doc.catalog.set(PDFName.of('Outlines'),rootRef);doc.catalog.set(PDFName.of('PageMode'),PDFName.of('UseOutlines'));}
 export function removeAnnotations(doc:PDFDocument){let removed=0;for(const p of doc.getPages()){const a=p.node.lookupMaybe(PDFName.of('Annots'),PDFArray);if(!a)continue;for(let i=a.size()-1;i>=0;i--){const entry=a.lookup(i,PDFDict);if(entry.get(PDFName.of('Subtype'))?.toString()!=='/Widget'){a.remove(i);removed++;}}}return removed;}
@@ -14,7 +14,7 @@ export async function halvePages(doc:PDFDocument){
   }
  }
  const sources=new Map([['source',doc]]),order=Array.from({length:out.getPageCount()},(_,i)=>({fileId:'source',index:Math.floor(i/2)}));
- remapPageLinks(out,sources,order);preserveOutlines(out,sources,order);
+ remapPageLinks(out,sources,order);preserveOutlines(out,sources,order);preservePageLabels(out,sources,order);
  for(const p of out.getPages()){
   const crop=p.getCropBox(),annots=p.node.lookupMaybe(PDFName.of('Annots'),PDFArray);if(!annots)continue;
   for(let n=annots.size()-1;n>=0;n--){

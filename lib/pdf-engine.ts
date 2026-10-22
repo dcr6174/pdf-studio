@@ -1,6 +1,6 @@
 import {normalizePDFObjectNumbers} from './pdf-object-numbers';
 import {repairPageTreeCounts} from './pdf-page-tree';
-import {preserveOutlines,remapPageLinks} from './pdf-navigation';
+import {preserveOutlines,remapPageLinks,preservePageLabels} from './pdf-navigation';
 import {epubHTMLText} from './epub-text';
 import {drawWorkflowWatermark} from './workflow-watermark';
 import {exportFilename} from '@/lib/export-filename';
@@ -231,7 +231,7 @@ export async function assemble(files: Loaded[], items: PageItem[], signal?:Abort
         p.setRotation(degrees((p.getRotation().angle + item.rotation) % 360));
         out.addPage(p);
     }
-} if(files.length===1&&files[0].doc){const d=files[0].doc;out.setTitle(d.getTitle()??'');out.setAuthor(d.getAuthor()??'');out.setSubject(d.getSubject()??'');out.setKeywords((d.getKeywords()??'').split(/,\s*/));} preserveOutlines(out,sources,items);remapPageLinks(out,sources,items);return out; }
+} if(files.length===1&&files[0].doc){const d=files[0].doc;out.setTitle(d.getTitle()??'');out.setAuthor(d.getAuthor()??'');out.setSubject(d.getSubject()??'');out.setKeywords((d.getKeywords()??'').split(/,\s*/));} preserveOutlines(out,sources,items);preservePageLabels(out,sources,items);remapPageLinks(out,sources,items);return out; }
 export const fields = readFormFields;
 async function plainPDF(text: string, markdown = false) { if(markdown)return (await import('./markdown-pdf')).markdownPDF(text); const { jsPDF } = await import('jspdf'); const p = new jsPDF(); const font = await fetch('/fonts/NotoSans-Regular.ttf'); if (!font.ok)
     throw new Error('The document font could not be loaded. Please try again.'); const arr = new Uint8Array(await font.arrayBuffer()); let binary = ''; for (let i = 0; i < arr.length; i++)

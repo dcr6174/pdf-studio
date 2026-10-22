@@ -1,7 +1,49 @@
-import {PDFDocument,PDFDict,PDFArray,PDFName,PDFString,PDFHexString,PDFRef,PDFNumber,type PDFObject} from 'pdf-lib';
+import {PDFDocument,PDFDict,PDFArray,PDFName,PDFString,PDFHexString,PDFRef,PDFNumber,PDFNull,type PDFObject} from 'pdf-lib';
 
 const key=PDFName.of;
 export type OutlineEntry={title:string;page?:number;children:OutlineEntry[];dest?:PDFArray};
+/** Copy only standard view parameters; never retain references into another document. */
+function destinationView(doc:PDFDocument,dest:PDFArray|undefined,page:number):PDFArray{
+ const fallback=()=>doc.context.obj([doc.getPage(page).ref,'Fit']);
+ if(!dest)return fallback();
+ const mode=dest.lookup(1);if(!(mode instanceof PDFName))return fallback();
+ const lengths:Record<string,number>={XYZ:5,Fit:2,FitH:3,FitV:3,FitR:6,FitB:2,FitBH:3,FitBV:3};
+ if(dest.size()!==lengths[mode.decodeText()])return fallback();
+ const values:PDFObject[]=[doc.getPage(page).ref,mode];
+ for(let i=2;i<dest.size();i++){const value=dest.lookup(i);if(value!==PDFNull&&!(value instanceof PDFNumber&&Number.isFinite(value.asNumber())))return fallback();values.push(value);}
+ return doc.context.obj(values);
+}
+
+/** Flatten bounded page-label number trees into independent per-page descriptors. */
+export function preservePageLabels(out:PDFDocument,sources:Map<string,PDFDocument>,order:{fileId:string;index:number}[]){
+ const labels=new Map<string,{start:number;style?:string;prefix:string;number:number}[]>();
+ for(const [id,source] of sources){
+  const rows:{start:number;style?:string;prefix:string;number:number}[]=[];
+  const seen=new Set<PDFDict>();let budget=1000;
+  const walk=(node:PDFDict,depth=0)=>{if(depth>32||budget--<=0||seen.has(node))return;seen.add(node);
+   const nums=node.lookup(key('Nums'));
+   if(nums instanceof PDFArray)for(let i=0;i+1<nums.size()&&budget>0;i+=2){budget--;const start=nums.lookup(i),value=nums.lookup(i+1);if(!(start instanceof PDFNumber)||!(value instanceof PDFDict))continue;
+    const n=start.asNumber();if(!Number.isInteger(n)||n<0||n>=source.getPageCount())continue;
+    const s=value.lookup(key('S')),p=value.lookup(key('P')),st=value.lookup(key('St'));
+    const style=s instanceof PDFName?s.decodeText():undefined;
+    if(s&&(!style||!['D','R','r','A','a'].includes(style)))continue;
+    const number=st instanceof PDFNumber?st.asNumber():1;if(!Number.isSafeInteger(number)||number<1||number>1e9)continue;
+    rows.push({start:n,style,prefix:p instanceof PDFString||p instanceof PDFHexString?p.decodeText():'',number});
+   }
+   const kids=node.lookup(key('Kids'));if(kids instanceof PDFArray)for(let i=0;i<kids.size()&&budget>0;i++){budget--;const child=kids.lookup(i);if(child instanceof PDFDict)walk(child,depth+1);}
+  };
+  const root=source.catalog.lookup(key('PageLabels'));if(root instanceof PDFDict)walk(root);if(rows.length)labels.set(id,rows.sort((a,b)=>a.start-b.start));
+ }
+ if(!labels.size)return;
+ const nums=out.context.obj([]);
+ order.forEach((item,index)=>{const row=labels.get(item.fileId)?.filter(row=>row.start<=item.index).at(-1);
+  const descriptor=out.context.obj({});
+  if(row){if(row.style){descriptor.set(key('S'),key(row.style));descriptor.set(key('St'),PDFNumber.of(row.number+item.index-row.start));}if(row.prefix)descriptor.set(key('P'),PDFHexString.fromText(row.prefix));}
+  else{descriptor.set(key('S'),key('D'));descriptor.set(key('St'),PDFNumber.of(index+1));}
+  nums.push(PDFNumber.of(index));nums.push(descriptor);
+ });
+ out.catalog.set(key('PageLabels'),out.context.obj({Nums:nums}));
+}
 /** Read local outline destinations with bounds and cycle guards. Never execute actions. */
 export function localDestination(doc:PDFDocument,value:PDFObject|undefined):PDFArray|undefined{
  const named=(name:string):PDFObject|undefined=>{
@@ -23,14 +65,14 @@ export function readOutline(doc:PDFDocument):OutlineEntry[]{
 export function writeOutline(doc:PDFDocument,rows:OutlineEntry[]){
  if(!rows.length){doc.catalog.delete(key('Outlines'));return;}
  const root=doc.context.obj({Type:'Outlines'}),rootRef=doc.context.register(root);
- const write=(entries:OutlineEntry[],parent:PDFRef):{first:PDFRef;last:PDFRef;count:number}=>{const nodes=entries.map(row=>doc.context.obj({Title:PDFHexString.fromText(row.title),Parent:parent})),refs=nodes.map(node=>doc.context.register(node));let count=entries.length;nodes.forEach((node,i)=>{const row=entries[i];if(i)node.set(key('Prev'),refs[i-1]);if(i+1<refs.length)node.set(key('Next'),refs[i+1]);if(row.page!==undefined&&row.page>=0&&row.page<doc.getPageCount())node.set(key('Dest'),doc.context.obj([doc.getPage(row.page).ref,'Fit']));if(row.children.length){const child=write(row.children,refs[i]);node.set(key('First'),child.first);node.set(key('Last'),child.last);node.set(key('Count'),PDFNumber.of(child.count));count+=child.count;}});return {first:refs[0],last:refs[refs.length-1],count};};
+ const write=(entries:OutlineEntry[],parent:PDFRef):{first:PDFRef;last:PDFRef;count:number}=>{const nodes=entries.map(row=>doc.context.obj({Title:PDFHexString.fromText(row.title),Parent:parent})),refs=nodes.map(node=>doc.context.register(node));let count=entries.length;nodes.forEach((node,i)=>{const row=entries[i];if(i)node.set(key('Prev'),refs[i-1]);if(i+1<refs.length)node.set(key('Next'),refs[i+1]);if(row.page!==undefined&&row.page>=0&&row.page<doc.getPageCount())node.set(key('Dest'),destinationView(doc,row.dest,row.page));if(row.children.length){const child=write(row.children,refs[i]);node.set(key('First'),child.first);node.set(key('Last'),child.last);node.set(key('Count'),PDFNumber.of(child.count));count+=child.count;}});return {first:refs[0],last:refs[refs.length-1],count};};
  const tree=write(rows,rootRef);root.set(key('First'),tree.first);root.set(key('Last'),tree.last);root.set(key('Count'),PDFNumber.of(tree.count));doc.catalog.set(key('Outlines'),rootRef);doc.catalog.set(key('PageMode'),key('UseOutlines'));
 }
 
 /** Rebuild outline targets using the first retained copy of each source page. */
 export function preserveOutlines(out:PDFDocument,sources:Map<string,PDFDocument>,order:{fileId:string;index:number}[]){
  const rows:OutlineEntry[]=[];
- for(const [fileId,source] of sources){const remap=(entries:OutlineEntry[]):OutlineEntry[]=>entries.flatMap(row=>{const page=row.page===undefined?undefined:order.findIndex(item=>item.fileId===fileId&&item.index===row.page),children=remap(row.children);if(page===undefined||page<0)return children.length?[{title:row.title,children}]:[];return [{title:row.title,page,children}];});rows.push(...remap(readOutline(source)));}
+ for(const [fileId,source] of sources){const remap=(entries:OutlineEntry[]):OutlineEntry[]=>entries.flatMap(row=>{const page=row.page===undefined?undefined:order.findIndex(item=>item.fileId===fileId&&item.index===row.page),children=remap(row.children);if(page===undefined||page<0)return children.length?[{title:row.title,children}]:[];return [{title:row.title,page,children,dest:row.dest}];});rows.push(...remap(readOutline(source)));}
  writeOutline(out,rows);
 }
 

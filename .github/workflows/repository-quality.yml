@@ -48,6 +48,9 @@ jobs:
       - name: Upload and PDF workflow regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-react-workflows.mjs && node checks/verify-workflow-interface.mjs
+      - name: Reader navigation and page destination preservation
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-reader-navigation.mjs && node checks/verify-reader-password.mjs && node checks/verify-reader-queue.mjs
       - name: Fillable form page assembly and appearance
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-form-appearance.mjs
