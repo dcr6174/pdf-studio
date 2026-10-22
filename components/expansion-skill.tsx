@@ -1,16 +1,15 @@
 'use client';
-import {useEffect,useRef,useState,type PointerEvent} from 'react';
+import {useEffect,useRef,useState} from 'react';
 import type {ExpansionKind} from '@/lib/expansion-catalog';
 import type {ArcadeEffect} from '@/lib/arcade-audio';
 type Props={kind:ExpansionKind;active:boolean;comfort:boolean;onScore:(n:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
-const themes=['#bca1ec','#ffcb99','#a6e1da','#f1abd3','#9dbdfa'];
 const mathDist=(a:number,b:number)=>Math.abs(a-b);
 function Header({children}:{children:React.ReactNode}){return <p className="fresh-instruction">{children}</p>}
 const mazeWalls=new Set([2,3,4,5,10,13,17,20,21,22,28,29,30,33,36,38,41,42,43,45,52,54,60].filter(i=>![2,10,20,28,36,43,52,60].includes(i)));
 const cookieGoals=[[0,2,4],[1,3,0],[2,4,1],[3,0,2]];
 export function ExpansionSkill({kind,active,comfort,onScore,onFinish,onSound}:Props){
- const [round,setRound]=useState(0),[score,setScore]=useState(0),[power,setPower]=useState(50),[aim,setAim]=useState(2),[selection,setSelection]=useState(0),[hits,setHits]=useState<number[]>([]),[result,setResult]=useState('Ready to play.'),[player,setPlayer]=useState(1),[enemy,setEnemy]=useState(0),[clock,setClock]=useState(0),[cookie,setCookie]=useState<number[]>([]),[marble,setMarble]=useState(0);
- const [tableBall,setTableBall]=useState({x:50,y:15,dx:1,dy:1}),[paddle,setPaddle]=useState(50),[goalie,setGoalie]=useState(1);
+ const [round,setRound]=useState(0),[score,setScore]=useState(0),[power,setPower]=useState(50),[aim,setAim]=useState(2),[hits,setHits]=useState<number[]>([]),[result,setResult]=useState('Ready to play.'),[player,setPlayer]=useState(1),[enemy,setEnemy]=useState(0),[clock,setClock]=useState(0),[cookie,setCookie]=useState<number[]>([]),[marble,setMarble]=useState(0);
+ const [tableBall,setTableBall]=useState({x:50,y:15,dx:1,dy:1}),[paddle,setPaddle]=useState(50),[,setGoalie]=useState(1);
  const done=useRef(false),ballRef=useRef({x:50,y:15,dx:1,dy:1}),paddleRef=useRef(paddle);
  paddleRef.current=paddle;
  const add=(n:number)=>{const val=score+n;setScore(val);onScore(val);onSound('success');return val;};
