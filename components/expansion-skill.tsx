@@ -33,7 +33,6 @@ export function ExpansionSkill({kind,active,comfort,onScore,onFinish,onSound}:Pr
  if(['toss','darts','bowling','archery','curling','penalty'].includes(kind)){
   const max=kind==='darts'?12:kind==='bowling'||kind==='toss'?5:kind==='penalty'?3:5;
   const count=kind==='darts'?8:kind==='toss'?8:5;
-  const target=kind==='toss'?(round*3+1)%5:kind==='darts'?(attempts*3+2)%12:2;
   return <div className="fresh-casual"><div className="fresh-sport-top"><span>{kind==='darts'?'Darts thrown':'Round'} <b>{kind==='darts'?attempts:skillRoundLabel(round,count)} / {count}</b></span><span>Score <b>{score}</b></span>{kind==='penalty'&&<span>Goals <b>{goals} / 5</b></span>}</div>
   <SkillAimStage kind={kind} aim={aim} power={power} round={round} shot={shot} active={active} popped={hits} onAim={setAim}/>
   {kind==='darts'&&<div className="fresh-grid four expand-dart-balloons">{Array.from({length:12},(_,i)=><button key={i} disabled={!active||hits.includes(i)} aria-label={'Balloon '+(i+1)+(hits.includes(i)?', popped':', intact')+(aim===i?', aimed':'')} aria-pressed={aim===i} onClick={()=>setAim(i)}>{hits.includes(i)?'✓ Popped':'🎈 '+(i+1)}</button>)}</div>}
