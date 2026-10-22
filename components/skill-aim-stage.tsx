@@ -1,9 +1,9 @@
 'use client';
 import type {ExpansionKind} from '@/lib/expansion-catalog';
 type Shot={aim:number;points:number;attempt:number}|null;
-type Props={kind:ExpansionKind;aim:number;power:number;round:number;shot:Shot;active:boolean;onAim:(value:number)=>void};
+type Props={kind:ExpansionKind;aim:number;power:number;round:number;shot:Shot;active:boolean;popped?:readonly number[];onAim:(value:number)=>void};
 const colours=['#fa9fbd','#b1dfd1','#f7d28f','#c1b0f2'];
-export function SkillAimStage({kind,aim,power,round,shot,active,onAim}:Props){
+export function SkillAimStage({kind,aim,power,round,shot,active,popped=[],onAim}:Props){
  const options=kind==='darts'?12:kind==='penalty'?3:5;
  const xFor=(i:number)=>kind==='darts'?73+(i%4)*119:kind==='penalty'?110+i*140:70+i*90;
  const yFor=(i:number)=>kind==='darts'?48+Math.floor(i/4)*47:kind==='bowling'?60+(i%2)*19:76;
@@ -15,7 +15,7 @@ export function SkillAimStage({kind,aim,power,round,shot,active,onAim}:Props){
  {kind==='archery'&&<><rect width="500" height="255" fill="#9ebd9c"/><circle cx="250" cy="100" r="80" fill="#fff8e8"/><circle cx="250" cy="100" r="62" fill="#252e47"/><circle cx="250" cy="100" r="44" fill="#9bc5e2"/><circle cx="250" cy="100" r="27" fill="#e77876"/><circle cx="250" cy="100" r="12" fill="#ffd57c"/><text x="26" y="27" fontSize="15" fill="#203834">Wind: {[-11,7,-8,12,-4][round%5]>0?'→':'←'}</text></>}
  {kind==='curling'&&<><rect x="0" y="0" width="500" height="255" fill="#c0ecf0"/>{[95,72,50,27].map((r,i)=><circle key={i} cx="250" cy="93" r={r} fill={['#d1eef3','#759dc3','#f8faff','#d97588'][i]} opacity=".92"/>)}</>}
  {kind==='toss'&&<><path d="M0 146H500V255H0Z" fill="#b8a788"/>{Array.from({length:5},(_,i)=><g key={i}><path d={'M'+(70+i*90)+' 86V165'} stroke="#6a594f" strokeWidth="13" strokeLinecap="round"/><circle cx={70+i*90} cy="85" r="11" fill="#ecdca9"/></g>)}</>}
- {kind==='darts'&&Array.from({length:12},(_,i)=>{const x=xFor(i),y=yFor(i);return <g key={i}><path d={'M'+x+' '+(y+12)+'l3 18'} stroke="#5e4560" strokeWidth="3"/><ellipse cx={x} cy={y} rx="20" ry="25" fill={colours[i%4]} stroke="#fff8" strokeWidth="2"/><text x={x} y={y+5} textAnchor="middle" fontWeight="750" fontSize="13" fill="#32263f">{i+1}</text></g>;})}
+ {kind==='darts'&&Array.from({length:12},(_,i)=>{const x=xFor(i),y=yFor(i);return <g key={i}><path d={'M'+x+' '+(y+12)+'l3 18'} stroke="#5e4560" strokeWidth="3"/><ellipse cx={x} cy={y} rx="20" ry="25" fill={popped.includes(i)?'#5d5476':colours[i%4]} stroke="#fff8" strokeWidth="2"/><text x={x} y={y+5} textAnchor="middle" fontWeight="750" fontSize="13" fill="#32263f">{popped.includes(i)?'×':i+1}</text></g>;})}
  {['penalty','toss','darts'].includes(kind)&&Array.from({length:options},(_,i)=><g key={i} role="button" tabIndex={0} aria-label={'Aim at target '+(i+1)} onClick={()=>{if(active)onAim(i);}} onKeyDown={e=>{if(active&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onAim(i);}}}><rect x={xFor(i)-26} y={yFor(i)-30} width="52" height="65" rx="9" fill="transparent"/>{aim===i&&<ellipse cx={xFor(i)} cy={yFor(i)} rx="30" ry="32" fill="none" stroke="#fff0b5" strokeDasharray="5 6" strokeWidth="5"/>}</g>)}
  <path d={'M250 231 Q'+(220+power/2)+' 140 '+currentX+' '+currentY} stroke="#fff7b8" fill="none" strokeDasharray="8 6" strokeWidth="4" opacity=".85"/>
  <circle cx="250" cy="231" r="15" fill="#ffdc99" stroke="#ffffffc7" strokeWidth="3"/>
