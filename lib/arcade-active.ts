@@ -8,7 +8,8 @@ export const retiredArcadeSlugs=[
  'crossword-garden','crossword-sprint','crossword-atlas','word-postcards',
  'letter-dice','clue-hunt','word-path','letter-solitaire',
  'quiet-words','orbit-words','category-cards','pocket-puzzle-mix',
- 'buddy-pachisi','word-duel','secret-quote','disc-drop-plinko'
+ 'buddy-pachisi','word-duel','secret-quote','disc-drop-plinko',
+ 'buddy-burrows','bullseye-301'
 ] as const;
 const retired=new Set<string>(retiredArcadeSlugs);
 export const isRetiredArcade=(slug:string)=>retired.has(slug);
