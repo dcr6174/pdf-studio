@@ -5,7 +5,7 @@ import {GameEmblem} from '@/components/game-emblem';
 import {ArcadeGarden} from '@/components/arcade-garden';
 import {activeArcadeGames} from '@/lib/arcade-active';
 import {ArrowRight,Clock3,Gamepad2,Heart,Search,Sparkles,Trophy} from 'lucide-react';
-const favourites=['boundary-cricket','metro-sprint','eight-ball-pool','spiral-drop','bubble-wrap-bliss','buddy-jigsaw','volleyball-rally','mini-bowling'] as const;
+const favourites=['merge-2048','buddy-jigsaw','lavender-chess','crown-checkers','moon-disc-reversi','pocket-mini-golf','eight-ball-pool','boundary-cricket','bubble-wrap-bliss','crystal-clean'] as const;
 const categories=['All games','Easy & relaxing','Action & adventure','Sports','Driving & racing','Brain & puzzles','Word games','Family & board'] as const;
 type Category=typeof categories[number];
 const simple=['memory-match','picture-patchwork','buddy-jigsaw','color-sort','water-flow','spot-the-difference','find-hidden-object','word-safari','sudoku-studio','peg-garden'];
