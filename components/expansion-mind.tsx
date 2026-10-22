@@ -15,7 +15,7 @@ export function ExpansionMind({kind,active,comfort,seed=0,onScore,onFinish,onSou
  const [board,setBoard]=useState<boolean[]>(startLights),[mirrors,setMirrors]=useState([0,0,1,0,0]),[steps,setSteps]=useState(0),[score,setScore]=useState(0),[selection,setSelection]=useState<number[]>([]),[path,setPath]=useState([0]),[finishedEdges,setFinishedEdges]=useState<string[]>([]),[marbles,setMarbles]=useState(0);
  const [balls,setBalls]=useState(0),[drop,setDrop]=useState(2),[shield,setShield]=useState(1),[meteors,setMeteors]=useState<{col:number;row:number}[]>([]),[damage,setDamage]=useState(0);
  const [shape,setShape]=useState(0),[orientation,setOrientation]=useState(0),[previewColumn,setPreviewColumn]=useState(2),[blocks,setBlocks]=useState<Block[]>([]),[rows,setRows]=useState(0);
- const [leftWeight,setLeftWeight]=useState(0),[rightWeight,setRightWeight]=useState(0),[leftDistance,setLeftDistance]=useState(1),[rightDistance,setRightDistance]=useState(1);
+ const [rightWeight,setRightWeight]=useState(0),[rightDistance,setRightDistance]=useState(1);
  const [feedback,setFeedback]=useState('');
  const latest=useRef({shield:1,damage:0,balls:0}),meteorRef=useRef<{col:number;row:number}[]>([]);
  const prize=(n:number)=>{setScore(n);onScore(n);onSound('success');};
