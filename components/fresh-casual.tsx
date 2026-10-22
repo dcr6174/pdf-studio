@@ -8,7 +8,7 @@ const objects=['🔑','🕶️','🎈','🧸','🪁','🧭','📷','🧤','🎸'
 const easyWords=[['GARDEN','A place where flowers grow'],['ORANGE','A citrus fruit'],['PLANET','Earth is one'],['BRIDGE','A way to cross a river'],['POCKET','A little space in your coat'],['MARKET','A place to buy food']];
 const ladderSets=[{words:['CAT','COT','COG','DOG'],choices:[['COT','CAR','CAN'],['COG','COP','COW'],['DOG','LOG','FOG']]},{words:['COLD','CORD','CARD','WARD','WARM'],choices:[['CORD','BOLD','COLD'],['CARD','WORD','COED'],['WARD','HARD','CART'],['WARM','WARS','WARN']]}];
 const paint=['#f3a2c7','#9ee1e9','#ffd38a','#c7b5ff'];
-function Layout({children,note}:{children:React.ReactNode;note?:string}){return <div className="fresh-casual">{note&&<p className="fresh-instruction">{note}</p>}{children}</div>;}
+function Layout({children,note}:{children?:React.ReactNode;note?:string}){return <div className="fresh-casual">{note&&<p className="fresh-instruction">{note}</p>}{children}</div>;}
 export function FreshCasual({kind,active,comfort,onScore,onFinish,onSound}:Props){
  const [round,setRound]=useState(0),[mistakes,setMistakes]=useState(0),[choice,setChoice]=useState<number|null>(null);
  const [selected,setSelected]=useState<number[]>([]),[guesses,setGuesses]=useState<string[]>([]),[typed,setTyped]=useState(''),[mark,setMark]=useState<number[]>([]);
