@@ -86,6 +86,8 @@ export function GameEmblem({slug,compact=false}:{slug:string;compact?:boolean}){
  case 'boundary-cricket':art=<>{line('M42 16 61 102',gold,15)}{line('M27 108h78',mint,7)}{circle(96,52,15,pink)}{line('M83 53q-14 12-4 27',ink,3)}</>;break;
  case 'volleyball-rally':art=<>{circle(47,46,28,gold)}{line('M22 37q34-17 49 0m-48 18q34-12 47 0M48 21v51',ink,4)}{line('M87 15V115M98 15V115M110 15V115M84 39H116M84 68H116M84 97H116',blue,4)}</>;break;
  case 'eight-ball-pool':art=<>{circle(64,64,49,ink)}{circle(64,64,23,'#f4eeea')}{text('8',64,76,32)}{line('M6 121 46 87',gold,8)}</>;break;
+ case 'spiral-drop':art=<>{circle(64,64,45,'#ae90ef')}<path d="M94 31A47 47 0 1 1 30 96" fill="none" stroke={ink} strokeWidth="13" strokeLinecap="round"/>{line('M64 60v44',gold,4)}{circle(64,96,13,gold)}</>;break;
+ case 'hoop-hop':art=<>{circle(46,81,24,gold)}{line('M22 82h48m-24-25v48',ink,3)}{line('M81 45h37m-34 3 9 34h18l9-34',pink,5)}{line('M38 23q39-27 59 12',mint,4)}</>;break;
  default:throw Error('Missing unique game emblem: '+slug);
  }
  return <svg className={compact?'game-emblem is-compact':'game-emblem'} viewBox="0 0 128 128" aria-hidden="true"><defs><radialGradient id={id}><stop stopColor="#7962ad" stopOpacity=".22"/><stop offset="1" stopColor="#7962ad" stopOpacity="0"/></radialGradient></defs><rect width="128" height="128" fill={'url(#'+id+')'}/>{art}</svg>;
