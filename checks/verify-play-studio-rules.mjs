@@ -42,4 +42,42 @@ const motion=fs.readFileSync('lib/expansion-catalog.ts','utf8');
 assert(!motion.includes('Collect 20 stars.'),'Metro objective must agree with obstacle goal');
 const directory=fs.readFileSync('components/arcade-directory.tsx','utf8');
 assert(directory.includes('Recently played'),'avoid suggesting unimplemented session-resume');
+const importTS=async path=>{const code=ts.transpileModule(fs.readFileSync(path,'utf8'),{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;return import('data:text/javascript;base64,'+Buffer.from(code).toString('base64'));};
+const puzzle=await importTS('lib/play-studio-puzzles.ts');
+assert.equal(puzzle.fallingShapes.length,4);
+for(let shape=0;shape<4;shape++)for(let spin=0;spin<4;spin++){
+ const rotated=puzzle.rotatedCells(shape,spin);
+ assert.equal(rotated.length,4);
+ assert.equal(new Set(rotated.map(p=>p.x+','+p.y)).size,4,'no overlapping piece squares');
+ assert(rotated.every(p=>p.x>=0&&p.y>=0),'normalized rotated geometry');
+}
+for(let i=0;i<5;i++){const placed=puzzle.droppedCells([],0,0,i);assert(placed&&placed.length===4);assert(placed.every(p=>p.y<=8));}
+const board=Array.from({length:7},(_,x)=>({x,y:8}));
+assert.equal(puzzle.settleRows(board).cleared,1);
+assert(puzzle.droppedCells(board,1,0,0),'a tall piece fits from top');
+for(let level=0;level<20;level++){
+ const p=puzzle.countingBoard(level,1);assert.equal(p.icons.length,12);assert(p.count>=1);
+ assert.equal(p.count,p.icons.filter(x=>x===p.target).length);
+ const m=puzzle.arithmeticPrompt(level,2);
+ assert(Number.isFinite(m.answer)&&m.answer>=0);
+}
+assert.equal(puzzle.balanceChallenges.length,4);
+assert.equal(new Set(puzzle.balanceChallenges.map(x=>x.weight+','+x.distance)).size,4);
+const peg=await importTS('lib/peg-physics.ts');
+assert.equal(peg.pegLocations.length,24);
+for(let lane=0;lane<5;lane++)for(let seed=0;seed<10;seed++){
+ const result=peg.simulatePegDrop(lane,seed);
+ assert(result.positions.length>15,'trajectory contains bouncing simulation steps');
+ assert(result.positions.every(p=>p.x>=0&&p.x<=500),'ball stays inside stage');
+ assert(result.pocket>=0&&result.pocket<5);
+ assert(result.points>0);
+ assert.equal(result.pocket,peg.simulatePegDrop(lane,seed).pocket,'repeatable physics');
+}
+const mind=fs.readFileSync('components/expansion-mind.tsx','utf8');
+assert(mind.includes('droppedCells(blocks,shape,orientation,previewColumn)'));
+assert(mind.includes('prize(points);win('),'Path Connect scores only on goal');
+assert(mind.includes('pegLocations.map('),'Peg Bounce renders real pins');
+const scenes=fs.readFileSync('components/fresh-illustrated-scenes.tsx','utf8');
+assert(scenes.includes('DifferenceVillage')&&scenes.includes('HiddenObjectGarden'));
+
 console.log('PASS: anti-farming, penalty win/loss, round HUD, darts misses, tennis score and truthful discovery checks.');
