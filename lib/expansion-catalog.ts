@@ -15,7 +15,7 @@ export const expansionGames = [
     "genre": "Driving",
     "color": "#f5a9ba",
     "description": "Sprint through a bright three-lane metro world.",
-    "instructions": "Change lanes, jump over barriers and slide below signs. Collect 20 stars.",
+    "instructions": "Change lanes, jump over barriers and slide below signs. Clear 20 obstacles to finish.",
     "kind": "metro"
   },
   {
@@ -29,10 +29,10 @@ export const expansionGames = [
   },
   {
     "slug": "hill-rider",
-    "name": "Hill Rider",
+    "name": "Hill Fuel Challenge",
     "genre": "Driving",
     "color": "#facaa2",
-    "description": "Climb bumpy hills with a tiny off-road car.",
+    "description": "Manage speed and fuel across a rolling landscape.",
     "instructions": "Press Gas to climb, Brake to slow down and collect fuel before it runs out.",
     "kind": "hill"
   },
@@ -83,10 +83,10 @@ export const expansionGames = [
   },
   {
     "slug": "pocket-grand-prix",
-    "name": "Pocket Grand Prix",
+    "name": "Solo Track Sprint",
     "genre": "Driving",
     "color": "#f5a9ba",
-    "description": "Race through a short cartoon circuit.",
+    "description": "Keep your kart on a winding solo track for 90 checkpoints.",
     "instructions": "Steer left and right to stay on the road and pass each checkpoint.",
     "kind": "prix"
   },
@@ -137,10 +137,10 @@ export const expansionGames = [
   },
   {
     "slug": "untangle-lines",
-    "name": "Untangle Lines",
+    "name": "Ribbon Switch",
     "genre": "Relax",
     "color": "#f5a7cf",
-    "description": "Uncross a playful tangle of ribbons.",
+    "description": "Swap numbered ribbon endpoints until every line is straight.",
     "instructions": "Tap two numbered endpoints to swap their positions and untangle the lines.",
     "kind": "untangle"
   },
@@ -164,10 +164,10 @@ export const expansionGames = [
   },
   {
     "slug": "shape-packing",
-    "name": "Shape Packing",
+    "name": "Shape Match",
     "genre": "Relax",
     "color": "#f7c9a2",
-    "description": "Fit geometric pieces into their outlines.",
+    "description": "Match nine illustrated shapes to their exact silhouettes.",
     "instructions": "Pick a colourful shape, then the matching silhouette.",
     "kind": "shapes"
   },
@@ -289,10 +289,10 @@ export const expansionGames = [
   },
   {
     "slug": "mini-bowling",
-    "name": "Mini Bowling",
+    "name": "Bowling Aim Challenge",
     "genre": "Sports",
     "color": "#f7c38f",
-    "description": "Roll the ball into ten tiny pins.",
+    "description": "Set your aim and power in a five-round bowling skill challenge.",
     "instructions": "Drag to aim or use left and right buttons, then press Bowl.",
     "kind": "bowling"
   },
