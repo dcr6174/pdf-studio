@@ -37,6 +37,7 @@ export function countingBoard(level:number,seed=0){
  const icons=Array.from({length:12},(_,i)=>countingSymbols[(i*i+3*i+level*5+seed+i*level)%countingSymbols.length]);
  // A different target and arrangement on every round, no fixed repeated 12-icon grid.
  const target=countingSymbols[(level*7+seed)%countingSymbols.length];
+ if(!icons.includes(target))icons[2+level%8]=target;
  const count=icons.filter(x=>x===target).length;
  return {icons,target,count};
 }
