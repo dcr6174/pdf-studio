@@ -18,12 +18,12 @@ export function FreshGame({slug}:{slug:FreshSlug|ExpansionSlug}){
  const [phase,setPhase]=useState<'ready'|'play'|'paused'|'finished'>('ready');
  const [session,setSession]=useState(0),[score,setScore]=useState(0),[best,setBest]=useState(0);
  const [comfort,setComfort]=useState(false),[sound,setSound]=useState(false),[loaded,setLoaded]=useState(false),[result,setResult]=useState({won:false,message:''}),[help,setHelp]=useState(false);
- const effects=useRef({sound:false,kind:game.kind,last:0});effects.current.sound=sound;effects.current.kind=game.kind;
- useEffect(()=>{try{const recent=JSON.parse(localStorage.getItem('studio-arcade:recent')||'[]');localStorage.setItem('studio-arcade:recent',JSON.stringify([slug,...(Array.isArray(recent)?recent:[]).filter(v=>typeof v==='string'&&v!==slug)].slice(0,4)));const value=Number(localStorage.getItem('studio-arcade:best:'+slug));if(Number.isFinite(value))setBest(Math.max(0,value));setComfort(localStorage.getItem('studio-arcade:comfort')==='true');setSound(localStorage.getItem('studio-arcade:sound')==='true');}catch{/* Browser storage is optional. */}setLoaded(true);},[slug]);
+ const lastSound=useRef(0);
+ useEffect(()=>{const timer=setTimeout(()=>{try{const recent=JSON.parse(localStorage.getItem('studio-arcade:recent')||'[]');localStorage.setItem('studio-arcade:recent',JSON.stringify([slug,...(Array.isArray(recent)?recent:[]).filter(v=>typeof v==='string'&&v!==slug)].slice(0,4)));const value=Number(localStorage.getItem('studio-arcade:best:'+slug));if(Number.isFinite(value))setBest(Math.max(0,value));setComfort(localStorage.getItem('studio-arcade:comfort')==='true');setSound(localStorage.getItem('studio-arcade:sound')==='true');}catch{/* Browser storage is optional. */}setLoaded(true);},0);return()=>clearTimeout(timer);},[slug]);
  useEffect(()=>{const pause=()=>{if(document.hidden)setPhase(p=>p==='play'?'paused':p);};document.addEventListener('visibilitychange',pause);return()=>document.removeEventListener('visibilitychange',pause);},[]);
  const onScore=useCallback((n:number)=>{setScore(n);setBest(old=>{if(n<=old)return old;try{localStorage.setItem('studio-arcade:best:'+slug,String(n));}catch{}return n;});},[slug]);
  const onFinish=useCallback((won:boolean,message:string)=>{setResult({won,message});setPhase('finished');},[]);
- const onSound=useCallback((effect:ArcadeEffect)=>{const s=effects.current;if(!s.sound)return;const now=Date.now();if(effect==='bounce'&&now-s.last<100)return;s.last=now;playArcadeSound(s.kind,effect);},[]);
+ const onSound=useCallback((effect:ArcadeEffect)=>{if(!sound)return;const now=Date.now();if(effect==='bounce'&&now-lastSound.current<100)return;lastSound.current=now;playArcadeSound(game.kind,effect);},[sound,game.kind]);
  const restart=()=>{setScore(0);setResult({won:false,message:''});setSession(i=>i+1);setPhase('play');};
  const toggleSound=()=>{setSound(s=>{try{localStorage.setItem('studio-arcade:sound',String(!s));}catch{}return !s;});};
  const toggleComfort=()=>{setComfort(s=>{try{localStorage.setItem('studio-arcade:comfort',String(!s));}catch{}return !s;});};
