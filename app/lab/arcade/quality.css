@@ -1,0 +1,67 @@
+/* Play Studio quality pass: a game-first workspace across all 100 titles. */
+.arcade-shell .fresh-main{max-width:1450px;padding:12px clamp(12px,2vw,26px) 50px}
+.arcade-shell .fresh-heading{gap:13px;margin:8px 0 14px}
+.arcade-shell .fresh-heading h1{font-size:clamp(23px,3vw,34px);line-height:1.14;margin:3px 0}
+.arcade-shell .fresh-heading p{font-size:clamp(12px,1vw,14px);line-height:1.45;max-width:950px}
+.arcade-shell .fresh-title-mark{width:60px;height:60px;border-radius:14px;flex-shrink:0}
+.arcade-shell .fresh-title-mark svg{width:52px;height:52px}
+.arcade-shell .fresh-layout{display:block}
+.arcade-shell .fresh-play-shell{max-width:1350px;margin:auto;padding:clamp(9px,1.3vw,17px);border-radius:20px}
+.arcade-shell .fresh-game-bar{display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:10px;margin-bottom:12px}
+.arcade-shell .fresh-game-bar .fresh-stats{margin:0;justify-content:flex-start;gap:7px}
+.arcade-shell .fresh-game-bar .fresh-stats span{font-size:12px;padding:7px 10px}
+.arcade-shell .fresh-quick-actions{display:flex;align-items:center;flex-wrap:wrap;gap:5px}
+.arcade-shell .fresh-quick-actions button{min-height:42px;padding:7px 12px;font-size:12px;border-radius:10px;background:#332d46}
+.arcade-shell .fresh-quick-actions button:disabled{opacity:.5}
+.arcade-shell .fresh-play-viewport{min-height:min(500px,65dvh);overflow:visible;border-radius:15px}
+.arcade-shell .fresh-active-scene{min-height:min(500px,65dvh);padding:clamp(8px,1.4vw,18px)}
+.arcade-shell .fresh-casual,.arcade-shell .fresh-sports{max-width:940px}
+.arcade-shell .fresh-instruction{font-size:clamp(12px,1.1vw,15px);margin:8px auto}
+.arcade-shell .fresh-grid{margin:10px auto;gap:clamp(5px,.8vw,9px)}
+.arcade-shell .fresh-actions{display:flex;align-items:center;justify-content:space-between;gap:9px;margin:10px 2px 1px}
+.arcade-shell .fresh-actions a{font-size:12px;text-decoration:underline;color:#d3b8ff;min-height:40px;display:inline-flex;align-items:center}
+.arcade-shell .fresh-settings{position:relative;max-width:100%;color:#e4d7f4}
+.arcade-shell .fresh-settings summary{cursor:pointer;font-weight:680;font-size:12px;padding:9px 12px;background:#332d46;border:1px solid #ffffff24;border-radius:10px;min-height:42px}
+.arcade-shell .fresh-settings .fresh-preferences{display:flex;gap:8px;margin:10px 0}
+.arcade-shell .fresh-settings .fresh-preferences button{min-height:44px;font-size:12px;padding:8px 12px;text-align:center}
+.arcade-shell .fresh-help{margin:10px auto 0;max-width:800px;padding:14px 18px;background:#302a42;border:1px solid #ffffff29;border-radius:14px}
+.arcade-shell .fresh-help h2{font-size:18px}
+.arcade-shell .fresh-help p{line-height:1.5;font-size:13px}
+.arcade-shell .fresh-play-shell:fullscreen{width:100vw;max-width:none;min-height:100dvh;border:0;border-radius:0;overflow:auto;background:#151323;padding:clamp(12px,1.5vw,25px)}
+.arcade-shell .fresh-play-shell:fullscreen .fresh-play-viewport{min-height:calc(100dvh - 110px)}
+.arcade-shell .fresh-play-shell:fullscreen .fresh-active-scene{min-height:calc(100dvh - 110px)}
+.arcade-shell .fresh-svg{max-height:min(60dvh,660px);width:min(100%,800px)}
+.arcade-shell .expand-motion-view{max-height:min(61dvh,650px);width:min(100%,450px)}
+.arcade-shell .fresh-hop-court,.arcade-shell .fresh-spiral{max-height:min(63dvh,580px)}
+.arcade-shell .fresh-play-shell button{touch-action:manipulation}
+.arcade-shell .fresh-play-shell button:focus-visible{outline:3px solid #ffe8a8;outline-offset:3px}
+.arcade-shell .fresh-storage-note{margin:14px auto;color:#bcb4cb;font-size:11px;text-align:center;line-height:1.45}
+.arcade-shell .club-main,.arcade-shell .puzzle-main,.arcade-shell .arcade-game-main{max-width:1400px}
+.arcade-shell .puzzle-heading{margin:14px 0}
+.arcade-shell .puzzle-heading h1,.arcade-shell .club-heading h1,.arcade-shell .arcade-game-heading h1{font-size:clamp(26px,3vw,40px)}
+.arcade-shell .puzzle-workspace,.arcade-shell .club-workspace{margin:0 auto}
+@media(max-width:700px){
+ .arcade-shell .fresh-main{padding:9px 10px 35px}
+ .arcade-shell .fresh-heading{margin:6px 0 8px}
+ .arcade-shell .fresh-title-mark{width:43px;height:43px;border-radius:9px}
+ .arcade-shell .fresh-title-mark svg{width:37px;height:37px}
+ .arcade-shell .fresh-heading h1{font-size:clamp(20px,5vw,27px)}
+ .arcade-shell .fresh-heading p{font-size:12px}
+ .arcade-shell .fresh-play-shell{padding:6px;border-radius:12px}
+ .arcade-shell .fresh-game-bar{gap:6px;margin:3px 0 7px}
+ .arcade-shell .fresh-game-bar .fresh-stats{gap:5px}
+ .arcade-shell .fresh-game-bar .fresh-stats span{padding:6px 8px;font-size:11px}
+ .arcade-shell .fresh-quick-actions{width:100%;display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:4px}
+ .arcade-shell .fresh-quick-actions button{min-width:0;min-height:42px;padding:5px 3px;font-size:clamp(10px,2.4vw,13px)}
+ .arcade-shell .fresh-play-viewport,.arcade-shell .fresh-active-scene{min-height:260px}
+ .arcade-shell .fresh-active-scene{padding:7px}
+ .arcade-shell .fresh-settings .fresh-preferences{display:grid}
+ .arcade-shell .fresh-svg{max-height:55dvh}
+ .arcade-shell .fresh-actions{align-items:start;flex-wrap:wrap}
+ .arcade-shell .fresh-storage-note{font-size:10px}
+}
+@media(max-width:370px){
+ .arcade-shell .fresh-quick-actions{grid-template-columns:repeat(2,minmax(0,1fr))}
+ .arcade-shell .fresh-game-bar .fresh-stats span{font-size:10px}
+}
+@media(prefers-reduced-motion:reduce){.arcade-shell .fresh-play-shell *, .arcade-shell .fresh-play-shell *:before, .arcade-shell .fresh-play-shell *:after{scroll-behavior:auto!important;transition-duration:0ms!important;animation-duration:0ms!important}}
