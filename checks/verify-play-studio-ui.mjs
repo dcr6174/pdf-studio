@@ -25,7 +25,7 @@ for(const game of [...freshGames,...expansionGames]){
  assert(screen.includes('Ready to play?'),'game start '+game.slug);
  assert(screen.includes('Comfort Mode'),'accessibility controls '+game.slug);
  const props={kind:game.kind,active:false,comfort:false,onScore:noop,onFinish:noop,onSound:noop};
- const Comp=freshGames.some(g=>g.slug===game.slug)?(['cricket','volleyball','pool'].includes(game.kind)?FreshSports:['spiral','hop'].includes(game.kind)?FreshOneTap:FreshCasual):game.genre==='Driving'?ExpansionMotion:game.genre==='Relax'?ExpansionSatisfy:game.genre==='Think'||game.genre==='Quick'&&['pegball','meteor'].includes(game.kind)?ExpansionMind:ExpansionSkill;
+ const Comp=freshGames.some(g=>g.slug===game.slug)?(['cricket','volleyball','pool'].includes(game.kind)?FreshSports:['spiral','hop'].includes(game.kind)?FreshOneTap:FreshCasual):['highway','metro','jungle','hill','drift','snow','river','rocket','traffic','prix'].includes(game.kind)?ExpansionMotion:['wrap','clean','paint','rings','sand','untangle','screws','polish','shapes','shelf'].includes(game.kind)?ExpansionSatisfy:['laser','lights','pegball','meteor','falling','balance','oneline','path','count','math'].includes(game.kind)?ExpansionMind:ExpansionSkill;
  const board=renderToStaticMarkup(createElement(Comp,props));
  assert(board.includes('class=')&&board.includes('fresh-'), 'playable board renders '+game.slug);
  assert(board.includes('<button')||board.includes('role="button"'),'game has player controls '+game.slug);
