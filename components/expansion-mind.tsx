@@ -8,9 +8,7 @@ const startLights=()=>{const b=Array(16).fill(false);for(const id of [1,5,8,12,1
 const mirrorIndices=[11,1,4,19,17],mirrorCorrect=[1,1,0,1,1];
 const edges=[[0,1],[1,2],[2,3],[3,0],[0,4],[4,2]];
 const nodes=[[30,75],[160,20],[290,75],[160,240],[160,125]];
-const initialWalls=[8,9,10,11,16,17,18,19,25,26,27,32,33,34,39,40,41].filter(i=>![8,11,16,19,25,27,32,34,39,41].includes(i));
-const options=[['3','4','5'],['6','7','8'],['9','10','11']];
-function Beam({mirror}:{mirror:number[]}){const positions=new Set(mirrorIndices);let row=2,col=0,dir=1;const dirs=[[0,1],[1,0],[0,-1],[-1,0]],coords:[[number,number],[number,number]][]=[] as never;let seen=new Set<string>(),hit=false;let points=[[0,2.5]] as number[][];while(row>=0&&row<5&&col>=0&&col<5&&points.length<34){const key=row+','+col+','+dir;if(seen.has(key))break;seen.add(key);points.push([col+.5,row+.5]);const id=row*5+col;if(positions.has(id)){const flag=mirror[mirrorIndices.indexOf(id)],map=flag?[3,2,1,0]:[1,0,3,2];dir=map[dir];}row+=dirs[dir][0];col+=dirs[dir][1];}if(row===5&&col===2)hit=true;points.push([col+.5,row+.5]);return{points:points.map(([x,y])=>(x*60)+','+(y*60)).join(' '),hit};}
+function Beam({mirror}:{mirror:number[]}){const positions=new Set(mirrorIndices);let row=2,col=0,dir=1;const dirs=[[0,1],[1,0],[0,-1],[-1,0]];let seen=new Set<string>(),hit=false;let points=[[0,2.5]] as number[][];while(row>=0&&row<5&&col>=0&&col<5&&points.length<34){const key=row+','+col+','+dir;if(seen.has(key))break;seen.add(key);points.push([col+.5,row+.5]);const id=row*5+col;if(positions.has(id)){const flag=mirror[mirrorIndices.indexOf(id)],map=flag?[3,2,1,0]:[1,0,3,2];dir=map[dir];}row+=dirs[dir][0];col+=dirs[dir][1];}if(row===5&&col===2)hit=true;points.push([col+.5,row+.5]);return{points:points.map(([x,y])=>(x*60)+','+(y*60)).join(' '),hit};}
 const palette=['#9ee6d3','#ffe0a1','#cfb9f2','#f4adbd'];
 function Intro({children}:{children:React.ReactNode}){return <p className="fresh-instruction">{children}</p>}
 export function ExpansionMind({kind,active,comfort,onScore,onFinish,onSound}:Props){
