@@ -33,13 +33,13 @@ export function ExpansionMotion({kind,active,comfort,onScore,onFinish,onSound}:P
  else{q.life--;q.message=kind==='highway'?'Traffic collision. Try another lane.':kind==='metro'||kind==='jungle'?'Obstacle hit. Jump, duck or change lanes.':'Missed a gate. Line up the next one.';onSound('miss');}
  }else if(q.steps%8>=4)q.message='Obstacle approaching. Read the lane and prepare.';}
  q.jump=Math.max(0,q.jump-1);q.duck=Math.max(0,q.duck-1);
- const target=kind==='hill'?72:kind==='prix'?90:kind==='drift'?100:kind==='traffic'?20:kind==='rocket'?14:20;
+ const target=kind==='hill'?72:kind==='prix'?90:kind==='drift'?100:kind==='rocket'?14:20;
  const progress=kind==='hill'||kind==='prix'||kind==='drift'?q.steps:q.level;
  onScore(Math.max(0,Math.floor(progress))*10);
  if(q.life<=0){finish(false,'You reached '+Math.floor(progress)+' checkpoints. Have another go!');return;}
  if(progress>=target){finish(true,'You finished all '+target+' checkpoints!');return;}
  publish();
- },[active,kind,comfort,onScore,onSound,finish]);
+ },[active,kind,onScore,onSound,finish]);
  useEffect(()=>{if(!active||done.current)return;const timer=setInterval(tick,comfort?245:175);return()=>{clearInterval(timer);};},[active,comfort,tick]);
  const advance=()=>{if(!active||done.current)return;const q=ref.current;if(kind==='traffic'){const next=Math.floor(q.level),car=(Math.floor(q.steps*2)+next*3)%4;const clear=car!==2;if(!clear){q.life--;q.message='A car was passing! Wait for a clear gap.';onSound('miss');}else{q.level++;q.message='Safe crossing! Another lane ahead.';onSound('success');onScore(q.level*10);}if(q.life<=0)finish(false,'Traffic caught you. Try again with better timing.');if(q.level>=20)finish(true,'You safely crossed twenty lanes!');publish();return;}action('jump');};
  const hold=(yes:boolean)=>{if(!active||done.current)return;ref.current.hold=yes;publish();if(yes)onSound('tap');};
