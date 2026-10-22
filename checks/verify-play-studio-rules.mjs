@@ -78,6 +78,10 @@ assert(mind.includes('droppedCells(blocks,shape,orientation,previewColumn)'));
 assert(mind.includes('prize(points);win('),'Path Connect scores only on goal');
 assert(mind.includes('pegLocations.map('),'Peg Bounce renders real pins');
 const scenes=fs.readFileSync('components/fresh-illustrated-scenes.tsx','utf8');
+const skillStage=fs.readFileSync('components/skill-aim-stage.tsx','utf8');
+assert(skillStage.includes('role="group"')&&skillStage.includes('onAim(i)'));
+assert(skillStage.includes('popped.includes(i)'),'popped balloons disappear from sporting artwork');
+assert(fs.readFileSync('components/expansion-skill.tsx','utf8').includes('<SkillAimStage'),'sports render aim preview');
 assert(scenes.includes('DifferenceVillage')&&scenes.includes('HiddenObjectGarden'));
 
 console.log('PASS: anti-farming, penalty win/loss, round HUD, darts misses, tennis score and truthful discovery checks.');
