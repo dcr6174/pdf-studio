@@ -1,5 +1,5 @@
 import Link from '@/components/browser-link';
-import {ArrowDownRight,ArrowRight,BookOpen,Camera,Check,Gamepad2,Image as ImageIcon,Palette,PenLine,Printer,Shapes,Sparkles,WandSparkles} from 'lucide-react';
+import {ArrowDownRight,ArrowRight,BookOpen,Camera,Check,Gamepad2,Image as ImageIcon,Palette,PenLine,Shapes,Sparkles} from 'lucide-react';
 import {imageTools} from '@/lib/image-tools';
 import {activeArcadeGames} from '@/lib/arcade-active';
 
