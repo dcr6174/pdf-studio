@@ -5,7 +5,6 @@ import type {ArcadeEffect} from '@/lib/arcade-audio';
 type Props={kind:ExpansionKind;active:boolean;comfort:boolean;onScore:(n:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
 type Model={steps:number;lane:number;level:number;life:number;fuel:number;x:number;altitude:number;speed:number;hold:boolean;jump:number;duck:number;message:string;over:boolean};
 const newModel=():Model=>({steps:0,lane:1,level:0,life:3,fuel:100,x:0,altitude:1,speed:2,hold:false,jump:0,duck:0,message:'Start moving! The next obstacle is coming.',over:false});
-const motionKinds=['highway','metro','jungle','hill','drift','snow','river','rocket','traffic','prix'];
 const rule=(kind:ExpansionKind,index:number)=>{
  const obstacle=(index*7+Math.floor(index/3)+1)%3;
  const type=(index*11+1)%4;
@@ -13,7 +12,7 @@ const rule=(kind:ExpansionKind,index:number)=>{
  return{obstacle,type,gate};
 };
 export function ExpansionMotion({kind,active,comfort,onScore,onFinish,onSound}:Props){
- const ref=useRef<Model>(newModel()),[s,setS]=useState<Model>(()=>newModel()),done=useRef(false),running=useRef(false);
+ const ref=useRef<Model>(newModel()),[s,setS]=useState<Model>(()=>newModel()),done=useRef(false);
  const publish=()=>setS({...ref.current});
  const finish=(won:boolean,message:string)=>{if(done.current)return;done.current=true;ref.current.over=true;ref.current.message=message;publish();onSound(won?'goal':'miss');onFinish(won,message);};
  const move=(delta:number)=>{if(!active||done.current)return;const q=ref.current;if(kind==='prix'){q.x=Math.min(1.6,Math.max(-1.6,q.x+delta*.25));}else if(kind==='hill'){q.speed=Math.min(6,Math.max(.4,q.speed+delta*.4));}else if(kind==='rocket'){q.altitude=Math.min(2,Math.max(0,q.altitude-delta));}else{q.lane=Math.min(2,Math.max(0,q.lane+delta));}onSound('tap');publish();};
@@ -41,7 +40,7 @@ export function ExpansionMotion({kind,active,comfort,onScore,onFinish,onSound}:P
  if(progress>=target){finish(true,'You finished all '+target+' checkpoints!');return;}
  publish();
  },[active,kind,comfort,onScore,onSound,onFinish]);
- useEffect(()=>{if(!active||done.current)return;running.current=true;const timer=setInterval(tick,comfort?245:175);return()=>{running.current=false;clearInterval(timer);};},[active,comfort,tick]);
+ useEffect(()=>{if(!active||done.current)return;const timer=setInterval(tick,comfort?245:175);return()=>{clearInterval(timer);};},[active,comfort,tick]);
  const advance=()=>{if(!active||done.current)return;const q=ref.current;if(kind==='traffic'){const next=Math.floor(q.level),car=(Math.floor(q.steps*2)+next*3)%4;const clear=car!==2;if(!clear){q.life--;q.message='A car was passing! Wait for a clear gap.';onSound('miss');}else{q.level++;q.message='Safe crossing! Another lane ahead.';onSound('success');onScore(q.level*10);}if(q.life<=0)finish(false,'Traffic caught you. Try again with better timing.');if(q.level>=20)finish(true,'You safely crossed twenty lanes!');publish();return;}action('jump');};
  const hold=(yes:boolean)=>{if(!active||done.current)return;ref.current.hold=yes;publish();if(yes)onSound('tap');};
  const labels:Record<string,[string,string,string]>={
