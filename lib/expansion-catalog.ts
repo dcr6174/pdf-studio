@@ -15,7 +15,7 @@ export const expansionGames = [
     "genre": "Driving",
     "color": "#f5a9ba",
     "description": "Sprint through a bright three-lane metro world.",
-    "instructions": "Change lanes, jump over barriers and slide below signs. Collect 20 stars.",
+    "instructions": "Change lanes, jump over barriers and slide below signs. Clear 20 obstacles to finish.",
     "kind": "metro"
   },
   {
