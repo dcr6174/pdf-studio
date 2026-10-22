@@ -98,3 +98,15 @@
 .arcade-shell .expand-peg-play{display:block;width:min(100%,700px);height:auto;aspect-ratio:10/7;border-radius:18px;overflow:hidden;margin:14px auto;border:4px solid #a99cbe;background:#273653}
 .arcade-shell .expand-peg-play circle{transition:none}
 @media(max-width:650px){.arcade-shell .expand-peg-play{border-width:2px;border-radius:12px}}
+
+.arcade-shell .fresh-illustrated-scene{display:block;width:min(100%,900px);max-height:65dvh;margin:10px auto;border-radius:18px;border:5px solid #e0d3ae;background:#a4d8d7;touch-action:manipulation}
+.arcade-shell .fresh-scene-object{cursor:pointer}
+.arcade-shell .fresh-scene-object circle{transition:stroke .15s,fill .15s}
+.arcade-shell .fresh-scene-object:hover circle,.arcade-shell .fresh-scene-object:focus-visible circle{stroke:#ffe9a9;stroke-width:5;fill:#fff9}
+.arcade-shell .fresh-difference-scenes{display:grid;grid-template-columns:1fr 1fr;gap:10px;max-width:1030px;margin:10px auto}
+.arcade-shell .fresh-difference-scenes>div{display:grid;gap:7px}
+.arcade-shell .fresh-difference-scenes>div>span{text-align:center;font-size:12px;letter-spacing:.1em;font-weight:850;color:#d3eade}
+.arcade-shell .fresh-difference-art{width:100%;height:auto;border:5px solid #e5d5c6;border-radius:12px;touch-action:manipulation}
+.arcade-shell .fresh-difference-art g[role=button]{cursor:pointer}
+.arcade-shell .fresh-difference-art g[role=button]:focus-visible{outline:3px solid #ffda84}
+@media(max-width:570px){.arcade-shell .fresh-difference-scenes{gap:5px}.arcade-shell .fresh-difference-art{border-width:2px}.arcade-shell .fresh-illustrated-scene{border-width:2px}}
