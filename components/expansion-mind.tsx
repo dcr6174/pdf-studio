@@ -5,11 +5,10 @@ import type {ArcadeEffect} from '@/lib/arcade-audio';
 type Props={kind:ExpansionKind;active:boolean;comfort:boolean;onScore:(n:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
 type Block={x:number;y:number};
 const startLights=()=>{const b=Array(16).fill(false);for(const id of [1,5,8,12,14])for(const delta of [0,-4,4,-1,1]){const to=id+delta;if(to<0||to>=16||(Math.abs(delta)===1&&Math.floor(to/4)!==Math.floor(id/4)))continue;b[to]=!b[to];}return b as boolean[];};
-const mirrorIndices=[11,1,4,19,17],mirrorCorrect=[1,1,0,1,1];
+const mirrorIndices=[11,1,4,19,17];
 const edges=[[0,1],[1,2],[2,3],[3,0],[0,4],[4,2]];
 const nodes=[[30,75],[160,20],[290,75],[160,240],[160,125]];
-function Beam({mirror}:{mirror:number[]}){const positions=new Set(mirrorIndices);let row=2,col=0,dir=1;const dirs=[[0,1],[1,0],[0,-1],[-1,0]];let seen=new Set<string>(),hit=false;let points=[[0,2.5]] as number[][];while(row>=0&&row<5&&col>=0&&col<5&&points.length<34){const key=row+','+col+','+dir;if(seen.has(key))break;seen.add(key);points.push([col+.5,row+.5]);const id=row*5+col;if(positions.has(id)){const flag=mirror[mirrorIndices.indexOf(id)],map=flag?[3,2,1,0]:[1,0,3,2];dir=map[dir];}row+=dirs[dir][0];col+=dirs[dir][1];}if(row===5&&col===2)hit=true;points.push([col+.5,row+.5]);return{points:points.map(([x,y])=>(x*60)+','+(y*60)).join(' '),hit};}
-const palette=['#9ee6d3','#ffe0a1','#cfb9f2','#f4adbd'];
+function Beam({mirror}:{mirror:number[]}){const positions=new Set(mirrorIndices);let row=2,col=0,dir=0;const dirs=[[0,1],[1,0],[0,-1],[-1,0]];let seen=new Set<string>(),hit=false;let points=[[0,2.5]] as number[][];while(row>=0&&row<5&&col>=0&&col<5&&points.length<34){const key=row+','+col+','+dir;if(seen.has(key))break;seen.add(key);points.push([col+.5,row+.5]);const id=row*5+col;if(positions.has(id)){const flag=mirror[mirrorIndices.indexOf(id)],map=flag?[3,2,1,0]:[1,0,3,2];dir=map[dir];}row+=dirs[dir][0];col+=dirs[dir][1];}if(row===5&&col===2)hit=true;points.push([col+.5,row+.5]);return{points:points.map(([x,y])=>(x*60)+','+(y*60)).join(' '),hit};}
 function Intro({children}:{children:React.ReactNode}){return <p className="fresh-instruction">{children}</p>}
 export function ExpansionMind({kind,active,comfort,onScore,onFinish,onSound}:Props){
  const [board,setBoard]=useState<boolean[]>(startLights),[mirrors,setMirrors]=useState([0,0,1,0,0]),[steps,setSteps]=useState(0),[score,setScore]=useState(0),[selection,setSelection]=useState<number[]>([]),[path,setPath]=useState([0]),[finishedEdges,setFinishedEdges]=useState<string[]>([]),[marbles,setMarbles]=useState(0);
