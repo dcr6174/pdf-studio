@@ -81,3 +81,16 @@
 .arcade-shell .expand-jar{box-shadow:0 12px 35px #0004}
 @media(max-width:550px){.arcade-shell .expand-clean-canvas{border-width:5px;border-radius:10px}.arcade-shell .expand-pour-controls{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:5px}.arcade-shell .expand-pour-controls button{min-width:0;min-height:58px;padding:6px;font-size:12px}}
 @media(prefers-reduced-motion:reduce){.arcade-shell .expand-clean-meter span{transition:none}}
+
+/* Brain-game progression, falling previews and helpful selection cues */
+.arcade-shell .expand-falling-queue{display:flex;align-items:center;justify-content:center;gap:22px;flex-wrap:wrap;margin:8px auto 14px}
+.arcade-shell .expand-falling-queue>div{display:grid;gap:5px;justify-items:center;font-size:11px;color:#e6d9f9}
+.arcade-shell .expand-shape-mini{display:grid;grid-template-columns:repeat(4,15px);grid-template-rows:repeat(4,15px);gap:2px}
+.arcade-shell .expand-shape-mini>span{border-radius:3px;background:#40375133}
+.arcade-shell .expand-shape-mini>span.filled{border:1px solid #ffffffaa;box-shadow:inset 0 0 7px #fff5}
+.arcade-shell .expand-falling-queue button{min-height:48px}
+.arcade-shell .expand-falling>span.ghost{background:#9de5cf79;border:2px dashed #b5fce0}
+.arcade-shell .expand-falling-controls button[aria-pressed=true]{background:#b8eccf;color:#182d2b}
+.arcade-shell .expand-path button.is-next{outline:2px solid #b1e9bc;outline-offset:-4px;background:#547a6988}
+.arcade-shell .expand-scale-controls{max-width:480px;grid-template-columns:1fr}
+@media(max-width:550px){.arcade-shell .expand-falling-queue{gap:10px}.arcade-shell .expand-shape-mini{grid-template-columns:repeat(4,12px);grid-template-rows:repeat(4,12px)}}
