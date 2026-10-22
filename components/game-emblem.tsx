@@ -69,6 +69,23 @@ export function GameEmblem({slug,compact=false}:{slug:string;compact?:boolean}){
  case 'buddy-burrows':art=<>{[0,1,2].map(i=><ellipse key={i} cx={28+i*37} cy={97-i%2*18} rx="22" ry="11" fill="#6f5969"/>)}{box(48,27,36,54,pink,14)}{circle(58,47,3,'#3b2b43')}{circle(75,47,3,'#3b2b43')}{line('M58 61q8 9 15 0','#3b2b43',3)}{line('M25 44 16 34M104 43l10-13',gold,4)}</>;break;
  case 'crate-escape':art=<>{box(25,31,73,73,gold,3)}{line('M31 37 92 98M92 37 31 98M31 37H92V98H31z','#88634e',5)}{line('M16 117H111M108 63V14m-10 9 10-10 10 10',mint,5)}</>;break;
  case 'disc-drop-plinko':art=<>{[0,1,2,3,4,5,6,7,8,9].map(i=><circle key={i} cx={23+i%4*27} cy={43+Math.floor(i/4)*26} r="4" fill={blue}/>)}{circle(65,18,11,gold)}{line('M64 30 37 52 65 77 53 103',pink,4)}{box(16,110,99,9,mint,3)}</>;break;
+
+ case 'balloon-pop-party':art=<>{[0,1,2].map(i=><g key={i}>{circle(31+i*32,37+i%2*12,16,[pink,blue,gold][i])}{line('M'+(31+i*32)+' '+(53+i%2*12)+'q-10 20 3 43',ink,2)}</g>)}</>;break;
+ case 'fruit-slice':art=<>{circle(52,56,28,'#fb8b70')}{circle(91,85,21,mint)}{line('M15 117 111 12',ink,7)}{line('M19 104 109 5',gold,2)}{circle(52,56,9,gold)}</>;break;
+ case 'catch-the-stars':art=<>{box(24,81,80,29,gold,15)}{line('M30 82 40 65M98 82 87 65',ink,3)}{circle(51,38,16,pink)}{text('★',50,46,34)}{circle(84,22,9,mint)}</>;break;
+ case 'spot-the-difference':art=<>{box(8,21,52,88,blue)}{box(68,21,52,88,mint)}{circle(35,52,14,gold)}{circle(95,52,14,pink)}{line('M18 92h30m29 0h30',ink,4)}</>;break;
+ case 'sequence-recall':art=<>{[0,1,2,3].map(i=><g key={i}>{box(18+i%2*48,18+Math.floor(i/2)*48,42,42,[pink,blue,gold,mint][i])}{text(String(i+1),39+i%2*48,47+Math.floor(i/2)*48,21)}</g>)}</>;break;
+ case 'find-hidden-object':art=<>{circle(59,60,33,mint)}{circle(59,60,20,'#2c314d')}{line('M82 84 113 114',gold,11)}{text('?',59,69,26)}</>;break;
+ case 'anagram-shuffle':art=<>{['A','R','T'].map((c,i)=><g key={i} transform={'rotate('+(i-1)*13+' '+(29+i*35)+' 68)'}>{box(15+i*35,39,32,57,[pink,blue,gold][i])}{text(c,31+i*35,77,25)}</g>)}</>;break;
+ case 'hangman-garden':art=<>{line('M27 110V21H78V32',mint,8)}{circle(78,48,16,gold)}{line('M78 64V91m0-17-17 11m17-11 17 11',pink,7)}{line('M16 110H112',ink,6)}</>;break;
+ case 'word-ladder':art=<>{[0,1,2].map(i=><g key={i}>{box(10+i*27,76-i*24,38,31,[mint,blue,pink][i])}{text(['C','O','G'][i],29+i*27,98-i*24,17)}</g>)}{line('M104 102V17m-11 12 11-12 11 12',gold,5)}</>;break;
+ case 'color-sort':art=<>{[0,1,2].map(i=><g key={i}>{line('M'+(26+i*37)+' 23v79q0 16 12 16t12-16V23',ink,5)}{circle(38+i*37,98,9,[pink,blue,gold][i])}{circle(38+i*37,79,9,[pink,blue,gold][i])}</g>)}</>;break;
+ case 'water-flow':art=<>{line('M20 20h45v47h43v40',blue,17)}{line('M20 20h45v47h43v40',mint,7)}{circle(20,20,12,gold)}{circle(108,107,12,pink)}</>;break;
+ case 'parking-escape':art=<>{box(10,17,36,82,blue)}{box(52,21,54,28,pink)}{box(52,58,54,28,mint)}{line('M19 108H113m-13-12 13 12-13 12',gold,5)}</>;break;
+ case 'tic-tac-toe-plus':art=<>{grid(26,26,3,blue)}{line('M30 32 41 43M41 32 30 43M78 32 89 43M89 32 78 43',ink,4)}{circle(64,65,9,pink)}{circle(36,84,8,gold)}</>;break;
+ case 'boundary-cricket':art=<>{line('M42 16 61 102',gold,15)}{line('M27 108h78',mint,7)}{circle(96,52,15,pink)}{line('M83 53q-14 12-4 27',ink,3)}</>;break;
+ case 'volleyball-rally':art=<>{circle(47,46,28,gold)}{line('M22 37q34-17 49 0m-48 18q34-12 47 0M48 21v51',ink,4)}{line('M87 15V115M98 15V115M110 15V115M84 39H116M84 68H116M84 97H116',blue,4)}</>;break;
+ case 'eight-ball-pool':art=<>{circle(64,64,49,ink)}{circle(64,64,23,'#f4eeea')}{text('8',64,76,32)}{line('M6 121 46 87',gold,8)}</>;break;
  default:throw Error('Missing unique game emblem: '+slug);
  }
  return <svg className={compact?'game-emblem is-compact':'game-emblem'} viewBox="0 0 128 128" aria-hidden="true"><defs><radialGradient id={id}><stop stopColor="#7962ad" stopOpacity=".22"/><stop offset="1" stopColor="#7962ad" stopOpacity="0"/></radialGradient></defs><rect width="128" height="128" fill={'url(#'+id+')'}/>{art}</svg>;
