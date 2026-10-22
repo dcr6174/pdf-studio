@@ -2,14 +2,19 @@
 import {useCallback,useEffect,useRef,useState} from 'react';
 import Link from '@/components/browser-link';
 import {GameEmblem} from '@/components/game-emblem';
-import {freshGame,type FreshSlug} from '@/lib/fresh-catalog';
+import {freshGame,type FreshSlug,type FreshKind} from '@/lib/fresh-catalog';
+import {expansionGame,type ExpansionSlug,type ExpansionKind} from '@/lib/expansion-catalog';
+import {ExpansionMotion} from '@/components/expansion-motion';
+import {ExpansionSatisfy} from '@/components/expansion-satisfy';
+import {ExpansionMind} from '@/components/expansion-mind';
+import {ExpansionSkill} from '@/components/expansion-skill';
 import {FreshCasual} from '@/components/fresh-casual';
 import {FreshSports} from '@/components/fresh-sports';
 import {FreshOneTap} from '@/components/fresh-one-tap';
 import {playArcadeSound,type ArcadeEffect} from '@/lib/arcade-audio';
 
-export function FreshGame({slug}:{slug:FreshSlug}){
- const game=freshGame(slug)!;
+export function FreshGame({slug}:{slug:FreshSlug|ExpansionSlug}){
+ const game=freshGame(slug)??expansionGame(slug)!;
  const [phase,setPhase]=useState<'ready'|'play'|'paused'|'finished'>('ready');
  const [session,setSession]=useState(0),[score,setScore]=useState(0),[best,setBest]=useState(0);
  const [comfort,setComfort]=useState(false),[sound,setSound]=useState(false),[loaded,setLoaded]=useState(false),[result,setResult]=useState({won:false,message:''}),[help,setHelp]=useState(false);
@@ -22,6 +27,10 @@ export function FreshGame({slug}:{slug:FreshSlug}){
  const restart=()=>{setScore(0);setResult({won:false,message:''});setSession(i=>i+1);setPhase('play');};
  const toggleSound=()=>{setSound(s=>{try{localStorage.setItem('studio-arcade:sound',String(!s));}catch{}return !s;});};
  const toggleComfort=()=>{setComfort(s=>{try{localStorage.setItem('studio-arcade:comfort',String(!s));}catch{}return !s;});};
+ const expansion=!!expansionGame(slug);
+ const motion=['highway','metro','jungle','hill','drift','snow','river','rocket','traffic','prix'].includes(game.kind);
+ const satisfy=['wrap','clean','paint','rings','sand','untangle','screws','polish','shapes','shelf'].includes(game.kind);
+ const mind=['laser','lights','pegball','meteor','falling','balance','oneline','path','count','math'].includes(game.kind);
  const isSport=['cricket','volleyball','pool'].includes(game.kind);
  const isOneTap=['spiral','hop'].includes(game.kind);
  const settings=<div className="fresh-preferences"><button aria-pressed={comfort} onClick={toggleComfort}>👓 Comfort Mode: {comfort?'On':'Off'}</button><button aria-pressed={sound} onClick={toggleSound}>{sound?'🔊 Sound on':'🔇 Sound off'}</button></div>;
@@ -31,7 +40,7 @@ export function FreshGame({slug}:{slug:FreshSlug}){
  <div className="fresh-layout"><section className="fresh-play-shell" aria-label={game.name+' play area'}>
  <div className="fresh-stats"><span>Score <b>{score}</b></span><span>Personal best <b>{best}</b></span><span>{phase==='paused'?'Paused':phase==='finished'?'Finished':phase==='play'?'Playing':'Ready'}</span></div>
  <div className="fresh-play-viewport">
- {session>0&&<div className="fresh-active-scene" inert={phase!=='play'}>{isSport?<FreshSports key={session} kind={game.kind} active={phase==='play'} comfort={comfort} onScore={onScore} onFinish={onFinish} onSound={onSound}/>:isOneTap?<FreshOneTap key={session} kind={game.kind} active={phase==='play'} comfort={comfort} onScore={onScore} onFinish={onFinish} onSound={onSound}/>:<FreshCasual key={session} kind={game.kind} active={phase==='play'} comfort={comfort} onScore={onScore} onFinish={onFinish} onSound={onSound}/>}</div>}
+ {session>0&&<div className="fresh-active-scene" inert={phase!=='play'}>{expansion?(motion?<ExpansionMotion key={session} kind={game.kind as ExpansionKind} active={phase==='play'} comfort={comfort} onScore={onScore} onFinish={onFinish} onSound={onSound}/>:satisfy?<ExpansionSatisfy key={session} kind={game.kind as ExpansionKind} active={phase==='play'} comfort={comfort} onScore={onScore} onFinish={onFinish} onSound={onSound}/>:mind?<ExpansionMind key={session} kind={game.kind as ExpansionKind} active={phase==='play'} comfort={comfort} onScore={onScore} onFinish={onFinish} onSound={onSound}/>:<ExpansionSkill key={session} kind={game.kind as ExpansionKind} active={phase==='play'} comfort={comfort} onScore={onScore} onFinish={onFinish} onSound={onSound}/>):isSport?<FreshSports key={session} kind={game.kind as FreshKind} active={phase==='play'} comfort={comfort} onScore={onScore} onFinish={onFinish} onSound={onSound}/>:isOneTap?<FreshOneTap key={session} kind={game.kind as FreshKind} active={phase==='play'} comfort={comfort} onScore={onScore} onFinish={onFinish} onSound={onSound}/>:<FreshCasual key={session} kind={game.kind as FreshKind} active={phase==='play'} comfort={comfort} onScore={onScore} onFinish={onFinish} onSound={onSound}/>}</div>}
  {phase==='ready'&&<div className="fresh-curtain"><GameEmblem slug={slug} compact/><h2>Ready to play?</h2><p>{game.instructions}</p><button className="fresh-primary" disabled={!loaded} onClick={restart}>▶ Play now</button><p className="fresh-curtain-extra">No account required. Take your time.</p></div>}
  {phase==='paused'&&<div className="fresh-curtain"><h2>Game paused</h2><p>Your place is saved while you take a break.</p><button className="fresh-primary" onClick={()=>setPhase('play')}>▶ Resume</button></div>}
  {phase==='finished'&&<div className="fresh-curtain" role="status"><h2>{result.won?'Nicely played!':'Another round?'}</h2><p>{result.message}</p><p>Score: <b>{score}</b> · Best: <b>{best}</b></p><button className="fresh-primary" onClick={restart}>↻ Play again</button><Link href="/lab/arcade">Choose another game →</Link></div>}
