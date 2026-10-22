@@ -1,5 +1,5 @@
 'use client';
-import {useEffect,useRef,useState} from 'react';
+import {useCallback,useEffect,useRef,useState} from 'react';
 import type {ExpansionKind} from '@/lib/expansion-catalog';
 import type {ArcadeEffect} from '@/lib/arcade-audio';
 type Props={kind:ExpansionKind;active:boolean;comfort:boolean;onScore:(n:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
@@ -8,22 +8,22 @@ const startLights=()=>{const b=Array(16).fill(false);for(const id of [1,5,8,12,1
 const mirrorIndices=[11,1,4,19,17];
 const edges=[[0,1],[1,2],[2,3],[3,0],[0,4],[4,2]];
 const nodes=[[30,75],[160,20],[290,75],[160,240],[160,125]];
-function Beam({mirror}:{mirror:number[]}){const positions=new Set(mirrorIndices);let row=2,col=0,dir=0;const dirs=[[0,1],[1,0],[0,-1],[-1,0]];let seen=new Set<string>(),hit=false;let points=[[0,2.5]] as number[][];while(row>=0&&row<5&&col>=0&&col<5&&points.length<34){const key=row+','+col+','+dir;if(seen.has(key))break;seen.add(key);points.push([col+.5,row+.5]);const id=row*5+col;if(positions.has(id)){const flag=mirror[mirrorIndices.indexOf(id)],map=flag?[3,2,1,0]:[1,0,3,2];dir=map[dir];}row+=dirs[dir][0];col+=dirs[dir][1];}if(row===5&&col===2)hit=true;points.push([col+.5,row+.5]);return{points:points.map(([x,y])=>(x*60)+','+(y*60)).join(' '),hit};}
+function Beam({mirror}:{mirror:number[]}){const positions=new Set(mirrorIndices);let row=2,col=0,dir=0;const dirs=[[0,1],[1,0],[0,-1],[-1,0]];const seen=new Set<string>();let hit=false;const points=[[0,2.5]] as number[][];while(row>=0&&row<5&&col>=0&&col<5&&points.length<34){const key=row+','+col+','+dir;if(seen.has(key))break;seen.add(key);points.push([col+.5,row+.5]);const id=row*5+col;if(positions.has(id)){const flag=mirror[mirrorIndices.indexOf(id)],map=flag?[3,2,1,0]:[1,0,3,2];dir=map[dir];}row+=dirs[dir][0];col+=dirs[dir][1];}if(row===5&&col===2)hit=true;points.push([col+.5,row+.5]);return{points:points.map(([x,y])=>(x*60)+','+(y*60)).join(' '),hit};}
 function Intro({children}:{children:React.ReactNode}){return <p className="fresh-instruction">{children}</p>}
 export function ExpansionMind({kind,active,comfort,onScore,onFinish,onSound}:Props){
  const [board,setBoard]=useState<boolean[]>(startLights),[mirrors,setMirrors]=useState([0,0,1,0,0]),[steps,setSteps]=useState(0),[score,setScore]=useState(0),[selection,setSelection]=useState<number[]>([]),[path,setPath]=useState([0]),[finishedEdges,setFinishedEdges]=useState<string[]>([]),[marbles,setMarbles]=useState(0);
  const [balls,setBalls]=useState(0),[drop,setDrop]=useState(2),[shield,setShield]=useState(1),[meteors,setMeteors]=useState<{col:number;row:number}[]>([]),[damage,setDamage]=useState(0);
  const [shape,setShape]=useState(0),[orientation,setOrientation]=useState(0),[blocks,setBlocks]=useState<Block[]>([]),[rows,setRows]=useState(0);
  const [leftWeight,setLeftWeight]=useState(0),[rightWeight,setRightWeight]=useState(0),[leftDistance,setLeftDistance]=useState(1),[rightDistance,setRightDistance]=useState(1);
- const [answer,setAnswer]=useState(-1),[feedback,setFeedback]=useState('');
+ const [feedback,setFeedback]=useState('');
  const latest=useRef({shield:1,damage:0,balls:0}),meteorRef=useRef<{col:number;row:number}[]>([]);
  const prize=(n:number)=>{setScore(n);onScore(n);onSound('success');};
- const win=(text:string)=>{onSound('goal');onFinish(true,text);};
- const fail=(text:string)=>{onSound('miss');onFinish(false,text);};
+ const win=useCallback((text:string)=>{onSound('goal');onFinish(true,text);},[onSound,onFinish]);
+ const fail=useCallback((text:string)=>{onSound('miss');onFinish(false,text);},[onSound,onFinish]);
  const flip=(i:number)=>{if(!active)return;const b=[...board];for(const delta of [0,-4,4,-1,1]){const to=i+delta;if(to<0||to>=16||(Math.abs(delta)===1&&Math.floor(to/4)!==Math.floor(i/4)))continue;b[to]=!b[to];}setBoard(b);setSteps(s=>s+1);onSound('tap');if(!b.some(Boolean)){prize(100);win('You switched off every light!');}};
  const turnMirror=(index:number)=>{if(!active)return;const k=mirrorIndices.indexOf(index);if(k<0)return;const m=[...mirrors];m[k]=1-m[k];setMirrors(m);onSound('tap');const traced=Beam({mirror:m});if(traced.hit){prize(100);win('The beam reached its target!');}};
  const launch=()=>{if(!active||balls>=10)return;const pocket=(drop*9+balls*7+13)%5,pts=[25,50,100,50,25][pocket];const next=score+pts;prize(next);setBalls(v=>v+1);setFeedback('Ball fell into pocket '+(pocket+1)+' · +'+pts+' points');if(balls+1===10)win('Ten balls dropped. Total '+next+' points!');};
- useEffect(()=>{if(kind!=='meteor'||!active)return;const interval=setInterval(()=>{const spawned=(Math.floor(Date.now()/1100)+latest.current.balls*2)%3;const next=[...meteorRef.current.map(m=>({col:m.col,row:m.row+1})),{col:spawned,row:0}];const impacts=next.filter(m=>m.row>=6);const remaining=next.filter(m=>m.row<6);meteorRef.current=remaining;setMeteors(remaining);const hits=impacts.filter(m=>m.col===latest.current.shield).length;const missed=impacts.filter(m=>m.col!==latest.current.shield).length;const saved=latest.current.balls+hits;if(hits){latest.current.balls=saved;onScore(saved*10);onSound('hit');}if(missed){latest.current.damage+=missed;setDamage(latest.current.damage);onSound('miss');}setMarbles(saved);if(saved>=12)win('Twelve meteorites blocked!');else if(latest.current.damage>=4)fail('Four meteorites slipped past the shield.');},comfort?650:430);return()=>clearInterval(interval);},[kind,active,comfort,onScore,onSound,onFinish]);
+ useEffect(()=>{if(kind!=='meteor'||!active)return;const interval=setInterval(()=>{const spawned=(Math.floor(Date.now()/1100)+latest.current.balls*2)%3;const next=[...meteorRef.current.map(m=>({col:m.col,row:m.row+1})),{col:spawned,row:0}];const impacts=next.filter(m=>m.row>=6);const remaining=next.filter(m=>m.row<6);meteorRef.current=remaining;setMeteors(remaining);const hits=impacts.filter(m=>m.col===latest.current.shield).length;const missed=impacts.filter(m=>m.col!==latest.current.shield).length;const saved=latest.current.balls+hits;if(hits){latest.current.balls=saved;onScore(saved*10);onSound('hit');}if(missed){latest.current.damage+=missed;setDamage(latest.current.damage);onSound('miss');}setMarbles(saved);if(saved>=12)win('Twelve meteorites blocked!');else if(latest.current.damage>=4)fail('Four meteorites slipped past the shield.');},comfort?650:430);return()=>clearInterval(interval);},[kind,active,comfort,onScore,onSound,win,fail]);
  const setShieldPosition=(n:number)=>{const x=Math.max(0,Math.min(2,n));setShield(x);latest.current.shield=x;};
  const shapes=[[[0,0],[1,0],[0,1],[1,1]],[[0,0],[0,1],[0,2],[0,3]],[[0,0],[0,1],[1,1],[1,2]],[[0,0],[1,0],[2,0],[1,1]]];
  const rotated=(piece:number,spin:number)=>shapes[piece].map(([x,y])=>{let a=x,b=y;for(let i=0;i<spin;i++){[a,b]=[-b,a];}return[a,b];}).map(([x,y],_,all)=>[x-Math.min(...all.map(v=>v[0])),y-Math.min(...all.map(v=>v[1]))]);
