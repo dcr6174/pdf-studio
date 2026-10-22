@@ -14,7 +14,7 @@ const rule=(kind:ExpansionKind,index:number)=>{
 export function ExpansionMotion({kind,active,comfort,onScore,onFinish,onSound}:Props){
  const ref=useRef<Model>(newModel()),[s,setS]=useState<Model>(()=>newModel()),done=useRef(false);
  const publish=()=>setS({...ref.current});
- const finish=(won:boolean,message:string)=>{if(done.current)return;done.current=true;ref.current.over=true;ref.current.message=message;publish();onSound(won?'goal':'miss');onFinish(won,message);};
+ const finish=useCallback((won:boolean,message:string)=>{if(done.current)return;done.current=true;ref.current.over=true;ref.current.message=message;setS({...ref.current});onSound(won?'goal':'miss');onFinish(won,message);},[onSound,onFinish]);
  const move=(delta:number)=>{if(!active||done.current)return;const q=ref.current;if(kind==='prix'){q.x=Math.min(1.6,Math.max(-1.6,q.x+delta*.25));}else if(kind==='hill'){q.speed=Math.min(6,Math.max(.4,q.speed+delta*.4));}else if(kind==='rocket'){q.altitude=Math.min(2,Math.max(0,q.altitude-delta));}else{q.lane=Math.min(2,Math.max(0,q.lane+delta));}onSound('tap');publish();};
  const action=(what:'jump'|'duck')=>{if(!active||done.current)return;ref.current[what]=comfort?6:4;onSound('hit');publish();};
  const tick=useCallback(()=>{if(done.current||!active)return;const q=ref.current;
@@ -39,7 +39,7 @@ export function ExpansionMotion({kind,active,comfort,onScore,onFinish,onSound}:P
  if(q.life<=0){finish(false,'You reached '+Math.floor(progress)+' checkpoints. Have another go!');return;}
  if(progress>=target){finish(true,'You finished all '+target+' checkpoints!');return;}
  publish();
- },[active,kind,comfort,onScore,onSound,onFinish]);
+ },[active,kind,comfort,onScore,onSound,finish]);
  useEffect(()=>{if(!active||done.current)return;const timer=setInterval(tick,comfort?245:175);return()=>{clearInterval(timer);};},[active,comfort,tick]);
  const advance=()=>{if(!active||done.current)return;const q=ref.current;if(kind==='traffic'){const next=Math.floor(q.level),car=(Math.floor(q.steps*2)+next*3)%4;const clear=car!==2;if(!clear){q.life--;q.message='A car was passing! Wait for a clear gap.';onSound('miss');}else{q.level++;q.message='Safe crossing! Another lane ahead.';onSound('success');onScore(q.level*10);}if(q.life<=0)finish(false,'Traffic caught you. Try again with better timing.');if(q.level>=20)finish(true,'You safely crossed twenty lanes!');publish();return;}action('jump');};
  const hold=(yes:boolean)=>{if(!active||done.current)return;ref.current.hold=yes;publish();if(yes)onSound('tap');};
@@ -55,8 +55,8 @@ export function ExpansionMotion({kind,active,comfort,onScore,onFinish,onSound}:P
  traffic:['Tap Forward','Wait for a safe gap','20 streets'],
  prix:['Steer the kart','Stay on the curving road','90 checkpoints']
  };
- const [label,hint,goal]=labels[kind]??['Drive','Avoid obstacles','Finish'];
- const next=Math.floor(s.steps/8)+(s.steps%8===0?0:1),detail=rule(kind,next),angle=Math.sin(s.steps/5)*.85;
+ const [,hint,goal]=labels[kind]??['Drive','Avoid obstacles','Finish'];
+ const angle=Math.sin(s.steps/5)*.85;
  const sceneIsRunner=['highway','metro','jungle','snow','river'].includes(kind);
  const roadKind=kind==='river'?'#376eaa':kind==='snow'?'#e6edf6':kind==='jungle'?'#916e54':'#405369';
  const playerSymbol=kind==='river'?'🚤':kind==='snow'?'⛷️':kind==='highway'?'🚙':kind==='jungle'?'🏃':'🏃';
