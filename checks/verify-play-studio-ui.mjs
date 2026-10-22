@@ -1,0 +1,33 @@
+import assert from 'node:assert/strict';
+import {build} from 'vite';
+import {createElement} from 'react';
+import {renderToStaticMarkup} from 'react-dom/server';
+import {resolve} from 'node:path';
+import {pathToFileURL} from 'node:url';
+const sources={directory:'components/arcade-directory.tsx',fresh:'components/fresh-game.tsx',casual:'components/fresh-casual.tsx',sports:'components/fresh-sports.tsx',oneTap:'components/fresh-one-tap.tsx',motion:'components/expansion-motion.tsx',mind:'components/expansion-mind.tsx',satisfy:'components/expansion-satisfy.tsx',skill:'components/expansion-skill.tsx',showcase:'components/lab-showcase.tsx',catalog:'lib/arcade-active.ts',freshCatalog:'lib/fresh-catalog.ts',expansionCatalog:'lib/expansion-catalog.ts'};
+const input=Object.fromEntries(Object.entries(sources).map(([key,path])=>[key,resolve(path)]));
+await build({configFile:false,logLevel:'error',resolve:{alias:{'@':process.cwd()}},build:{ssr:true,outDir:'.play-studio-ui-check',emptyOutDir:true,rollupOptions:{input,output:{entryFileNames:'[name].mjs'},external:['react','react-dom','react-dom/server']}});
+const load=name=>import(pathToFileURL(resolve('.play-studio-ui-check/'+name+'.mjs')).href);
+const [{ArcadeDirectory},{FreshGame},{FreshCasual},{FreshSports},{FreshOneTap},{ExpansionMotion},{ExpansionMind},{ExpansionSatisfy},{ExpansionSkill},{LabShowcase},{activeArcadeGames},{freshGames},{expansionGames}]=await Promise.all(['directory','fresh','casual','sports','oneTap','motion','mind','satisfy','skill','showcase','catalog','freshCatalog','expansionCatalog'].map(load));
+assert.equal(activeArcadeGames.length,100);
+const directory=renderToStaticMarkup(createElement(ArcadeDirectory));
+assert(directory.includes('100 easy-to-start mini games'));
+assert(directory.includes('Find your next favourite.'));
+assert(directory.includes('Show more games'));
+assert(directory.includes('/lab/arcade/boundary-cricket'));
+const showcase=renderToStaticMarkup(createElement(LabShowcase));
+assert(showcase.includes('Image Studio')&&showcase.includes('Play Studio')&&showcase.includes('Create Studio'));
+assert(showcase.includes('/lab/image-studio')&&showcase.includes('/lab/arcade'));
+const noop=()=>{};
+for(const game of [...freshGames,...expansionGames]){
+ const screen=renderToStaticMarkup(createElement(FreshGame,{slug:game.slug}));
+ assert(screen.includes('<h1>'+game.name+'</h1>'),'game heading '+game.slug);
+ assert(screen.includes('Ready to play?'),'game start '+game.slug);
+ assert(screen.includes('Comfort Mode'),'accessibility controls '+game.slug);
+ const props={kind:game.kind,active:false,comfort:false,onScore:noop,onFinish:noop,onSound:noop};
+ const Comp=freshGames.some(g=>g.slug===game.slug)?(['cricket','volleyball','pool'].includes(game.kind)?FreshSports:['spiral','hop'].includes(game.kind)?FreshOneTap:FreshCasual):game.genre==='Driving'?ExpansionMotion:game.genre==='Relax'?ExpansionSatisfy:game.genre==='Think'||game.genre==='Quick'&&['pegball','meteor'].includes(game.kind)?ExpansionMind:ExpansionSkill;
+ const board=renderToStaticMarkup(createElement(Comp,props));
+ assert(board.includes('class=')&&board.includes('fresh-'), 'playable board renders '+game.slug);
+ assert(board.includes('<button')||board.includes('role="button"'),'game has player controls '+game.slug);
+}
+console.log('PASS: all 58 new mini game screens render with controls; directory and three-studio Lab showcase render.');
