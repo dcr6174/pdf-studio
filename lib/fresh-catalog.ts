@@ -1,0 +1,18 @@
+export const freshGames = [
+ {slug:'balloon-pop-party',name:'Balloon Pop Party',genre:'Quick',color:'#f6accb',description:'Pop the happy balloons. Avoid the storm clouds.',instructions:'Tap balloons to score. Clouds cost a heart. Play ten gentle rounds with no clock.',kind:'balloons'},
+ {slug:'fruit-slice',name:'Fruit Slice',genre:'Arcade',color:'#ffc089',description:'Slice bright fruit with a swipe or a tap.',instructions:'Swipe across fruit or tap it. Avoid the dark bombs. Finish ten rounds and try to beat your score.',kind:'fruit'},
+ {slug:'catch-the-stars',name:'Catch the Stars',genre:'Arcade',color:'#fbe69c',description:'Move your basket and catch falling stars.',instructions:'Move the basket with left and right buttons, the arrow keys or a drag. Catch fifteen stars at your own pace.',kind:'catch'},
+ {slug:'spot-the-difference',name:'Spot the Difference',genre:'Puzzle',color:'#ade5cc',description:'Find the little changes in two pictures.',instructions:'Look at the two pictures and tap the three shapes that have changed. No timer.',kind:'difference'},
+ {slug:'sequence-recall',name:'Sequence Recall',genre:'Puzzle',color:'#c6b4ff',description:'Look carefully, then repeat the number sequence.',instructions:'Watch the highlighted numbered tiles and repeat them in order. Replay the pattern whenever you need.',kind:'sequence'},
+ {slug:'find-hidden-object',name:'Find the Hidden Object',genre:'Puzzle',color:'#bad6ff',description:'Find everyday objects in a friendly picture.',instructions:'Find the object named above the picture, then tap it. There is no time limit.',kind:'hidden'},
+ {slug:'anagram-shuffle',name:'Anagram Shuffle',genre:'Word',color:'#ffcedb',description:'Unscramble a familiar everyday word.',instructions:'Tap letters in the right order, or type the word. Use Clear to start again.',kind:'anagram'},
+ {slug:'hangman-garden',name:'Hangman Garden',genre:'Word',color:'#b0e7a7',description:'Guess the hidden word and grow your flower.',instructions:'Tap or type a letter. You get six incorrect guesses per word. Hints are always available.',kind:'hangman'},
+ {slug:'word-ladder',name:'Word Ladder',genre:'Word',color:'#c1d9ff',description:'Turn one word into another, one letter at a time.',instructions:'Change exactly one letter each turn to make a listed valid word. Hints show the next step.',kind:'ladder'},
+ {slug:'color-sort',name:'Color Sort',genre:'Puzzle',color:'#ffbe9f',description:'Sort the cheerful coloured balls into tubes.',instructions:'Tap a tube, then another tube with room for its top colour. Group each colour into its own tube.',kind:'sort'},
+ {slug:'water-flow',name:'Water Flow',genre:'Puzzle',color:'#a3e0ea',description:'Turn the pipes and connect the water.',instructions:'Tap a pipe to rotate it. Make one connected path from the start to the finish.',kind:'pipes'},
+ {slug:'parking-escape',name:'Parking Escape',genre:'Puzzle',color:'#d4c1fe',description:'Slide cars out of the way so Buddy can leave.',instructions:'Tap a car, then the direction arrow to move it along its lane. Clear the exit for the red car.',kind:'parking'},
+ {slug:'tic-tac-toe-plus',name:'Tic-Tac-Toe Plus',genre:'Board',color:'#f9da89',description:'The classic three-in-a-row, with a friendly opponent.',instructions:'Tap a square to place an X. Get three in a row. Play against a friend or a gentle computer.',kind:'tictactoe'}
+] as const;
+export type FreshSlug=typeof freshGames[number]['slug'];
+export type FreshKind=typeof freshGames[number]['kind'];
+export const freshGame=(slug:string)=>freshGames.find(g=>g.slug===slug);
