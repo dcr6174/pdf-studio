@@ -6,7 +6,7 @@ import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 const sources={directory:'components/arcade-directory.tsx',fresh:'components/fresh-game.tsx',casual:'components/fresh-casual.tsx',sports:'components/fresh-sports.tsx',oneTap:'components/fresh-one-tap.tsx',motion:'components/expansion-motion.tsx',mind:'components/expansion-mind.tsx',satisfy:'components/expansion-satisfy.tsx',skill:'components/expansion-skill.tsx',showcase:'components/lab-showcase.tsx',catalog:'lib/arcade-active.ts',freshCatalog:'lib/fresh-catalog.ts',expansionCatalog:'lib/expansion-catalog.ts'};
 const input=Object.fromEntries(Object.entries(sources).map(([key,path])=>[key,resolve(path)]));
-await build({configFile:false,logLevel:'error',resolve:{alias:{'@':process.cwd()}},build:{ssr:true,outDir:'.play-studio-ui-check',emptyOutDir:true,rollupOptions:{input,output:{entryFileNames:'[name].mjs'},external:['react','react-dom','react-dom/server']}});
+await build({configFile:false,logLevel:'error',resolve:{alias:{'@':process.cwd()}},build:{ssr:true,outDir:'.play-studio-ui-check',emptyOutDir:true,rollupOptions:{input,output:{entryFileNames:'[name].mjs'},external:['react','react-dom','react-dom/server']}}});
 const load=name=>import(pathToFileURL(resolve('.play-studio-ui-check/'+name+'.mjs')).href);
 const [{ArcadeDirectory},{FreshGame},{FreshCasual},{FreshSports},{FreshOneTap},{ExpansionMotion},{ExpansionMind},{ExpansionSatisfy},{ExpansionSkill},{LabShowcase},{activeArcadeGames},{freshGames},{expansionGames}]=await Promise.all(['directory','fresh','casual','sports','oneTap','motion','mind','satisfy','skill','showcase','catalog','freshCatalog','expansionCatalog'].map(load));
 assert.equal(activeArcadeGames.length,100);
