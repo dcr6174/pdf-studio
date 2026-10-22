@@ -17,9 +17,24 @@ const {conversionGuides}=await import(asModule(await readFile(new URL('lib/conve
 const {searchGuidance}=await import(asModule(await readFile(new URL('lib/search-guidance.ts',root),'utf8')));
 const {articles}=await import(asModule(await readFile(new URL('lib/articles.ts',root),'utf8')));
 const {imageGuides}=await import(asModule(await readFile(new URL('lib/image-guides.ts',root),'utf8')));
-const {arcadeGames}=await import(asModule(await readFile(new URL('lib/arcade-catalog.ts',root),'utf8')));
-const {puzzleGames}=await import(asModule(await readFile(new URL('lib/puzzle-catalog.ts',root),'utf8')));
-const {clubGames}=await import(asModule(await readFile(new URL('lib/club-catalog.ts',root),'utf8')));
+const arcadeCatalogURL=asModule(await readFile(new URL('lib/arcade-catalog.ts',root),'utf8'));
+const puzzleCatalogURL=asModule(await readFile(new URL('lib/puzzle-catalog.ts',root),'utf8'));
+const clubCatalogURL=asModule(await readFile(new URL('lib/club-catalog.ts',root),'utf8'));
+const freshCatalogURL=asModule(await readFile(new URL('lib/fresh-catalog.ts',root),'utf8'));
+const expansionCatalogURL=asModule(await readFile(new URL('lib/expansion-catalog.ts',root),'utf8'));
+const {arcadeGames}=await import(arcadeCatalogURL);
+const {puzzleGames}=await import(puzzleCatalogURL);
+const {clubGames}=await import(clubCatalogURL);
+const {freshGames}=await import(freshCatalogURL);
+const {expansionGames}=await import(expansionCatalogURL);
+const activeSource=(await readFile(new URL('lib/arcade-active.ts',root),'utf8'))
+ .replace("'./arcade-catalog'",JSON.stringify(arcadeCatalogURL))
+ .replace("'./puzzle-catalog'",JSON.stringify(puzzleCatalogURL))
+ .replace("'./club-catalog'",JSON.stringify(clubCatalogURL))
+ .replace("'./fresh-catalog'",JSON.stringify(freshCatalogURL))
+ .replace("'./expansion-catalog'",JSON.stringify(expansionCatalogURL));
+const {activeArcadeGames}=await import(asModule(activeSource));
+const activeArcadeSlugs=new Set(activeArcadeGames.map(game=>game.slug));
 const {imageTools}=await import(asModule(await readFile(new URL('lib/image-tools.ts',root),'utf8')));
 const {comparisons}=await import(asModule(await readFile(new URL('lib/comparisons.ts',root),'utf8')));
 GlobalFonts.registerFromPath(new URL('public/fonts/NotoSans-Regular.ttf',root).pathname,'Studio Sans');
@@ -51,11 +66,16 @@ pages.push(...['text-to-handwriting','notebook-maker','handwriting-practice'].ma
 pages.push({path:'/lab/guides',content:(await readFile(new URL('app/lab/guides/page.tsx',root),'utf8'))+(await readFile(new URL('components/image-guide-directory.tsx',root),'utf8'))+JSON.stringify(imageGuides)});
 pages.push(...imageGuides.map(g=>({path:'/lab/guides/'+g.slug,content:JSON.stringify(g)+JSON.stringify(imageTools.filter(t=>g.tools.includes(t.slug)))+''})));
 const puzzleSource=(await readFile(new URL('components/puzzle-game.tsx',root),'utf8'))+(await readFile(new URL('lib/puzzle-engine.ts',root),'utf8'))+(await readFile(new URL('lib/puzzle-data.ts',root),'utf8'))+(await readFile(new URL('components/puzzle-artwork.tsx',root),'utf8'))+(await readFile(new URL('app/lab/arcade/puzzles.css',root),'utf8'))+(await readFile(new URL('components/game-emblem.tsx',root),'utf8'))+(await readFile(new URL('app/lab/arcade/club.css',root),'utf8'));
-pages.push(...puzzleGames.map(game=>({path:'/lab/arcade/'+game.slug,content:JSON.stringify(game)+puzzleSource})));
+pages.push(...puzzleGames.filter(game=>activeArcadeSlugs.has(game.slug)).map(game=>({path:'/lab/arcade/'+game.slug,content:JSON.stringify(game)+puzzleSource})));
 const clubSource=(await readFile(new URL('components/club-game.tsx',root),'utf8'))+(await readFile(new URL('components/club-sport.tsx',root),'utf8'))+(await readFile(new URL('lib/club-engine.ts',root),'utf8'))+(await readFile(new URL('components/game-emblem.tsx',root),'utf8'))+(await readFile(new URL('app/lab/arcade/club.css',root),'utf8'));
-pages.push(...clubGames.map(game=>({path:'/lab/arcade/'+game.slug,content:JSON.stringify(game)+clubSource})));
+pages.push(...clubGames.filter(game=>activeArcadeSlugs.has(game.slug)).map(game=>({path:'/lab/arcade/'+game.slug,content:JSON.stringify(game)+clubSource})));
 const arcadeSource=(await readFile(new URL('components/arcade-game.tsx',root),'utf8'))+(await readFile(new URL('lib/arcade-engine.ts',root),'utf8'))+(await readFile(new URL('lib/arcade-draw.ts',root),'utf8'))+(await readFile(new URL('lib/arcade-presentation.ts',root),'utf8'))+(await readFile(new URL('app/lab/arcade/arcade.css',root),'utf8'))+(await readFile(new URL('app/lab/arcade/club.css',root),'utf8'))+(await readFile(new URL('components/game-emblem.tsx',root),'utf8'));
-pages.push({path:'/lab/arcade',content:(await readFile(new URL('components/arcade-directory.tsx',root),'utf8'))+(await readFile(new URL('components/arcade-artwork.tsx',root),'utf8'))+(await readFile(new URL('app/lab/arcade/arcade.css',root),'utf8'))+(await readFile(new URL('components/game-emblem.tsx',root),'utf8'))+(await readFile(new URL('app/lab/arcade/club.css',root),'utf8'))+JSON.stringify([...arcadeGames,...puzzleGames,...clubGames])},...arcadeGames.map(game=>({path:'/lab/arcade/'+game.slug,content:JSON.stringify(game)+arcadeSource})));
+const freshSource=await Promise.all(['components/fresh-game.tsx','components/fresh-casual.tsx','components/fresh-sports.tsx','components/fresh-one-tap.tsx','components/expansion-motion.tsx','components/expansion-mind.tsx','components/expansion-satisfy.tsx','components/expansion-skill.tsx','lib/arcade-audio.ts','app/lab/arcade/fresh.css','app/lab/arcade/expansion.css'].map(file=>readFile(new URL(file,root),'utf8'))).then(parts=>parts.join(''));
+pages.push({path:'/lab/arcade',content:(await readFile(new URL('components/arcade-directory.tsx',root),'utf8'))+(await readFile(new URL('components/arcade-artwork.tsx',root),'utf8'))+(await readFile(new URL('app/lab/arcade/arcade.css',root),'utf8'))+(await readFile(new URL('components/game-emblem.tsx',root),'utf8'))+(await readFile(new URL('app/lab/arcade/club.css',root),'utf8'))+JSON.stringify(activeArcadeGames)},
+ ...arcadeGames.filter(game=>activeArcadeSlugs.has(game.slug)).map(game=>({path:'/lab/arcade/'+game.slug,content:JSON.stringify(game)+arcadeSource})),
+ ...[...freshGames,...expansionGames].map(game=>({path:'/lab/arcade/'+game.slug,content:JSON.stringify(game)+freshSource})));
+pages.push({path:'/lab',content:await Promise.all(['app/lab/page.tsx','components/lab-showcase.tsx','components/lab-directory.tsx','app/lab/showcase.css'].map(file=>readFile(new URL(file,root),'utf8'))).then(parts=>parts.join(''))});
+pages.push({path:'/lab/image-studio',content:await Promise.all(['app/lab/image-studio/page.tsx','app/lab/image-studio/image-studio.css','lib/image-tools.ts'].map(file=>readFile(new URL(file,root),'utf8'))).then(parts=>parts.join(''))});
 const entries=pages.map(page=>{const hash=createHash('sha256').update(page.content).digest('hex');state[page.path]={hash,lastmod:old[page.path]?.hash===hash?old[page.path].lastmod:today};return {path:page.path,lastmod:state[page.path].lastmod};});
 entries.push(...['/lab','/lab/image-size-reducer','/lab/remove-watermark','/lab/mini-zine-maker','/lab/photo-booth-strips','/lab/custom-bingo','/lab/giant-poster','/lab/photo-coloring-page','/lab/printable-flashcards','/lab/daily-mood-canvas','/lab/photo-strip','/lab/flashcards','/lab/decision-wheel','/lab/pomodoro','/lab/calculator','/lab/finance-calculator','/lab/practice-sheets','/lab/text-to-handwriting','/lab/notebook-maker','/lab/handwriting-practice','/lab/flipbook','/lab/word-cloud','/lab/page-palette','/lab/whiteboard','/lab/poster-collage','/lab/pdf-to-gif','/lab/sketch-pdf'].map(path=>({path})));
 entries.push(...imageTools.filter(t=>t.slug!=='image-size-reducer').map(t=>({path:'/lab/'+t.slug})));
