@@ -29,11 +29,11 @@ export const expansionGames = [
   },
   {
     "slug": "hill-rider",
-    "name": "Hill Fuel Challenge",
+    "name": "Hill Rider",
     "genre": "Driving",
     "color": "#facaa2",
-    "description": "Manage speed and fuel across a rolling landscape.",
-    "instructions": "Press Gas to climb, Brake to slow down and collect fuel before it runs out.",
+    "description": "Drive real hills, balance your vehicle, jump rocks and collect fuel in a physics-based off-road challenge.",
+    "instructions": "Hold Gas or Brake to control a physics-driven off-road car on rolling terrain. Jump over rocks and land upright. Collect fuel and travel 1500 metres. Touch buttons or keyboard arrows (Gas/Brake/Jump) and Q/E to lean midair.",
     "kind": "hill"
   },
   {
