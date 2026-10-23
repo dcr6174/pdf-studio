@@ -146,3 +146,16 @@
 @keyframes fresh-impact{from{opacity:0;transform:scale(.3)}45%{opacity:1;transform:scale(1.35)}to{opacity:1;transform:scale(1)}}
 @media(max-width:600px){.arcade-shell .fresh-skill-aim-stage{border-width:2px;border-radius:11px;max-height:35dvh}}
 @media(prefers-reduced-motion:reduce){.arcade-shell .fresh-impact-pulse{animation:none}}
+
+/* More legible puzzle destinations and touch-first parking controls */
+.arcade-shell .fresh-tube.legal-destination{border:3px solid #9aebc3;box-shadow:0 0 0 4px #9aebc355,0 10px 20px #10261e99;transform:translateY(-3px)}
+.arcade-shell .fresh-tube.selected{border:3px solid #ffe3a1}
+.arcade-shell .fresh-parking{touch-action:pan-y;user-select:none}
+.arcade-shell .fresh-car{touch-action:none;cursor:grab;border:2px solid #fff7;box-shadow:0 6px 13px #2b284745}
+.arcade-shell .fresh-car:active{cursor:grabbing}
+.arcade-shell .fresh-parking-controls{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:8px;max-width:620px;margin:10px auto}
+.arcade-shell .fresh-parking-controls button{min-height:52px;font-size:13px;padding:6px;min-width:0}
+.arcade-shell .fresh-parking-controls button:not(:disabled){background:#c6ebd3;color:#254036}
+.arcade-shell .fresh-ladder-path{flex-wrap:wrap}
+@media(max-width:550px){.arcade-shell .fresh-parking-controls{gap:4px}.arcade-shell .fresh-parking-controls button{font-size:11px;padding:5px;min-height:48px}}
+@media(prefers-reduced-motion:reduce){.arcade-shell .fresh-tube.legal-destination{transform:none}}
