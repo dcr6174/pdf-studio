@@ -159,3 +159,10 @@
 .arcade-shell .fresh-ladder-path{flex-wrap:wrap}
 @media(max-width:550px){.arcade-shell .fresh-parking-controls{gap:4px}.arcade-shell .fresh-parking-controls button{font-size:11px;padding:5px;min-height:48px}}
 @media(prefers-reduced-motion:reduce){.arcade-shell .fresh-tube.legal-destination{transform:none}}
+
+/* Beach volleyball: instant court gestures, visible landing shadow and two shot styles */
+.arcade-shell .fresh-volley-court{touch-action:none;user-select:none;cursor:crosshair}
+.arcade-shell .fresh-volley-shots{display:grid;grid-template-columns:1fr 1fr;gap:8px;margin:8px auto;max-width:600px}
+.arcade-shell .fresh-volley-shots button{font-size:12px;min-height:50px}
+.arcade-shell .fresh-volley-shots button[aria-pressed=true]{background:#b7e8cf;color:#1c4037;border-color:#e1fff0}
+@media(max-width:550px){.arcade-shell .fresh-volley-shots button{font-size:11px;padding:7px}}
