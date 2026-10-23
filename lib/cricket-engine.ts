@@ -107,6 +107,12 @@ export function evaluateStroke(
  if(quality>=2)return result(delivery.length==='short'?2:1,false,null,'good','Good timing. '+(delivery.length==='short'?'Two':'One')+' run'+(delivery.length==='short'?'s':'')+'.');
  return result(1,false,null,'late','A controlled nudge earns a single.');
 }
+export function missedDelivery(delivery:BowledBall):StrokeResult{
+ const hitsStumps=Math.abs(delivery.line+delivery.swing)<1.15;
+ return{runs:0,wicket:hitsStumps,out:hitsStumps?'bowled':null,label:hitsStumps?'W':'·',
+  grade:'miss',contact:0,flight:0,direction:'straight',timingError:950,targetLine:delivery.line,
+  comment:hitsStumps?'BOWLED! You let the ball hit middle stump.':'Beaten outside off stump. Dot ball. Watch the ball right to the bat.'};
+}
 export function applyStroke(innings:Innings,outcome:StrokeResult):Innings{
  if(innings.ended)return innings;
  const balls=innings.balls+1,runs=innings.runs+outcome.runs,wickets=innings.wickets+Number(outcome.wicket);
