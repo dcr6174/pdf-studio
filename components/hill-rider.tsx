@@ -1,5 +1,5 @@
 'use client';
-import {useCallback,useEffect,useRef,useState,type PointerEvent} from 'react';
+import {useCallback,useEffect,useRef,useState} from 'react';
 import {createHill,hillFuelStations,hillGoal,hillHeight,hillRocks,hillSlope,stepHill,type HillInput,type HillModel,type HillTrack} from '@/lib/hill-physics';
 import type {ArcadeEffect} from '@/lib/arcade-audio';
 type Props={active:boolean;comfort:boolean;onScore:(score:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
@@ -54,7 +54,6 @@ export function HillRider({active,comfort,onScore,onFinish,onSound}:Props){
  const terrain=Array.from({length:97},(_,i)=>{const x=camera+i*8,y=hillHeight(x,track);return{x,y};});
  const ground='M0 420L'+terrain.map(p=>(p.x-camera).toFixed(1)+' '+p.y.toFixed(1)).join('L')+'L760 420Z';
  const slope=hillSlope(view.x,track),canSwitch=view.x<68&&view.best<68;
- const press=(name:'gas'|'brake',value:boolean)=>(e:PointerEvent<HTMLButtonElement>)=>{if(value)e.currentTarget.setPointerCapture(e.pointerId);controls.current[name]=value;};
  return <div className="play-hill">
  <div className="play-hill-stats"><span>DISTANCE <b>{Math.floor(view.best)} / {hillGoal} m</b></span><span>SPEED <b>{Math.floor(Math.abs(view.vx)*1.7)} km/h</b></span><span>FUEL <b>{Math.floor(view.fuel)}%</b></span><span>DAMAGE <b>{view.damage}/3</b></span></div>
  <svg className="play-hill-stage" viewBox="0 0 760 390" role="img" aria-label={'Side-scrolling '+track+' with moving car, slopes, fuel and rocks. Distance '+Math.floor(view.best)+' meters.'}>
@@ -81,7 +80,7 @@ export function HillRider({active,comfort,onScore,onFinish,onSound}:Props){
  <text x="14" y="374" fill="#153f3c" fontSize="13" fontWeight="800">SLOPE {slope>0?'+':''}{slope.toFixed(2)} · {view.airborne?'AIRBORNE':'ON GROUND'}</text>
  </svg>
  <div className="play-hill-controller">
- <div className="play-hill-driving"><button className="play-hill-brake" disabled={!active} onPointerDown={press('brake',true)} onPointerUp={press('brake',false)} onPointerCancel={press('brake',false)}>◀ HOLD BRAKE</button><button className="play-hill-jump" disabled={!active} onClick={()=>{controls.current.jump=true;}}>↥ JUMP</button><button className="play-hill-gas" disabled={!active} onPointerDown={press('gas',true)} onPointerUp={press('gas',false)} onPointerCancel={press('gas',false)}>HOLD GAS ▶</button></div>
+ <div className="play-hill-driving"><button className="play-hill-brake" disabled={!active} onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);controls.current.brake=true;}} onPointerUp={()=>{controls.current.brake=false;}} onPointerCancel={()=>{controls.current.brake=false;}}>◀ HOLD BRAKE</button><button className="play-hill-jump" disabled={!active} onClick={()=>{controls.current.jump=true;}}>↥ JUMP</button><button className="play-hill-gas" disabled={!active} onPointerDown={e=>{e.currentTarget.setPointerCapture(e.pointerId);controls.current.gas=true;}} onPointerUp={()=>{controls.current.gas=false;}} onPointerCancel={()=>{controls.current.gas=false;}}>HOLD GAS ▶</button></div>
  <div className="play-hill-secondary"><span>Car tilts naturally with the slope. During jumps, Q/E adjusts balance:</span><button disabled={!active} onPointerDown={()=>{controls.current.tilt=-1;}} onPointerUp={()=>{controls.current.tilt=0;}}>↶ LEAN BACK</button><button disabled={!active} onPointerDown={()=>{controls.current.tilt=1;}} onPointerUp={()=>{controls.current.tilt=0;}}>LEAN FORWARD ↷</button></div>
  {canSwitch&&<div className="play-hill-track"><span>TRACK</span>{tracks.map(t=><button key={t.id} aria-pressed={track===t.id} onClick={()=>{setTrack(t.id);reset(t.id);}}>{t.label}</button>)}</div>}
  </div>
