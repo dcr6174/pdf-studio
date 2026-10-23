@@ -64,7 +64,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
  const [elapsed,setElapsed]=useState(0),[foot,setFoot]=useState<Footwork>('front'),[loft,setLoft]=useState(false);
  const [direction,setDirection]=useState<ShotSide>('straight'),[result,setResult]=useState<StrokeResult|null>(null);
  const [message,setMessage]=useState('Choose a match, then read the bounce marker and time your shot.'),[swingCount,setSwingCount]=useState(0);
- const inningsRef=useRef(innings),phaseRef=useRef<Phase>('setup'),elapsedRef=useRef(0),ballRef=useRef(delivery),clock=useRef(0),lastView=useRef(0),lastStrike=useRef(0);
+ const inningsRef=useRef(innings),phaseRef=useRef<Phase>('setup'),elapsedRef=useRef(0),ballRef=useRef(delivery),lastView=useRef(0);
  const setPhaseBoth=(p:Phase)=>{phaseRef.current=p;setPhase(p);};
  const completeDelivery=useCallback((outcome:StrokeResult)=>{
   if(phaseRef.current!=='bowling')return;
@@ -77,7 +77,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
  const nextBall=useCallback(()=>{
   if(inningsRef.current.ended)return;
   const ball=makeDelivery(inningsRef.current.balls,difficulty,23+overs);
-  ballRef.current=ball;setDelivery(ball);elapsedRef.current=0;setElapsed(0);lastView.current=0;clock.current=0;
+  ballRef.current=ball;setDelivery(ball);elapsedRef.current=0;setElapsed(0);lastView.current=0;
   setResult(null);setMessage(ball.style.toUpperCase()+' · '+ball.length+' · '+ball.speed+' km/h. Watch the bounce circle.');
   setPhaseBoth('bowling');onSound('tap');
  },[difficulty,overs,onSound]);
@@ -87,14 +87,14 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
   const t=elapsedRef.current,b=ballRef.current;
   if(t<b.contactMs-570){setMessage('Wait for the red ball to reach the batter — not yet!');onSound('miss');return;}
   const output=evaluateStroke(b,{side,foot,loft},t,difficulty);
-  setDirection(side);setSwingCount(n=>n+1);lastStrike.current=t;completeDelivery(output);
+  setDirection(side);setSwingCount(n=>n+1);completeDelivery(output);
  },[active,foot,loft,difficulty,completeDelivery,onSound]);
  useEffect(()=>{
   if(!active||phase!=='bowling')return;
   let raf=0,last=0;
   const frame=(now:number)=>{
    if(!last)last=now;const dt=Math.min(now-last,48);last=now;
-   const next=elapsedRef.current+dt;elapsedRef.current=next;
+   const next=elapsedRef.current+dt*(comfort?.68:1);elapsedRef.current=next;
    if(now-lastView.current>32){setElapsed(next);lastView.current=now;}
    if(next>ballRef.current.contactMs+380){
     completeDelivery(missedDelivery(ballRef.current));
@@ -103,7 +103,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
    raf=requestAnimationFrame(frame);
   };
   raf=requestAnimationFrame(frame);return()=>cancelAnimationFrame(raf);
- },[active,phase,completeDelivery]);
+ },[active,phase,comfort,completeDelivery]);
  useEffect(()=>{
   if(!active||phase!=='result')return;
   const id=setTimeout(nextBall,1500);return()=>clearTimeout(id);
@@ -122,7 +122,6 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
  },[active,strike]);
  const oversBall=Math.floor(innings.balls/6),withinOver=innings.balls%6;
  const bowlerLine=delivery.line===0?'MIDDLE':delivery.line<0?'LEG':'OFF',bowlerLength=delivery.length.toUpperCase();
- const projected=ballAt(delivery,delivery.contactMs*delivery.bounce);
  const percent=Math.min(100,Math.max(0,Math.round(elapsed/delivery.contactMs*100)));
  return <div className="play-cricket">
   <div className="pc-score-strip">
