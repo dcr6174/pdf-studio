@@ -2,6 +2,7 @@
 import {useCallback,useEffect,useRef,useState,type PointerEvent} from 'react';
 import type {FreshKind} from '@/lib/fresh-catalog';
 import {CricketMatch} from '@/components/cricket-match';
+import {cueGuide} from '@/lib/pool-aim';
 type Effect='tap'|'success'|'miss'|'bounce'|'hit'|'goal';
 type Props={kind:FreshKind;active:boolean;comfort:boolean;onScore:(score:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:Effect)=>void};
 type Ball={id:number;x:number;y:number;vx:number;vy:number;color:string;stripe:boolean;potted:boolean};
@@ -16,19 +17,19 @@ function Pool({active,onScore,onFinish,onSound}:Omit<Props,'kind'>){
  for(let i=0;i<all.length;i++)for(let j=i+1;j<all.length;j++){const a=all[i],b=all[j];if(a.potted||b.potted)continue;const dx=b.x-a.x,dy=b.y-a.y,d=Math.hypot(dx,dy)||.0001;if(d>=22)continue;const nx=dx/d,ny=dy/d,overlap=(22-d)/2;a.x-=nx*overlap;a.y-=ny*overlap;b.x+=nx*overlap;b.y+=ny*overlap;const closing=(a.vx-b.vx)*nx+(a.vy-b.vy)*ny;if(closing>0){a.vx-=closing*nx*.96;a.vy-=closing*ny*.96;b.vx+=closing*nx*.96;b.vy+=closing*ny*.96;if(closing>1.5)onSound('bounce');}}
  if(ts-renderTime.current>50){setBalls(all.map(v=>({...v})));renderTime.current=ts;}
  if(speed<.18){setMoving(false);const count=all.filter(b=>b.id>=1&&b.id<=7&&b.potted).length;setSolids(count);onScore(count*15+all.filter(b=>b.id>8&&b.potted).length*5);if(all[0].potted){all[0].potted=false;all[0].x=164;all[0].y=180;setMessage('Scratch! Cue ball returned to the starting spot.');}else setMessage(count===7?'All solids cleared. Pocket the black 8-ball!':(7-count)+' solid balls left. Aim for the coloured solids.');if(all.find(b=>b.id===8)?.potted&&!ended.current){ended.current=true;if(count===7)onFinish(true,'Eight-ball pocketed after clearing all solids. Brilliant!');else onFinish(false,'The black eight went in early. Play another match!');}setBalls(all.map(v=>({...v})));return;}raf=requestAnimationFrame(step);};raf=requestAnimationFrame(step);return()=>cancelAnimationFrame(raf);},[active,moving,onFinish,onScore,onSound]);
- const cue=balls[0],guide={x:cue.x+Math.cos(angle)*260,y:cue.y+Math.sin(angle)*260};
+ const cue=balls[0],guide=cueGuide(cue,angle,balls);
  return <div className="fresh-sports">
  <div className="fresh-sport-top"><span>Solids potted <b>{solids} / 7</b></span><span>Shots <b>{shots}</b></span></div>
  <svg className="fresh-pool-table" viewBox="0 0 640 360" role="group" aria-label="Pool table. Drag or tap to aim the cue ball." onPointerDown={pointerAim} onPointerMove={e=>{if(e.buttons)pointerAim(e);}}>
  <rect width="640" height="360" rx="25" fill="#563a2b"/><rect x="18" y="17" width="604" height="326" rx="17" fill="#0c574e" stroke="#b78a5e" strokeWidth="9"/>
  {pockets.map(([x,y],i)=><circle key={i} cx={x} cy={y} r="22" fill="#0d1821"/>)}
- {!moving&&!cue.potted&&<><line x1={cue.x} y1={cue.y} x2={guide.x} y2={guide.y} stroke="#fce9ad" strokeWidth="2.5" strokeDasharray="9 8" opacity=".8"/><line x1={cue.x-Math.cos(angle)*25} y1={cue.y-Math.sin(angle)*25} x2={cue.x-Math.cos(angle)*135} y2={cue.y-Math.sin(angle)*135} stroke="#d7b58d" strokeWidth="7" strokeLinecap="round"/></>}
+ {!moving&&!cue.potted&&<><line x1={cue.x} y1={cue.y} x2={guide.x} y2={guide.y} stroke="#fce9ad" strokeWidth="3" strokeDasharray="9 8" opacity=".9"/><circle cx={guide.x} cy={guide.y} r={guide.objectHit?11:7} fill="none" stroke={guide.objectHit?'#e5fa9e':'#fff4db'} strokeWidth="2.5"/><line x1={guide.x} y1={guide.y} x2={guide.x+Math.cos(angle)*34} y2={guide.y+Math.sin(angle)*34} stroke="#fff8d2" strokeWidth="2" opacity=".55"/><line x1={cue.x-Math.cos(angle)*25} y1={cue.y-Math.sin(angle)*25} x2={cue.x-Math.cos(angle)*135} y2={cue.y-Math.sin(angle)*135} stroke="#d7b58d" strokeWidth="7" strokeLinecap="round"/></>}
  {balls.filter(b=>!b.potted).map(b=><g key={b.id}><circle cx={b.x+1.5} cy={b.y+2} r="12" fill="#071d19" opacity=".45"/><circle cx={b.x} cy={b.y} r="11" fill={b.stripe?'#fdf6e9':b.color}/>{b.stripe&&<rect x={b.x-10} y={b.y-5} width="20" height="10" rx="4" fill={b.color}/>}<circle cx={b.x-3} cy={b.y-4} r="3" fill="#fff" opacity=".55"/>{b.id>0&&<text x={b.x} y={b.y+3} textAnchor="middle" fontSize="9" fontWeight="800" fill={b.id===8?'white':'#182c30'}>{b.id}</text>}</g>)}
  </svg>
  <p className="fresh-instruction" role="status">{message}</p>
  <div className="fresh-power"><label htmlFor="fresh-pool-power">Shot power: <b>{power}%</b></label><input id="fresh-pool-power" type="range" min="10" max="100" step="5" value={power} disabled={!active||moving} onChange={e=>setPower(Number(e.target.value))}/></div>
  <div className="fresh-row"><button disabled={!active||moving} onClick={()=>setAngle(a=>a-.085)}>↶ Aim left</button><button className="fresh-primary" disabled={!active||moving} onClick={shoot}>🎱 Shoot</button><button disabled={!active||moving} onClick={()=>setAngle(a=>a+.085)}>Aim right ↷</button></div>
- <p className="fresh-instruction">Relaxed solo 8-ball practice: pocket your seven solids, then the eight. Stripes remain as obstacles. This is not a competitive full-rules pool match.</p>
+ <p className="fresh-instruction">The dashed line shows the first predicted cue-ball contact with a cushion or numbered ball. Relaxed solo 8-ball practice: pocket your seven solids, then the eight. Stripes remain as obstacles. This is not a competitive full-rules pool match.</p>
  </div>;
 }
 function Volleyball({active,comfort,onScore,onFinish,onSound}:Omit<Props,'kind'>){
