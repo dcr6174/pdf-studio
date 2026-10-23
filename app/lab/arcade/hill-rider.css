@@ -1,0 +1,31 @@
+/* Hill Rider: tactile scrolling terrain driving and physics HUD */
+.arcade-shell .play-hill{width:min(100%,1110px);margin:auto;--hill-ink:#ebf7ef}
+.arcade-shell .play-hill-stats{display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:7px;margin:0 auto 10px}
+.arcade-shell .play-hill-stats span{display:grid;gap:4px;text-align:center;padding:9px 7px;background:#2e4455;border:1px solid #ffffff2e;border-radius:11px;color:#a5d7cf;font-weight:800;font-size:10px;letter-spacing:.09em}
+.arcade-shell .play-hill-stats b{font-size:clamp(13px,1.55vw,20px);color:#f8f7ef;letter-spacing:0;font-variant-numeric:tabular-nums}
+.arcade-shell .play-hill-stage{width:100%;height:auto;display:block;max-height:550px;border:5px solid #ccd5bd;border-radius:18px;box-shadow:0 11px 32px #132b2866;background:#a3cfdd}
+.arcade-shell .play-hill-controller{padding:11px 0;display:grid;gap:10px}
+.arcade-shell .play-hill-driving{display:grid;grid-template-columns:1fr .8fr 1fr;gap:10px}
+.arcade-shell .play-hill-driving button{min-height:75px;padding:10px 8px;font-weight:900;font-size:clamp(12px,1.6vw,18px);touch-action:none;border-radius:18px}
+.arcade-shell .play-hill-driving .play-hill-gas{background:linear-gradient(#bdf1c9,#80d2a8);color:#204f3a;border-color:#e2ffe2;box-shadow:0 5px 0 #3a936e}
+.arcade-shell .play-hill-driving .play-hill-brake{background:linear-gradient(#ffcbba,#e9978b);color:#763b30;border-color:#ffe1d8;box-shadow:0 5px 0 #be6762}
+.arcade-shell .play-hill-driving .play-hill-jump{background:linear-gradient(#f6e5b8,#dec48b);color:#604823;border-color:#fff0c9;box-shadow:0 5px 0 #927846}
+.arcade-shell .play-hill-driving button:active:not(:disabled){transform:translateY(4px);box-shadow:none}
+.arcade-shell .play-hill-secondary{display:flex;gap:7px;flex-wrap:wrap;align-items:center;justify-content:center}
+.arcade-shell .play-hill-secondary span{color:#b7cfc8;font-size:12px}
+.arcade-shell .play-hill-secondary button{font-size:12px;min-height:45px}
+.arcade-shell .play-hill-track{display:flex;align-items:center;justify-content:center;gap:8px;flex-wrap:wrap;margin-top:2px}
+.arcade-shell .play-hill-track span{color:#c3d5dd;font-size:11px;font-weight:800;letter-spacing:.1em}
+.arcade-shell .play-hill-track button{min-height:45px;font-size:12px}
+.arcade-shell .play-hill-track button[aria-pressed=true]{background:#c3e8d1;color:#24503b;border-color:#dcffda}
+@media(max-width:600px){
+ .arcade-shell .play-hill-stage{border-width:2px;border-radius:12px}
+ .arcade-shell .play-hill-stats{gap:4px}
+ .arcade-shell .play-hill-stats span{font-size:8px;padding:6px 3px}
+ .arcade-shell .play-hill-stats b{font-size:clamp(11px,3vw,15px)}
+ .arcade-shell .play-hill-driving{gap:6px}
+ .arcade-shell .play-hill-driving button{min-height:62px;border-radius:12px;font-size:11px;padding:7px 3px}
+ .arcade-shell .play-hill-secondary span{width:100%;text-align:center}
+ .arcade-shell .play-hill-secondary button{flex:1;font-size:11px}
+}
+@media(prefers-reduced-motion:reduce){.arcade-shell .play-hill-driving button{transition:none!important}}
