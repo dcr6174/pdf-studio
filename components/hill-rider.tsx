@@ -1,5 +1,5 @@
 'use client';
-import {useCallback,useEffect,useRef,useState} from 'react';
+import {useCallback,useEffect,useRef,useState,type PointerEvent} from 'react';
 import {createHill,hillFuelStations,hillGoal,hillHeight,hillRocks,hillSlope,stepHill,type HillInput,type HillModel,type HillTrack} from '@/lib/hill-physics';
 import type {ArcadeEffect} from '@/lib/arcade-audio';
 type Props={active:boolean;comfort:boolean;onScore:(score:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
@@ -54,7 +54,7 @@ export function HillRider({active,comfort,onScore,onFinish,onSound}:Props){
  const terrain=Array.from({length:97},(_,i)=>{const x=camera+i*8,y=hillHeight(x,track);return{x,y};});
  const ground='M0 420L'+terrain.map(p=>(p.x-camera).toFixed(1)+' '+p.y.toFixed(1)).join('L')+'L760 420Z';
  const slope=hillSlope(view.x,track),canSwitch=view.x<68&&view.best<68;
- const press=(name:'gas'|'brake',value:boolean)=>(e:React.PointerEvent<HTMLButtonElement>)=>{if(value)e.currentTarget.setPointerCapture(e.pointerId);controls.current[name]=value;};
+ const press=(name:'gas'|'brake',value:boolean)=>(e:PointerEvent<HTMLButtonElement>)=>{if(value)e.currentTarget.setPointerCapture(e.pointerId);controls.current[name]=value;};
  return <div className="play-hill">
  <div className="play-hill-stats"><span>DISTANCE <b>{Math.floor(view.best)} / {hillGoal} m</b></span><span>SPEED <b>{Math.floor(Math.abs(view.vx)*1.7)} km/h</b></span><span>FUEL <b>{Math.floor(view.fuel)}%</b></span><span>DAMAGE <b>{view.damage}/3</b></span></div>
  <svg className="play-hill-stage" viewBox="0 0 760 390" role="img" aria-label={'Side-scrolling '+track+' with moving car, slopes, fuel and rocks. Distance '+Math.floor(view.best)+' meters.'}>
