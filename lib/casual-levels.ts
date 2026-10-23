@@ -84,7 +84,7 @@ const parkingBases:ParkingCar[][]=[
  [{id:'red',x:0,y:2,length:2,axis:'h'},{id:'blue',x:2,y:0,length:3,axis:'v'},{id:'green',x:3,y:1,length:2,axis:'v'},{id:'yellow',x:0,y:5,length:3,axis:'h'},{id:'purple',x:5,y:3,length:2,axis:'v'}],
  [{id:'red',x:1,y:2,length:2,axis:'h'},{id:'blue',x:3,y:1,length:2,axis:'v'},{id:'green',x:4,y:1,length:2,axis:'v'},{id:'yellow',x:0,y:5,length:3,axis:'h'},{id:'purple',x:5,y:3,length:2,axis:'v'}],
  [{id:'red',x:0,y:2,length:2,axis:'h'},{id:'blue',x:3,y:1,length:2,axis:'v'},{id:'green',x:4,y:0,length:3,axis:'v'},{id:'yellow',x:0,y:4,length:3,axis:'h'},{id:'purple',x:5,y:3,length:2,axis:'v'}],
- [{id:'red',x:0,y:2,length:2,axis:'h'},{id:'blue',x:2,y:1,length:3,axis:'v'},{id:'green',x:3,y:0,length:3,axis:'v'},{id:'yellow',x:0,y:5,length:3,axis:'h'},{id:'purple',x:5,y:3,length:2,axis:'v'}]
+ [{id:'red',x:0,y:2,length:2,axis:'h'},{id:'blue',x:2,y:1,length:3,axis:'v'},{id:'green',x:3,y:1,length:2,axis:'v'},{id:'yellow',x:0,y:5,length:3,axis:'h'},{id:'purple',x:5,y:3,length:2,axis:'v'}]
 ];
 export function parkingLevel(index=0):ParkingCar[]{return parkingBases[((index%parkingBases.length)+parkingBases.length)%parkingBases.length].map(c=>({...c}));}
 const spaces=(car:ParkingCar,x=car.x,y=car.y)=>Array.from({length:car.length},(_,i)=>car.axis==='h'?(x+i)+y*6:x+(y+i)*6);
