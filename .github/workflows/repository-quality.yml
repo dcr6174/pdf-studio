@@ -71,7 +71,7 @@ jobs:
         run: node checks/verify-site-maintenance.mjs && node checks/verify-responsive-layout.mjs && node checks/verify-device-layout.mjs
       - name: Arcade mechanics and route regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
-        run: node checks/verify-arcade-garden.mjs && node checks/verify-arcade.mjs && node checks/verify-arcade-ui.mjs && node checks/verify-arcade-improvements.mjs && node checks/verify-puzzles.mjs && node checks/verify-puzzle-ui.mjs && node checks/verify-club.mjs && node checks/verify-club-ui.mjs && node checks/verify-play-studio-ui.mjs && node checks/verify-play-studio-rules.mjs
+        run: node checks/verify-arcade-garden.mjs && node checks/verify-arcade.mjs && node checks/verify-arcade-ui.mjs && node checks/verify-arcade-improvements.mjs && node checks/verify-puzzles.mjs && node checks/verify-puzzle-ui.mjs && node checks/verify-club.mjs && node checks/verify-club-ui.mjs && node checks/verify-play-studio-ui.mjs && node checks/verify-play-studio-rules.mjs && node checks/verify-cricket-game.mjs
       - name: Production build
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npm run build:public
