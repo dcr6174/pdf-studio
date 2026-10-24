@@ -64,7 +64,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
  const [elapsed,setElapsed]=useState(0),[foot,setFoot]=useState<Footwork>('front'),[loft,setLoft]=useState(false);
  const [direction,setDirection]=useState<ShotSide>('straight'),[result,setResult]=useState<StrokeResult|null>(null);
  const [message,setMessage]=useState('Choose a match, then read the bounce marker and time your shot.'),[swingCount,setSwingCount]=useState(0);
- const inningsRef=useRef(innings),phaseRef=useRef<Phase>('setup'),elapsedRef=useRef(0),ballRef=useRef(delivery),lastView=useRef(0);
+ const inningsRef=useRef(innings),phaseRef=useRef<Phase>('setup'),elapsedRef=useRef(0),ballRef=useRef(delivery),lastView=useRef(0),matchSeed=useRef(0),swingLocked=useRef(false);
  const setPhaseBoth=(p:Phase)=>{phaseRef.current=p;setPhase(p);};
  const completeDelivery=useCallback((outcome:StrokeResult)=>{
   if(phaseRef.current!=='bowling')return;
@@ -76,16 +76,16 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
  },[onScore,onSound,onFinish]);
  const nextBall=useCallback(()=>{
   if(inningsRef.current.ended)return;
-  const ball=makeDelivery(inningsRef.current.balls,difficulty,23+overs);
-  ballRef.current=ball;setDelivery(ball);elapsedRef.current=0;setElapsed(0);lastView.current=0;
+  const ball=makeDelivery(inningsRef.current.balls,difficulty,matchSeed.current);
+  ballRef.current=ball;swingLocked.current=false;setDelivery(ball);elapsedRef.current=0;setElapsed(0);lastView.current=0;
   setResult(null);setMessage(ball.style.toUpperCase()+' · '+ball.length+' · '+ball.speed+' km/h. Watch the bounce circle.');
   setPhaseBoth('bowling');onSound('tap');
  },[difficulty,overs,onSound]);
- const start=()=>{const next=createInnings(overs);inningsRef.current=next;setInnings(next);setDirection('straight');setLoft(false);setFoot('front');nextBall();};
+ const start=()=>{matchSeed.current=Math.floor(Math.random()*10000000)+overs*37;const next=createInnings(overs);inningsRef.current=next;setInnings(next);setDirection('straight');setLoft(false);setFoot('front');nextBall();};
  const strike=useCallback((side:ShotSide)=>{
-  if(!active||phaseRef.current!=='bowling')return;
+  if(!active||phaseRef.current!=='bowling'||swingLocked.current)return;
+  swingLocked.current=true;
   const t=elapsedRef.current,b=ballRef.current;
-  if(t<b.contactMs-570){setMessage('Wait for the red ball to reach the batter — not yet!');onSound('miss');return;}
   const output=evaluateStroke(b,{side,foot,loft},t,difficulty);
   setDirection(side);setSwingCount(n=>n+1);completeDelivery(output);
  },[active,foot,loft,difficulty,completeDelivery,onSound]);
@@ -111,6 +111,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
  useEffect(()=>{
   if(!active)return;
   const keyboard=(e:KeyboardEvent)=>{
+   if(e.repeat)return;
    if(e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement||e.target instanceof HTMLTextAreaElement)return;
    if(e.key==='ArrowLeft'||e.key==='1'){e.preventDefault();strike('leg');}
    else if(e.key==='ArrowDown'||e.key===' '||e.key==='2'){e.preventDefault();strike('straight');}
@@ -135,18 +136,19 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
    <div className="pc-stage-wrap">
     <CricketStadium ball={delivery} elapsed={elapsed} result={result} phase={phase} loft={loft} shotDirection={direction} strokeFlash={swingCount}/>
     <div className="pc-overlay-score" aria-live="polite">
-     {phase==='bowling'?<><strong>{delivery.speed} km/h · {delivery.style.toUpperCase()}</strong><span>{bowlerLine} · {bowlerLength}</span></>:phase==='result'&&result?<><strong>{result.wicket?'WICKET':result.runs===0?'DOT':result.runs+' RUNS'}</strong><span>{result.grade.toUpperCase()} TIMING · {result.timingError>0?'+':''}{result.timingError}ms</span></>:<><strong>BOUNDARY CRICKET</strong><span>Two-button easy to learn, timing to master</span></>}
+     {phase==='bowling'?<><strong>{delivery.speed} km/h · {delivery.style.toUpperCase()}</strong><span>{bowlerLine} · {bowlerLength}</span></>:phase==='result'&&result?<><strong>{result.wicket?'WICKET':result.runs===0?'DOT':result.runs+' RUNS'}</strong><span>{result.grade.toUpperCase()} TIMING · {result.timingError>0?'+':''}{result.timingError}ms</span></>:<><strong>BOUNDARY CRICKET</strong><span>Three-shot batting, timed to the crease</span></>}
     </div>
     {phase==='bowling'&&<div className="pc-timing" aria-label={'Delivery '+percent+' percent through its flight'}><div className="pc-timing-track"><i style={{left:percent+'%'}}/><span className="pc-hit-window"/></div><span className="pc-timing-label">BALL ARRIVING · HIT NEAR THE GREEN ZONE</span></div>}
    </div>
+   {phase==='bowling'&&<div className="pc-mobile-bat-pad" aria-label="Touch batting controls"><span>WATCH THE BALL · SWING AT THE BAT</span><div className="pc-bat-buttons">{sideInfo.map(s=><button key={s.id} className={'pc-bat-'+s.id} disabled={!active} onClick={()=>strike(s.id)} aria-label={s.label+' shot'}><span>{s.icon}</span><b>{s.label}</b></button>)}</div></div>}
    <section className="pc-controller" aria-label="Cricket batting controller">
     {phase==='setup'&&<div className="pc-pregame"><h2>Ready for the chase?</h2><p>Watch each delivery. Pick your side as the ball reaches the batsman. Start with ground shots, then master the loft.</p><span className="pc-control-label">MATCH LENGTH</span><div className="pc-choices">{([2,5,10] as const).map(n=><button type="button" key={n} aria-pressed={overs===n} onClick={()=>{setOvers(n);const t=createInnings(n);inningsRef.current=t;setInnings(t);}}>{n} overs</button>)}</div><span className="pc-control-label">BOWLING DIFFICULTY</span><div className="pc-choices">{(['easy','club','pro'] as const).map(n=><button type="button" key={n} aria-pressed={difficulty===n} onClick={()=>setDifficulty(n)}>{n==='easy'?'Academy':n==='club'?'Club':'Pro'}</button>)}</div><button className="fresh-primary pc-start" onClick={start}>🏏 START CHASE · {innings.target} RUNS</button></div>}
     {phase!=='setup'&&<>
      <div className="pc-controller-heading"><span className="pc-control-label">BATTING CONTROLS</span><strong>{phase==='done'?'INNINGS ENDED':phase==='result'?'SHOT PLAYED':'READ · AIM · TIME'}</strong></div>
      <div className="pc-shot-options"><span className="pc-control-label">FOOTWORK · X TO SWITCH</span><div className="pc-choices"><button aria-pressed={foot==='front'} disabled={!active||phase==='done'} onClick={()=>setFoot('front')}>FRONT FOOT</button><button aria-pressed={foot==='back'} disabled={!active||phase==='done'} onClick={()=>setFoot('back')}>BACK FOOT</button></div><small>Full/yorker: front foot · Short: back foot</small></div>
      <div className="pc-shot-options"><span className="pc-control-label">SHOT STYLE · Z TO SWITCH</span><div className="pc-choices"><button aria-pressed={!loft} disabled={!active||phase==='done'} onClick={()=>setLoft(false)}>GROUND · SAFE</button><button aria-pressed={loft} disabled={!active||phase==='done'} onClick={()=>setLoft(true)}>LOFT · RISKY</button></div></div>
-     <span className="pc-control-label">TAP A DIRECTION AT CONTACT</span>
-     <div className="pc-bat-buttons">{sideInfo.map(s=><button className={'pc-bat-'+s.id} key={s.id} disabled={!active||phase!=='bowling'} onClick={()=>strike(s.id)} aria-label={s.label+' shot, keyboard '+s.key}><span>{s.icon}</span><b>{s.label}</b><small>{s.key}</small></button>)}</div>
+     <span className="pc-control-label pc-desktop-bat-label">TAP A DIRECTION AT CONTACT</span>
+     <div className="pc-bat-buttons pc-desktop-bat-buttons">{sideInfo.map(s=><button className={'pc-bat-'+s.id} key={s.id} disabled={!active||phase!=='bowling'} onClick={()=>strike(s.id)} aria-label={s.label+' shot, keyboard '+s.key}><span>{s.icon}</span><b>{s.label}</b><small>{s.key}</small></button>)}</div>
      <div className="pc-bowler-info"><div><span>PACE</span><strong>{delivery.speed} km/h</strong></div><div><span>LINE</span><strong>{bowlerLine}</strong></div><div><span>LENGTH</span><strong>{bowlerLength}</strong></div></div>
      <div className="pc-ball-feed"><strong>THIS OVER</strong><div>{Array.from({length:6},(_,i)=>{const label=innings.history[oversBall*6+i]??'—';return <span key={i} className={label==='W'?'is-wicket':label==='4'||label==='6'?'is-boundary':''}>{i<withinOver?label:'—'}</span>})}</div></div>
      </>}
