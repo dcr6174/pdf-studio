@@ -16,7 +16,7 @@
     "verify:compression": "node checks/verify-jpeg-optimization.mjs && node checks/verify-compression-targets.mjs",
     "verify:analytics": "node checks/verify-analytics.mjs && node checks/verify-tracker.mjs",
     "verify:studio": "node checks/verify-studio.mjs",
-    "build:public": "npm run verify:play-studio && npx tsc --noEmit && node scripts/prepare-pdf-assets.mjs && node scripts/generate-tool-fixtures.mjs && node scripts/generate-brand-options.mjs && node scripts/generate-site-assets.mjs && vite build --config vite.public.config.ts",
+    "build:public": "npm run lint:play-studio && npm run verify:play-studio && npx tsc --noEmit && node scripts/prepare-pdf-assets.mjs && node scripts/generate-tool-fixtures.mjs && node scripts/generate-brand-options.mjs && node scripts/generate-site-assets.mjs && vite build --config vite.public.config.ts",
     "deploy:public": "node scripts/deploy-public.mjs",
     "verify:public": "node checks/verify-public-owner.mjs",
     "postinstall": "node scripts/prepare-pdf-assets.mjs",
