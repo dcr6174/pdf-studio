@@ -57,7 +57,8 @@ export function ballAt(delivery:BowledBall,elapsedMs:number){
  // Camera is behind the striker; ball grows as it approaches from the bowler.
  const sway=Math.sin(p*Math.PI)*(delivery.swing*36);
  const x=360+delivery.line*37*(.3+.7*p)+sway;
- const y=56+495*p;
+ // A single strike plane at the visibly rendered batter's bat (around y=477).
+ const y=56+421*p;
  const bounceP=delivery.bounce;
  const z=p<bounceP?(1-p/bounceP)*28:Math.sin((p-bounceP)/(1-bounceP)*Math.PI)*19;
  return{x,y,z,p,bounced:p>=bounceP};
