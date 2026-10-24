@@ -66,7 +66,7 @@ export function SandPour({active,comfort,onScore,onFinish,onSound}:Props){
    {spill>0&&Array.from({length:Math.min(15,Math.ceil(spill/4))},(_,i)=><ellipse key={i} cx={270+(i*37)%180} cy={357+i%3*2} rx={5+i%3*2} ry="3" fill={sands[jar]}/>)}
    <text x="25" y="32" fill="#e1f1eb" fontWeight="850" fontSize="13">DRAG TOP TO POSITION SPOUT</text>
   </svg>
-  <div className="sand-actions"><label>Flow <select value={rate} onChange={e=>setRate(Number(e.target.value))} disabled={!active}><option value="1">Gentle</option><option value="2">Normal</option><option value="3">Fast</option></select></label><button className="sand-hold" disabled={!active||finished.current} aria-pressed={pouring} onClick={toggle}>{pouring?'Ⅱ Stop pouring':'▶ Start pouring'}</button><button disabled={!active} onClick={seal}>✓ Seal near target</button><button disabled={!active} onClick={reset}>↶ Empty</button></div>
+  <div className="sand-actions"><label>Flow <select value={rate} onChange={e=>setRate(Number(e.target.value))} disabled={!active}><option value="1">Gentle</option><option value="2">Normal</option><option value="3">Fast</option></select></label><button className="sand-hold" disabled={!active} aria-pressed={pouring} onClick={toggle}>{pouring?'Ⅱ Stop pouring':'▶ Start pouring'}</button><button disabled={!active} onClick={seal}>✓ Seal near target</button><button disabled={!active} onClick={reset}>↶ Empty</button></div>
   <p className="fresh-instruction" role="status">{message} Keep the flowing grains inside the mouth of the jar. Fine adjustments improve accuracy.</p>
  </div>;
 }
