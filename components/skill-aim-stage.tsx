@@ -1,16 +1,16 @@
 'use client';
 import type {ExpansionKind} from '@/lib/expansion-catalog';
-type Shot={aim:number;points:number;attempt:number}|null;
+type Shot={aim:number;points:number;attempt:number;keeperLane?:number;impactX?:number;impactY?:number}|null;
 type Props={kind:ExpansionKind;aim:number;power:number;round:number;shot:Shot;active:boolean;popped?:readonly number[];onAim:(value:number)=>void};
 const colours=['#fa9fbd','#b1dfd1','#f7d28f','#c1b0f2'];
 export function SkillAimStage({kind,aim,power,round,shot,active,popped=[],onAim}:Props){
  const options=kind==='darts'?12:kind==='penalty'?3:5;
  const xFor=(i:number)=>kind==='darts'?73+(i%4)*119:kind==='penalty'?110+i*140:70+i*90;
  const yFor=(i:number)=>kind==='darts'?48+Math.floor(i/4)*47:kind==='bowling'?60+(i%2)*19:76;
- const currentX=xFor(aim),currentY=yFor(aim),keeper=(round*5+1)%3;
+ const currentX=xFor(aim),currentY=yFor(aim),keeper=shot?.keeperLane??1;
  return <svg className="fresh-skill-aim-stage" viewBox="0 0 500 255" role="group" aria-label={'Aim preview for '+kind+', power '+power+' percent'}>
  <rect width="500" height="255" rx="21" fill={kind==='curling'?'#8dd4dc':kind==='penalty'?'#317b5a':kind==='archery'?'#a4c7a2':kind==='bowling'?'#ae8c76':kind==='darts'?'#5c537f':'#86ae90'}/>
- {kind==='penalty'&&<><rect x="35" y="26" width="430" height="145" rx="12" fill="#e2e5e444" stroke="#fff" strokeWidth="8"/>{[1,2,3,4,5,6,7].map(i=><path key={i} d={'M'+(35+i*54)+' 26V171'} stroke="#fff6" strokeWidth="2"/>)}<text x={xFor(keeper)} y="167" textAnchor="middle" fontSize="36">🧤</text><path d="M0 194H500" stroke="#e4ebc2" strokeWidth="4"/></>}
+ {kind==='penalty'&&<><rect x="35" y="26" width="430" height="145" rx="12" fill="#e2e5e444" stroke="#fff" strokeWidth="8"/>{[1,2,3,4,5,6,7].map(i=><path key={i} d={'M'+(35+i*54)+' 26V171'} stroke="#fff6" strokeWidth="2"/>)}<g transform={'translate('+(xFor(keeper))+' 130)'}><circle cx="0" cy="-23" r="13" fill="#f3c4aa"/><path d="M-15 -12H15L19 35H-19Z" fill="#f7c466" stroke="#f8e7b0" strokeWidth="3"/><path d="M-13 2L-34 20M13 2L34 20" stroke="#f2c6a4" strokeWidth="10" strokeLinecap="round"/><path d="M-9 33L-17 53M9 33L17 53" stroke="#f6f5e6" strokeWidth="9" strokeLinecap="round"/><circle cx="-34" cy="20" r="9" fill="#d5e5ee" stroke="#eaffff"/><circle cx="34" cy="20" r="9" fill="#d5e5ee" stroke="#eaffff"/></g><path d="M0 194H500" stroke="#e4ebc2" strokeWidth="4"/></>}
  {kind==='bowling'&&<><path d="M122 0L60 255H440L378 0Z" fill="#d7af81" stroke="#f6e0c7" strokeWidth="6"/><path d="M154 0L130 255M350 0L370 255" stroke="#fff6" strokeWidth="5"/>{[0,1,2,3,4,5,6,7,8,9].map(i=>{const row=Math.floor((Math.sqrt(8*i+1)-1)/2),col=i-row*(row+1)/2;return <g key={i}><rect x={250+(col-row/2)*34-8} y={40+row*21} width="16" height="27" rx="7" fill="#fff9f3" stroke="#c66b68" strokeWidth="2"/></g>;})}</>}
  {kind==='archery'&&<><rect width="500" height="255" fill="#9ebd9c"/><circle cx="250" cy="100" r="80" fill="#fff8e8"/><circle cx="250" cy="100" r="62" fill="#252e47"/><circle cx="250" cy="100" r="44" fill="#9bc5e2"/><circle cx="250" cy="100" r="27" fill="#e77876"/><circle cx="250" cy="100" r="12" fill="#ffd57c"/><text x="26" y="27" fontSize="15" fill="#203834">Wind: {[-11,7,-8,12,-4][round%5]>0?'→':'←'}</text></>}
  {kind==='curling'&&<><rect x="0" y="0" width="500" height="255" fill="#c0ecf0"/>{[95,72,50,27].map((r,i)=><circle key={i} cx="250" cy="93" r={r} fill={['#d1eef3','#759dc3','#f8faff','#d97588'][i]} opacity=".92"/>)}</>}
@@ -19,7 +19,8 @@ export function SkillAimStage({kind,aim,power,round,shot,active,popped=[],onAim}
  {['penalty','toss','darts'].includes(kind)&&Array.from({length:options},(_,i)=><g key={i} role="button" tabIndex={0} aria-label={'Aim at target '+(i+1)} onClick={()=>{if(active)onAim(i);}} onKeyDown={e=>{if(active&&(e.key==='Enter'||e.key===' ')){e.preventDefault();onAim(i);}}}><rect x={xFor(i)-26} y={yFor(i)-30} width="52" height="65" rx="9" fill="transparent"/>{aim===i&&<ellipse cx={xFor(i)} cy={yFor(i)} rx="30" ry="32" fill="none" stroke="#fff0b5" strokeDasharray="5 6" strokeWidth="5"/>}</g>)}
  <path d={'M250 231 Q'+(220+power/2)+' 140 '+currentX+' '+currentY} stroke="#fff7b8" fill="none" strokeDasharray="8 6" strokeWidth="4" opacity=".85"/>
  <circle cx="250" cy="231" r="15" fill="#ffdc99" stroke="#ffffffc7" strokeWidth="3"/>
- {shot&&<g key={shot.attempt}><circle cx={xFor(shot.aim)} cy={yFor(shot.aim)} r="22" fill="none" stroke={shot.points?'#b3ffcf':'#ffe1af'} strokeWidth="8" className="fresh-impact-pulse"/><text x={xFor(shot.aim)+26} y={yFor(shot.aim)-15} fill="#fff" fontSize="16" fontWeight="bold">{shot.points?'+'+shot.points:'MISS'}</text></g>}
+ {shot&&<g key={shot.attempt}><circle cx={shot.impactX??xFor(shot.aim)} cy={shot.impactY??yFor(shot.aim)} r="22" fill="none" stroke={shot.points?'#b3ffcf':'#ffe1af'} strokeWidth="8" className="fresh-impact-pulse"/><text x={(shot.impactX??xFor(shot.aim))+22} y={(shot.impactY??yFor(shot.aim))-20} fill="#fff" fontSize="16" fontWeight="bold">{shot.points?'+'+shot.points:'MISS'}</text></g>}
+ {shot&&kind==='penalty'&&<circle key={'ball-'+shot.attempt} cx="250" cy="231" r="12" fill="#f9f8e7" stroke="#e2bb72" strokeWidth="3"><animateMotion dur="0.6s" fill="freeze" path={'M0 0 Q'+(80+power/3)+' -125 '+((shot.impactX??250)-250)+' '+((shot.impactY??90)-231)}/></circle>}
  <text x="19" y="240" fill="#fffaf4" fontWeight="700" fontSize="12">{kind==='bowling'?'BOWLING LANE':kind==='penalty'?'PENALTY BOX':kind==='curling'?'ICE RINK':kind==='archery'?'ARCHERY RANGE':kind==='darts'?'BALLOON FIELD':'RING TOSS'}</text>
  </svg>;
 }
