@@ -16,7 +16,7 @@
 .arcade-shell .pc-overlay-score span{color:#dbefe8;font-size:clamp(9px,1vw,12px)}
 .arcade-shell .pc-big-result{fill:#fff4cf;font-size:54px;font-weight:950;letter-spacing:-.07em;paint-order:stroke;stroke:#1d443b;stroke-width:7;filter:drop-shadow(0 5px 5px #173b4980)}
 .arcade-shell .pc-timing{position:absolute;bottom:10px;left:11px;right:11px;background:#102e3bea;padding:9px 13px;border-radius:10px;border:1px solid #c1e4cf64}
-.arcade-shell .pc-timing-track{height:11px;border-radius:99px;background:linear-gradient(90deg,#ffd4b2 0%,#a8cbbe 64%,#87e0a9 77%,#fbd3b3 94%);position:relative;margin:4px 0 5px}
+.arcade-shell .pc-timing-track{height:11px;border-radius:99px;background:linear-gradient(90deg,#edb1a7 0%,#e5bca6 72%,#f8d892 90%,#81deb0 96%,#5ad497 100%);position:relative;margin:4px 0 5px}
 .arcade-shell .pc-timing-track i{position:absolute;left:0;top:50%;transform:translate(-50%,-50%);width:15px;height:22px;border-radius:6px;background:#fdfae3;border:2px solid #284a53;box-shadow:0 1px 8px #fff}
 .arcade-shell .pc-timing-label{display:block;text-align:center;font-size:9px;font-weight:850;letter-spacing:.11em;color:#dbeae2}
 .arcade-shell .pc-controller{display:flex;flex-direction:column;gap:11px;background:#1d2d44;border:1px solid #a6cce331;border-radius:20px;padding:clamp(12px,1.65vw,20px);min-width:0;min-height:410px}
@@ -86,3 +86,21 @@
 }
 @media(orientation:landscape) and (max-height:620px){.arcade-shell .pc-match-layout{grid-template-columns:minmax(0,1fr) minmax(250px,.8fr)}.arcade-shell .pc-controller{max-height:90dvh;overflow-y:auto}.arcade-shell .play-cricket-field{max-height:74dvh}.arcade-shell .pc-bat-buttons button{min-height:62px}.arcade-shell .pc-score-strip{padding:4px}}
 @media(prefers-reduced-motion:reduce){.arcade-shell .pc-flight,.arcade-shell .pc-impact,.arcade-shell .pc-bat-swing{animation:none!important}.arcade-shell .pc-bat-buttons button{transition:none}}
+
+/* The shot pad lives directly after the pitch on narrow screens, not after advanced controls. */
+.arcade-shell .pc-mobile-bat-pad{display:none}
+@media(max-width:1070px){
+ .arcade-shell .pc-mobile-bat-pad{display:block;position:sticky;bottom:0;z-index:25;max-width:760px;margin:0 auto;background:#122b3ef5;border:1px solid #9edabb;box-shadow:0 -7px 24px #0a1725b5;border-radius:12px;padding:8px 10px 12px;backdrop-filter:blur(12px)}
+ .arcade-shell .pc-mobile-bat-pad>span{display:block;text-align:center;font-size:10px;font-weight:850;letter-spacing:.12em;margin-bottom:7px;color:#d6f6da}
+ .arcade-shell .pc-mobile-bat-pad .pc-bat-buttons button{min-height:72px}
+ .arcade-shell .pc-controller .pc-desktop-bat-buttons,.arcade-shell .pc-desktop-bat-label{display:none}
+ .arcade-shell .pc-score-strip{position:relative;z-index:2}
+ .arcade-shell .pc-controller{min-height:0}
+}
+@media(max-width:640px){
+ .arcade-shell .pc-mobile-bat-pad{position:fixed;left:env(safe-area-inset-left,0px);right:env(safe-area-inset-right,0px);bottom:0;border-radius:15px 15px 0 0;padding:7px 9px calc(10px + env(safe-area-inset-bottom));}
+ .arcade-shell .pc-mobile-bat-pad .pc-bat-buttons button{min-height:65px;box-shadow:0 3px 0 #152733}
+ .arcade-shell .play-cricket{padding-bottom:105px}
+ .arcade-shell .pc-mobile-bat-pad>span{font-size:9px}
+}
+@media(orientation:landscape) and (max-height:620px){.arcade-shell .pc-mobile-bat-pad{position:sticky;bottom:0}.arcade-shell .play-cricket{padding-bottom:0}}
