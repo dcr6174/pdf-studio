@@ -166,3 +166,30 @@
 .arcade-shell .fresh-volley-shots button{font-size:12px;min-height:50px}
 .arcade-shell .fresh-volley-shots button[aria-pressed=true]{background:#b7e8cf;color:#1c4037;border-color:#e1fff0}
 @media(max-width:550px){.arcade-shell .fresh-volley-shots button{font-size:11px;padding:7px}}
+
+/* Game-first layout. Eliminate duplicate competitive scores where the game owns the HUD. */
+.arcade-shell .fresh-main[data-kind="cricket"] .fresh-stats,.arcade-shell .fresh-main[data-kind="hill"] .fresh-stats{display:none}
+.arcade-shell .fresh-main[data-kind="cricket"] .fresh-game-bar,.arcade-shell .fresh-main[data-kind="hill"] .fresh-game-bar{justify-content:flex-end;padding:0 0 6px;margin:0}
+.arcade-shell .fresh-main[data-kind="cricket"] .fresh-quick-actions button,.arcade-shell .fresh-main[data-kind="hill"] .fresh-quick-actions button{min-height:40px;padding:6px 10px}
+.arcade-shell .fresh-main[data-kind="cricket"] .fresh-active-scene,.arcade-shell .fresh-main[data-kind="hill"] .fresh-active-scene{padding:5px;min-height:0;justify-content:flex-start}
+.arcade-shell .fresh-main[data-kind="cricket"] .fresh-play-shell,.arcade-shell .fresh-main[data-kind="hill"] .fresh-play-shell{padding:8px;max-width:1380px}
+.arcade-shell .fresh-main[data-kind="cricket"] .fresh-play-viewport,.arcade-shell .fresh-main[data-kind="hill"] .fresh-play-viewport{min-height:0;border-radius:12px}
+.arcade-shell .fresh-main[data-kind="cricket"] .fresh-heading,.arcade-shell .fresh-main[data-kind="hill"] .fresh-heading{margin:6px auto 9px}
+.arcade-shell .fresh-main[data-kind="cricket"] .fresh-heading p,.arcade-shell .fresh-main[data-kind="hill"] .fresh-heading p{display:none}
+.arcade-shell .fresh-main[data-kind="cricket"] .fresh-actions,.arcade-shell .fresh-main[data-kind="hill"] .fresh-actions{margin-top:5px}
+@media(max-width:700px){
+ .arcade-shell .fresh-heading{gap:7px;margin:6px 0}
+ .arcade-shell .fresh-heading h1{font-size:clamp(21px,6vw,28px);line-height:1.12}
+ .arcade-shell .fresh-title-mark{width:44px;height:44px;flex-shrink:0}
+ .arcade-shell .fresh-title-mark svg{width:40px;height:40px}
+ .arcade-shell .fresh-heading p{display:none}
+ .arcade-shell .fresh-play-shell{padding:5px;border-radius:10px}
+ .arcade-shell .fresh-game-bar{gap:3px}
+ .arcade-shell .fresh-stats{gap:3px;margin-bottom:6px}
+ .arcade-shell .fresh-stats span{padding:5px;font-size:11px}
+ .arcade-shell .fresh-quick-actions{display:flex;gap:3px;justify-content:flex-end;flex-wrap:nowrap;overflow-x:auto}
+ .arcade-shell .fresh-quick-actions button{flex-shrink:0;min-height:40px;padding:4px 8px;white-space:nowrap;font-size:11px}
+ .arcade-shell .fresh-main[data-kind="cricket"] .fresh-game-bar,.arcade-shell .fresh-main[data-kind="hill"] .fresh-game-bar{justify-content:center}
+ .arcade-shell .fresh-main[data-kind="cricket"] .fresh-play-shell,.arcade-shell .fresh-main[data-kind="hill"] .fresh-play-shell{padding:2px}
+ .arcade-shell .fresh-main[data-kind="cricket"] .fresh-quick-actions button,.arcade-shell .fresh-main[data-kind="hill"] .fresh-quick-actions button{font-size:10px;padding:5px 7px}
+}
