@@ -18,7 +18,7 @@ export function ShapePackingStudio({active,seed=0,onScore,onFinish,onSound}:Prop
  const [notice,setNotice]=useState('Fill the 5 × 5 tray. Drag a piece from below, or tap a piece and then tap the board.');
  const [attempts,setAttempts]=useState(0),[totalScore,setTotalScore]=useState(0),[cleared,setCleared]=useState(false);
  const boardRef=useRef<SVGSVGElement|null>(null),pointerId=useRef<number|null>(null);
- const orders=useMemo(()=>level.pieces.map((p,i)=>level.pieces[(i*2+(stage+seed)%5)%5]),[level,stage,seed]);
+ const orders=useMemo(()=>Array.from({length:level.pieces.length},(_,i)=>level.pieces[(i*2+(stage+seed)%5)%5]),[level,stage,seed]);
  // Multiplication by 2 modulo 5 makes all five piece identities appear exactly once.
  const piece=(id:string|null):PackingTile|undefined=>level.pieces.find(p=>p.id===id);
  const rotation=(id:string)=>(turns[id]??(id.charCodeAt(0)+stage+seed)%4);
@@ -88,7 +88,7 @@ export function ShapePackingStudio({active,seed=0,onScore,onFinish,onSound}:Prop
  };
  const picked=piece(selected),ghostCells=picked?rotatePacking(picked.cells,rotation(picked.id)):[];
  const ghostValid=selected&&hover?validPackingMove(level,placed,{id:selected,x:hover.x,y:hover.y,turns:rotation(selected)}):false;
- return <div className="spatial-game packing-game">
+ return <div className="fresh-casual spatial-game packing-game" onKeyDown={e=>{if(e.key.toLowerCase()==="r"&&!e.repeat&&selected){e.preventDefault();rotate();}}}>
   <div className="spatial-scoreline"><span>BOARD <b>{stage+1}/{PACKING_LEVEL_COUNT}</b></span><span>FILLED <b>{placed.length*5}/25</b></span><span>PLACEMENTS <b>{attempts}</b></span></div>
   <div className="spatial-intro"><b>{cleared?'PERFECT FIT!':level.name}</b><span>Fit five different shapes into the square. Every cell counts. No overlaps or invisible matches.</span></div>
   <svg ref={boardRef} className="packing-board" viewBox="0 0 360 360" role="group" aria-label={'Five by five packing board, '+placed.length+' of five pieces placed'} onPointerMove={e=>{
