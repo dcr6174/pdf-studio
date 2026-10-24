@@ -118,3 +118,6 @@
  .arcade-shell .pc-mobile-pad button{min-height:48px}
  .arcade-shell .play-cricket{padding-bottom:63px}
 }
+
+@media(max-width:1070px){.arcade-shell .pc-match-layout.is-setup .pc-controller{order:-1}.arcade-shell .pc-match-layout.is-setup .pc-pregame{padding:4px 2px;gap:7px}.arcade-shell .pc-match-layout.is-setup .pc-start{min-height:54px;margin:3px 0}.arcade-shell .pc-match-layout.is-setup .pc-pregame h2{font-size:24px}}
+@media(max-width:760px){.arcade-shell .pc-match-layout.is-setup .pc-stage-wrap{max-height:38dvh}.arcade-shell .pc-match-layout.is-setup{gap:8px}}
