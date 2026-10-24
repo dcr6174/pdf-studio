@@ -86,3 +86,35 @@
 }
 @media(orientation:landscape) and (max-height:620px){.arcade-shell .pc-match-layout{grid-template-columns:minmax(0,1fr) minmax(250px,.8fr)}.arcade-shell .pc-controller{max-height:90dvh;overflow-y:auto}.arcade-shell .play-cricket-field{max-height:74dvh}.arcade-shell .pc-bat-buttons button{min-height:62px}.arcade-shell .pc-score-strip{padding:4px}}
 @media(prefers-reduced-motion:reduce){.arcade-shell .pc-flight,.arcade-shell .pc-impact,.arcade-shell .pc-bat-swing{animation:none!important}.arcade-shell .pc-bat-buttons button{transition:none}}
+
+/* 24 Oct gameplay integrity: put the actual bat-contact marker inside the generous zone.
+   The green window is calibrated in milliseconds by CricketMatch, never a static 77% cue. */
+.arcade-shell .pc-timing-track{background:linear-gradient(90deg,#d9b2a4,#cfc6bd)}
+.arcade-shell .pc-timing-track .pc-hit-window{position:absolute;top:0;bottom:0;background:linear-gradient(90deg,#78bf93,#b5eac3);border-radius:20px;opacity:1}
+.arcade-shell .pc-hit-marker{position:absolute;top:-5px;bottom:-5px;width:2px;background:#fff9c8;box-shadow:0 0 5px #fff9a6;pointer-events:none}
+.arcade-shell .pc-advanced-options{border:1px solid #ffffff37;border-radius:10px;padding:8px 10px;background:#273e52}
+.arcade-shell .pc-advanced-options summary{font-size:12px;font-weight:800;cursor:pointer;min-height:28px;display:list-item;color:#d7eee3}
+.arcade-shell .pc-advanced-options[open]{display:grid;gap:11px}
+.arcade-shell .pc-mobile-pad{display:none}
+@media(max-width:760px){
+ .arcade-shell .play-cricket{padding-bottom:106px}
+ .arcade-shell .pc-score-strip{margin-bottom:6px}
+ .arcade-shell .pc-mobile-pad{position:fixed;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:7px;z-index:100;bottom:max(6px,env(safe-area-inset-bottom));left:max(7px,env(safe-area-inset-left));right:max(7px,env(safe-area-inset-right));padding:8px;background:#172f3ff0;box-shadow:0 -7px 25px #061925bf;border:1px solid #c5eaca81;border-radius:15px;backdrop-filter:blur(9px)}
+ .arcade-shell .pc-mobile-pad button{display:grid;place-items:center;gap:2px;min-height:64px;padding:5px 4px;border:2px solid #e1f2d5;background:#b9e4cf;color:#1b3d40;font-weight:900}
+ .arcade-shell .pc-mobile-pad button:nth-child(2){background:#ffdf9b}
+ .arcade-shell .pc-mobile-pad button span{font-size:19px}
+ .arcade-shell .pc-mobile-pad button b{font-size:10px}
+ .arcade-shell .pc-controller .pc-bat-buttons{display:none}
+ .arcade-shell .pc-controller{gap:6px}
+ .arcade-shell .pc-overlay-score{max-width:58%}
+}
+@media(max-width:390px){
+ .arcade-shell .play-cricket{padding-bottom:106px}
+ .arcade-shell .pc-mobile-pad button{min-height:58px}
+ .arcade-shell .pc-timing-label{font-size:7px}
+}
+@media(orientation:landscape) and (max-height:620px) and (max-width:850px){
+ .arcade-shell .pc-mobile-pad{width:210px;left:auto;grid-template-columns:repeat(3,1fr)}
+ .arcade-shell .pc-mobile-pad button{min-height:48px}
+ .arcade-shell .play-cricket{padding-bottom:63px}
+}
