@@ -111,7 +111,7 @@ export function ShapePackingStudio({active,seed=0,onScore,onFinish,onSound}:Prop
   </svg>
   <div className="spatial-progress" role="status">{notice}</div>
   <div className="packing-tray" aria-label="Packing pieces">
-   {orders.map((tile,i)=>{
+   {orders.map(tile=>{
     const chosen=selected===tile.id,locked=placed.some(p=>p.id===tile.id),shape=rotatePacking(tile.cells,rotation(tile.id));
     return <button key={tile.id} className={'packing-piece'+(chosen?' is-selected':'')} disabled={!active||cleared||locked} aria-pressed={chosen} aria-label={'Shape '+tile.id+(locked?', already placed':'')+'. Select or drag to board.'}
       onClick={()=>{if(!locked){setSelected(tile.id);setNotice('Shape '+tile.id+' selected. Tap a board square or drag it into the tray. Rotate before dropping.');}}}
