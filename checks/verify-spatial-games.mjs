@@ -41,6 +41,6 @@ for(const path of ['components/untangle-studio.tsx','components/shape-packing-st
  assert(content.includes('onScore')&&content.includes('onFinish'),'progression and win in '+path);
 }
 const router=fs.readFileSync('components/fresh-game.tsx','utf8');
-assert(router.includes('game.kind===\\'untangle\\'?<UntangleStudio'));
-assert(router.includes('game.kind===\\'shapes\\'?<ShapePackingStudio'));
+assert(router.includes("game.kind==='untangle'?<UntangleStudio"));
+assert(router.includes("game.kind==='shapes'?<ShapePackingStudio"));
 console.log('PASS: 50 provably untangleable starts, four exact 25-cell packing tilings, collision logic, and tactile game routing.');
