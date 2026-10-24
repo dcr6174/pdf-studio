@@ -238,8 +238,8 @@ export const expansionGames = [
     "name": "One Line Draw",
     "genre": "Think",
     "color": "#bbe4b2",
-    "description": "Trace an entire shape without lifting.",
-    "instructions": "Tap adjacent dots to draw every edge exactly once.",
+    "description": "Trace real connected graphs without repeating an edge, in five original one-line puzzles.",
+    "instructions": "Start at A, then drag or tap to the next connected dot. Every line must be used exactly once. Five solvable graphs, undo and keyboard input.",
     "kind": "oneline"
   },
   {
