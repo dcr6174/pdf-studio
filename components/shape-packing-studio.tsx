@@ -1,5 +1,5 @@
 'use client';
-import {useMemo,useRef,useState,type PointerEvent,type KeyboardEvent} from 'react';
+import {useMemo,useRef,useState,type PointerEvent} from 'react';
 import {PACKING_LEVEL_COUNT,packingComplete,packingLevel,rotatePacking,validPackingMove,type PackingPlacement,type PackingTile,type Point} from '@/lib/spatial-puzzles';
 import type {ArcadeEffect} from '@/lib/arcade-audio';
 type Props={active:boolean;seed?:number;onScore:(n:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
