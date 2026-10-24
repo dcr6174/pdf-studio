@@ -40,7 +40,27 @@ for(const path of ['components/untangle-studio.tsx','components/shape-packing-st
  assert(content.includes('onPointerDown')&&content.includes('onPointerUp'),'actual pointer gesture in '+path);
  assert(content.includes('onScore')&&content.includes('onFinish'),'progression and win in '+path);
 }
+const trailCode=ts.transpileModule(fs.readFileSync('lib/line-trail.ts','utf8'),{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText;
+const trails=await import('data:text/javascript;base64,'+Buffer.from(trailCode).toString('base64'));
+assert.equal(trails.TRAIL_LEVELS,5);
+for(let level=0;level<trails.TRAIL_LEVELS;level++){
+ const graph=trails.trailLevel(level,0),used=new Set();
+ assert(graph.edges.length>=6+level);
+ assert(graph.trail.length===graph.edges.length+1);
+ assert.equal(graph.trail[0],graph.start);
+ for(let step=1;step<graph.trail.length;step++){
+  const before=graph.trail[step-1],after=graph.trail[step],key=trails.trailKey(before,after);
+  assert(trails.isLegalTrailStep(graph.edges,used,before,after),'authored path step is legal');
+  used.add(key);
+  assert(!trails.isLegalTrailStep(graph.edges,used,before,after),'used line cannot be repeated');
+ }
+ assert(trails.trailComplete(graph.edges,used),'every line can be traced exactly once');
+ assert.equal(used.size,graph.edges.length,'no duplicate lines');
+}
+const traceUI=fs.readFileSync('components/one-line-studio.tsx','utf8');
+assert(traceUI.includes('onPointerMove')&&traceUI.includes('isLegalTrailStep'),'actual line tracing and legal steps');
+
 const router=fs.readFileSync('components/fresh-game.tsx','utf8');
 assert(router.includes("game.kind==='untangle'?<UntangleStudio"));
 assert(router.includes("game.kind==='shapes'?<ShapePackingStudio"));
-console.log('PASS: 50 provably untangleable starts, four exact 25-cell packing tilings, collision logic, and tactile game routing.');
+console.log('PASS: 50 provably untangleable starts, five Euler trace puzzles and four exact 25-cell packing tilings, collision logic, and tactile game routing.');
