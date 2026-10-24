@@ -6,7 +6,7 @@ const targets=[62,76,57,82,68,89] as const;
 const sands=['#f3c487','#b5dfcc','#e7b4b7','#cfc1f2','#eedb96','#a7d5ed'];
 export function SandPour({active,comfort,onScore,onFinish,onSound}:Props){
  const [jar,setJar]=useState(0),[fill,setFill]=useState(0),[rate,setRate]=useState(2),[spout,setSpout]=useState(360),[pouring,setPouring]=useState(false),[spill,setSpill]=useState(0),[message,setMessage]=useState('Move the spout over the jar. Hold Pour; stop near the glowing fill mark.'),[time,setTime]=useState(0);
- const model=useRef({fill:0,spilled:0,jar:0,done:false}),last=useRef(0),soundAt=useRef(0),pour=useRef(false);
+ const model=useRef({fill:0,spilled:0,jar:0,done:false}),soundAt=useRef(0),pour=useRef(false);
  const finished=useRef(false);
  const target=targets[Math.min(jar,targets.length-1)];
  const seal=useCallback(()=>{
