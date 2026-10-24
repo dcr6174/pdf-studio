@@ -63,4 +63,5 @@ assert(traceUI.includes('onPointerMove')&&traceUI.includes('isLegalTrailStep'),'
 const router=fs.readFileSync('components/fresh-game.tsx','utf8');
 assert(router.includes("game.kind==='untangle'?<UntangleStudio"));
 assert(router.includes("game.kind==='shapes'?<ShapePackingStudio"));
+assert(router.includes("game.kind==='oneline'?<OneLineStudio"));
 console.log('PASS: 50 provably untangleable starts, five Euler trace puzzles and four exact 25-cell packing tilings, collision logic, and tactile game routing.');
