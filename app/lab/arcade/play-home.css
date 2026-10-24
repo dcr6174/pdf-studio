@@ -87,3 +87,39 @@
 @keyframes play-art-float{50%{transform:perspective(700px) rotate(-6deg) rotateY(-5deg) translateY(-11px)}}
 @keyframes play-spark{50%{transform:translateY(-9px) rotate(17deg)}}
 @media(prefers-reduced-motion:reduce){.arcade-shell .play-art-grid,.arcade-shell .play-art-star{animation:none!important}.arcade-shell .play-featured-card,.arcade-shell .play-primary-cta,.arcade-shell .play-mood-card{transition:none!important}.arcade-shell .play-featured-card:hover,.arcade-shell .play-mood-card:hover{transform:none!important}}
+
+/* October 24 game-first navigation: search and playable options before promotional sections. */
+.arcade-shell .play-directory{display:flex;flex-direction:column}
+.arcade-shell .play-hero{order:0;min-height:240px;padding:clamp(20px,2.6vw,35px);grid-template-columns:1.35fr .65fr;border-radius:20px}
+.arcade-shell .play-hero h1{font-size:clamp(36px,4vw,58px);line-height:1.05;margin:10px 0}
+.arcade-shell .play-hero-text>p{font-size:14px;line-height:1.45;max-width:620px;margin:8px 0}
+.arcade-shell .play-hero-actions{margin:12px 0}
+.arcade-shell .play-hero-benefits{margin-top:12px}
+.arcade-shell .play-primary-cta,.arcade-shell .play-secondary-cta{min-height:45px;padding:8px 13px;border-radius:11px}
+.arcade-shell .play-hero-art{min-height:170px;max-height:220px}
+.arcade-shell .play-art-grid{width:min(79%,300px);gap:7px;transform:rotate(-3deg)}
+.arcade-shell .play-art-tile{border-width:2px;border-radius:11px;overflow:hidden}
+.arcade-shell .play-browse{order:1;margin-top:26px}
+.arcade-shell .play-featured{order:2;margin-top:40px}
+.arcade-shell .play-mood{order:3;margin-top:35px}
+.arcade-shell .play-garden-area{order:4}
+.arcade-shell .arcade-endnote{order:5}
+.arcade-shell .play-section-heading h2,.arcade-shell .play-browse-head h2{font-size:clamp(23px,2.5vw,32px)}
+.arcade-shell .play-browse-head{margin-bottom:12px}
+.arcade-shell .play-browse-head p{font-size:12px;margin:6px 0}
+.arcade-shell .play-all-games .arcade-card-art{height:166px}
+.arcade-shell .play-all-games .arcade-card-copy{padding:12px 14px}
+.arcade-shell .play-all-games .arcade-card h3{font-size:16px;margin:5px 0}
+.arcade-shell .play-all-games .arcade-card p{font-size:11px;line-height:1.4;min-height:0;margin-bottom:9px}
+.arcade-shell .play-featured-grid{grid-template-columns:repeat(5,minmax(0,1fr))}
+.arcade-shell .play-featured-card{display:flex;flex-direction:column;align-items:stretch;gap:7px;min-height:0;padding:7px}
+.arcade-shell .play-featured-art{display:block;width:100%;height:auto;aspect-ratio:16/9;overflow:hidden;border-radius:10px}
+.arcade-shell .play-featured-description{padding:6px 9px 9px}
+.arcade-shell .scene-preview{position:relative;display:grid;place-items:center;width:100%;height:100%;overflow:hidden;border-radius:inherit;background:#283446}
+.arcade-shell .scene-preview>svg{display:block;width:100%;height:100%;object-fit:cover}
+.arcade-shell .scene-default>svg{width:74%;height:74%}
+.arcade-shell .scene-caption{position:absolute;right:4px;bottom:4px;color:#f0eff2;background:#1b2947bd;border-radius:4px;padding:2px 4px;font-size:7px;font-weight:900;letter-spacing:.07em}
+.arcade-shell .arcade-card-art .scene-preview{height:100%}
+.arcade-shell .play-art-tile .scene-preview{height:100%}
+@media(max-width:1100px){.arcade-shell .play-featured-grid{grid-template-columns:repeat(3,minmax(0,1fr))}}
+@media(max-width:760px){.arcade-shell .play-hero{grid-template-columns:1fr;min-height:0;padding:19px;border-radius:16px}.arcade-shell .play-hero h1{font-size:clamp(33px,9vw,43px)}.arcade-shell .play-hero-art{display:none}.arcade-shell .play-hero-benefits{margin-top:8px}.arcade-shell .play-hero-text>p{font-size:12px}.arcade-shell .play-browse{margin-top:20px}.arcade-shell .play-featured-grid{grid-template-columns:repeat(2,minmax(0,1fr))}.arcade-shell .play-featured{margin-top:28px}.arcade-shell .play-all-games .arcade-card-art{height:115px}.arcade-shell .play-all-games .arcade-card-copy{padding:8px 9px}.arcade-shell .play-all-games .arcade-card p{font-size:10px}.arcade-shell .scene-caption{font-size:6px}}

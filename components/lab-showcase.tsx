@@ -25,7 +25,7 @@ export function LabShowcase(){return <>
  </div></section>
  <section id="lab-creative-tools" className="lab-next-section" aria-labelledby="lab-next-title"><div><span className="lab-section-eyebrow">A LITTLE INSPIRATION</span><h2 id="lab-next-title">Don&apos;t know where to start?</h2><p>Pick a small idea. Make something in a few clicks.</p></div><div className="lab-next-links">
  <Link href="/lab/image-compressor"><span className="lab-next-icon mint"><ImageIcon size={21}/></span><span><b>Shrink a photo</b><small>Smaller file, same moment.</small></span><ArrowRight size={18}/></Link>
- <Link href="/lab/arcade/boundary-cricket"><span className="lab-next-icon peach"><Gamepad2 size={21}/></span><span><b>Play cricket</b><small>Two overs. Big boundaries.</small></span><ArrowRight size={18}/></Link>
+ <Link href="/lab/arcade/boundary-cricket"><span className="lab-next-icon peach"><Gamepad2 size={21}/></span><span><b>Play cricket</b><small>Timed batting. Multiple chase lengths.</small></span><ArrowRight size={18}/></Link>
  <Link href="/lab/mini-zine-maker"><span className="lab-next-icon violet"><BookOpen size={21}/></span><span><b>Make a mini zine</b><small>Turn one sheet into a story.</small></span><ArrowRight size={18}/></Link>
  <Link href="/lab/photo-coloring-page"><span className="lab-next-icon yellow"><Shapes size={21}/></span><span><b>Colour a memory</b><small>Your photo, a new canvas.</small></span><ArrowRight size={18}/></Link>
  </div></section>
