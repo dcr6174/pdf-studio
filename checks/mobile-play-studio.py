@@ -19,6 +19,7 @@ GAMES=[
  ("boundary-cricket",".pc-stage-wrap"),
  ("untangle-lines",".untangle-board"),
  ("shape-packing",".packing-board"),
+ ("one-line-draw",".one-line-board"),
 ]
 
 async def run_case(browser,base,width,height,slug,selector,out):
@@ -69,6 +70,11 @@ async def run_case(browser,base,width,height,slug,selector,out):
             result["checks"]["drag_moves_counter_changed"]=before!=after
             if before==after:
                 raise AssertionError("Drag did not update puzzle move count")
+        elif slug=="one-line-draw":
+            dots=page.locator(".one-line-board g[role=button]")
+            if await dots.count()<5:raise AssertionError("Graph has too few nodes")
+            await dots.nth(1).click()
+            result["checks"]["graph_status"]=(await page.locator(".spatial-progress").inner_text())[:140]
         elif slug=="shape-packing":
             pieces=page.locator(".packing-piece")
             if await pieces.count()!=5:
