@@ -105,7 +105,7 @@ export const expansionGames = [
     "genre": "Relax",
     "color": "#f5a7cf",
     "description": "Wipe a dusty window to reveal an illustration.",
-    "instructions": "Swipe across dirty patches, or tap each patch to clean the scene.",
+    "instructions": "Drag a smooth brush across the window to clear the grime precisely under your finger. Change brush size if needed.",
     "kind": "clean"
   },
   {
@@ -132,7 +132,7 @@ export const expansionGames = [
     "genre": "Relax",
     "color": "#f7c9a2",
     "description": "Fill tiny sand jars to the perfect line.",
-    "instructions": "Tap Pour in small steps, stop close to the marked line, then move to the next jar.",
+    "instructions": "Position the spout, start or stop flowing grains, control flow speed, and seal each of six jars within three percent of its target.",
     "kind": "sand"
   },
   {
@@ -141,7 +141,7 @@ export const expansionGames = [
     "genre": "Relax",
     "color": "#f5a7cf",
     "description": "Swap numbered ribbon endpoints until every line is straight.",
-    "instructions": "Tap two numbered endpoints to swap their positions and untangle the lines.",
+    "instructions": "Swap ribbon endpoints to make each numbered line horizontal; this is a permutation puzzle rather than free-node untangling.",
     "kind": "untangle"
   },
   {
@@ -159,7 +159,7 @@ export const expansionGames = [
     "genre": "Relax",
     "color": "#9de4dd",
     "description": "Bring a dull tiled mural back to life.",
-    "instructions": "Tap each muted tile to polish it. Finish the whole mosaic.",
+    "instructions": "Rub the tarnish off an engraved decorative plate with a continuous adjustable brush.",
     "kind": "polish"
   },
   {
@@ -293,7 +293,7 @@ export const expansionGames = [
     "genre": "Sports",
     "color": "#f7c38f",
     "description": "Roll a full ten-frame bowling game with real pin contacts, hooks, strikes and spares.",
-    "instructions": "Drag to aim or use left and right buttons, then press Bowl.",
+    "instructions": "Choose one of five starting positions, adjust power and hook, then roll. Ten frames use strike/spare bonus scoring.",
     "kind": "bowling"
   },
   {
