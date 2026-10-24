@@ -1,16 +1,16 @@
 'use client';
 import type {ExpansionKind} from '@/lib/expansion-catalog';
 type Shot={aim:number;points:number;attempt:number}|null;
-type Props={kind:ExpansionKind;aim:number;power:number;round:number;shot:Shot;active:boolean;popped?:readonly number[];onAim:(value:number)=>void};
+type Props={kind:ExpansionKind;aim:number;power:number;round:number;shot:Shot;active:boolean;keeperLane?:number;popped?:readonly number[];onAim:(value:number)=>void};
 const colours=['#fa9fbd','#b1dfd1','#f7d28f','#c1b0f2'];
-export function SkillAimStage({kind,aim,power,round,shot,active,popped=[],onAim}:Props){
+export function SkillAimStage({kind,aim,power,round,shot,active,keeperLane=1,popped=[],onAim}:Props){
  const options=kind==='darts'?12:kind==='penalty'?3:5;
  const xFor=(i:number)=>kind==='darts'?73+(i%4)*119:kind==='penalty'?110+i*140:70+i*90;
  const yFor=(i:number)=>kind==='darts'?48+Math.floor(i/4)*47:kind==='bowling'?60+(i%2)*19:76;
- const currentX=xFor(aim),currentY=yFor(aim),keeper=(round*5+1)%3;
+ const currentX=xFor(aim),currentY=yFor(aim),keeper=shot?keeperLane:1;
  return <svg className="fresh-skill-aim-stage" viewBox="0 0 500 255" role="group" aria-label={'Aim preview for '+kind+', power '+power+' percent'}>
  <rect width="500" height="255" rx="21" fill={kind==='curling'?'#8dd4dc':kind==='penalty'?'#317b5a':kind==='archery'?'#a4c7a2':kind==='bowling'?'#ae8c76':kind==='darts'?'#5c537f':'#86ae90'}/>
- {kind==='penalty'&&<><rect x="35" y="26" width="430" height="145" rx="12" fill="#e2e5e444" stroke="#fff" strokeWidth="8"/>{[1,2,3,4,5,6,7].map(i=><path key={i} d={'M'+(35+i*54)+' 26V171'} stroke="#fff6" strokeWidth="2"/>)}<text x={xFor(keeper)} y="167" textAnchor="middle" fontSize="36">🧤</text><path d="M0 194H500" stroke="#e4ebc2" strokeWidth="4"/></>}
+ {kind==='penalty'&&<><rect x="35" y="26" width="430" height="145" rx="12" fill="#e2e5e444" stroke="#fff" strokeWidth="8"/>{[1,2,3,4,5,6,7].map(i=><path key={i} d={'M'+(35+i*54)+' 26V171'} stroke="#fff6" strokeWidth="2"/>)}<text x={xFor(keeper)} y="167" textAnchor="middle" fontSize="36" className={shot?"fresh-goalie-dive":""}>🧤</text><path d="M0 194H500" stroke="#e4ebc2" strokeWidth="4"/></>}
  {kind==='bowling'&&<><path d="M122 0L60 255H440L378 0Z" fill="#d7af81" stroke="#f6e0c7" strokeWidth="6"/><path d="M154 0L130 255M350 0L370 255" stroke="#fff6" strokeWidth="5"/>{[0,1,2,3,4,5,6,7,8,9].map(i=>{const row=Math.floor((Math.sqrt(8*i+1)-1)/2),col=i-row*(row+1)/2;return <g key={i}><rect x={250+(col-row/2)*34-8} y={40+row*21} width="16" height="27" rx="7" fill="#fff9f3" stroke="#c66b68" strokeWidth="2"/></g>;})}</>}
  {kind==='archery'&&<><rect width="500" height="255" fill="#9ebd9c"/><circle cx="250" cy="100" r="80" fill="#fff8e8"/><circle cx="250" cy="100" r="62" fill="#252e47"/><circle cx="250" cy="100" r="44" fill="#9bc5e2"/><circle cx="250" cy="100" r="27" fill="#e77876"/><circle cx="250" cy="100" r="12" fill="#ffd57c"/><text x="26" y="27" fontSize="15" fill="#203834">Wind: {[-11,7,-8,12,-4][round%5]>0?'→':'←'}</text></>}
  {kind==='curling'&&<><rect x="0" y="0" width="500" height="255" fill="#c0ecf0"/>{[95,72,50,27].map((r,i)=><circle key={i} cx="250" cy="93" r={r} fill={['#d1eef3','#759dc3','#f8faff','#d97588'][i]} opacity=".92"/>)}</>}
