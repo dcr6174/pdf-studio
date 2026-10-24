@@ -17,6 +17,7 @@ import '../club.css';
 import '../fresh.css';
 import '../expansion.css';
 import '../quality.css';
+import '../spatial.css';
 import '../cricket-play.css';
 import '../hill-rider.css';
 import '../tenpin.css';
