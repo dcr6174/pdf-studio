@@ -49,3 +49,28 @@ export function rollBowlingBall(aim:number,power:number,standing:readonly number
  }
  return{contacted:[...new Set(contacted)],endX,launchX,track:tenPins.map(p=>({x:250+(endX-250)*((226-p.y)/170),y:p.y})),remaining:[...remaining]};
 }
+
+/** Wind and aim resolve to the exact ring/arrow/stone position illustrated after release. */
+export function simulateArchery(round:number,aim:number,power:number){
+ const wind=[-11,7,-8,12,-4][round%5];
+ const x=250+(aim-2)*47+wind*2;
+ const y=100+(65-power)*.68;
+ const distance=Math.hypot(x-250,y-100);
+ const points=distance<14?30:distance<34?15:distance<64?5:0;
+ return{x,y,wind,points,distance};
+}
+export function simulateCurling(round:number,aim:number,power:number){
+ // Ice travel decelerates each step; release power controls travel distance.
+ let x=250+(aim-2)*41,y=229,v=Math.max(0,power)/100*5.9;
+ for(let step=0;step<90;step++){y-=v;x+=(aim-2)*.08+Math.sin((step+round)/17)*.02;v=Math.max(0,v-.055);}
+ const distance=Math.hypot(x-250,y-95);
+ return{x,y,points:distance<19?30:distance<40?15:distance<75?5:0,distance};
+}
+export function simulateRingToss(round:number,aim:number,power:number){
+ const wind=((round*13+5)%7)-3;
+ const pegX=70+Math.max(0,Math.min(4,aim))*90;
+ const x=pegX+wind*5+(power-60)*.9;
+ const y=85+(power-60)*.28;
+ const distance=Math.hypot(x-pegX,y-85);
+ return{x,y,wind,distance,points:distance<17?30:distance<30?10:0};
+}
