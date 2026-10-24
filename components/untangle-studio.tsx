@@ -64,7 +64,7 @@ export function UntangleStudio({active,seed=0,onScore,onFinish,onSound}:Props){
   const next=level+1;if(next>4)return;
   setLevel(next);setNodes(generateUntangle(next,seed).points);setMoves(0);setSolved(false);setHint(null);
  };
- return <div className="spatial-game untangle-game">
+ return <div className="fresh-casual spatial-game untangle-game">
   <div className="spatial-scoreline"><span>THREAD <b>{level+1} / 5</b></span><span>CROSSINGS <b className={crossings===0?'spatial-good':''}>{crossings}</b></span><span>MOVES <b>{moves}</b></span></div>
   <div className="spatial-intro"><b>{solved?'ALL LINES CLEAR!':'Drag the knots. Free the threads.'}</b><span>{solved?'Every thread is uncrossed.': 'Move the glowing knots until no lines cross. Shared endpoints are allowed.'}</span></div>
   <svg className="untangle-board" viewBox="0 0 500 370" role="group" aria-label={'Untangle level '+(level+1)+'. '+crossings+' line crossings. Drag the nodes to separate all thread crossings.'} onPointerMove={handleMove} onPointerUp={handleUp} onPointerCancel={()=>{drag.current=null;}}>
