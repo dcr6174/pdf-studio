@@ -20,6 +20,7 @@ export type StrokeResult={
  label:string;grade:'perfect'|'good'|'late'|'miss'|'edge';
  contact:number; flight:number; direction:ShotSide;
  comment:string; timingError:number; targetLine:number;
+ impactX:number;impactY:number;interceptedBy:string|null;
 };
 export type Innings={
  runs:number;wickets:number;balls:number;target:number;overs:number;
@@ -28,6 +29,13 @@ export type Innings={
 const lengths:Length[]=['yorker','full','good','short'];
 const styles:BowlingStyle[]=['pace','swing','spin'];
 const sideOffset:Record<ShotSide,number>={leg:-1,straight:0,off:1};
+/** All pitch rendering and judgement use the SAME instant of bat contact. */
+export const CRICKET_CONTACT_Y=465;
+export const CRICKET_PERFECT_MS=100;
+export const cricketFielders=[
+ {x:85,y:268,name:'Deep square'},{x:157,y:379,name:'Square leg'},{x:243,y:178,name:'Midwicket'},
+ {x:460,y:162,name:'Mid off'},{x:573,y:371,name:'Cover'},{x:668,y:248,name:'Deep point'},{x:378,y:82,name:'Long off'}
+] as const;
 const clamp=(v:number,min:number,max:number)=>Math.min(max,Math.max(min,v));
 function hash(n:number){let x=n|0;x^=x>>>16;x=Math.imul(x,0x7feb352d);x^=x>>>15;x=Math.imul(x,0x846ca68b);return(x^(x>>>16))>>>0;}
 export function makeDelivery(index:number,difficulty:Difficulty='club',seed=19):BowledBall{
@@ -57,10 +65,23 @@ export function ballAt(delivery:BowledBall,elapsedMs:number){
  // Camera is behind the striker; ball grows as it approaches from the bowler.
  const sway=Math.sin(p*Math.PI)*(delivery.swing*36);
  const x=360+delivery.line*37*(.3+.7*p)+sway;
- const y=56+495*p;
+ const y=56+(CRICKET_CONTACT_Y-56)*p;
  const bounceP=delivery.bounce;
  const z=p<bounceP?(1-p/bounceP)*28:Math.sin((p-bounceP)/(1-bounceP)*Math.PI)*19;
  return{x,y,z,p,bounced:p>=bounceP};
+}
+/** Shot landing and fielder interception share the positions drawn on the pitch. */
+export function cricketShotLanding(delivery:BowledBall,stroke:Stroke,quality:number){
+ const salt=hash(delivery.id*13+delivery.speed*7+stroke.side.length*31);
+ const lane=sideOffset[stroke.side];
+ const long=quality>=3?1:quality>=2?.78:quality>=1?.52:.3;
+ const sideways=lane*(170+long*167);
+ const noise=((salt%101)-50)*.72;
+ const x=clamp(380+sideways+noise,12,748);
+ const y=clamp(363-(stroke.loft?160:112)*long+(((salt>>>9)%73)-36),28,485);
+ const fielder=cricketFielders.find(f=>Math.hypot(f.x-x,f.y-y)<(stroke.loft?40:26))??null;
+ const boundary=Math.pow((x-380)/350,2)+Math.pow((y-363)/162,2)>=1;
+ return{x,y,interceptedBy:fielder?.name??null,boundary};
 }
 export function evaluateStroke(
  delivery:BowledBall,stroke:Stroke,contactElapsedMs:number,difficulty:Difficulty='club'
@@ -72,46 +93,44 @@ export function evaluateStroke(
  const frontPreferred=delivery.length==='yorker'||delivery.length==='full';
  const backPreferred=delivery.length==='short';
  const footMismatch=(frontPreferred&&stroke.foot!=='front')||(backPreferred&&stroke.foot!=='back');
- const timingQuality=delta<100?3:delta<220?2:delta<window?1:0;
- const placement=align===0?0:align===1?1:2;
- const misfit=(footMismatch?1:0)+placement;
- const quality=timingQuality-misfit;
- const deterministic=hash(delivery.id*13+delivery.speed*7+stroke.side.length*31);
+ const timingQuality=delta<CRICKET_PERFECT_MS?3:delta<220?2:delta<window?1:0;
+ const quality=timingQuality-(footMismatch?1:0)-align;
+ const salt=hash(delivery.id*13+delivery.speed*7+stroke.side.length*31);
  const targetLine=clamp(delivery.line+delivery.swing*2,-2.5,2.5);
+ const landing=cricketShotLanding(delivery,stroke,quality);
  const tag=stroke.side==='leg'?'leg side':stroke.side==='off'?'off side':'straight';
- const result=(runs:number,wicket:boolean,out:StrokeResult['out'],grade:StrokeResult['grade'],comment:string):StrokeResult=>({
-  runs,wicket,out,grade,comment,direction:stroke.side,timingError:error,
-  label:wicket?'W':runs===0?'·':String(runs),contact:timingQuality/3,
-  flight:stroke.loft?1:.35,targetLine
+ const result=(runs:number,out:StrokeResult['out'],grade:StrokeResult['grade'],comment:string):StrokeResult=>({
+  runs,wicket:out!==null,out,grade,comment,direction:stroke.side,timingError:error,
+  label:out?'W':runs===0?'·':String(runs),contact:timingQuality/3,
+  flight:stroke.loft?1:.35,targetLine,impactX:landing.x,impactY:landing.y,interceptedBy:landing.interceptedBy
  });
  if(delta>window+260||quality<=-1){
-  const bowled=(delivery.line===0||delivery.length==='yorker')&&(deterministic%5!==0);
+  const bowled=(delivery.line===0||delivery.length==='yorker')&&(salt%5!==0);
   const out=bowled?'bowled':delivery.line===0?'lbw':null;
-  return result(0,!!out,out,'miss',bowled?'Bowled! You missed a straight delivery.':out?'LBW! The ball struck your pads.':'Beaten by the delivery. Dot ball.');
+  return result(0,out,'miss',bowled?'BOWLED! The ball beat the bat.':out?'LBW! The ball struck the pads.':'Beaten by the delivery. Dot ball.');
  }
  if(timingQuality===0||quality===0){
-  const out=stroke.loft&&deterministic%3===0?'caught':null;
-  return result(0,!!out,out,out?'edge':'late',out?'Mistimed loft: safely caught!':error<0?'Too early — wait until the ball reaches the crease.':'Late contact. No run.');
+  const out=stroke.loft&&landing.interceptedBy?'caught':null;
+  return result(0,out,out?'edge':'late',out?'Top edge taken by '+landing.interceptedBy+'.':error<0?'Too early — wait until the ball reaches the bat.':'Late contact. No run.');
  }
  if(stroke.loft){
-  if(quality<=1){
-   const caught=(deterministic%4)!==0;
-   return result(caught?0:2,caught,caught?'caught':null,caught?'edge':'late',caught?'The loft hung in the air — caught!':'Top edge drops into space. Two runs.');
-  }
-  const fielder=(delivery.id*3+hash(delivery.id+17))%7;
-  if(quality>=3&&fielder>=2)return result(6,false,null,'perfect','SIX! Sweetly timed into the '+tag+' stands!');
-  if(quality>=2&&fielder>=3)return result(4,false,null,'good','FOUR! A high drive beats the deep field.');
-  return result(2,false,null,'good','Floated over the infield. Two runs.');
+  if(landing.interceptedBy&&quality<=2)return result(0,'caught','edge','Caught by '+landing.interceptedBy+'! The high shot was within reach.');
+  if(quality<=1)return result(2,null,'late','Top edge drops short of the boundary. Two runs.');
+  if(landing.boundary&&quality>=3)return result(6,null,'perfect','SIX! Cleared the boundary over '+tag+'!');
+  if(landing.boundary)return result(4,null,'good','FOUR! The lofted ball clears the rope after bouncing.');
+  return result(2,null,'good','Lifted into a gap. Two runs.');
  }
- if(quality>=3){const gap=hash(delivery.id+stroke.side.length)%6;return result(gap>=2?4:3,false,null,'perfect',gap>=2?'FOUR! Crisp placement through the '+tag+' gap.':'Split the field! Three runs.');}
- if(quality>=2)return result(delivery.length==='short'?2:1,false,null,'good','Good timing. '+(delivery.length==='short'?'Two':'One')+' run'+(delivery.length==='short'?'s':'')+'.');
- return result(1,false,null,'late','A controlled nudge earns a single.');
+ if(landing.boundary&&quality>=2)return result(4,null,quality>=3?'perfect':'good','FOUR! Along the ground through the '+tag+' gap.');
+ if(quality>=3)return result(3,null,'perfect','Excellent placement. Three hard-run runs.');
+ if(quality>=2)return result(2,null,'good','Placed beyond the infield for two.');
+ return result(1,null,'late','A controlled nudge earns a single.');
 }
 export function missedDelivery(delivery:BowledBall):StrokeResult{
  const hitsStumps=Math.abs(delivery.line+delivery.swing)<1.15;
  return{runs:0,wicket:hitsStumps,out:hitsStumps?'bowled':null,label:hitsStumps?'W':'·',
   grade:'miss',contact:0,flight:0,direction:'straight',timingError:950,targetLine:delivery.line,
-  comment:hitsStumps?'BOWLED! You let the ball hit middle stump.':'Beaten outside off stump. Dot ball. Watch the ball right to the bat.'};
+  comment:hitsStumps?'BOWLED! You let the ball hit middle stump.':'Beaten outside off stump. Dot ball. Watch the ball right to the bat.',
+  impactX:ballAt(delivery,delivery.contactMs).x,impactY:CRICKET_CONTACT_Y,interceptedBy:null};
 }
 export function applyStroke(innings:Innings,outcome:StrokeResult):Innings{
  if(innings.ended)return innings;
