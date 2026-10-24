@@ -16,7 +16,7 @@
     "verify:compression": "node checks/verify-jpeg-optimization.mjs && node checks/verify-compression-targets.mjs",
     "verify:analytics": "node checks/verify-analytics.mjs && node checks/verify-tracker.mjs",
     "verify:studio": "node checks/verify-studio.mjs",
-    "build:public": "npx tsc --noEmit && npx eslint components/surface-studio.tsx components/tenpin-bowling.tsx components/granular-sand.tsx components/game-scene-preview.tsx lib/tenpin-engine.ts lib/sport-contact.ts lib/runner-hazards.ts checks/verify-audit-gameplay.mjs --max-warnings 0 && npm run verify:play-studio && node scripts/prepare-pdf-assets.mjs && node scripts/generate-tool-fixtures.mjs && node scripts/generate-brand-options.mjs && node scripts/generate-site-assets.mjs && vite build --config vite.public.config.ts",
+    "build:public": "npx tsc --noEmit && npx eslint components/cricket-match.tsx components/expansion-skill.tsx components/skill-aim-stage.tsx components/expansion-motion.tsx components/fresh-game.tsx components/arcade-directory.tsx components/lab-showcase.tsx lib/cricket-engine.ts checks/verify-play-studio-ui.mjs --max-warnings 0 && npm run verify:play-studio && node scripts/prepare-pdf-assets.mjs && node scripts/generate-tool-fixtures.mjs && node scripts/generate-brand-options.mjs && node scripts/generate-site-assets.mjs && vite build --config vite.public.config.ts",
     "deploy:public": "node scripts/deploy-public.mjs",
     "verify:public": "node checks/verify-public-owner.mjs",
     "postinstall": "node scripts/prepare-pdf-assets.mjs",
