@@ -120,3 +120,10 @@
  .arcade-shell .expand-skill-emoji{font-size:62px}
 }
 @media(prefers-reduced-motion:reduce){.arcade-shell .expand-jar-fill{transition:none}}
+
+.arcade-shell .expand-ping-opponent{position:absolute;top:2%;width:78px;height:16px;background:#c5f4de;border:4px solid #fff;border-radius:20px;transform:translateX(-50%);box-shadow:0 3px 12px #143c45a6;z-index:2}
+.arcade-shell .expand-ping-paddle{box-shadow:0 2px 12px #143c45a6}
+.arcade-shell .expand-ping-net{pointer-events:none}
+.arcade-shell .fresh-goalie-dive{animation:goalie-dive .33s ease-out both;transform-box:fill-box;transform-origin:center}
+@keyframes goalie-dive{from{opacity:.5;transform:translateX(20px) rotate(18deg)}to{opacity:1;transform:none}}
+@media(prefers-reduced-motion:reduce){.arcade-shell .fresh-goalie-dive{animation:none}}
