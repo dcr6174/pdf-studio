@@ -156,7 +156,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
      {phase==='done'&&<button className="pc-next" onClick={()=>{setPhaseBoth('setup');setResult(null);}}>Choose a new chase ↻</button>}
     </section>
    </div>
-   {phase==='bowling'&&<div className="pc-mobile-pad" role="group" aria-label="Always-visible mobile cricket batting buttons">{sideInfo.map(s=><button key={s.id} onClick={()=>strike(s.id)} disabled={!active||swingCommitted.current} aria-label={'Play '+s.label+' shot'}><span>{s.icon}</span><b>{s.label}</b></button>)}</div>}
+   {phase==='bowling'&&<div className="pc-mobile-pad" role="group" aria-label="Always-visible mobile cricket batting buttons">{sideInfo.map(s=><button key={s.id} onClick={()=>strike(s.id)} disabled={!active} aria-label={'Play '+s.label+' shot'}><span>{s.icon}</span><b>{s.label}</b></button>)}</div>}
    <div className="pc-smallprint">Original arcade cricket: quick timing-based batting inspired by the accessible controls of Stick Cricket and the timing, footwork and placement cues of Cricket 2007. Not a reproduction, licensed simulation, or official franchise game. <strong>Comfort Mode</strong> gives longer read time; pause freezes the ball.</div>
  </div>;
 }
