@@ -60,7 +60,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
  const [elapsed,setElapsed]=useState(0),[foot,setFoot]=useState<Footwork>('front'),[loft,setLoft]=useState(false);
  const [direction,setDirection]=useState<ShotSide>('straight'),[result,setResult]=useState<StrokeResult|null>(null);
  const [message,setMessage]=useState('Choose a match, then read the bounce marker and time your shot.'),[swingCount,setSwingCount]=useState(0);
- const inningsRef=useRef(innings),phaseRef=useRef<Phase>('setup'),elapsedRef=useRef(0),ballRef=useRef(delivery),lastView=useRef(0),matchSeed=useRef(23),swingCommitted=useRef(false);
+ const inningsRef=useRef(innings),phaseRef=useRef<Phase>('setup'),elapsedRef=useRef(0),ballRef=useRef(delivery),lastView=useRef(0),matchSeed=useRef(23),swingCommitted=useRef(false),stadiumRef=useRef<HTMLDivElement|null>(null);
  const setPhaseBoth=(p:Phase)=>{phaseRef.current=p;setPhase(p);};
  const completeDelivery=useCallback((outcome:StrokeResult)=>{
   if(phaseRef.current!=='bowling')return;
@@ -77,7 +77,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
   setResult(null);setMessage(ball.style.toUpperCase()+' · '+ball.length+' · '+ball.speed+' km/h. Watch the bounce circle.');
   setPhaseBoth('bowling');onSound('tap');
  },[difficulty,overs,onSound]);
- const start=()=>{matchSeed.current=(Date.now()>>>0)%65521+overs*31;const next=createInnings(overs);inningsRef.current=next;setInnings(next);setDirection('straight');setLoft(false);setFoot('front');nextBall();};
+ const start=()=>{matchSeed.current=(Date.now()>>>0)%65521+overs*31;const next=createInnings(overs);inningsRef.current=next;setInnings(next);setDirection('straight');setLoft(false);setFoot('front');nextBall();if(typeof window!=='undefined'&&window.innerWidth<1070)requestAnimationFrame(()=>stadiumRef.current?.scrollIntoView({block:'start',behavior:'smooth'}));};
  const strike=useCallback((side:ShotSide)=>{
   if(!active||phaseRef.current!=='bowling'||swingCommitted.current)return;
   swingCommitted.current=true;
@@ -130,8 +130,8 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
    <div><small>NEED</small><b>{Math.max(0,innings.target-innings.runs)}</b></div>
    <div><small>REQ. RATE</small><b>{requiredRate(innings).toFixed(1)}</b></div>
   </div>
-  <div className="pc-match-layout">
-   <div className="pc-stage-wrap">
+  <div className={"pc-match-layout"+(phase==="setup"?" is-setup":"")}>
+   <div className="pc-stage-wrap" ref={stadiumRef}>
     <CricketStadium ball={delivery} elapsed={elapsed} result={result} phase={phase} loft={loft} shotDirection={direction} strokeFlash={swingCount}/>
     <div className="pc-overlay-score" aria-live="polite">
      {phase==='bowling'?<><strong>{delivery.speed} km/h · {delivery.style.toUpperCase()}</strong><span>{bowlerLine} · {bowlerLength}</span></>:phase==='result'&&result?<><strong>{result.wicket?'WICKET':result.runs===0?'DOT':result.runs+' RUNS'}</strong><span>{result.grade.toUpperCase()} TIMING · {result.timingError>0?'+':''}{result.timingError}ms</span></>:<><strong>BOUNDARY CRICKET</strong><span>Three directions. One swing per ball.</span></>}
