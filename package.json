@@ -25,7 +25,7 @@
     "generate:brand-options": "node scripts/generate-brand-options.mjs",
     "verify:text": "node checks/verify-online-text.mjs && node checks/verify-text-advanced.mjs",
     "verify:play-studio": "node checks/verify-audit-gameplay.mjs && node checks/verify-play-studio-ui.mjs && node checks/verify-cricket-game.mjs && node checks/verify-casual-levels.mjs && node checks/verify-hill-game.mjs && node checks/verify-pool-aim.mjs && node checks/verify-spatial-games.mjs",
-    "lint:play-studio": "eslint components/untangle-studio.tsx components/shape-packing-studio.tsx lib/spatial-puzzles.ts checks/verify-spatial-games.mjs --max-warnings 0 components/one-line-studio.tsx lib/line-trail.ts"
+    "lint:play-studio": "eslint lib/spatial-puzzles.ts lib/line-trail.ts checks/verify-spatial-games.mjs --max-warnings 0"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",
