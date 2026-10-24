@@ -289,10 +289,10 @@ export const expansionGames = [
   },
   {
     "slug": "mini-bowling",
-    "name": "Bowling Aim Challenge",
+    "name": "Ten-Pin Bowling",
     "genre": "Sports",
     "color": "#f7c38f",
-    "description": "Set your aim and power in a five-round bowling skill challenge.",
+    "description": "Roll a full ten-frame bowling game with real pin contacts, hooks, strikes and spares.",
     "instructions": "Drag to aim or use left and right buttons, then press Bowl.",
     "kind": "bowling"
   },
