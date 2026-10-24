@@ -51,7 +51,7 @@ export function TenPinBowling({active,comfort,onScore,onFinish,onSound}:Props){
    <path d="M145 7H355L415 325H85Z" fill="url(#tenpin-lane-floor)" stroke="#ffe7b8" strokeWidth="6"/>
    <path d="M131 3L68 326M371 3L432 326" stroke="#544e56" strokeWidth="23"/>
    {[0,1,2,3].map(i=><path key={i} d={'M'+(185+i*43)+' 8l'+((i-1.5)*13)+' 312'} stroke="#fcebd0" opacity=".21" strokeWidth="4"/>)}
-   <path d={'M250 289Q'+(249+hook*50)+' 172 '+end+' 66'} fill="none" stroke="#ebfbdb" strokeWidth="3" strokeDasharray="9 7" opacity={flight?.3:.75}/>
+   <path d={'M250 289Q'+(249+hook*50)+' 172 '+end+' 66'} fill="none" stroke="#ebfbdb" strokeWidth="3" strokeDasharray="9 7" opacity={flight?0.3:0.75}/>
    {tenPins.filter(p=>standing.has(p.id)).map(p=><g key={p.id} transform={'translate('+p.x+' '+p.y+')'} opacity={showPin(p.id,p.y)?1:.12}>
     <ellipse cx="0" cy="7" rx="9" ry="4" fill="#2a29284b"/><path d="M-6 -11Q-2 -15 0 -16Q4 -15 7 -11L8 7H-8Z" fill="#fffaf0" stroke="#d3af97" strokeWidth="1.7"/><path d="M-7 -3H7" stroke="#d66e78" strokeWidth="4"/><circle cx="0" cy="-14" r="6" fill="#fffaf0"/>
    </g>)}
