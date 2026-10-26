@@ -195,6 +195,7 @@ export function RooftopHoops(){
    </div></div>
    <div className="hoops-stage" data-orientation={compact?'portrait':'landscape'}>
     <RooftopCourt court={court} compact={compact} spot={spot} ball={position} aimLine={aimLine} toast={toast} score={score} shots={shots} streak={streak} dragging={dragging} flying={flying} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={()=>{startedDrag.current=null;setDragging(false);}}/>
+    {phase==='play'&&!flying&&<button className="hoops-mobile-shoot" onClick={()=>launch()} aria-label="Shoot basketball from the court">🏀 SHOOT</button>}
     {phase==='ready'&&<div className="hoops-curtain"><span className="hoops-start-ball" aria-hidden="true">🏀</span><h2>THE COURT IS YOURS.</h2><p>Pull the ball back and release, or tune your angle and power below. Twelve shots. Every swish counts.</p><button disabled={!loaded} onClick={begin}>▶ TAKE THE COURT</button><small>Sound is on by default. Tap the speaker to mute.</small></div>}
     {phase==='paused'&&<div className="hoops-curtain"><h2>TIMEOUT.</h2><p>Your shot and score are saved for this round.</p><button onClick={()=>{unlockSportsAudio();setPhase('play');}}>▶ BACK IN THE GAME</button></div>}
     {phase==='done'&&<div className="hoops-curtain"><span className="hoops-start-ball" aria-hidden="true">{score>=18?'🏆':'🏀'}</span><h2>FINAL BUZZER!</h2><p><b>{score} points</b> from {HOOPS_SHOTS} shots. {score>=18?'You owned the roof!':'The rim is waiting for your comeback.'}</p><button onClick={reset}>↻ RUN IT BACK</button></div>}
