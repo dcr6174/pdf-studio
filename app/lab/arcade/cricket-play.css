@@ -121,3 +121,10 @@
 
 @media(max-width:1070px){.arcade-shell .pc-match-layout.is-setup .pc-controller{order:-1}.arcade-shell .pc-match-layout.is-setup .pc-pregame{padding:4px 2px;gap:7px}.arcade-shell .pc-match-layout.is-setup .pc-start{min-height:54px;margin:3px 0}.arcade-shell .pc-match-layout.is-setup .pc-pregame h2{font-size:24px}}
 @media(max-width:760px){.arcade-shell .pc-match-layout.is-setup .pc-stage-wrap{max-height:38dvh}.arcade-shell .pc-match-layout.is-setup{gap:8px}}
+
+/* Audible cricket isn't hidden in a global settings drawer. The scorecard owns it. */
+.arcade-shell .pc-main-score .pc-audio-toggle{position:relative;margin:2px auto 0;background:#1e5d53;color:#e6ffe0;border:1px solid #a5e3bb;border-radius:7px;font-weight:850;font-size:10px;letter-spacing:.035em;min-height:29px;padding:5px 9px;cursor:pointer}
+.arcade-shell .pc-main-score .pc-audio-toggle[aria-pressed=false]{background:#64474e;color:#f2e6e8;border-color:#bca3aa}
+.arcade-shell .pc-main-score .pc-audio-toggle:focus-visible{outline:3px solid #ffdd87;outline-offset:3px}
+.arcade-shell .pc-sound-info{color:#e8edcd;font-size:11px;font-weight:750;text-align:center;line-height:1.4;margin:6px auto}
+@media(max-width:760px){.arcade-shell .pc-main-score .pc-audio-toggle{font-size:9px;min-height:28px;padding:3px 5px}.arcade-shell .pc-score-strip .pc-main-score{gap:3px}.arcade-shell .pc-sound-info{font-size:10px}}
