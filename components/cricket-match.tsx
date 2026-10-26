@@ -2,7 +2,8 @@
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {applyStroke,ballAt,createInnings,cricketFielders,evaluateStroke,inningsResult,makeDelivery,missedDelivery,renderOvers,requiredRate,type BowledBall,type Difficulty,type Footwork,type Innings,type ShotSide,type StrokeResult} from '@/lib/cricket-engine';
 import type {ArcadeEffect} from '@/lib/arcade-audio';
-type Props={active:boolean;comfort:boolean;onScore:(score:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
+import {playSportsAudio,unlockSportsAudio,type SportsCue} from '@/lib/sports-audio';
+type Props={active:boolean;comfort:boolean;soundEnabled:boolean;onScore:(score:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
 type Phase='setup'|'bowling'|'result'|'done';
 const sideInfo:{id:ShotSide;label:string;key:string;icon:string}[]=[
  {id:'leg',label:'LEG SIDE',key:'←',icon:'↖'},
@@ -35,7 +36,7 @@ function CricketStadium({ball,elapsed,result,shotDirection,loft,phase,strokeFlas
  <path d="M353 171V199M374 171V199M395 171V199M348 456V500M378 456V500M408 456V500" stroke="#e7b985" strokeWidth="1.5" opacity=".7"/>
  <path d="M352 168V135M379 168V135M406 168V135" stroke="#fff4da" strokeWidth="7" strokeLinecap="round"/>
  <path d="M348 135H411" stroke="#fff4da" strokeWidth="5"/>
- {cricketFielders.map((p,i)=><g key={p.name} transform={'translate('+p.x+' '+p.y+')'}><ellipse cy="11" rx="13" ry="5" fill="#244d4b44"/><circle cy="-9" r="7" fill="#f1c4a8"/><path d="M-9 -2h18l8 20h-34z" fill={i%2?'#eea784':'#fee3a9'} stroke="#ffffffaa" strokeWidth="1.5"/><circle cx="0" cy="-19" r="5" fill="#263e61"/></g>)}
+ {cricketFielders.map((p,i)=><g key={p.name} className={result?.interceptedBy===p.name&&phase==='result'?'pc-fielder-catch':''} transform={'translate('+p.x+' '+p.y+')'}><ellipse cy="11" rx="13" ry="5" fill="#244d4b44"/><circle cy="-9" r="7" fill="#f1c4a8"/><path d="M-9 -2h18l8 20h-34z" fill={i%2?'#eea784':'#fee3a9'} stroke="#ffffffaa" strokeWidth="1.5"/><circle cx="0" cy="-19" r="5" fill="#263e61"/></g>)}
  <g transform="translate(378 188) scale(.78)"><ellipse cy="19" rx="13" ry="4" fill="#533d2866"/><circle cy="-17" r="12" fill="#f4c3a5"/><path d="M-14 -6h28l6 37h-38z" fill="#e0e8f2" stroke="#7da5bd" strokeWidth="2"/><path d="M-13 30l-6 24m31-24 8 24" stroke="#e0e8f2" strokeWidth="8" strokeLinecap="round"/></g>
  <g transform="translate(362 474)"><ellipse cx="-10" cy="51" rx="30" ry="8" fill="#45382266"/><path d="M-7 -10l-10 41m17-40 18 42" stroke="#dfe7fa" strokeWidth="14" strokeLinecap="round"/><path d="M-31 -12Q-8 -30 15 -18l16 39-52 6z" fill="#f5f5ec" stroke="#879aaf" strokeWidth="3"/><circle cx="-6" cy="-34" r="15" fill="#d79f82"/><path d="M-22 -38q7-21 30-15l12 10-26 8z" fill="#315e86"/><path d="M-25 -1l-14 16m36-21 28 7" stroke="#f0bb9e" strokeWidth="12" strokeLinecap="round"/><path className={phase==='result'?'pc-bat-swing':''} key={strokeFlash} d="M26 7L69 43" stroke="#f1d6a2" strokeWidth="13" strokeLinecap="round"/></g>
  <g><path d="M340 462V515m18-54v54m18-54v54" stroke="#fff6e7" strokeWidth="7" strokeLinecap="round"/><path d="M337 462H380" stroke="#fff6e7" strokeWidth="5"/></g>
@@ -50,47 +51,60 @@ function CricketStadium({ball,elapsed,result,shotDirection,loft,phase,strokeFlas
   <circle cx={target.x} cy={target.y} r="19" fill="#fff9d5aa" stroke="#ffffff" strokeWidth="4" className="pc-impact"/>
   <text x="380" y="110" textAnchor="middle" className="pc-big-result">{result.wicket?'OUT!':result.runs===6?'SIX!':result.runs===4?'FOUR!':result.runs?result.runs+' RUN'+(result.runs===1?'':'S'):'DOT BALL'}</text>
  </>}
- <text x="22" y="31" fill="#1e403f" fontSize="15" fontWeight="800">BATTING CAMERA · ORIGINAL PLAY STUDIO</text>
+ {phase==='result'&&result?.wicket&&<g className="pc-wicket-flash"><path d="M337 457L377 518M376 457L339 519" stroke="#ffdfaa" strokeWidth="8" strokeLinecap="round"/><circle cx="359" cy="479" r="45" stroke="#ffdb8d" strokeWidth="5" fill="none" strokeDasharray="10 8"/></g>}
+ <text x="22" y="31" fill="#1e403f" fontSize="15" fontWeight="800">STADIUM CAM · LIVE CHASE</text>
  </svg>;
 }
-export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
+export function CricketMatch({active,comfort,soundEnabled,onScore,onFinish,onSound}:Props){
  const [overs,setOvers]=useState<2|5|10>(2),[difficulty,setDifficulty]=useState<Difficulty>('club');
  const [innings,setInnings]=useState<Innings>(()=>createInnings(2)),[phase,setPhase]=useState<Phase>('setup');
  const [delivery,setDelivery]=useState<BowledBall>(()=>makeDelivery(0,'club'));
  const [elapsed,setElapsed]=useState(0),[foot,setFoot]=useState<Footwork>('front'),[loft,setLoft]=useState(false);
  const [direction,setDirection]=useState<ShotSide>('straight'),[result,setResult]=useState<StrokeResult|null>(null);
  const [message,setMessage]=useState('Choose a match, then read the bounce marker and time your shot.'),[swingCount,setSwingCount]=useState(0);
- const inningsRef=useRef(innings),phaseRef=useRef<Phase>('setup'),elapsedRef=useRef(0),ballRef=useRef(delivery),lastView=useRef(0),matchSeed=useRef(23),swingCommitted=useRef(false),stadiumRef=useRef<HTMLDivElement|null>(null);
+ const inningsRef=useRef(innings),phaseRef=useRef<Phase>('setup'),elapsedRef=useRef(0),ballRef=useRef(delivery),lastView=useRef(0),matchSeed=useRef(23),swingCommitted=useRef(false),stadiumRef=useRef<HTMLDivElement|null>(null),bowlerSound=useRef(false),bounceSound=useRef(false);
+ const emit=useCallback((event:SportsCue)=>{if(soundEnabled)playSportsAudio(event);},[soundEnabled]);
  const setPhaseBoth=(p:Phase)=>{phaseRef.current=p;setPhase(p);};
  const completeDelivery=useCallback((outcome:StrokeResult)=>{
   if(phaseRef.current!=='bowling')return;
   const updated=applyStroke(inningsRef.current,outcome);
   inningsRef.current=updated;setInnings(updated);setResult(outcome);setMessage(outcome.comment);
-  onScore(updated.runs);onSound(outcome.wicket?'miss':outcome.runs>=4?'goal':outcome.runs?'hit':'bounce');
+  onScore(updated.runs);
+  if(outcome.wicket){
+   emit(outcome.out==='bowled'?'cricket-stumps':outcome.out==='caught'?'cricket-edge':'cricket-edge');
+  }else if(outcome.grade==='miss'){emit('cricket-edge');}
+  else{
+   emit(outcome.grade==='edge'?'cricket-edge':'cricket-bat');
+   if(outcome.runs===6)emit('cricket-six');
+   else if(outcome.runs===4)emit('cricket-four');
+  }
+  onSound(outcome.wicket?'miss':outcome.runs>=4?'goal':outcome.runs?'hit':'bounce');
   setPhaseBoth(updated.ended?'done':'result');
   if(updated.ended)onFinish(updated.won,inningsResult(updated));
- },[onScore,onSound,onFinish]);
+ },[onScore,onSound,onFinish,emit]);
  const nextBall=useCallback(()=>{
   if(inningsRef.current.ended)return;
   const ball=makeDelivery(inningsRef.current.balls,difficulty,matchSeed.current);
-  ballRef.current=ball;swingCommitted.current=false;setDelivery(ball);elapsedRef.current=0;setElapsed(0);lastView.current=0;
+  ballRef.current=ball;swingCommitted.current=false;bowlerSound.current=false;bounceSound.current=false;setDelivery(ball);elapsedRef.current=0;setElapsed(0);lastView.current=0;
   setResult(null);setMessage(ball.style.toUpperCase()+' · '+ball.length+' · '+ball.speed+' km/h. Watch the bounce circle.');
-  setPhaseBoth('bowling');onSound('tap');
- },[difficulty,overs,onSound]);
- const start=()=>{matchSeed.current=(Date.now()>>>0)%65521+overs*31;const next=createInnings(overs);inningsRef.current=next;setInnings(next);setDirection('straight');setLoft(false);setFoot('front');nextBall();if(typeof window!=='undefined'&&window.innerWidth<1070)requestAnimationFrame(()=>stadiumRef.current?.scrollIntoView({block:'start',behavior:'smooth'}));};
+  setPhaseBoth('bowling');emit('cricket-crowd');onSound('tap');
+ },[difficulty,overs,onSound,emit]);
+ const start=()=>{unlockSportsAudio();matchSeed.current=(Date.now()>>>0)%65521+overs*31;const next=createInnings(overs);inningsRef.current=next;setInnings(next);setDirection('straight');setLoft(false);setFoot('front');nextBall();if(typeof window!=='undefined'&&window.innerWidth<1070)requestAnimationFrame(()=>stadiumRef.current?.scrollIntoView({block:'start',behavior:'smooth'}));};
  const strike=useCallback((side:ShotSide)=>{
   if(!active||phaseRef.current!=='bowling'||swingCommitted.current)return;
-  swingCommitted.current=true;
+  unlockSportsAudio();swingCommitted.current=true;
   const t=elapsedRef.current,b=ballRef.current;
   const output=evaluateStroke(b,{side,foot,loft},t,difficulty);
   setDirection(side);setSwingCount(n=>n+1);completeDelivery(output);
- },[active,foot,loft,difficulty,completeDelivery,onSound]);
+ },[active,foot,loft,difficulty,completeDelivery]);
  useEffect(()=>{
   if(!active||phase!=='bowling')return;
   let raf=0,last=0;
   const frame=(now:number)=>{
    if(!last)last=now;const dt=Math.min(now-last,48);last=now;
    const next=elapsedRef.current+dt*(comfort?.68:1);elapsedRef.current=next;
+   if(!bowlerSound.current&&next>=ballRef.current.releaseMs){bowlerSound.current=true;emit('cricket-bowler');}
+   if(!bounceSound.current&&next>=ballRef.current.contactMs*ballRef.current.bounce){bounceSound.current=true;emit('cricket-pitch');}
    if(now-lastView.current>32){setElapsed(next);lastView.current=now;}
    if(next>ballRef.current.contactMs+380){
     completeDelivery(missedDelivery(ballRef.current));
@@ -99,7 +113,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
    raf=requestAnimationFrame(frame);
   };
   raf=requestAnimationFrame(frame);return()=>cancelAnimationFrame(raf);
- },[active,phase,comfort,completeDelivery]);
+ },[active,phase,comfort,completeDelivery,emit]);
  useEffect(()=>{
   if(!active||phase!=='result')return;
   const id=setTimeout(nextBall,1500);return()=>clearTimeout(id);
