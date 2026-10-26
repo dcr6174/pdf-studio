@@ -55,8 +55,18 @@ for(const feature of ['onPointerDown','onPointerUp','rooftop-court','rooftop-sho
 }
 const styles=fs.readFileSync('app/lab/arcade/rooftop-hoops.css','utf8');
 assert(styles.includes('aspect-ratio:5 / 3')&&styles.includes('width:100%')&&styles.includes('max-height:min(77dvh'),'Court must dominate rather than render as a tiny card');
+assert(ui.includes('data-camera={portrait?"portrait":"landscape"}')&&ui.includes('viewBox={viewBox}')&&ui.includes('getScreenCTM'),
+ 'Portrait court must pan with the traveling basketball while preserving accurate touch coordinates');
+assert(ui.includes('rooftop-hit-callout')&&ui.includes('rh-celebrate-burst'),
+ 'A basket needs readable feedback and animated celebration');
+assert(styles.includes('max-width:680px')&&styles.includes('height:clamp(285px,calc(100dvh - 265px),655px)'),
+ 'Portrait stage should occupy roughly the full available phone viewport, not retain a tiny 5:3 strip');
 const cricket=fs.readFileSync('components/cricket-match.tsx','utf8');
-assert(cricket.includes('pc-audio-toggle')&&cricket.includes("onSound('bounce')"),'Cricket should show an audio control and audible bounce timing');
+assert(cricket.includes('pc-audio-toggle')&&cricket.includes('pc-audio-preview')&&cricket.includes('unlockStadiumAudio')&&cricket.includes('startCricketAmbience')&&cricket.includes("onSound('bounce')"),
+ 'Cricket audio must unlock on player gesture, offer a test sound and play ambient crowd/bounce');
 const sound=fs.readFileSync('lib/arcade-audio.ts','utf8');
-assert(sound.includes("kind==='cricket'")&&sound.includes('playStadiumSound'),'Cricket must use the new stadium sounds');
+assert(sound.includes("kind==='cricket'")&&sound.includes('playStadiumSound')&&sound.includes("effect==='miss'?'miss'"),'Cricket misses must not sound like wickets');
+assert(cricket.includes("playStadiumSound('cricket','wicket')"),'A wicket must trigger its distinct stadium sound effect');
 console.log('PASS: Rooftop physics 10 positions × 18 arcs × 26 strengths, real collisions, playable scoring, arena routing and visible cricket sounds.');
+
+assert(fs.readFileSync('lib/stadium-audio.ts','utf8').includes('startCricketAmbience'),'Original filtered cricket ambient audio must exist.');

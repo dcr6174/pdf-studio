@@ -76,3 +76,100 @@
 }
 @media(orientation:landscape) and (max-height:650px){.arcade-shell .rooftop-nav{display:none}.arcade-shell .rooftop-head{margin:0 0 4px}.arcade-shell .rooftop-scoreline{margin:0 0 5px}.arcade-shell .rooftop-stage{max-height:calc(100dvh - 172px)}.arcade-shell .rooftop-bottom{margin-top:5px}.arcade-shell .rooftop-controls{padding:5px}}
 @media(prefers-reduced-motion:reduce){.arcade-shell .rh-clouds,.arcade-shell .rh-player-shoot,.arcade-shell .rh-net-pop,.arcade-shell .rh-ball-spin{animation:none!important}}
+
+/* 26 Oct: dedicate the viewport to basketball. No 5:3 postage-stamp
+   on portrait mobile, and no unused letterboxed theatre on wide monitors. */
+.arcade-shell .rooftop-stage{
+  width:min(100%,125dvh,1500px);
+  height:auto;
+  aspect-ratio:5/3;
+  max-height:none;
+  background:radial-gradient(ellipse at 50% 15%,#895476,#121e3c 80%);
+  box-shadow:0 20px 55px #030d23ab, inset 0 0 0 1px #e2c79a70;
+}
+.arcade-shell .rooftop-court{width:100%;height:100%}
+.arcade-shell .rooftop-hit-callout{
+ position:absolute;top:16%;left:50%;transform:translateX(-50%);
+ z-index:2;pointer-events:none;white-space:nowrap;
+ border:2px solid #fff0ac;border-radius:16px;
+ background:linear-gradient(130deg,#24435cee,#352951ed);
+ padding:13px 24px;font-size:clamp(24px,3.5vw,47px);
+ font-weight:950;letter-spacing:-.035em;color:#fff2ae;
+ text-shadow:0 3px 9px #0e203f;box-shadow:0 9px 24px #08172d95;
+ animation:rh-celebrate-callout .5s cubic-bezier(.2,.8,.28,1.15) both;
+}
+.arcade-shell .rh-celebrate-burst{animation:rh-burst .6s ease-out both;transform-box:fill-box;transform-origin:center}
+@keyframes rh-burst{from{transform:scale(.25);opacity:.1}55%{opacity:1}to{transform:scale(1.35);opacity:.75}}
+@keyframes rh-celebrate-callout{from{transform:translate(-50%,14px) scale(.7);opacity:.2}60%{transform:translate(-50%,0) scale(1.07);opacity:1}to{transform:translate(-50%,0) scale(1);opacity:1}}
+.arcade-shell .rooftop-camera-guide{display:none}
+@media(max-width:680px) and (orientation:portrait){
+ .arcade-shell .rooftop-main{padding:3px 5px max(20px,env(safe-area-inset-bottom));}
+ .arcade-shell .rooftop-nav{min-height:25px}
+ .arcade-shell .rooftop-head{margin:2px 0 5px}
+ .arcade-shell .rooftop-head h1{font-size:clamp(21px,6vw,29px)}
+ .arcade-shell .rooftop-eyebrow{font-size:7px}
+ .arcade-shell .rooftop-head-actions button{min-height:32px}
+ .arcade-shell .rooftop-scoreline{margin-bottom:5px}
+ .arcade-shell .rooftop-scoreline>div{padding:5px 3px}
+ .arcade-shell .rooftop-scoreline strong{font-size:20px}
+ .arcade-shell .rooftop-scoreline span{font-size:7px}
+ .arcade-shell .rooftop-stage{
+   width:100%;height:clamp(285px,calc(100dvh - 265px),655px);
+   max-height:none;aspect-ratio:auto;border-width:2px;
+   border-radius:12px;
+ }
+ .arcade-shell .rooftop-court{width:100%;height:100%;object-fit:cover}
+ .arcade-shell .rooftop-camera-guide{
+   position:absolute;left:8px;right:8px;bottom:8px;display:flex;
+   justify-content:space-between;gap:5px;padding:8px 9px;
+   border:1px solid #a8e7d479;border-radius:9px;background:#13263ddf;
+   color:#fff4d1;font-weight:900;font-size:9px;letter-spacing:.04em;
+   pointer-events:none;
+ }
+ .arcade-shell .rooftop-hit-callout{top:20%;padding:10px 14px;font-size:26px}
+ .arcade-shell .rooftop-bottom{
+   position:sticky;bottom:0;z-index:20;display:grid;gap:4px;
+   margin:4px 0 0;padding:4px 3px max(5px,env(safe-area-inset-bottom));
+   background:linear-gradient(180deg,#102036e8,#0e2238fa);
+   border:1px solid #c6d5bb55;border-radius:12px;backdrop-filter:blur(12px)
+ }
+ .arcade-shell .rooftop-controls{padding:5px;gap:5px;grid-template-columns:1fr 1fr}
+ .arcade-shell .rooftop-controls input{min-height:22px}
+ .arcade-shell .rooftop-controls label{font-size:9px;gap:2px}
+ .arcade-shell .rooftop-shoot{min-height:44px;font-size:17px}
+ .arcade-shell .rooftop-commentary{padding:3px 6px;display:flex;align-items:center;gap:6px}
+ .arcade-shell .rooftop-commentary strong{font-size:9px;flex-shrink:0}
+ .arcade-shell .rooftop-commentary span{font-size:10px}
+ .arcade-shell .rooftop-help{font-size:9px;margin:5px auto}
+ .arcade-shell .rooftop-curtain{padding:12px}
+ .arcade-shell .rooftop-curtain p{font-size:13px;max-width:290px}
+ .arcade-shell .rooftop-curtain h2{font-size:32px}
+ .arcade-shell .rooftop-start{min-height:54px;font-size:16px}
+}
+@media(orientation:landscape) and (max-height:650px){
+ .arcade-shell .rooftop-stage{width:min(100%,130dvh);height:auto;aspect-ratio:5/3;max-height:calc(100dvh - 134px)}
+}
+@media(prefers-reduced-motion:reduce){
+ .arcade-shell .rh-celebrate-burst,.arcade-shell .rooftop-hit-callout{animation:none!important}
+}
+
+/* Portrait overview preserves target awareness while the primary camera pans. */
+.arcade-shell .rooftop-mini-map{display:none}
+@media(max-width:680px) and (orientation:portrait){
+ .arcade-shell .rooftop-mini-map{
+   display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
+   gap:8px;position:absolute;top:8px;left:8px;right:8px;z-index:3;
+   padding:6px 9px;border-radius:11px;border:1px solid #ffe8b980;
+   background:#182b44dd;box-shadow:0 4px 12px #0b1c3aaa;
+   pointer-events:none;color:#ffe9b9;font-size:10px;font-weight:900;letter-spacing:.09em
+ }
+ .arcade-shell .rooftop-mini-track{
+   height:22px;border-radius:12px;position:relative;overflow:visible;
+   background:linear-gradient(180deg,#366d79,#253e56);border:1px solid #d3e8c452
+ }
+ .arcade-shell .rooftop-mini-track:after{content:"";position:absolute;top:50%;left:4px;right:4px;border-top:1px dashed #ffe3b47a}
+ .arcade-shell .rooftop-mini-track i{position:absolute;top:50%;transform:translate(-50%,-50%);z-index:2;display:block}
+ .arcade-shell .rooftop-mini-you{width:13px;height:13px;background:#80eadb;border:2px solid #fff;border-radius:50%}
+ .arcade-shell .rooftop-mini-ball{width:8px;height:8px;background:#ffae54;border:1px solid #ffd19b;border-radius:50%;box-shadow:0 0 6px #ffa64b}
+ .arcade-shell .rooftop-mini-rim{width:19px;height:8px;border-radius:50%;border:3px solid #ffa669;background:#fef5d6}
+}

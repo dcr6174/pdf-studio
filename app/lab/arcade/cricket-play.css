@@ -128,3 +128,26 @@
 .arcade-shell .pc-main-score .pc-audio-toggle:focus-visible{outline:3px solid #ffdd87;outline-offset:3px}
 .arcade-shell .pc-sound-info{color:#e8edcd;font-size:11px;font-weight:750;text-align:center;line-height:1.4;margin:6px auto}
 @media(max-width:760px){.arcade-shell .pc-main-score .pc-audio-toggle{font-size:9px;min-height:28px;padding:3px 5px}.arcade-shell .pc-score-strip .pc-main-score{gap:3px}.arcade-shell .pc-sound-info{font-size:10px}}
+
+/* A visible audio affordance should sound immediately after a player gesture,
+   even if the browser suspended Web Audio on page load. */
+.arcade-shell .pc-audio-actions{display:flex;flex-wrap:wrap;gap:4px;justify-content:center;align-items:center;width:100%}
+.arcade-shell .pc-audio-actions .pc-audio-toggle{margin:2px 0;flex:1 1 105px}
+.arcade-shell .pc-audio-preview{
+ cursor:pointer;background:#31485d;border:1px solid #c4dcc4a8;
+ border-radius:7px;color:#e7f5dd;min-height:29px;
+ padding:4px 7px;font-size:10px;font-weight:800;
+}
+.arcade-shell .pc-audio-preview:focus-visible{outline:3px solid #ffe098;outline-offset:2px}
+.arcade-shell .pc-boundary-flags{animation:pc-fan-waves .75s ease-out both}
+.arcade-shell .pc-wicket-burst{animation:pc-stumps-explode .58s cubic-bezier(.2,.7,.2,1.1) both;transform-box:fill-box;transform-origin:center}
+@keyframes pc-fan-waves{from{transform:translateY(18px);opacity:0}40%{opacity:1}to{transform:translateY(0);opacity:1}}
+@keyframes pc-stumps-explode{from{transform:translateY(0) scale(.4);opacity:.2}70%{transform:translateY(-12px) scale(1.1);opacity:1}to{transform:translateY(-8px) scale(1);opacity:1}}
+@media(max-width:760px){
+ .arcade-shell .pc-audio-actions{flex-direction:column;gap:2px}
+ .arcade-shell .pc-audio-actions .pc-audio-toggle{flex:auto;min-height:26px}
+ .arcade-shell .pc-audio-preview{font-size:8px;padding:3px 5px;min-height:24px}
+}
+@media(prefers-reduced-motion:reduce){
+ .arcade-shell .pc-boundary-flags,.arcade-shell .pc-wicket-burst{animation:none!important}
+}

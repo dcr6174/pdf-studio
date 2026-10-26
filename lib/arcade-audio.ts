@@ -54,7 +54,7 @@ const fallback:Record<ArcadeEffect,{freq:number;end:number;duration:number;wave:
 /** Must only be called from an actual player gesture or a sound-enabled gameplay callback. */
 export function playArcadeSound(kind:string,effect:ArcadeEffect){
  if(kind==='cricket'){
-  const sound=effect==='goal'||effect==='success'?'boundary':effect==='miss'?'wicket':effect==='tap'?'delivery':effect==='bounce'?'bounce':'hit';
+  const sound=effect==='goal'||effect==='success'?'boundary':effect==='miss'?'miss':effect==='tap'?'delivery':effect==='bounce'?'bounce':'hit';
   playStadiumSound('cricket',sound);
   return;
  }
