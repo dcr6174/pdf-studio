@@ -68,7 +68,7 @@ export function CricketMatch({active,comfort,sound=true,onToggleSound,onScore,on
   if(phaseRef.current!=='bowling')return;
   const updated=applyStroke(inningsRef.current,outcome);
   inningsRef.current=updated;setInnings(updated);setResult(outcome);setMessage(outcome.comment);
-  onScore(updated.runs);onSound(outcome.wicket?'wicket':outcome.runs>=4?'goal':outcome.grade==='miss'?'miss':'hit');
+  onScore(updated.runs);if(outcome.wicket){playStadiumSound('cricket','wicket');}else onSound(outcome.runs>=4?'goal':outcome.grade==='miss'?'miss':'hit');
   setPhaseBoth(updated.ended?'done':'result');
   if(updated.ended)onFinish(updated.won,inningsResult(updated));
  },[onScore,onSound,onFinish]);
