@@ -1,20 +1,24 @@
 /** Original Rooftop Hoops physics: coordinates and scoring all share one model. */
 export type HoopsEvent='release'|'rim'|'glass'|'floor'|'swish'|'settled';
+export type HoopsCourt={width:number;height:number;ground:number;rimY:number;rimLeft:number;rimRight:number;boardX:number;boardTop:number;boardBottom:number;radius:number;gravity:number;launchY:number};
 export type HoopsBall={
+ court:HoopsCourt;
  x:number;y:number;vx:number;vy:number;rotation:number;elapsed:number;
  rimHits:number;floorHits:number;scored:boolean;finished:boolean;events:HoopsEvent[];
 };
-export const HOOPS={width:960,height:540,ground:475,rimY:240,rimLeft:723,rimRight:820,boardX:843,boardTop:130,boardBottom:252,radius:16,gravity:885};
+export const HOOPS:HoopsCourt={width:960,height:540,ground:475,rimY:240,rimLeft:723,rimRight:820,boardX:843,boardTop:130,boardBottom:252,radius:16,gravity:885,launchY:390};
+export const MOBILE_HOOPS:HoopsCourt={width:540,height:710,ground:655,rimY:285,rimLeft:411,rimRight:493,boardX:511,boardTop:176,boardBottom:302,radius:14,gravity:930,launchY:555};
 export const HOOPS_SHOTS=12;
 export const HOOPS_SPOTS=[170,270,360,210,315,155,285,365,190,300,240,340] as const;
-export function releaseHoopsBall(startX:number,angleDeg:number,power:number):HoopsBall{
+export const MOBILE_HOOPS_SPOTS=[105,155,205,125,190,100,170,215,120,205,145,200] as const;
+export function releaseHoopsBall(startX:number,angleDeg:number,power:number,court:HoopsCourt=HOOPS):HoopsBall{
  const a=Math.max(22,Math.min(82,angleDeg))*Math.PI/180;
  const speed=490+Math.max(10,Math.min(100,power))*5.2;
- return{x:startX,y:390,vx:Math.cos(a)*speed,vy:-Math.sin(a)*speed,rotation:0,elapsed:0,
+ return{court,x:startX,y:court.launchY,vx:Math.cos(a)*speed,vy:-Math.sin(a)*speed,rotation:0,elapsed:0,
   rimHits:0,floorHits:0,scored:false,finished:false,events:['release']};
 }
 function rimCollision(ball:HoopsBall,rx:number,ry:number){
- const dx=ball.x-rx,dy=ball.y-ry,dist=Math.hypot(dx,dy),minDist=HOOPS.radius+7.5;
+ const dx=ball.x-rx,dy=ball.y-ry,dist=Math.hypot(dx,dy),minDist=ball.court.radius+7.5;
  if(dist>=minDist||dist<.001)return false;
  const nx=dx/dist,ny=dy/dist,normal=ball.vx*nx+ball.vy*ny;
  ball.x=rx+nx*minDist;ball.y=ry+ny*minDist;
@@ -29,33 +33,33 @@ export function stepHoopsBall(ball:HoopsBall,dt:number):HoopsBall{
  for(let k=0;k<steps&&!ball.finished;k++){
   const previousY=ball.y,previousX=ball.x;
   ball.elapsed+=h;
-  ball.vy+=HOOPS.gravity*h;
+  ball.vy+=ball.court.gravity*h;
   ball.x+=ball.vx*h;ball.y+=ball.vy*h;
-  ball.rotation+=(ball.vx/(HOOPS.radius*1.5))*h;
+  ball.rotation+=(ball.vx/(ball.court.radius*1.5))*h;
   // A basket is scored only when the centre of the ball passes DOWN through the rim gap.
-  const edge=HOOPS.radius+3;
-  const crossing=previousY<HOOPS.rimY&&ball.y>=HOOPS.rimY&&ball.vy>0;
+  const edge=ball.court.radius+3;
+  const crossing=previousY<ball.court.rimY&&ball.y>=ball.court.rimY&&ball.vy>0;
   if(!ball.scored&&crossing){
-   const fraction=(HOOPS.rimY-previousY)/(ball.y-previousY||1);
+   const fraction=(ball.court.rimY-previousY)/(ball.y-previousY||1);
    const crossedX=previousX+(ball.x-previousX)*fraction;
-   if(crossedX>HOOPS.rimLeft+edge&&crossedX<HOOPS.rimRight-edge){
+   if(crossedX>ball.court.rimLeft+edge&&crossedX<ball.court.rimRight-edge){
     ball.scored=true;ball.events.push('swish');
    }
   }
   // Backboard and front-facing glass; ball reacts visibly instead of clipping through it.
-  if(ball.x+HOOPS.radius>=HOOPS.boardX&&previousX+HOOPS.radius<HOOPS.boardX&&
-     ball.y>HOOPS.boardTop-HOOPS.radius&&ball.y<HOOPS.boardBottom+HOOPS.radius){
-   ball.x=HOOPS.boardX-HOOPS.radius;
+  if(ball.x+ball.court.radius>=ball.court.boardX&&previousX+ball.court.radius<ball.court.boardX&&
+     ball.y>ball.court.boardTop-ball.court.radius&&ball.y<ball.court.boardBottom+ball.court.radius){
+   ball.x=ball.court.boardX-ball.court.radius;
    ball.vx=-Math.abs(ball.vx)*.72;
    ball.vy*=.91;ball.events.push('glass');
   }
   if(!ball.scored){
-   rimCollision(ball,HOOPS.rimLeft,HOOPS.rimY);
-   rimCollision(ball,HOOPS.rimRight,HOOPS.rimY);
+   rimCollision(ball,ball.court.rimLeft,ball.court.rimY);
+   rimCollision(ball,ball.court.rimRight,ball.court.rimY);
   }
-  if(ball.x>HOOPS.width+70||ball.x<-70||ball.elapsed>4.2){ball.finished=true;ball.events.push('settled');break;}
-  if(ball.y+HOOPS.radius>HOOPS.ground){
-   ball.y=HOOPS.ground-HOOPS.radius;
+  if(ball.x>ball.court.width+70||ball.x<-70||ball.elapsed>4.2){ball.finished=true;ball.events.push('settled');break;}
+  if(ball.y+ball.court.radius>ball.court.ground){
+   ball.y=ball.court.ground-ball.court.radius;
    if(ball.floorHits===0)ball.events.push('floor');
    ball.floorHits++;
    if(ball.scored||Math.abs(ball.vy)<110||ball.floorHits>4){
@@ -65,8 +69,8 @@ export function stepHoopsBall(ball:HoopsBall,dt:number):HoopsBall{
  }
  return ball;
 }
-export function traceHoopsShot(startX:number,angle:number,power:number){
- const shot=releaseHoopsBall(startX,angle,power);
+export function traceHoopsShot(startX:number,angle:number,power:number,court:HoopsCourt=HOOPS){
+ const shot=releaseHoopsBall(startX,angle,power,court);
  const points:{x:number;y:number}[]=[];
  for(let i=0;i<230&&!shot.finished;i++){
   if(i%4===0)points.push({x:shot.x,y:shot.y});
@@ -75,9 +79,10 @@ export function traceHoopsShot(startX:number,angle:number,power:number){
  }
  return points;
 }
-export function hoopsPoints(startX:number,swish:boolean,rimHits:number){
- // Further spots award three; close-range shot earns two. Banked scores still count.
- return startX<=250&&swish&&rimHits===0?3:startX<=225?3:2;
+export function hoopsPoints(startX:number,swish:boolean,rimHits:number,court:HoopsCourt=HOOPS){
+ // Further shooting spots award three; all other made baskets score two.
+ const far=court.rimLeft-startX>(court.width*.53);
+ return far&&swish&&rimHits===0?3:2;
 }
 export function hoopsResultText(ball:HoopsBall,points:number){
  if(ball.scored)return ball.rimHits?'BANK SHOT! +'+points:points===3?'NOTHING BUT NET! +3':'SWISH! +2';
