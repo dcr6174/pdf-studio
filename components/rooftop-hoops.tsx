@@ -148,7 +148,7 @@ export function RooftopHoops(){
     </g>
     {canShoot&&trail.length>3&&<polyline className="rh-trail" points={trail.filter((_,i)=>i%3===0).map(v=>v.x.toFixed(1)+','+v.y.toFixed(1)).join(' ')} fill="none" stroke="#fff1ac" strokeDasharray="6 12" strokeWidth="4" pointerEvents="none"/>}
     <ellipse cx={ball.x} cy={HOOPS.floorY+4} rx={Math.max(12,39-Math.max(0,HOOPS.floorY-ball.y)*.07)} ry="8" fill="#1b153b44"/>
-    <g transform={'translate('+ball.x+' '+ball.y+')'}><circle r="16" fill="url(#rh-ball)" stroke="#8a4128" strokeWidth="2"/><path d="M-15 0H15M0-15V15M-11-11q22 11 0 22M11-11q-22 11 0 22" stroke="#7d3928" fill="none" strokeWidth="2.4"/></g>
+    <g transform={'translate('+ball.x+' '+ball.y+')'}><g className={inFlight?'rh-ball-spin':''}><circle r="16" fill="url(#rh-ball)" stroke="#8a4128" strokeWidth="2"/><path d="M-15 0H15M0-15V15M-11-11q22 11 0 22M11-11q-22 11 0 22" stroke="#7d3928" fill="none" strokeWidth="2.4"/></g></g>
     <path d={'M'+(rimX-HOOPS.hoopHalf)+' '+HOOPS.rimY+'h'+(HOOPS.hoopHalf*2)} stroke="#fd9151" strokeWidth="6" strokeLinecap="round" pointerEvents="none"/>
     <rect x="19" y="22" width="216" height="54" rx="12" fill="#19233ddc" stroke="#ffe0a799"/>
     <text x="36" y="44" fontSize="14" fontWeight="900" letterSpacing="1.4" fill="#fff4d7">ROOFTOP LEAGUE</text>
