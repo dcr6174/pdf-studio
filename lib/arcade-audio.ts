@@ -1,3 +1,4 @@
+import {playStadiumSound} from './stadium-audio';
 /** Lightweight original synth effects; never downloads or loops audio. */
 export type ArcadeEffect='tap'|'success'|'miss'|'bounce'|'hit'|'goal';
 let audio:AudioContext|null=null;
@@ -52,6 +53,11 @@ const fallback:Record<ArcadeEffect,{freq:number;end:number;duration:number;wave:
 };
 /** Must only be called from an actual player gesture or a sound-enabled gameplay callback. */
 export function playArcadeSound(kind:string,effect:ArcadeEffect){
+ if(kind==='cricket'){
+  const sound=effect==='goal'||effect==='success'?'boundary':effect==='miss'?'wicket':effect==='tap'?'delivery':effect==='bounce'?'bounce':'hit';
+  playStadiumSound('cricket',sound);
+  return;
+ }
  if(typeof window==='undefined')return;
  try{
   audio??=new AudioContext();
