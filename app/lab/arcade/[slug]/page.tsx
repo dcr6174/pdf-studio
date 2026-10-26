@@ -21,6 +21,7 @@ import '../spatial.css';
 import '../cricket-play.css';
 import '../hill-rider.css';
 import '../tenpin.css';
+import '../rooftop-hoops.css';
 import '../surface-studio.css';
 import '../sand-pour.css';
 export function generateStaticParams(){return activeArcadeGames.map(game=>({slug:game.slug}));}
