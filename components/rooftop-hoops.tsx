@@ -121,7 +121,12 @@ export function RooftopHoops(){
     if(event==='floor')cue('hoops-floor');
     if(event==='swish'&&!scoreCommitted.current){
      scoreCommitted.current=true;const points=hoopsPoints((compact?MOBILE_HOOPS_SPOTS:HOOPS_SPOTS)[shots-1],true,b.rimHits,b.court);
-     setScore(s=>{const result=s+points;setBest(prev=>{if(result>prev){try{localStorage.setItem('studio-club:hoops-best',String(result));}catch{}return result;}return prev;});return result;});
+     setScore(s=>s+points);
+     const newTotal=score+points;setBest(prev=>{
+      if(newTotal<=prev)return prev;
+      try{localStorage.setItem('studio-club:hoops-best',String(newTotal));}catch{}
+      return newTotal;
+     });
      setStreak(s=>s+1);setToast(hoopsResultText(b,points));
      cue('hoops-swish');cue('hoops-cheer');
     }
@@ -136,7 +141,7 @@ export function RooftopHoops(){
    raf=requestAnimationFrame(step);
   };
   raf=requestAnimationFrame(step);return()=>cancelAnimationFrame(raf);
- },[phase,flying,shots,compact,cue]);
+ },[phase,flying,shots,compact,score,cue]);
  useEffect(()=>{const handle=()=>{if(document.hidden)setPhase(p=>p==='play'?'paused':p);};document.addEventListener('visibilitychange',handle);return()=>document.removeEventListener('visibilitychange',handle);},[]);
  const begin=()=>{unlockSportsAudio();setPhase('play');setToast('');};
  const reset=()=>{shotRef.current=null;setView(null);setShots(0);setScore(0);setStreak(0);setFlying(false);setToast('');setAngle(compact?60:52);setPower(compact?69:64);unlockSportsAudio();setPhase('play');};
