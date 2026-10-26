@@ -94,7 +94,7 @@ export function RooftopHoops(){
  const cue=useCallback((event:SportsCue)=>{if(audioEnabled.current)playSportsAudio(event);},[]);
  useEffect(()=>{
   const mq=window.matchMedia('(max-width: 760px)');
-  const apply=()=>setCompact(mq.matches);
+  const apply=()=>{setCompact(mq.matches);if(shotRef.current===null){setAngle(mq.matches?60:52);setPower(mq.matches?69:64);}};
   const timer=setTimeout(()=>{
    apply();
    try{
@@ -139,7 +139,7 @@ export function RooftopHoops(){
  },[phase,flying,shots,compact,cue]);
  useEffect(()=>{const handle=()=>{if(document.hidden)setPhase(p=>p==='play'?'paused':p);};document.addEventListener('visibilitychange',handle);return()=>document.removeEventListener('visibilitychange',handle);},[]);
  const begin=()=>{unlockSportsAudio();setPhase('play');setToast('');};
- const reset=()=>{shotRef.current=null;setView(null);setShots(0);setScore(0);setStreak(0);setFlying(false);setToast('');setAngle(compact?58:52);setPower(compact?53:64);unlockSportsAudio();setPhase('play');};
+ const reset=()=>{shotRef.current=null;setView(null);setShots(0);setScore(0);setStreak(0);setFlying(false);setToast('');setAngle(compact?60:52);setPower(compact?69:64);unlockSportsAudio();setPhase('play');};
  const launch=(a=angle,p=power)=>{
   if(phase!=='play'||flying||shots>=HOOPS_SHOTS)return;
   unlockSportsAudio();const b=releaseHoopsBall(spot,a,p,court);
