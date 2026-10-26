@@ -178,6 +178,7 @@ export function RooftopHoops(){
     <text x="36" y="64" fontSize="12" fontWeight="800" fill="#ffdcac">SHOT {round} / {SHOTS} · GET THE ARC</text>
     {feedback&&phase==='play'&&<g className="rh-celebrate-burst">{Array.from({length:18},(_,i)=><circle key={i} cx={rimX+Math.cos(i*Math.PI/9)*100} cy={170+Math.sin(i*Math.PI/9)*75} r={4+i%4*2} fill={['#fff7a3','#9ae7d3','#ffa1ba'][i%3]} opacity={feedback.startsWith('SPLASH')?0.9:0.38}/>)}</g>}
    </svg>
+   {portrait&&phase==='play'&&<div className="rooftop-mini-map" aria-label="Basketball court overview showing shooter, traveling ball and basket"><span>YOU</span><div className="rooftop-mini-track"><i className="rooftop-mini-you" style={{left:(fromX/10)+'%'}}/><i className="rooftop-mini-ball" style={{left:((flight?.x??fromX)/10)+'%'}}/><i className="rooftop-mini-rim" style={{left:(rimX/10)+'%'}}/></div><span>HOOP</span></div>}
    {portrait&&phase==='play'&&<div className="rooftop-camera-guide" aria-live="off"><span>{inFlight?"TRACKING BALL":"AIM RIGHT · FOLLOW THE ARC"}</span><span>🏀 {Math.round(fromX)} <span aria-hidden="true">━━▶</span> 🏀 HOOP</span></div>}
    {feedback&&phase==='play'&&<div className="rooftop-hit-callout" key={attempts+"-"+feedback} role="status">{feedback}</div>}
    {(phase==='ready'||phase==='paused'||phase==='done')&&<div className="rooftop-curtain">
