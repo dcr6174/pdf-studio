@@ -121,3 +121,36 @@
 
 @media(max-width:1070px){.arcade-shell .pc-match-layout.is-setup .pc-controller{order:-1}.arcade-shell .pc-match-layout.is-setup .pc-pregame{padding:4px 2px;gap:7px}.arcade-shell .pc-match-layout.is-setup .pc-start{min-height:54px;margin:3px 0}.arcade-shell .pc-match-layout.is-setup .pc-pregame h2{font-size:24px}}
 @media(max-width:760px){.arcade-shell .pc-match-layout.is-setup .pc-stage-wrap{max-height:38dvh}.arcade-shell .pc-match-layout.is-setup{gap:8px}}
+
+
+/* Cricket audio HUD and cinematic hit feedback. Audio stays opt-out and gesture-unlocked. */
+.arcade-shell .fresh-main[data-game-kind="cricket"] .pc-sound-switch{
+ background:linear-gradient(160deg,#2d665c,#203b4c);
+ border:1px solid #9cdeb1;color:#e5ffe5;letter-spacing:.035em;font-weight:900;
+ padding:7px 13px;min-height:43px;border-radius:11px;white-space:nowrap;
+ box-shadow:0 2px 10px #0a241f8a
+}
+.arcade-shell .fresh-main[data-game-kind="cricket"] .pc-sound-switch[aria-pressed=false]{
+ background:#463f46;color:#efdfcf;border-color:#bea393
+}
+.arcade-shell .pc-fielder-catch{animation:pc-catch-celebrate .65s cubic-bezier(.26,1,.36,1) both;transform-box:fill-box;transform-origin:center}
+.arcade-shell .pc-wicket-flash{animation:pc-wicket-flicker .5s ease-out both;transform-box:fill-box;transform-origin:center}
+.arcade-shell .pc-big-result{filter:drop-shadow(0 5px 6px #13271c);letter-spacing:.04em}
+.arcade-shell .pc-stage-wrap{box-shadow:inset 0 0 55px #163b3b5a,0 12px 32px #0a192a8f}
+.arcade-shell .pc-overlay-score{background:linear-gradient(140deg,#172c3be8,#192d41dc);border:1px solid #c4deb777}
+.arcade-shell .play-cricket-field{width:100%;display:block;max-height:75dvh}
+@keyframes pc-catch-celebrate{0%{opacity:1;scale:1}38%{scale:1.4}100%{scale:1}}
+@keyframes pc-wicket-flicker{0%{opacity:.1;scale:.3}35%{opacity:1;scale:1.12}100%{opacity:0;scale:1.4}}
+@media(max-width:760px){
+ .arcade-shell .fresh-main[data-game-kind="cricket"] .fresh-quick-actions{
+  display:grid;grid-template-columns:repeat(4,minmax(0,1fr));gap:5px;width:100%
+ }
+ .arcade-shell .fresh-main[data-game-kind="cricket"] .pc-sound-switch{grid-column:1/-1;min-height:37px}
+ .arcade-shell .fresh-main[data-game-kind="cricket"] .fresh-quick-actions button:not(.pc-sound-switch){
+  font-size:10px;padding:6px 3px;min-height:38px;white-space:nowrap
+ }
+ .arcade-shell .play-cricket-field{max-height:53dvh}
+}
+@media(prefers-reduced-motion:reduce){
+ .arcade-shell .pc-fielder-catch,.arcade-shell .pc-wicket-flash{animation:none!important}
+}
