@@ -21,7 +21,9 @@ export function RooftopHoops(){
   const stage=stageRef.current;if(!stage||typeof window==='undefined')return;
   const portraitMedia=window.matchMedia('(max-width:680px) and (orientation:portrait)');
   const refresh=()=>{const narrow=portraitMedia.matches;setPortrait(narrow);const box=stage.getBoundingClientRect();if(narrow&&box.height>0)setCameraWidth(Math.max(345,Math.min(650,Math.round(box.width/box.height*600))));};
-  refresh();const observer=new ResizeObserver(refresh);observer.observe(stage);portraitMedia.addEventListener('change',refresh);
+  // Observe asynchronously. Calling state setters synchronously inside a mount
+  // effect is a React lint error and can cause unnecessary layout cascades.
+  const observer=new ResizeObserver(refresh);observer.observe(stage);portraitMedia.addEventListener('change',refresh);
   return()=>{observer.disconnect();portraitMedia.removeEventListener('change',refresh);};
  },[]);
  const round=Math.min(SHOTS,attempts+1),rimX=hoopPosition(attempts),fromX=shooterPosition(attempts);
