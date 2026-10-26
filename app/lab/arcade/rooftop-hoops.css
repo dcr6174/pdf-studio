@@ -152,3 +152,24 @@
 @media(prefers-reduced-motion:reduce){
  .arcade-shell .rh-celebrate-burst,.arcade-shell .rooftop-hit-callout{animation:none!important}
 }
+
+/* Portrait overview preserves target awareness while the primary camera pans. */
+.arcade-shell .rooftop-mini-map{display:none}
+@media(max-width:680px) and (orientation:portrait){
+ .arcade-shell .rooftop-mini-map{
+   display:grid;grid-template-columns:auto minmax(0,1fr) auto;align-items:center;
+   gap:8px;position:absolute;top:8px;left:8px;right:8px;z-index:3;
+   padding:6px 9px;border-radius:11px;border:1px solid #ffe8b980;
+   background:#182b44dd;box-shadow:0 4px 12px #0b1c3aaa;
+   pointer-events:none;color:#ffe9b9;font-size:10px;font-weight:900;letter-spacing:.09em
+ }
+ .arcade-shell .rooftop-mini-track{
+   height:22px;border-radius:12px;position:relative;overflow:visible;
+   background:linear-gradient(180deg,#366d79,#253e56);border:1px solid #d3e8c452
+ }
+ .arcade-shell .rooftop-mini-track:after{content:"";position:absolute;top:50%;left:4px;right:4px;border-top:1px dashed #ffe3b47a}
+ .arcade-shell .rooftop-mini-track i{position:absolute;top:50%;transform:translate(-50%,-50%);z-index:2;display:block}
+ .arcade-shell .rooftop-mini-you{width:13px;height:13px;background:#80eadb;border:2px solid #fff;border-radius:50%}
+ .arcade-shell .rooftop-mini-ball{width:8px;height:8px;background:#ffae54;border:1px solid #ffd19b;border-radius:50%;box-shadow:0 0 6px #ffa64b}
+ .arcade-shell .rooftop-mini-rim{width:19px;height:8px;border-radius:50%;border:3px solid #ffa669;background:#fef5d6}
+}
