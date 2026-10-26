@@ -174,7 +174,7 @@ export function RooftopHoops(){
     <rect x="19" y="22" width="216" height="54" rx="12" fill="#19233ddc" stroke="#ffe0a799"/>
     <text x="36" y="44" fontSize="14" fontWeight="900" letterSpacing="1.4" fill="#fff4d7">ROOFTOP LEAGUE</text>
     <text x="36" y="64" fontSize="12" fontWeight="800" fill="#ffdcac">SHOT {round} / {SHOTS} · GET THE ARC</text>
-    {feedback&&phase==='play'&&<g className="rh-celebrate-burst">{Array.from({length:18},(_,i)=><circle key={i} cx={rimX+Math.cos(i*Math.PI/9)*100} cy={170+Math.sin(i*Math.PI/9)*75} r={4+i%4*2} fill={['#fff7a3','#9ae7d3','#ffa1ba'][i%3]} opacity={feedback.startsWith('SPLASH')?.9:.38}/>)}</g>}
+    {feedback&&phase==='play'&&<g className="rh-celebrate-burst">{Array.from({length:18},(_,i)=><circle key={i} cx={rimX+Math.cos(i*Math.PI/9)*100} cy={170+Math.sin(i*Math.PI/9)*75} r={4+i%4*2} fill={['#fff7a3','#9ae7d3','#ffa1ba'][i%3]} opacity={feedback.startsWith('SPLASH')?0.9:0.38}/>)}</g>}
    </svg>
    {portrait&&phase==='play'&&<div className="rooftop-camera-guide" aria-live="off"><span>{inFlight?"TRACKING BALL":"AIM RIGHT · FOLLOW THE ARC"}</span><span>🏀 {Math.round(fromX)} <span aria-hidden="true">━━▶</span> 🏀 HOOP</span></div>}
    {feedback&&phase==='play'&&<div className="rooftop-hit-callout" key={attempts+"-"+feedback} role="status">{feedback}</div>}
