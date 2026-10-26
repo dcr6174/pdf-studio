@@ -17,6 +17,7 @@ from playwright.async_api import async_playwright
 SIZES=[(320,568),(360,740),(390,844),(768,1024),(1280,800)]
 GAMES=[
  ("boundary-cricket",".pc-stage-wrap"),
+ ("rooftop-hoops",".rooftop-court"),
  ("untangle-lines",".untangle-board"),
  ("shape-packing",".packing-board"),
  ("one-line-draw",".one-line-board"),
@@ -58,6 +59,20 @@ async def run_case(browser,base,width,height,slug,selector,out):
                 result["checks"]["bat_pad"]=box
                 if not box or box["y"]+box["height"]>height+5:
                     raise AssertionError("Mobile batting button extends beyond viewport")
+        elif slug=="rooftop-hoops":
+            start=page.locator(".rooftop-start")
+            if await start.count() and await start.is_visible():
+                await start.click()
+            shoot=page.locator(".rooftop-shoot")
+            await shoot.wait_for(state="visible",timeout=10000)
+            if not await shoot.is_enabled():
+                raise AssertionError("Rooftop game has no enabled shoot button")
+            await shoot.click()
+            result["checks"]["shot_started"]=await page.locator(".rooftop-stage").get_attribute("data-phase")=="play"
+            result["checks"]["court_box"]=await stage.bounding_box()
+            if not result["checks"]["court_box"]:
+                raise AssertionError("Basketball court is invisible")
+            result["checks"]["shoot_visible"]=True
         elif slug=="untangle-lines":
             before=await page.locator(".spatial-scoreline").inner_text()
             knot=page.locator(".untangle-board g[role=button]").first
