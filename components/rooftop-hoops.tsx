@@ -88,16 +88,23 @@ export function RooftopHoops(){
  const [angle,setAngle]=useState(52),[power,setPower]=useState(64),[shots,setShots]=useState(0),[score,setScore]=useState(0),[best,setBest]=useState(0),[streak,setStreak]=useState(0);
  const [flying,setFlying]=useState(false),[view,setView]=useState<{x:number;y:number;rotation:number}|null>(null);
  const [sound,setSound]=useState(true),[toast,setToast]=useState(''),[dragging,setDragging]=useState(false),[loaded,setLoaded]=useState(false);
- const shotRef=useRef<HoopsBall|null>(null),startedDrag=useRef<Aim|null>(null),scoreCommitted=useRef(false),audioEnabled=useRef(true),lastFrame=useRef(0),sceneRef=useRef<SVGSVGElement|null>(null);
+ const shotRef=useRef<HoopsBall|null>(null),startedDrag=useRef<Aim|null>(null),scoreCommitted=useRef(false),audioEnabled=useRef(true),lastFrame=useRef(0);
  const court=compact?MOBILE_HOOPS:HOOPS;
  const spot=(compact?MOBILE_HOOPS_SPOTS:HOOPS_SPOTS)[Math.min(shots,HOOPS_SHOTS-1)];
  const cue=useCallback((event:SportsCue)=>{if(audioEnabled.current)playSportsAudio(event);},[]);
  useEffect(()=>{
   const mq=window.matchMedia('(max-width: 760px)');
   const apply=()=>setCompact(mq.matches);
-  const timer=setTimeout(apply,0);mq.addEventListener('change',apply);
-  try{const val=Number(localStorage.getItem('studio-club:hoops-best'));if(Number.isFinite(val)&&val>=0)setBest(val);}catch{}
-  setLoaded(true);
+  const timer=setTimeout(()=>{
+   apply();
+   try{
+    const val=Number(localStorage.getItem('studio-club:hoops-best'));
+    if(Number.isFinite(val)&&val>=0)setBest(val);
+    const saved=localStorage.getItem('studio-club:hoops-sound');
+    if(saved==='false'){setSound(false);audioEnabled.current=false;}
+   }catch{}
+   setLoaded(true);
+  },0);mq.addEventListener('change',apply);
   return()=>{clearTimeout(timer);mq.removeEventListener('change',apply);};
  },[]);
  useEffect(()=>{
