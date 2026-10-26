@@ -1,6 +1,6 @@
 import {playStadiumSound} from './stadium-audio';
 /** Lightweight original synth effects; never downloads or loops audio. */
-export type ArcadeEffect='tap'|'success'|'miss'|'bounce'|'hit'|'goal'|'wicket';
+export type ArcadeEffect='tap'|'success'|'miss'|'bounce'|'hit'|'goal';
 let audio:AudioContext|null=null;
 const shape:Record<string,Partial<Record<ArcadeEffect,{freq:number;end:number;duration:number;wave:OscillatorType}>>>={
  cricket:{hit:{freq:170,end:92,duration:.13,wave:'triangle'},bounce:{freq:115,end:85,duration:.065,wave:'triangle'},goal:{freq:440,end:880,duration:.28,wave:'sine'},miss:{freq:205,end:125,duration:.15,wave:'triangle'}},
@@ -49,13 +49,12 @@ const fallback:Record<ArcadeEffect,{freq:number;end:number;duration:number;wave:
  miss:{freq:220,end:150,duration:.12,wave:'triangle'},
  bounce:{freq:370,end:290,duration:.045,wave:'sine'},
  hit:{freq:410,end:235,duration:.1,wave:'triangle'},
- goal:{freq:580,end:1050,duration:.23,wave:'sine'},
- wicket:{freq:330,end:120,duration:.26,wave:'triangle'}
+ goal:{freq:580,end:1050,duration:.23,wave:'sine'}
 };
 /** Must only be called from an actual player gesture or a sound-enabled gameplay callback. */
 export function playArcadeSound(kind:string,effect:ArcadeEffect){
  if(kind==='cricket'){
-  const sound=effect==='goal'||effect==='success'?'boundary':effect==='wicket'?'wicket':effect==='miss'?'miss':effect==='tap'?'delivery':effect==='bounce'?'bounce':'hit';
+  const sound=effect==='goal'||effect==='success'?'boundary':effect==='miss'?'miss':effect==='tap'?'delivery':effect==='bounce'?'bounce':'hit';
   playStadiumSound('cricket',sound);
   return;
  }
