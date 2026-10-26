@@ -137,11 +137,11 @@ export const expansionGames = [
   },
   {
     "slug": "untangle-lines",
-    "name": "Ribbon Switch",
+    "name": "Untangle Lines",
     "genre": "Relax",
     "color": "#f5a7cf",
-    "description": "Swap numbered ribbon endpoints until every line is straight.",
-    "instructions": "Swap ribbon endpoints to make each numbered line horizontal; this is a permutation puzzle rather than free-node untangling.",
+    "description": "Drag colourful knots to eliminate every intersection in five increasingly intricate line puzzles.",
+    "instructions": "Drag each glowing knot around the board until none of its connecting threads cross. Shared endpoints are allowed. Five solvable stages with keyboard arrow-key movement and a knot hint.",
     "kind": "untangle"
   },
   {
@@ -164,11 +164,11 @@ export const expansionGames = [
   },
   {
     "slug": "shape-packing",
-    "name": "Shape Match",
+    "name": "Shape Packing",
     "genre": "Relax",
     "color": "#f7c9a2",
-    "description": "Match nine illustrated shapes to their exact silhouettes.",
-    "instructions": "Pick a colourful shape, then the matching silhouette.",
+    "description": "Rotate and pack five pentomino pieces into a five-by-five tray, across four fully solvable boards.",
+    "instructions": "Drag a piece from the tray onto the wooden board or tap a piece and then its destination. Rotate with the button or R, undo mistakes and fit all 25 squares without overlap.",
     "kind": "shapes"
   },
   {
@@ -238,8 +238,8 @@ export const expansionGames = [
     "name": "One Line Draw",
     "genre": "Think",
     "color": "#bbe4b2",
-    "description": "Trace an entire shape without lifting.",
-    "instructions": "Tap adjacent dots to draw every edge exactly once.",
+    "description": "Trace real connected graphs without repeating an edge, in five original one-line puzzles.",
+    "instructions": "Start at A, then drag or tap to the next connected dot. Every line must be used exactly once. Five solvable graphs, undo and keyboard input.",
     "kind": "oneline"
   },
   {
