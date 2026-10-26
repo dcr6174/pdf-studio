@@ -15,13 +15,12 @@ for(const [name,court,spots] of [['desktop',HOOPS,HOOPS_SPOTS],['portrait',MOBIL
  for(const angle of [30,36,42,48,52,56,60,64,70,76]){
   for(const power of [25,33,41,49,57,65,69,73,77,85,93]){
    const s=releaseHoopsBall(spots[0],angle,power,court);
-   let stopped=false;
    for(let n=0;n<550&&!s.finished;n++){
     stepHoopsBall(s,1/90);
     if(s.events.includes('glass'))glass++;
     if(s.events.includes('rim'))rims++;
     if(s.events.includes('floor'))floor++;
-    if(s.scored){stopped=true;break;}
+    if(s.scored)break;
    }
    if(s.scored)scored++;else misses++;
    assert(Number.isFinite(s.x)&&Number.isFinite(s.y),'ball position must remain finite');
