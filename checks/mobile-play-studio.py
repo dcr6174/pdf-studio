@@ -17,6 +17,7 @@ from playwright.async_api import async_playwright
 SIZES=[(320,568),(360,740),(390,844),(768,1024),(1280,800)]
 GAMES=[
  ("boundary-cricket",".pc-stage-wrap"),
+ ("rooftop-hoops",".hoops-court"),
  ("untangle-lines",".untangle-board"),
  ("shape-packing",".packing-board"),
  ("one-line-draw",".one-line-board"),
@@ -46,11 +47,31 @@ async def run_case(browser,base,width,height,slug,selector,out):
             raise AssertionError(f"horizontal overflow {scroll['overflow']}px")
         stage=page.locator(selector)
         result["checks"]["stage_box"]=await stage.bounding_box()
-        if slug=="boundary-cricket":
+        if slug=="rooftop-hoops":
+            start=page.get_by_role("button",name="TAKE THE COURT")
+            await start.wait_for(state="visible",timeout=6000)
+            await start.click()
+            sound=page.get_by_role("button",name="SOUND ON")
+            if not await sound.count():
+                raise AssertionError("Basketball sound toggle is absent or muted by default")
+            bounds=await stage.bounding_box()
+            if width<700 and (not bounds or bounds["height"]<height*.42 or bounds["width"]<width*.91):
+                raise AssertionError("Basketball court renders too small for mobile viewport")
+            shot=page.get_by_role("button",name="SHOOT",exact=False)
+            await shot.click()
+            await page.wait_for_timeout(150)
+            data=await page.locator(".hoops-topline").inner_text()
+            result["checks"]["shot_registered"]="1 / 12" in data
+            if "1 / 12" not in data:
+                raise AssertionError("Shooting a ball did not consume one of twelve attempts")
+        elif slug=="boundary-cricket":
             start=page.locator(".pc-start")
             if await start.count():
                 await start.click()
                 await page.locator(".pc-mobile-pad button, .pc-bat-buttons button").first.wait_for(timeout=6000)
+            switch=page.locator(".pc-sound-switch")
+            if not await switch.count() or await switch.get_attribute("aria-pressed")!="true":
+                raise AssertionError("Cricket audible mode is missing or disabled by default")
             if width<700:
                 button=page.locator(".pc-mobile-pad button").first
                 await button.wait_for(state="visible",timeout=7000)
