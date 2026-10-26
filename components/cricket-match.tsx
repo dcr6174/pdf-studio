@@ -2,7 +2,7 @@
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {applyStroke,ballAt,createInnings,cricketFielders,evaluateStroke,inningsResult,makeDelivery,missedDelivery,renderOvers,requiredRate,type BowledBall,type Difficulty,type Footwork,type Innings,type ShotSide,type StrokeResult} from '@/lib/cricket-engine';
 import type {ArcadeEffect} from '@/lib/arcade-audio';
-type Props={active:boolean;comfort:boolean;onScore:(score:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
+type Props={active:boolean;comfort:boolean;sound?:boolean;onToggleSound?:()=>void;onScore:(score:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
 type Phase='setup'|'bowling'|'result'|'done';
 const sideInfo:{id:ShotSide;label:string;key:string;icon:string}[]=[
  {id:'leg',label:'LEG SIDE',key:'←',icon:'↖'},
@@ -53,14 +53,14 @@ function CricketStadium({ball,elapsed,result,shotDirection,loft,phase,strokeFlas
  <text x="22" y="31" fill="#1e403f" fontSize="15" fontWeight="800">BATTING CAMERA · ORIGINAL PLAY STUDIO</text>
  </svg>;
 }
-export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
+export function CricketMatch({active,comfort,sound=true,onToggleSound,onScore,onFinish,onSound}:Props){
  const [overs,setOvers]=useState<2|5|10>(2),[difficulty,setDifficulty]=useState<Difficulty>('club');
  const [innings,setInnings]=useState<Innings>(()=>createInnings(2)),[phase,setPhase]=useState<Phase>('setup');
  const [delivery,setDelivery]=useState<BowledBall>(()=>makeDelivery(0,'club'));
  const [elapsed,setElapsed]=useState(0),[foot,setFoot]=useState<Footwork>('front'),[loft,setLoft]=useState(false);
  const [direction,setDirection]=useState<ShotSide>('straight'),[result,setResult]=useState<StrokeResult|null>(null);
  const [message,setMessage]=useState('Choose a match, then read the bounce marker and time your shot.'),[swingCount,setSwingCount]=useState(0);
- const inningsRef=useRef(innings),phaseRef=useRef<Phase>('setup'),elapsedRef=useRef(0),ballRef=useRef(delivery),lastView=useRef(0),matchSeed=useRef(23),swingCommitted=useRef(false),stadiumRef=useRef<HTMLDivElement|null>(null);
+ const inningsRef=useRef(innings),phaseRef=useRef<Phase>('setup'),elapsedRef=useRef(0),ballRef=useRef(delivery),lastView=useRef(0),matchSeed=useRef(23),swingCommitted=useRef(false),bouncePlayed=useRef(false),stadiumRef=useRef<HTMLDivElement|null>(null);
  const setPhaseBoth=(p:Phase)=>{phaseRef.current=p;setPhase(p);};
  const completeDelivery=useCallback((outcome:StrokeResult)=>{
   if(phaseRef.current!=='bowling')return;
@@ -73,7 +73,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
  const nextBall=useCallback(()=>{
   if(inningsRef.current.ended)return;
   const ball=makeDelivery(inningsRef.current.balls,difficulty,matchSeed.current);
-  ballRef.current=ball;swingCommitted.current=false;setDelivery(ball);elapsedRef.current=0;setElapsed(0);lastView.current=0;
+  ballRef.current=ball;swingCommitted.current=false;bouncePlayed.current=false;setDelivery(ball);elapsedRef.current=0;setElapsed(0);lastView.current=0;
   setResult(null);setMessage(ball.style.toUpperCase()+' · '+ball.length+' · '+ball.speed+' km/h. Watch the bounce circle.');
   setPhaseBoth('bowling');onSound('tap');
  },[difficulty,overs,onSound]);
@@ -91,6 +91,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
   const frame=(now:number)=>{
    if(!last)last=now;const dt=Math.min(now-last,48);last=now;
    const next=elapsedRef.current+dt*(comfort?.68:1);elapsedRef.current=next;
+   if(!bouncePlayed.current&&next>=ballRef.current.contactMs*ballRef.current.bounce){bouncePlayed.current=true;onSound('bounce');}
    if(now-lastView.current>32){setElapsed(next);lastView.current=now;}
    if(next>ballRef.current.contactMs+380){
     completeDelivery(missedDelivery(ballRef.current));
@@ -99,7 +100,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
    raf=requestAnimationFrame(frame);
   };
   raf=requestAnimationFrame(frame);return()=>cancelAnimationFrame(raf);
- },[active,phase,comfort,completeDelivery]);
+ },[active,phase,comfort,completeDelivery,onSound]);
  useEffect(()=>{
   if(!active||phase!=='result')return;
   const id=setTimeout(nextBall,1500);return()=>clearTimeout(id);
@@ -124,7 +125,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
  const greenStart=Math.max(0,(delivery.contactMs-220)/timingTotal*100),greenEnd=Math.min(100,(delivery.contactMs+220)/timingTotal*100);
  return <div className="play-cricket">
   <div className="pc-score-strip">
-   <div className="pc-main-score"><small>YOUR INNINGS</small><strong>{innings.runs}<em>/{innings.wickets}</em></strong></div>
+   <div className="pc-main-score"><small>YOUR INNINGS</small><strong>{innings.runs}<em>/{innings.wickets}</em></strong><button className="pc-audio-toggle" type="button" onClick={onToggleSound} aria-label={sound?'Mute cricket stadium sounds':'Enable cricket stadium sounds'} aria-pressed={sound}>{sound?'🔊 SOUND ON':'🔇 SOUND OFF'}</button></div>
    <div><small>OVERS</small><b>{renderOvers(innings.balls)} <i>/ {overs}</i></b></div>
    <div><small>TARGET</small><b>{innings.target}</b></div>
    <div><small>NEED</small><b>{Math.max(0,innings.target-innings.runs)}</b></div>
@@ -139,7 +140,7 @@ export function CricketMatch({active,comfort,onScore,onFinish,onSound}:Props){
     {phase==='bowling'&&<div className="pc-timing" aria-label={'Delivery '+percent+' percent through its flight'}><div className="pc-timing-track"><span className="pc-hit-window" style={{left:greenStart+"%",width:(greenEnd-greenStart)+"%"}}/><span className="pc-hit-marker" style={{left:contactMarker+"%"}}/><i style={{left:percent+"%"}}/></div><span className="pc-timing-label">BALL ARRIVING · HIT NEAR THE GREEN ZONE</span></div>}
    </div>
    <section className="pc-controller" aria-label="Cricket batting controller">
-    {phase==='setup'&&<div className="pc-pregame"><h2>Ready for the chase?</h2><p>Watch each delivery. Pick your side as the ball reaches the batsman. Start with ground shots, then master the loft.</p><span className="pc-control-label">MATCH LENGTH</span><div className="pc-choices">{([2,5,10] as const).map(n=><button type="button" key={n} aria-pressed={overs===n} onClick={()=>{setOvers(n);const t=createInnings(n);inningsRef.current=t;setInnings(t);}}>{n} overs</button>)}</div><span className="pc-control-label">BOWLING DIFFICULTY</span><div className="pc-choices">{(['easy','club','pro'] as const).map(n=><button type="button" key={n} aria-pressed={difficulty===n} onClick={()=>setDifficulty(n)}>{n==='easy'?'Academy':n==='club'?'Club':'Pro'}</button>)}</div><button className="fresh-primary pc-start" onClick={start}>🏏 START CHASE · {innings.target} RUNS</button></div>}
+    {phase==='setup'&&<div className="pc-pregame"><h2>Ready for the chase?</h2><p>Watch each delivery. Pick your side as the ball reaches the batsman. Start with ground shots, then master the loft.</p><span className="pc-control-label">MATCH LENGTH</span><div className="pc-choices">{([2,5,10] as const).map(n=><button type="button" key={n} aria-pressed={overs===n} onClick={()=>{setOvers(n);const t=createInnings(n);inningsRef.current=t;setInnings(t);}}>{n} overs</button>)}</div><span className="pc-control-label">BOWLING DIFFICULTY</span><div className="pc-choices">{(['easy','club','pro'] as const).map(n=><button type="button" key={n} aria-pressed={difficulty===n} onClick={()=>setDifficulty(n)}>{n==='easy'?'Academy':n==='club'?'Club':'Pro'}</button>)}</div><div className="pc-sound-info">{sound?'🔊 Stadium sound ready — bat, bounce, wickets and cheering.':'🔇 Sound muted. Tap SOUND OFF beside your score to enable.'}</div><button className="fresh-primary pc-start" onClick={start}>🏏 START CHASE · {innings.target} RUNS</button></div>}
     {phase!=='setup'&&<>
      <div className="pc-controller-heading"><span className="pc-control-label">BATTING CONTROLS</span><strong>{phase==='done'?'INNINGS ENDED':phase==='result'?'SHOT PLAYED':'READ · AIM · TIME'}</strong></div>
      <span className="pc-control-label">TAP A DIRECTION AT CONTACT</span>
