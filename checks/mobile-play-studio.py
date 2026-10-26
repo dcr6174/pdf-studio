@@ -52,6 +52,11 @@ async def run_case(browser,base,width,height,slug,selector,out):
             if await start.count():
                 await start.click()
                 await page.locator(".pc-mobile-pad button, .pc-bat-buttons button").first.wait_for(timeout=6000)
+            sound_test=page.locator(".pc-audio-preview")
+            if await sound_test.count()==0 or not await sound_test.is_visible():
+                raise AssertionError("Cricket is missing visible test-sound control")
+            await sound_test.click()
+            result["checks"]["test_sound_available"]=True
             if width<700:
                 button=page.locator(".pc-mobile-pad button").first
                 await button.wait_for(state="visible",timeout=7000)
@@ -72,6 +77,14 @@ async def run_case(browser,base,width,height,slug,selector,out):
             result["checks"]["court_box"]=await stage.bounding_box()
             if not result["checks"]["court_box"]:
                 raise AssertionError("Basketball court is invisible")
+            if width<=680 and height>width:
+                box=result["checks"]["court_box"]
+                if box["height"]<max(270,height*.47):
+                    raise AssertionError("Portrait Rooftop court remains too short: "+str(box["height"]))
+                camera=await stage.get_attribute("viewBox")
+                result["checks"]["portrait_camera"]=camera
+                if not camera or camera=="0 0 1000 600":
+                    raise AssertionError("Portrait camera not active: shrinking entire 1000px court instead")
             result["checks"]["shoot_visible"]=True
         elif slug=="untangle-lines":
             before=await page.locator(".spatial-scoreline").inner_text()
