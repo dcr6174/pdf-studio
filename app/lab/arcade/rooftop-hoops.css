@@ -20,6 +20,8 @@
 .arcade-shell .rh-clouds{animation:rooftop-cloud-drift 18s ease-in-out infinite alternate}
 .arcade-shell .rh-player-shoot{animation:rooftop-shot-motion .58s ease-out both;transform-box:fill-box;transform-origin:center}
 .arcade-shell .rh-trail{filter:drop-shadow(0 0 5px #ffdda4)}
+.arcade-shell .rh-ball-spin{animation:rooftop-ball-rotate .68s linear infinite;transform-box:fill-box;transform-origin:center}
+@keyframes rooftop-ball-rotate{from{transform:rotate(0deg)}to{transform:rotate(360deg)}}
 .arcade-shell .rh-net-pop{animation:rooftop-net-swish .53s ease-out both;transform-box:fill-box;transform-origin:top}
 .arcade-shell .rooftop-curtain{position:absolute;inset:0;display:flex;flex-direction:column;gap:13px;justify-content:center;align-items:center;text-align:center;padding:22px;background:linear-gradient(100deg,#0b193de8,#182747c9);z-index:2;backdrop-filter:blur(3px)}
 .arcade-shell .rooftop-intro-tag{font-size:clamp(10px,1.5vw,16px);font-weight:900;color:#a8edd3;letter-spacing:.16em}
@@ -73,4 +75,4 @@
  .arcade-shell .rooftop-help{font-size:10px;line-height:1.4}
 }
 @media(orientation:landscape) and (max-height:650px){.arcade-shell .rooftop-nav{display:none}.arcade-shell .rooftop-head{margin:0 0 4px}.arcade-shell .rooftop-scoreline{margin:0 0 5px}.arcade-shell .rooftop-stage{max-height:calc(100dvh - 172px)}.arcade-shell .rooftop-bottom{margin-top:5px}.arcade-shell .rooftop-controls{padding:5px}}
-@media(prefers-reduced-motion:reduce){.arcade-shell .rh-clouds,.arcade-shell .rh-player-shoot,.arcade-shell .rh-net-pop{animation:none!important}}
+@media(prefers-reduced-motion:reduce){.arcade-shell .rh-clouds,.arcade-shell .rh-player-shoot,.arcade-shell .rh-net-pop,.arcade-shell .rh-ball-spin{animation:none!important}}
