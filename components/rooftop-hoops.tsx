@@ -14,10 +14,26 @@ export function RooftopHoops(){
  const [feedback,setFeedback]=useState(''),[flight,setFlight]=useState<HoopsBall|null>(null),[inFlight,setInFlight]=useState(false);
  const ballRef=useRef<HoopsBall|null>(null),dragRef=useRef<{x:number;y:number}|null>(null),scoreRef=useRef(0);
  const [dragging,setDragging]=useState(false);
+ const [portrait,setPortrait]=useState(false),[cameraWidth,setCameraWidth]=useState(500);
+ const stageRef=useRef<HTMLDivElement|null>(null);
  const arena=useRef<SVGSVGElement|null>(null);
+ useEffect(()=>{
+  const stage=stageRef.current;if(!stage||typeof window==='undefined')return;
+  const portraitMedia=window.matchMedia('(max-width:680px) and (orientation:portrait)');
+  const refresh=()=>{const narrow=portraitMedia.matches;setPortrait(narrow);const box=stage.getBoundingClientRect();if(narrow&&box.height>0)setCameraWidth(Math.max(345,Math.min(650,Math.round(box.width/box.height*600))));};
+  // Observe asynchronously. Calling state setters synchronously inside a mount
+  // effect is a React lint error and can cause unnecessary layout cascades.
+  const observer=new ResizeObserver(refresh);observer.observe(stage);portraitMedia.addEventListener('change',refresh);
+  return()=>{observer.disconnect();portraitMedia.removeEventListener('change',refresh);};
+ },[]);
  const round=Math.min(SHOTS,attempts+1),rimX=hoopPosition(attempts),fromX=shooterPosition(attempts);
  const canShoot=phase==='play'&&!inFlight&&attempts<SHOTS;
  const trail=useMemo(()=>canShoot?previewHoops(angle,power,fromX,rimX):[],[angle,power,fromX,rimX,canShoot]);
+ // A portrait court follows the ball like a side-scrolling camera instead of
+ // shrinking a complete 1000px-wide scene into a postage stamp.
+ const cameraTarget=inFlight&&flight?flight.x:fromX;
+ const cameraStart=portrait?clamp(cameraTarget-cameraWidth*.36,0,1000-cameraWidth):0;
+ const viewBox=portrait?cameraStart.toFixed(1)+' 0 '+cameraWidth+' 600':'0 0 1000 600';
  useEffect(()=>{
   const t=setTimeout(()=>{
    try{
@@ -76,7 +92,14 @@ export function RooftopHoops(){
   };
   raf=requestAnimationFrame(tick);return()=>cancelAnimationFrame(raf);
  },[phase,inFlight,attempts,rimX,streak,effect]);
- const pos=(e:PointerEvent<SVGSVGElement>)=>{const b=arena.current!.getBoundingClientRect();return{x:(e.clientX-b.left)*1000/b.width,y:(e.clientY-b.top)*600/b.height};};
+ const pos=(e:PointerEvent<SVGSVGElement>)=>{
+  // Convert through SVG's current viewBox transform: touch aiming remains
+  // calibrated even when the portrait camera pans and letterboxes the scene.
+  const svg=arena.current;if(!svg)return{x:0,y:0};
+  const transform=svg.getScreenCTM();if(!transform)return{x:0,y:0};
+  const point=svg.createSVGPoint();point.x=e.clientX;point.y=e.clientY;
+  const world=point.matrixTransform(transform.inverse());return{x:world.x,y:world.y};
+ };
  const dragTo=(p:{x:number;y:number})=>{
   if(!dragRef.current)return;
   const dx=p.x-dragRef.current.x,dy=dragRef.current.y-p.y,len=Math.hypot(dx,dy);
@@ -115,8 +138,8 @@ export function RooftopHoops(){
   <header className="rooftop-head"><div><span className="rooftop-eyebrow">ROOFTOP LEAGUE · ORIGINAL ARCADE BASKETBALL</span><h1>Rooftop Hoops</h1></div>
    <div className="rooftop-head-actions"><button type="button" onClick={toggleSound} aria-label={sound?'Mute basketball sounds':'Enable basketball sounds'} aria-pressed={sound}>{sound?'🔊 SOUND ON':'🔇 SOUND OFF'}</button><button type="button" onClick={()=>setPhase(p=>p==='play'?'paused':p==='paused'?'play':p)} disabled={phase==='ready'||phase==='done'}>{phase==='paused'?'▶ RESUME':'⏸ PAUSE'}</button><button type="button" onClick={start}>↻ RESTART</button></div></header>
   <div className="rooftop-scoreline" aria-label="Basketball scoreboard"><div><span>POINTS</span><strong>{score}</strong></div><div><span>SHOT</span><strong>{round} <small>/ {SHOTS}</small></strong></div><div><span>HOT STREAK</span><strong>{streak>0?'🔥 '+streak:'—'}</strong></div><div><span>YOUR BEST</span><strong>{best}</strong></div></div>
-  <div className="rooftop-stage" data-phase={phase}>
-   <svg ref={arena} className="rooftop-court" viewBox="0 0 1000 600" role="group" aria-label={'Full rooftop basketball court. Shot '+round+' of ten. Drag upward and toward hoop to shoot.'} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={()=>{dragRef.current=null;setDragging(false);}}>
+  <div className="rooftop-stage" data-phase={phase} data-camera={portrait?"portrait":"landscape"} ref={stageRef}>
+   <svg ref={arena} className="rooftop-court" viewBox={viewBox} preserveAspectRatio="xMidYMid meet" role="group" aria-label={'Full rooftop basketball court. Shot '+round+' of ten. Drag upward and toward hoop to shoot.'} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={()=>{dragRef.current=null;setDragging(false);}}>
     <defs>
      <linearGradient id="rh-sky" x1="0" y1="0" x2="0" y2="1"><stop stopColor="#111f4b"/><stop offset=".53" stopColor="#875879"/><stop offset=".95" stopColor="#f5ac7a"/><stop offset="1" stopColor="#f8cca0"/></linearGradient>
      <linearGradient id="rh-court" x1="0" y1="0" x2="1" y2="1"><stop stopColor="#db935e"/><stop offset=".7" stopColor="#ac6352"/><stop offset="1" stopColor="#56364d"/></linearGradient>
@@ -153,8 +176,10 @@ export function RooftopHoops(){
     <rect x="19" y="22" width="216" height="54" rx="12" fill="#19233ddc" stroke="#ffe0a799"/>
     <text x="36" y="44" fontSize="14" fontWeight="900" letterSpacing="1.4" fill="#fff4d7">ROOFTOP LEAGUE</text>
     <text x="36" y="64" fontSize="12" fontWeight="800" fill="#ffdcac">SHOT {round} / {SHOTS} · GET THE ARC</text>
-    {feedback&&phase==='play'&&<g><rect x="357" y="105" width="285" height="85" rx="15" fill="#182843e3" stroke="#ffe29e" strokeWidth="3"/><text x="500" y="159" textAnchor="middle" fontWeight="900" fontSize="34" fill="#fff5ce">{feedback}</text></g>}
+    {feedback&&phase==='play'&&<g className="rh-celebrate-burst">{Array.from({length:18},(_,i)=><circle key={i} cx={rimX+Math.cos(i*Math.PI/9)*100} cy={170+Math.sin(i*Math.PI/9)*75} r={4+i%4*2} fill={['#fff7a3','#9ae7d3','#ffa1ba'][i%3]} opacity={feedback.startsWith('SPLASH')?0.9:0.38}/>)}</g>}
    </svg>
+   {portrait&&phase==='play'&&<div className="rooftop-camera-guide" aria-live="off"><span>{inFlight?"TRACKING BALL":"AIM RIGHT · FOLLOW THE ARC"}</span><span>🏀 {Math.round(fromX)} <span aria-hidden="true">━━▶</span> 🏀 HOOP</span></div>}
+   {feedback&&phase==='play'&&<div className="rooftop-hit-callout" key={attempts+"-"+feedback} role="status">{feedback}</div>}
    {(phase==='ready'||phase==='paused'||phase==='done')&&<div className="rooftop-curtain">
     <span className="rooftop-intro-tag">{phase==='done'?'FINAL BUZZER':phase==='paused'?'TIME OUT':'YOUR COURT. YOUR SHOT.'}</span>
     <h2>{phase==='done'?'GAME COMPLETE':phase==='paused'?'PAUSED':'TAKE THE SHOT.'}</h2>
