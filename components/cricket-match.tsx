@@ -2,6 +2,7 @@
 import {useCallback,useEffect,useRef,useState} from 'react';
 import {applyStroke,ballAt,createInnings,cricketFielders,evaluateStroke,inningsResult,makeDelivery,missedDelivery,renderOvers,requiredRate,type BowledBall,type Difficulty,type Footwork,type Innings,type ShotSide,type StrokeResult} from '@/lib/cricket-engine';
 import type {ArcadeEffect} from '@/lib/arcade-audio';
+import {playStadiumSound,startCricketAmbience,stopCricketAmbience,unlockStadiumAudio} from '@/lib/stadium-audio';
 type Props={active:boolean;comfort:boolean;sound?:boolean;onToggleSound?:()=>void;onScore:(score:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
 type Phase='setup'|'bowling'|'result'|'done';
 const sideInfo:{id:ShotSide;label:string;key:string;icon:string}[]=[
@@ -46,9 +47,10 @@ function CricketStadium({ball,elapsed,result,shotDirection,loft,phase,strokeFlas
   <path d={'M'+(current.x-4)+' '+(current.y-current.z-3)+'l6 6'} stroke="#bc4651" strokeWidth="2"/>
  </>}
  {phase==='result'&&result&&<>
+  {result.wicket?<g className="pc-wicket-burst"><path d="M344 464l-23-48m44 47 26-53m-27 69 13-58" stroke="#fff6e9" strokeWidth="6" strokeLinecap="round"/><text x="380" y="190" textAnchor="middle" fontSize="22" fontWeight="950" fill="#ffeab7">THE BAILS FLY!</text></g>:result.runs>=4?<g className="pc-boundary-flags">{Array.from({length:18},(_,i)=><g key={i} transform={'translate('+(35+i*39)+' '+(92+i%3*30)+')'}><path d="M0 0v31" stroke="#e9f4dd" strokeWidth="3"/><path d="M2 0l19 7-19 9z" fill={['#ffe599','#87e5b3','#f2a1aa'][i%3]}/></g>)}</g>:null}
   <path key={strokeFlash} className={loft?'pc-flight pc-flight-loft':'pc-flight'} d={'M359 452Q'+(result.direction==='leg'?120:result.direction==='off'?642:380)+' '+(loft?28:208)+' '+target.x+' '+target.y} stroke={result.wicket?'#ffd0c0':'#fceaa7'} strokeWidth="5" fill="none" strokeDasharray={loft?'10 7':'5 7'}/>
   <circle cx={target.x} cy={target.y} r="19" fill="#fff9d5aa" stroke="#ffffff" strokeWidth="4" className="pc-impact"/>
-  <text x="380" y="110" textAnchor="middle" className="pc-big-result">{result.wicket?'OUT!':result.runs===6?'SIX!':result.runs===4?'FOUR!':result.runs?result.runs+' RUN'+(result.runs===1?'':'S'):'DOT BALL'}</text>
+  <text x="380" y="110" textAnchor="middle" className="pc-big-result" key={strokeFlash}>{result.wicket?'OUT!':result.runs===6?'SIX!':result.runs===4?'FOUR!':result.runs?result.runs+' RUN'+(result.runs===1?'':'S'):'DOT BALL'}</text>
  </>}
  <text x="22" y="31" fill="#1e403f" fontSize="15" fontWeight="800">BATTING CAMERA · ORIGINAL PLAY STUDIO</text>
  </svg>;
@@ -66,7 +68,7 @@ export function CricketMatch({active,comfort,sound=true,onToggleSound,onScore,on
   if(phaseRef.current!=='bowling')return;
   const updated=applyStroke(inningsRef.current,outcome);
   inningsRef.current=updated;setInnings(updated);setResult(outcome);setMessage(outcome.comment);
-  onScore(updated.runs);onSound(outcome.wicket?'miss':outcome.runs>=4?'goal':outcome.runs?'hit':'bounce');
+  onScore(updated.runs);onSound(outcome.wicket?'wicket':outcome.runs>=4?'goal':outcome.grade==='miss'?'miss':'hit');
   setPhaseBoth(updated.ended?'done':'result');
   if(updated.ended)onFinish(updated.won,inningsResult(updated));
  },[onScore,onSound,onFinish]);
@@ -77,7 +79,11 @@ export function CricketMatch({active,comfort,sound=true,onToggleSound,onScore,on
   setResult(null);setMessage(ball.style.toUpperCase()+' · '+ball.length+' · '+ball.speed+' km/h. Watch the bounce circle.');
   setPhaseBoth('bowling');onSound('tap');
  },[difficulty,overs,onSound]);
- const start=()=>{matchSeed.current=(Date.now()>>>0)%65521+overs*31;const next=createInnings(overs);inningsRef.current=next;setInnings(next);setDirection('straight');setLoft(false);setFoot('front');nextBall();if(typeof window!=='undefined'&&window.innerWidth<1070)requestAnimationFrame(()=>stadiumRef.current?.scrollIntoView({block:'start',behavior:'smooth'}));};
+ useEffect(()=>{
+  if(!active||!sound||phase==='setup'||phase==='done'){stopCricketAmbience();return;}
+  startCricketAmbience();return()=>stopCricketAmbience();
+ },[active,sound,phase]);
+ const start=()=>{if(sound){unlockStadiumAudio();playStadiumSound('cricket','start');}matchSeed.current=(Date.now()>>>0)%65521+overs*31;const next=createInnings(overs);inningsRef.current=next;setInnings(next);setDirection('straight');setLoft(false);setFoot('front');nextBall();if(typeof window!=='undefined'&&window.innerWidth<1070)requestAnimationFrame(()=>stadiumRef.current?.scrollIntoView({block:'start',behavior:'smooth'}));};
  const strike=useCallback((side:ShotSide)=>{
   if(!active||phaseRef.current!=='bowling'||swingCommitted.current)return;
   swingCommitted.current=true;
@@ -125,7 +131,7 @@ export function CricketMatch({active,comfort,sound=true,onToggleSound,onScore,on
  const greenStart=Math.max(0,(delivery.contactMs-220)/timingTotal*100),greenEnd=Math.min(100,(delivery.contactMs+220)/timingTotal*100);
  return <div className="play-cricket">
   <div className="pc-score-strip">
-   <div className="pc-main-score"><small>YOUR INNINGS</small><strong>{innings.runs}<em>/{innings.wickets}</em></strong><button className="pc-audio-toggle" type="button" onClick={onToggleSound} aria-label={sound?'Mute cricket stadium sounds':'Enable cricket stadium sounds'} aria-pressed={sound}>{sound?'🔊 SOUND ON':'🔇 SOUND OFF'}</button></div>
+   <div className="pc-main-score"><small>YOUR INNINGS</small><strong>{innings.runs}<em>/{innings.wickets}</em></strong><div className="pc-audio-actions"><button className="pc-audio-toggle" type="button" onClick={()=>{unlockStadiumAudio();onToggleSound?.();}} aria-label={sound?'Mute cricket stadium sounds':'Enable cricket stadium sounds'} aria-pressed={sound}>{sound?'🔊 SOUND ON':'🔇 ENABLE SOUND'}</button><button className="pc-audio-preview" type="button" onClick={()=>{unlockStadiumAudio();playStadiumSound('cricket','hit');}} aria-label="Play an audible cricket bat sound to test speakers">▶ TEST SOUND</button></div></div>
    <div><small>OVERS</small><b>{renderOvers(innings.balls)} <i>/ {overs}</i></b></div>
    <div><small>TARGET</small><b>{innings.target}</b></div>
    <div><small>NEED</small><b>{Math.max(0,innings.target-innings.runs)}</b></div>
