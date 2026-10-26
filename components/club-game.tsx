@@ -6,6 +6,7 @@ import {clubGame,type ClubSlug} from '@/lib/club-catalog';
 import {createClub,boardReducer,computerAction,legalMoves,reversiMoves,pachisiMoves,dominoMoves,dominoes,diceCategories,diceScore,dartValue,ladders,runs,square,stepSport,restoreClub,type ClubState,type BoardAction} from '@/lib/club-engine';
 import {GameEmblem} from '@/components/game-emblem';
 import {ClubSport} from '@/components/club-sport';
+import {RooftopHoops} from '@/components/rooftop-hoops';
 const computerKinds=['chess','checkers','connect','reversi','dots','fleet','mancala','pachisi','ludo','snakes','domino'];
 const sports=['basketball','golf','hockey','darts','plinko'];
 const liveKinds=['basketball','golf','hockey','plinko','burrows'];
@@ -13,6 +14,10 @@ const colours=['#c5a8ff','#ffb5a0','#a9e6c8','#ffe099'];
 const chessNames=['','pawn','knight','bishop','rook','queen','king'];
 const pieceGlyphs=['','♙','♘','♗','♖','♕','♔'];
 export function ClubGame({slug}:{slug:ClubSlug}){
+ if(slug==='rooftop-hoops')return <RooftopHoops/>;
+ return <ClubGameLegacy slug={slug}/>;
+}
+function ClubGameLegacy({slug}:{slug:ClubSlug}){
  useEffect(()=>{try{const old=JSON.parse(localStorage.getItem('studio-arcade:recent')||'[]');localStorage.setItem('studio-arcade:recent',JSON.stringify([slug,...(Array.isArray(old)?old:[]).filter(v=>typeof v==='string'&&v!==slug)].slice(0,4)));}catch{/* History is optional. */}},[slug]);
  const game=clubGame(slug)!;
  const [s,setS]=useState(()=>createClub(slug)),model=useRef(s);
