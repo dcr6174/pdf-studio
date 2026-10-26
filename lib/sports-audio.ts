@@ -35,7 +35,7 @@ function noise(a:AudioContext,at:number,duration:number,volume:number,freq:numbe
 export function playSportsAudio(cue:SportsCue){
  const a=audio();if(!a)return;
  try{
-  if(a.state==='suspended'){void a.resume().catch(()=>{});if(a.state!=='running')return;}
+  if(a.state==='suspended')void a.resume().catch(()=>{});
   const t=a.currentTime+.006;
   switch(cue){
    case 'hoops-release':tone(a,t,180,75,.14,.07,'triangle');noise(a,t,.055,.034,560,'lowpass');break;
