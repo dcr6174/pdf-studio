@@ -4,6 +4,8 @@
 export type StadiumSound='start'|'delivery'|'bounce'|'hit'|'boundary'|'wicket'|'miss'|'rim'|'backboard'|'score'|'shoot';
 let ctx:AudioContext|null=null;
 let lastAudio=0;
+let cricketBed:AudioBufferSourceNode|null=null;
+let cricketBedGain:GainNode|null=null;
 function startContext(){
  if(typeof window==='undefined')return null;
  try{
@@ -32,6 +34,23 @@ function noise(a:AudioContext,start:number,duration:number,level:number,frequenc
  source.connect(filter);filter.connect(g);g.connect(a.destination);
  source.start(start);source.stop(start+duration+.005);
 }
+/** Gentle filtered crowd murmur, started only after an explicit playing gesture.
+ * Reused across deliveries; do not create an audio node on every animation frame. */
+export function startCricketAmbience(){
+ const a=startContext();if(!a||cricketBed)return;
+ try{
+  const frames=Math.floor(a.sampleRate*2),buf=a.createBuffer(1,frames,a.sampleRate),data=buf.getChannelData(0);
+  let smooth=0;for(let i=0;i<frames;i++){smooth=.88*smooth+.12*(Math.random()*2-1);data[i]=smooth*.9+Math.sin(i/a.sampleRate*2*Math.PI*43)*.035;}
+  const src=a.createBufferSource(),filter=a.createBiquadFilter(),gain=a.createGain();
+  src.buffer=buf;src.loop=true;filter.type='lowpass';filter.frequency.value=850;
+  gain.gain.value=.022;src.connect(filter);filter.connect(gain);gain.connect(a.destination);
+  src.start();cricketBed=src;cricketBedGain=gain;
+ }catch{/* Ambient audio is optional and never blocks gameplay. */}
+}
+export function stopCricketAmbience(){
+ try{cricketBed?.stop();cricketBed?.disconnect();cricketBedGain?.disconnect();}catch{}
+ cricketBed=null;cricketBedGain=null;
+}
 function cheer(a:AudioContext,t:number,long=false){
  const d=long?.95:.54;
  noise(a,t,d,.07,520,.45);
@@ -50,11 +69,15 @@ export function playStadiumSound(kind:'cricket'|'hoops',effect:StadiumSound){
    case 'delivery':noise(a,now,.11,.022,760);tone(a,now,170,110,.12,.018,'triangle');break;
    case 'bounce':noise(a,now,.065,.07,1100,1.5);tone(a,now,180,99,.085,.048,'triangle');break;
    case 'hit':
-    noise(a,now,.13,.19,2500,1.2);tone(a,now,285,120,.17,.11,'triangle');break;
+    // Sharply filtered wood-leather crack, with a low bat thump for impact.
+    noise(a,now,.1,.26,2350,.85);tone(a,now,345,135,.13,.14,'triangle');
+    noise(a,now+.012,.07,.09,4100,1.1);break;
    case 'boundary':
-    noise(a,now,.12,.18,2600,1);tone(a,now,260,135,.16,.09,'triangle');cheer(a,now+.13,true);break;
+    noise(a,now,.11,.29,2580,.85);tone(a,now,330,120,.17,.13,'triangle');
+    cheer(a,now+.10,true);tone(a,now+.26,640,950,.28,.06,'sine');break;
    case 'wicket':
-    noise(a,now,.2,.22,3200,.8);tone(a,now,430,140,.24,.095,'sawtooth');cheer(a,now+.17,true);break;
+    noise(a,now,.23,.26,3200,.85);tone(a,now,430,110,.28,.12,'sawtooth');
+    tone(a,now+.13,150,85,.3,.09,'triangle');cheer(a,now+.23,true);break;
    case 'miss':
     noise(a,now,.1,.085,1250);tone(a,now,195,85,.16,.055,'triangle');break;
    default:break;
