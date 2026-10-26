@@ -65,7 +65,8 @@ const cricket=fs.readFileSync('components/cricket-match.tsx','utf8');
 assert(cricket.includes('pc-audio-toggle')&&cricket.includes('pc-audio-preview')&&cricket.includes('unlockStadiumAudio')&&cricket.includes('startCricketAmbience')&&cricket.includes("onSound('bounce')"),
  'Cricket audio must unlock on player gesture, offer a test sound and play ambient crowd/bounce');
 const sound=fs.readFileSync('lib/arcade-audio.ts','utf8');
-assert(sound.includes("kind==='cricket'")&&sound.includes('playStadiumSound')&&sound.includes("effect==='wicket'?'wicket'"),'Cricket must route wicket audio separately from ordinary misses');
+assert(sound.includes("kind==='cricket'")&&sound.includes('playStadiumSound')&&sound.includes("effect==='miss'?'miss'"),'Cricket misses must not sound like wickets');
+assert(cricket.includes("playStadiumSound('cricket','wicket')"),'A wicket must trigger its distinct stadium sound effect');
 console.log('PASS: Rooftop physics 10 positions × 18 arcs × 26 strengths, real collisions, playable scoring, arena routing and visible cricket sounds.');
 
 assert(fs.readFileSync('lib/stadium-audio.ts','utf8').includes('startCricketAmbience'),'Original filtered cricket ambient audio must exist.');
