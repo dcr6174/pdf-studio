@@ -52,6 +52,7 @@
  .arcade-shell .hoops-direction-tip{grid-column:1/-1}
  .arcade-shell .hoops-stage{height:min(69dvh,670px)}
 }
+.arcade-shell .hoops-mobile-shoot{display:none;position:absolute;z-index:3;right:10px;bottom:12px;min-width:115px;min-height:54px;background:linear-gradient(145deg,#ffc888,#f49756);border:2px solid #fff0cc;color:#293848;font-size:15px;font-weight:1000;border-radius:13px;box-shadow:0 4px 14px #081d2c89}
 @media(max-width:760px){
  .arcade-shell .hoops-main{padding:5px 5px calc(24px + env(safe-area-inset-bottom))}
  .arcade-shell .hoops-nav{padding:4px 6px 9px;font-size:10px}
@@ -67,6 +68,7 @@
  .arcade-shell .hoops-live-actions{width:100%;justify-content:space-between;margin:0;gap:4px}
  .arcade-shell .hoops-live-actions button{min-height:35px;font-size:9px;flex:1;padding:5px 3px}
  .arcade-shell .hoops-stage{height:clamp(355px,59dvh,620px);min-height:0}
+ .arcade-shell .hoops-mobile-shoot{display:block}
  .arcade-shell .hoops-control-deck{grid-template-columns:1fr 1fr;gap:8px;padding:11px}
  .arcade-shell .hoops-direction-tip{grid-column:1/-1;gap:3px}
  .arcade-shell .hoops-direction-tip span{font-size:10px}
