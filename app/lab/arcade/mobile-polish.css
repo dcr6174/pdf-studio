@@ -1,17 +1,18 @@
 /* Cross-game layout polish for phones and narrow windows. Loaded last so it wins. */
 .arcade-shell .arcade-game-nav{flex-wrap:wrap;align-items:center;row-gap:10px}
-.arcade-shell .arcade-title{display:flex;align-items:center;gap:12px;min-width:0}
-.arcade-shell .arcade-title>:first-child{flex-shrink:0}
-.arcade-shell .arcade-title h1{min-width:0;overflow-wrap:anywhere}
+.arcade-shell .arcade-title{display:flex;align-items:center;gap:16px;min-width:0}
+.arcade-shell .arcade-title>:first-child{flex-shrink:0;overflow:hidden;position:relative}
+.arcade-shell .arcade-title h1{min-width:0;overflow-wrap:anywhere;position:relative;z-index:1}
 @media(max-width:1070px){.arcade-shell .play-cricket .pc-match-layout.is-setup .pc-controller{order:0}.arcade-shell .play-cricket .pc-controller{min-height:0}}
 @media(max-width:600px){
  .arcade-shell .arcade-game-heading{flex-wrap:wrap;gap:12px;padding:14px 0 18px}
- .arcade-shell .arcade-title{gap:10px}
+ .arcade-shell .arcade-title{gap:14px}
  .arcade-shell .arcade-title h1{font-size:clamp(24px,7.5vw,34px);line-height:1.1;margin:0}
  .arcade-shell .arcade-scoreboard{width:100%}
  .arcade-shell .arcade-game-nav a{min-height:40px;display:inline-flex;align-items:center}
  .arcade-shell .play-cricket .pc-score-strip{grid-template-columns:repeat(4,1fr);padding:6px 8px}
  .arcade-shell .play-cricket .pc-score-strip .pc-main-score{grid-column:1/-1;border-right:0}
+ .arcade-shell .play-cricket .pc-overlay-score{max-width:48%;padding:5px 8px;top:6px;right:6px}
  .arcade-shell .arcade-filters{scroll-snap-type:x proximity;-webkit-overflow-scrolling:touch}
  .arcade-shell .arcade-filters button{scroll-snap-align:start;min-height:40px;padding:8px 14px}
  .arcade-shell .arcade-grid{gap:14px}
