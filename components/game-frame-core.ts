@@ -15,6 +15,7 @@ function h<K extends keyof HTMLElementTagNameMap>(tag:K,attrs:Record<string,stri
 function add(parent:Node,...kids:(Node|string)[]){for(const k of kids)parent.appendChild(typeof k==='string'?document.createTextNode(k):k);}
 function setKids(parent:Node,...kids:(Node|string)[]){while(parent.firstChild)parent.removeChild(parent.firstChild);add(parent,...kids);}
 function scoreNode(root:Element):HTMLElement|null{
+ const declared=root.querySelector<HTMLElement>('[data-game-score]');if(declared)return declared;
  for(const el of root.querySelectorAll('span,dt,small,label,em')){
   if(el.closest('.gf-layer'))continue;
   const own=[...el.childNodes].filter(n=>n.nodeType===3).map(n=>n.textContent).join('').trim();
@@ -70,19 +71,23 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
  };
  const markStart=()=>{if(!started){started=true;startedAt=performance.now();}};
  const findBtn=(re:RegExp,scope:Element=root)=>Array.from(scope.querySelectorAll<HTMLButtonElement>('button')).find(b=>!b.closest('.gf-bar,.gf-sheet')&&!b.disabled&&re.test(txt(b))&&visible(b));
+ // Games can opt into the shared controls without leaving duplicate native buttons visible.
+ const managed=()=>root.querySelector<HTMLElement>('[data-shared-controls]');
+ const control=(action:string)=>{const game=managed();if(!game)return false;game.dispatchEvent(new CustomEvent('arcade:control',{detail:{action}}));return true;};
  const onClick=(e:Event)=>{const t=e.target as Element;if(t.closest('.gf-bar,.gf-sheet'))return;if(t.closest('button,canvas,[role="button"],.arcade-board'))markStart();if(overShown&&t.closest('button')&&againRe.test(txt(t.closest('button')!)))hideEnd();};
  root.addEventListener('pointerdown',onClick,true);
  const keyStart=(e:KeyboardEvent)=>{if(['ArrowLeft','ArrowRight','ArrowUp','ArrowDown',' '].includes(e.key))markStart();};window.addEventListener('keydown',keyStart);
- function pause(){if(!pauseCard.hidden||!endCard.hidden)return;const b=findBtn(pauseRe);if(b){pausedBy=b;b.click();}else{pausedBy=null;window.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));}
-  setKids(pauseCard,h('h2',{},'Paused'),h('p',{},'Score '+score+' · Best '+Math.max(best,score)),resumeBtn,h('div',{class:'gf-row'},h('a',{class:'gf-link',href:'/lab/arcade'},'All games'),h('a',{class:'gf-link',href:'/lab/arcade/'+next.slug},'Next: '+next.name)));pauseCard.hidden=false;resumeBtn.focus();}
+ function pause(){if(!pauseCard.hidden||!endCard.hidden)return;const b=findBtn(pauseRe);if(control('pause'))pausedBy=null;else if(b){pausedBy=b;b.click();}else{pausedBy=null;window.dispatchEvent(new KeyboardEvent('keydown',{key:'Escape',bubbles:true}));}
+  setKids(pauseCard,h('h2',{},'Paused'),h('p',{},'Score '+score+' · Best '+Math.max(best,score)),resumeBtn,h('div',{class:'gf-row'},h('a',{class:'gf-link',href:'/lab/arcade'},'All games'),h('a',{class:'gf-link',href:'/lab/arcade/'+next.slug},'Next: '+next.name)));pauseCard.hidden=false;root.classList.add('gf-paused');resumeBtn.focus();}
  const resumeBtn=h('button',{class:'gf-primary',type:'button'},'▶ Resume');
- resumeBtn.addEventListener('click',()=>{pauseCard.hidden=true;const r=findBtn(resumeRe);if(r)r.click();else if(pausedBy&&pausedBy.isConnected&&visible(pausedBy)&&!pauseRe.test(txt(pausedBy)))pausedBy.click();pausedBy=null;});
+ resumeBtn.addEventListener('click',()=>{pauseCard.hidden=true;root.classList.remove('gf-paused');const r=findBtn(resumeRe);if(!control('resume')){if(r)r.click();else if(pausedBy&&pausedBy.isConnected&&visible(pausedBy)&&!pauseRe.test(txt(pausedBy)))pausedBy.click();}pausedBy=null;pauseBtn.focus();});
  pauseBtn.addEventListener('click',pause);
  const fs=()=>{if(document.fullscreenElement)void document.exitFullscreen().catch(()=>{});else void root.requestFullscreen?.().catch(()=>{});};
  fsBtn.addEventListener('click',fs);
  const onFs=()=>root.classList.toggle('gf-full',document.fullscreenElement===root);document.addEventListener('fullscreenchange',onFs);
  const toggleRow=(label:string,key:'shake'|'buzz'|'retro',locked=false)=>{const b=h('button',{type:'button',class:'gf-toggle','aria-pressed':String(settings[key])},label+(locked?' 🔒 Lv 5':''));if(locked)b.setAttribute('disabled','');b.addEventListener('click',()=>{settings={...settings,[key]:!settings[key]};b.setAttribute('aria-pressed',String(settings[key]));applySettings();});return b;};
- function openMenu(){const level=levelFromXp(progress.xp),owned=new Set<string>(unlockedAt(level.level).map(u=>u.id));const ms=missionsFor(best),done=new Set(progress.missions[slug]??[]);
+ let menuPaused=false;
+ function openMenu(){if(sheet.hidden&&managed()?.dataset.gameState==='play'){menuPaused=true;control('pause');}const level=levelFromXp(progress.xp),owned=new Set<string>(unlockedAt(level.level).map(u=>u.id));const ms=missionsFor(best),done=new Set(progress.missions[slug]??[]);
   const themes=h('div',{class:'gf-row'});for(const [id,label] of [['default','Classic'],['theme-sunset','Sunset'],['theme-midnight','Midnight'],['theme-champion','Champion']] as const){const ok=id==='default'||owned.has(id);const b=h('button',{type:'button',class:'gf-toggle','aria-pressed':String(settings.theme===id)},label+(ok?'':' 🔒'));if(!ok)b.setAttribute('disabled','');b.addEventListener('click',()=>{settings={...settings,theme:id};applySettings();openMenu();});add(themes,b);}
   setKids(sheet,h('div',{class:'gf-sheet-head'},h('h2',{},'Arcade menu'),closeBtn),
    h('section',{},h('h3',{},'Level '+level.level),h('div',{class:'gf-meter'},meter(level.into/level.need)),h('p',{},level.into+' / '+level.need+' XP to level '+(level.level+1))),
@@ -91,10 +96,19 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
    h('section',{},h('h3',{},'Feel'),h('div',{class:'gf-row'},toggleRow('Screen shake & flashes','shake'),toggleRow('Vibration','buzz'),toggleRow('Retro mode','retro',!owned.has('retro')))),
    h('section',{},h('h3',{},'Theme'),themes),
    h('p',{class:'gf-keys'},'Keys: P pause · F full screen · Esc close. Gamepad: stick/D-pad move, A action, Start pause.'));
-  sheet.hidden=false;menuBtn.setAttribute('aria-expanded','true');closeBtn.focus();}
+  const game=managed();if(game){
+   const controls=h('section',{},h('h3',{},'Match controls'));
+   for(const [action,label,attr] of [['toggle-sound','Stadium sound','sound'],['toggle-comfort','Comfort Mode','comfort']] as const){
+    const b=h('button',{type:'button',class:'gf-toggle','aria-pressed':game.dataset[attr]??'false'},label);
+    b.addEventListener('click',()=>{control(action);b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));});add(controls,b);
+   }
+   const restart=h('button',{type:'button',class:'gf-toggle'},'Restart chase');
+   restart.addEventListener('click',()=>{menuPaused=false;pauseCard.hidden=true;root.classList.remove('gf-paused');hideEnd();overShown=false;startedAt=performance.now();control('restart');closeBtn.click();});add(controls,restart);add(sheet,controls);
+  }
+  sheet.hidden=false;root.classList.add('gf-menu-open');menuBtn.setAttribute('aria-expanded','true');closeBtn.focus();}
  const meter=(f:number)=>{const i=h('i',{});i.style.width=Math.round(Math.max(0,Math.min(1,f))*100)+'%';return i;};
  const closeBtn=h('button',{class:'gf-btn',type:'button','aria-label':'Close menu'},'✕');
- closeBtn.addEventListener('click',()=>{sheet.hidden=true;menuBtn.setAttribute('aria-expanded','false');});
+ closeBtn.addEventListener('click',()=>{sheet.hidden=true;root.classList.remove('gf-menu-open');menuBtn.setAttribute('aria-expanded','false');if(menuPaused){menuPaused=false;control('resume');}menuBtn.focus();});
  menuBtn.addEventListener('click',()=>sheet.hidden?openMenu():closeBtn.click());
  function hideEnd(){endCard.hidden=true;}
  function showEnd(){
@@ -139,5 +153,6 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
  window.addEventListener('keydown',onKey);
  const onRotate=()=>{if(started&&!overShown)pause();};
  screen.orientation?.addEventListener?.('change',onRotate);
- return ()=>{disposed=true;cancelAnimationFrame(raf);root.removeEventListener('pointerdown',onClick,true);window.removeEventListener('keydown',keyStart);window.removeEventListener('keydown',onKey);document.removeEventListener('fullscreenchange',onFs);screen.orientation?.removeEventListener?.('change',onRotate);for(const el of [bar,layer,sheet,pauseCard,endCard])el.remove();root.classList.remove('gf-on','gf-retro');};
+ return ()=>{disposed=true;cancelAnimationFrame(raf);root.removeEventListener('pointerdown',onClick,true);window.removeEventListener('keydown',keyStart);window.removeEventListener('keydown',onKey);document.removeEventListener('fullscreenchange',onFs);screen.orientation?.removeEventListener?.('change',onRotate);for(const el of [bar,layer,sheet,pauseCard,endCard])el.remove();root.classList.remove('gf-on','gf-retro','gf-paused','gf-menu-open');};
 }
+

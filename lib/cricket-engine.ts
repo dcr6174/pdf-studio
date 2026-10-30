@@ -111,7 +111,9 @@ export function evaluateStroke(
  }
  if(timingQuality===0||quality===0){
   const out=stroke.loft&&landing.interceptedBy?'caught':null;
-  return result(0,out,out?'edge':'late',out?'Top edge taken by '+landing.interceptedBy+'.':error<0?'Too early — wait until the ball reaches the bat.':'Late contact. No run.');
+  const advice=delta>=220?(error<0?'Too early — wait until the ball reaches the bat.':'Late contact. No run.'):
+   footMismatch?'Good timing, wrong footwork for this length. Try automatic footwork.':'Good timing, but the shot direction missed the gap. No run.';
+  return result(0,out,out?'edge':'late',out?'Top edge taken by '+landing.interceptedBy+'.':advice);
  }
  if(stroke.loft){
   if(landing.interceptedBy&&quality<=2)return result(0,'caught','edge','Caught by '+landing.interceptedBy+'! The high shot was within reach.');
@@ -144,3 +146,4 @@ export function inningsResult(innings:Innings):string{
  return innings.won?'CHASE WON! '+summary+'. Target '+innings.target+' reached.':
  'Innings complete: '+summary+'. Target '+innings.target+'. '+Math.max(0,innings.target-innings.runs)+' runs short.';
 }
+
