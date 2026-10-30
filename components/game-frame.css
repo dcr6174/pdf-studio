@@ -69,3 +69,28 @@
 .gf-retro .gf-score,.gf-retro .gf-big{font-family:ui-monospace,Menlo,monospace}
 @media(max-width:560px){.gf-bar{gap:6px;padding:6px 8px}.gf-best,.gf-level{display:none}.gf-score{font-size:20px}.gf-chips{display:none}.gf-btn{min-width:42px;min-height:42px}}
 @media(prefers-reduced-motion:reduce){.gf-pop,.gf-float,.gf-big,.gf-sheet{animation-duration:.01s!important}.gf-shake>*,.gf-shake-big>*{animation:none!important}}
+.gf-sr{position:absolute;width:1px;height:1px;overflow:hidden;clip-path:inset(50%);white-space:nowrap}
+.gf-btn:disabled{opacity:.35;cursor:not-allowed}.gf-btn:disabled:active{transform:none}
+.gf-big-icon{font-size:56px}.gf-unit{margin:-4px 0 4px;font-weight:800;opacity:.7;text-transform:uppercase;letter-spacing:.12em;font-size:12px}
+.gf-msg{font-weight:700;margin:6px 0}
+.gf-outcome .gf-score-wrap{display:none}
+.gf-calm-motion .gf-float{animation-duration:.6s}
+/* Frame cards sit inside each game's own styles; these win over generic game button rules. */
+.gf-on .gf-sheet .gf-primary{display:block;width:100%;min-height:58px;margin-top:14px;border:0;border-radius:16px;background:var(--gf-accent);color:#1a1206;font:900 20px system-ui,sans-serif;letter-spacing:0;text-transform:none;box-shadow:0 6px 0 color-mix(in srgb,var(--gf-accent) 60%,#000)}
+.gf-on .gf-sheet .gf-toggle{min-height:44px;padding:0 14px;border-radius:12px;border:1px solid color-mix(in srgb,var(--gf-ink) 15%,transparent);background:var(--gf-paper);color:var(--gf-ink);font:700 14px system-ui,sans-serif;letter-spacing:0;text-transform:none;box-shadow:none}
+.gf-on .gf-sheet .gf-toggle[aria-pressed=true]{background:var(--gf-accent);border-color:var(--gf-accent);color:#1a1206}
+.gf-on .gf-sheet .gf-link{font:700 14px/1.2 system-ui,sans-serif;padding:8px 12px;color:var(--gf-ink);background:var(--gf-soft)}
+.gf-on .gf-sheet .gf-btn,.gf-on .gf-bar .gf-btn{font:700 16px system-ui,sans-serif;letter-spacing:0;text-transform:none;color:var(--gf-ink);background:transparent;padding:0}
+.gf-on .gf-sheet,.gf-on .gf-bar{color:var(--gf-ink);font-family:system-ui,sans-serif}
+.gf-restart{width:100%}
+.gf-sound[hidden]{display:none}
+.gf-mix{display:grid;gap:6px}
+.gf-mix-row{display:grid;grid-template-columns:minmax(0,9rem) minmax(0,1fr) 3.2rem;align-items:center;gap:10px;font-size:14px;font-weight:700}
+.gf-mix-row input{width:100%;min-height:32px;accent-color:var(--gf-accent)}
+.gf-mix-row output{text-align:right;font-variant-numeric:tabular-nums;opacity:.8}
+.gf-detail{font-size:13px;font-weight:800;padding:3px 9px;border-radius:999px;background:var(--gf-soft);white-space:nowrap;font-variant-numeric:tabular-nums}
+.gf-detail[hidden]{display:none}
+.gf-how{line-height:1.45;margin:0}
+.gf-rotate{position:fixed;z-index:60;left:50%;bottom:max(10px,env(safe-area-inset-bottom));transform:translateX(-50%);display:flex;align-items:center;gap:10px;padding:8px 8px 8px 14px;border-radius:999px;background:var(--gf-paper);color:var(--gf-ink);box-shadow:0 6px 24px #0007;font-size:13px;font-weight:700;max-width:calc(100vw - 24px)}
+.gf-rotate[hidden]{display:none}
+.gf-rotate button{min-width:36px;min-height:36px;border-radius:50%;border:0;background:var(--gf-soft);color:inherit;font:inherit;cursor:pointer}
