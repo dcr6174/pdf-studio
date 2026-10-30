@@ -3,6 +3,7 @@ import {useEffect,useMemo,useState} from 'react';
 import Link from '@/components/browser-link';
 import {GameScenePreview} from '@/components/game-scene-preview';
 import {ArcadeGarden} from '@/components/arcade-garden';
+import {recentSlugs} from '@/lib/arcade-preferences';
 import {activeArcadeGames} from '@/lib/arcade-active';
 import {ArrowRight,Clock3,Gamepad2,Heart,Search,Sparkles,Trophy} from 'lucide-react';
 const favourites=['merge-2048','buddy-jigsaw','lavender-chess','crown-checkers','moon-disc-reversi','pocket-mini-golf','eight-ball-pool','boundary-cricket','bubble-wrap-bliss','crystal-clean'] as const;
@@ -15,18 +16,20 @@ const highlights=[{label:'A quick break',description:'Ready in seconds',icon:'�
 export function ArcadeDirectory(){
  const [recent,setRecent]=useState<string[]>([]);
  const [category,setCategory]=useState<Category>('All games'),[query,setQuery]=useState(''),[visible,setVisible]=useState(24);
- useEffect(()=>{const timer=setTimeout(()=>{try{const old=JSON.parse(localStorage.getItem('studio-arcade:recent')||'[]');if(Array.isArray(old))setRecent(old.filter((v:unknown)=>typeof v==='string').slice(0,5));}catch{/* Optional recent history. */}},0);return()=>clearTimeout(timer);},[]);
+ useEffect(()=>{const timer=setTimeout(()=>{try{setRecent(recentSlugs(localStorage.getItem('studio-arcade:recent')));}catch{/* Optional recent history. */}},0);return()=>clearTimeout(timer);},[]);
  const games=useMemo(()=>activeArcadeGames.filter(g=>belongs(g,category)&&(g.name+' '+g.genre+' '+g.description).toLocaleLowerCase().includes(query.trim().toLocaleLowerCase())),[category,query]);
  const shown=games.slice(0,visible);
  const favs=favourites.map(slug=>activeArcadeGames.find(game=>game.slug===slug)).filter((g):g is typeof activeArcadeGames[number]=>!!g);
  const recentGames=recent.map(slug=>activeArcadeGames.find(game=>game.slug===slug)).filter((g):g is typeof activeArcadeGames[number]=>!!g);
+ const lastGame=recentGames[0];
  const choose=(next:Category)=>{setCategory(next);setVisible(24);};
  return <div className="play-directory">
  <header className="play-hero"><div className="play-hero-text">
  <span className="play-overline"><Sparkles size={16} aria-hidden="true"/> PLAY STUDIO <span className="play-overline-dot"/> BY PDF STUDIO</span>
  <h1>Big fun.<br/>Little games.</h1>
  <p>100 easy-to-start mini games. Chase a boundary, race through a city, solve a puzzle, or just pop some bubbles. Your next break starts with one tap.</p>
- <div className="play-hero-actions"><Link href="/lab/arcade/boundary-cricket" className="play-primary-cta"><Gamepad2 size={19}/> Play cricket <ArrowRight size={18}/></Link><a href="#play-browse" className="play-secondary-cta">Explore all games ↓</a></div>
+ <div className="play-hero-actions"><Link href={lastGame?'/lab/arcade/'+lastGame.slug+'?play=1':'/lab/arcade/boundary-cricket'} className="play-primary-cta"><Gamepad2 size={19}/> {lastGame?'Continue playing':'Play cricket'} <ArrowRight size={18}/></Link><a href="#play-browse" className="play-secondary-cta">Explore all games ↓</a></div>
+ {lastGame&&<p>Last played: {lastGame.name}</p>}
  <div className="play-hero-benefits"><span><Clock3 size={16}/> Quick to learn</span><span><Heart size={16}/> All ages welcome</span><span><Trophy size={16}/> Local high scores</span></div>
  </div>
  <div className="play-hero-art" aria-hidden="true"><div className="play-art-orbit one"/><div className="play-art-orbit two"/><div className="play-art-grid"><div className="play-art-tile cricket"><GameScenePreview slug="boundary-cricket"/></div><div className="play-art-tile road"><GameScenePreview slug="metro-sprint"/></div><div className="play-art-tile pool"><GameScenePreview slug="eight-ball-pool"/></div><div className="play-art-tile puzzle"><GameScenePreview slug="buddy-jigsaw"/></div></div><span className="play-art-star star1">✦</span><span className="play-art-star star2">✧</span></div></header>
