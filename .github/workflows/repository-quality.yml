@@ -25,6 +25,12 @@ jobs:
       - name: TypeScript
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: npx tsc --noEmit
+      - name: Dependency compatibility
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: node checks/verify-dependency-compatibility.mjs
+      - name: No critical or high dependency advisories
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm audit --audit-level=high
       - name: Prepare independent PDF and GIF inspection
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: |
