@@ -33,7 +33,7 @@ export function ArcadeHub(){
  return <div className="hub">
   <div className="hub-top">
    <Link className="hub-daily" href={'/lab/arcade/'+daily.slug+'?play=1'}><span className="hub-kicker">★ Today’s challenge · +20 XP</span><strong>{daily.name}</strong><span>{data.dailyBest!==undefined?'Your best today: '+data.dailyBest:'Same game for everyone today. Set your score.'}</span><span className="hub-go">Play now →</span></Link>
-   <div className="hub-player"><span className="hub-kicker">Player level</span><strong>Level {lv.level}</strong><div className="gf-meter"><i style={{width:Math.round(lv.into/lv.need*100)+'%'}}/></div><span>{lv.into} / {lv.need} XP · {p.rounds} rounds played</span><span className="hub-streak">{p.streak>0?'🔥 '+p.streak+'-day streak':'Play today to start a streak'}</span></div>
+   <div className="hub-player"><span className="hub-kicker">Player level</span><strong>Level {lv.level}</strong><div className="gf-meter"><i style={{width:Math.round(lv.into/lv.need*100)+'%'}}/></div><span>{lv.into} / {lv.need} XP · {p.rounds} {p.rounds===1?"round":"rounds"} played</span><span className="hub-streak">{p.streak>0?'🔥 '+p.streak+'-day streak':'Play today to start a streak'}</span></div>
    <div className="hub-actions">{recent[0]&&<Link className="hub-continue" href={'/lab/arcade/'+recent[0].slug+'?play=1'}>▶ Continue: {recent[0].name}</Link>}<button type="button" className="hub-surprise" onClick={surprise}>🎲 Surprise me</button></div>
   </div>
   {most.length>0&&<Row title="Your most played" games={most} best={best}/>}
