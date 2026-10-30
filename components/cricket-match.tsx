@@ -78,7 +78,7 @@ export function CricketMatch({active,comfort,sound=true,onToggleSound,onScore,on
   ballRef.current=ball;swingCommitted.current=false;bouncePlayed.current=false;setDelivery(ball);elapsedRef.current=0;setElapsed(0);lastView.current=0;
   setResult(null);setMessage(ball.style.toUpperCase()+' · '+ball.length+' · '+ball.speed+' km/h. Watch the bounce circle.');
   setPhaseBoth('bowling');onSound('tap');
- },[difficulty,overs,onSound]);
+ },[difficulty,onSound]);
  useEffect(()=>{
   if(!active||!sound||phase==='setup'||phase==='done'){stopCricketAmbience();return;}
   startCricketAmbience();return()=>stopCricketAmbience();
@@ -90,7 +90,7 @@ export function CricketMatch({active,comfort,sound=true,onToggleSound,onScore,on
   const t=elapsedRef.current,b=ballRef.current;
   const output=evaluateStroke(b,{side,foot,loft},t,difficulty);
   setDirection(side);setSwingCount(n=>n+1);completeDelivery(output);
- },[active,foot,loft,difficulty,completeDelivery,onSound]);
+ },[active,foot,loft,difficulty,completeDelivery]);
  useEffect(()=>{
   if(!active||phase!=='bowling')return;
   let raf=0,last=0;

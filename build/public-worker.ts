@@ -1,4 +1,4 @@
-import {canonicalToolRoutes} from '../lib/canonical-routes';
+import {canonicalPublicRedirect} from '../lib/canonical-routes';
 import {withSecurityHeaders} from '../lib/security-headers';
 import {publicPageCache} from '../lib/public-page-cache';
 import {purgeAudience} from '../lib/audience';
@@ -7,8 +7,14 @@ import { publicOwnerBoundary } from '../lib/public-owner';
 
 export default {
   async fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext) {
-    const requestURL=new URL(request.url),canonical=requestURL.pathname.match(/^\/tools\/([^/]+)\/?$/);if(canonical&&canonicalToolRoutes[canonical[1]]&&['GET','HEAD'].includes(request.method)){requestURL.pathname='/tools/'+canonicalToolRoutes[canonical[1]];return withSecurityHeaders(Response.redirect(requestURL.toString(),301),requestURL.pathname);}
-    const response=await publicOwnerBoundary(request, env, clean => { const url=new URL(clean.url); if((clean.method==='GET'||clean.method==='HEAD')&&url.pathname.replace(/\/$/,'')==='/prove-it'){url.pathname='/check-it-yourself';return Promise.resolve(Response.redirect(url.toString(),301));} return handler.fetch(clean, env, ctx); });
+    const canonical=canonicalPublicRedirect(request);
+    if(canonical)return withSecurityHeaders(Response.redirect(canonical.toString(),308),canonical.pathname);
+    const response=await publicOwnerBoundary(request, env, clean => handler.fetch(clean, env, ctx));
+    if(response.status>=400&&response.headers.get('content-type')?.includes('text/html')){
+      const headers=new Headers(response.headers);
+      headers.set('X-Robots-Tag','noindex, follow');
+      return withSecurityHeaders(new Response(response.body,{status:response.status,statusText:response.statusText,headers}),new URL(request.url).pathname);
+    }
     return withSecurityHeaders(await publicPageCache(request,response),new URL(request.url).pathname);
   },
   async scheduled(_event: ScheduledEvent, env: Cloudflare.Env) {

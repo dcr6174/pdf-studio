@@ -12,7 +12,7 @@ import {creativeTools,handwritingDefaults,handwritingFonts,type CreativeMode,typ
 type CustomFont={name:string;bytes:Uint8Array};
 type Result={bytes:Uint8Array;pages:number;text:string;options:HandwritingOptions;font:CustomFont|null};
 const sample='A little space for your ideas.\n\nType your notes here. Choose a handwriting style and make the page your own.';
-export function HandwritingStudio({mode}:{mode:CreativeMode}){
+export function HandwritingStudio({mode,embedded=false}:{mode:CreativeMode;embedded?:boolean}){
  const [sourceName,setSourceName]=useState('');
  const [text,setText]=useState(mode==='handwriting-practice'?'The quick brown fox jumps over the lazy dog.\n0123456789':sample);
  const [options,setOptions]=useState<HandwritingOptions>(handwritingDefaults);
@@ -50,8 +50,9 @@ export function HandwritingStudio({mode}:{mode:CreativeMode}){
  }
  async function openFont(file?:File){if(!file)return;try{if(!/\.(ttf|otf)$/i.test(file.name))throw new Error('Choose a TTF or OTF font.');if(file.size>5*1000*1000)throw new Error('This font exceeds 5 MB. Choose a smaller font.');const bytes=new Uint8Array(await file.arrayBuffer());const {default:fontkit}=await import('@pdf-lib/fontkit');fontkit.create(bytes);dirty.current=true;setCustomFont({name:file.name,bytes});setError('');}catch(e){setError(e instanceof Error?e.message:'The font is invalid. Choose another font.');}finally{if(fontInput.current)fontInput.current.value='';}}
  function download(){if(!ready||!result||busy||opening)return;prepare(new Blob([new Uint8Array(result.bytes)],{type:'application/pdf'}),mode==='notebook-maker'?'pdf-studio-notebook.pdf':mode==='handwriting-practice'?'pdf-studio-practice.pdf':sourceName?exportFilename('Handwriting','handwriting.pdf','',sourceName):'pdf-studio-handwriting.pdf','Your handwritten PDF is ready');}
- return <main className={`handwriting-main ${mode==='pdf-to-handwriting'?'handwriting-tool-action':''}`}><div className="studio-workspace-content" data-export-workspace tabIndex={-1} hidden={resultVisible}>
-  <div className="handwriting-title"><div>{mode!=='pdf-to-handwriting'&&<Link href="/lab">Studio Lab · Beta</Link>}<h1>{tool.title}</h1><p>{tool.description}</p></div><span className="handwriting-private">Files and text stay on your device</span></div>
+ const Container=embedded?'section':'main',Heading=embedded?'h2':'h1';
+ return <Container className={`handwriting-main ${mode==='pdf-to-handwriting'?'handwriting-tool-action':''}`}><div className="studio-workspace-content" data-export-workspace tabIndex={-1} hidden={resultVisible}>
+  <div className="handwriting-title"><div>{mode!=='pdf-to-handwriting'&&<Link href="/lab">Studio Lab · Beta</Link>}<Heading>{tool.title}</Heading><p>{tool.description}</p></div><span className="handwriting-private">Files and text stay on your device</span></div>
   <div className="handwriting-mobile-tabs" role="tablist" aria-label="Notebook workspace">{['page',...(mode==='notebook-maker'?[]:['text']),'style'].map(t=><button key={t} id={'hand-tab-'+t} type="button" role="tab" tabIndex={tab===t?0:-1} onKeyDown={e=>{const tabs=['page',...(mode==='notebook-maker'?[]:['text']),'style'];if(['ArrowLeft','ArrowRight','Home','End'].includes(e.key)){e.preventDefault();const next=e.key==='Home'?tabs[0]:e.key==='End'?tabs[tabs.length-1]:tabs[(tabs.indexOf(t)+(e.key==='ArrowRight'?1:tabs.length-1))%tabs.length];setTab(next);document.getElementById('hand-tab-'+next)?.focus();}}} aria-selected={tab===t} aria-controls={'hand-panel-'+t} onClick={()=>setTab(t)}>{t==='page'?'Preview':t==='text'?'Text':'Style'}</button>)}</div>
   <div className="handwriting-layout" data-mobile-tab={tab}>
    <aside className="handwriting-controls">
@@ -71,5 +72,9 @@ export function HandwritingStudio({mode}:{mode:CreativeMode}){
   <div className="handwriting-export"><div aria-live="polite">{error?<p role="alert" className="handwriting-error">{error}</p>:opening?<p>Reading your file…</p>:busy?<p>Updating your notebook…</p>:<p>{result?`${result.pages} ${result.pages===1?'page':'pages'} · ${(result.bytes.length/1000).toFixed(1)} KB · No added watermark`:'Your text is retained.'}</p>}{(opening||busy)&&<button type="button" onClick={()=>{importJob.current?.abort();buildJob.current?.abort();setOpening(false);setBusy(false);setError('Cancelled. Your text is retained; change a setting to regenerate.');}}>Cancel</button>}</div><button type="button" className="handwriting-download" disabled={!ready||busy||opening} onClick={download}><Download size={20}/>Export PDF</button></div>
   {downloaded&&<div className="handwriting-success" role="status"><p>Your download has started. Check your browser’s downloads.</p><SupportLink success/></div>}
 
- </div>{resultScreen}</main>;
+ </div>{resultScreen}</Container>;
+}
+
+export function EmbeddedHandwritingStudio({mode}:{mode:CreativeMode}){
+ return <HandwritingStudio mode={mode} embedded/>;
 }

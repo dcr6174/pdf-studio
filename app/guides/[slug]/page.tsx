@@ -3,7 +3,7 @@ import {HandwritingHelp} from '@/components/handwriting-help';
 import {canonicalToolRoutes} from '@/lib/canonical-routes';
 import {redirect} from 'next/navigation';
 import Link from '@/components/browser-link';
-import {toolMeta,fullTitle} from '@/lib/seo-meta';
+import {guideMeta} from '@/lib/guide-meta';
 import {FormLanding} from '@/components/form-landing';
 import {conversionGuides} from '@/lib/conversion-guides';
 import {ConversionGuide} from '@/components/conversion-guide';
@@ -18,10 +18,8 @@ import {Spotlight} from '@/components/spotlight';
 
 export function generateStaticParams(){return [...seoPages,...conversionGuides,...creativeTools.filter(c=>!seoPages.some(p=>p.slug===c.slug))].map(t=>({slug:t.slug}));}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
- const {slug}=await params, creative=creativeTools.find(c=>c.slug===slug);if(creative)return {title:creative.title+' guide',description:creative.description,alternates:{canonical:'/guides/'+slug}};const t=[...seoPages,...conversionGuides].find(t=>t.slug===slug);if(!t)return {};
- const image={url:'/social/'+t.slug+'.png',width:1200,height:630,alt:t.title+' — PDF Studio'};
- const meta=toolMeta[slug]??{title:t.title+('id' in t?' — Free Online':''),description:t.intro};
- return {title:{absolute:fullTitle(t.title+' guide')},description:meta.description,alternates:{canonical:'/guides/'+t.slug},twitter:{card:'summary_large_image',images:[image.url],title:fullTitle(meta.title),description:meta.description},openGraph:{images:[image],title:fullTitle(meta.title),description:meta.description,url:'https://pdf-studio.in/guides/'+t.slug}};
+ const {slug}=await params, creative=creativeTools.find(c=>c.slug===slug);if(creative)return guideMeta(slug,creative.title,creative.description);const t=[...seoPages,...conversionGuides].find(t=>t.slug===slug);if(!t)return {};
+ return guideMeta(t.slug,t.title,t.intro,'/social/'+t.slug+'.png');
 }
 export default async function ToolGuidePage({params}:{params:Promise<{slug:string}>}){
  const {slug}=await params;if(canonicalToolRoutes[slug])redirect('/guides/'+canonicalToolRoutes[slug]);const creative=creativeTools.find(c=>c.slug===slug);if(creative)return <div className="tool-guide-page"><SiteHeader/><main className="tool-instructions"><nav aria-label="Breadcrumb"><Link href="/guides">All guides</Link></nav><h1>{creative.title}: guide</h1><p>{creative.description}</p><HandwritingHelp mode={creative.slug}/><Link className="primary" href={(slug==='pdf-to-handwriting'?'/tools/':'/lab/')+slug}>Open {creative.title}</Link></main><SiteFooter/></div>;const conversion=conversionGuides.find(g=>g.slug===slug);if(conversion)return <ConversionGuide guide={conversion}/>;const t=seoPages.find(t=>t.slug===slug);if(!t)notFound();

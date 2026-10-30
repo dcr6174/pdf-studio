@@ -1,9 +1,15 @@
 /** Keep indexed URLs canonical; never borrow an alias's lastmod. */
 export function canonicalSitemapEntries(entries, toolAliases = {}) {
-  const redirects = { '/lab/sketch-pdf': '/tools/sketch-over-pdf' };
+  const redirects = {
+    '/lab/sketch-pdf': '/tools/sketch-over-pdf',
+    '/tools/html-to-pdf': '/guides/html-to-pdf',
+    '/tools/powerpoint-to-pdf': '/guides/powerpoint-to-pdf',
+    '/prove-it': '/check-it-yourself',
+  };
   const canonical = path => {
-    const match = path.match(/^\/tools\/([^/]+)$/);
-    return redirects[path] ?? (match && toolAliases[match[1]] ? '/tools/' + toolAliases[match[1]] : path);
+    const clean = path === '/' ? path : path.replace(/\/+$/, '');
+    const match = clean.match(/^\/(tools|guides)\/([^/]+)$/);
+    return redirects[clean] ?? (match && toolAliases[match[2]] ? '/' + match[1] + '/' + toolAliases[match[2]] : clean);
   };
   const result = new Map();
   for (const entry of entries) {
