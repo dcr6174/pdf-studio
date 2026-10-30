@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {unstable_dev} from 'wrangler';
+import {loadArticles} from '../scripts/article-data.mjs';
 
 // Execute the actual built Cloudflare worker locally. No Cloudflare deployment,
 // remote database, API keys, production writes or persistent local DB are used.
@@ -98,7 +99,24 @@ try{
   assert(types.includes('Article'),'article structured data: '+row.path);
   assert(types.includes('BreadcrumbList'),'article breadcrumb structured data: '+row.path);
  }
- console.log(`PASS: ${urls.length} built HTTP pages, unique metadata, canonical/social URLs, one H1, valid JSON-LD, no HTML-orphan pages; ${Object.keys(aliases).length} permanent redirects and four noindex 404s.`);
+ const revised=(await loadArticles()).filter(a=>a.workedExample);
+ assert.equal(revised.length,6,'prioritized editorial batch stays bounded');
+ for(const article of revised){
+  const response=await worker.fetch('/blog/'+article.slug),html=await response.text();
+  assert(html.includes('id="worked-example"'),'real worked-example target: '+article.slug);
+  assert(html.includes(article.workedExample.id+'-input.pdf'),'exact scenario input: '+article.slug);
+  assert(!html.includes('id="tested-example"'),'generic historical check replaced: '+article.slug);
+  const assets=[`/examples/guide-intent/${article.workedExample.id}-input.pdf`,`/examples/guide-intent/${article.workedExample.id}-result.${article.workedExample.id==='invoice-groups'?'zip':'pdf'}`,...(article.workedExample.extra||[]).map(f=>f.href),...(article.workedExample.screenshots||[]).map(s=>s.src)];
+  for(const path of assets)assert.equal((await worker.fetch(path)).status,200,'download/screenshot resolves: '+path);
+ }
+ for(const slug of ['split-pdf','extract-pdf-pages','reverse-pages']){
+  const guide=await(await worker.fetch('/guides/'+slug)).text();
+  const group=revised.filter(a=>a.tool===(slug==='extract-pdf-pages'?'split-pdf':slug));
+  for(const article of group)assert(guide.includes('/blog/'+article.slug+'#worked-example'),'guide points to distinct intent: '+article.slug);
+  const action=await(await worker.fetch('/tools/'+slug)).text();
+  assert(!action.includes('/examples/guide-intent/'),'teaching samples stay off action pages');
+ }
+ console.log(`PASS: ${urls.length} built HTTP pages, unique metadata, canonical/social URLs, one H1, valid JSON-LD, no HTML-orphan pages; ${Object.keys(aliases).length} permanent redirects and four noindex 404s; six distinct worked examples, all assets and three guide/action boundaries.`);
 }finally{
  await worker.stop();
 }
