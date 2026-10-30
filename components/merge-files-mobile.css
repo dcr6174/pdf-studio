@@ -1,0 +1,12 @@
+/* Phone polish for Merge/Compress file cards. Loaded after merge-files.css. */
+@media(max-width:699px){
+ html .studio-shell.document-shell .merge-document-grid,html .studio-shell[data-tool] .merge-document-grid{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:10px!important}
+ .merge-document-card{min-width:0}
+ .merge-document-card .merge-cover{max-height:150px}
+ .merge-file-info b{display:block;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;font-size:13px}
+ .merge-file-info small{font-size:11px}
+ .merge-card-top{gap:2px}
+ .merge-card-top button{min-width:36px;min-height:36px}
+ .merge-card-actions button{min-height:36px}
+}
+@media(max-width:359px){html .studio-shell.document-shell .merge-document-grid,html .studio-shell[data-tool] .merge-document-grid{grid-template-columns:1fr!important}}
