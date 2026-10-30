@@ -42,3 +42,15 @@ Production checks must verify the exported addresses again after deployment.
 This repair does not claim Search Console validation has completed or guarantee
 indexing. Google must recrawl; intentional 404s can legitimately remain in the
 report.
+
+## Owner-requested permanent removal
+
+After the redirect release, the owner explicitly requested that the 20
+invalid/retired addresses not remain ordinary 404s. They now receive a direct
+HTTP 410 Gone with noindex headers and metadata, no canonical and no redirect.
+The corresponding 18 unsuffixed retired-game addresses receive the same
+permanent response. Working assets, all 100 active games and all 317 recovered
+addresses remain available. Unknown URLs still use ordinary 404s.
+
+This is a permanent-removal signal, not an instant deletion of Google's
+historical Search Console records. Those records update on Google's schedule.

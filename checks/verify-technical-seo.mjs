@@ -31,6 +31,21 @@ for(const input of [...protected404Paths,...unapprovedMetadataPaths]){
  assert.equal(path(input),input,'do not redirect excluded/unknown addresses');
  assert.equal(redirect(new Request('https://pdf-studio.in'+input)),null);
 }
+for(const input of protected404Paths){
+ assert(seo.isPermanentlyRemovedPath(input),'exported permanent removal: '+input);
+ for(const method of ['GET','HEAD']){
+  const response=seo.permanentlyRemovedResponse(new Request('https://pdf-studio.in'+input+'?from=gsc',{method}));
+  assert.equal(response.status,410);
+  assert.match(response.headers.get('x-robots-tag'),/noindex/);
+  assert.equal(response.headers.get('location'),null,'gone URLs do not redirect');
+ }
+ assert.equal(seo.permanentlyRemovedResponse(new Request('https://pdf-studio.in'+input,{method:'POST'})),null);
+}
+assert.equal(seo.isPermanentlyRemovedPath('/test-fixtures/%'),false,'invalid URI escapes cannot crash the worker');
+for(const game of seo.activeArcadeGames)assert.equal(seo.isPermanentlyRemovedPath('/lab/arcade/'+game.slug),false,'never remove active games');
+for(const input of [...seo.legacyMetadataPaths,...unapprovedMetadataPaths,'/tools/merge-pdf','/test-fixtures/source.pdf']){
+ assert.equal(seo.isPermanentlyRemovedPath(input),false,'unrelated and working addresses are preserved');
+}
 const cases={
  '/tools/pdf-editor':'/tools/add-text-and-images',
  '/tools/edit-pdf':'/tools/add-text-and-images',
