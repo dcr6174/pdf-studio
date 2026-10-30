@@ -56,7 +56,22 @@ try{
   const destination=await worker.fetch(target,{redirect:'manual'});
   assert.equal(destination.status,200,'redirect resolves to a real page: '+path);
  }
- const missingPaths=['/tools/not-a-real-tool','/guides/not-a-real-guide','/blog/not-a-real-article','/not-a-real-page',...protected404Paths,...unapprovedMetadataPaths.filter(path=>!path.startsWith('/api/'))];
+ const gonePaths=[...new Set([...protected404Paths,...protected404Paths.filter(path=>path.startsWith('/lab/arcade/')).map(path=>path.slice(0,path.lastIndexOf(':')))])];
+ for(const path of gonePaths){
+  for(const variant of [path,path+'/',path.replace(':','%3A')]){
+   const response=await worker.fetch(variant+'?source=gsc',{redirect:'manual'}),page=parse(await response.text());
+   assert.equal(response.status,410,'permanently removed: '+variant);
+   assert.match(response.headers.get('x-robots-tag')||'',/noindex/);
+   assert.equal(response.headers.get('location'),null,'no homepage/alias redirects');
+   assert.equal(page.canonical,undefined,'removed addresses have no canonical');
+   assert(page.robots.every(r=>!/(\b|,)index\b/i.test(r)),'removed pages never advertise index');
+   assert(page.titles.some(title=>/permanently removed/i.test(title)));
+   const head=await worker.fetch(variant,{method:'HEAD',redirect:'manual'});
+   assert.equal(head.status,410,'HEAD retains Gone status');
+   assert.equal(await head.text(),'','HEAD has no response body');
+  }
+ }
+ const missingPaths=['/tools/not-a-real-tool','/guides/not-a-real-guide','/blog/not-a-real-article','/not-a-real-page',...unapprovedMetadataPaths.filter(path=>!path.startsWith('/api/'))];
  for(const path of missingPaths){
   const response=await worker.fetch(path,{redirect:'manual'}),page=parse(await response.text());
   assert.equal(response.status,404,'real error status: '+path);
@@ -105,7 +120,7 @@ try{
   assert(types.includes('Article'),'article structured data: '+row.path);
   assert(types.includes('BreadcrumbList'),'article breadcrumb structured data: '+row.path);
  }
- console.log(`PASS: ${urls.length} built HTTP pages, unique metadata, canonical/social URLs, one H1, valid JSON-LD, no HTML-orphan pages; ${Object.keys(aliases).length} permanent redirects and ${missingPaths.length} noindex 404s.`);
+ console.log(`PASS: ${urls.length} built HTTP pages, unique metadata, canonical/social URLs, one H1, valid JSON-LD, no HTML-orphan pages; ${Object.keys(aliases).length} permanent redirects, ${gonePaths.length} permanently removed addresses and ${missingPaths.length} unknown noindex 404s.`);
 }finally{
  await worker.stop();
 }

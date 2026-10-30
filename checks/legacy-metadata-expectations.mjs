@@ -9,7 +9,7 @@ export const legacyMetadataTarget=path=>{
  return canonicalAliases[clean]??clean;
 };
 
-// All 20 exported addresses deliberately excluded from the redirect repair.
+// All 20 exported addresses excluded from redirects, now permanently removed.
 export const protected404Paths=[
  '/lab/arcade/buddy-pachisi:x21xsx',
  '/lab/arcade/bullseye-301:1e9b8bv',
