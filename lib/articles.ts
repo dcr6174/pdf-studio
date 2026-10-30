@@ -1,5 +1,6 @@
-export type Article={slug:string;title:string;category:string;tool:string;summary:string;steps:string[];check:string;limit:string;toolId?:string;toolNumber?:number;cta?:string;sections?:{heading:string;paragraphs:string[]}[];tips?:string[];faq?:{question:string;answer:string}[];intent?:string;published?:string;updated?:string;tags?:string[];evidence?:{inputs?:{href:string;label:string}[];id:string;input:string;output:string;date:string;environment:string;check:string;scope:string;options:Record<string,unknown>;preview?:{input:string;output:string}};hero?:{input:string;output:string}};
-export const articles:Article[]=
+import {reviseArticle,type WorkedExample} from './article-worked-examples';
+export type Article={workedExample?:WorkedExample;slug:string;title:string;category:string;tool:string;summary:string;steps:string[];check:string;limit:string;toolId?:string;toolNumber?:number;cta?:string;sections?:{heading:string;paragraphs:string[]}[];tips?:string[];faq?:{question:string;answer:string}[];intent?:string;published?:string;updated?:string;tags?:string[];evidence?:{inputs?:{href:string;label:string}[];id:string;input:string;output:string;date:string;environment:string;check:string;scope:string;options:Record<string,unknown>;preview?:{input:string;output:string}};hero?:{input:string;output:string}};
+const articleDrafts:Article[]=
 [
   {
     "slug": "how-to-merge-pdf-files",
@@ -19069,3 +19070,4 @@ export const articles:Article[]=
     }
   }
 ];
+export const articles:Article[]=articleDrafts.map(reviseArticle);

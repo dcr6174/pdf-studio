@@ -1,0 +1,137 @@
+{
+  "date": "2026-10-30",
+  "environment": "Node v24.22.1; pdf-lib; pdftotext version 26.06.0",
+  "scope": "Fresh synthetic engine runs. Independent text-order checks; no real-device, production or visual-fidelity guarantee.",
+  "results": [
+    {
+      "id": "select-chapter",
+      "tool": "split",
+      "options": {
+        "range": "3-4",
+        "splitOutput": "one"
+      },
+      "expected": [
+        "Chapter 1",
+        "Chapter 2"
+      ],
+      "actual": [
+        "Chapter 1",
+        "Chapter 2"
+      ],
+      "input": "/examples/guide-intent/select-chapter-input.pdf",
+      "output": "/examples/guide-intent/select-chapter-result.pdf"
+    },
+    {
+      "id": "invoice-groups",
+      "tool": "split",
+      "options": {
+        "range": "2-3;5-6",
+        "splitOutput": "groups"
+      },
+      "expected": [
+        [
+          "INV-101 main",
+          "INV-101 receipt"
+        ],
+        [
+          "INV-103 main",
+          "INV-103 receipt"
+        ]
+      ],
+      "actual": [
+        {
+          "name": "group-1 - pdf-studio.in - Split pages - Group 1.pdf",
+          "pages": [
+            "INV-101 main",
+            "INV-101 receipt"
+          ]
+        },
+        {
+          "name": "group-2 - pdf-studio.in - Split pages - Group 2.pdf",
+          "pages": [
+            "INV-103 main",
+            "INV-103 receipt"
+          ]
+        }
+      ],
+      "input": "/examples/guide-intent/invoice-groups-input.pdf",
+      "output": "/examples/guide-intent/invoice-groups-result.zip"
+    },
+    {
+      "id": "selection-order",
+      "tool": "split",
+      "options": {
+        "range": "3,1,3",
+        "splitOutput": "one"
+      },
+      "expected": [
+        "A3",
+        "A1"
+      ],
+      "actual": [
+        "A3",
+        "A1"
+      ],
+      "input": "/examples/guide-intent/selection-order-input.pdf",
+      "output": "/examples/guide-intent/selection-order-result.pdf"
+    },
+    {
+      "id": "reverse-basics",
+      "tool": "reverse",
+      "options": {},
+      "expected": [
+        "A3",
+        "A2",
+        "A1"
+      ],
+      "actual": [
+        "A3",
+        "A2",
+        "A1"
+      ],
+      "input": "/examples/guide-intent/reverse-basics-input.pdf",
+      "output": "/examples/guide-intent/reverse-basics-result.pdf"
+    },
+    {
+      "id": "reverse-backs",
+      "tool": "reverse",
+      "options": {},
+      "expected": [
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "actual": [
+        "B1",
+        "B2",
+        "B3"
+      ],
+      "input": "/examples/guide-intent/reverse-backs-input.pdf",
+      "output": "/examples/guide-intent/reverse-backs-result.pdf"
+    },
+    {
+      "id": "reverse-misplaced",
+      "tool": "reverse",
+      "options": {},
+      "expected": [
+        "A2",
+        "A3",
+        "A1"
+      ],
+      "actual": [
+        "A2",
+        "A3",
+        "A1"
+      ],
+      "input": "/examples/guide-intent/reverse-misplaced-input.pdf",
+      "output": "/examples/guide-intent/reverse-misplaced-result.pdf"
+    }
+  ],
+  "limitations": [
+    "Blank range selects every page.",
+    "En dash and descending ranges are rejected.",
+    "Repeated positions are deduplicated in first-encounter order.",
+    "Copying a subset of fillable pages requires read-only fields.",
+    "Reverse reverses all pages, not just a misplaced pair."
+  ]
+}

@@ -15,6 +15,7 @@ import {tools,accepted} from '@/lib/tools';
 import {seoPages,seoTools} from '@/lib/seo-tools';
 import {toolGuidance} from '@/lib/tool-guidance';
 import {Spotlight} from '@/components/spotlight';
+import {articles} from '@/lib/articles';
 
 export function generateStaticParams(){return [...seoPages,...conversionGuides,...creativeTools.filter(c=>!seoPages.some(p=>p.slug===c.slug))].map(t=>({slug:t.slug}));}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
@@ -25,6 +26,7 @@ export default async function ToolGuidePage({params}:{params:Promise<{slug:strin
  const {slug}=await params;if(canonicalToolRoutes[slug])redirect('/guides/'+canonicalToolRoutes[slug]);const creative=creativeTools.find(c=>c.slug===slug);if(creative)return <div className="tool-guide-page"><SiteHeader/><main className="tool-instructions"><nav aria-label="Breadcrumb"><Link href="/guides">All guides</Link></nav><h1>{creative.title}: guide</h1><p>{creative.description}</p><HandwritingHelp mode={creative.slug}/><Link className="primary" href={(slug==='pdf-to-handwriting'?'/tools/':'/lab/')+slug}>Open {creative.title}</Link></main><SiteFooter/></div>;const conversion=conversionGuides.find(g=>g.slug===slug);if(conversion)return <ConversionGuide guide={conversion}/>;const t=seoPages.find(t=>t.slug===slug);if(!t)notFound();
  const tool=tools.find(x=>x.id===t.id)!,guidance=searchGuidance[t.slug]??toolGuidance[t.id];
  const formats=accepted(t.id).replaceAll('.','').toUpperCase();
+ const workedArticles=articles.filter(a=>a.toolId===t.id&&a.workedExample);
  const faq:[string,string][]=[...guidance.faq,
   ['Which files can I use?',`Supported inputs: ${formats}. ${tool.note??tool.description}`],
   ['Is this free?','Core tools require no account or subscription and add no watermark.'],
@@ -43,6 +45,11 @@ export default async function ToolGuidePage({params}:{params:Promise<{slug:strin
    <h2 id="tool-guide-title">{t.heading}</h2><p>{t.intro}</p>
    <h3>How it works</h3><ol>{guidance.steps.map(step=><li key={step}>{step}</li>)}</ol><p>{t.detail}</p>
    <h3>When to use this tool</h3><p>{guidance.useCase}</p>
+   {workedArticles.length>0&&<section aria-labelledby="worked-routes">
+    <h3 id="worked-routes">Choose a worked example for your situation</h3>
+    <p>This guide covers the controls. The following articles use different source files and acceptance checks; choose the scenario that matches your document.</p>
+    <ul>{workedArticles.map(a=><li key={a.slug}><Link href={'/blog/'+a.slug+'#worked-example'}>{a.title}</Link><p>{a.summary}</p></li>)}</ul>
+   </section>}
    <h3>What to check before sharing</h3><p>{guidance.checks}</p>
    <h3>Supported files</h3><p>{tool.note??tool.description}</p><p>Inputs: {formats}. Performance depends on your device. Download important work before closing the browser; local storage is not a backup.</p>
    <h3>Troubleshooting</h3><p>{searchGuidance[t.slug]?guidance.faq.map(([question,answer])=>`${question} ${answer}`).join(" "):"If the file will not open, check it in another PDF reader. If it is password-protected, use Remove a PDF password with a password you know. For scans that need selectable text, run Make a PDF searchable first."}</p>

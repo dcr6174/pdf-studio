@@ -2,12 +2,13 @@ import fs from 'node:fs';
 import ts from 'typescript';
 import assert from 'node:assert/strict';
 import {DOMParser} from '@xmldom/xmldom';
+import {loadArticles} from '../scripts/article-data.mjs';
 const moduleURL=text=>'data:text/javascript;base64,'+Buffer.from(ts.transpileModule(text,{compilerOptions:{module:ts.ModuleKind.ESNext,target:ts.ScriptTarget.ES2022}}).outputText).toString('base64');
 const toolsURL=moduleURL(fs.readFileSync('lib/tools.ts','utf8'));
 const legacyMetadataURL=moduleURL(fs.readFileSync('lib/legacy-metadata-paths.ts','utf8'));
 const canonicalURL=moduleURL(fs.readFileSync('lib/canonical-routes.ts','utf8').replace("'./legacy-metadata-paths'",JSON.stringify(legacyMetadataURL)));
 const {seoPages}=await import(moduleURL(fs.readFileSync('lib/seo-tools.ts','utf8').replace("'./tools'",JSON.stringify(toolsURL)).replace("'./canonical-routes'",JSON.stringify(canonicalURL))));
-const {articles}=await import(moduleURL(fs.readFileSync('lib/articles.ts','utf8')));
+const articles=await loadArticles();
 const xml=new DOMParser().parseFromString(fs.readFileSync('public/sitemap.xml','utf8'),'application/xml');
 const urls=Array.from(xml.getElementsByTagName('loc')).map(n=>n.textContent);assert.equal(new Set(urls).size,urls.length);
 for(const page of seoPages){assert.ok(urls.includes('https://pdf-studio.in/tools/'+page.slug),page.slug);assert.ok(urls.includes('https://pdf-studio.in/guides/'+page.slug),'guide '+page.slug);}

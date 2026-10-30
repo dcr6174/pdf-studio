@@ -17,6 +17,7 @@
     "verify": "node checks/verify-engine.mjs",
     "verify:seo": "node checks/verify-technical-seo.mjs && node checks/verify-sitemap-canonical.mjs",
     "verify:seo:rendered": "node checks/verify-rendered-seo.mjs",
+    "verify:guide-examples": "node checks/verify-guide-examples.mjs && node checks/audit-article-overlap.mjs",
     "verify:compression": "node checks/verify-jpeg-optimization.mjs && node checks/verify-compression-targets.mjs",
     "verify:analytics": "node checks/verify-analytics.mjs && node checks/verify-tracker.mjs",
     "verify:studio": "node checks/verify-studio.mjs",

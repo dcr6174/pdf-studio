@@ -1,0 +1,5248 @@
+{
+  "method": "Exact steps/FAQ equality and repeated section paragraphs within each tool family. This flags potential intent overlap, not search demand, rankings or semantic plagiarism. Bespoke templates and guides require manual inspection.",
+  "articles": 211,
+  "before": [
+    {
+      "toolId": "merge",
+      "articles": 4,
+      "flaggedPairs": 0,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-merge-pdf-files",
+            "/blog/arrange-pdf-files-and-pages-before-merging"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-merge-pdf-files",
+            "/blog/fix-pdf-merge-order-forms-and-missing-pages"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-merge-pdf-files",
+            "/blog/combine-job-application-documents"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/arrange-pdf-files-and-pages-before-merging",
+            "/blog/fix-pdf-merge-order-forms-and-missing-pages"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/arrange-pdf-files-and-pages-before-merging",
+            "/blog/combine-job-application-documents"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/fix-pdf-merge-order-forms-and-missing-pages",
+            "/blog/combine-job-application-documents"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "compress",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/pdf-too-large-for-a-job-portal",
+            "/blog/prepare-a-readable-pdf-for-an-upload-size-limit"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/pdf-too-large-for-a-job-portal",
+            "/blog/compress-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/prepare-a-readable-pdf-for-an-upload-size-limit",
+            "/blog/compress-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "sign",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/sign-a-pdf-without-printing",
+            "/blog/place-a-signature-name-and-date-without-printing"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/sign-a-pdf-without-printing",
+            "/blog/sign-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/place-a-signature-name-and-date-without-printing",
+            "/blog/sign-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "native-text",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/fix-a-phone-number-in-a-pdf",
+            "/blog/correct-a-contact-line-in-a-pdf-cv"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/fix-a-phone-number-in-a-pdf",
+            "/blog/edit-existing-text-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/correct-a-contact-line-in-a-pdf-cv",
+            "/blog/edit-existing-text-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "redact",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/remove-sensitive-information",
+            "/blog/remove-a-private-identifier-before-sharing-a-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/remove-sensitive-information",
+            "/blog/redact-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/remove-a-private-identifier-before-sharing-a-pdf",
+            "/blog/redact-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "ocr",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/make-a-scanned-pdf-searchable",
+            "/blog/make-a-scanned-letter-searchable-and-check-recognition-errors"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/make-a-scanned-pdf-searchable",
+            "/blog/searchable-pdf-ocr-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/make-a-scanned-letter-searchable-and-check-recognition-errors",
+            "/blog/searchable-pdf-ocr-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "organize",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/remove-unwanted-pdf-pages",
+            "/blog/build-a-clean-application-pack-by-editing-page-order"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/remove-unwanted-pdf-pages",
+            "/blog/organize-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/build-a-clean-application-pack-by-editing-page-order",
+            "/blog/organize-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "split",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/save-only-selected-pages",
+            "/blog/extract-selected-invoices-from-a-longer-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/save-only-selected-pages",
+            "/blog/split-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/extract-selected-invoices-from-a-longer-pdf",
+            "/blog/split-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "rotate",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/fix-sideways-pdf-pages",
+            "/blog/fix-one-sideways-page-in-an-otherwise-upright-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/fix-sideways-pdf-pages",
+            "/blog/rotate-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/fix-one-sideways-page-in-an-otherwise-upright-pdf",
+            "/blog/rotate-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "images",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/turn-receipt-photos-into-a-pdf",
+            "/blog/combine-receipt-photos-into-a-single-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/turn-receipt-photos-into-a-pdf",
+            "/blog/images-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/combine-receipt-photos-into-a-single-pdf",
+            "/blog/images-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "numbers",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/number-a-document",
+            "/blog/number-a-report-after-assembling-its-pages"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/number-a-document",
+            "/blog/page-numbers-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/number-a-report-after-assembling-its-pages",
+            "/blog/page-numbers-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "bates",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/bates-numbering-for-a-review-pack",
+            "/blog/create-stable-review-ids-for-a-document-pack"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/bates-numbering-for-a-review-pack",
+            "/blog/bates-numbering-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/create-stable-review-ids-for-a-document-pack",
+            "/blog/bates-numbering-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "crop",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/crop-white-borders",
+            "/blog/trim-white-scanner-borders-without-cutting-the-text"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/crop-white-borders",
+            "/blog/crop-margins-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/trim-white-scanner-borders-without-cutting-the-text",
+            "/blog/crop-margins-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "resize",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/fit-a-document-to-a4",
+            "/blog/fit-a-mixed-size-document-onto-a4-pages"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/fit-a-document-to-a4",
+            "/blog/resize-to-a4-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/fit-a-mixed-size-document-onto-a4-pages",
+            "/blog/resize-to-a4-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "nup",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/print-more-pages-per-sheet",
+            "/blog/print-a-lecture-handout-with-four-pages-per-sheet"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/print-more-pages-per-sheet",
+            "/blog/pages-per-sheet-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/print-a-lecture-handout-with-four-pages-per-sheet",
+            "/blog/pages-per-sheet-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "xlsx",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/why-a-pdf-spreadsheet-needs-review",
+            "/blog/review-extracted-pdf-rows-before-using-them-in-excel"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/why-a-pdf-spreadsheet-needs-review",
+            "/blog/pdf-to-spreadsheet-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/review-extracted-pdf-rows-before-using-them-in-excel",
+            "/blog/pdf-to-spreadsheet-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "encrypt",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/protect-a-pdf-with-a-password",
+            "/blog/protect-a-pdf-with-an-opening-password"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/protect-a-pdf-with-a-password",
+            "/blog/protect-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/protect-a-pdf-with-an-opening-password",
+            "/blog/protect-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "decrypt",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/remove-a-known-pdf-password",
+            "/blog/remove-a-known-opening-password-from-your-own-pdf-copy"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/remove-a-known-pdf-password",
+            "/blog/remove-password-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/remove-a-known-opening-password-from-your-own-pdf-copy",
+            "/blog/remove-password-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "hash",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/check-a-file-with-sha256",
+            "/blog/check-whether-two-pdf-copies-have-identical-bytes"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/check-a-file-with-sha256",
+            "/blog/calculate-sha-256-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/check-whether-two-pdf-copies-have-identical-bytes",
+            "/blog/calculate-sha-256-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "workflow",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/automate-a-repeat-pdf-task",
+            "/blog/prepare-a-repeatable-pdf-review-pack"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/automate-a-repeat-pdf-task",
+            "/blog/pdf-workflows-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/prepare-a-repeatable-pdf-review-pack",
+            "/blog/pdf-workflows-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "interleave",
+      "articles": 3,
+      "flaggedPairs": 0,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-alternate-and-mix",
+            "/blog/combine-front-and-back-pdf-scans"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-alternate-and-mix",
+            "/blog/fix-alternating-pdf-page-order"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/combine-front-and-back-pdf-scans",
+            "/blog/fix-alternating-pdf-page-order"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "pdf-to-handwriting",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-turn-pdf-text-into-handwriting-style-pages",
+            "/blog/turn-typed-revision-notes-into-handwritten-style-pages"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-turn-pdf-text-into-handwriting-style-pages",
+            "/blog/pdf-to-handwriting-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/turn-typed-revision-notes-into-handwritten-style-pages",
+            "/blog/pdf-to-handwriting-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "split-chapters",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-split-a-pdf-at-chapter-bookmarks",
+            "/blog/separate-a-bookmarked-manual-into-chapter-pdfs"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-split-a-pdf-at-chapter-bookmarks",
+            "/blog/split-by-chapters-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/separate-a-bookmarked-manual-into-chapter-pdfs",
+            "/blog/split-by-chapters-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "blank-check",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-check-a-pdf-for-blank-pages",
+            "/blog/review-empty-scan-sheets-without-losing-faint-content"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-check-a-pdf-for-blank-pages",
+            "/blog/find-possible-blank-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/review-empty-scan-sheets-without-losing-faint-content",
+            "/blog/find-possible-blank-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "reader",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-read-and-navigate-a-pdf-in-your-browser",
+            "/blog/read-a-long-pdf-with-search-and-continuous-scrolling"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-read-and-navigate-a-pdf-in-your-browser",
+            "/blog/pdf-reader-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/read-a-long-pdf-with-search-and-continuous-scrolling",
+            "/blog/pdf-reader-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "webp",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-webp-images",
+            "/blog/create-compact-pdf-page-images-for-a-website"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-webp-images",
+            "/blog/pdf-to-webp-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-compact-pdf-page-images-for-a-website",
+            "/blog/pdf-to-webp-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "remove-bookmarks",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-remove-pdf-bookmarks",
+            "/blog/remove-an-outdated-reader-outline-from-a-report"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-remove-pdf-bookmarks",
+            "/blog/remove-bookmarks-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/remove-an-outdated-reader-outline-from-a-report",
+            "/blog/remove-bookmarks-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "remove-attachments",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-remove-embedded-attachments-from-a-pdf",
+            "/blog/share-a-report-without-its-embedded-companion-files"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-remove-embedded-attachments-from-a-pdf",
+            "/blog/remove-embedded-files-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/share-a-report-without-its-embedded-companion-files",
+            "/blog/remove-embedded-files-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "remove-links",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-remove-clickable-links-from-a-pdf",
+            "/blog/remove-clickable-pdf-links-while-keeping-readable-text"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-remove-clickable-links-from-a-pdf",
+            "/blog/remove-pdf-links-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/remove-clickable-pdf-links-while-keeping-readable-text",
+            "/blog/remove-pdf-links-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "bookmarks",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-add-bookmarks-to-a-pdf",
+            "/blog/add-a-clear-chapter-outline-to-a-report"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-add-bookmarks-to-a-pdf",
+            "/blog/add-bookmarks-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/add-a-clear-chapter-outline-to-a-report",
+            "/blog/add-bookmarks-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "halve",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-divide-a-pdf-spread-into-two-pages",
+            "/blog/separate-a-side-by-side-book-scan-into-reading-pages"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-divide-a-pdf-spread-into-two-pages",
+            "/blog/split-pages-in-half-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/separate-a-side-by-side-book-scan-into-reading-pages",
+            "/blog/split-pages-in-half-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "viewer",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-set-the-preferred-reading-layout-of-a-pdf",
+            "/blog/set-a-preferred-two-column-pdf-reading-layout"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-set-the-preferred-reading-layout-of-a-pdf",
+            "/blog/reading-layout-preference-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/set-a-preferred-two-column-pdf-reading-layout",
+            "/blog/reading-layout-preference-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "remove-annotations",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-remove-pdf-comments-and-annotations",
+            "/blog/create-a-reading-copy-without-review-comments"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-remove-pdf-comments-and-annotations",
+            "/blog/remove-annotations-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/create-a-reading-copy-without-review-comments",
+            "/blog/remove-annotations-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "create-form",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-create-a-simple-fillable-pdf-form",
+            "/blog/create-a-small-fillable-questionnaire-from-labels"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-create-a-simple-fillable-pdf-form",
+            "/blog/create-fillable-form-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-a-small-fillable-questionnaire-from-labels",
+            "/blog/create-fillable-form-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "split-all",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-save-every-pdf-page-as-a-separate-file",
+            "/blog/send-each-page-of-a-batch-as-a-separate-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-save-every-pdf-page-as-a-separate-file",
+            "/blog/split-every-page-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/send-each-page-of-a-batch-as-a-separate-pdf",
+            "/blog/split-every-page-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "reverse",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-reverse-the-order-of-pdf-pages",
+            "/blog/correct-a-back-page-scan-stored-in-reverse-order"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-reverse-the-order-of-pdf-pages",
+            "/blog/reverse-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/correct-a-back-page-scan-stored-in-reverse-order",
+            "/blog/reverse-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "duplicate",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-duplicate-pdf-pages",
+            "/blog/create-consecutive-copies-of-each-pdf-page"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-duplicate-pdf-pages",
+            "/blog/duplicate-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/create-consecutive-copies-of-each-pdf-page",
+            "/blog/duplicate-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "flip",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-mirror-pdf-pages",
+            "/blog/create-a-mirrored-pdf-for-a-deliberate-print-workflow"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-mirror-pdf-pages",
+            "/blog/mirror-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/create-a-mirrored-pdf-for-a-deliberate-print-workflow",
+            "/blog/mirror-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "edit",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-add-text-images-and-drawings-to-a-pdf",
+            "/blog/add-a-review-note-and-image-to-a-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-add-text-images-and-drawings-to-a-pdf",
+            "/blog/add-text-images-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/add-a-review-note-and-image-to-a-pdf",
+            "/blog/add-text-images-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "watermark",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-add-a-watermark-to-a-pdf",
+            "/blog/label-a-review-pdf-as-a-draft"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-add-a-watermark-to-a-pdf",
+            "/blog/add-watermark-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/label-a-review-pdf-as-a-draft",
+            "/blog/add-watermark-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "headers",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-add-pdf-headers-and-footers",
+            "/blog/add-a-document-label-and-page-aware-footer"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-add-pdf-headers-and-footers",
+            "/blog/headers-footers-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/add-a-document-label-and-page-aware-footer",
+            "/blog/headers-footers-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "flatten",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-flatten-completed-pdf-form-fields",
+            "/blog/make-completed-form-values-static-without-choosing-unnecessary-image-loss"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-flatten-completed-pdf-form-fields",
+            "/blog/flatten-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/make-completed-form-values-static-without-choosing-unnecessary-image-loss",
+            "/blog/flatten-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "form",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-fill-pdf-form-fields",
+            "/blog/complete-an-interactive-application-form-and-keep-a-revisable-copy"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-fill-pdf-form-fields",
+            "/blog/fill-pdf-forms-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/complete-an-interactive-application-form-and-keep-a-revisable-copy",
+            "/blog/fill-pdf-forms-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "metadata",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-edit-pdf-document-properties",
+            "/blog/correct-document-properties-before-distribution"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-edit-pdf-document-properties",
+            "/blog/edit-metadata-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/correct-document-properties-before-distribution",
+            "/blog/edit-metadata-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "scan",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-make-a-pdf-from-camera-photos",
+            "/blog/photograph-paper-pages-into-a-readable-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-make-a-pdf-from-camera-photos",
+            "/blog/scan-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/photograph-paper-pages-into-a-readable-pdf",
+            "/blog/scan-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "jpg",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-jpg-images",
+            "/blog/export-pdf-pages-as-jpg-images-for-sharing"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-jpg-images",
+            "/blog/pdf-to-jpg-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/export-pdf-pages-as-jpg-images-for-sharing",
+            "/blog/pdf-to-jpg-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "png",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-png-images",
+            "/blog/export-a-crisp-pdf-page-image-for-a-diagram"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-png-images",
+            "/blog/pdf-to-png-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/export-a-crisp-pdf-page-image-for-a-diagram",
+            "/blog/pdf-to-png-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "text",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-extract-selectable-text-from-a-pdf",
+            "/blog/extract-selectable-pdf-text-into-a-plain-text-file"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-extract-selectable-text-from-a-pdf",
+            "/blog/extract-text-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/extract-selectable-pdf-text-into-a-plain-text-file",
+            "/blog/extract-text-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "word",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-into-a-word-document",
+            "/blog/make-an-editable-text-draft-from-a-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-into-a-word-document",
+            "/blog/pdf-to-word-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/make-an-editable-text-draft-from-a-pdf",
+            "/blog/pdf-to-word-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "html",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-into-html",
+            "/blog/turn-pdf-text-into-a-readable-html-draft"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-into-html",
+            "/blog/pdf-to-html-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/turn-pdf-text-into-a-readable-html-draft",
+            "/blog/pdf-to-html-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "epub",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-create-an-epub-reading-copy-from-pdf-text",
+            "/blog/create-a-reflowing-ebook-from-a-text-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-create-an-epub-reading-copy-from-pdf-text",
+            "/blog/pdf-to-epub-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/create-a-reflowing-ebook-from-a-text-pdf",
+            "/blog/pdf-to-epub-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "pptx",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-to-powerpoint-slides",
+            "/blog/place-pdf-pages-on-presentation-slides"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-to-powerpoint-slides",
+            "/blog/pdf-to-powerpoint-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/place-pdf-pages-on-presentation-slides",
+            "/blog/pdf-to-powerpoint-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "csv",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-rows-into-csv",
+            "/blog/export-pdf-text-rows-for-a-csv-import"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-rows-into-csv",
+            "/blog/pdf-to-csv-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/export-pdf-text-rows-for-a-csv-import",
+            "/blog/pdf-to-csv-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "create",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-create-a-pdf-from-plain-text",
+            "/blog/turn-a-plain-text-letter-into-a-readable-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-create-a-pdf-from-plain-text",
+            "/blog/text-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/turn-a-plain-text-letter-into-a-readable-pdf",
+            "/blog/text-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "markdown",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-create-a-pdf-from-markdown-notes",
+            "/blog/create-a-simple-formatted-pdf-from-markdown-notes"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-create-a-pdf-from-markdown-notes",
+            "/blog/markdown-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-a-simple-formatted-pdf-from-markdown-notes",
+            "/blog/markdown-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "docx",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-convert-word-document-text-into-a-pdf",
+            "/blog/make-a-pdf-reading-copy-from-a-simple-word-draft"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-convert-word-document-text-into-a-pdf",
+            "/blog/word-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/make-a-pdf-reading-copy-from-a-simple-word-draft",
+            "/blog/word-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "sheet",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-convert-spreadsheet-text-into-a-pdf",
+            "/blog/create-a-pdf-reading-copy-of-a-small-first-sheet-table"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-convert-spreadsheet-text-into-a-pdf",
+            "/blog/spreadsheet-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-a-pdf-reading-copy-of-a-small-first-sheet-table",
+            "/blog/spreadsheet-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "ebook",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-convert-epub-text-into-a-pdf",
+            "/blog/make-a-pdf-reading-copy-of-a-text-epub"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-convert-epub-text-into-a-pdf",
+            "/blog/epub-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/make-a-pdf-reading-copy-of-a-text-epub",
+            "/blog/epub-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "grayscale",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-make-a-grayscale-pdf-reading-copy",
+            "/blog/create-a-monochrome-pdf-reading-copy"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-make-a-grayscale-pdf-reading-copy",
+            "/blog/grayscale-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-a-monochrome-pdf-reading-copy",
+            "/blog/grayscale-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "invert",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-invert-pdf-page-colors",
+            "/blog/create-an-inverted-pdf-copy-for-a-specific-reading-preference"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-invert-pdf-page-colors",
+            "/blog/invert-colours-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-an-inverted-pdf-copy-for-a-specific-reading-preference",
+            "/blog/invert-colours-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "audio",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-listen-to-pdf-text-aloud",
+            "/blog/listen-to-a-text-pdf-using-device-voices"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-listen-to-pdf-text-aloud",
+            "/blog/read-aloud-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/listen-to-a-text-pdf-using-device-voices",
+            "/blog/read-aloud-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "compare",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-compare-two-pdf-documents",
+            "/blog/compare-a-revised-report-with-its-earlier-version"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-compare-two-pdf-documents",
+            "/blog/compare-pdfs-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/compare-a-revised-report-with-its-earlier-version",
+            "/blog/compare-pdfs-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "privacy",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-review-a-pdf-for-possible-private-information",
+            "/blog/review-privacy-warnings-before-sharing-a-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-review-a-pdf-for-possible-private-information",
+            "/blog/privacy-scanner-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/review-privacy-warnings-before-sharing-a-pdf",
+            "/blog/privacy-scanner-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "clean",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-remove-standard-pdf-metadata",
+            "/blog/clear-stale-document-properties-from-a-sharing-copy"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-remove-standard-pdf-metadata",
+            "/blog/remove-metadata-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/clear-stale-document-properties-from-a-sharing-copy",
+            "/blog/remove-metadata-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "zip",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-bundle-separate-pdfs-in-a-zip",
+            "/blog/bundle-related-pdfs-without-merging-their-pages"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-bundle-separate-pdfs-in-a-zip",
+            "/blog/bundle-pdfs-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/bundle-related-pdfs-without-merging-their-pages",
+            "/blog/bundle-pdfs-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "repair",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-resave-a-readable-pdf-with-a-rebuilt-structure",
+            "/blog/resave-a-readable-pdf-into-a-fresh-structure"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-resave-a-readable-pdf-with-a-rebuilt-structure",
+            "/blog/repair-readable-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/resave-a-readable-pdf-into-a-fresh-structure",
+            "/blog/repair-readable-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "cut-collect",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-collect-pdf-clippings-with-source-references",
+            "/blog/build-a-research-excerpt-pack-from-pdfs"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-collect-pdf-clippings-with-source-references",
+            "/blog/fix-pdf-clipping-quality-and-selection"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/build-a-research-excerpt-pack-from-pdfs",
+            "/blog/fix-pdf-clipping-quality-and-selection"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "fold-lab",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-make-a-folded-pdf-booklet",
+            "/blog/make-four-pdf-revision-cards-per-sheet"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-make-a-folded-pdf-booklet",
+            "/blog/fix-booklet-printing-order-and-upside-down-backs"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/make-four-pdf-revision-cards-per-sheet",
+            "/blog/fix-booklet-printing-order-and-upside-down-backs"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "attachment-map",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-create-a-clickable-pdf-attachment-map",
+            "/blog/build-a-report-and-evidence-pdf-pack"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-create-a-clickable-pdf-attachment-map",
+            "/blog/fix-pdf-map-links-and-main-page-references"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/build-a-report-and-evidence-pdf-pack",
+            "/blog/fix-pdf-map-links-and-main-page-references"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "sketch-pdf",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-sketch-directly-on-pdf-pages",
+            "/blog/mark-up-a-pdf-for-a-review"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 4,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-sketch-directly-on-pdf-pages",
+            "/blog/fix-pdf-sketch-scroll-and-export"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 4,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/mark-up-a-pdf-for-a-review",
+            "/blog/fix-pdf-sketch-scroll-and-export"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 4,
+          "sameEvidence": false
+        }
+      ]
+    }
+  ],
+  "after": [
+    {
+      "toolId": "merge",
+      "articles": 4,
+      "flaggedPairs": 0,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-merge-pdf-files",
+            "/blog/arrange-pdf-files-and-pages-before-merging"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-merge-pdf-files",
+            "/blog/fix-pdf-merge-order-forms-and-missing-pages"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-merge-pdf-files",
+            "/blog/combine-job-application-documents"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/arrange-pdf-files-and-pages-before-merging",
+            "/blog/fix-pdf-merge-order-forms-and-missing-pages"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/arrange-pdf-files-and-pages-before-merging",
+            "/blog/combine-job-application-documents"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/fix-pdf-merge-order-forms-and-missing-pages",
+            "/blog/combine-job-application-documents"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "compress",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/pdf-too-large-for-a-job-portal",
+            "/blog/prepare-a-readable-pdf-for-an-upload-size-limit"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/pdf-too-large-for-a-job-portal",
+            "/blog/compress-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/prepare-a-readable-pdf-for-an-upload-size-limit",
+            "/blog/compress-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "sign",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/sign-a-pdf-without-printing",
+            "/blog/place-a-signature-name-and-date-without-printing"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/sign-a-pdf-without-printing",
+            "/blog/sign-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/place-a-signature-name-and-date-without-printing",
+            "/blog/sign-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "native-text",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/fix-a-phone-number-in-a-pdf",
+            "/blog/correct-a-contact-line-in-a-pdf-cv"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/fix-a-phone-number-in-a-pdf",
+            "/blog/edit-existing-text-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/correct-a-contact-line-in-a-pdf-cv",
+            "/blog/edit-existing-text-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "redact",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/remove-sensitive-information",
+            "/blog/remove-a-private-identifier-before-sharing-a-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/remove-sensitive-information",
+            "/blog/redact-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/remove-a-private-identifier-before-sharing-a-pdf",
+            "/blog/redact-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "ocr",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/make-a-scanned-pdf-searchable",
+            "/blog/make-a-scanned-letter-searchable-and-check-recognition-errors"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/make-a-scanned-pdf-searchable",
+            "/blog/searchable-pdf-ocr-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/make-a-scanned-letter-searchable-and-check-recognition-errors",
+            "/blog/searchable-pdf-ocr-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "organize",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/remove-unwanted-pdf-pages",
+            "/blog/build-a-clean-application-pack-by-editing-page-order"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/remove-unwanted-pdf-pages",
+            "/blog/organize-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/build-a-clean-application-pack-by-editing-page-order",
+            "/blog/organize-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "split",
+      "articles": 3,
+      "flaggedPairs": 0,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/save-only-selected-pages",
+            "/blog/extract-selected-invoices-from-a-longer-pdf"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/save-only-selected-pages",
+            "/blog/split-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/extract-selected-invoices-from-a-longer-pdf",
+            "/blog/split-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "rotate",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/fix-sideways-pdf-pages",
+            "/blog/fix-one-sideways-page-in-an-otherwise-upright-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/fix-sideways-pdf-pages",
+            "/blog/rotate-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/fix-one-sideways-page-in-an-otherwise-upright-pdf",
+            "/blog/rotate-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "images",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/turn-receipt-photos-into-a-pdf",
+            "/blog/combine-receipt-photos-into-a-single-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/turn-receipt-photos-into-a-pdf",
+            "/blog/images-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/combine-receipt-photos-into-a-single-pdf",
+            "/blog/images-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "numbers",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/number-a-document",
+            "/blog/number-a-report-after-assembling-its-pages"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/number-a-document",
+            "/blog/page-numbers-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/number-a-report-after-assembling-its-pages",
+            "/blog/page-numbers-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "bates",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/bates-numbering-for-a-review-pack",
+            "/blog/create-stable-review-ids-for-a-document-pack"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/bates-numbering-for-a-review-pack",
+            "/blog/bates-numbering-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/create-stable-review-ids-for-a-document-pack",
+            "/blog/bates-numbering-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "crop",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/crop-white-borders",
+            "/blog/trim-white-scanner-borders-without-cutting-the-text"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/crop-white-borders",
+            "/blog/crop-margins-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/trim-white-scanner-borders-without-cutting-the-text",
+            "/blog/crop-margins-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "resize",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/fit-a-document-to-a4",
+            "/blog/fit-a-mixed-size-document-onto-a4-pages"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/fit-a-document-to-a4",
+            "/blog/resize-to-a4-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/fit-a-mixed-size-document-onto-a4-pages",
+            "/blog/resize-to-a4-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "nup",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/print-more-pages-per-sheet",
+            "/blog/print-a-lecture-handout-with-four-pages-per-sheet"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/print-more-pages-per-sheet",
+            "/blog/pages-per-sheet-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/print-a-lecture-handout-with-four-pages-per-sheet",
+            "/blog/pages-per-sheet-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "xlsx",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/why-a-pdf-spreadsheet-needs-review",
+            "/blog/review-extracted-pdf-rows-before-using-them-in-excel"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/why-a-pdf-spreadsheet-needs-review",
+            "/blog/pdf-to-spreadsheet-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/review-extracted-pdf-rows-before-using-them-in-excel",
+            "/blog/pdf-to-spreadsheet-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "encrypt",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/protect-a-pdf-with-a-password",
+            "/blog/protect-a-pdf-with-an-opening-password"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/protect-a-pdf-with-a-password",
+            "/blog/protect-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/protect-a-pdf-with-an-opening-password",
+            "/blog/protect-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "decrypt",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/remove-a-known-pdf-password",
+            "/blog/remove-a-known-opening-password-from-your-own-pdf-copy"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/remove-a-known-pdf-password",
+            "/blog/remove-password-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/remove-a-known-opening-password-from-your-own-pdf-copy",
+            "/blog/remove-password-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "hash",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/check-a-file-with-sha256",
+            "/blog/check-whether-two-pdf-copies-have-identical-bytes"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/check-a-file-with-sha256",
+            "/blog/calculate-sha-256-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/check-whether-two-pdf-copies-have-identical-bytes",
+            "/blog/calculate-sha-256-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "workflow",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/automate-a-repeat-pdf-task",
+            "/blog/prepare-a-repeatable-pdf-review-pack"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/automate-a-repeat-pdf-task",
+            "/blog/pdf-workflows-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/prepare-a-repeatable-pdf-review-pack",
+            "/blog/pdf-workflows-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "interleave",
+      "articles": 3,
+      "flaggedPairs": 0,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-alternate-and-mix",
+            "/blog/combine-front-and-back-pdf-scans"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-alternate-and-mix",
+            "/blog/fix-alternating-pdf-page-order"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/combine-front-and-back-pdf-scans",
+            "/blog/fix-alternating-pdf-page-order"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "pdf-to-handwriting",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-turn-pdf-text-into-handwriting-style-pages",
+            "/blog/turn-typed-revision-notes-into-handwritten-style-pages"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-turn-pdf-text-into-handwriting-style-pages",
+            "/blog/pdf-to-handwriting-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/turn-typed-revision-notes-into-handwritten-style-pages",
+            "/blog/pdf-to-handwriting-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "split-chapters",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-split-a-pdf-at-chapter-bookmarks",
+            "/blog/separate-a-bookmarked-manual-into-chapter-pdfs"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-split-a-pdf-at-chapter-bookmarks",
+            "/blog/split-by-chapters-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/separate-a-bookmarked-manual-into-chapter-pdfs",
+            "/blog/split-by-chapters-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "blank-check",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-check-a-pdf-for-blank-pages",
+            "/blog/review-empty-scan-sheets-without-losing-faint-content"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-check-a-pdf-for-blank-pages",
+            "/blog/find-possible-blank-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/review-empty-scan-sheets-without-losing-faint-content",
+            "/blog/find-possible-blank-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "reader",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-read-and-navigate-a-pdf-in-your-browser",
+            "/blog/read-a-long-pdf-with-search-and-continuous-scrolling"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-read-and-navigate-a-pdf-in-your-browser",
+            "/blog/pdf-reader-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/read-a-long-pdf-with-search-and-continuous-scrolling",
+            "/blog/pdf-reader-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "webp",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-webp-images",
+            "/blog/create-compact-pdf-page-images-for-a-website"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-webp-images",
+            "/blog/pdf-to-webp-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-compact-pdf-page-images-for-a-website",
+            "/blog/pdf-to-webp-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "remove-bookmarks",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-remove-pdf-bookmarks",
+            "/blog/remove-an-outdated-reader-outline-from-a-report"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-remove-pdf-bookmarks",
+            "/blog/remove-bookmarks-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/remove-an-outdated-reader-outline-from-a-report",
+            "/blog/remove-bookmarks-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "remove-attachments",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-remove-embedded-attachments-from-a-pdf",
+            "/blog/share-a-report-without-its-embedded-companion-files"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-remove-embedded-attachments-from-a-pdf",
+            "/blog/remove-embedded-files-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/share-a-report-without-its-embedded-companion-files",
+            "/blog/remove-embedded-files-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "remove-links",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-remove-clickable-links-from-a-pdf",
+            "/blog/remove-clickable-pdf-links-while-keeping-readable-text"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-remove-clickable-links-from-a-pdf",
+            "/blog/remove-pdf-links-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/remove-clickable-pdf-links-while-keeping-readable-text",
+            "/blog/remove-pdf-links-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "bookmarks",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-add-bookmarks-to-a-pdf",
+            "/blog/add-a-clear-chapter-outline-to-a-report"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-add-bookmarks-to-a-pdf",
+            "/blog/add-bookmarks-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/add-a-clear-chapter-outline-to-a-report",
+            "/blog/add-bookmarks-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "halve",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-divide-a-pdf-spread-into-two-pages",
+            "/blog/separate-a-side-by-side-book-scan-into-reading-pages"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-divide-a-pdf-spread-into-two-pages",
+            "/blog/split-pages-in-half-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/separate-a-side-by-side-book-scan-into-reading-pages",
+            "/blog/split-pages-in-half-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "viewer",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-set-the-preferred-reading-layout-of-a-pdf",
+            "/blog/set-a-preferred-two-column-pdf-reading-layout"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-set-the-preferred-reading-layout-of-a-pdf",
+            "/blog/reading-layout-preference-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/set-a-preferred-two-column-pdf-reading-layout",
+            "/blog/reading-layout-preference-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "remove-annotations",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-remove-pdf-comments-and-annotations",
+            "/blog/create-a-reading-copy-without-review-comments"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-remove-pdf-comments-and-annotations",
+            "/blog/remove-annotations-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/create-a-reading-copy-without-review-comments",
+            "/blog/remove-annotations-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "create-form",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-create-a-simple-fillable-pdf-form",
+            "/blog/create-a-small-fillable-questionnaire-from-labels"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-create-a-simple-fillable-pdf-form",
+            "/blog/create-fillable-form-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-a-small-fillable-questionnaire-from-labels",
+            "/blog/create-fillable-form-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "split-all",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-save-every-pdf-page-as-a-separate-file",
+            "/blog/send-each-page-of-a-batch-as-a-separate-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-save-every-pdf-page-as-a-separate-file",
+            "/blog/split-every-page-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/send-each-page-of-a-batch-as-a-separate-pdf",
+            "/blog/split-every-page-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "reverse",
+      "articles": 3,
+      "flaggedPairs": 0,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-reverse-the-order-of-pdf-pages",
+            "/blog/correct-a-back-page-scan-stored-in-reverse-order"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-reverse-the-order-of-pdf-pages",
+            "/blog/reverse-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/correct-a-back-page-scan-stored-in-reverse-order",
+            "/blog/reverse-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": false,
+          "sameFAQ": false,
+          "sharedParagraphs": 0,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "duplicate",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-duplicate-pdf-pages",
+            "/blog/create-consecutive-copies-of-each-pdf-page"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-duplicate-pdf-pages",
+            "/blog/duplicate-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/create-consecutive-copies-of-each-pdf-page",
+            "/blog/duplicate-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "flip",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-mirror-pdf-pages",
+            "/blog/create-a-mirrored-pdf-for-a-deliberate-print-workflow"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-mirror-pdf-pages",
+            "/blog/mirror-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/create-a-mirrored-pdf-for-a-deliberate-print-workflow",
+            "/blog/mirror-pages-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "edit",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-add-text-images-and-drawings-to-a-pdf",
+            "/blog/add-a-review-note-and-image-to-a-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-add-text-images-and-drawings-to-a-pdf",
+            "/blog/add-text-images-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/add-a-review-note-and-image-to-a-pdf",
+            "/blog/add-text-images-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "watermark",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-add-a-watermark-to-a-pdf",
+            "/blog/label-a-review-pdf-as-a-draft"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-add-a-watermark-to-a-pdf",
+            "/blog/add-watermark-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/label-a-review-pdf-as-a-draft",
+            "/blog/add-watermark-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "headers",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-add-pdf-headers-and-footers",
+            "/blog/add-a-document-label-and-page-aware-footer"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-add-pdf-headers-and-footers",
+            "/blog/headers-footers-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/add-a-document-label-and-page-aware-footer",
+            "/blog/headers-footers-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "flatten",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-flatten-completed-pdf-form-fields",
+            "/blog/make-completed-form-values-static-without-choosing-unnecessary-image-loss"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-flatten-completed-pdf-form-fields",
+            "/blog/flatten-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/make-completed-form-values-static-without-choosing-unnecessary-image-loss",
+            "/blog/flatten-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "form",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-fill-pdf-form-fields",
+            "/blog/complete-an-interactive-application-form-and-keep-a-revisable-copy"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-fill-pdf-form-fields",
+            "/blog/fill-pdf-forms-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/complete-an-interactive-application-form-and-keep-a-revisable-copy",
+            "/blog/fill-pdf-forms-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "metadata",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-edit-pdf-document-properties",
+            "/blog/correct-document-properties-before-distribution"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-edit-pdf-document-properties",
+            "/blog/edit-metadata-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/correct-document-properties-before-distribution",
+            "/blog/edit-metadata-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "scan",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-make-a-pdf-from-camera-photos",
+            "/blog/photograph-paper-pages-into-a-readable-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-make-a-pdf-from-camera-photos",
+            "/blog/scan-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/photograph-paper-pages-into-a-readable-pdf",
+            "/blog/scan-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "jpg",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-jpg-images",
+            "/blog/export-pdf-pages-as-jpg-images-for-sharing"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-jpg-images",
+            "/blog/pdf-to-jpg-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/export-pdf-pages-as-jpg-images-for-sharing",
+            "/blog/pdf-to-jpg-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "png",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-png-images",
+            "/blog/export-a-crisp-pdf-page-image-for-a-diagram"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-as-png-images",
+            "/blog/pdf-to-png-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/export-a-crisp-pdf-page-image-for-a-diagram",
+            "/blog/pdf-to-png-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "text",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-extract-selectable-text-from-a-pdf",
+            "/blog/extract-selectable-pdf-text-into-a-plain-text-file"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-extract-selectable-text-from-a-pdf",
+            "/blog/extract-text-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/extract-selectable-pdf-text-into-a-plain-text-file",
+            "/blog/extract-text-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "word",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-into-a-word-document",
+            "/blog/make-an-editable-text-draft-from-a-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-into-a-word-document",
+            "/blog/pdf-to-word-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/make-an-editable-text-draft-from-a-pdf",
+            "/blog/pdf-to-word-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "html",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-into-html",
+            "/blog/turn-pdf-text-into-a-readable-html-draft"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-into-html",
+            "/blog/pdf-to-html-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/turn-pdf-text-into-a-readable-html-draft",
+            "/blog/pdf-to-html-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "epub",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-create-an-epub-reading-copy-from-pdf-text",
+            "/blog/create-a-reflowing-ebook-from-a-text-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-create-an-epub-reading-copy-from-pdf-text",
+            "/blog/pdf-to-epub-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/create-a-reflowing-ebook-from-a-text-pdf",
+            "/blog/pdf-to-epub-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "pptx",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-to-powerpoint-slides",
+            "/blog/place-pdf-pages-on-presentation-slides"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-export-pdf-pages-to-powerpoint-slides",
+            "/blog/pdf-to-powerpoint-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/place-pdf-pages-on-presentation-slides",
+            "/blog/pdf-to-powerpoint-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "csv",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-rows-into-csv",
+            "/blog/export-pdf-text-rows-for-a-csv-import"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-extract-pdf-text-rows-into-csv",
+            "/blog/pdf-to-csv-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/export-pdf-text-rows-for-a-csv-import",
+            "/blog/pdf-to-csv-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "create",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-create-a-pdf-from-plain-text",
+            "/blog/turn-a-plain-text-letter-into-a-readable-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-create-a-pdf-from-plain-text",
+            "/blog/text-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/turn-a-plain-text-letter-into-a-readable-pdf",
+            "/blog/text-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "markdown",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-create-a-pdf-from-markdown-notes",
+            "/blog/create-a-simple-formatted-pdf-from-markdown-notes"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-create-a-pdf-from-markdown-notes",
+            "/blog/markdown-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-a-simple-formatted-pdf-from-markdown-notes",
+            "/blog/markdown-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "docx",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-convert-word-document-text-into-a-pdf",
+            "/blog/make-a-pdf-reading-copy-from-a-simple-word-draft"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-convert-word-document-text-into-a-pdf",
+            "/blog/word-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/make-a-pdf-reading-copy-from-a-simple-word-draft",
+            "/blog/word-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "sheet",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-convert-spreadsheet-text-into-a-pdf",
+            "/blog/create-a-pdf-reading-copy-of-a-small-first-sheet-table"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-convert-spreadsheet-text-into-a-pdf",
+            "/blog/spreadsheet-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-a-pdf-reading-copy-of-a-small-first-sheet-table",
+            "/blog/spreadsheet-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "ebook",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-convert-epub-text-into-a-pdf",
+            "/blog/make-a-pdf-reading-copy-of-a-text-epub"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-convert-epub-text-into-a-pdf",
+            "/blog/epub-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/make-a-pdf-reading-copy-of-a-text-epub",
+            "/blog/epub-to-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "grayscale",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-make-a-grayscale-pdf-reading-copy",
+            "/blog/create-a-monochrome-pdf-reading-copy"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-make-a-grayscale-pdf-reading-copy",
+            "/blog/grayscale-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-a-monochrome-pdf-reading-copy",
+            "/blog/grayscale-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "invert",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-invert-pdf-page-colors",
+            "/blog/create-an-inverted-pdf-copy-for-a-specific-reading-preference"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-invert-pdf-page-colors",
+            "/blog/invert-colours-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/create-an-inverted-pdf-copy-for-a-specific-reading-preference",
+            "/blog/invert-colours-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "audio",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-listen-to-pdf-text-aloud",
+            "/blog/listen-to-a-text-pdf-using-device-voices"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-listen-to-pdf-text-aloud",
+            "/blog/read-aloud-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/listen-to-a-text-pdf-using-device-voices",
+            "/blog/read-aloud-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "compare",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-compare-two-pdf-documents",
+            "/blog/compare-a-revised-report-with-its-earlier-version"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-compare-two-pdf-documents",
+            "/blog/compare-pdfs-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/compare-a-revised-report-with-its-earlier-version",
+            "/blog/compare-pdfs-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "privacy",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-review-a-pdf-for-possible-private-information",
+            "/blog/review-privacy-warnings-before-sharing-a-pdf"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-review-a-pdf-for-possible-private-information",
+            "/blog/privacy-scanner-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/review-privacy-warnings-before-sharing-a-pdf",
+            "/blog/privacy-scanner-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": false
+        }
+      ]
+    },
+    {
+      "toolId": "clean",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-remove-standard-pdf-metadata",
+            "/blog/clear-stale-document-properties-from-a-sharing-copy"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-remove-standard-pdf-metadata",
+            "/blog/remove-metadata-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/clear-stale-document-properties-from-a-sharing-copy",
+            "/blog/remove-metadata-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "zip",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-bundle-separate-pdfs-in-a-zip",
+            "/blog/bundle-related-pdfs-without-merging-their-pages"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-bundle-separate-pdfs-in-a-zip",
+            "/blog/bundle-pdfs-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/bundle-related-pdfs-without-merging-their-pages",
+            "/blog/bundle-pdfs-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "repair",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-resave-a-readable-pdf-with-a-rebuilt-structure",
+            "/blog/resave-a-readable-pdf-into-a-fresh-structure"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-resave-a-readable-pdf-with-a-rebuilt-structure",
+            "/blog/repair-readable-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 3,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/resave-a-readable-pdf-into-a-fresh-structure",
+            "/blog/repair-readable-pdf-common-problems-and-how-to-fix-them"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "cut-collect",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-collect-pdf-clippings-with-source-references",
+            "/blog/build-a-research-excerpt-pack-from-pdfs"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-collect-pdf-clippings-with-source-references",
+            "/blog/fix-pdf-clipping-quality-and-selection"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/build-a-research-excerpt-pack-from-pdfs",
+            "/blog/fix-pdf-clipping-quality-and-selection"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "fold-lab",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-make-a-folded-pdf-booklet",
+            "/blog/make-four-pdf-revision-cards-per-sheet"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-make-a-folded-pdf-booklet",
+            "/blog/fix-booklet-printing-order-and-upside-down-backs"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/make-four-pdf-revision-cards-per-sheet",
+            "/blog/fix-booklet-printing-order-and-upside-down-backs"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "attachment-map",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-create-a-clickable-pdf-attachment-map",
+            "/blog/build-a-report-and-evidence-pdf-pack"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/how-to-create-a-clickable-pdf-attachment-map",
+            "/blog/fix-pdf-map-links-and-main-page-references"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        },
+        {
+          "routes": [
+            "/blog/build-a-report-and-evidence-pdf-pack",
+            "/blog/fix-pdf-map-links-and-main-page-references"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 2,
+          "sameEvidence": true
+        }
+      ]
+    },
+    {
+      "toolId": "sketch-pdf",
+      "articles": 3,
+      "flaggedPairs": 3,
+      "pairs": [
+        {
+          "routes": [
+            "/blog/how-to-sketch-directly-on-pdf-pages",
+            "/blog/mark-up-a-pdf-for-a-review"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 4,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/how-to-sketch-directly-on-pdf-pages",
+            "/blog/fix-pdf-sketch-scroll-and-export"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 4,
+          "sameEvidence": false
+        },
+        {
+          "routes": [
+            "/blog/mark-up-a-pdf-for-a-review",
+            "/blog/fix-pdf-sketch-scroll-and-export"
+          ],
+          "sameSteps": true,
+          "sameFAQ": true,
+          "sharedParagraphs": 4,
+          "sameEvidence": false
+        }
+      ]
+    }
+  ]
+}
