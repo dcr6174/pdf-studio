@@ -27,7 +27,7 @@ export function FreshGame({slug}:{slug:FreshSlug|ExpansionSlug}){
  const [phase,setPhase]=useState<'ready'|'play'|'paused'|'finished'>(game.kind==='cricket'?'play':'ready');
  const [session,setSession]=useState(game.kind==='cricket'?1:0),[score,setScore]=useState(0),[best,setBest]=useState(0);
  const [comfort,setComfort]=useState(false),[sound,setSound]=useState(game.kind==='cricket'),[loaded,setLoaded]=useState(false),[result,setResult]=useState({won:false,message:''}),[help,setHelp]=useState(false);
- const lastSound=useRef(0),stageRef=useRef<HTMLElement|null>(null);
+ const lastSound=useRef(0),mainRef=useRef<HTMLElement|null>(null),stageRef=useRef<HTMLElement|null>(null);
  useEffect(()=>{const timer=setTimeout(()=>{try{const recent=JSON.parse(localStorage.getItem('studio-arcade:recent')||'[]');localStorage.setItem('studio-arcade:recent',JSON.stringify([slug,...(Array.isArray(recent)?recent:[]).filter(v=>typeof v==='string'&&v!==slug)].slice(0,4)));const value=Number(localStorage.getItem('studio-arcade:best:'+slug));if(Number.isFinite(value))setBest(Math.max(0,value));setComfort(localStorage.getItem('studio-arcade:comfort')==='true');{const override=localStorage.getItem('studio-arcade:sound:cricket'),global=localStorage.getItem('studio-arcade:sound');setSound(game.kind==='cricket'?(override!==null?override==='true':true):global==='true');}}catch{/* Browser storage is optional. */}setLoaded(true);},0);return()=>clearTimeout(timer);},[slug,game.kind]);
  useEffect(()=>{const pause=()=>{if(document.hidden)setPhase(p=>p==='play'?'paused':p);};document.addEventListener('visibilitychange',pause);return()=>document.removeEventListener('visibilitychange',pause);},[]);
  const onScore=useCallback((n:number)=>{setScore(n);setBest(old=>{if(n<=old)return old;try{localStorage.setItem('studio-arcade:best:'+slug,String(n));}catch{}return n;});},[slug]);
@@ -37,6 +37,17 @@ export function FreshGame({slug}:{slug:FreshSlug|ExpansionSlug}){
  const toggleSound=()=>{const next=!sound;setSound(next);try{localStorage.setItem(game.kind==='cricket'?'studio-arcade:sound:cricket':'studio-arcade:sound',String(next));}catch{}if(next&&game.kind==='cricket')playArcadeSound('cricket','tap');};
  useArcadeSession({slug,phase:phase==='play'?'playing':phase==='finished'?'over':phase,score,best,won:phase==='finished'?result.won:null,message:phase==='finished'?result.message:'',...arcadeProfile(game.kind),canPause:true,sound},{pause:()=>setPhase(p=>p==='play'?'paused':p),resume:()=>setPhase(p=>p==='paused'?'play':p),restart,sound:toggleSound});
  const toggleComfort=()=>{setComfort(s=>{try{localStorage.setItem('studio-arcade:comfort',String(!s));}catch{}return !s;});};
+ useEffect(()=>{
+  const el=mainRef.current;if(!el||game.kind!=='cricket')return;
+  const handle=(event:Event)=>{const action=(event as CustomEvent<{action:string}>).detail?.action;
+   if(action==='pause')setPhase(p=>p==='play'?'paused':p);
+   else if(action==='resume')setPhase(p=>p==='paused'?'play':p);
+   else if(action==='restart')restart();
+   else if(action==='toggle-sound')toggleSound();
+   else if(action==='toggle-comfort')toggleComfort();
+  };
+  el.addEventListener('arcade:control',handle);return()=>el.removeEventListener('arcade:control',handle);
+ });
  const expansion=!!expansionGame(slug);
  const motion=['highway','metro','jungle','hill','drift','snow','river','rocket','traffic','prix'].includes(game.kind);
  const satisfy=['wrap','clean','paint','rings','sand','untangle','screws','polish','shapes','shelf'].includes(game.kind);
@@ -44,7 +55,7 @@ export function FreshGame({slug}:{slug:FreshSlug|ExpansionSlug}){
  const isSport=['cricket','volleyball','pool'].includes(game.kind);
  const isOneTap=['spiral','hop'].includes(game.kind);
  const settings=<div className="fresh-preferences"><button aria-pressed={comfort} onClick={toggleComfort}>👓 Comfort Mode: {comfort?'On':'Off'}</button><button aria-pressed={sound} onClick={toggleSound}>{sound?'🔊 Sound on':'🔇 Sound off'}</button></div>;
- return <main className="fresh-main" data-comfort={comfort} data-game-kind={game.kind}>
+ return <main ref={mainRef} className="fresh-main" data-shared-controls={game.kind==='cricket'?'true':undefined} data-game-state={phase} data-sound={sound} data-comfort={comfort} data-game-kind={game.kind}>
  <nav className="fresh-top-nav"><Link href="/lab/arcade">← All games</Link><span>PLAY STUDIO</span><Link href="/lab">Studio Lab</Link></nav>
  <header className="fresh-heading"><div className="fresh-title-mark"><GameEmblem slug={slug} compact/></div><div><span className="arcade-kicker">{game.genre} · TOUCH-FRIENDLY PLAY</span><h1>{game.name}</h1><p>{game.description}</p></div></header>
  <div className="fresh-layout"><section ref={stageRef} className="fresh-play-shell" aria-label={game.name+' play area'}>
@@ -59,6 +70,7 @@ export function FreshGame({slug}:{slug:FreshSlug|ExpansionSlug}){
  {help&&<div id="fresh-game-help" className="fresh-help" role="region" aria-label="Game rules"><h2>How to play</h2><p>{game.instructions}</p><p>Use your finger, mouse or the large on-screen buttons. Pausing never costs points. Comfort Mode uses slower or more forgiving controls where available.</p></div>}
  </section>
  </div>
- <p className="fresh-storage-note">Personal bests and preferences stay in this browser. Clearing browser storage clears them. Sound starts off unless you enable it.</p>
+ <p className="fresh-storage-note">Personal bests and preferences stay in this browser. Clearing browser storage clears them. {game.kind==='cricket'?'Stadium sound can be changed in the Arcade menu.':'Sound starts off unless you enable it.'}</p>
  </main>;
 }
+

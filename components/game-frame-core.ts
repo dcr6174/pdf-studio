@@ -28,6 +28,9 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
  let progress:Progress=parseProgress((()=>{try{return localStorage.getItem(PROGRESS);}catch{return null;}})());
  let fame=parseFame((()=>{try{return localStorage.getItem('studio-arcade:fame:'+slug);}catch{return null;}})());
  let report:ArcadeReport|null=null,shown=0,lastGain=0,combo=0,rounds=0,endTimer=0,disposed=false,recorded=false;
+ let menuPaused=false;
+ const managed=()=>root.querySelector<HTMLElement>('[data-shared-controls]');
+ const control=(action:string)=>managed()?.dispatchEvent(new CustomEvent('arcade:control',{detail:{action}}));
  root.classList.add('gf-on');
  const layer=h('div',{class:'gf-layer','aria-hidden':'true'});
  const bar=h('div',{class:'gf-bar',role:'toolbar','aria-label':'Game controls'});
@@ -73,14 +76,14 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
  };
  const bestText=(r:ArcadeReport,value=r.best)=>r.scoreKind==='outcome'?plural(progress.wins[slug]??0,'win','wins'):value>0?(r.scoreKind==='strokes'?'Best '+plural(value,'stroke','strokes'):'Best '+value):'No best yet';
  const resumeBtn=h('button',{class:'gf-primary',type:'button'},'▶ Resume');
- const restartBtn=()=>{const b=h('button',{class:'gf-toggle gf-restart',type:'button'},report?.scoreKind==='outcome'?'↻ New game':'↻ Restart round');b.addEventListener('click',()=>{hidePause();sheet.hidden=true;menuBtn.setAttribute('aria-expanded','false');hideEnd();sendArcadeCommand(slug,'restart');});return b;};
+ const restartBtn=()=>{const b=h('button',{class:'gf-toggle gf-restart',type:'button'},report?.scoreKind==='outcome'?'↻ New game':'↻ Restart round');b.addEventListener('click',()=>{hidePause();menuPaused=false;root.classList.remove('gf-menu-open');sheet.hidden=true;menuBtn.setAttribute('aria-expanded','false');hideEnd();sendArcadeCommand(slug,'restart');});return b;};
  function showPause(){
   if(!report||!endCard.hidden)return;const r=report;
   const line=r.scoreKind==='outcome'?r.message:(r.scoreKind==='strokes'?'Strokes ':'Score ')+r.score+' · '+bestText(r);
   setKids(pauseCard,h('h2',{},'Paused'),h('p',{},line),resumeBtn,h('div',{class:'gf-row'},restartBtn()),h('div',{class:'gf-row'},h('a',{class:'gf-link',href:'/lab/arcade'},'All games'),h('a',{class:'gf-link',href:'/lab/arcade/'+next.slug},'Next: '+next.name)));
-  pauseCard.hidden=false;resumeBtn.focus();
+  pauseCard.hidden=false;root.classList.add('gf-paused');resumeBtn.focus();
  }
- const hidePause=()=>{pauseCard.hidden=true;};
+ const hidePause=()=>{pauseCard.hidden=true;root.classList.remove('gf-paused');};
  const pause=()=>{if(report?.canPause&&report.phase==='playing')sendArcadeCommand(slug,'pause');};
  const resume=()=>{hidePause();if(report?.phase==='paused')sendArcadeCommand(slug,'resume');};
  const togglePause=()=>{if(report?.phase==='paused')resume();else pause();};
@@ -92,7 +95,7 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
  const onFs=()=>root.classList.toggle('gf-full',document.fullscreenElement===root);document.addEventListener('fullscreenchange',onFs);
  const toggleRow=(label:string,key:'shake'|'buzz'|'retro',locked=false)=>{const b=h('button',{type:'button',class:'gf-toggle','aria-pressed':String(settings[key])},label+(locked?' 🔒 Lv 5':''));if(locked)b.setAttribute('disabled','');b.addEventListener('click',()=>{settings={...settings,[key]:!settings[key]};b.setAttribute('aria-pressed',String(settings[key]));applySettings();});return b;};
  const kind=()=>report?.scoreKind??'points';
- function openMenu(){const level=levelFromXp(progress.xp),owned=new Set<string>(unlockedAt(level.level).map(u=>u.id));const ms=missionsFor(report?.best??0,kind()),done=new Set(progress.missions[slug]??[]);
+ function openMenu(){if(sheet.hidden&&managed()&&report?.phase==='playing'){menuPaused=true;sendArcadeCommand(slug,'pause');}const level=levelFromXp(progress.xp),owned=new Set<string>(unlockedAt(level.level).map(u=>u.id));const ms=missionsFor(report?.best??0,kind()),done=new Set(progress.missions[slug]??[]);
   const themes=h('div',{class:'gf-row'});for(const [id,label] of [['default','Classic'],['theme-sunset','Sunset'],['theme-midnight','Midnight'],['theme-champion','Champion']] as const){const ok=id==='default'||owned.has(id);const b=h('button',{type:'button',class:'gf-toggle','aria-pressed':String(settings.theme===id)},label+(ok?'':' 🔒'));if(!ok)b.setAttribute('disabled','');b.addEventListener('click',()=>{settings={...settings,theme:id};applySettings();openMenu();});add(themes,b);}
   const lower=kind()==='strokes';
   setKids(sheet,h('div',{class:'gf-sheet-head'},h('h2',{},'Arcade menu'),closeBtn),
@@ -106,7 +109,8 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
    h('section',{},h('h3',{},'Comfort'),h('div',{class:'gf-row'},toggleRow('Screen shake & flashes','shake'),toggleRow('Vibration','buzz'),toggleRow('Retro mode','retro',!owned.has('retro')))),
    h('section',{},h('h3',{},'Theme'),themes),
    h('p',{class:'gf-keys'},(report?.letterKeys?'Letter keys type in this game. ':'Keys: P pause · F full screen. ')+'Esc closes this menu. Gamepad: stick/D-pad move, A action, Start pause.'));
-  sheet.hidden=false;menuBtn.setAttribute('aria-expanded','true');closeBtn.focus();}
+  const game=managed();if(game){const controls=h('section',{},h('h3',{},'Match controls'));for(const [action,label,attr] of [['toggle-sound','Stadium sound','sound'],['toggle-comfort','Comfort Mode','comfort']] as const){const b=h('button',{type:'button',class:'gf-toggle','aria-pressed':game.dataset[attr]??'false'},label);b.addEventListener('click',()=>{control(action);b.setAttribute('aria-pressed',String(b.getAttribute('aria-pressed')!=='true'));});add(controls,b);}add(sheet,controls);}
+  sheet.hidden=false;root.classList.add('gf-menu-open');menuBtn.setAttribute('aria-expanded','true');closeBtn.focus();}
  /** Volume sliders shared by every game; they take effect immediately and persist on this device. */
  const mixRows=()=>{const m=getMix();return ([['master','Master'],['sfx','Game sounds'],['ui','Taps & menus'],['ambience','Crowd & ambience']] as const).map(([key,label])=>{
   const id='gf-mix-'+key,input=h('input',{type:'range',min:'0',max:'100',step:'5',id,value:String(Math.round(m[key]*100)),'aria-valuetext':Math.round(m[key]*100)+'%'}) as HTMLInputElement;
@@ -115,7 +119,7 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
   return h('label',{class:'gf-mix-row',for:id},h('span',{},label),input,out);});};
  const meter=(f:number)=>{const i=h('i',{});i.style.width=Math.round(Math.max(0,Math.min(1,f))*100)+'%';return i;};
  const closeBtn=h('button',{class:'gf-btn',type:'button','aria-label':'Close menu'},'✕');
- closeBtn.addEventListener('click',()=>{sheet.hidden=true;menuBtn.setAttribute('aria-expanded','false');menuBtn.focus();});
+ closeBtn.addEventListener('click',()=>{sheet.hidden=true;root.classList.remove('gf-menu-open');menuBtn.setAttribute('aria-expanded','false');if(menuPaused){menuPaused=false;sendArcadeCommand(slug,'resume');}menuBtn.focus();});
  menuBtn.addEventListener('click',()=>sheet.hidden?openMenu():closeBtn.click());
  function hideEnd(){clearTimeout(endTimer);endTimer=0;endCard.hidden=true;}
  /** Records the round exactly once and shows the shared result card. */
@@ -166,7 +170,7 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
   pauseBtn.toggleAttribute('disabled',!pausable);pauseBtn.textContent=r.phase==='paused'?'▶':'❚❚';pauseBtn.setAttribute('aria-label',r.phase==='paused'?'Resume (P)':'Pause (P)');
   soundBtn.hidden=r.sound===null;soundBtn.textContent=r.sound?'🔊':'🔇';soundBtn.setAttribute('aria-pressed',String(!!r.sound));soundBtn.setAttribute('aria-label',r.sound?'Sound on — tap to mute':'Sound off — tap to turn on');
   root.classList.toggle('gf-has-sound',r.sound!==null);
-  if(r.phase==='paused')showPause();else hidePause();
+  if(r.phase==='paused'&&sheet.hidden)showPause();else hidePause();
   if(!prev||prev.phase!==r.phase)requestAnimationFrame(()=>fit(true));
   if(r.phase==='over'&&!recorded){recorded=true;const previousBest=roundBest;clearTimeout(endTimer);endTimer=window.setTimeout(()=>{endTimer=0;if(!disposed&&report?.phase==='over')showEnd(report,previousBest);},END_DELAY);}
  };
@@ -256,5 +260,5 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
  const onRotate=()=>pause();
  const onHide=()=>{if(document.hidden)pause();};
  screen.orientation?.addEventListener?.('change',onRotate);document.addEventListener('visibilitychange',onHide);
- return ()=>{disposed=true;cancelAnimationFrame(raf);clearTimeout(endTimer);window.removeEventListener(REPORT_EVENT,onReport);window.removeEventListener('keydown',onKey);window.removeEventListener('resize',onResize);root.removeEventListener('pointerdown',onDown,true);window.removeEventListener('pointerup',onUp,true);window.removeEventListener('pointercancel',onUp,true);const fitEl=root.querySelector<HTMLElement>(FIT);if(fitEl){for(const k of ['zoom','max-width','margin-inline'])fitEl.style.removeProperty(k);delete fitEl.dataset.gfZoom;delete fitEl.dataset.gfFluid;delete fitEl.dataset.gfNarrow;}document.removeEventListener('fullscreenchange',onFs);document.removeEventListener('visibilitychange',onHide);screen.orientation?.removeEventListener?.('change',onRotate);for(const el of [bar,layer,sheet,pauseCard,endCard,rotateTip])el.remove();root.classList.remove('gf-on','gf-retro','gf-calm-motion','gf-outcome');};
+ return ()=>{disposed=true;cancelAnimationFrame(raf);clearTimeout(endTimer);window.removeEventListener(REPORT_EVENT,onReport);window.removeEventListener('keydown',onKey);window.removeEventListener('resize',onResize);root.removeEventListener('pointerdown',onDown,true);window.removeEventListener('pointerup',onUp,true);window.removeEventListener('pointercancel',onUp,true);const fitEl=root.querySelector<HTMLElement>(FIT);if(fitEl){for(const k of ['zoom','max-width','margin-inline'])fitEl.style.removeProperty(k);delete fitEl.dataset.gfZoom;delete fitEl.dataset.gfFluid;delete fitEl.dataset.gfNarrow;}document.removeEventListener('fullscreenchange',onFs);document.removeEventListener('visibilitychange',onHide);screen.orientation?.removeEventListener?.('change',onRotate);for(const el of [bar,layer,sheet,pauseCard,endCard,rotateTip])el.remove();root.classList.remove('gf-on','gf-retro','gf-calm-motion','gf-outcome','gf-paused','gf-menu-open');};
 }
