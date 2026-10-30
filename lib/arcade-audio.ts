@@ -1,7 +1,8 @@
 import {playStadiumSound} from './stadium-audio';
+import {audioContext,busNode,pitchSpread,tick} from './arcade-mixer';
 /** Lightweight original synth effects; never downloads or loops audio. */
 export type ArcadeEffect='tap'|'success'|'miss'|'bounce'|'hit'|'goal';
-let audio:AudioContext|null=null;
+let plays=0;
 const shape:Record<string,Partial<Record<ArcadeEffect,{freq:number;end:number;duration:number;wave:OscillatorType}>>>={
  cricket:{hit:{freq:170,end:92,duration:.13,wave:'triangle'},bounce:{freq:115,end:85,duration:.065,wave:'triangle'},goal:{freq:440,end:880,duration:.28,wave:'sine'},miss:{freq:205,end:125,duration:.15,wave:'triangle'}},
  volleyball:{hit:{freq:245,end:125,duration:.13,wave:'sine'},bounce:{freq:175,end:110,duration:.08,wave:'triangle'},goal:{freq:570,end:840,duration:.25,wave:'sine'}},
@@ -41,7 +42,17 @@ const shape:Record<string,Partial<Record<ArcadeEffect,{freq:number;end:number;du
  bowling:{hit:{freq:200,end:75,duration:.19,wave:'triangle'}},
  darts:{hit:{freq:385,end:255,duration:.07,wave:'triangle'},goal:{freq:645,end:945,duration:.21,wave:'sine'}},
  penalty:{hit:{freq:230,end:165,duration:.12,wave:'triangle'},goal:{freq:550,end:840,duration:.22,wave:'sine'}},
- marble:{tap:{freq:470,end:420,duration:.045,wave:'sine'},goal:{freq:520,end:950,duration:.28,wave:'sine'}}
+ marble:{tap:{freq:470,end:420,duration:.045,wave:'sine'},goal:{freq:520,end:950,duration:.28,wave:'sine'}},
+ stack:{success:{freq:300,end:360,duration:.09,wave:'triangle'},goal:{freq:600,end:900,duration:.16,wave:'sine'},miss:{freq:180,end:70,duration:.35,wave:'triangle'}},
+ runner:{success:{freq:880,end:1320,duration:.08,wave:'sine'},tap:{freq:260,end:420,duration:.09,wave:'triangle'},miss:{freq:200,end:60,duration:.4,wave:'sawtooth'}},
+ toss:{success:{freq:420,end:760,duration:.18,wave:'sine'},miss:{freq:240,end:160,duration:.16,wave:'triangle'}},
+ bubbles:{success:{freq:720,end:420,duration:.07,wave:'sine'},goal:{freq:520,end:1040,duration:.2,wave:'sine'},miss:{freq:200,end:90,duration:.35,wave:'triangle'}},
+ snake:{success:{freq:520,end:780,duration:.07,wave:'square'},miss:{freq:220,end:55,duration:.45,wave:'sawtooth'}},
+ breaker:{success:{freq:640,end:600,duration:.05,wave:'square'},bounce:{freq:330,end:300,duration:.04,wave:'square'},miss:{freq:210,end:60,duration:.4,wave:'sawtooth'}},
+ merge:{success:{freq:330,end:495,duration:.1,wave:'triangle'},goal:{freq:495,end:990,duration:.22,wave:'sine'},miss:{freq:190,end:120,duration:.3,wave:'triangle'}},
+ memory:{tap:{freq:500,end:540,duration:.05,wave:'sine'},success:{freq:620,end:930,duration:.14,wave:'sine'},miss:{freq:300,end:240,duration:.12,wave:'triangle'}},
+ odd:{success:{freq:700,end:1050,duration:.09,wave:'sine'},miss:{freq:200,end:150,duration:.12,wave:'square'}},
+ slide:{tap:{freq:240,end:200,duration:.05,wave:'triangle'},goal:{freq:520,end:1040,duration:.3,wave:'sine'}}
 };
 const fallback:Record<ArcadeEffect,{freq:number;end:number;duration:number;wave:OscillatorType}>={
  tap:{freq:340,end:440,duration:.07,wave:'sine'},
@@ -60,17 +71,19 @@ export function playArcadeSound(kind:string,effect:ArcadeEffect){
  }
  if(typeof window==='undefined')return;
  try{
-  audio??=new AudioContext();
-  if(audio.state==='suspended')void audio.resume().catch(()=>{});
+  const audio=audioContext();if(!audio)return;
   const profile=shape[kind]?.[effect]??fallback[effect];
-  const now=audio.currentTime,osc=audio.createOscillator(),gain=audio.createGain();
+  // Slight pitch spread keeps repeated cues from sounding mechanical.
+  const p=pitchSpread(++plays),now=audio.currentTime,osc=audio.createOscillator(),gain=audio.createGain();
   osc.type=profile.wave;
-  osc.frequency.setValueAtTime(profile.freq,now);
-  osc.frequency.exponentialRampToValueAtTime(Math.max(40,profile.end),now+profile.duration);
+  osc.frequency.setValueAtTime(profile.freq*p,now);
+  osc.frequency.exponentialRampToValueAtTime(Math.max(40,profile.end*p),now+profile.duration);
   gain.gain.setValueAtTime(.0001,now);
   gain.gain.exponentialRampToValueAtTime(.028,now+.012);
   gain.gain.exponentialRampToValueAtTime(.0001,now+profile.duration);
-  osc.connect(gain);gain.connect(audio.destination);
+  osc.connect(gain);gain.connect(busNode(audio,'sfx'));
   osc.start(now);osc.stop(now+profile.duration+.008);
+  // Physical contacts get a short noise transient on top of the tone.
+  if(effect==='hit'||effect==='bounce')tick('sfx',{duration:effect==='hit'?.05:.03,freq:effect==='hit'?1800:1200,level:effect==='hit'?.09:.05});
  }catch{/* Audio failure must never stop gameplay. */}
 }

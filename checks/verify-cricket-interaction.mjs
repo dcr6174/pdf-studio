@@ -6,7 +6,7 @@ import {Window} from 'happy-dom';
 import {resolve} from 'node:path';
 import {pathToFileURL} from 'node:url';
 const window=new Window({url:'https://pdf-studio.in/lab/arcade/boundary-cricket'});
-for(const key of ['window','document','navigator','localStorage','HTMLElement','HTMLInputElement','HTMLSelectElement','HTMLTextAreaElement','HTMLButtonElement','HTMLCanvasElement','Element','Node','Event','CustomEvent','KeyboardEvent','MutationObserver','ResizeObserver','screen']){
+for(const key of ['window','document','navigator','localStorage','HTMLElement','HTMLInputElement','HTMLSelectElement','HTMLTextAreaElement','HTMLButtonElement','HTMLCanvasElement','Element','Node','Event','CustomEvent','KeyboardEvent','MutationObserver','ResizeObserver','screen','innerHeight','innerWidth','scrollY']){
  Object.defineProperty(globalThis,key,{configurable:true,value:key==='window'?window:window[key]});
 }
 window.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});

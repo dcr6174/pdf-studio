@@ -3,6 +3,8 @@ import {useCallback,useEffect,useMemo,useRef,useState,type PointerEvent} from 'r
 import Link from '@/components/browser-link';
 import {HOOPS,hoopPosition,shooterPosition,launchY,makeHoopsBall,stepHoops,previewHoops,evaluateHoopsScore,type HoopsBall} from '@/lib/rooftop-hoops-engine';
 import {playStadiumSound} from '@/lib/stadium-audio';
+import {arcadeProfile} from '@/lib/arcade-session';
+import {useArcadeSession} from '@/components/use-arcade-session';
 type Phase='ready'|'play'|'paused'|'done';
 const SHOTS=10;
 const clamp=(n:number,lo:number,hi:number)=>Math.max(lo,Math.min(hi,n));
@@ -60,6 +62,7 @@ export function RooftopHoops(){
   effect('shoot');
  },[angle,power,attempts,fromX,phase,effect]);
  const toggleSound=()=>{const next=!sound;setSound(next);try{localStorage.setItem('studio-arcade:sound:rooftop',String(next));}catch{}if(next)playStadiumSound('hoops','start');};
+ useArcadeSession({slug:'rooftop-hoops',phase:!loaded?'ready':phase==='play'?'playing':phase==='done'?'over':phase,score,best,won:null,message:phase==='done'?score+' points from '+SHOTS+' shots'+(streak>1?' · finished on a '+streak+'-shot streak':''):'',...arcadeProfile('basketball'),canPause:true,sound,detail:phase==='play'||phase==='paused'?'Shot '+round+'/'+SHOTS+(streak>1?' · 🔥'+streak:''):undefined},{pause:()=>setPhase(p=>p==='play'?'paused':p),resume:()=>setPhase(p=>p==='paused'?'play':p),restart:start,sound:toggleSound});
  useEffect(()=>{
   if(phase!=='play'||!inFlight)return;
   let raf=0,last=0,paint=0;
@@ -136,7 +139,7 @@ export function RooftopHoops(){
  return <main className="rooftop-main" aria-label="Rooftop Hoops basketball shootout">
   <nav className="rooftop-nav"><Link href="/lab/arcade">← All games</Link><span>PLAY STUDIO · SPORTS</span><Link href="/lab">Studio Lab</Link></nav>
   <header className="rooftop-head"><div><span className="rooftop-eyebrow">ROOFTOP LEAGUE · ORIGINAL ARCADE BASKETBALL</span><h1>Rooftop Hoops</h1></div>
-   <div className="rooftop-head-actions"><button type="button" onClick={toggleSound} aria-label={sound?'Mute basketball sounds':'Enable basketball sounds'} aria-pressed={sound}>{sound?'🔊 SOUND ON':'🔇 SOUND OFF'}</button><button type="button" onClick={()=>setPhase(p=>p==='play'?'paused':p==='paused'?'play':p)} disabled={phase==='ready'||phase==='done'}>{phase==='paused'?'▶ RESUME':'⏸ PAUSE'}</button><button type="button" onClick={start}>↻ RESTART</button></div></header>
+   <div className="rooftop-head-actions" data-frame-dup><button type="button" onClick={toggleSound} aria-label={sound?'Mute basketball sounds':'Enable basketball sounds'} aria-pressed={sound}>{sound?'🔊 SOUND ON':'🔇 SOUND OFF'}</button><button type="button" onClick={()=>setPhase(p=>p==='play'?'paused':p==='paused'?'play':p)} disabled={phase==='ready'||phase==='done'}>{phase==='paused'?'▶ RESUME':'⏸ PAUSE'}</button><button type="button" onClick={start}>↻ RESTART</button></div></header>
   <div className="rooftop-scoreline" aria-label="Basketball scoreboard"><div><span>POINTS</span><strong>{score}</strong></div><div><span>SHOT</span><strong>{round} <small>/ {SHOTS}</small></strong></div><div><span>HOT STREAK</span><strong>{streak>0?'🔥 '+streak:'—'}</strong></div><div><span>YOUR BEST</span><strong>{best}</strong></div></div>
   <div className="rooftop-stage" data-phase={phase} data-camera={portrait?"portrait":"landscape"} ref={stageRef}>
    <svg ref={arena} className="rooftop-court" viewBox={viewBox} preserveAspectRatio="xMidYMid meet" role="group" aria-label={'Full rooftop basketball court. Shot '+round+' of ten. Drag upward and toward hoop to shoot.'} onPointerDown={down} onPointerMove={move} onPointerUp={up} onPointerCancel={()=>{dragRef.current=null;setDragging(false);}}>

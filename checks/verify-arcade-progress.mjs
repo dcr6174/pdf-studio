@@ -40,4 +40,20 @@ assert.deepEqual(fame.map(f=>f.score),[50,40,30,20,10]);assert.equal(fame[0].ini
 assert.equal(cleanInitials(''),'AAA');assert.deepEqual(parseFame('{bad'),[]);assert.deepEqual(parseFame('[{"initials":"<s>","score":1,"date":"x"}]'),[]);
 // Corrupt or hostile storage never breaks the game.
 assert.deepEqual(parseProgress('{bad'),emptyProgress());assert.equal(parseProgress('{"xp":-5,"plays":{"../x":3,"ok":2}}').xp,0);assert.deepEqual(parseProgress('{"plays":{"../x":3,"ok":2}}').plays,{ok:2});
-console.log('PASS: levels, XP, daily challenge, streaks, missions, unlocks, near miss and hall of fame');
+// Strokes games (mini golf): fewer is better for XP, missions, near miss, daily best and hall of fame.
+assert.equal(roundXp(30,34,'strokes'),50);assert.equal(roundXp(36,34,'strokes'),25);assert.equal(roundXp(30,0,'strokes'),50);
+assert.equal(missionsFor(30,'strokes')[1].label,'Finish in 33 strokes or fewer');
+const golf=recordRound(emptyProgress(),{slug:'g',score:31,previousBest:34,day:'2026-10-30',kind:'strokes'},'g');
+assert.deepEqual(golf.missions,['Finish in 38 strokes or fewer','Beat your best (fewer strokes)']);assert.equal(golf.progress.dailyBest['2026-10-30'],31);
+assert.equal(recordRound(golf.progress,{slug:'g',score:40,previousBest:31,day:'2026-10-30',kind:'strokes'},'g').progress.dailyBest['2026-10-30'],31);
+assert.equal(nearMiss(33,31,'strokes'),'So close! 2 strokes off your best.');assert.equal(nearMiss(30,31,'strokes'),'');assert.equal(nearMiss(50,31,'strokes'),'');
+let low=[];for(const s of [40,32,36,30,44,38])if(qualifies(low,s,true))low=addFame(low,{initials:'abc',score:s,date:'2026-10-30'},true);
+assert.deepEqual(low.map(f=>f.score),[30,32,36,38,40]);assert.equal(qualifies(low,41,true),false);assert.equal(qualifies(low,31,true),true);
+// Outcome games (chess, checkers…): XP and missions follow wins, never points, and never a near miss.
+assert.equal(roundXp(999,0,'outcome',false),10);assert.equal(roundXp(0,0,'outcome',true),40);assert.equal(nearMiss(1,2,'outcome'),'');
+let chess=recordRound(emptyProgress(),{slug:'c',score:12,previousBest:0,day:'2026-10-30',kind:'outcome',won:false},'z');assert.deepEqual(chess.missions,[]);
+chess=recordRound(chess.progress,{slug:'c',score:0,previousBest:0,day:'2026-10-30',kind:'outcome',won:true},'z');assert.deepEqual(chess.missions,['Win a game']);assert.equal(chess.progress.wins.c,1);
+chess=recordRound(chess.progress,{slug:'c',score:0,previousBest:0,day:'2026-10-30',kind:'outcome',won:true},'z');assert.deepEqual(chess.missions,['Finish 3 games']);
+chess=recordRound(chess.progress,{slug:'c',score:0,previousBest:0,day:'2026-10-30',kind:'outcome',won:true},'z');assert.deepEqual(chess.missions,['Win 3 games']);
+assert.deepEqual(parseProgress('{"wins":{"c":2,"../x":4}}').wins,{c:2});
+console.log('PASS: levels, XP, daily challenge, streaks, missions, unlocks, near miss, hall of fame, strokes and win/lose games');

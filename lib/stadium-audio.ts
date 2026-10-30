@@ -1,26 +1,19 @@
 /** Small original stadium sound designer: bat leather, hoop impacts and crowd.
  * No remote audio files, autoplay loops, copyrighted recordings or network requests.
  */
+import {audioContext,busNode} from './arcade-mixer';
 export type StadiumSound='start'|'delivery'|'bounce'|'hit'|'boundary'|'wicket'|'miss'|'rim'|'backboard'|'score'|'shoot';
-let ctx:AudioContext|null=null;
 let lastAudio=0;
 let cricketBed:AudioBufferSourceNode|null=null;
 let cricketBedGain:GainNode|null=null;
-function startContext(){
- if(typeof window==='undefined')return null;
- try{
-  ctx??=new AudioContext();
-  if(ctx.state==='suspended')void ctx.resume().catch(()=>{});
-  return ctx;
- }catch{return null;}
-}
+function startContext(){return audioContext();}
 function tone(a:AudioContext,start:number,frequency:number,stopFrequency:number,duration:number,level:number,wave:OscillatorType='sine'){
  const o=a.createOscillator(),g=a.createGain();
  o.type=wave;o.frequency.setValueAtTime(frequency,start);
  o.frequency.exponentialRampToValueAtTime(Math.max(35,stopFrequency),start+duration);
  g.gain.setValueAtTime(.0001,start);g.gain.exponentialRampToValueAtTime(level,start+.009);
  g.gain.exponentialRampToValueAtTime(.0001,start+duration);
- o.connect(g);g.connect(a.destination);o.start(start);o.stop(start+duration+.015);
+ o.connect(g);g.connect(busNode(a,'sfx'));o.start(start);o.stop(start+duration+.015);
 }
 function noise(a:AudioContext,start:number,duration:number,level:number,frequency=1550,quality=.85){
  const frames=Math.ceil(duration*a.sampleRate),b=a.createBuffer(1,frames,a.sampleRate),c=b.getChannelData(0);
@@ -31,7 +24,7 @@ function noise(a:AudioContext,start:number,duration:number,level:number,frequenc
  filter.Q.value=.65;g.gain.setValueAtTime(.0001,start);
  g.gain.exponentialRampToValueAtTime(level,start+.005);
  g.gain.exponentialRampToValueAtTime(.0001,start+duration);
- source.connect(filter);filter.connect(g);g.connect(a.destination);
+ source.connect(filter);filter.connect(g);g.connect(busNode(a,'sfx'));
  source.start(start);source.stop(start+duration+.005);
 }
 /** Gentle filtered crowd murmur, started only after an explicit playing gesture.
@@ -43,7 +36,7 @@ export function startCricketAmbience(){
   let smooth=0;for(let i=0;i<frames;i++){smooth=.88*smooth+.12*(Math.random()*2-1);data[i]=smooth*.9+Math.sin(i/a.sampleRate*2*Math.PI*43)*.035;}
   const src=a.createBufferSource(),filter=a.createBiquadFilter(),gain=a.createGain();
   src.buffer=buf;src.loop=true;filter.type='lowpass';filter.frequency.value=850;
-  gain.gain.value=.022;src.connect(filter);filter.connect(gain);gain.connect(a.destination);
+  gain.gain.value=.022;src.connect(filter);filter.connect(gain);gain.connect(busNode(a,'ambience'));
   src.start();cricketBed=src;cricketBedGain=gain;
  }catch{/* Ambient audio is optional and never blocks gameplay. */}
 }

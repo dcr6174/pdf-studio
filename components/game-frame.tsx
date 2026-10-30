@@ -3,7 +3,8 @@ import {useEffect,useRef,type ReactNode} from 'react';
 import {activeArcadeGames} from '@/lib/arcade-active';
 import {mountGameFrame} from './game-frame-core';
 import './game-frame.css';
-const games=activeArcadeGames.map(g=>({slug:g.slug,name:g.name}));
+import './game-screen.css';
+const games=activeArcadeGames.map(g=>({slug:g.slug,name:g.name,instructions:g.instructions}));
 /** Wraps every game page in the shared arcade frame. The game itself renders unchanged inside. */
 export function GameFrame({slug,children}:{slug:string;children:ReactNode}){
  const host=useRef<HTMLDivElement>(null);

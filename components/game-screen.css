@@ -1,0 +1,91 @@
+/* Arcade-only viewport sizing: preserve game engines, aspect ratios and existing save keys. */
+.arcade-shell .gf-on .gf-bar{max-width:none;margin:0;min-height:60px;border-radius:0}
+.arcade-shell .gf-on :is(.fresh-main,.arcade-game-main,.club-main,.puzzle-main,.rooftop-main){width:100%;max-width:none!important;margin:0!important;padding:8px!important}
+/* Classic games keep their timer (and Moves in the sliding puzzle) as a slim strip; score and best live in the bar. */
+.arcade-shell .gf-on .arcade-game-heading{display:none!important}
+.arcade-shell .gf-on .arcade-scoreboard{display:flex;gap:8px;margin:0}
+.arcade-shell .gf-on .arcade-scoreboard>div{padding:4px 12px;min-width:0;display:flex;gap:8px;align-items:baseline;border-radius:10px}
+.arcade-shell .gf-on .arcade-scoreboard strong{font-size:18px}
+.arcade-shell .gf-on :is(.fresh-play-shell,.fresh-play-viewport,.fresh-active-scene){max-width:none!important;padding:0!important;margin:0!important;border:0!important;border-radius:0!important;background:transparent!important;box-shadow:none!important;min-height:0!important}
+.arcade-shell .gf-on :is(.fresh-layout,.club-layout,.puzzle-layout){grid-template-columns:minmax(0,1fr);gap:8px}
+.arcade-shell .gf-on :is(.fresh-casual,.fresh-sports,.play-cricket){max-width:none;width:100%}
+.arcade-shell .gf-on .arcade-game-layout{display:flex!important;flex-direction:column!important;align-items:center!important;gap:8px}
+.arcade-shell .gf-on .arcade-play-area{width:100%;max-width:none!important}
+.arcade-shell .gf-on .arcade-game-nav{height:0;overflow:hidden}
+.arcade-shell .gf-on .arcade-stage{width:min(100%,calc((100dvh - 170px)*.8));max-width:none;margin-inline:auto!important;border-radius:8px}
+.arcade-shell .gf-on .arcade-stage canvas{display:block;width:100%;height:auto}
+.arcade-shell .gf-on .fresh-game-bar{margin:0 0 4px;padding:0;min-height:44px}
+.arcade-shell .gf-on .rooftop-head{margin:0 0 6px}
+.arcade-shell .gf-on .rooftop-head h1,.arcade-shell .gf-on .rooftop-eyebrow{display:none}
+.arcade-shell .gf-on .rooftop-stage{width:100%!important;height:calc(100dvh - 270px)!important;max-height:none;aspect-ratio:auto;border-radius:8px}
+.arcade-shell .gf-on .rooftop-scoreline{margin-bottom:6px}
+@media(max-width:760px){
+.arcade-shell .gf-on .gf-bar{min-height:56px;gap:4px;padding:6px}
+.arcade-shell .gf-on .rooftop-stage{height:calc(100dvh - 335px)!important}
+}
+@media(orientation:landscape) and (max-height:620px){
+.arcade-shell .gf-on .rooftop-stage{height:calc(100dvh - 245px)!important}
+}
+/* The shared bar owns pause, restart, sound, score and full screen; each family's duplicates step aside. */
+.arcade-shell .gf-on [data-frame-dup]{display:none!important}
+.arcade-shell .gf-on .rooftop-head{display:none}
+/* ── Classic canvas games (4:5 stage): the stage takes the full height left under the bar. ── */
+.arcade-shell .gf-on .arcade-stage{aspect-ratio:4/5;width:min(100%,calc((var(--gf-avail,640px) - 170px)*.8))!important;min-width:min(100%,260px)}
+.arcade-shell .gf-on .arcade-stage>canvas{width:100%;height:100%;object-fit:contain}
+.arcade-shell .gf-on .arcade-board{width:100%!important;height:100%;max-width:none!important;aspect-ratio:auto;grid-auto-rows:1fr;box-sizing:border-box}
+.arcade-shell .gf-on .board-memory .arcade-tile{min-height:0;height:100%}
+.arcade-shell .gf-on .arcade-game-status{margin:4px 0 0;min-height:1.4em}
+@media (min-width:900px),(orientation:landscape) and (max-height:600px){
+ .arcade-shell .gf-on .arcade-play-area{display:grid;grid-template-columns:auto minmax(200px,300px);column-gap:20px;row-gap:10px;justify-content:center;align-content:center;align-items:center}
+ .arcade-shell .gf-on .arcade-stage{grid-column:1;grid-row:1 / span 4;width:min(calc(100vw - 360px),calc((var(--gf-avail,640px) - 12px)*.8))!important;margin:0!important}
+ .arcade-shell .gf-on .arcade-play-area>:not(.arcade-stage){grid-column:2;justify-content:flex-start;text-align:left}
+ .arcade-shell .gf-on .arcade-touch-controls{justify-content:flex-start}
+}
+@media (orientation:landscape) and (max-height:600px){
+ .arcade-shell .gf-on .gf-bar{min-height:44px;padding-block:2px}
+ .arcade-shell .gf-on .gf-bar .gf-btn{min-height:40px;min-width:40px}
+ .arcade-shell .gf-on .arcade-stage{width:min(calc(100vw - 300px),calc((var(--gf-avail,320px) - 8px)*.8))!important}
+}
+/* ── Puzzles: compact chapter line and stats, board sized to the height left under the bar. ── */
+.arcade-shell .gf-on .puzzle-campaign{display:flex;flex-wrap:wrap;align-items:center;gap:4px 14px;margin:0 0 6px;padding:0 4px;font-size:13px;min-height:0}
+.arcade-shell .gf-on .puzzle-campaign details{margin:0}.arcade-shell .gf-on .puzzle-campaign summary{padding:2px 0}
+.arcade-shell .gf-on .puzzle-workspace{padding:10px 12px!important;border-radius:14px}
+.arcade-shell .gf-on .puzzle-stats{display:flex;gap:18px;margin:0 0 8px;padding:0 0 6px;font-size:13px}
+.arcade-shell .gf-on .puzzle-stats b{font-size:16px;margin-left:4px}
+.arcade-shell .gf-on .puzzle-play-area{row-gap:12px;column-gap:28px;justify-content:center}
+.arcade-shell .gf-on .puzzle-play-area>.puzzle-grid,.arcade-shell .gf-on .puzzle-grid{width:min(100%,calc((var(--gf-avail,640px) - var(--puzzle-chrome,215px)) * var(--puzzle-cols,1) / var(--puzzle-rows,var(--puzzle-cols,1))))!important;max-width:none!important;justify-self:center}
+.arcade-shell .gf-on .puzzle-play-area:not(:has(>:is(.puzzle-keypad,.puzzle-targets,.puzzle-shapes,.puzzle-tray,.puzzle-piece-tray,.puzzle-submit,.puzzle-letter-rack,.puzzle-word-groups,.puzzle-card-columns,.puzzle-foundations,.puzzle-quote))){grid-template-columns:minmax(0,1fr)!important}
+.arcade-shell .gf-on .puzzle-message{margin:8px 0 4px}
+.arcade-shell .gf-on .puzzle-actions{margin-top:4px;padding-top:6px}
+@media (max-width:760px){.arcade-shell .gf-on .puzzle-workspace{padding:8px!important}.arcade-shell .gf-on{--puzzle-chrome:260px}}
+/* ── Touch-first games with short content sit in the middle of the screen instead of hugging the top. ── */
+@media (orientation:portrait){.arcade-shell .gf-on .fresh-play-viewport{min-height:calc(var(--gf-avail,600px) - 48px)!important;display:grid;align-content:center}}
+.arcade-shell .gf-on .fresh-game-bar{display:none!important}
+/* Wide tables and courts fit by height so the whole surface is visible at once. */
+.arcade-shell .gf-on .fresh-pool-table{display:block;width:min(100%,calc((var(--gf-avail,600px) - 110px) * 640 / 360))!important;margin-inline:auto}
+.arcade-shell .gf-on .fresh-volley-court{display:block;width:min(100%,calc((var(--gf-avail,600px) - 110px) * 600 / 360))!important;margin-inline:auto}
+/* Dice scorecard keeps two columns on phones so the dice and every category stay on one screen. */
+@media (max-width:760px){
+ .arcade-shell .gf-on .club-scorecard{grid-template-columns:repeat(2,minmax(0,1fr))!important;gap:6px}
+ .arcade-shell .gf-on .club-scorecard button{padding:8px 9px;gap:6px;font-size:13px;min-height:44px}
+}
+/* Phone held sideways: the court takes the height; the bar already shows score and shot number. */
+@media (orientation:landscape) and (max-height:600px){
+ .arcade-shell .gf-on .rooftop-scoreline{display:none!important}
+ .arcade-shell .gf-on .rooftop-stage{height:calc(var(--gf-avail,320px) - 84px)!important;width:100%!important}
+ .arcade-shell .gf-on .rooftop-controls{margin-top:6px}
+}
+/* Games that scroll their play area into view on start stop just under the bar instead of behind it. */
+.arcade-shell .gf-on :is(.fresh-play-viewport,.fresh-active-scene,.play-cricket,.pc-score-strip,.pc-stage-wrap,.club-play-inner,.puzzle-workspace,.arcade-play-area,.arcade-stage,.rooftop-main,.rooftop-stage){scroll-margin-top:calc(var(--gf-bar-h,60px) + 6px)}
+@media (orientation:landscape) and (max-height:600px){
+}
+/* ── Board games: one compact status line, square boards sized to the height left under the bar. ── */
+.arcade-shell .gf-on .club-stats{display:flex;flex-wrap:wrap;align-items:baseline;gap:4px 18px;margin:0 0 8px;padding:0 0 6px}
+.arcade-shell .gf-on .club-stats span{display:flex;align-items:baseline;gap:6px;font-size:12px}
+.arcade-shell .gf-on .club-stats b{font-size:16px}
+.arcade-shell .gf-on .club-board:not(.club-oceans .club-board),.arcade-shell .gf-on .club-race{width:min(100%,calc(var(--gf-avail,640px) - var(--club-chrome,150px)))!important;max-width:none!important;margin-inline:auto}
+@media (max-width:760px){.arcade-shell .gf-on{--club-chrome:210px}}
+/* Phone held sideways: written instructions move to the menu (How to play) so the playfield gets the height. */
+@media (orientation:landscape) and (max-height:600px){
+ .arcade-shell .gf-on :is(.fresh-instruction,.spatial-intro){display:none!important}
+}
