@@ -4,3 +4,10 @@
 .document-loaded[data-tool="edit"] .action-bar,.document-loaded[data-tool="sign"] .action-bar,.document-loaded[data-tool="organize"] .action-bar,.document-loaded[data-tool="watermark"] .action-bar{display:none}
 
 @media(min-width:801px){.document-workspace{position:relative}.workspace-page-drawer[open] .workspace-thumbnails{position:absolute;top:100%;left:0;width:126px;max-height:650px;height:min(650px,75vh);flex-direction:column;padding:12px 4px;background:var(--card,var(--background));border:1px solid var(--border,#dedbea);border-radius:0 0 12px 12px;z-index:2}.workspace-thumbnails>div{flex:0 0 auto}.document-loaded:has(.workspace-page-drawer[open]) .task-workspace{margin-left:146px;width:calc(100% - 146px)}.document-loaded:has(.workspace-page-drawer[open]) .task-canvas{min-height:650px}}
+
+/* Sign PDF toolbar: wrap instead of clipping on narrow screens. */
+.sign-workspace-toolbar{flex-wrap:wrap;row-gap:8px;min-width:0}
+.sign-toolbar-pages,.sign-toolbar-actions{min-width:0}
+.sign-document-select{min-width:0;max-width:100%}
+.sign-document-select select{max-width:100%;text-overflow:ellipsis}
+@media(max-width:700px){.sign-workspace-toolbar{display:flex;align-items:center;gap:8px;padding:8px 10px}.sign-workspace-toolbar>.sign-document-select{flex:1 1 100%;order:-1}.sign-document-select select{width:100%}.sign-toolbar-pages{display:flex;align-items:center;gap:4px}.sign-toolbar-actions{display:flex;align-items:center;gap:4px;margin-left:auto;overflow-x:auto;flex-wrap:nowrap;max-width:100%}.sign-toolbar-actions button{flex-shrink:0;min-width:40px;min-height:40px}.workspace-history>div{width:min(260px,calc(100vw - 32px))}}
