@@ -37,6 +37,9 @@ jobs:
           sudo apt-get update
           sudo apt-get install -y poppler-utils
           python3 -m pip install Pillow
+      - name: Reproducible guide examples and overlap inventory
+        if: ${{ !cancelled() && steps.install.outcome == 'success' }}
+        run: npm run verify:guide-examples
       - name: Text editing regressions
         if: ${{ !cancelled() && steps.install.outcome == 'success' }}
         run: node checks/verify-online-text.mjs && node checks/verify-horizontal-flow.mjs

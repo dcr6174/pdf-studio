@@ -2,6 +2,7 @@ import {readFile,writeFile,mkdir} from 'node:fs/promises';
 import {createHash} from 'node:crypto';
 import ts from 'typescript';
 import {canonicalSitemapEntries} from './canonical-sitemap.mjs';
+import {loadArticles} from './article-data.mjs';
 import {createCanvas,loadImage,GlobalFonts} from '@napi-rs/canvas';
 const root=new URL('../',import.meta.url);
 const source=await readFile(new URL('lib/tools.ts',root),'utf8');
@@ -17,7 +18,7 @@ const {toolGuidance}=await import(asModule(await readFile(new URL('lib/tool-guid
 const {seoPages}=await import(asModule(seoSource.replace("'./tools'",JSON.stringify(toolsModule)).replace("'./canonical-routes'",JSON.stringify(canonicalModule))));
 const {conversionGuides}=await import(asModule(await readFile(new URL('lib/conversion-guides.ts',root),'utf8')));
 const {searchGuidance}=await import(asModule(await readFile(new URL('lib/search-guidance.ts',root),'utf8')));
-const {articles}=await import(asModule(await readFile(new URL('lib/articles.ts',root),'utf8')));
+const articles=await loadArticles();
 const {imageGuides}=await import(asModule(await readFile(new URL('lib/image-guides.ts',root),'utf8')));
 const arcadeCatalogURL=asModule(await readFile(new URL('lib/arcade-catalog.ts',root),'utf8'));
 const puzzleCatalogURL=asModule(await readFile(new URL('lib/puzzle-catalog.ts',root),'utf8'));

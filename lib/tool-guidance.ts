@@ -21,7 +21,7 @@ create:{steps:['Type or paste text, or choose a Unicode text file.','Review the 
     faq: [['Can I change the order?', 'Yes. Arrange pages in the shared workspace before exporting.'], ['Does merging compress the files?', 'No. Use Compress after merging if you also need a smaller output.']]
   },
   split: {
-    steps: ['Open the source PDF and review its page thumbnails.', 'Enter the required pages or ranges, for example 1, 3–5. Use the displayed page count to check your selection.', 'Export the selected pages, reopen the result and confirm that it contains only the pages you need.'],
+    steps: ['Open the source PDF and review its page thumbnails.', 'Enter the required pages in Pages to extract, for example 1, 3-5. Use a normal hyphen and the physical page positions.', 'Choose Extract selected pages, reopen the result and confirm that it contains only the pages you need.'],
     useCase: 'Extract one chapter, an invoice or a section of a longer document. Use Organize for visual reordering and deleting pages.',
     checks: 'Page numbers refer to positions in the file, which may differ from numbers printed on the pages. Extracting pages does not redact sensitive content within a retained page.',
     faq: [['Will the original PDF change?', 'No. Export creates a separate result. Keep your original as a backup.'], ['Can I remove sensitive text this way?', 'Only whole excluded pages are omitted. Use Redact for sensitive regions on pages you retain.']]
