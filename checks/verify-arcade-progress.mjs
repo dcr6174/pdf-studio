@@ -1,4 +1,11 @@
 import assert from 'node:assert/strict';
+import {spawnSync} from 'node:child_process';
+import {fileURLToPath} from 'node:url';
+// Node runs this check directly, so re-launch with type stripping to load the .ts library.
+if(!process.env.ARCADE_PROGRESS_STRIP){
+ const r=spawnSync(process.execPath,['--experimental-strip-types','--no-warnings',fileURLToPath(import.meta.url)],{stdio:'inherit',env:{...process.env,ARCADE_PROGRESS_STRIP:'1'}});
+ process.exit(r.status??1);
+}
 import {addFame,cleanInitials,dailySlug,emptyProgress,levelFromXp,missionsFor,nearMiss,parseFame,parseProgress,qualifies,recordRound,roundXp} from '../lib/arcade-progress.ts';
 // Levels: 100 XP for level 2, 300 for level 3, 600 for level 4.
 assert.equal(levelFromXp(0).level,1);assert.equal(levelFromXp(99).level,1);assert.equal(levelFromXp(100).level,2);assert.equal(levelFromXp(300).level,3);assert.deepEqual(levelFromXp(350),{level:3,into:50,need:300});
