@@ -2,10 +2,12 @@
   "name": "pdf-studio",
   "version": "0.1.0",
   "private": true,
+  "packageManager": "npm@11.19.1",
   "engines": {
     "node": ">=22.13.0"
   },
   "scripts": {
+    "verify:lockfile": "node checks/verify-portable-lockfile.mjs",
     "install:ci": "npm ci",
     "dev": "node scripts/prepare-pdf-assets.mjs && vite",
     "build": "npm run build:public",

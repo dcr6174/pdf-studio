@@ -1,4 +1,5 @@
 import {canonicalPublicRedirect} from '../lib/canonical-routes';
+import {permanentlyRemovedResponse} from '../lib/permanently-removed';
 import {withSecurityHeaders} from '../lib/security-headers';
 import {publicPageCache} from '../lib/public-page-cache';
 import {purgeAudience} from '../lib/audience';
@@ -7,6 +8,8 @@ import { publicOwnerBoundary } from '../lib/public-owner';
 
 export default {
   async fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext) {
+    const removed=permanentlyRemovedResponse(request);
+    if(removed)return withSecurityHeaders(removed,new URL(request.url).pathname);
     const canonical=canonicalPublicRedirect(request);
     if(canonical)return withSecurityHeaders(Response.redirect(canonical.toString(),308),canonical.pathname);
     const response=await publicOwnerBoundary(request, env, clean => handler.fetch(clean, env, ctx));

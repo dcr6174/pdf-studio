@@ -5,6 +5,7 @@ import {build} from 'vite';
 import {createElement} from 'react';
 import {renderToStaticMarkup} from 'react-dom/server';
 import {canonicalSitemapEntries} from '../scripts/canonical-sitemap.mjs';
+import {legacyMetadataTarget,protected404Paths,unapprovedMetadataPaths} from './legacy-metadata-expectations.mjs';
 
 await build({
  configFile:false,logLevel:'error',resolve:{alias:{'@':resolve('.')}},
@@ -12,6 +13,39 @@ await build({
 });
 const seo=await import('../.seo-policy-check/entry.mjs');
 const {canonicalPublicPath:path,canonicalPublicRedirect:redirect}=seo;
+assert.equal(seo.legacyMetadataPaths.length,317,'only the approved export addresses');
+assert.equal(new Set(seo.legacyMetadataPaths).size,317,'no duplicate allowlist entries');
+for(const input of seo.legacyMetadataPaths){
+ const expected=legacyMetadataTarget(input);
+ assert.equal(path(input),expected,'verified historical address: '+input);
+ assert.equal(path(input+'/'),expected,'no trailing-slash redirect chain');
+ assert.equal(path(input.replace(':','%3A')),expected,'encoded colon variant');
+ assert.equal(path(expected),expected,'canonical destination is final');
+ for(const method of ['GET','HEAD']){
+  const result=redirect(new Request('https://pdf-studio.in'+input+'?source=gsc&mode=read',{method}));
+  assert.equal(result.href,'https://pdf-studio.in'+expected+'?source=gsc&mode=read','preserve queries: '+input);
+ }
+ assert.equal(redirect(new Request('https://pdf-studio.in'+input,{method:'POST'})),null,'never redirect writes');
+}
+for(const input of [...protected404Paths,...unapprovedMetadataPaths]){
+ assert.equal(path(input),input,'do not redirect excluded/unknown addresses');
+ assert.equal(redirect(new Request('https://pdf-studio.in'+input)),null);
+}
+for(const input of protected404Paths){
+ assert(seo.isPermanentlyRemovedPath(input),'exported permanent removal: '+input);
+ for(const method of ['GET','HEAD']){
+  const response=seo.permanentlyRemovedResponse(new Request('https://pdf-studio.in'+input+'?from=gsc',{method}));
+  assert.equal(response.status,410);
+  assert.match(response.headers.get('x-robots-tag'),/noindex/);
+  assert.equal(response.headers.get('location'),null,'gone URLs do not redirect');
+ }
+ assert.equal(seo.permanentlyRemovedResponse(new Request('https://pdf-studio.in'+input,{method:'POST'})),null);
+}
+assert.equal(seo.isPermanentlyRemovedPath('/test-fixtures/%'),false,'invalid URI escapes cannot crash the worker');
+for(const game of seo.activeArcadeGames)assert.equal(seo.isPermanentlyRemovedPath('/lab/arcade/'+game.slug),false,'never remove active games');
+for(const input of [...seo.legacyMetadataPaths,...unapprovedMetadataPaths,'/tools/merge-pdf','/test-fixtures/source.pdf']){
+ assert.equal(seo.isPermanentlyRemovedPath(input),false,'unrelated and working addresses are preserved');
+}
 const cases={
  '/tools/pdf-editor':'/tools/add-text-and-images',
  '/tools/edit-pdf':'/tools/add-text-and-images',
@@ -41,6 +75,7 @@ assert.equal(redirect(new Request('https://pdf-studio.in/tools/pdf-editor',{meth
 assert.equal(redirect(new Request('http://localhost:5173/tools/merge-pdf')),null,'local development is not redirected');
 const html=renderToStaticMarkup(createElement(seo.Link,{href:'/tools/edit-pdf?mode=annotate#open'},'Edit PDF'));
 assert(html.includes('/tools/add-text-and-images?mode=annotate#open'),'native links avoid redirect chains');
+assert(renderToStaticMarkup(createElement(seo.Link,{href:'/lab/pomodoro:1ql3syo?mode=read#timer'},'Timer')).includes('/lab/pomodoro?mode=read#timer'),'historical links normalize without losing query or fragment');
 assert(renderToStaticMarkup(createElement(seo.Link,{href:'https://example.org/tools/edit-pdf'},'External')).includes('https://example.org/tools/edit-pdf'));
 
 const descriptions=new Set(),titles=new Set();

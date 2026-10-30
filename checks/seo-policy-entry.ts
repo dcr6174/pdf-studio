@@ -1,4 +1,6 @@
 export {canonicalPublicPath,canonicalPublicRedirect,canonicalToolRoutes} from '../lib/canonical-routes';
+export {legacyMetadataPaths} from '../lib/legacy-metadata-paths';
+export {isPermanentlyRemovedPath,permanentlyRemovedResponse} from '../lib/permanently-removed';
 export {guideMeta} from '../lib/guide-meta';
 export {pageMeta} from '../lib/page-meta';
 export {seoPages} from '../lib/seo-tools';
