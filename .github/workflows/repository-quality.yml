@@ -14,6 +14,10 @@ jobs:
         with:
           node-version: '22'
           cache: npm
+      - name: Check portable dependency sources
+        run: node checks/verify-portable-lockfile.mjs
+      - name: Match the Cloudflare package manager
+        run: npm install --global "$(node -p "require('./package.json').packageManager")"
       - id: install
         run: npm ci
       - name: Lint with zero warnings
