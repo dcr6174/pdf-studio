@@ -1,0 +1,5 @@
+.public-directory{margin:24px 0;padding:18px;border:1px solid var(--border,#ddd);border-radius:12px;background:var(--background,#fff);color:var(--foreground,#17142e)}
+.public-directory summary{cursor:pointer;font-weight:650;line-height:1.5}
+.public-directory ul{list-style:none;padding:0;margin:18px 0 0;display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,210px),1fr));gap:8px 16px}
+.public-directory a{display:inline-flex;align-items:center;min-height:44px;color:inherit;text-decoration:underline;text-underline-offset:3px}
+.public-directory a:focus-visible,.public-directory summary:focus-visible{outline:2px solid var(--primary,#6545e8);outline-offset:4px}

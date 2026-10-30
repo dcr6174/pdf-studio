@@ -1697,7 +1697,7 @@ export const articles:Article[]=
   },
   {
     "slug": "protect-a-pdf-with-a-password",
-    "title": "Protect a PDF with an opening password",
+    "title": "How to password-protect a PDF before sharing",
     "category": "Privacy",
     "tool": "protect-pdf",
     "summary": "Choose a passphrase, confirm it and keep it somewhere safe.",
@@ -16417,7 +16417,7 @@ export const articles:Article[]=
   },
   {
     "slug": "protect-a-pdf-with-an-opening-password",
-    "title": "Protect a PDF with an opening password",
+    "title": "Password-protect a PDF: a document-sharing example",
     "category": "Privacy",
     "tool": "protect-pdf",
     "toolId": "encrypt",

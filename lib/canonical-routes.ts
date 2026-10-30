@@ -1,7 +1,8 @@
 /** Redirect only duplicate tasks; retain different output modes and guides. */
 export const canonicalToolRoutes:Record<string,string>={
  'resize-to-a4':'resize-pages',
- 'pdf-editor':'edit-pdf',
+ 'pdf-editor':'add-text-and-images',
+ 'edit-pdf':'add-text-and-images',
  'edit-cv-pdf':'edit-pdf-text',
  'jpg-to-pdf':'images-to-pdf',
  'png-to-pdf':'images-to-pdf',
@@ -9,3 +10,32 @@ export const canonicalToolRoutes:Record<string,string>={
  'text-to-pdf':'create-pdf',
  'txt-to-pdf':'create-pdf'
 };
+
+/** Resolve legacy public links in one permanent hop, without losing queries. */
+export function canonicalPublicPath(path: string): string {
+ const clean=path==='/'?path:path.replace(/\/+$/,'');
+ const match=clean.match(/^\/(tools|guides)\/([^/]+)$/);
+ if(match){
+  const [,section,slug]=match;
+  if(section==='tools'&&['html-to-pdf','powerpoint-to-pdf'].includes(slug))return '/guides/'+slug;
+  return '/'+section+'/'+(canonicalToolRoutes[slug]??slug);
+ }
+ if(clean==='/prove-it')return '/check-it-yourself';
+ if(clean==='/lab/sketch-pdf')return '/tools/sketch-over-pdf';
+ if(clean==='/creative/pdf-to-handwriting')return '/tools/pdf-to-handwriting';
+ if(/^\/creative\/(text-to-handwriting|notebook-maker|handwriting-practice)$/.test(clean))return clean.replace('/creative/','/lab/');
+ return clean;
+}
+
+export function canonicalPublicRedirect(request: Request): URL | null {
+ if(!['GET','HEAD'].includes(request.method))return null;
+ const original=new URL(request.url);
+ if(original.pathname==='/api'||original.pathname.startsWith('/api/'))return null;
+ const canonical=new URL(original);
+ canonical.pathname=canonicalPublicPath(canonical.pathname);
+ if(['pdf-studio.in','www.pdf-studio.in'].includes(canonical.hostname)||canonical.hostname.endsWith('.workers.dev')){
+  canonical.hostname='pdf-studio.in';
+  canonical.protocol='https:';
+ }
+ return canonical.href===original.href?null:canonical;
+}

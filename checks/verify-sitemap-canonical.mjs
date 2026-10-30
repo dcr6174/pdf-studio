@@ -13,10 +13,10 @@ const entries=[
 const result=canonicalSitemapEntries(entries,aliases);
 assert.deepEqual(result,[
  {path:'/tools/edit-pdf',lastmod:'2026-10-09'},
- {path:'/guides/jpg-to-pdf',lastmod:'2026-10-04'},
  {path:'/lab/image-crop'},
  {path:'/tools/sketch-over-pdf'},
  {path:'/tools/images-to-pdf'},
+ {path:'/guides/images-to-pdf'},
 ]);
 assert.equal(new Set(result.map(e=>e.path)).size,result.length);
 assert.deepEqual(canonicalSitemapEntries(result,aliases),result);

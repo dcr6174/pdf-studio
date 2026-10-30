@@ -1,7 +1,7 @@
 'use client';
 import {useEffect,useRef,useState} from 'react';
 import {SiteHeader} from '@/components/site-header';
-import {HandwritingStudio} from '@/components/handwriting-studio';
+import {EmbeddedHandwritingStudio as HandwritingStudio} from '@/components/handwriting-studio';
 import {calculate,financeEstimate,utilityTools,type UtilityMode} from '@/lib/lab-utilities';
 import Link from '@/components/browser-link';
 import '@/app/lab/utilities.css';
