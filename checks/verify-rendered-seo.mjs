@@ -1,6 +1,7 @@
 import assert from 'node:assert/strict';
 import {readFile} from 'node:fs/promises';
 import {unstable_dev} from 'wrangler';
+import {legacyMetadataTarget,protected404Paths,unapprovedMetadataPaths} from './legacy-metadata-expectations.mjs';
 
 // Execute the actual built Cloudflare worker locally. No Cloudflare deployment,
 // remote database, API keys, production writes or persistent local DB are used.
@@ -42,6 +43,11 @@ try{
   '/prove-it':'/check-it-yourself',
   '/creative/pdf-to-handwriting':'/tools/pdf-to-handwriting'
  };
+ // Read the literal data list without requiring a second TypeScript runtime.
+ const metadataSource=await readFile('lib/legacy-metadata-paths.ts','utf8');
+ const metadataPaths=[...metadataSource.matchAll(/^ '([^']+)',?$/gm)].map(match=>match[1]);
+ assert.equal(metadataPaths.length,317,'all approved historical addresses are tested');
+ for(const path of metadataPaths)aliases[path]=legacyMetadataTarget(path);
  for(const [path,target] of Object.entries(aliases)){
   const response=await worker.fetch(path,{redirect:'manual'});
   assert.equal(response.status,308,'permanent canonical redirect: '+path);
@@ -50,7 +56,8 @@ try{
   const destination=await worker.fetch(target,{redirect:'manual'});
   assert.equal(destination.status,200,'redirect resolves to a real page: '+path);
  }
- for(const path of ['/tools/not-a-real-tool','/guides/not-a-real-guide','/blog/not-a-real-article','/not-a-real-page']){
+ const missingPaths=['/tools/not-a-real-tool','/guides/not-a-real-guide','/blog/not-a-real-article','/not-a-real-page',...protected404Paths,...unapprovedMetadataPaths.filter(path=>!path.startsWith('/api/'))];
+ for(const path of missingPaths){
   const response=await worker.fetch(path,{redirect:'manual'}),page=parse(await response.text());
   assert.equal(response.status,404,'real error status: '+path);
   assert.match(response.headers.get('x-robots-tag')||'',/noindex/);
@@ -98,7 +105,7 @@ try{
   assert(types.includes('Article'),'article structured data: '+row.path);
   assert(types.includes('BreadcrumbList'),'article breadcrumb structured data: '+row.path);
  }
- console.log(`PASS: ${urls.length} built HTTP pages, unique metadata, canonical/social URLs, one H1, valid JSON-LD, no HTML-orphan pages; ${Object.keys(aliases).length} permanent redirects and four noindex 404s.`);
+ console.log(`PASS: ${urls.length} built HTTP pages, unique metadata, canonical/social URLs, one H1, valid JSON-LD, no HTML-orphan pages; ${Object.keys(aliases).length} permanent redirects and ${missingPaths.length} noindex 404s.`);
 }finally{
  await worker.stop();
 }

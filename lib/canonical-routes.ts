@@ -1,3 +1,7 @@
+import {legacyMetadataPaths} from './legacy-metadata-paths';
+
+const recoverableMetadataPaths = new Set<string>(legacyMetadataPaths);
+
 /** Redirect only duplicate tasks; retain different output modes and guides. */
 export const canonicalToolRoutes:Record<string,string>={
  'resize-to-a4':'resize-pages',
@@ -13,7 +17,10 @@ export const canonicalToolRoutes:Record<string,string>={
 
 /** Resolve legacy public links in one permanent hop, without losing queries. */
 export function canonicalPublicPath(path: string): string {
- const clean=path==='/'?path:path.replace(/\/+$/,'');
+ let clean=path==='/'?path:path.replace(/\/+$/,'');
+ // Accept encoded colons only when they match an explicitly verified address.
+ const historical=clean.replace(/%3a/gi,':');
+ if(recoverableMetadataPaths.has(historical))clean=historical.slice(0,historical.lastIndexOf(':'));
  const match=clean.match(/^\/(tools|guides)\/([^/]+)$/);
  if(match){
   const [,section,slug]=match;
