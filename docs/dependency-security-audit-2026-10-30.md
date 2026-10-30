@@ -66,13 +66,17 @@ unrestricted dependency update or an `npm audit fix --force`.
 | browserslist | 4.29.5 | #39–40 |
 | @babel/core | 7.29.7 | #10 |
 | ws | 8.21.0 | #7, #9 |
-| lodash-es | 4.18.0 | #4–6 |
+| lodash-es | 4.18.1 | #4–6 |
 
 The top-level esbuild update to 0.28.2 also removes its low finding; the nested
 Wrangler copy remains affected as documented below.
 
 ### Compatibility decisions
 
+- Use lodash-es `4.18.1`; `4.18.0` is deprecated by its publisher as a bad
+  release. Its suggested fallback `4.17.23` now has high-severity template and
+  prototype-pollution advisories, so do not downgrade to it. Keep the override
+  and lockfile synchronized and regression-test collection and object helpers.
 - Keep Vinext `1.0.0-beta.5`, Cloudflare Vite plugin `1.37.1`, Wrangler `4.92.0`
   and their existing workerd release. Newer parent releases bring wider framework
   changes, including a new Miniflare beta line. Pin the vulnerable HTTP,

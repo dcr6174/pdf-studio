@@ -5,11 +5,26 @@ import { pathToFileURL } from 'node:url';
 import { imageSize } from 'image-size';
 import PptxGenJS from 'pptxgenjs';
 import JSZip from 'jszip';
+import { chunk, sortBy, merge, escape, template, unset, omit } from 'lodash-es';
 import {
   invocationSchema, driverMessageSchema, grantsSchema, sessionOptionsSchema,
 } from '../scripts/connector-preview/protocol.mjs';
 
 // These records used Zod 3's one-argument record API. Check both the valid
+// Guard the lodash-es bad-release replacement and safe object-path handling.
+assert.deepEqual(chunk([1, 2, 3], 2), [[1, 2], [3]]);
+assert.deepEqual(sortBy([{ n: 2 }, { n: 1 }], 'n'), [{ n: 1 }, { n: 2 }]);
+assert.deepEqual(merge({}, { a: { b: 1 } }), { a: { b: 1 } });
+assert.equal(escape('<script>'), '&lt;script&gt;');
+assert.equal(template('Hello <%= name %>')({ name: 'Studio' }), 'Hello Studio');
+assert.throws(() => template('test', { imports: { 'x){};throw new Error("unsafe");//': 1 } }));
+const inherited = { kept: true };
+const object = Object.create(inherited);
+unset(object, ['__proto__', 'kept']);
+assert.equal(inherited.kept, true);
+omit(object, [['__proto__', 'kept']]);
+assert.equal(inherited.kept, true);
+
 // envelope and strict rejection behavior after moving to the patched Zod 4.
 const fields = { connectorId: 'documents', actionName: 'read' };
 const args = { file: 'example.pdf', pages: [1, 2], nested: { enabled: true } };
