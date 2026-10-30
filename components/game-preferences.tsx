@@ -1,6 +1,7 @@
 'use client';
 import {useEffect,useRef,type ReactNode} from 'react';
 import {parsePreferences,rememberGame,validSelect} from '../lib/arcade-preferences';
+import {GameFrame} from './game-frame';
 const inputSelector='.arcade-game-sidebar select,.arcade-game-sidebar input[type="checkbox"],.club-sidebar select';
 const toggleSelector='.fresh-preferences button[aria-pressed],.rooftop-head-actions button[aria-pressed],.arcade-game-controls button[aria-pressed]';
 const choiceSelector='.pc-pregame .pc-choices button[aria-pressed]';
@@ -50,5 +51,5 @@ export function GamePreferences({slug,children}:{slug:string;children:ReactNode}
   const historyTimer=setTimeout(()=>{try{rememberGame(localStorage,slug);}catch{}},100);
   return()=>{clearInterval(interval);clearTimeout(historyTimer);el.removeEventListener('change',persist);el.removeEventListener('click',persist);};
  },[slug]);
- return <div ref={root}>{children}</div>;
+ return <GameFrame slug={slug}><div ref={root}>{children}</div></GameFrame>;
 }
