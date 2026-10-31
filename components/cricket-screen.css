@@ -12,8 +12,13 @@
 .arcade-shell .gf-on .play-cricket .pc-stage-wrap{height:100%;max-height:none!important;min-height:0;border:0;border-radius:0;box-shadow:none}
 .arcade-shell .gf-on .play-cricket :is(.pc-stadium,.play-cricket-field){display:block;width:100%!important;height:100%!important;max-height:none!important;aspect-ratio:auto;object-fit:contain}
 .arcade-shell .gf-on .play-cricket :is(.pc-stadium-canvas,.pc-stadium svg){width:100%;height:100%;object-fit:contain}
-.arcade-shell .gf-on .play-cricket .pc-controller{min-height:0;max-height:none;border-radius:0;padding:12px;gap:8px;overflow:auto;box-sizing:border-box;order:0}
+.arcade-shell .gf-on .play-cricket .pc-controller{min-height:0;max-height:none;border-radius:0;padding:12px;gap:8px;overflow:auto;box-sizing:border-box;order:0;grid-template-columns:minmax(0,1fr);grid-template-rows:none;align-content:start}
 .arcade-shell .gf-on .play-cricket :is(.pc-smallprint,.pc-bowler-info,.pc-controller-heading,.pc-mobile-pad,.pc-audio-actions){display:none!important}
+/* The 3D renderer uses the newer three-column bottom dock. Reset its explicit
+   grid positions when this viewport layout moves that dock into a narrow side panel. */
+.arcade-shell .gf-on .play-cricket .pc-controller>:is(.pc-bat-buttons,.pc-advanced-options,.pc-ball-feed,.pc-commentary,.pc-next){grid-column:1;grid-row:auto}
+.arcade-shell .gf-on .play-cricket.pc-is-setup .pc-controller{position:static;inset:auto;transform:none;max-width:none}
+.arcade-shell .gf-on .play-cricket .pc-advanced-options[open]{position:static;inset:auto;width:auto;max-height:none;transform:none}
 .arcade-shell .gf-on .play-cricket .pc-bat-buttons{display:grid}
 .arcade-shell .gf-on .play-cricket .pc-bat-buttons button{min-height:68px}
 .arcade-shell .gf-on .play-cricket .pc-pregame{padding:0;gap:8px}
