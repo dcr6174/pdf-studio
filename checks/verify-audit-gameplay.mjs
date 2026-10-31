@@ -55,7 +55,7 @@ for(let k of ['highway','metro','jungle','snow','river','rocket']){
 }
 assert(typeof runner.safeTrafficStep(12.5,2)==='boolean');
 const cricketUI=fs.readFileSync('components/cricket-match.tsx','utf8');
-assert(cricketUI.includes('pc-mobile-pad')&&cricketUI.includes('pc-hit-marker'));
+assert(cricketUI.includes('Cricket batting controller')&&cricketUI.includes('pc-bat-buttons')&&cricketUI.includes('pc-hit-marker'),'responsive batting dock and timing marker remain available');
 assert(cricketUI.includes('e.repeat'),'held keys cannot create multiple bats');
 const skillUI=fs.readFileSync('components/expansion-skill.tsx','utf8');
 assert(skillUI.includes('expand-ping-ai')&&skillUI.includes('simulatePenalty'));
@@ -66,3 +66,4 @@ assert(sand.includes('requestAnimationFrame(tick)')&&sand.includes('Start pourin
 const preview=fs.readFileSync('components/game-scene-preview.tsx','utf8');
 assert(preview.includes('ILLUSTRATED GAMEPLAY'),'previews labelled honestly');
 console.log('PASS: cricket timing, fielding, randomized matches; all ten-pin scoring; penalty reactions; 6 runner types and true painting masks.');
+
