@@ -62,8 +62,9 @@ assert(ui.includes('rooftop-hit-callout')&&ui.includes('rh-celebrate-burst'),
 assert(styles.includes('max-width:680px')&&styles.includes('height:clamp(285px,calc(100dvh - 265px),655px)'),
  'Portrait stage should occupy roughly the full available phone viewport, not retain a tiny 5:3 strip');
 const cricket=fs.readFileSync('components/cricket-match.tsx','utf8');
-assert(cricket.includes('pc-audio-toggle')&&cricket.includes('pc-audio-preview')&&cricket.includes('unlockStadiumAudio')&&cricket.includes('startCricketAmbience')&&cricket.includes("onSound('bounce')"),
- 'Cricket audio must unlock on player gesture, offer a test sound and play ambient crowd/bounce');
+const frame=fs.readFileSync('components/game-frame-core.ts','utf8');
+assert(frame.includes('gf-sound')&&frame.includes('Stadium sound')&&cricket.includes('unlockStadiumAudio')&&cricket.includes('startCricketAmbience')&&cricket.includes("onSound('bounce')"),
+ 'Shared controls must expose cricket sound; chase audio must unlock on a player gesture and preserve crowd/bounce cues');
 const sound=fs.readFileSync('lib/arcade-audio.ts','utf8');
 assert(sound.includes("kind==='cricket'")&&sound.includes('playStadiumSound')&&sound.includes("effect==='miss'?'miss'"),'Cricket misses must not sound like wickets');
 assert(cricket.includes("playStadiumSound('cricket','wicket')"),'A wicket must trigger its distinct stadium sound effect');
