@@ -39,3 +39,9 @@ Reviewed PRs #214–#228 against main. Eight of the latest ten were already merg
 ## Limits
 
 No claim that all 100 Arcade games were manually played. Physical phones, screen readers and audible sound still need dedicated checks. GitHub Actions verify jobs can fail before producing logs; do not confuse those with the independently successful Cloudflare build or local production checks. No pipeline safety checks were disabled. The persistent per-game audit remains under docs/arcade-audit.
+
+## Live viewport follow-up
+
+After #227 deployed successfully, the cloud browser measured a 1,363×936 viewport with a 1,063 px field and 300 px controller, no horizontal overflow, and a usable 2D fallback. An inherited `height:calc(100dvh - 114px)`, minimum 530 px and maximum 1,000 px still constrained the fixed game. The resulting game bottom was above the viewport bottom, and the minimum could overflow short landscape screens. The viewport rule now targets `.play-cricket.pc-immersive` and explicitly resets height to auto, minimum to zero and maximum to none so top/bottom insets determine the available height. This follow-up preserves the 3D renderer and the same controller/engine.
+
+The local production build and built-worker SEO suite passed for the integrated release. Cloudflare confirmed success for merged #228 and #227. The follow-up is deliberately small: viewport sizing plus the content fingerprint and this record; physical-phone performance remains unverified.
