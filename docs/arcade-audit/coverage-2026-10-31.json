@@ -1434,7 +1434,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Tap Left or Right to switch lanes, avoid oncoming vehicles and survive 30 checkpoints. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Tap Left or Right to switch lanes, avoid oncoming vehicles and survive 30 checkpoints. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "metro-sprint",
@@ -1456,7 +1457,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Change lanes, jump over barriers and slide below signs. Clear 20 obstacles to finish. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Change lanes, jump over barriers and slide below signs. Clear 20 obstacles to finish. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "jungle-escape",
@@ -1478,7 +1480,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Change paths, jump fallen logs and duck vines to escape 20 obstacles. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Change paths, jump fallen logs and duck vines to escape 20 obstacles. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "hill-rider",
@@ -1500,7 +1503,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Hold Gas or Brake to control a physics-driven off-road car on rolling terrain. Jump over rocks and land upright. Collect fuel and travel 1500 metres. Touch buttons or keyboard arrows (Gas/Brake/Jump) and Q/E to lean midair. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Hold Gas or Brake to control a physics-driven off-road car on rolling terrain. Jump over rocks and land upright. Collect fuel and travel 1500 metres. Touch buttons or keyboard arrows (Gas/Brake/Jump) and Q/E to lean midair. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "drift-loop",
@@ -1522,7 +1526,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Hold Drift when a curve arrives, release on the straight and finish the track. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Hold Drift when a curve arrives, release on the straight and finish the track. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "snow-slalom",
@@ -1544,7 +1549,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Steer left or right through 20 gates without hitting the markers. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Steer left or right through 20 gates without hitting the markers. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "river-slalom",
@@ -1566,7 +1572,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Steer left and right to sail between buoy pairs. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Steer left and right to sail between buoy pairs. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "rocket-glide",
@@ -1588,7 +1595,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Hold Thrust to rise, release to descend, and fly between obstacles. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Hold Thrust to rise, release to descend, and fly between obstacles. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "traffic-cross",
@@ -1610,7 +1618,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Tap Forward only when your next lane is clear of traffic. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Tap Forward only when your next lane is clear of traffic. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "pocket-grand-prix",
@@ -1632,7 +1641,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Steer left and right to stay on the road and pass each checkpoint. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Steer left and right to stay on the road and pass each checkpoint. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "bubble-wrap-bliss",
@@ -1654,7 +1664,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Tap all 30 raised bubbles. Enjoy a calm round without a clock. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Tap all 30 raised bubbles. Enjoy a calm round without a clock. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "crystal-clean",
@@ -1676,7 +1687,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Drag a smooth brush across the window to clear the grime precisely under your finger. Change brush size if needed. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Drag a smooth brush across the window to clear the grime precisely under your finger. Change brush size if needed. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "paint-by-numbers",
@@ -1698,7 +1710,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Select a colour then paint the cells with its matching number. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Select a colour then paint the cells with its matching number. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "rainbow-ring-stack",
@@ -1720,7 +1733,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Move rings between three pegs. Never place a bigger ring above a smaller one. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Move rings between three pegs. Never place a bigger ring above a smaller one. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "sand-jars",
@@ -1742,7 +1756,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Position the spout, start or stop flowing grains, control flow speed, and seal each of six jars within three percent of its target. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Position the spout, start or stop flowing grains, control flow speed, and seal each of six jars within three percent of its target. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "untangle-lines",
@@ -1764,7 +1779,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Drag each glowing knot around the board until none of its connecting threads cross. Shared endpoints are allowed. Five solvable stages with keyboard arrow-key movement and a knot hint. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Drag each glowing knot around the board until none of its connecting threads cross. Shared endpoints are allowed. Five solvable stages with keyboard arrow-key movement and a knot hint. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "screw-sort",
@@ -1786,7 +1802,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Tap a screw, then its matching tray. Organize all fifteen screws. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Tap a screw, then its matching tray. Organize all fifteen screws. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "tile-polish",
@@ -1808,7 +1825,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Rub the tarnish off an engraved decorative plate with a continuous adjustable brush. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Rub the tarnish off an engraved decorative plate with a continuous adjustable brush. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "shape-packing",
@@ -1830,7 +1848,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Drag a piece from the tray onto the wooden board or tap a piece and then its destination. Rotate with the button or R, undo mistakes and fit all 25 squares without overlap. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Drag a piece from the tray onto the wooden board or tap a piece and then its destination. Rotate with the button or R, undo mistakes and fit all 25 squares without overlap. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "cozy-shelf",
@@ -1852,7 +1871,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Tap two books to swap them. Organize the shelf from shortest to tallest. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Tap two books to swap them. Organize the shelf from shortest to tallest. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "laser-mirror",
@@ -1874,7 +1894,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Rotate mirror tiles until the beam reaches the star. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Rotate mirror tiles until the beam reaches the star. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "lights-out",
@@ -1896,7 +1917,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Tap a square to toggle it and its neighbours. Clear the 4×4 board. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Tap a square to toggle it and its neighbours. Clear the 4×4 board. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "peg-bounce",
@@ -1918,7 +1940,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Pick a drop column and let the ball bounce toward the scoring pockets. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Pick a drop column and let the ball bounce toward the scoring pockets. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "meteor-shield",
@@ -1940,7 +1963,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Move the shield left and right to block incoming rocks. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Move the shield left and right to block incoming rocks. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "falling-blocks",
@@ -1962,7 +1986,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Rotate a block and move it left or right. Fill complete rows. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Rotate a block and move it left or right. Fill complete rows. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "balance-bridge",
@@ -1984,7 +2009,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Place weights on different sides until both sides balance. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Place weights on different sides until both sides balance. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "one-line-draw",
@@ -2006,7 +2032,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Start at A, then drag or tap to the next connected dot. Every line must be used exactly once. Five solvable graphs, undo and keyboard input. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Start at A, then drag or tap to the next connected dot. Every line must be used exactly once. Five solvable graphs, undo and keyboard input. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "path-connect",
@@ -2028,7 +2055,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Tap neighbouring tiles to connect the starting dot to the target. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Tap neighbouring tiles to connect the starting dot to the target. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "count-and-tap",
@@ -2050,7 +2078,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Count the requested symbols, then tap the correct answer. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Count the requested symbols, then tap the correct answer. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "quick-math",
@@ -2072,7 +2101,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Choose the correct answer to ten small calculations. No timer. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Choose the correct answer to ten small calculations. No timer. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "ring-toss",
@@ -2094,7 +2124,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Choose a target peg and release your ring to score. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Choose a target peg and release your ring to score. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "balloon-darts",
@@ -2116,7 +2147,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Aim and tap Throw to hit each colourful balloon. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Aim and tap Throw to hit each colourful balloon. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "mini-bowling",
@@ -2138,7 +2170,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Choose one of five starting positions, adjust power and hook, then roll. Ten frames use strike/spare bonus scoring. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Choose one of five starting positions, adjust power and hook, then roll. Ten frames use strike/spare bonus scoring. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "table-tennis",
@@ -2160,7 +2193,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Move your paddle with touch or arrows and rally against a friendly computer. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Move your paddle with touch or arrows and rally against a friendly computer. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "archery-wind",
@@ -2182,7 +2216,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Adjust aim for the gentle wind and shoot five arrows. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Adjust aim for the gentle wind and shoot five arrows. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "ice-curling",
@@ -2204,7 +2239,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Choose aim and power, then slide your curling stone. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Choose aim and power, then slide your curling stone. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "soccer-penalty",
@@ -2226,7 +2262,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Tap a corner, choose shot power and score from five kicks. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Tap a corner, choose shot power and score from five kicks. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "clock-reflex",
@@ -2248,7 +2285,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Stop the spinning hand inside the highlighted arc. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Stop the spinning hand inside the highlighted arc. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "cookie-decorate",
@@ -2270,7 +2308,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Pick the icing and toppings shown in the order card. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Pick the icing and toppings shown in the order card. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     },
     {
       "slug": "marble-maze",
@@ -2292,7 +2331,8 @@
       "improvement": "Pending individual observed findings",
       "priority": "Unassigned pending audit",
       "implementation": "No individual implementation claimed",
-      "acceptance": "Verify the stated rule: Use the four arrow buttons to steer the marble toward the exit. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves."
+      "acceptance": "Verify the stated rule: Use the four arrow buttons to steer the marble toward the exit. Then outcome, restart/replay, pause/background, keyboard/pointer and touch; preserve local saves.",
+      "catalog": "lib/expansion-catalog.ts"
     }
   ],
   "sharedMechanicCandidates": {
