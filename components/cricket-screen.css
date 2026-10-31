@@ -1,5 +1,5 @@
 /* Cricket-only viewport layout; preserve full pitch and existing controls. */
-.arcade-shell .gf-on .play-cricket{position:fixed;inset:var(--gf-bar-h,61px) 0 0;z-index:30;display:grid;grid-template-rows:48px minmax(0,1fr);width:100%;max-width:none!important;padding:0!important;box-sizing:border-box}
+.arcade-shell .gf-on .play-cricket.pc-immersive{position:fixed;height:auto;min-height:0;max-height:none;inset:var(--gf-bar-h,61px) 0 0;z-index:30;display:grid;grid-template-rows:48px minmax(0,1fr);width:100%;max-width:none!important;padding:0!important;box-sizing:border-box}
 .arcade-shell .gf-on:has(.play-cricket) .gf-bar{position:fixed;inset:0 0 auto;z-index:40}
 .arcade-shell .gf-on:has(.play-cricket) :is(.fresh-main,.fresh-play-viewport,.fresh-active-scene){zoom:1!important;padding:0!important;min-height:0!important}
 .arcade-shell .gf-on:has(.play-cricket) :is(.fresh-game-bar,.fresh-instruction,.fresh-footer,.arcade-game-heading){display:none!important}
