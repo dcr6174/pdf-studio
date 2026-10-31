@@ -1,4 +1,5 @@
 'use client';
+import './cricket-screen.css';
 import {useEffect,useRef,useState} from 'react';
 import type {BowledBall,ShotSide,StrokeResult} from '@/lib/cricket-engine';
 import {CricketStadiumFallback} from './cricket-stadium-fallback';

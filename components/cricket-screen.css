@@ -1,0 +1,44 @@
+/* Cricket-only viewport layout; preserve full pitch and existing controls. */
+.arcade-shell .gf-on .play-cricket{position:fixed;inset:var(--gf-bar-h,61px) 0 0;z-index:30;display:grid;grid-template-rows:48px minmax(0,1fr);width:100%;max-width:none!important;padding:0!important;box-sizing:border-box}
+.arcade-shell .gf-on:has(.play-cricket) .gf-bar{position:fixed;inset:0 0 auto;z-index:40}
+.arcade-shell .gf-on:has(.play-cricket) :is(.fresh-main,.fresh-play-viewport,.fresh-active-scene){zoom:1!important;padding:0!important;min-height:0!important}
+.arcade-shell .gf-on:has(.play-cricket) :is(.fresh-game-bar,.fresh-instruction,.fresh-footer,.arcade-game-heading){display:none!important}
+.arcade-shell .gf-on .play-cricket .pc-score-strip{display:grid!important;grid-template-columns:1.2fr repeat(4,minmax(0,1fr))!important;max-width:none;width:100%;margin:0;padding:2px 8px;gap:2px;border-radius:0;box-sizing:border-box;overflow:hidden}
+.arcade-shell .gf-on .play-cricket .pc-score-strip>div{padding:0 4px;gap:1px}
+.arcade-shell .gf-on .play-cricket .pc-score-strip small{font-size:9px;letter-spacing:0}
+.arcade-shell .gf-on .play-cricket .pc-score-strip b{font-size:16px}
+.arcade-shell .gf-on .play-cricket .pc-main-score strong{font-size:23px}
+.arcade-shell .gf-on .play-cricket .pc-match-layout{display:grid;grid-template-columns:minmax(0,1fr) 300px;grid-template-rows:minmax(0,1fr);align-items:stretch;gap:0;max-width:none;margin:0;min-height:0;position:relative}
+.arcade-shell .gf-on .play-cricket .pc-stage-wrap{height:100%;max-height:none!important;min-height:0;border:0;border-radius:0;box-shadow:none}
+.arcade-shell .gf-on .play-cricket :is(.pc-stadium,.play-cricket-field){display:block;width:100%!important;height:100%!important;max-height:none!important;aspect-ratio:auto;object-fit:contain}
+.arcade-shell .gf-on .play-cricket :is(.pc-stadium-canvas,.pc-stadium svg){width:100%;height:100%;object-fit:contain}
+.arcade-shell .gf-on .play-cricket .pc-controller{min-height:0;max-height:none;border-radius:0;padding:12px;gap:8px;overflow:auto;box-sizing:border-box;order:0;grid-template-columns:minmax(0,1fr);grid-template-rows:none;align-content:start}
+.arcade-shell .gf-on .play-cricket :is(.pc-smallprint,.pc-bowler-info,.pc-controller-heading,.pc-mobile-pad,.pc-audio-actions){display:none!important}
+/* The 3D renderer uses the newer three-column bottom dock. Reset its explicit
+   grid positions when this viewport layout moves that dock into a narrow side panel. */
+.arcade-shell .gf-on .play-cricket .pc-controller>:is(.pc-bat-buttons,.pc-advanced-options,.pc-ball-feed,.pc-commentary,.pc-next){grid-column:1;grid-row:auto}
+.arcade-shell .gf-on .play-cricket.pc-is-setup .pc-controller{position:static;inset:auto;transform:none;max-width:none}
+.arcade-shell .gf-on .play-cricket .pc-advanced-options[open]{position:static;inset:auto;width:auto;max-height:none;transform:none}
+.arcade-shell .gf-on .play-cricket .pc-bat-buttons{display:grid}
+.arcade-shell .gf-on .play-cricket .pc-bat-buttons button{min-height:68px}
+.arcade-shell .gf-on .play-cricket .pc-pregame{padding:0;gap:8px}
+@media(max-width:760px) and (orientation:portrait){
+.arcade-shell .gf-on .play-cricket{top:var(--gf-bar-h,57px)}
+.arcade-shell .gf-on .play-cricket .pc-match-layout{grid-template-columns:minmax(0,1fr);grid-template-rows:minmax(0,1fr) auto}
+.arcade-shell .gf-on .play-cricket .pc-controller{padding:6px 8px calc(6px + env(safe-area-inset-bottom));gap:5px;max-height:40dvh}
+.arcade-shell .gf-on .play-cricket :is(.pc-controller>.pc-control-label,.pc-bat-buttons small,.pc-ball-feed){display:none}
+.arcade-shell .gf-on .play-cricket .pc-bat-buttons button{min-height:58px;gap:3px}
+.arcade-shell .gf-on .play-cricket .pc-commentary{min-height:0;padding:4px 8px;font-size:11px}
+.arcade-shell .gf-on .play-cricket .pc-advanced-options{padding:4px 8px}
+.arcade-shell .gf-on .play-cricket .pc-match-layout.is-setup{grid-template-rows:minmax(0,1fr)}
+.arcade-shell .gf-on .play-cricket .is-setup .pc-controller{position:absolute;z-index:5;bottom:8px;left:8px;right:8px;max-height:55%;border-radius:8px;padding:12px}
+.arcade-shell .gf-on .play-cricket :is(.pc-pregame>p,.pc-sound-info,.is-setup .pc-commentary){display:none}
+.arcade-shell .gf-on .play-cricket .pc-pregame{gap:6px}
+.arcade-shell .gf-on .play-cricket .pc-start{min-height:48px;margin:4px 0}
+}
+@media(orientation:landscape) and (max-height:620px){
+.arcade-shell .gf-on .play-cricket .pc-match-layout{grid-template-columns:minmax(0,1fr) 260px}
+.arcade-shell .gf-on .play-cricket .pc-controller{padding:6px 8px;gap:5px}
+.arcade-shell .gf-on .play-cricket .pc-bat-buttons button{min-height:48px}
+.arcade-shell .gf-on .play-cricket :is(.pc-pregame>p,.pc-sound-info,.pc-ball-feed){display:none}
+}
