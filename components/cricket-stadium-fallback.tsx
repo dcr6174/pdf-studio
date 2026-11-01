@@ -43,6 +43,6 @@ export function CricketStadiumFallback({ball,elapsed,result,shotDirection,loft,p
   <circle cx={target.x} cy={target.y} r="19" fill="#fff9d5aa" stroke="#ffffff" strokeWidth="4" className="pc-impact"/>
   <text x="380" y="110" textAnchor="middle" className="pc-big-result" key={'result-'+strokeFlash}>{result.wicket?'OUT!':result.runs===6?'SIX!':result.runs===4?'FOUR!':result.runs?result.runs+' RUN'+(result.runs===1?'':'S'):'DOT BALL'}</text>
  </>}
- <text x="22" y="31" fill="#1e403f" fontSize="15" fontWeight="800">BATTING CAMERA · ORIGINAL PLAY STUDIO</text>
+ <text x="22" y="31" fill="#1e403f" fontSize="15" fontWeight="800">BATTING CAMERA · ORIGINAL ARCADE</text>
  </svg>;
 }
