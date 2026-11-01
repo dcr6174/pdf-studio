@@ -23,7 +23,7 @@ assert.equal(beats('strokes',30,34),true);assert.equal(beats('strokes',36,34),fa
 assert.equal(beats('outcome',99,0),false);
 // Only well-formed reports reach the frame.
 const ok={slug:'buddy-runner',phase:'playing',score:3,best:9,won:null,message:'',scoreKind:'points',feel:'action',letterKeys:false,canPause:true,sound:true};
-assert.equal(isArcadeReport(ok),true);assert.equal(isArcadeReport({...ok,againLabel:'Next puzzle →'}),true);
+assert.equal(isArcadeReport(ok),true);assert.equal(isArcadeReport({...ok,nativeResult:true}),true);assert.equal(isArcadeReport({...ok,nativeResult:'yes'}),false);assert.equal(isArcadeReport({...ok,againLabel:'Next puzzle →'}),true);
 for(const bad of [{...ok,phase:'won'},{...ok,score:NaN},{...ok,won:'yes'},{...ok,scoreKind:'time'},{...ok,sound:'on'},{...ok,againLabel:5},null,'x'])assert.equal(isArcadeReport(bad),false);
 // Volume mix: defaults, clamping and hostile storage.
 assert.deepEqual(parseMix(null),defaultMix);assert.deepEqual(parseMix('{bad'),defaultMix);

@@ -4,7 +4,7 @@ import type {FreshKind} from '@/lib/fresh-catalog';
 import {CricketMatch} from '@/components/cricket-match';
 import {cueGuide} from '@/lib/pool-aim';
 type Effect='tap'|'success'|'miss'|'bounce'|'hit'|'goal';
-type Props={sound?:boolean;onToggleSound?:()=>void;kind:FreshKind;active:boolean;comfort:boolean;onScore:(score:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:Effect)=>void};
+type Props={onStart?:()=>void;sound?:boolean;onToggleSound?:()=>void;kind:FreshKind;active:boolean;comfort:boolean;onScore:(score:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:Effect)=>void};
 type Ball={id:number;x:number;y:number;vx:number;vy:number;color:string;stripe:boolean;potted:boolean};
 const colours=['#ffdf82','#81b6fc','#ff899b','#b79bff','#ffb77b','#83d3b0','#e59dd4'];
 const pockets=[[30,30],[320,26],[610,30],[30,330],[320,334],[610,330]];

@@ -76,11 +76,13 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
  };
  const bestText=(r:ArcadeReport,value=r.best)=>r.scoreKind==='outcome'?plural(progress.wins[slug]??0,'win','wins'):value>0?(r.scoreKind==='strokes'?'Best '+plural(value,'stroke','strokes'):'Best '+value):'No best yet';
  const resumeBtn=h('button',{class:'gf-primary',type:'button'},'▶ Resume');
- const restartBtn=()=>{const b=h('button',{class:'gf-toggle gf-restart',type:'button'},report?.scoreKind==='outcome'?'↻ New game':'↻ Restart round');b.addEventListener('click',()=>{hidePause();menuPaused=false;root.classList.remove('gf-menu-open');sheet.hidden=true;menuBtn.setAttribute('aria-expanded','false');hideEnd();sendArcadeCommand(slug,'restart');});return b;};
+ const restartBtn=()=>{const b=h('button',{class:'gf-toggle gf-restart',type:'button'},slug==='boundary-cricket'?'↻ Restart Match':report?.scoreKind==='outcome'?'↻ New game':'↻ Restart round');b.addEventListener('click',()=>{hidePause();menuPaused=false;root.classList.remove('gf-menu-open');sheet.hidden=true;menuBtn.setAttribute('aria-expanded','false');hideEnd();sendArcadeCommand(slug,'restart');});return b;};
  function showPause(){
   if(!report||!endCard.hidden)return;const r=report;
   const line=r.scoreKind==='outcome'?r.message:(r.scoreKind==='strokes'?'Strokes ':'Score ')+r.score+' · '+bestText(r);
   setKids(pauseCard,h('h2',{},'Paused'),h('p',{},line),resumeBtn,h('div',{class:'gf-row'},restartBtn()),h('div',{class:'gf-row'},h('a',{class:'gf-link',href:'/lab/arcade'},'All games'),h('a',{class:'gf-link',href:'/lab/arcade/'+next.slug},'Next: '+next.name)));
+  if(slug==='boundary-cricket'){const options=h('div',{class:'gf-row'});for(const [event,label] of [['settings','Settings'],['home','Exit to Home']]){const b=h('button',{class:'gf-toggle',type:'button'},label);b.addEventListener('click',()=>{hidePause();sendArcadeCommand(slug,'resume');window.dispatchEvent(new CustomEvent('studio-cricket:'+event));});add(options,b);}add(pauseCard,options);}
+
   pauseCard.hidden=false;root.classList.add('gf-paused');resumeBtn.focus();
  }
  const hidePause=()=>{pauseCard.hidden=true;root.classList.remove('gf-paused');};
@@ -130,6 +132,7 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
   const record=beats(k,r.score,previousBest);
   const bestNow=record?r.score:k==='strokes'?(r.best||previousBest):Math.max(r.best,previousBest);
   const level=levelFromXp(progress.xp);levelEl.textContent='Lv '+level.level;bestEl.textContent=bestText(r,bestNow);
+  if(r.nativeResult)return;
   const near=nearMiss(r.score,previousBest,k);
   const again=h('button',{class:'gf-primary',type:'button'},r.againLabel??(k==='outcome'?'↻ Rematch':'↻ Play again'));
   again.addEventListener('click',()=>{hideEnd();sendArcadeCommand(slug,'restart');});

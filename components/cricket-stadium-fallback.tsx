@@ -16,7 +16,7 @@ export function CricketStadiumFallback({ball,elapsed,result,shotDirection,loft,p
  <linearGradient id="pc-pitch" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stopColor="#d8ba85"/><stop offset="1" stopColor="#a98757"/></linearGradient>
  <filter id="pc-ball-shadow"><feGaussianBlur stdDeviation="2"/></filter>
  </defs>
- <rect width="760" height="555" rx="20" fill="#8ed0db"/>
+ <rect width="760" height="555" rx="20" fill={sky}/>
  <path d="M0 67Q380 -25 760 67V191H0Z" fill="url(#pc-stand)"/>
  {Array.from({length:43},(_,i)=><g key={i}><rect x={i*19-5} y={82+i%3*11} width="8" height="5" rx="2" fill={['#e6c69c','#b5dfe6','#efb7b8','#d8cbf0'][i%4]}/><rect x={i*18+8} y={121+i%4*8} width="7" height="5" rx="2" fill="#e2d6c5"/></g>)}
  <rect y="176" width="760" height="15" fill="#e9ece3"/>

@@ -6,8 +6,8 @@ import type {CricketSceneState} from './cricket-stadium';
 /** Original procedural artwork: no remote models, textures, fonts or licensed team assets. */
 export function createCricketScene(canvas:HTMLCanvasElement,read:()=>CricketSceneState,onFailure:()=>void){
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});
- renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
- renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,read().quality==='high'?2:1.25));
+ renderer.shadowMap.enabled=read().quality==='high';renderer.shadowMap.type=THREE.PCFSoftShadowMap;
  renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;
  renderer.toneMappingExposure=1.25;
  const scene=new THREE.Scene();scene.background=new THREE.Color('#bedfe5');scene.fog=new THREE.Fog('#bedfe5',65,145);

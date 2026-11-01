@@ -29,7 +29,7 @@ export function ArcadeHub(){
  if(!data)return <div className="hub hub-loading" aria-hidden="true"/>;
  const {p,daily,recent,best}=data,lv=levelFromXp(p.xp);
  const most=Object.entries(p.plays).sort((a,b)=>b[1]-a[1]).map(([s])=>bySlug.get(s)).filter((g):g is Game=>!!g).slice(0,10);
- const surprise=()=>{const g=activeArcadeGames[Math.floor(Math.random()*activeArcadeGames.length)];window.location.href='/lab/arcade/'+g.slug+'?play=1';};
+ const surprise=()=>{const g=activeArcadeGames[Math.floor(Math.random()*activeArcadeGames.length)];window.location.assign(new URL('/lab/arcade/'+g.slug+'?play=1',window.location.origin).href);};
  return <div className="hub">
   <div className="hub-top">
    <Link className="hub-daily" href={'/lab/arcade/'+daily.slug+'?play=1'}><span className="hub-kicker">★ Today’s challenge · +20 XP</span><strong>{daily.name}</strong><span>{data.dailyBest!==undefined?'Your best today: '+data.dailyBest:'Same game for everyone today. Set your score.'}</span><span className="hub-go">Play now →</span></Link>

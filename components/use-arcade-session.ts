@@ -7,10 +7,10 @@ type Commands={pause:()=>void;resume:()=>void;restart:()=>void;sound?:()=>void};
 export function useArcadeSession(report:ArcadeReport,commands:Commands){
  const handlers=useRef(commands);
  useEffect(()=>{handlers.current=commands;});
- const {slug,phase,score,best,won,message,scoreKind,feel,letterKeys,canPause,sound,againLabel,detail}=report;
+ const {slug,phase,score,best,won,message,scoreKind,feel,letterKeys,canPause,sound,againLabel,detail,nativeResult}=report;
  useEffect(()=>{
-  publishArcadeReport({slug,phase,score,best,won,message,scoreKind,feel,letterKeys,canPause,sound,againLabel,detail});
- },[slug,phase,score,best,won,message,scoreKind,feel,letterKeys,canPause,sound,againLabel,detail]);
+  publishArcadeReport({slug,phase,score,best,won,message,scoreKind,feel,letterKeys,canPause,sound,againLabel,detail,nativeResult});
+ },[slug,phase,score,best,won,message,scoreKind,feel,letterKeys,canPause,sound,againLabel,detail,nativeResult]);
  useEffect(()=>{
   const on=(event:Event)=>{
    const detail=(event as CustomEvent<{slug?:unknown;command?:unknown}>).detail;

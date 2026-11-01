@@ -22,6 +22,8 @@ export type ArcadeReport=ArcadeProfile&{
  sound:boolean|null;
  /** Label for the main end-of-round button when it is not a plain replay, e.g. "Next puzzle". */
  againLabel?:string;
+ /** Game provides its own accessible result UI; shared progression still records the round. */
+ nativeResult?:boolean;
  /** One short live readout the bar shows beside the score, e.g. "42s left" or "Moves 17". */
  detail?:string;
 };
@@ -50,7 +52,7 @@ const kinds=new Set<ScoreKind>(['points','strokes','outcome']);
 const finite=(v:unknown)=>typeof v==='number'&&Number.isFinite(v);
 export function isArcadeReport(v:unknown):v is ArcadeReport{
  if(!v||typeof v!=='object')return false;const r=v as Record<string,unknown>;
- return typeof r.slug==='string'&&phases.has(r.phase as ArcadePhase)&&finite(r.score)&&finite(r.best)&&(r.won===null||typeof r.won==='boolean')&&typeof r.message==='string'&&kinds.has(r.scoreKind as ScoreKind)&&(r.feel==='action'||r.feel==='calm')&&typeof r.letterKeys==='boolean'&&typeof r.canPause==='boolean'&&(r.sound===null||typeof r.sound==='boolean')&&(r.againLabel===undefined||typeof r.againLabel==='string')&&(r.detail===undefined||typeof r.detail==='string');
+ return typeof r.slug==='string'&&phases.has(r.phase as ArcadePhase)&&finite(r.score)&&finite(r.best)&&(r.won===null||typeof r.won==='boolean')&&typeof r.message==='string'&&kinds.has(r.scoreKind as ScoreKind)&&(r.feel==='action'||r.feel==='calm')&&typeof r.letterKeys==='boolean'&&typeof r.canPause==='boolean'&&(r.sound===null||typeof r.sound==='boolean')&&(r.nativeResult===undefined||typeof r.nativeResult==='boolean')&&(r.againLabel===undefined||typeof r.againLabel==='string')&&(r.detail===undefined||typeof r.detail==='string');
 }
 /** Is `score` an improvement on `best` for this kind of game? A zero best means no record yet. */
 export function beats(kind:ScoreKind,score:number,best:number){
