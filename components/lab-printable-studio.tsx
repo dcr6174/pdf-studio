@@ -56,7 +56,7 @@ export function LabPrintableStudio({mode}:{mode:PrintableMode}){
   let posterSummary='';if(mode==='giant-poster'&&pictures[0]){try{const p=posterPlan(pictures[0].width,pictures[0].height,settings);posterSummary=`${p.cols} × ${p.rows} sheets · ${Math.round(p.width)} × ${Math.round(p.height)} mm`;}catch(e){posterSummary=e instanceof Error?e.message:'';}}
   const activeCard=settings.cards[selectedCard];
   return <main className="printable-studio">
-    <header className="printable-heading"><Link href="/lab">← Studio Lab</Link><span className="printable-kicker"><Scissors size={15} aria-hidden="true"/> Make it. Print it. Keep it.</span><h1>{tool.title}</h1><p>{tool.description}</p></header>
+    <header className="printable-heading"><Link href="/lab/creative-studio">← Creative Studio</Link><span className="printable-kicker"><Scissors size={15} aria-hidden="true"/> Make it. Print it. Keep it.</span><h1>{tool.title}</h1><p>{tool.description}</p></header>
     <div className="printable-mobile-tabs" role="group" aria-label="Workspace panel"><button aria-pressed={mobileTab==='design'} onClick={()=>setMobileTab('design')}>Design</button><button aria-pressed={mobileTab==='preview'} onClick={()=>setMobileTab('preview')}>Preview {result&&<Check size={15}/>}</button></div>
     {error&&<div className="printable-error" role="alert"><span>{error}</span><button aria-label="Dismiss error" onClick={()=>setError('')}><X size={18}/></button></div>}
     <div className="printable-layout" data-panel={mobileTab}>

@@ -94,7 +94,7 @@ export function ImageWorkspace({
   return (
     <div className="iw-root" ref={root}>
       <header className="iw-header">
-        <Link href="/lab" className="iw-brand">
+        <Link href="/lab/image-studio" className="iw-brand">
           <span className="iw-brand-mark" aria-hidden="true">
             <i />
             <i />
@@ -102,7 +102,7 @@ export function ImageWorkspace({
             <i />
           </span>
           <span>
-            Studio <b>Lab</b>
+            Image <b>Studio</b>
             <small>IMAGE WORKSPACE</small>
           </span>
         </Link>

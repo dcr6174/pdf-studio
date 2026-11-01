@@ -11,7 +11,7 @@ type Photo={id:string;name:string;url:string};
 type Card={id:string;question:string;answer:string};
 export function FunLab({mode}:{mode:FunMode}){
  const tool=funTools.find(t=>t.slug===mode)!;
- return <div className="fun-shell"><SiteHeader/><main className="fun-main"><Link href="/lab">← Studio Lab</Link><header><span className="fun-eyebrow">Fun & Play · made by you</span><h1>{tool.title}</h1><p>{tool.description}</p></header>{mode==='photo-strip'?<PhotoStrip/>:mode==='flashcards'?<Flashcards/>:<DecisionWheel/>}<p className="fun-privacy">Files and choices stay in this browser. Download work you want to keep before leaving.</p></main><SiteFooter/></div>;
+ return <div className="fun-shell"><SiteHeader/><main className="fun-main"><Link href="/lab/creative-studio">← Creative Studio</Link><header><span className="fun-eyebrow">Fun & Play · made by you</span><h1>{tool.title}</h1><p>{tool.description}</p></header>{mode==='photo-strip'?<PhotoStrip/>:mode==='flashcards'?<Flashcards/>:<DecisionWheel/>}<p className="fun-privacy">Files and choices stay in this browser. Download work you want to keep before leaving.</p></main><SiteFooter/></div>;
 }
 function PhotoStrip(){
  const [photos,setPhotos]=useState<Photo[]>([]),[caption,setCaption]=useState('A few moments worth keeping'),[theme,setTheme]=useState('lavender'),[fit,setFit]=useState('cover'),[busy,setBusy]=useState(false),[notice,setNotice]=useState('');const input=useRef<HTMLInputElement>(null);

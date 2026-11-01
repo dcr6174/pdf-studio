@@ -1,0 +1,49 @@
+.studio-switcher {
+  display: flex;
+  gap: 4px;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 10px 24px;
+  border-bottom: 1px solid var(--border, #dce0e8);
+  box-sizing: border-box;
+  color: var(--foreground, #202133);
+}
+.studio-switcher a {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 8px;
+  min-height: 46px;
+  padding: 8px 16px;
+  border-bottom: 2px solid transparent;
+  text-decoration: none;
+  font: 600 14px/1.4 var(--font-body, system-ui);
+  color: inherit;
+  box-sizing: border-box;
+}
+.studio-switcher a[aria-current="page"] {
+  border-bottom-color: var(--primary, #6341e8);
+  color: var(--primary, #6341e8);
+  background: var(--soft, #f2effa);
+  border-radius: 8px 8px 0 0;
+}
+.studio-switcher a:hover {
+  background: var(--soft, #f2effa);
+}
+.studio-switcher a:focus-visible {
+  outline: 3px solid var(--primary, #6341e8);
+  outline-offset: 2px;
+}
+@media (max-width: 600px) {
+  .studio-switcher {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    padding: 8px 16px;
+    gap: 4px;
+  }
+  .studio-switcher a {
+    justify-content: flex-start;
+    padding: 8px 10px;
+    min-height: 44px;
+  }
+}

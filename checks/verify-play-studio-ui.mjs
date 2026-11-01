@@ -16,7 +16,7 @@ assert(directory.includes('Find your next favourite.'));
 assert(directory.includes('Show more games'));
 assert(directory.includes('/lab/arcade/boundary-cricket'));
 const showcase=renderToStaticMarkup(createElement(LabShowcase));
-assert(showcase.includes('Image Studio')&&showcase.includes('Play Studio')&&showcase.includes('Create Studio'));
+assert(showcase.includes('Image Studio')&&showcase.includes('Arcade')&&showcase.includes('Creative Studio'));
 assert(showcase.includes('/lab/image-studio')&&showcase.includes('/lab/arcade'));
 const noop=()=>{};
 for(const game of [...freshGames,...expansionGames]){

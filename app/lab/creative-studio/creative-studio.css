@@ -1,0 +1,193 @@
+.creative-hub-main {
+  max-width: 1120px;
+  margin: 0 auto;
+  padding: 32px 24px 56px;
+  color: var(--foreground, #202133);
+}
+.creative-hub-main > header {
+  max-width: 720px;
+  margin-bottom: 28px;
+}
+.creative-hub-main > header > span:first-child {
+  font-size: 12px;
+  font-weight: 750;
+  letter-spacing: 0.1em;
+  color: var(--primary, #6341e8);
+}
+.creative-hub-main h1 {
+  font-size: clamp(32px, 4vw, 46px);
+  letter-spacing: -0.04em;
+  margin: 12px 0;
+}
+.creative-hub-main > header > p {
+  font-size: 17px;
+  line-height: 1.7;
+  color: var(--muted, #596274);
+  margin: 0 0 14px;
+}
+.creative-tool-count {
+  font-size: 14px;
+  color: var(--muted, #596274);
+}
+.creative-browse-controls {
+  margin: 24px 0;
+}
+.creative-tool-search {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  max-width: 600px;
+  border: 1px solid var(--border, #dce0e8);
+  border-radius: 12px;
+  padding: 6px 14px;
+  background: var(--card, #fff);
+}
+.creative-tool-search input {
+  min-width: 0;
+  width: 100%;
+  min-height: 44px;
+  font: inherit;
+  font-size: 16px;
+  border: 0;
+  background: transparent;
+  color: inherit;
+  outline: none;
+}
+.creative-tool-search:focus-within {
+  outline: 3px solid var(--primary, #6341e8);
+  outline-offset: 3px;
+}
+.creative-group-filters {
+  display: flex;
+  gap: 6px;
+  flex-wrap: wrap;
+  margin-top: 16px;
+}
+.creative-group-filters button {
+  min-height: 44px;
+  padding: 8px 14px;
+  font: inherit;
+  font-size: 14px;
+  border: 1px solid var(--border, #dce0e8);
+  border-radius: 8px;
+  background: var(--card, #fff);
+  color: inherit;
+  cursor: pointer;
+}
+.creative-group-filters button[aria-pressed="true"] {
+  background: var(--primary, #6341e8);
+  border-color: transparent;
+  color: #fff;
+}
+.creative-browse-controls > p {
+  font-size: 14px;
+  color: var(--muted, #596274);
+}
+.creative-tool-group {
+  margin-top: 28px;
+}
+.creative-tool-group > h2 {
+  font-size: 22px;
+  letter-spacing: -0.02em;
+  margin: 0 0 14px;
+}
+.creative-tool-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(0, 1fr));
+  gap: 12px;
+}
+.creative-tool-grid a {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 18px;
+  padding: 20px;
+  border: 1px solid var(--border, #dce0e8);
+  border-radius: 12px;
+  background: var(--card, #fff);
+  text-decoration: none;
+  color: inherit;
+  min-width: 0;
+}
+.creative-tool-grid svg {
+  flex-shrink: 0;
+  color: var(--primary, #6341e8);
+}
+.creative-tool-grid h3 {
+  font-size: 17px;
+  line-height: 1.4;
+  margin: 0 0 6px;
+}
+.creative-tool-grid p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted, #596274);
+  margin: 0;
+}
+.creative-document-experiments {
+  margin-top: 32px;
+  border: 1px solid var(--border, #dce0e8);
+  border-radius: 12px;
+  padding: 16px;
+}
+.creative-document-experiments > summary {
+  font-size: 16px;
+  font-weight: 650;
+  cursor: pointer;
+  min-height: 44px;
+  align-content: center;
+}
+.creative-document-experiments > p {
+  font-size: 15px;
+  line-height: 1.6;
+  color: var(--muted, #596274);
+}
+.creative-empty {
+  padding: 24px;
+  border: 1px dashed var(--border, #dce0e8);
+  border-radius: 12px;
+}
+.creative-empty button {
+  min-height: 44px;
+  font: inherit;
+  padding: 8px 16px;
+  background: var(--card, #fff);
+  color: inherit;
+  border: 1px solid var(--border, #dce0e8);
+  border-radius: 8px;
+  cursor: pointer;
+}
+.lab-creative-hub a:focus-visible,
+.lab-creative-hub button:focus-visible,
+.lab-creative-hub summary:focus-visible {
+  outline: 3px solid var(--primary, #6341e8);
+  outline-offset: 3px;
+}
+@media (max-width: 650px) {
+  .creative-hub-main {
+    padding: 24px 16px 40px;
+  }
+  .creative-tool-grid {
+    grid-template-columns: 1fr;
+  }
+  .creative-group-filters {
+    flex-wrap: nowrap;
+    overflow-x: auto;
+    padding-bottom: 6px;
+  }
+  .creative-group-filters button {
+    flex-shrink: 0;
+  }
+  .creative-tool-grid a {
+    padding: 16px;
+  }
+  .creative-hub-main > header > p {
+    font-size: 16px;
+  }
+}
+@media (prefers-reduced-motion: reduce) {
+  .lab-creative-hub * {
+    animation: none !important;
+    transition: none !important;
+  }
+}
