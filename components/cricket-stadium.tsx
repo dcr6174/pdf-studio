@@ -6,6 +6,7 @@ import {CricketStadiumFallback} from './cricket-stadium-fallback';
 
 export type CricketSceneState={
  ball:BowledBall;elapsed:number;result:StrokeResult|null;shotDirection:ShotSide;
+ battingColor?:string;fieldingColor?:string;night?:boolean;view?:'bat'|'bowl';
  loft:boolean;phase:'setup'|'bowling'|'result'|'done';strokeFlash:number;active:boolean;comfort:boolean;
 };
 
@@ -23,7 +24,7 @@ export function CricketStadium(props:CricketSceneState){
   }).catch(fail);
   return()=>{cancelled=true;dispose?.();};
  },[]);
- const description='Cricket stadium behind the striker. '+props.ball.style+' delivery, '+props.ball.length+' length. '+(props.result?props.result.comment:'Watch the ball and bounce marker.');
+ const description=(props.view==='bowl'?'Cricket stadium from the bowling end. ':'Cricket stadium behind the striker. ')+props.ball.style+' delivery, '+props.ball.length+' length. '+(props.result?props.result.comment:'Watch the ball and bounce marker.');
  return <div className="pc-stadium" role="img" aria-label={description}>
   <canvas className="pc-stadium-canvas" ref={canvas} aria-hidden="true" hidden={mode!=='3d'}/>
   {mode!=='3d'&&<CricketStadiumFallback {...props}/>}

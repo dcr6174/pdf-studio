@@ -32,7 +32,7 @@ const progress=()=>Number(host.querySelector('.play-cricket-field')?.getAttribut
 const score=()=>host.querySelector('.pc-main-score strong')?.textContent;
 try{
  await act(async()=>{root.render(createElement(GamePreferences,{slug:'boundary-cricket'},createElement(FreshGame,{slug:'boundary-cricket'})));await new Promise(r=>setTimeout(r,25));});
- assert(find('START CHASE'));await click(find('START CHASE'));await tick();
+ await click(find('Quick Chase'));assert(find('START CHASE'));await click(find('START CHASE'));await tick();
  assert(host.querySelector('.pc-auto-foot input').checked,'beginner footwork starts automatic');
  // An early A key commits one delivery; subsequent D/Space inputs cannot score it twice.
  await act(async()=>window.dispatchEvent(new window.KeyboardEvent('keydown',{key:'a',bubbles:true})));
@@ -76,7 +76,7 @@ try{
  assert(seenOver,'a complete over was played');
  await act(async()=>{await new Promise(r=>setTimeout(r,1900));});
  assert.equal(host.querySelector('[data-game-state]').dataset.gameState,'finished','chase ends after final-ball presentation');
- await click(find('Play again'));assert(find('START CHASE'),'replay returns to setup');
+ await click(find('Play again'));await click(find('Quick Chase'));assert(find('START CHASE'),'replay returns to setup');
  await click(find('START CHASE'));assert.equal(score(),'0/0','new chase resets score');
  await act(async()=>{await new Promise(r=>setTimeout(r,30));});
  assert(host.textContent.includes('2D compatibility mode'),'no WebGL falls back to a playable stadium');

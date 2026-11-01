@@ -22,7 +22,7 @@ export function createCricketScene(canvas:HTMLCanvasElement,read:()=>CricketScen
  const materials:THREE.Material[]=[],geometries:THREE.BufferGeometry[]=[];
  const mat=(color:string,roughness=.85)=>{const m=new THREE.MeshStandardMaterial({color,roughness});materials.push(m);return m;};
  const grass=mat('#388e57'),stripe=mat('#429b5b'),sand=mat('#d6b982'),white=mat('#f5f0d9');
- const navy=mat('#12394e'),mint=mat('#95e2bb'),skin=mat('#c98d66'),kit=mat('#f6eedb'),pad=mat('#dfeae5'),batMat=mat('#e4bd76');
+ const navy=mat('#12394e'),mint=mat('#95e2bb'),skin=mat('#c98d66'),fieldKit=mat('#2584e8'),kit=mat('#f6eedb'),pad=mat('#dfeae5'),batMat=mat('#e4bd76');
  const crowdColors=['#f7cc81','#72b4b1','#a6c3df','#d8877c'].map(c=>mat(c));
  const box=(x:number,y:number,z:number)=>{const g=new THREE.BoxGeometry(x,y,z);geometries.push(g);return g;};
  const sphere=(r:number)=>{const g=new THREE.SphereGeometry(r,12,8);geometries.push(g);return g;};
@@ -63,7 +63,8 @@ export function createCricketScene(canvas:HTMLCanvasElement,read:()=>CricketScen
  }
  for(const x of [-30,30])for(const z of [-21,33]){
   mesh(cylinder(.18,.28,17),navy,scene,x,8.5,z);
-  const lamp=mesh(box(5,1.5,.4),white,scene,x,17,z);lamp.rotation.y=x<0?.5:-.5;
+  const lampMat=mat('#f4f4de');lampMat.emissive.set('#d9edff');lampMat.emissiveIntensity=1.5;
+  const lamp=mesh(box(5,1.5,.4),lampMat,scene,x,17,z);lamp.rotation.y=x<0?.5:-.5;
  }
  const boards=mat('#173748');
  for(let i=0;i<32;i++){
@@ -87,9 +88,10 @@ export function createCricketScene(canvas:HTMLCanvasElement,read:()=>CricketScen
  const batPivot=new THREE.Group();batPivot.position.set(.35,1.2,-.12);batter.root.add(batPivot);
  const blade=mesh(box(.2,.72,.08),batMat,batPivot,0,-.47,0);blade.castShadow=true;
  mesh(cylinder(.033,.033,.28),navy,batPivot,0,.02,0);
- const bowler=player(0,10.8,navy,.95);bowler.root.rotation.y=Math.PI;
- const keeper=player(0,-12.3,mint,.9);keeper.root.rotation.y=0;
- const fielders=cricketFielders.map(f=>{const p=cricketFieldWorld(f.x,f.y);const person=player(p.x,p.z,navy,.95);person.root.lookAt(0,0,-10);return person;});
+ const bowler=player(0,10.8,fieldKit,.95);bowler.root.rotation.y=Math.PI;
+ const keeper=player(0,-12.3,fieldKit,.9);keeper.root.rotation.y=0;
+ const fielders=cricketFielders.map(f=>{const p=cricketFieldWorld(f.x,f.y);const person=player(p.x,p.z,fieldKit,.95);person.root.lookAt(0,0,-10);return person;});
+ const nonStriker=player(1.7,8.8,kit,.95);nonStriker.root.rotation.y=Math.PI;
  const bails:THREE.Mesh[]=[];
  for(const z of [-11.1,10.6]){
   for(const x of [-.22,0,.22]){const stump=mesh(cylinder(.035,.035,.85),white,scene,x,.43,z);stump.castShadow=true;}
@@ -115,6 +117,8 @@ export function createCricketScene(canvas:HTMLCanvasElement,read:()=>CricketScen
  const loop=(now:number)=>{
   if(disposed)return;frame=requestAnimationFrame(loop);
   const state=read(),dt=last?Math.min((now-last)/1000,.05):0;last=now;
+  kit.color.set(state.battingColor??'#f6eedb');fieldKit.color.set(state.fieldingColor??'#12394e');
+  const sky=state.night?'#0b1b36':'#bedfe5';(scene.background as THREE.Color).set(sky);(scene.fog as THREE.Fog).color.set(sky);ambient.intensity=state.night?1.5:2.1;sun.intensity=state.night?2.2:3.1;
   const draw=state.active||lastActive||lastPhase!==state.phase;lastActive=state.active;
   if(!draw)return;
   const hasResult=(state.phase==='result'||state.phase==='done')&&state.result;
@@ -145,8 +149,9 @@ export function createCricketScene(canvas:HTMLCanvasElement,read:()=>CricketScen
   bails.forEach((b,i)=>{b.position.copy(baseBails[i]);b.rotation.z=0;if(i<2&&hasResult&&state.result!.out==='bowled'){b.position.x+=(i?1:-1)*Math.min(1,resultTime)*1.5;b.position.y+=Math.sin(Math.min(1,resultTime)*Math.PI)*1.6;b.rotation.z=resultTime*8;}});
   sparks.forEach((s,i)=>{s.visible=!!hasResult&&state.result!.runs>=4&&resultTime<.65&&!quiet;const a=i/12*Math.PI*2;s.position.set(point.x+Math.cos(a)*resultTime*2,point.y+Math.sin(a)*resultTime*2,point.z);});
   // Follow only boundary flights; never move the camera while the player is timing a ball.
+  home.z=state.view==='bowl'?18.7:-18.7;look.z=state.view==='bowl'?-7:7;
   const follow=!!hasResult&&state.result!.runs>=4&&!quiet;
-  const eye=follow?new THREE.Vector3(point.x*.2,6+Math.min(point.y,7)*.25,-18.7+Math.min(resultTime,.8)*3):home;
+  const eye=follow?new THREE.Vector3(point.x*.2,6+Math.min(point.y,7)*.25,home.z-Math.sign(home.z)*Math.min(resultTime,.8)*3):home;
   camera.position.lerp(eye,1-Math.exp(-dt*7));
   const aim=follow?new THREE.Vector3(point.x*.52,Math.max(1,point.y*.6),Math.max(7,point.z*.5)):look;
   camera.lookAt(aim);renderer.render(scene,camera);

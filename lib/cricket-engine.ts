@@ -13,7 +13,7 @@ export type BowlingStyle='pace'|'swing'|'spin';
 export type Difficulty='easy'|'club'|'pro';
 export type BowledBall={
  id:number;speed:number;line:number;length:Length;style:BowlingStyle;
- bounce:number;swing:number;releaseMs:number;contactMs:number;leadMs:number;
+ bounce:number;swing:number;releaseMs:number;contactMs:number;leadMs:number;extra?:'wide'|'no-ball';
 };
 export type StrokeResult={
  runs:number;wicket:boolean;out:'bowled'|'caught'|'lbw'|null;
@@ -22,8 +22,12 @@ export type StrokeResult={
  comment:string; timingError:number; targetLine:number;
  impactX:number;impactY:number;interceptedBy:string|null;
 };
+export type BatterRecord={runs:number;balls:number;fours:number;sixes:number;out:boolean};
+export type CricketEvent={ball:number;type:'ball'|'wide'|'no-ball';runs:number;batRuns:number;wicket:boolean;label:string;direction:ShotSide;impactX:number;impactY:number};
 export type Innings={
- runs:number;wickets:number;balls:number;target:number;overs:number;
+ runs:number;wickets:number;balls:number;target:number|null;overs:number;
+ maxWickets:number;extras:number;wides:number;noBalls:number;freeHit:boolean;
+ striker:number;nonStriker:number;nextBatter:number;batters:readonly BatterRecord[];events:readonly CricketEvent[];
  won:boolean;ended:boolean;history:readonly string[];last:StrokeResult|null;
 };
 const lengths:Length[]=['yorker','full','good','short'];
@@ -34,7 +38,7 @@ export const CRICKET_CONTACT_Y=465;
 export const CRICKET_PERFECT_MS=100;
 export const cricketFielders=[
  {x:85,y:268,name:'Deep square'},{x:157,y:379,name:'Square leg'},{x:243,y:178,name:'Midwicket'},
- {x:460,y:162,name:'Mid off'},{x:573,y:371,name:'Cover'},{x:668,y:248,name:'Deep point'},{x:378,y:82,name:'Long off'}
+ {x:460,y:162,name:'Mid off'},{x:573,y:371,name:'Cover'},{x:668,y:248,name:'Deep point'},{x:378,y:82,name:'Long off'}, {x:453,y:430,name:'Slip'}, {x:227,y:452,name:'Fine leg'}
 ] as const;
 const clamp=(v:number,min:number,max:number)=>Math.min(max,Math.max(min,v));
 function hash(n:number){let x=n|0;x^=x>>>16;x=Math.imul(x,0x7feb352d);x^=x>>>15;x=Math.imul(x,0x846ca68b);return(x^(x>>>16))>>>0;}
@@ -51,14 +55,15 @@ export function makeDelivery(index:number,difficulty:Difficulty='club',seed=19):
   leadMs:Math.max(500,Math.round(contactMs*.31))};
 }
 export const inningsTarget=(overs:number)=>overs===2?30:overs===5?77:overs===10?158:Math.ceil(Math.max(1,overs)*15);
-export function createInnings(overs=2,target=inningsTarget(overs)):Innings{
+export function createInnings(overs=2,target:number|null=inningsTarget(overs),maxWickets=3):Innings{
  const bounded=clamp(Math.floor(overs),1,10);
- return{runs:0,wickets:0,balls:0,target:Math.max(1,Math.floor(target)),overs:bounded,won:false,ended:false,history:[],last:null};
+ return{runs:0,wickets:0,balls:0,target:target===null?null:Math.max(1,Math.floor(target)),overs:bounded,
+ maxWickets:clamp(Math.floor(maxWickets),1,10),extras:0,wides:0,noBalls:0,freeHit:false,striker:0,nonStriker:1,nextBatter:2,batters:Array.from({length:11},()=>({runs:0,balls:0,fours:0,sixes:0,out:false})),events:[],won:false,ended:false,history:[],last:null};
 }
 export function renderOvers(balls:number):string{return Math.floor(balls/6)+'.'+(balls%6);}
 export function requiredRate(innings:Innings):number{
  const remaining=innings.overs*6-innings.balls;
- return remaining<=0?0:Math.max(0,innings.target-innings.runs)*6/remaining;
+ return remaining<=0||innings.target===null?0:Math.max(0,innings.target-innings.runs)*6/remaining;
 }
 export function ballAt(delivery:BowledBall,elapsedMs:number){
  const p=clamp(elapsedMs/delivery.contactMs,0,1);
@@ -134,16 +139,36 @@ export function missedDelivery(delivery:BowledBall):StrokeResult{
   comment:hitsStumps?'BOWLED! You let the ball hit middle stump.':'Beaten outside off stump. Dot ball. Watch the ball right to the bat.',
   impactX:ballAt(delivery,delivery.contactMs).x,impactY:CRICKET_CONTACT_Y,interceptedBy:null};
 }
+/** Apply one legal delivery. Free hits suppress the dismissals supported by this arcade engine. */
 export function applyStroke(innings:Innings,outcome:StrokeResult):Innings{
  if(innings.ended)return innings;
- const balls=innings.balls+1,runs=innings.runs+outcome.runs,wickets=innings.wickets+Number(outcome.wicket);
- const won=runs>=innings.target;
- const ended=won||balls>=innings.overs*6||wickets>=3;
- return{...innings,runs,balls,wickets,won,ended,last:outcome,history:[...innings.history,outcome.label]};
+ const effective=innings.freeHit&&outcome.wicket?{...outcome,wicket:false,out:null,label:'·',comment:'Free hit. No dismissal; dot ball.'}:outcome;
+ const balls=innings.balls+1,runs=innings.runs+effective.runs,wickets=innings.wickets+Number(effective.wicket);
+ const won=innings.target!==null&&runs>=innings.target;
+ const ended=won||balls>=innings.overs*6||wickets>=innings.maxWickets;
+ const batters=innings.batters.map(b=>({...b}));
+ const batter=batters[innings.striker];batter.balls++;batter.runs+=effective.runs;batter.fours+=Number(effective.runs===4);batter.sixes+=Number(effective.runs===6);batter.out=effective.wicket;
+ let striker=innings.striker,nonStriker=innings.nonStriker,nextBatter=innings.nextBatter;
+ if(effective.wicket&&!ended){striker=nextBatter;nextBatter++;}
+ if(effective.runs%2===1)[striker,nonStriker]=[nonStriker,striker];
+ if(balls%6===0)[striker,nonStriker]=[nonStriker,striker];
+ const event:CricketEvent={ball:balls,type:'ball',runs:effective.runs,batRuns:effective.runs,wicket:effective.wicket,label:effective.label,direction:effective.direction,impactX:effective.impactX,impactY:effective.impactY};
+ return{...innings,runs,balls,wickets,won,ended,freeHit:false,striker,nonStriker,nextBatter,batters,last:effective,history:[...innings.history,effective.label],events:[...innings.events,event]};
+}
+/** Wides/no-balls score one extra and never consume a legal ball. A no-ball grants a free hit. */
+export function applyExtra(innings:Innings,type:'wide'|'no-ball',batOutcome?:StrokeResult):Innings{
+ if(innings.ended)return innings;
+ const batRuns=type==='no-ball'?batOutcome?.runs??0:0,runs=innings.runs+1+batRuns,won=innings.target!==null&&runs>=innings.target;
+ const batters=innings.batters.map(b=>({...b}));
+ if(type==='no-ball'){const b=batters[innings.striker];b.balls++;b.runs+=batRuns;b.fours+=Number(batRuns===4);b.sixes+=Number(batRuns===6);}
+ let striker=innings.striker,nonStriker=innings.nonStriker;if(batRuns%2)[striker,nonStriker]=[nonStriker,striker];
+ const event:CricketEvent={ball:innings.balls,type,runs:1+batRuns,batRuns,wicket:false,label:type==='wide'?'Wd':'Nb'+(batRuns?'+'+batRuns:''),direction:batOutcome?.direction??'straight',impactX:batOutcome?.impactX??380,impactY:batOutcome?.impactY??465};
+ const last=batOutcome?{...batOutcome,wicket:false,out:null,label:event.label}:innings.last;
+ return{...innings,runs,extras:innings.extras+1,wides:innings.wides+Number(type==='wide'),noBalls:innings.noBalls+Number(type==='no-ball'),freeHit:innings.freeHit||type==='no-ball',won,ended:won,batters,striker,nonStriker,last,events:[...innings.events,event]};
 }
 export function inningsResult(innings:Innings):string{
  const summary=innings.runs+'/'+innings.wickets+' in '+renderOvers(innings.balls)+' overs';
+ if(innings.target===null)return 'INNINGS COMPLETE: '+summary+'.';
  return innings.won?'CHASE WON! '+summary+'. Target '+innings.target+' reached.':
  'Innings complete: '+summary+'. Target '+innings.target+'. '+Math.max(0,innings.target-innings.runs)+' runs short.';
 }
-
