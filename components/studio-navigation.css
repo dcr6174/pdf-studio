@@ -22,8 +22,8 @@
   box-sizing: border-box;
 }
 .studio-switcher a[aria-current="page"] {
-  border-bottom-color: var(--primary, #6341e8);
-  color: var(--primary, #6341e8);
+  border-bottom-color: var(--lab-link, var(--primary, #6341e8));
+  color: var(--lab-link, var(--primary, #6341e8));
   background: var(--soft, #f2effa);
   border-radius: 8px 8px 0 0;
 }
@@ -46,4 +46,8 @@
     padding: 8px 10px;
     min-height: 44px;
   }
+}
+
+[data-theme="dark"] .studio-switcher {
+  --lab-link: #afc2ff;
 }

@@ -12,7 +12,7 @@
   font-size: 12px;
   font-weight: 750;
   letter-spacing: 0.1em;
-  color: var(--primary, #6341e8);
+  color: var(--lab-link, var(--primary, #6341e8));
 }
 .creative-hub-main h1 {
   font-size: clamp(32px, 4vw, 46px);
@@ -111,7 +111,7 @@
 }
 .creative-tool-grid svg {
   flex-shrink: 0;
-  color: var(--primary, #6341e8);
+  color: var(--lab-link, var(--primary, #6341e8));
 }
 .creative-tool-grid h3 {
   font-size: 17px;
@@ -190,4 +190,8 @@
     animation: none !important;
     transition: none !important;
   }
+}
+
+[data-theme="dark"] .lab-creative-hub {
+  --lab-link: #afc2ff;
 }
