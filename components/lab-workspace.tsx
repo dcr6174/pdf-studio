@@ -631,7 +631,7 @@ export function LabWorkspace({ mode }: { mode: Mode }) {
     <main className={"lab-workspace lab-workspace-" + mode}>
       <div className="studio-workspace-content" data-export-workspace tabIndex={-1} hidden={resultVisible}>
       <header className="lab-workspace-heading">
-        <Link href="/lab">Back to Studio Lab</Link>
+        <Link href="/lab/creative-studio">Back to Creative Studio</Link>
         <span className="lab-workspace-beta">BETA</span>
         <p className="lab-eyebrow">{examples[mode].eyebrow}</p>
         <h1>{tool.title.replace("PDF ", "")}</h1>

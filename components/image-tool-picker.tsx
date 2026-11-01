@@ -12,6 +12,7 @@ import {
   ShieldCheck,
   Minimize2,
 } from "lucide-react";
+import Link from "./browser-link";
 import { imageTools } from "@/lib/image-tools";
 const icons = {
   Edit: SlidersHorizontal,
@@ -83,7 +84,7 @@ export function ImageToolPicker({ title }: { title: string }) {
       >
         <div className="iw-tool-dialog-heading">
           <div>
-            <span className="iw-eyebrow">STUDIO LAB</span>
+            <span className="iw-eyebrow">IMAGE STUDIO</span>
             <h2>Your image toolkit</h2>
           </div>
           <button aria-label="Close image tools" onClick={() => setOpen(false)}>
@@ -101,6 +102,7 @@ export function ImageToolPicker({ title }: { title: string }) {
             onChange={(e) => setQuery(e.target.value)}
           />
         </label>
+        <nav className="iw-studio-destinations" aria-label="Studio destinations"><Link href="/lab/image-studio">All image tools</Link><Link href="/lab">All studios</Link></nav>
         <p className="iw-tool-navigation-note">
           Opening a different tool starts a new workspace.
         </p>

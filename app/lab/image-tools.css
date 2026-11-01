@@ -2017,3 +2017,5 @@
     height: auto;
   }
 }
+
+.iw-studio-destinations{display:flex;flex-wrap:wrap;gap:8px;padding:0 22px}.iw-studio-destinations a{display:inline-flex;align-items:center;min-height:44px;padding:8px 12px;border:1px solid #dce0e8;border-radius:8px;font-size:14px!important;text-decoration:none}

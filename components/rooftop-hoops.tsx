@@ -137,7 +137,7 @@ export function RooftopHoops(){
  const ball=flight??{x:fromX,y:launchY};
  const jumping=Boolean(inFlight&&flight&&flight.age<.65),net=Boolean(flight?.scored);
  return <main className="rooftop-main" aria-label="Rooftop Hoops basketball shootout">
-  <nav className="rooftop-nav"><Link href="/lab/arcade">← All games</Link><span>PLAY STUDIO · SPORTS</span><Link href="/lab">Studio Lab</Link></nav>
+  <nav className="rooftop-nav"><Link href="/lab/arcade">← All games</Link><span>ARCADE · SPORTS</span><Link href="/lab">Studio Lab</Link></nav>
   <header className="rooftop-head"><div><span className="rooftop-eyebrow">ROOFTOP LEAGUE · ORIGINAL ARCADE BASKETBALL</span><h1>Rooftop Hoops</h1></div>
    <div className="rooftop-head-actions" data-frame-dup><button type="button" onClick={toggleSound} aria-label={sound?'Mute basketball sounds':'Enable basketball sounds'} aria-pressed={sound}>{sound?'🔊 SOUND ON':'🔇 SOUND OFF'}</button><button type="button" onClick={()=>setPhase(p=>p==='play'?'paused':p==='paused'?'play':p)} disabled={phase==='ready'||phase==='done'}>{phase==='paused'?'▶ RESUME':'⏸ PAUSE'}</button><button type="button" onClick={start}>↻ RESTART</button></div></header>
   <div className="rooftop-scoreline" aria-label="Basketball scoreboard"><div><span>POINTS</span><strong>{score}</strong></div><div><span>SHOT</span><strong>{round} <small>/ {SHOTS}</small></strong></div><div><span>HOT STREAK</span><strong>{streak>0?'🔥 '+streak:'—'}</strong></div><div><span>YOUR BEST</span><strong>{best}</strong></div></div>
