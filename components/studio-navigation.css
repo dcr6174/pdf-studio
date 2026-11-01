@@ -51,3 +51,10 @@
 [data-theme="dark"] .studio-switcher {
   --lab-link: #afc2ff;
 }
+
+/* Keep the optional install action in the drawer on the narrowest catalogues. */
+@media (max-width: 360px) {
+  .studio-header:has(+ .studio-switcher) .header-end > .install-app {
+    display: none;
+  }
+}
