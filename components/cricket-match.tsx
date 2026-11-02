@@ -1,136 +1,105 @@
 'use client';
 import {useCallback,useEffect,useRef,useState} from 'react';
-import {applyStroke,createInnings,evaluateStroke,inningsResult,makeDelivery,missedDelivery,renderOvers,requiredRate,type BowledBall,type Difficulty,type Footwork,type Innings,type ShotSide,type StrokeResult} from '@/lib/cricket-engine';
-import {CricketStadium} from '@/components/cricket-stadium';
-import {cricketTimingFeedback,cricketOverHistory} from '@/lib/cricket-presentation';
-import type {ArcadeEffect} from '@/lib/arcade-audio';
+import {makeDelivery,evaluateStroke,missedDelivery,type BowledBall,type Difficulty,type Footwork,type ShotSide,type StrokeResult} from '@/lib/cricket-engine';
+import {CricketStadium} from './cricket-stadium';
+import {cricketTimingFeedback} from '@/lib/cricket-presentation';
+import {newQuickMatch,prepareQuickDelivery,applyQuickBall,beginQuickChase,currentQuickInnings,quickOvers,quickRate,quickStrikeRate,quickRequired,quickStroke,aiQuickOutcome,readCricketRecords,saveQuickRecord,emptyCricketRecords,defaultQuickConfig,type QuickConfig,type QuickMatch} from '@/lib/cricket-quick-match';
+import {blip} from '@/lib/arcade-mixer';
+import {ArcadeAudioSettings} from './game-preferences';
 import {playStadiumSound,startCricketAmbience,stopCricketAmbience,unlockStadiumAudio} from '@/lib/stadium-audio';
-type Props={active:boolean;comfort:boolean;sound?:boolean;onToggleSound?:()=>void;onScore:(score:number)=>void;onFinish:(won:boolean,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
-type Phase='setup'|'bowling'|'result'|'done';
-const sideInfo:{id:ShotSide;label:string;key:string;icon:string}[]=[
- {id:'leg',label:'LEG SIDE',key:'A / ←',icon:'↖'},
- {id:'straight',label:'STRAIGHT',key:'↓ / Space',icon:'↑'},
- {id:'off',label:'OFF SIDE',key:'D / →',icon:'↗'}
-];
-export function CricketMatch({active,comfort,sound=true,onScore,onFinish,onSound}:Props){
- const [overs,setOvers]=useState<2|5|10>(2),[difficulty,setDifficulty]=useState<Difficulty>('club');
- const [innings,setInnings]=useState<Innings>(()=>createInnings(2)),[phase,setPhase]=useState<Phase>('setup');
- const [delivery,setDelivery]=useState<BowledBall>(()=>makeDelivery(0,'club'));
- const [elapsed,setElapsed]=useState(0),[foot,setFoot]=useState<Footwork>('front'),[autoFoot,setAutoFoot]=useState(true),[loft,setLoft]=useState(false);
- const [optionsOpen,setOptionsOpen]=useState(false);
- const playing=active&&!optionsOpen;
- const [direction,setDirection]=useState<ShotSide>('straight'),[result,setResult]=useState<StrokeResult|null>(null);
- const [message,setMessage]=useState('Choose a match, then read the bounce marker and time your shot.'),[swingCount,setSwingCount]=useState(0);
- const inningsRef=useRef(innings),phaseRef=useRef<Phase>('setup'),elapsedRef=useRef(0),ballRef=useRef(delivery),lastView=useRef(0),matchSeed=useRef(23),swingCommitted=useRef(false),bouncePlayed=useRef(false);
- const setPhaseBoth=(p:Phase)=>{phaseRef.current=p;setPhase(p);};
- const completeDelivery=useCallback((outcome:StrokeResult)=>{
-  if(phaseRef.current!=='bowling')return;
-  const updated=applyStroke(inningsRef.current,outcome);
-  inningsRef.current=updated;setInnings(updated);setResult(outcome);setMessage(outcome.comment);
-  onScore(updated.runs);if(outcome.wicket){if(sound)playStadiumSound('cricket','wicket');}else onSound(outcome.runs>=4?'goal':outcome.contact===0?'miss':'hit');
-  setPhaseBoth(updated.ended?'done':'result');
- },[onScore,onSound,sound]);
+import type {ArcadeEffect} from '@/lib/arcade-audio';
+import './cricket-quick-match.css';
+type Props={active:boolean;comfort:boolean;sound?:boolean;onToggleSound?:()=>void;onScore:(score:number)=>void;onFinish:(won:boolean|null,message:string)=>void;onSound:(effect:ArcadeEffect)=>void};
+type Screen='loading'|'home'|'setup'|'tutorial'|'rules'|'records'|'settings'|'match'|'interval'|'result';
+type Phase='between'|'bowling'|'flight'|'result';
+const RECORDS='studio-arcade:cricket:records:v2',SETTINGS='studio-arcade:cricket:settings:v2';
+const directions:[ShotSide,string,string][]=[['leg','Leg side','← A'],['straight','Straight','↓ S'],['off','Off side','D →']];
+export function CricketMatch({active,comfort,sound=true,onToggleSound,onScore,onFinish,onSound}:Props){
+ const root=useRef<HTMLDivElement>(null),[screen,setScreen]=useState<Screen>('loading'),[phase,setPhase]=useState<Phase>('between');
+ const [config,setConfig]=useState<QuickConfig>({...defaultQuickConfig}),[match,setMatch]=useState<QuickMatch|null>(null),matchRef=useRef<QuickMatch|null>(null);
+ const [delivery,setDelivery]=useState<BowledBall>(()=>makeDelivery(0,'easy')),ballRef=useRef(delivery),[elapsed,setElapsed]=useState(0),elapsedRef=useRef(0),phaseRef=useRef<Phase>('between');
+ const [result,setResult]=useState<StrokeResult|null>(null),resultRef=useRef<StrokeResult|null>(null),flightRef=useRef(0),betweenRef=useRef(0),[direction,setDirection]=useState<ShotSide>('straight'),directionRef=useRef<ShotSide>('straight');
+ const [loft,setLoft]=useState(false),loftRef=useRef(false),[autoFoot,setAutoFoot]=useState(true),[foot,setFoot]=useState<Footwork>('front');
+ const [strokeFlash,setStrokeFlash]=useState(0),[message,setMessage]=useState('Your stadium. Your moment.'),[skipAI,setSkipAI]=useState(false);
+ const [records,setRecords]=useState(emptyCricketRecords),[reduced,setReduced]=useState(false),[vibration,setVibration]=useState(false),[graphics,setGraphics]=useState<'high'|'balanced'|'compatibility'>('balanced');
+ const [tutorial,setTutorial]=useState(0),[tutorialHit,setTutorialHit]=useState(false),[savedNotice,setSavedNotice]=useState(''),[returnScreen,setReturnScreen]=useState<Screen>('home'),configRef=useRef(config),seed=useRef(23),audioGesture=useRef(false),bounceRef=useRef(false),serial=useRef(0),settingsLoaded=useRef(false);
+ const playing=active&&screen==='match',calm=comfort||reduced;
+ const storeMatch=useCallback((m:QuickMatch)=>{matchRef.current=m;setMatch(m);},[]);
+ const setPhaseBoth=useCallback((p:Phase)=>{phaseRef.current=p;setPhase(p);},[]);
+ useEffect(()=>{let alive=true;queueMicrotask(()=>{if(!alive)return;try{{const r=readCricketRecords(localStorage.getItem(RECORDS));const legacy=Number(localStorage.getItem('studio-arcade:best:boundary-cricket'));if(Number.isFinite(legacy)&&legacy>r.best)r.best=legacy;setRecords(r);}const s=JSON.parse(localStorage.getItem(SETTINGS)||'{}');if(['high','balanced','compatibility'].includes(s.graphics))setGraphics(s.graphics);setReduced(typeof s.reduced==='boolean'?s.reduced:window.matchMedia?.('(prefers-reduced-motion: reduce)').matches??false);setVibration(s.vibration===true);const c=s.config;if(c&&[1,2,5].includes(c.overs)&&['easy','club','pro'].includes(c.difficulty)&&['first','chase'].includes(c.order))setConfig({...defaultQuickConfig,...c,team:typeof c.team==='string'?c.team:defaultQuickConfig.team,opponent:typeof c.opponent==='string'?c.opponent:defaultQuickConfig.opponent,color:/^#[0-9a-f]{6}$/i.test(c.color)?c.color:defaultQuickConfig.color,opponentColor:/^#[0-9a-f]{6}$/i.test(c.opponentColor)?c.opponentColor:defaultQuickConfig.opponentColor,practice:c.practice===true});}catch{setSavedNotice('Browser storage is unavailable. This session still works.');}settingsLoaded.current=true;});return()=>{alive=false;};},[]);
+ useEffect(()=>{configRef.current=config;if(!settingsLoaded.current)return;try{localStorage.setItem(SETTINGS,JSON.stringify({config,reduced,vibration,graphics}));}catch{/* Optional storage must not stop a match. */}},[config,reduced,vibration,graphics]);
+ useEffect(()=>{directionRef.current=direction;},[direction]);useEffect(()=>{loftRef.current=loft;},[loft]);
+ const ready=useCallback(()=>setScreen(s=>s==='loading'?'home':s),[]);
+ const control=useCallback((action:string)=>{queueMicrotask(()=>root.current?.closest('[data-shared-controls]')?.dispatchEvent(new CustomEvent('arcade:control',{detail:{action}})));},[]);
+ useEffect(()=>{control(screen==='match'?'cricket-playing':'cricket-ready');const heading=root.current?.querySelector<HTMLElement>('h1');heading?.focus({preventScroll:true});},[screen,control]);
+ function gesture(){audioGesture.current=true;if(sound)unlockStadiumAudio();}
+ function cue(effect:Parameters<typeof playStadiumSound>[1]){if(sound&&audioGesture.current)try{playStadiumSound('cricket',effect);}catch{/* Audio is optional. */}}
+ function go(s:Screen){gesture();onSound('tap');setScreen(s);}
  const nextBall=useCallback(()=>{
-  if(inningsRef.current.ended)return;
-  const ball=makeDelivery(inningsRef.current.balls,difficulty,matchSeed.current);
-  ballRef.current=ball;swingCommitted.current=false;bouncePlayed.current=false;setDelivery(ball);elapsedRef.current=0;setElapsed(0);lastView.current=0;
-  setResult(null);setMessage(ball.style.toUpperCase()+' · '+ball.length+' · '+ball.speed+' km/h. Watch the bounce circle.');
-  setPhaseBoth('bowling');onSound('tap');
- },[difficulty,onSound]);
+  const m=matchRef.current;if(!m||m.status!=='playing'||m.pending!==null)return;
+  const next=prepareQuickDelivery(m);storeMatch(next);const ball=makeDelivery(next.serial,next.config.difficulty,seed.current);ballRef.current=ball;setDelivery(ball);elapsedRef.current=0;setElapsed(0);flightRef.current=0;betweenRef.current=0;bounceRef.current=false;resultRef.current=null;setResult(null);setPhaseBoth('bowling');setMessage(currentQuickInnings(next).player?ball.style.toUpperCase()+' · '+ball.length+' · Watch the bounce, then swing.':'Computer batting · '+ball.style+' delivery.');
+  if(sound&&audioGesture.current)try{playStadiumSound('cricket','delivery');}catch{}
+ },[sound,storeMatch,setPhaseBoth]);
+ const start=useCallback((chosen?:QuickConfig)=>{
+  const c=chosen??configRef.current;audioGesture.current=true;if(sound)unlockStadiumAudio();seed.current=(Date.now()%65521)+ ++serial.current*31;
+  storeMatch(newQuickMatch(c,Date.now()+'-'+serial.current));setSkipAI(false);setResult(null);resultRef.current=null;setDirection('straight');directionRef.current='straight';setLoft(false);loftRef.current=false;setPhaseBoth('between');betweenRef.current=0;onScore(0);setScreen('match');control('start-cricket');if(sound)playStadiumSound('cricket','start');
+ },[sound,storeMatch,setPhaseBoth,onScore,control]);
+ useEffect(()=>{const el=root.current?.closest('[data-shared-controls]');if(!el)return;const restart=()=>start();const home=()=>{setScreen('home');setPhaseBoth('between');stopCricketAmbience();};el.addEventListener('cricket:restart',restart);el.addEventListener('cricket:home',home);return()=>{el.removeEventListener('cricket:restart',restart);el.removeEventListener('cricket:home',home);};},[start,setPhaseBoth]);
+ const finishVisualBall=useCallback(()=>{
+  const m=matchRef.current,r=resultRef.current;if(!m||!r||m.pending===null||phaseRef.current!=='flight')return;
+  const next=applyQuickBall(m,m.pending,r);storeMatch(next);setPhaseBoth('result');betweenRef.current=0;
+  const player=next.innings.find(i=>i.player)!;if(!next.config.practice)onScore(player.runs);
+  setMessage(r.comment);if(sound&&audioGesture.current){try{playStadiumSound('cricket',r.wicket?'wicket':r.runs>=4?'boundary':r.runs?'hit':'miss');if(r.runs===6)blip('sfx',{freq:880,end:1320,duration:.3,delay:.25,level:.07});else if(r.runs>0&&r.runs<4)blip('sfx',{freq:330+r.runs*110,end:550,duration:.16,level:.05});if(currentQuickInnings(next).balls%6===0)blip('sfx',{freq:440,end:660,duration:.2,delay:.25});}catch{}}
+  if(vibration&&!calm&&r.runs>=4&&typeof navigator.vibrate==='function')navigator.vibrate(r.runs===6?[40,30,70]:30);
+ },[storeMatch,setPhaseBoth,onScore,sound,vibration,calm]);
+ const strike=useCallback(()=>{
+  const m=matchRef.current;if(!playing||!m||!currentQuickInnings(m).player||phaseRef.current!=='bowling')return;
+  const b=ballRef.current;const output=quickStroke(evaluateStroke(b,{side:directionRef.current,foot:autoFoot?(b.length==='short'?'back':'front'):foot,loft:loftRef.current},elapsedRef.current,m.config.difficulty));
+  resultRef.current=output;setResult(output);setStrokeFlash(n=>n+1);flightRef.current=0;setPhaseBoth('flight');if(sound&&audioGesture.current&&output.contact>0)try{playStadiumSound('cricket','hit');}catch{}
+ },[playing,autoFoot,foot,setPhaseBoth,sound]);
  useEffect(()=>{
-  if(!playing||!sound||phase==='setup'||phase==='done'){stopCricketAmbience();return;}
-  startCricketAmbience();return()=>stopCricketAmbience();
- },[playing,sound,phase]);
- const start=()=>{if(sound){unlockStadiumAudio();playStadiumSound('cricket','start');}matchSeed.current=(Date.now()>>>0)%65521+overs*31;const next=createInnings(overs);inningsRef.current=next;setInnings(next);setDirection('straight');setLoft(false);setFoot('front');setOptionsOpen(false);onScore(0);nextBall();};
- const strike=useCallback((side:ShotSide)=>{
-  if(!playing||phaseRef.current!=='bowling'||swingCommitted.current)return;
-  swingCommitted.current=true;
-  const t=elapsedRef.current,b=ballRef.current;
-  const chosenFoot=autoFoot?(b.length==='short'?'back':'front'):foot;
-  const output=evaluateStroke(b,{side,foot:chosenFoot,loft},t,difficulty);
-  setDirection(side);setSwingCount(n=>n+1);completeDelivery(output);
- },[playing,foot,autoFoot,loft,difficulty,completeDelivery]);
- useEffect(()=>{
-  if(!playing||phase!=='bowling')return;
-  let raf=0,last=0;
-  const frame=(now:number)=>{
-   if(!last)last=now;const dt=Math.min(now-last,48);last=now;
-   const next=elapsedRef.current+dt*(comfort?.68:1);elapsedRef.current=next;
-   if(!bouncePlayed.current&&next>=ballRef.current.contactMs*ballRef.current.bounce){bouncePlayed.current=true;onSound('bounce');}
-   if(now-lastView.current>32){setElapsed(next);lastView.current=now;}
-   if(next>ballRef.current.contactMs+380){
-    completeDelivery(missedDelivery(ballRef.current));
-    return;
+  if(!playing)return;let raf=0,last=0;
+  const frame=(now:number)=>{if(!last)last=now;const dt=Math.min(48,now-last);last=now;const m=matchRef.current;if(!m||m.status!=='playing'&&phaseRef.current!=='result')return;
+   if(phaseRef.current==='between'){betweenRef.current+=dt;if(betweenRef.current>400)nextBall();}
+   else if(phaseRef.current==='bowling'){
+    const ai=!currentQuickInnings(m).player;elapsedRef.current+=dt*(comfort?.75:1)*(ai&&skipAI?8:1);setElapsed(elapsedRef.current);
+    const b=ballRef.current;if(!bounceRef.current&&elapsedRef.current>=b.contactMs*b.bounce){bounceRef.current=true;if(sound&&audioGesture.current)try{playStadiumSound('cricket','bounce');}catch{}}
+    if(ai&&elapsedRef.current>=b.contactMs){const r=aiQuickOutcome(m);resultRef.current=r;setResult(r);setStrokeFlash(n=>n+1);flightRef.current=0;setPhaseBoth('flight');}
+    else if(!ai&&elapsedRef.current>b.contactMs+400){const r=missedDelivery(b);resultRef.current=r;setResult(r);flightRef.current=0;setPhaseBoth('flight');}
+   }else if(phaseRef.current==='flight'){flightRef.current+=dt;const ai=!currentQuickInnings(m).player;if(flightRef.current>(ai&&skipAI?70:1350))finishVisualBall();}
+   else if(phaseRef.current==='result'){
+    betweenRef.current+=dt;const ai=!currentQuickInnings(m).player;if(betweenRef.current>(ai&&skipAI?70:1350)){
+     if(m.status==='interval'){setScreen('interval');if(sound&&audioGesture.current)blip('sfx',{freq:440,end:880,duration:.4});return;}
+     if(m.status==='complete'){setScreen('result');if(!m.config.practice){setRecords(old=>{const next=saveQuickRecord(old,m);try{localStorage.setItem(RECORDS,JSON.stringify(next));}catch{setSavedNotice('Records could not be saved in this browser.');}return next;});onFinish(m.winner==='tie'?null:m.winner==='player',m.winner==='tie'?'Scores level. Match tied.':m.winner==='player'?m.config.team+' win!':m.config.opponent+' win.');}if(sound&&audioGesture.current)blip('sfx',{freq:m.winner==='player'?660:330,end:m.winner==='player'?1320:220,duration:.5});return;}
+     setPhaseBoth('between');betweenRef.current=0;
+    }
    }
    raf=requestAnimationFrame(frame);
-  };
-  raf=requestAnimationFrame(frame);return()=>cancelAnimationFrame(raf);
- },[playing,phase,comfort,completeDelivery,onSound]);
- useEffect(()=>{
-  if(!playing||phase!=='result')return;
-  const id=setTimeout(nextBall,1800);return()=>clearTimeout(id);
- },[playing,phase,nextBall]);
- // Show the last ball before the parent presents the end-of-chase card. Pause cancels this timer.
- useEffect(()=>{
-  if(!playing||phase!=='done')return;
-  const id=setTimeout(()=>onFinish(inningsRef.current.won,inningsResult(inningsRef.current)),1800);
-  return()=>clearTimeout(id);
- },[playing,phase,onFinish]);
- useEffect(()=>{
-  if(!playing)return;
-  const keyboard=(e:KeyboardEvent)=>{
-   if(e.repeat||e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement||e.target instanceof HTMLTextAreaElement)return;
-   if(e.key===' '&&e.target instanceof HTMLButtonElement&&e.isTrusted)return;
-   if(e.key==='ArrowLeft'||e.key==='1'||e.key.toLowerCase()==='a'){e.preventDefault();strike('leg');}
-   else if(e.key==='ArrowDown'||e.key===' '||e.key==='2'){e.preventDefault();strike('straight');}
-   else if(e.key==='ArrowRight'||e.key==='3'||e.key.toLowerCase()==='d'){e.preventDefault();strike('off');}
-   else if(e.key.toLowerCase()==='z')setLoft(v=>!v);
-   else if(e.key.toLowerCase()==='x'){setAutoFoot(false);setFoot(v=>v==='front'?'back':'front');}
-  };
-  window.addEventListener('keydown',keyboard);return()=>window.removeEventListener('keydown',keyboard);
- },[playing,strike]);
- const overHistory=cricketOverHistory(innings,phase==='bowling');
- const timing=result?cricketTimingFeedback(result):null;
- const bowlerLine=delivery.line===0?'MIDDLE':delivery.line<0?'LEG':'OFF',bowlerLength=delivery.length.toUpperCase();
- const timingTotal=delivery.contactMs+380;
- const percent=Math.min(100,Math.max(0,Math.round(elapsed/timingTotal*100)));
- const contactMarker=delivery.contactMs/timingTotal*100;
- const greenStart=Math.max(0,(delivery.contactMs-220)/timingTotal*100),greenEnd=Math.min(100,(delivery.contactMs+220)/timingTotal*100);
- return <div className={'play-cricket pc-immersive'+(phase==='setup'?' pc-is-setup':'')}>
-  <div className="pc-score-strip">
-   <div className="pc-main-score"><small>YOUR INNINGS</small><strong data-game-score>{innings.runs}<em>/{innings.wickets}</em></strong></div>
-   <div><small>OVERS</small><b>{renderOvers(innings.balls)} <i>/ {overs}</i></b></div>
-   <div><small>TARGET</small><b>{innings.target}</b></div>
-   <div><small>NEED</small><b>{Math.max(0,innings.target-innings.runs)}</b></div>
-   <div><small>REQ. RATE</small><b>{requiredRate(innings).toFixed(1)}</b></div>
-  </div>
-  <div className={"pc-match-layout"+(phase==="setup"?" is-setup":"")}>
-   <div className="pc-stage-wrap">
-    <CricketStadium ball={delivery} elapsed={elapsed} result={result} phase={phase} loft={loft} shotDirection={direction} strokeFlash={swingCount} active={playing} comfort={comfort}/>
-    <div className="pc-overlay-score" aria-live="polite">
-     {phase==='bowling'?<><strong>{delivery.speed} km/h · {delivery.style.toUpperCase()}</strong><span>{bowlerLine} · {bowlerLength}</span></>:(phase==='result'||phase==='done')&&result?<><strong>{result.wicket?'WICKET':result.runs===0?'DOT':result.runs+' RUNS'}</strong><span>{timing?.label.toUpperCase()} TIMING · {result.timingError>0?'+':''}{result.timingError}ms</span></>:<><strong>BOUNDARY CRICKET</strong><span>Three directions. One swing per ball.</span></>}
-    </div>
-    {phase==='bowling'&&<div className="pc-timing" aria-label={'Delivery '+percent+' percent through its flight'}><div className="pc-timing-track"><span className="pc-hit-window" style={{left:greenStart+"%",width:(greenEnd-greenStart)+"%"}}/><span className="pc-hit-marker" style={{left:contactMarker+"%"}}/><i style={{left:percent+"%"}}/></div><span className="pc-timing-label">BALL ARRIVING · HIT NEAR THE GREEN ZONE</span></div>}
-   </div>
-   <section className="pc-controller" aria-label="Cricket batting controller">
-    {phase==='setup'&&<div className="pc-pregame"><h2>Ready for the chase?</h2><p>Time your swing as the ball reaches the bat. Choose leg, straight or off. Automatic footwork helps you start.</p><span className="pc-control-label">MATCH LENGTH</span><div className="pc-choices">{([2,5,10] as const).map(n=><button type="button" key={n} aria-pressed={overs===n} onClick={()=>{setOvers(n);const t=createInnings(n);inningsRef.current=t;setInnings(t);}}>{n} overs</button>)}</div><span className="pc-control-label">BOWLING DIFFICULTY</span><div className="pc-choices">{(['easy','club','pro'] as const).map(n=><button type="button" key={n} aria-pressed={difficulty===n} onClick={()=>setDifficulty(n)}>{n==='easy'?'Academy':n==='club'?'Club':'Pro'}</button>)}</div><div className="pc-sound-info">{sound?'Sound on · change it in the Arcade menu.':'Sound off · enable it in the Arcade menu.'}</div><button className="fresh-primary pc-start" onClick={start}>🏏 START CHASE · {innings.target} RUNS</button></div>}
-    {phase!=='setup'&&<>
-     <div className="pc-controller-heading"><span className="pc-control-label">BATTING CONTROLS</span><strong>{phase==='done'?'INNINGS ENDED':phase==='result'?'SHOT PLAYED':'READ · AIM · TIME'}</strong></div>
-     <span className="pc-control-label">TAP A DIRECTION AT CONTACT</span>
-     <div className="pc-bat-buttons">{sideInfo.map(s=><button className={'pc-bat-'+s.id} key={s.id} disabled={!playing||phase!=='bowling'} onClick={()=>strike(s.id)} aria-label={s.label+' shot, keyboard '+s.key}><span>{s.icon}</span><b>{s.label}</b><small>{s.key}</small></button>)}</div>
-     <details className="pc-advanced-options" open={optionsOpen} onToggle={e=>setOptionsOpen(e.currentTarget.open)}><summary>Batting options · {autoFoot?'Auto footwork':foot==='front'?'Front foot':'Back foot'} · {loft?'Loft':'Ground'}</summary>
-       <div className="pc-shot-options"><label className="pc-auto-foot"><input type="checkbox" checked={autoFoot} onChange={e=>setAutoFoot(e.target.checked)}/> Automatic footwork</label><span className="pc-control-label">MANUAL FOOTWORK · X TO SWITCH</span><div className="pc-choices"><button aria-pressed={foot==='front'} disabled={!active||phase==='done'} onClick={()=>{setAutoFoot(false);setFoot('front');}}>FRONT FOOT</button><button aria-pressed={foot==='back'} disabled={!active||phase==='done'} onClick={()=>{setAutoFoot(false);setFoot('back');}}>BACK FOOT</button></div><small>Full/yorker: front · Short: back</small></div>
-       <div className="pc-shot-options"><span className="pc-control-label">SHOT STYLE · Z TO SWITCH</span><div className="pc-choices"><button aria-pressed={!loft} disabled={!active||phase==='done'} onClick={()=>setLoft(false)}>GROUND · SAFE</button><button aria-pressed={loft} disabled={!active||phase==='done'} onClick={()=>setLoft(true)}>LOFT · RISKY</button></div></div>
-     </details>
-     <div className="pc-bowler-info"><div><span>PACE</span><strong>{delivery.speed} km/h</strong></div><div><span>LINE</span><strong>{bowlerLine}</strong></div><div><span>LENGTH</span><strong>{bowlerLength}</strong></div></div>
-     <div className="pc-ball-feed"><strong>{innings.balls>0&&innings.balls%6===0&&phase!=='bowling'?'OVER COMPLETE':'THIS OVER'}</strong><div>{overHistory.map((label,i)=><span key={i} className={label==='W'?'is-wicket':label==='4'||label==='6'?'is-boundary':''}>{label}</span>)}</div></div>
-     </>}
-     <p className="pc-commentary" role="status" aria-live="polite">{message}</p>
-     {phase==='result'&&<button className="pc-next" onClick={nextBall}>Next delivery →</button>}
-     {phase==='done'&&<button className="pc-next" onClick={()=>{setPhaseBoth('setup');setResult(null);}}>Choose a new chase ↻</button>}
-    </section>
-   </div>
-   <div className="pc-smallprint">Original arcade cricket: quick timing-based batting inspired by the accessible controls of Stick Cricket and the timing, footwork and placement cues of Cricket 2007. Not a reproduction, licensed simulation, or official franchise game. <strong>Comfort Mode</strong> gives longer read time; pause freezes the ball.</div>
+  };raf=requestAnimationFrame(frame);return()=>cancelAnimationFrame(raf);
+ },[playing,comfort,sound,skipAI,calm,nextBall,finishVisualBall,setPhaseBoth,onFinish]);
+ useEffect(()=>{if(!playing||!sound||!audioGesture.current){stopCricketAmbience();return;}startCricketAmbience();let note=0;const tune=setInterval(()=>{const notes=[220,330,277,440,330,247,294,330];blip('ambience',{freq:notes[note++%notes.length],end:notes[(note-1)%notes.length],duration:.32,level:.009,wave:'sine'});},1100);return()=>{clearInterval(tune);stopCricketAmbience();};},[playing,sound]);
+ useEffect(()=>{if(!playing)return;const key=(e:KeyboardEvent)=>{if(e.repeat||e.target instanceof HTMLInputElement||e.target instanceof HTMLSelectElement||e.target instanceof HTMLTextAreaElement)return;const k=e.key.toLowerCase();if(k==='a'||k==='arrowleft'){e.preventDefault();directionRef.current='leg';setDirection('leg');}else if(k==='d'||k==='arrowright'){e.preventDefault();directionRef.current='off';setDirection('off');}else if(k==='s'||k==='arrowdown'){e.preventDefault();directionRef.current='straight';setDirection('straight');}else if(k===' '){e.preventDefault();strike();}else if(k==='z'){loftRef.current=!loftRef.current;setLoft(loftRef.current);}};window.addEventListener('keydown',key);return()=>window.removeEventListener('keydown',key);},[playing,strike]);
+ const a=match?currentQuickInnings(match):null,playerBatting=a?.player??true,req=match?quickRequired(match):null;
+ const live=screen==='match',renderPhase=live?(phase==='bowling'?'bowling':phase==='flight'||phase==='result'?'result':'setup'):'setup';
+ const feedback=result?cricketTimingFeedback(result):null,contact=delivery.contactMs/(delivery.contactMs+400)*100,progress=Math.min(100,elapsed/(delivery.contactMs+400)*100);
+ const patch=(v:Partial<QuickConfig>)=>setConfig(c=>({...c,...v}));
+ const settingsPanel=<><h2>Make it your match.</h2><p>Audio uses the shared Arcade mixer. Settings stay in this browser.</p><ArcadeAudioSettings sound={sound} onGesture={gesture} onToggleSound={onToggleSound}/><label className="cq-check"><input type="checkbox" checked={reduced} onChange={e=>setReduced(e.target.checked)}/> Reduced motion</label><label className="cq-check"><input type="checkbox" checked={vibration} onChange={e=>setVibration(e.target.checked)}/> Boundary vibration (supported devices)</label><label>Graphics quality<select value={graphics} onChange={e=>setGraphics(e.target.value as typeof graphics)}><option value="high">High · 3D stadium</option><option value="balanced">Balanced · lower pixel density</option><option value="compatibility">Compatibility · 2D stadium</option></select></label><button className="cq-primary" onClick={()=>go(returnScreen)}>Back to {returnScreen==='match'?'match':'home'}</button></>;
+ return <div ref={root} className={'play-cricket cq-root cq-'+screen} data-cricket-phase={phase} style={{'--cq-team':config.color} as React.CSSProperties}>
+  <div className="cq-world"><CricketStadium ball={delivery} elapsed={elapsed} result={live?result:null} phase={renderPhase} loft={loft} shotDirection={direction} strokeFlash={strokeFlash} active={playing} comfort={calm} quality={graphics} teamColor={config.color} opponentColor={config.opponentColor} onReady={ready}/></div>
+  <header className="cq-header"><button className="cq-brand" onClick={()=>{if(live){control('pause');return;}go('home');}}><span className="cq-logo">B<span>●</span></span><span>BOUNDARY<small>NIGHT CRICKET</small></span></button><div className="cq-header-right"><span className="cq-live"><i/> NIGHT SESSION</span><button aria-label={sound?'Mute cricket':'Enable cricket sound'} aria-pressed={!sound} onClick={()=>{gesture();onToggleSound?.();}}>{sound?'♫':'♩'}</button>{live&&<button aria-label="Pause cricket match" onClick={()=>control('pause')}>Ⅱ <span>Pause</span></button>}</div></header>
+  {screen==='loading'&&<div className="cq-loading"><span className="cq-loading-ball">●</span><h1 tabIndex={-1}>Taking the field.</h1><p>Preparing your stadium…</p><progress aria-label="Stadium loading"/></div>}
+  {screen==='home'&&<section className="cq-home"><div className="cq-hero"><span className="cq-eyebrow">THE LIGHTS ARE ON. YOU’RE UP.</span><h1 tabIndex={-1}>Own the<br/><em>night.</em></h1><p>A stadium. Six balls an over.<br/>One perfectly timed swing.</p><button className="cq-primary cq-play" onClick={()=>go('setup')}>Play now <span>↗</span></button><div className="cq-hero-links"><button onClick={()=>{setTutorial(0);go('tutorial');}}>How to play</button><button onClick={()=>go('rules')}>Quick-match rules</button></div><div className="cq-home-meta"><span>1–5 OVERS</span><span>3 DIFFICULTIES</span><span>NO LOGIN</span></div></div><aside className="cq-feature"><span className="cq-eyebrow">YOUR NEXT GREAT INNINGS</span><h2>Find your timing.<br/>Then find the rope.</h2><p>Bat first or chase an AI score. Play a quick match, or take a few swings in practice.</p><div className="cq-mini-record"><strong>{records.best}</strong><span>YOUR BEST<br/>LOCAL SCORE</span></div><button onClick={()=>go('records')}>Your records →</button><button onClick={()=>{setReturnScreen('home');go('settings');}}>Settings →</button><small>{savedNotice||'Scores and settings are local to this browser.'}</small></aside></section>}
+  {screen==='setup'&&<section className="cq-panel cq-setup"><span className="cq-eyebrow">MATCH SETUP</span><h1 tabIndex={-1}>Make it yours.</h1><div className="cq-form-pair"><label>Your team<input maxLength={24} value={config.team} onChange={e=>patch({team:e.target.value})}/></label><label>Opponent<input maxLength={24} value={config.opponent} onChange={e=>patch({opponent:e.target.value})}/></label></div><div className="cq-form-pair"><label>Your team colour<input type="color" value={config.color} onChange={e=>patch({color:e.target.value})}/></label><label>Opponent colour<input type="color" value={config.opponentColor} onChange={e=>patch({opponentColor:e.target.value})}/></label></div><fieldset><legend>Match length</legend><div className="cq-segments">{([1,2,5] as const).map(n=><button key={n} aria-pressed={config.overs===n} onClick={()=>patch({overs:n})}>{n} {n===1?'over':'overs'}</button>)}</div></fieldset><fieldset><legend>Difficulty</legend><div className="cq-segments">{([['easy','Easy'],['club','Medium'],['pro','Hard']] as [Difficulty,string][]).map(([n,t])=><button key={n} aria-pressed={config.difficulty===n} onClick={()=>patch({difficulty:n})}>{t}</button>)}</div></fieldset><fieldset><legend>Choose your innings</legend><div className="cq-segments"><button aria-pressed={config.order==='first'} onClick={()=>patch({order:'first'})}>Bat first</button><button aria-pressed={config.order==='chase'} onClick={()=>patch({order:'chase'})}>Chase</button></div></fieldset><label className="cq-check"><input type="checkbox" checked={config.practice} onChange={e=>patch({practice:e.target.checked})}/> Practice · one innings, no opponent or records</label><button className="cq-primary pc-start" onClick={()=>start(config)}>🏏 {config.practice?'Start practice':'Start match'}</button><button onClick={()=>go('home')}>Back to home</button></section>}
+  {screen==='tutorial'&&<section className="cq-panel"><span className="cq-eyebrow">HOW TO PLAY · {tutorial+1}/3</span><h1 tabIndex={-1}>{['Pick your gap.','Wait for the ball.','Make it count.'][tutorial]}</h1><p>{['A / Left selects leg side. D / Right selects off side. S / Down returns to straight. On a phone, tap a direction.','Press Space, or tap BAT, when the ball reaches the green timing zone. Early and late swings can miss.','Ground shots are safer. Lofted shots can clear the rope, but can also be caught. Perfect timing helps; it never guarantees a six.'][tutorial]}</p>{tutorial===0?<div className="cq-directions">{directions.map(([s,t])=><button key={s} aria-pressed={direction===s} onClick={()=>{setDirection(s);directionRef.current=s;setTutorialHit(true);}}>{t}</button>)}</div>:tutorial===1?<button className="cq-primary" onClick={()=>{gesture();cue('hit');setTutorialHit(true);}}>🏏 Try a swing</button>:<div className="cq-tutorial-results"><span>4 · grounded boundary</span><span>6 · clears the rope</span><span>W · wicket</span></div>}<p role="status">{tutorialHit?'Nice. You’re ready for the next step.':'Try the control, then continue.'}</p><button className="cq-primary" onClick={()=>{if(tutorial===2)go('setup');else{setTutorial(n=>n+1);setTutorialHit(false);}}}>{tutorial===2?'Set up a match':'Next step →'}</button><button onClick={()=>go('home')}>Back to home</button></section>}
+  {screen==='rules'&&<section className="cq-panel"><span className="cq-eyebrow">SIMPLIFIED CRICKET</span><h1 tabIndex={-1}>A quick game.<br/>The important rules.</h1><ul><li>Six legal balls per over. Ten wickets per side. Choose 1, 2 or 5 overs.</li><li>Each ball scores 0, 1, 2, 3, 4, 6, or a wicket. Running is automatic.</li><li>Four: the ball reaches the boundary after touching the ground. Six: it clears the rope without touching the ground.</li><li>An innings ends after its overs or ten wickets. Target = first-innings score + 1.</li><li>The chase ends immediately when the target is reached. Equal completed scores are a tie.</li><li>No wides, no-balls, byes, leg-byes, LBW, reviews or fielding restrictions in this quick version.</li></ul><button className="cq-primary" onClick={()=>go('setup')}>Let’s play</button><button onClick={()=>go('home')}>Back to home</button></section>}
+  {screen==='settings'&&<section className="cq-panel cq-settings">{settingsPanel}</section>}
+  {screen==='records'&&<section className="cq-panel cq-records"><span className="cq-eyebrow">LOCAL TO THIS BROWSER</span><h1 tabIndex={-1}>Your pavilion.</h1><div className="cq-record-grid">{[[records.best,'Best score'],[records.sixes,'Most sixes / innings'],[records.fours,'Most fours / innings'],[records.fifty===null?'—':records.fifty+' balls','Fastest fifty'],[records.wins,'Match wins'],[records.matches,'Matches played']].map(([v,t])=><div key={String(t)}><strong>{v}</strong><span>{t}</span></div>)}</div><h2>Recent matches</h2>{records.recent.length?records.recent.map((r,i)=><div className="cq-recent" key={i}><b>{r.team} <span>{r.score}</span></b><small>vs {r.opponent} {r.other} · {r.winner==='tie'?'Tie':r.winner==='player'?'Won':'Lost'} · {new Date(r.date).toLocaleDateString()}</small></div>):<p>Your first completed match starts the story. Practice does not change records.</p>}<button className="cq-primary" onClick={()=>go('setup')}>Play a match</button><button onClick={()=>go('home')}>Back to home</button></section>}
+  {live&&match&&a&&<><section className="cq-scoreboard" aria-label="Live cricket score"><div><span>{playerBatting?match.config.team:match.config.opponent} <i>{playerBatting?'YOU':'AI'}</i></span><strong data-game-score>{a.runs}<em>/{a.wickets}</em></strong><small>{quickOvers(a.balls)} / {match.config.overs} overs · {match.config.overs*6-a.balls} balls left</small></div><div className="cq-score-info"><span>{match.config.practice?'PRACTICE':match.index===0?'FIRST INNINGS':'THE CHASE'}</span><b>{match.index===1?'Target '+match.target:'Set the standard.'}</b><small>Run rate {quickRate(a.runs,a.balls)}</small>{match.index===1&&req&&<small>Need {req.runs} in {req.balls} · RRR {req.rate}</small>}</div><div className="cq-score-extra"><span>4s <b>{a.fours}</b>　6s <b>{a.sixes}</b></span><small>Dots {a.dots} · SR {quickStrikeRate(a.runs,a.balls)}</small></div></section>
+   {(phase==='flight'||phase==='result')&&result&&<div className={'cq-result-pop '+(result.wicket?'is-wicket':'')} key={match.serial}><strong>{result.wicket?'WICKET!':result.runs===4?'FOUR!':result.runs===6?'SIX!':result.runs===0?'DOT BALL':result.runs+' RUN'+(result.runs===1?'':'S')}</strong><span>{playerBatting?feedback?.label+' timing':'Computer batting'}</span></div>}
+   <div className="cq-live-comment" role="status" aria-live="polite">{message}</div>
+   <section className="cq-batting-dock" aria-label="Batting controls"><div className="cq-ball-strip"><span>RECENT BALLS</span><div>{a.history.slice(-6).map(b=><b key={b.ball} className={b.wicket?'wicket':b.runs>=4?'boundary':''}>{b.label}</b>)}{a.history.length===0&&<small>Ready for ball one.</small>}</div><details><summary>Ball-by-ball history</summary><ol>{a.history.map(b=><li key={b.ball}>{quickOvers(b.ball)} · {b.label} · {b.total}/{b.wickets}</li>)}</ol></details></div><div className="cq-bat-center">{playerBatting?<><div className="cq-timing"><span>EARLY</span><div role="meter" aria-label="Ball timing; swing near the green zone" aria-valuemin={0} aria-valuemax={100} aria-valuenow={Math.round(progress)}><b style={{left:Math.max(0,contact-13)+'%',width:'26%'}}/><em style={{left:contact+'%'}}/><i style={{left:progress+'%'}}/></div><span>LATE</span></div><div className="cq-direction-row"><div className="cq-directions">{directions.map(([s,t,k])=><button key={s} aria-pressed={direction===s} onClick={()=>{directionRef.current=s;setDirection(s);}}><b>{s==='leg'?'↖':s==='off'?'↗':'↑'}</b><span>{t}</span><small>{k}</small></button>)}</div><button className="cq-primary cq-bat" disabled={!playing||phase!=='bowling'} onClick={()=>{gesture();strike();}}>🏏 BAT <small>SPACE</small></button></div></>:<div className="cq-ai-panel"><b>Watching {match.config.opponent}</b><p>The computer plays every legal ball under the same innings rules.</p><button aria-pressed={skipAI} onClick={()=>setSkipAI(v=>!v)}>{skipAI?'Show full animation':'Skip animation · fast-forward'}</button></div>}</div><div className="cq-options"><label className="cq-check"><input type="checkbox" checked={loft} onChange={e=>{loftRef.current=e.target.checked;setLoft(e.target.checked);}}/> Lofted shot <small>Z</small></label><details onToggle={e=>{if(e.currentTarget.open&&playing)control('pause');}}><summary>Shot help</summary><p>Full / yorker: front foot. Short: back foot. Select a side that matches the line.</p></details><label className="cq-check"><input type="checkbox" checked={autoFoot} onChange={e=>setAutoFoot(e.target.checked)}/> Auto footwork</label>{!autoFoot&&<select aria-label="Manual footwork" value={foot} onChange={e=>setFoot(e.target.value as Footwork)}><option value="front">Front foot</option><option value="back">Back foot</option></select>}<button onClick={()=>{setReturnScreen('match');setScreen('settings');}}>Match settings</button></div></section>
+  </>}
+  {screen==='interval'&&match&&<section className="cq-panel cq-end"><span className="cq-eyebrow">INNINGS BREAK</span><h1 tabIndex={-1}>{match.config.order==='first'?'A score to defend.':'Your turn to chase.'}</h1><strong className="cq-final-score">{match.innings[0].runs}<small>/{match.innings[0].wickets}</small></strong><p>{match.innings[0].player?match.config.team:match.config.opponent} · {quickOvers(match.innings[0].balls)} overs</p><div className="cq-target">TARGET <b>{match.target}</b></div><button className="cq-primary" onClick={()=>{gesture();storeMatch(beginQuickChase(match));setPhaseBoth('between');betweenRef.current=0;setResult(null);resultRef.current=null;setScreen('match');}}>Start chase →</button></section>}
+  {screen==='result'&&match&&<section className="cq-panel cq-end"><span className="cq-eyebrow">{match.config.practice?'PRACTICE COMPLETE':'MATCH COMPLETE'}</span><h1 tabIndex={-1}>{match.winner==='practice'?'Good practice.':match.winner==='tie'?'A match tied.':match.winner==='player'?'The night is yours.':match.config.opponent+' win.'}</h1><div className="cq-final-teams">{match.innings.filter(i=>!match.config.practice||i.player).map((i,n)=><div key={n}><span>{i.player?match.config.team:match.config.opponent}</span><b>{i.runs}/{i.wickets}</b><small>{quickOvers(i.balls)} overs</small></div>)}</div><p>{match.innings.find(i=>i.player)?.fours} fours · {match.innings.find(i=>i.player)?.sixes} sixes · {match.config.practice?'Practice is not added to records.':savedNotice||'Match saved locally in this browser.'}</p><button className="cq-primary" onClick={()=>start(match.config)}>Play again ↗</button><button onClick={()=>{control('start-cricket');go('records');}}>View records</button><button onClick={()=>{control('start-cricket');go('home');}}>Exit to home</button></section>}
  </div>;
 }
-

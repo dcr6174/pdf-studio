@@ -28,58 +28,43 @@ console.error=(...args)=>{const text=args.join(' ');if(!text.includes('Error cre
 const click=async el=>{assert(el,'expected a control');await act(async()=>{el.click();});};
 const find=text=>Array.from(host.querySelectorAll('button')).find(b=>b.textContent.includes(text));
 const tick=async(ms=16)=>{await act(async()=>{now+=ms;const tasks=[...frames.values()];frames.clear();tasks.forEach(cb=>cb(now));});};
-const progress=()=>Number(host.querySelector('.play-cricket-field')?.getAttribute('aria-label')?.match(/progress (\d+) percent/)?.[1]??0);
-const score=()=>host.querySelector('.pc-main-score strong')?.textContent;
+const phase=()=>host.querySelector('[data-cricket-phase]')?.dataset.cricketPhase;
+const score=()=>host.querySelector('[data-game-score]')?.textContent;
+const advance=async(test,max=2000)=>{for(let n=0;n<max&&!test();n++)await tick(48);assert(test(),'expected game state before timeout');};
+const key=async k=>act(async()=>window.dispatchEvent(new window.KeyboardEvent('keydown',{key:k,bubbles:true})));
 try{
- await act(async()=>{root.render(createElement(GamePreferences,{slug:'boundary-cricket'},createElement(FreshGame,{slug:'boundary-cricket'})));await new Promise(r=>setTimeout(r,25));});
- assert(find('START CHASE'));await click(find('START CHASE'));await tick();
- assert(host.querySelector('.pc-auto-foot input').checked,'beginner footwork starts automatic');
- // An early A key commits one delivery; subsequent D/Space inputs cannot score it twice.
- await act(async()=>window.dispatchEvent(new window.KeyboardEvent('keydown',{key:'a',bubbles:true})));
- assert(host.querySelector('.pc-overlay-score').textContent.includes('MISSED'));
- const after=host.querySelector('.pc-score-strip').textContent;
- await act(async()=>{for(const key of ['d',' ','ArrowRight'])window.dispatchEvent(new window.KeyboardEvent('keydown',{key,bubbles:true}));});
- assert.equal(host.querySelector('.pc-score-strip').textContent,after,'one swing per ball');
- await click(find('Next delivery'));await tick();
- // The shared pause owns the match, including keyboard input and its animation clock.
+ await act(async()=>{root.render(createElement(GamePreferences,{slug:'boundary-cricket'},createElement(FreshGame,{slug:'boundary-cricket'})));await new Promise(r=>setTimeout(r,30));});
+ await click(find('How to play'));await click(find('Leg side'));await click(find('Next step'));await click(find('Try a swing'));await click(find('Next step'));await click(find('Set up a match'));
+ await click(find('1 over'));await click(find('Start match'));
+ await advance(()=>phase()==='bowling');
+ await key('a');assert.equal(find('Leg side').getAttribute('aria-pressed'),'true','A selects direction without swinging');assert.equal(phase(),'bowling');
+ await key(' ');assert.equal(phase(),'flight');const frozen=score();await key(' ');await key('d');assert.equal(score(),frozen,'scoring waits for animation');
  await click(host.querySelector('.gf-bar [aria-label="Pause (P)"]'));
  assert.equal(host.querySelector('[data-game-state]').dataset.gameState,'paused');
- const frozen=progress(),frozenScore=score();
- for(let i=0;i<10;i++)await tick(48);
- await act(async()=>window.dispatchEvent(new window.KeyboardEvent('keydown',{key:'d',bubbles:true})));
- assert.equal(progress(),frozen);assert.equal(score(),frozenScore);
+ for(let i=0;i<100;i++)await tick(48);assert.equal(score(),frozen);assert.equal(phase(),'flight');
  await click(host.querySelector('.gf-pause .gf-primary'));
- assert.equal(host.querySelector('[data-game-state]').dataset.gameState,'play');
- // Opening the shared menu pauses; closing it resumes only a match it paused.
- await click(host.querySelector('.gf-bar [aria-label="Arcade menu"]'));
- assert.equal(host.querySelector('[data-game-state]').dataset.gameState,'paused');
- const mute=find('Stadium sound');assert(mute);const was=mute.getAttribute('aria-pressed');
- await click(mute);assert.notEqual(mute.getAttribute('aria-pressed'),was);
- await click(host.querySelector('[aria-label="Close menu"]'));
- assert.equal(host.querySelector('[data-game-state]').dataset.gameState,'play');
- // Batting settings pause the ball but remain operable, then release the same delivery.
- const options=host.querySelector('.pc-advanced-options');
- await act(async()=>{options.open=true;options.dispatchEvent(new window.Event('toggle'));});
- const before=progress();for(let i=0;i<5;i++)await tick(48);assert.equal(progress(),before);
- await act(async()=>{options.open=false;options.dispatchEvent(new window.Event('toggle'));});
- // Play actual, aligned ground strokes through to a complete over and a finished chase.
- let rounds=1,seenOver=false;
- while(rounds<12&&host.querySelector('[data-game-state]').dataset.gameState==='play'){
-  for(let i=0;i<300&&progress()<97;i++)await tick();
-  const line=host.querySelector('.pc-overlay-score span').textContent;
-  const side=line.includes('LEG')?'LEG SIDE':line.includes('OFF')?'OFF SIDE':'STRAIGHT';
-  await click(host.querySelector('.pc-bat-buttons button[aria-label^="'+side+'"]'));
-  rounds++;
-  if(rounds===6){assert.equal(host.querySelectorAll('.pc-ball-feed span').length,6);assert(Array.from(host.querySelectorAll('.pc-ball-feed span')).every(s=>s.textContent!=='—'));seenOver=true;}
-  const next=find('Next delivery');if(next)await click(next);else break;
- }
- assert(seenOver,'a complete over was played');
- await act(async()=>{await new Promise(r=>setTimeout(r,1900));});
- assert.equal(host.querySelector('[data-game-state]').dataset.gameState,'finished','chase ends after final-ball presentation');
- await click(find('Play again'));assert(find('START CHASE'),'replay returns to setup');
- await click(find('START CHASE'));assert.equal(score(),'0/0','new chase resets score');
- await act(async()=>{await new Promise(r=>setTimeout(r,30));});
- assert(host.textContent.includes('2D compatibility mode'),'no WebGL falls back to a playable stadium');
- assert.deepEqual(errors,[],'no unexpected React/runtime errors');
- console.log('PASS: mouse/A-D batting, one swing per ball, shared pause/resume/menu, sound toggle, settings freeze, full over, chase end, replay and no-WebGL fallback.');
+ await advance(()=>phase()==='result');const completed=score();for(let i=0;i<5;i++)await tick(48);assert.equal(score(),completed,'one score per ball');
+ await click(find('Match settings'));assert(find('Back to match'));const before=score();for(let i=0;i<60;i++)await tick(48);assert.equal(score(),before);await click(find('Back to match'));
+ await advance(()=>!!find('Start chase'));
+ assert(host.textContent.includes('1.0 overs'),'six balls display one over');
+ await click(find('Start chase'));await click(find('Skip animation'));
+ await advance(()=>!!find('Play again'),3000);
+ assert.equal(host.querySelector('[data-game-state]').dataset.gameState,'finished');
+ assert.equal(JSON.parse(localStorage.getItem('studio-arcade:cricket:records:v2')).matches,1);
+ assert.equal(host.querySelector('.gf-end')?.hidden,true,'custom result avoids competing end cards');
+ assert.equal(JSON.parse(localStorage.getItem('studio-arcade:progress:v1')).rounds,1,'custom result retains shared progression exactly once');
+ await click(find('Exit to home'));await click(find('Play now'));await click(find('Chase'));await click(find('Start match'));await click(find('Skip animation'));
+ await advance(()=>!!find('Start chase'));await click(find('Start chase'));
+ await advance(()=>phase()==='bowling');
+ await click(host.querySelector('.gf-bar [aria-label="Pause (P)"]'));await click(find('Restart match'));
+ assert.equal(score(),'0/0','restart clears previous innings');
+ await click(find('Skip animation'));await advance(()=>!!find('Start chase'));await click(find('Start chase'));
+ await advance(()=>!!find('Play again'),3000);
+ assert.equal(JSON.parse(localStorage.getItem('studio-arcade:cricket:records:v2')).matches,2);
+ await click(find('Play again'));assert.equal(score(),'0/0');
+ await click(host.querySelector('.gf-bar [aria-label="Pause (P)"]'));await click(find('Exit to game home'));assert(find('Play now'));
+ await click(find('Settings'));const mute=host.querySelector('.cq-settings [aria-pressed]');assert(mute);const was=mute.getAttribute('aria-pressed');await click(mute);assert.notEqual(mute.getAttribute('aria-pressed'),was);
+ assert(host.textContent.includes('2D compatibility mode'),'no-WebGL fallback');
+ assert.deepEqual(errors,[],'no React/runtime errors');
+ console.log('PASS: tutorial, direction + single swing, delayed score, pause/resume, settings freeze, both complete batting orders, restart, exit, mute, records and no-WebGL fallback.');
 }finally{await act(async()=>root.unmount());console.error=oldError;await window.happyDOM.close();}

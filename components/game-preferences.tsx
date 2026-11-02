@@ -1,6 +1,7 @@
 'use client';
-import {useEffect,useRef,type ReactNode} from 'react';
+import {useEffect,useRef,useState,type ReactNode} from 'react';
 import {parsePreferences,rememberGame,validSelect} from '../lib/arcade-preferences';
+import {getMix,setMix} from '@/lib/arcade-mixer';
 import {GameFrame} from './game-frame';
 const inputSelector='.arcade-game-sidebar select,.arcade-game-sidebar input[type="checkbox"],.club-sidebar select';
 const toggleSelector='.fresh-preferences button[aria-pressed],.rooftop-head-actions button[aria-pressed],.arcade-game-controls button[aria-pressed]';
@@ -52,4 +53,10 @@ export function GamePreferences({slug,children}:{slug:string;children:ReactNode}
   return()=>{clearInterval(interval);clearTimeout(historyTimer);el.removeEventListener('change',persist);el.removeEventListener('click',persist);};
  },[slug]);
  return <GameFrame slug={slug}><div ref={root}>{children}</div></GameFrame>;
+}
+
+/** Shared mixer controls can be embedded in a game's own settings screen. */
+export function ArcadeAudioSettings({sound,onGesture,onToggleSound}:{sound:boolean;onGesture:()=>void;onToggleSound?:()=>void}){
+ const [mix,update]=useState(getMix);
+ return <><label>Music & crowd <output>{Math.round(mix.ambience*100)}%</output><input aria-label="Music and crowd volume" type="range" min="0" max="1" step=".05" value={mix.ambience} onChange={e=>{onGesture();setMix({ambience:Number(e.target.value)});update(getMix());}}/></label><label>Sound effects <output>{Math.round(mix.sfx*100)}%</output><input aria-label="Sound effects volume" type="range" min="0" max="1" step=".05" value={mix.sfx} onChange={e=>{onGesture();setMix({sfx:Number(e.target.value)});update(getMix());}}/></label><button aria-pressed={!sound} onClick={()=>{onGesture();onToggleSound?.();}}>{sound?'Mute all sound':'Enable sound'}</button></>;
 }
