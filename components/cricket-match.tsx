@@ -33,6 +33,7 @@ export function CricketMatch({active,comfort,sound=true,onToggleSound,onScore,on
  const ready=useCallback(()=>setScreen(s=>s==='loading'?'home':s),[]);
  const control=useCallback((action:string)=>{queueMicrotask(()=>root.current?.closest('[data-shared-controls]')?.dispatchEvent(new CustomEvent('arcade:control',{detail:{action}})));},[]);
  useEffect(()=>{control(screen==='match'?'cricket-playing':'cricket-ready');const heading=root.current?.querySelector<HTMLElement>('[data-cricket-heading]');heading?.focus({preventScroll:true});},[screen,control]);
+ useEffect(()=>{const el=root.current,dock=el?.querySelector<HTMLElement>('.cq-batting-dock');if(!el||!dock)return;const measure=()=>el.style.setProperty('--cq-dock-height',`${dock.getBoundingClientRect().height}px`);measure();if(typeof ResizeObserver==='undefined')return;const observer=new ResizeObserver(measure);observer.observe(dock);return()=>{observer.disconnect();el.style.removeProperty('--cq-dock-height');};},[screen]);
  function gesture(){audioGesture.current=true;if(sound)unlockStadiumAudio();}
  function cue(effect:Parameters<typeof playStadiumSound>[1]){if(sound&&audioGesture.current)try{playStadiumSound('cricket',effect);}catch{/* Audio is optional. */}}
  function go(s:Screen){gesture();onSound('tap');setScreen(s);}
