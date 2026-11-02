@@ -11,6 +11,9 @@ for(const key of ['window','document','navigator','localStorage','HTMLElement','
 }
 window.matchMedia=()=>({matches:false,addEventListener(){},removeEventListener(){}});
 window.HTMLCanvasElement.prototype.getContext=()=>null;
+window.SpeechSynthesisUtterance=class {constructor(text){this.text=text;}};
+window.speechSynthesis={getVoices:()=>[{lang:'en-IN',localService:true}],speak(){},cancel(){}};
+
 globalThis.IS_REACT_ACT_ENVIRONMENT=true;
 let now=1000,id=0;const frames=new Map();
 globalThis.requestAnimationFrame=window.requestAnimationFrame=cb=>{frames.set(++id,cb);return id;};
@@ -36,6 +39,12 @@ try{
  await act(async()=>{root.render(createElement(GamePreferences,{slug:'boundary-cricket'},createElement(FreshGame,{slug:'boundary-cricket'})));await new Promise(r=>setTimeout(r,30));});
  for(let n=0;n<200&&!find('How to play');n++)await act(async()=>{await new Promise(r=>setTimeout(r,20));});
  assert(find('How to play'),'stadium resolves to the home screen');
+ assert.equal(host.querySelectorAll('h1').length,1,'shared page owns the only primary heading');
+ await click(find('Settings'));const speech=host.querySelector('.cq-settings input[type=checkbox]');
+ assert.equal(speech.checked,false,'speech is opt-in');await act(async()=>{speech.click();});
+ assert.equal(JSON.parse(localStorage.getItem('studio-arcade:cricket:settings:v2')).spokenBoundaries,true,'spoken preference saves');
+ await click(find('Back to home'));
+
  await click(find('How to play'));await click(find('Leg side'));await click(find('Next step'));await click(find('Try a swing'));await click(find('Next step'));await click(find('Set up a match'));
  await click(find('1 over'));await click(find('Start match'));
  await advance(()=>phase()==='bowling');

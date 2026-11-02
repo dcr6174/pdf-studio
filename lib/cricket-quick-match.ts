@@ -1,4 +1,4 @@
-import {makeDelivery,type Difficulty,type Innings,type StrokeResult} from './cricket-engine';
+import {evaluateStroke,type BowledBall,type Difficulty,type Innings,type StrokeResult} from './cricket-engine';
 export type QuickConfig={team:string;opponent:string;color:string;opponentColor:string;overs:1|2|5;difficulty:Difficulty;order:'first'|'chase';practice:boolean};
 export const defaultQuickConfig:QuickConfig={team:'Midnight XI',opponent:'Coastal Kings',color:'#b6ed40',opponentColor:'#ffb56e',overs:2,difficulty:'easy',order:'first',practice:false};
 export type QuickBall=StrokeResult&{ball:number;total:number;wickets:number};
@@ -30,12 +30,17 @@ export const quickStrikeRate=(runs:number,balls:number)=>balls>0?(runs*100/balls
 export function quickRequired(m:QuickMatch){const a=currentQuickInnings(m),balls=Math.max(0,m.config.overs*6-a.balls),runs=Math.max(0,(m.target??0)-a.runs);return{balls,runs,rate:balls?quickRate(runs,balls):runs?'—':'0.00'};}
 /** Quick rules intentionally exclude LBW; the legacy chase engine remains available. */
 export function quickStroke(r:StrokeResult):StrokeResult{return r.out==='lbw'?{...r,wicket:false,out:null,label:'·',comment:'Beaten by the delivery. No run. This quick match omits LBW.'}:r;}
-export function aiQuickOutcome(m:QuickMatch,random=Math.random):StrokeResult{
- const weights=m.config.difficulty==='easy'?[.28,.31,.18,.04,.12,.03,.04]:m.config.difficulty==='club'?[.21,.29,.19,.05,.16,.05,.05]:[.16,.25,.20,.05,.20,.08,.06];
- const values=[0,1,2,3,4,6,'W'] as const;let sum=0,value:typeof values[number]=0;const roll=random();for(let n=0;n<values.length;n++){sum+=weights[n];if(roll<sum){value=values[n];break;}}
- const wicket=value==='W',runs=wicket?0:value as number;const d=makeDelivery(m.serial,m.config.difficulty,43);
- return{runs,wicket,out:wicket?'caught':null,label:wicket?'W':runs?String(runs):'·',grade:'good',contact:.8,flight:runs===6?1:.35,direction:d.line<0?'leg':d.line>0?'off':'straight',comment:wicket?'Caught in the deep!':runs===6?'SIX! Over the rope.':runs===4?'FOUR! Races across the outfield.':runs?runs+' runs added.':'Defended. No run.',timingError:0,targetLine:d.line,impactX:runs>=4?730:490,impactY:230,interceptedBy:wicket?'Deep cover':null};
+/** Seeded timing variation from PR 230; outcomes use the actual visible delivery. */
+export function quickRandom(seed:number){let x=seed|0;x=Math.imul(x^(x>>>16),0x45d9f3b);x=Math.imul(x^(x>>>16),0x45d9f3b);return((x^(x>>>16))>>>0)/4294967296;}
+export function aiQuickOutcome(m:QuickMatch,ball:BowledBall,seed:number):StrokeResult{
+ const r=quickRandom(seed+currentQuickInnings(m).balls*1709+(m.index+1)*77),level=m.config.difficulty;
+ const side=ball.line<=-1?'leg':ball.line>=1?'off':'straight';
+ const offset=(level==='easy'?230:level==='pro'?70:155)+r*(level==='easy'?430:level==='pro'?240:350);
+ const result=quickStroke(evaluateStroke(ball,{side,loft:r>.57,foot:ball.length==='short'?'back':'front'},ball.contactMs+(r>.5?offset:-offset),level));
+ // Keep scoring and trajectory from the same stroke result, including boundary flight.
+ return result;
 }
+
 export type CricketRecords={best:number;sixes:number;fours:number;fifty:number|null;wins:number;matches:number;ids:string[];recent:{team:string;opponent:string;score:string;other:string;winner:QuickMatch['winner'];date:string}[]};
 export const emptyCricketRecords=():CricketRecords=>({best:0,sixes:0,fours:0,fifty:null,wins:0,matches:0,ids:[],recent:[]});
 export function readCricketRecords(raw:string|null):CricketRecords{

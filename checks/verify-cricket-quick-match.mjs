@@ -19,6 +19,22 @@ let p=q.prepareQuickDelivery(q.newQuickMatch(q.defaultQuickConfig));assert.stric
 assert.equal(q.quickOvers(5),'0.5');assert.equal(q.quickOvers(6),'1.0');assert.equal(q.quickOvers(30),'5.0');assert.equal(q.quickRate(0,0),'0.00');assert.equal(q.quickStrikeRate(0,0),'0.0');assert.equal(q.quickRequired({...scored,target:20,innings:[{...scored.innings[0],balls:12},scored.innings[1]]}).rate,'—');
 let practice=q.newQuickMatch({...q.defaultQuickConfig,practice:true,overs:1});for(let n=0;n<6;n++)practice=ball(practice,6);assert.equal(practice.winner,'practice');assert.deepEqual(q.saveQuickRecord(q.emptyCricketRecords(),practice),q.emptyCricketRecords());
 let fifty=q.newQuickMatch({...q.defaultQuickConfig,overs:2,order:'chase'},'fifty');for(let n=0;n<12;n++)fifty=ball(fifty,6);fifty=q.beginQuickChase(fifty);for(let n=0;n<12;n++)fifty=ball(fifty,6);assert.equal(fifty.innings[1].fifty,9);let rec=q.saveQuickRecord(q.emptyCricketRecords(),fifty);assert.equal(rec.fifty,9);assert.equal(rec.matches,1);assert.deepEqual(q.saveQuickRecord(rec,fifty),rec);assert.deepEqual(q.readCricketRecords('{bad json'),q.emptyCricketRecords());assert.equal(q.readCricketRecords('{"best":-10,"wins":"oops"}').best,0);
-for(const difficulty of ['easy','club','pro']){const game=q.newQuickMatch({...q.defaultQuickConfig,difficulty});for(let n=0;n<1000;n++){const o=q.aiQuickOutcome(game,()=>n/1000);assert([0,1,2,3,4,6].includes(o.runs));assert(!o.wicket||o.runs===0);}}
+const timingErrors=[];
+for(const difficulty of ['easy','club','pro']){
+ let error=0;const outcomes=new Set();
+ for(let n=0;n<1000;n++){
+  const game=q.prepareQuickDelivery(q.newQuickMatch({...q.defaultQuickConfig,difficulty}));
+  // Exercise the actual public delivery generator separately from the AI.
+  const delivery={id:n,speed:110+(n%35),line:n%5-2,length:['full','short','good'][n%3],style:'pace',bounce:.65,swing:0,releaseMs:200,contactMs:1500,leadMs:500};
+  const o=q.aiQuickOutcome(game,delivery,n+137);assert.deepEqual(q.aiQuickOutcome(game,delivery,n+137),o,'skip/animation speed cannot reroll the result');
+  assert([0,1,2,3,4,6].includes(o.runs));assert(!o.wicket||o.runs===0);assert.notEqual(o.out,'lbw');
+  assert.equal(o.targetLine,delivery.line,'AI uses the displayed delivery rather than a fabricated ball');
+  for(const k of ['timingError','impactX','impactY','flight'])assert(Number.isFinite(o[k]));
+  outcomes.add(o.label);error+=Math.abs(o.timingError);
+ }
+ assert(outcomes.size>2,'AI produces varied legal results');timingErrors.push(error/1000);
+}
+assert(timingErrors[0]>timingErrors[1]&&timingErrors[1]>timingErrors[2],'higher difficulty improves computer timing');
+
 assert.equal(q.quickStroke({...r(0,true),out:'lbw'}).wicket,false);
 console.log('PASS: both batting orders at 1/2/5 overs, ten-wicket innings, immediate chase, ties, six-ball overs, duplicate delivery/scoring rejection, finite rates, practice exclusion, fifty/records persistence and 3,000 valid AI outcomes.');

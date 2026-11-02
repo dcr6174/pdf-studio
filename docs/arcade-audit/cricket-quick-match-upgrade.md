@@ -27,3 +27,15 @@ Controls: A/Left selects leg, D/Right off, S/Down straight; Space/BAT swings onc
 Physical iOS/Android touch/vibration; audible speaker/headphone quality; low-end-phone frame rate; live WebGL/context loss; screen-reader operation; 200–400% browser zoom; production deployment. Browser layout inspection and simulated-DOM full matches are distinct evidence. No WCAG certification is claimed. Full public production build was not completed locally because this checkout lacks binary public assets; repository CI remains the production-build gate.
 
 CI evidence: commit `b04b8928795e90b58b2fac92bdb7e1165ff030d2` passed Cloudflare Workers Builds and the Lab watermark workflow, including `npm run build:public`. Repository-wide lint and TypeScript also passed. The CI test harness now waits for the actual home screen rather than assuming a fixed stadium-load duration.
+
+## Combined PR 230/233 follow-up
+
+The retained UI, manual/automatic footwork, original best-score import and shared progression are from #233. Computer batting now uses #230's seeded timing approach against the actual delivery and the existing `evaluateStroke` collision/placement engine. Fast-forward changes presentation only; it cannot reroll a result. Legal scoring, ten wickets, both batting orders, practice exclusion and delayed/duplicate-safe scoring remain unchanged.
+
+Spoken boundary cues are opt-in and saved with cricket settings. They announce only “Four!”/“Six!” with an English device voice where available. Web Speech cannot connect to Web Audio buses: its utterance volume explicitly mirrors the shared master/effects gains and it cancels on mixer changes, game mute, pause, settings/exit and unmount. No remote voice is selected. Visual and synthesized cues remain available when device speech is unavailable.
+
+Fixed the duplicate primary-heading regression: the enclosing FreshGame keeps the page H1, and cricket screens use focusable section headings with corresponding visual selectors.
+
+Local follow-up validation: all `verify:play-studio` checks pass, including the actual React/shared-frame full-match harness. Three thousand seeded AI cases verify legal/finite outcomes, displayed-delivery alignment, deterministic results across repeated evaluation and improved timing at higher difficulty. Speech tests verify text, volume, queue cancellation, device/language restriction and failure fallback. TypeScript and targeted zero-warning lint pass. These speech tests simulate the browser API and do not establish audible quality.
+
+The isolated actual-component client bundle builds. The connected browser could not reach its localhost server (connection refused); new pre-merge visual/device checks remain unverified. The production CI and rendered SEO checks are the merge gates. Physical-phone, live GPU and audible speaker/headphone checks remain separate from automated evidence.

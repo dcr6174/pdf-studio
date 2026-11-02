@@ -38,6 +38,7 @@ export function getMix():Mix{return {...currentMix()};}
 export function setMix(next:Partial<Mix>){
  const m={...currentMix(),...next};mix=parseMix(JSON.stringify(m));
  try{localStorage.setItem(MIX_KEY,JSON.stringify(mix));}catch{/* Volume still applies for this visit. */}
+ if(typeof window!=='undefined')window.dispatchEvent(new Event('arcade:mix-change'));
  if(ctx&&master){const t=ctx.currentTime;master.gain.setTargetAtTime(gainFor(mix.master),t,.02);for(const b of ['sfx','ui','ambience'] as const)buses[b]?.gain.setTargetAtTime(gainFor(mix[b]),t,.02);}
 }
 let counter=0;
