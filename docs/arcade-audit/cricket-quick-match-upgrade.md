@@ -19,9 +19,11 @@ Controls: A/Left selects leg, D/Right off, S/Down straight; Space/BAT swings onc
 | Arcade regression | `npm run verify:play-studio` passes, including classic interactions and other game engines. Source assertions now reflect the new cricket controls and direct mixer cues. |
 | Shared protocol/progression | Progress, session, arcade, improvements and device-layout checks pass. Unrelated watermark verification cannot run locally: source-only checkout lacks `public/fonts/NotoSans-Regular.ttf`. |
 | Types/lint | TypeScript and targeted changed-source ESLint pass. |
-| Browser responsive inspection | Actual FreshGame/GamePreferences preview inspected at desktop 1363×936 and embedded 390×844 portrait / 844×390 landscape viewports. Home, setup, live scoreboard and reachable batting controls inspected. Browser selects 2D fallback. |
+| Browser responsive inspection | Actual FreshGame/GamePreferences preview inspected at desktop 1363×936 and embedded 390×844 portrait / 844×390 landscape / 768×1024 tablet viewports. Home, setup, live scoreboard and reachable batting controls inspected. Browser selects 2D fallback. |
 | Client bundle | Actual game-components Vite build passes; >500 KB shared-game chunk warning remains. |
 
 ## Untested
 
 Physical iOS/Android touch/vibration; audible speaker/headphone quality; low-end-phone frame rate; live WebGL/context loss; screen-reader operation; 200–400% browser zoom; production deployment. Browser layout inspection and simulated-DOM full matches are distinct evidence. No WCAG certification is claimed. Full public production build was not completed locally because this checkout lacks binary public assets; repository CI remains the production-build gate.
+
+CI evidence: commit `b04b8928795e90b58b2fac92bdb7e1165ff030d2` passed Cloudflare Workers Builds and the Lab watermark workflow, including `npm run build:public`. Repository-wide lint and TypeScript also passed. The CI test harness now waits for the actual home screen rather than assuming a fixed stadium-load duration.
