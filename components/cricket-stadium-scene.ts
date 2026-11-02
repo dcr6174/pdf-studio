@@ -6,16 +6,16 @@ import type {CricketSceneState} from './cricket-stadium';
 /** Original procedural artwork: no remote models, textures, fonts or licensed team assets. */
 export function createCricketScene(canvas:HTMLCanvasElement,read:()=>CricketSceneState,onFailure:()=>void){
  const renderer=new THREE.WebGLRenderer({canvas,antialias:true,alpha:false,powerPreference:'low-power'});
- renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,1.5));
- renderer.shadowMap.enabled=true;renderer.shadowMap.type=THREE.PCFSoftShadowMap;
+ renderer.setPixelRatio(Math.min(window.devicePixelRatio||1,read().quality==='high'?2:1));
+ renderer.shadowMap.enabled=read().quality==='high';renderer.shadowMap.type=THREE.PCFSoftShadowMap;
  renderer.outputColorSpace=THREE.SRGBColorSpace;renderer.toneMapping=THREE.ACESFilmicToneMapping;
  renderer.toneMappingExposure=1.25;
- const scene=new THREE.Scene();scene.background=new THREE.Color('#bedfe5');scene.fog=new THREE.Fog('#bedfe5',65,145);
+ const scene=new THREE.Scene();scene.background=new THREE.Color('#071426');scene.fog=new THREE.Fog('#071426',65,145);
  const camera=new THREE.PerspectiveCamera(49,1,.1,180);
  const home=new THREE.Vector3(0,5.3,-18.7),look=new THREE.Vector3(0,1,7);
  camera.position.copy(home);camera.lookAt(look);
- const ambient=new THREE.HemisphereLight('#e9faff','#49664e',2.1);scene.add(ambient);
- const sun=new THREE.DirectionalLight('#fff4d7',3.1);sun.position.set(-16,30,-14);
+ const ambient=new THREE.HemisphereLight('#c3dcff','#18351c',1.9);scene.add(ambient);
+ const sun=new THREE.DirectionalLight('#e9f4ff',3.5);sun.position.set(-16,30,-14);
  sun.castShadow=true;sun.shadow.mapSize.set(1024,1024);
  Object.assign(sun.shadow.camera,{left:-18,right:18,top:23,bottom:-18,near:1,far:85});
  sun.shadow.normalBias=.04;scene.add(sun);sun.target.position.set(0,0,2);scene.add(sun.target);
@@ -30,6 +30,13 @@ export function createCricketScene(canvas:HTMLCanvasElement,read:()=>CricketScen
  const mesh=(g:THREE.BufferGeometry,m:THREE.Material,parent:THREE.Object3D,x=0,y=0,z=0)=>{
   const o=new THREE.Mesh(g,m);o.position.set(x,y,z);parent.add(o);return o;
  };
+ // Original floodlight towers keep the night setting recognizable without remote assets.
+ const lamp=new THREE.MeshBasicMaterial({color:'#e6f1ff'});materials.push(lamp);
+ for(const x of [-28,28])for(const z of [-12,32]){
+  mesh(cylinder(.22,.35,15),navy,scene,x,7.5,z);
+  mesh(box(5,.9,.6),lamp,scene,x,15,z);
+  for(let i=-1;i<=1;i++)mesh(box(1.2,.7,.2),white,scene,x+i*1.5,15,z-.35);
+ }
  // Elliptical outfield, subtle mowing bands, and a full-length pitch.
  const groundGeo=new THREE.CircleGeometry(1,80);geometries.push(groundGeo);
  const field=mesh(groundGeo,grass,scene,0,-.04,5);field.rotation.x=-Math.PI/2;field.scale.set(39,36,1);field.receiveShadow=true;
@@ -65,6 +72,7 @@ export function createCricketScene(canvas:HTMLCanvasElement,read:()=>CricketScen
   mesh(cylinder(.18,.28,17),navy,scene,x,8.5,z);
   const lamp=mesh(box(5,1.5,.4),white,scene,x,17,z);lamp.rotation.y=x<0?.5:-.5;
  }
+ white.emissive.set('#a9d5ff');white.emissiveIntensity=.18;
  const boards=mat('#173748');
  for(let i=0;i<32;i++){
   const a=i/32*Math.PI*2;
@@ -115,6 +123,7 @@ export function createCricketScene(canvas:HTMLCanvasElement,read:()=>CricketScen
  const loop=(now:number)=>{
   if(disposed)return;frame=requestAnimationFrame(loop);
   const state=read(),dt=last?Math.min((now-last)/1000,.05):0;last=now;
+  kit.color.set(state.teamColor??'#b6ed40');mint.color.set(state.opponentColor??'#ffb56e');
   const draw=state.active||lastActive||lastPhase!==state.phase;lastActive=state.active;
   if(!draw)return;
   const hasResult=(state.phase==='result'||state.phase==='done')&&state.result;

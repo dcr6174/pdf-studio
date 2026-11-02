@@ -24,8 +24,11 @@ export type ArcadeReport=ArcadeProfile&{
  againLabel?:string;
  /** One short live readout the bar shows beside the score, e.g. "42s left" or "Moves 17". */
  detail?:string;
+ /** A game-owned match result replaces the generic round card. */
+ customResult?:boolean;
+ canHome?:boolean;
 };
-export type ArcadeCommand='pause'|'resume'|'restart'|'sound';
+export type ArcadeCommand='pause'|'resume'|'restart'|'sound'|'home';
 export const REPORT_EVENT='studio-arcade:report';
 export const COMMAND_EVENT='studio-arcade:command';
 
@@ -50,7 +53,7 @@ const kinds=new Set<ScoreKind>(['points','strokes','outcome']);
 const finite=(v:unknown)=>typeof v==='number'&&Number.isFinite(v);
 export function isArcadeReport(v:unknown):v is ArcadeReport{
  if(!v||typeof v!=='object')return false;const r=v as Record<string,unknown>;
- return typeof r.slug==='string'&&phases.has(r.phase as ArcadePhase)&&finite(r.score)&&finite(r.best)&&(r.won===null||typeof r.won==='boolean')&&typeof r.message==='string'&&kinds.has(r.scoreKind as ScoreKind)&&(r.feel==='action'||r.feel==='calm')&&typeof r.letterKeys==='boolean'&&typeof r.canPause==='boolean'&&(r.sound===null||typeof r.sound==='boolean')&&(r.againLabel===undefined||typeof r.againLabel==='string')&&(r.detail===undefined||typeof r.detail==='string');
+ return typeof r.slug==='string'&&phases.has(r.phase as ArcadePhase)&&finite(r.score)&&finite(r.best)&&(r.won===null||typeof r.won==='boolean')&&typeof r.message==='string'&&kinds.has(r.scoreKind as ScoreKind)&&(r.feel==='action'||r.feel==='calm')&&typeof r.letterKeys==='boolean'&&typeof r.canPause==='boolean'&&(r.sound===null||typeof r.sound==='boolean')&&(r.againLabel===undefined||typeof r.againLabel==='string')&&(r.detail===undefined||typeof r.detail==='string')&&(r.customResult===undefined||typeof r.customResult==='boolean')&&(r.canHome===undefined||typeof r.canHome==='boolean');
 }
 /** Is `score` an improvement on `best` for this kind of game? A zero best means no record yet. */
 export function beats(kind:ScoreKind,score:number,best:number){

@@ -55,5 +55,5 @@ const sports=fs.readFileSync('components/fresh-sports.tsx','utf8');
 assert(sports.includes('CricketMatch'),'game route loads revamped cricket instead of old formula');
 assert(!sports.includes('function Cricket('),'old bowler shortcut removed');
 const component=fs.readFileSync('components/cricket-match.tsx','utf8');
-for(const feature of ['CricketStadium','pc-timing-track','FRONT FOOT','BACK FOOT','GROUND','LOFT','KeyboardEvent','setPointerCapture','aria-live']){if(feature!=='setPointerCapture')assert(component.includes(feature),'cricket has '+feature);}
+for(const feature of ['CricketStadium','cq-timing','Auto footwork','Manual footwork','Lofted shot','KeyboardEvent','aria-live','Start chase']){if(feature!=='setPointerCapture')assert(component.includes(feature),'cricket has '+feature);}
 console.log('PASS: 240 bowler/shot scenarios, varied innings, wickets, overs, cricket UI and deterministic replay.');

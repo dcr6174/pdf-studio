@@ -76,11 +76,12 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
  };
  const bestText=(r:ArcadeReport,value=r.best)=>r.scoreKind==='outcome'?plural(progress.wins[slug]??0,'win','wins'):value>0?(r.scoreKind==='strokes'?'Best '+plural(value,'stroke','strokes'):'Best '+value):'No best yet';
  const resumeBtn=h('button',{class:'gf-primary',type:'button'},'▶ Resume');
- const restartBtn=()=>{const b=h('button',{class:'gf-toggle gf-restart',type:'button'},report?.scoreKind==='outcome'?'↻ New game':'↻ Restart round');b.addEventListener('click',()=>{hidePause();menuPaused=false;root.classList.remove('gf-menu-open');sheet.hidden=true;menuBtn.setAttribute('aria-expanded','false');hideEnd();sendArcadeCommand(slug,'restart');});return b;};
+ const restartBtn=()=>{const b=h('button',{class:'gf-toggle gf-restart',type:'button'},report?.canHome?'↻ Restart match':report?.scoreKind==='outcome'?'↻ New game':'↻ Restart round');b.addEventListener('click',()=>{hidePause();menuPaused=false;root.classList.remove('gf-menu-open');sheet.hidden=true;menuBtn.setAttribute('aria-expanded','false');hideEnd();sendArcadeCommand(slug,'restart');});return b;};
  function showPause(){
   if(!report||!endCard.hidden)return;const r=report;
   const line=r.scoreKind==='outcome'?r.message:(r.scoreKind==='strokes'?'Strokes ':'Score ')+r.score+' · '+bestText(r);
   setKids(pauseCard,h('h2',{},'Paused'),h('p',{},line),resumeBtn,h('div',{class:'gf-row'},restartBtn()),h('div',{class:'gf-row'},h('a',{class:'gf-link',href:'/lab/arcade'},'All games'),h('a',{class:'gf-link',href:'/lab/arcade/'+next.slug},'Next: '+next.name)));
+  if(r.canHome){const home=h('button',{class:'gf-toggle',type:'button'},'Exit to game home');home.addEventListener('click',()=>{hidePause();sendArcadeCommand(slug,'home');});add(pauseCard,home);const settings=h('button',{class:'gf-toggle',type:'button'},'Settings');settings.addEventListener('click',()=>{hidePause();menuBtn.click();});add(pauseCard,settings);}
   pauseCard.hidden=false;root.classList.add('gf-paused');resumeBtn.focus();
  }
  const hidePause=()=>{pauseCard.hidden=true;root.classList.remove('gf-paused');};
@@ -123,13 +124,14 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
  menuBtn.addEventListener('click',()=>sheet.hidden?openMenu():closeBtn.click());
  function hideEnd(){clearTimeout(endTimer);endTimer=0;endCard.hidden=true;}
  /** Records the round exactly once and shows the shared result card. */
- function showEnd(r:ArcadeReport,previousBest:number){
+ function showEnd(r:ArcadeReport,previousBest:number,custom=false){
   rounds++;root.dataset.gfRounds=String(rounds);
   const k=r.scoreKind,lower=k==='strokes';
   const res=recordRound(progress,{slug,score:r.score,previousBest,day:today,kind:k,won:r.won},daily);progress=res.progress;write(PROGRESS,progress);
   const record=beats(k,r.score,previousBest);
   const bestNow=record?r.score:k==='strokes'?(r.best||previousBest):Math.max(r.best,previousBest);
   const level=levelFromXp(progress.xp);levelEl.textContent='Lv '+level.level;bestEl.textContent=bestText(r,bestNow);
+  if(custom){status.textContent=r.message||'Match complete.';return;}
   const near=nearMiss(r.score,previousBest,k);
   const again=h('button',{class:'gf-primary',type:'button'},r.againLabel??(k==='outcome'?'↻ Rematch':'↻ Play again'));
   again.addEventListener('click',()=>{hideEnd();sendArcadeCommand(slug,'restart');});
@@ -172,7 +174,7 @@ export function mountGameFrame(root:HTMLElement,opts:{slug:string;games:FrameGam
   root.classList.toggle('gf-has-sound',r.sound!==null);
   if(r.phase==='paused'&&sheet.hidden)showPause();else hidePause();
   if(!prev||prev.phase!==r.phase)requestAnimationFrame(()=>fit(true));
-  if(r.phase==='over'&&!recorded){recorded=true;const previousBest=roundBest;clearTimeout(endTimer);endTimer=window.setTimeout(()=>{endTimer=0;if(!disposed&&report?.phase==='over')showEnd(report,previousBest);},END_DELAY);}
+  if(r.phase==='over'&&!recorded){recorded=true;const previousBest=roundBest;clearTimeout(endTimer);if(r.customResult)showEnd(r,previousBest,true);else endTimer=window.setTimeout(()=>{endTimer=0;if(!disposed&&report?.phase==='over')showEnd(report,previousBest);},END_DELAY);}
  };
  const onReport=(event:Event)=>{const d=(event as CustomEvent<unknown>).detail;if(isArcadeReport(d)&&d.slug===slug)apply(d);};
  window.addEventListener(REPORT_EVENT,onReport);

@@ -16,7 +16,7 @@ from playwright.async_api import async_playwright
 
 SIZES=[(320,568),(360,740),(390,844),(768,1024),(1280,800)]
 GAMES=[
- ("boundary-cricket",".pc-stage-wrap"),
+ ("boundary-cricket",".cq-world"),
  ("rooftop-hoops",".rooftop-court"),
  ("untangle-lines",".untangle-board"),
  ("shape-packing",".packing-board"),
@@ -37,6 +37,8 @@ async def run_case(browser,base,width,height,slug,selector,out):
             raise RuntimeError(f"HTTP {response.status if response else 'no response'}")
         await page.wait_for_timeout(1200)
         play=page.get_by_role("button",name="Play now")
+        if slug=="boundary-cricket":
+            await play.first.wait_for(state="visible",timeout=15000)
         if await play.count() and await play.first.is_visible():
             await play.first.click()
         await page.locator(selector).wait_for(state="visible",timeout=15000)
@@ -48,22 +50,26 @@ async def run_case(browser,base,width,height,slug,selector,out):
         stage=page.locator(selector)
         result["checks"]["stage_box"]=await stage.bounding_box()
         if slug=="boundary-cricket":
-            start=page.locator(".pc-start")
-            if await start.count():
-                await start.click()
-                await page.locator(".pc-mobile-pad button, .pc-bat-buttons button").first.wait_for(timeout=6000)
-            sound_test=page.locator(".pc-audio-preview")
-            if await sound_test.count()==0 or not await sound_test.is_visible():
-                raise AssertionError("Cricket is missing visible test-sound control")
-            await sound_test.click()
-            result["checks"]["test_sound_available"]=True
-            if width<700:
-                button=page.locator(".pc-mobile-pad button").first
-                await button.wait_for(state="visible",timeout=7000)
-                box=await button.bounding_box()
-                result["checks"]["bat_pad"]=box
-                if not box or box["y"]+box["height"]>height+5:
-                    raise AssertionError("Mobile batting button extends beyond viewport")
+            await page.locator(".cq-setup").wait_for(state="visible",timeout=15000)
+            await page.get_by_role("button",name="1 over",exact=True).click()
+            await page.get_by_role("button",name="Start match",exact=False).click()
+            button=page.locator(".cq-bat")
+            await button.wait_for(state="visible",timeout=6000)
+            mute=page.locator(".cq-header-right button[aria-pressed]")
+            before=await mute.get_attribute("aria-pressed")
+            await mute.click()
+            if await mute.get_attribute("aria-pressed")==before:
+                raise AssertionError("Cricket mute did not update")
+            await mute.click()
+            result["checks"]["mute_toggle"]=True
+            await page.wait_for_function("document.querySelector('[data-cricket-phase]')?.dataset.cricketPhase === 'bowling'")
+            await button.click()
+            await page.wait_for_function("document.querySelector('[data-cricket-phase]')?.dataset.cricketPhase === 'flight'")
+            result["checks"]["bat_swing_started"]=True
+            box=await button.bounding_box()
+            result["checks"]["bat_pad"]=box
+            if not box or box["y"]+box["height"]>height+5 or box["x"]+box["width"]>width+5:
+                raise AssertionError("Batting button extends beyond viewport")
         elif slug=="rooftop-hoops":
             start=page.locator(".rooftop-start")
             if await start.count() and await start.is_visible():
