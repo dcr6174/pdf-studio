@@ -34,6 +34,8 @@ const advance=async(test,max=2000)=>{for(let n=0;n<max&&!test();n++)await tick(4
 const key=async k=>act(async()=>window.dispatchEvent(new window.KeyboardEvent('keydown',{key:k,bubbles:true})));
 try{
  await act(async()=>{root.render(createElement(GamePreferences,{slug:'boundary-cricket'},createElement(FreshGame,{slug:'boundary-cricket'})));await new Promise(r=>setTimeout(r,30));});
+ for(let n=0;n<200&&!find('How to play');n++)await act(async()=>{await new Promise(r=>setTimeout(r,20));});
+ assert(find('How to play'),'stadium resolves to the home screen');
  await click(find('How to play'));await click(find('Leg side'));await click(find('Next step'));await click(find('Try a swing'));await click(find('Next step'));await click(find('Set up a match'));
  await click(find('1 over'));await click(find('Start match'));
  await advance(()=>phase()==='bowling');

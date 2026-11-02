@@ -37,6 +37,8 @@ async def run_case(browser,base,width,height,slug,selector,out):
             raise RuntimeError(f"HTTP {response.status if response else 'no response'}")
         await page.wait_for_timeout(1200)
         play=page.get_by_role("button",name="Play now")
+        if slug=="boundary-cricket":
+            await play.first.wait_for(state="visible",timeout=15000)
         if await play.count() and await play.first.is_visible():
             await play.first.click()
         await page.locator(selector).wait_for(state="visible",timeout=15000)
