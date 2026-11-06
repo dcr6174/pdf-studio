@@ -40,7 +40,7 @@ export function cleanupPDF(doc:PDFDocument,kind:'remove-bookmarks'|'remove-links
  const stripAssociated=(dict:PDFDict)=>{if(dict.has(PDFName.of('AF'))){dict.delete(PDFName.of('AF'));removed++;}};
  const payload=new Set<PDFRef>();
  const collectSpec=(spec:PDFDict|undefined)=>{if(!spec)return;const ef=spec.lookupMaybe(PDFName.of('EF'),PDFDict);if(!ef)return;for(const key of ['F','UF','DOS','Mac','Unix']){const ref=ef.get(PDFName.of(key));if(ref instanceof PDFRef)payload.add(ref);}};
- const collectTree=(node:PDFDict)=>{const entries=node.lookupMaybe(PDFName.of('Names'),PDFArray);if(entries)for(let i=1;i<entries.size();i+=2){const ref=entries.get(i);if(ref instanceof PDFRef){payload.add(ref);const spec=doc.context.lookup(ref);if(spec instanceof PDFDict)collectSpec(spec);}}const kids=node.lookupMaybe(PDFName.of('Kids'),PDFArray);if(kids)for(let i=0;i<kids.size();i++){const kid=kids.get(i);if(kid instanceof PDFRef){const dict=doc.context.lookup(kid);if(dict instanceof PDFDict)collectTree(dict);}}};
+ const collectTree=(node:PDFDict)=>{const entries=node.lookupMaybe(PDFName.of('Names'),PDFArray);if(entries)for(let i=1;i<entries.size();i+=2){const ref=entries.get(i);if(ref instanceof PDFRef){payload.add(ref);const spec=doc.context.lookup(ref);if(spec instanceof PDFDict)collectSpec(spec);}else if(ref instanceof PDFDict)collectSpec(ref);}const kids=node.lookupMaybe(PDFName.of('Kids'),PDFArray);if(kids)for(let i=0;i<kids.size();i++){const kid=kids.get(i);if(kid instanceof PDFRef){const dict=doc.context.lookup(kid);if(dict instanceof PDFDict)collectTree(dict);}}};
  if(kind==='remove-attachments'){
   const names=doc.catalog.lookupMaybe(PDFName.of('Names'),PDFDict);
   const tree=names?.lookupMaybe(PDFName.of('EmbeddedFiles'),PDFDict);
@@ -54,7 +54,7 @@ export function cleanupPDF(doc:PDFDocument,kind:'remove-bookmarks'|'remove-links
   const annots=page.node.lookupMaybe(PDFName.of('Annots'),PDFArray);if(!annots)continue;
   for(let i=annots.size()-1;i>=0;i--){const entry=annots.lookup(i,PDFDict);
    const subtype=entry.get(PDFName.of('Subtype'))?.toString();
-   if(subtype===(kind==='remove-links'?'/Link':'/FileAttachment')){if(kind==='remove-attachments'){const fs=entry.get(PDFName.of('FS'));if(fs instanceof PDFRef){payload.add(fs);const spec=doc.context.lookup(fs);if(spec instanceof PDFDict)collectSpec(spec);}}annots.remove(i);removed++;}
+   if(subtype===(kind==='remove-links'?'/Link':'/FileAttachment')){if(kind==='remove-attachments'){const fs=entry.get(PDFName.of('FS'));if(fs instanceof PDFRef){payload.add(fs);const spec=doc.context.lookup(fs);if(spec instanceof PDFDict)collectSpec(spec);}else if(fs instanceof PDFDict)collectSpec(fs);}annots.remove(i);removed++;}
   }
  }
  if(kind==='remove-attachments')for(const ref of payload)doc.context.delete(ref);
