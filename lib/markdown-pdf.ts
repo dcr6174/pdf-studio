@@ -1,4 +1,4 @@
-import {PDFDocument,StandardFonts,rgb,degrees,type PDFFont} from 'pdf-lib';
+import {PDFDocument,rgb,type PDFFont} from 'pdf-lib';
 import fontkit from '@pdf-lib/fontkit';
 export type InlineRun={text:string;bold:boolean;italic:boolean};
 /** Parse basic inline emphasis; unmatched markers remain readable literal text. */
@@ -16,19 +16,23 @@ export function inlineMarkdown(text:string,bold=false,italic=false):InlineRun[]{
 }
 export async function markdownPDF(text:string){
  const doc=await PDFDocument.create();doc.registerFontkit(fontkit);
- const fonts=await Promise.all([StandardFonts.Helvetica,StandardFonts.HelveticaBold,StandardFonts.HelveticaOblique,StandardFonts.HelveticaBoldOblique].map(name=>doc.embedFont(name)));
- let unicode:PDFFont|undefined;const fontFor=async(run:InlineRun)=>{const font=fonts[Number(run.bold)+Number(run.italic)*2];try{font.encodeText(run.text);return {font,fallback:false};}catch{if(!unicode){const response=await fetch('/fonts/NotoSans-Regular.ttf');if(!response.ok)throw new Error('The document font could not load. Please retry.');unicode=await doc.embedFont(await response.arrayBuffer(),{subset:true});}return {font:unicode,fallback:true};}};
+ // Always embed the app fonts. Referencing PDF standard fonts left width
+ // selection to the viewer, and its substituted metrics collapsed the
+ // measured space after wide words (e.g. "MDWATCH Heading").
+ const load=async(path:string)=>{const response=await fetch(path);if(!response.ok)throw new Error('The document font could not load. Please retry.');return doc.embedFont(await response.arrayBuffer(),{subset:true});};
+ const fonts=await Promise.all(['/fonts/NotoSans-Regular.ttf','/fonts/editing/NotoSans-Bold.ttf','/fonts/editing/NotoSans-Italic.ttf','/fonts/editing/NotoSans-BoldItalic.ttf'].map(load));
+ const fontFor=(run:InlineRun):PDFFont=>fonts[Number(run.bold)+Number(run.italic)*2];
  let page=doc.addPage([595.28,841.89]),x=60,y=780;const right=535,lineHeight=18;
  const nextLine=(height=lineHeight)=>{x=60;y-=height;if(y<60){if(doc.getPageCount()>=400)throw new Error('This document exceeds 400 pages. Split it into smaller documents.');page=doc.addPage([595.28,841.89]);y=780;}};
  for(const raw of text.replace(/\r\n?/g,'\n').split('\n')){
   const heading=/^(#{1,6})\s+/.exec(raw),size=heading?Math.max(12,22-heading[1].length*2):11;
   const content=raw.replace(/^#{1,6}\s+/,'').replace(/^\s*[-*+]\s+/,'• ');
   for(const run of inlineMarkdown(content,!!heading)){
-   const {font,fallback}=await fontFor(run);
+   const font=fontFor(run);
    for(const token of run.text.split(/(\s+)/).filter(Boolean)){
     if(!token.trim()){if(x>60)x+=font.widthOfTextAtSize(token,size);continue;}
     const width=font.widthOfTextAtSize(token,size);if(x+width>right&&x>60)nextLine(size*1.6);
-    const draw=(word:string)=>{const w=font.widthOfTextAtSize(word,size);page.drawText(word,{x,y,font,size,color:rgb(.1,.14,.2),...(fallback&&run.italic?{xSkew:degrees(12)}:{})});if(fallback&&run.bold)page.drawText(word,{x:x+.35,y,font,size,color:rgb(.1,.14,.2),...(run.italic?{xSkew:degrees(12)}:{})});x+=w;};
+    const draw=(word:string)=>{const w=font.widthOfTextAtSize(word,size);page.drawText(word,{x,y,font,size,color:rgb(.1,.14,.2)});x+=w;};
     if(width<=right-60)draw(token);else for(const char of token){if(x+font.widthOfTextAtSize(char,size)>right)nextLine(size*1.6);draw(char);}
    }
   }nextLine(size*1.6+4);
