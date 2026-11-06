@@ -107,6 +107,12 @@ description: "Shrink a PDF toward 100, 200 or 500 KB upload limits. No size is g
  "powerpoint-to-pdf": {title: "PowerPoint to PDF: How to Export Your Slides", description: 
 "A guide to saving a PPT or PPTX as a PDF in PowerPoint, then organizing or compressing it here. PDF Studio does not convert PPTX itself."},
  "html-to-pdf": {title: "HTML to PDF: Save a Webpage as PDF", description: "A guide to using your browser's Print, Save as PDF to turn a webpage into a PDF. PDF Studio does not fetch URLs or convert HTML itself."},
+ "resize-pages": {title: "Resize PDF Pages to A4 or US Letter", description: "Fit selected PDF pages onto A4 or US Letter and export a resized copy. Runs in your browser; the original file is not changed."},
+ "add-text-and-images": {title: "Add Text and Images to a PDF Online", description: "Place new text, images and annotations on PDF pages in your browser. Adds overlays; use Edit PDF Text to replace existing text."},
+ "sketch-over-pdf": {title: "Sketch Over a PDF: Draw and Highlight", description: "Draw and highlight on PDF pages on a spacious canvas, then export. Marks are visual additions, not redaction. Free, in your browser."},
+ "pdf-cut-and-collect": {title: "PDF Cut and Collect: Gather Clippings", description: "Collect clippings from PDF pages with their source-page references and export them as images in a new PDF. Text is not editable."},
+ "pdf-fold-lab": {title: "PDF Fold Lab: Booklets and Cards", description: "Turn PDF pages into a folded booklet or four cut-out cards per A4 sheet. Test duplex orientation before printing the full pack."},
+ "pdf-attachment-map": {title: "PDF Attachment Map: Linked Index", description: "Connect supporting PDFs with a clickable document index and export a combined reading copy. Separate files are not embedded."},
 };
 export const labMeta: Record<string, SeoMeta> = {
  "text-to-handwriting": {title: "Text to Handwriting: Handwritten-Style PDF", description: 
