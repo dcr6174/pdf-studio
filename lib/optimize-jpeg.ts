@@ -1,7 +1,44 @@
-import {PDFDocument,PDFRawStream,PDFName,PDFNumber,PDFDict,decodePDFRawStream} from 'pdf-lib';
+import {PDFDocument,PDFRawStream,PDFName,PDFNumber,PDFDict,PDFArray,decodePDFRawStream} from 'pdf-lib';
 import {decodePhoto} from './mobile-image';
 import {imageSamples} from './pdf-image-samples';
 export type JPEGOptimization={quality?:number;maxDimension?:number};
+/** Resolve a dictionary entry written as a name, an indirect name, or a single-element array of either; anything longer is a filter chain we cannot reproduce. */
+function singleName(doc:PDFDocument,dict:PDFDict,key:string){
+ const value=dict.get(PDFName.of(key)),entries=value instanceof PDFArray?value.asArray():[value];
+ if(entries.length!==1)return undefined;
+ const resolved=doc.context.lookup(entries[0]);
+ return resolved instanceof PDFName?resolved.toString():undefined;
+}
+/** Color spaces whose samples the canvas pipeline can decode and re-encode: device RGB/gray, or ICC profiles declaring the same channel counts. */
+function supportedColorSpace(doc:PDFDocument,dict:PDFDict):'rgb'|'gray'|undefined{
+ const value=dict.get(PDFName.of('ColorSpace'));
+ if(value instanceof PDFArray){
+  const entries=value.asArray(),kind=entries.length?doc.context.lookup(entries[0]):undefined;
+  if(kind instanceof PDFName&&kind.toString()==='/ICCBased'&&entries.length===2){
+   const profile=doc.context.lookup(entries[1]),n=profile instanceof PDFRawStream?profile.dict.lookupMaybe(PDFName.of('N'),PDFNumber)?.asNumber():undefined;
+   if(n===3)return 'rgb';if(n===1)return 'gray';
+  }
+  return undefined;
+ }
+ const name=singleName(doc,dict,'ColorSpace');
+ return name==='/DeviceRGB'?'rgb':name==='/DeviceGray'?'gray':undefined;
+}
+/** Channel count from the JPEG SOF marker: 1 is gray, 3 is YCbCr/RGB. CMYK and other channel counts are unsafe to re-encode through the canvas. */
+function jpegComponents(bytes:Uint8Array){
+ if(bytes.length<4||bytes[0]!==0xFF||bytes[1]!==0xD8)return undefined;
+ let at=2;
+ while(at+1<bytes.length){
+  if(bytes[at]!==0xFF){at++;continue;}
+  const marker=bytes[at+1];
+  if(marker===0xD8||marker===0x01||marker>=0xD0&&marker<=0xD7){at+=2;continue;}
+  if(at+3>=bytes.length)return undefined;
+  const length=bytes[at+2]<<8|bytes[at+3];
+  if(length<2)return undefined;
+  if(marker>=0xC0&&marker<=0xCF&&marker!==0xC4&&marker!==0xC8&&marker!==0xCC)return at+9<bytes.length?bytes[at+9]:undefined;
+  at+=2+length;
+ }
+ return undefined;
+}
 /** Optimize embedded RGB/gray JPEG and 8-bit Flate images without rasterizing pages. */
 export async function optimizeJPEGImages(doc:PDFDocument,signal?:AbortSignal,options:JPEGOptimization={}){
  const quality=options.quality??.76,limit=options.maxDimension??2400;
@@ -10,8 +47,14 @@ export async function optimizeJPEGImages(doc:PDFDocument,signal?:AbortSignal,opt
  let changed=0;
  for(const [ref,obj] of doc.context.enumerateIndirectObjects()){
   signal?.throwIfAborted();if(!(obj instanceof PDFRawStream))continue;
-  const dict=obj.dict,filter=dict.get(PDFName.of('Filter'))?.toString(),space=dict.get(PDFName.of('ColorSpace'))?.toString();
-  if(dict.get(PDFName.of('Subtype'))?.toString()!=='/Image'||!['/DCTDecode','/FlateDecode'].includes(filter??'')||!['/DeviceRGB','/DeviceGray'].includes(space??'')||dict.has(PDFName.of('SMask'))||dict.has(PDFName.of('Mask'))||dict.has(PDFName.of('Decode'))||dict.has(PDFName.of('ImageMask')))continue;
+  const dict=obj.dict,filter=singleName(doc,dict,'Filter');
+  if(singleName(doc,dict,'Subtype')!=='/Image'||filter!=='/DCTDecode'&&filter!=='/FlateDecode'||dict.has(PDFName.of('SMask'))||dict.has(PDFName.of('Mask'))||dict.has(PDFName.of('Decode'))||dict.has(PDFName.of('ImageMask')))continue;
+  const space=supportedColorSpace(doc,dict);
+  if(dict.has(PDFName.of('ColorSpace'))&&!space)continue;
+  if(filter==='/DCTDecode'){
+   const components=jpegComponents(obj.contents);
+   if(components!==1&&components!==3)continue;
+  }else if(!space)continue;
   const w=dict.lookupMaybe(PDFName.of('Width'),PDFNumber)?.asNumber()??0,h=dict.lookupMaybe(PDFName.of('Height'),PDFNumber)?.asNumber()??0;
   if(!Number.isInteger(w)||!Number.isInteger(h)||w<128||h<128||w*h<65536||w*h>22000000)continue;
   let decoded:Awaited<ReturnType<typeof decodePhoto>>|undefined,canvas:HTMLCanvasElement|undefined,sampleCanvas:HTMLCanvasElement|undefined;
@@ -23,7 +66,7 @@ export async function optimizeJPEGImages(doc:PDFDocument,signal?:AbortSignal,opt
     if(decoded.width!==w||decoded.height!==h)continue;source=decoded.source;
    }else{
     if(dict.lookupMaybe(PDFName.of('BitsPerComponent'),PDFNumber)?.asNumber()!==8)continue;
-    const channels=space==='/DeviceRGB'?3:1,params=dict.lookupMaybe(PDFName.of('DecodeParms'),PDFDict);
+    const channels=space==='rgb'?3:1,params=dict.lookupMaybe(PDFName.of('DecodeParms'),PDFDict);
     const max=(w*channels+1)*h,raw=decodePDFRawStream(obj).getBytes(max+1),samples=imageSamples(raw,w,h,channels,params);
     sampleCanvas=document.createElement('canvas');sampleCanvas.width=w;sampleCanvas.height=h;
     const ctx=sampleCanvas.getContext('2d');if(!ctx)continue;const pixels=ctx.createImageData(w,h);
