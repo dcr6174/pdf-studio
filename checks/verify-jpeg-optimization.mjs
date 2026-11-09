@@ -31,3 +31,19 @@ for(const filter of [0,1,2,3,4]){
 const unsupported=await PDFDocument.create(),img=await unsupported.embedJpg(native.toBuffer('image/jpeg',100));unsupported.addPage([500,600]).drawImage(img);await unsupported.save();const obj=unsupported.context.lookup(img.ref);obj.dict.set(PDFName.of('SMask'),unsupported.context.register(unsupported.context.obj({})));const saved=obj.contents.slice();assert.equal(await optimizeJPEGImages(unsupported),0);assert.deepEqual(obj.contents,saved);
 assert.throws(()=>imageSamples(new Uint8Array(1),width,height,channels),/Unexpected image/);
 console.log('PASS Flate scans, all five PNG prediction filters, resized JPEG dictionaries and masked-image preservation.');
+
+// ReportLab-style filter chain: ASCII85Decode + DCTDecode around the same JPEG must optimize too.
+const ascii85Encode=input=>{let out='';for(let i=0;i<input.length;i+=4){const chunk=input.slice(i,i+4),value=((chunk[0]*256+chunk[1])*256+(chunk[2]??0))*256+(chunk[3]??0);if(chunk.length===4&&value===0){out+='z';continue;}let five='';let v=value;for(let j=0;j<5;j++){five=String.fromCharCode(v%85+33)+five;v=Math.floor(v/85);}out+=chunk.length===4?five:five.slice(0,chunk.length+1);}return out+'~>';};
+const chainDoc=await PDFDocument.create();const chainJpeg=await chainDoc.embedJpg(native.toBuffer('image/jpeg',100));chainDoc.addPage([500,600]).drawImage(chainJpeg,{x:0,y:0,width:500,height:600});await chainDoc.save();
+const chainObj=chainDoc.context.lookup(chainJpeg.ref),rawJpeg=chainObj.contents.slice();
+chainObj.dict.set(PDFName.of('Filter'),chainDoc.context.obj(['ASCII85Decode','DCTDecode']));
+const asciiBytes=new TextEncoder().encode(ascii85Encode(rawJpeg));
+chainDoc.context.assign(chainJpeg.ref,PDFRawStream.of(chainObj.dict,asciiBytes));
+const chainBefore=await chainDoc.save();
+const chainOpened=await PDFDocument.load(chainBefore);
+assert.equal(await optimizeJPEGImages(chainOpened,undefined,{quality:.7,maxDimension:300}),1);
+const chainImage=chainOpened.context.enumerateIndirectObjects().map(([,o])=>o).find(o=>o instanceof PDFRawStream&&o.dict.get(PDFName.of('Subtype'))?.toString()==='/Image');
+assert.equal(chainImage.dict.get(PDFName.of('Filter')).toString(),'/DCTDecode');
+const chainDecoded=await loadImage(Buffer.from(chainImage.contents));assert.equal(chainDecoded.width,250);assert.equal(chainDecoded.height,300);
+const chainReopened=await PDFDocument.load(await chainOpened.save());assert.equal(chainReopened.getPageCount(),1);
+console.log(`PASS ASCII85Decode+DCTDecode filter chain optimized (${chainBefore.length} bytes with wrapper), rewritten as plain DCTDecode and re-decoded at 250x300.`);

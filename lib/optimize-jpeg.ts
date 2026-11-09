@@ -2,12 +2,45 @@ import {PDFDocument,PDFRawStream,PDFName,PDFNumber,PDFDict,PDFArray,decodePDFRaw
 import {decodePhoto} from './mobile-image';
 import {imageSamples} from './pdf-image-samples';
 export type JPEGOptimization={quality?:number;maxDimension?:number};
-/** Resolve a dictionary entry written as a name, an indirect name, or a single-element array of either; anything longer is a filter chain we cannot reproduce. */
+/** Resolve a dictionary entry written as a name, an indirect name, or a single-element array of either. */
 function singleName(doc:PDFDocument,dict:PDFDict,key:string){
  const value=dict.get(PDFName.of(key)),entries=value instanceof PDFArray?value.asArray():[value];
  if(entries.length!==1)return undefined;
  const resolved=doc.context.lookup(entries[0]);
  return resolved instanceof PDFName?resolved.toString():undefined;
+}
+/** Resolve a Filter entry written as a name, an indirect name, or an array of either, preserving chain order. */
+function filterChain(doc:PDFDocument,dict:PDFDict){
+ const value=dict.get(PDFName.of('Filter')),entries=value instanceof PDFArray?value.asArray():[value];
+ if(!entries.length)return undefined;
+ const names:string[]=[];
+ for(const entry of entries){const resolved=doc.context.lookup(entry);if(!(resolved instanceof PDFName))return undefined;names.push(resolved.toString());}
+ return names;
+}
+/** Generators such as ReportLab wrap binary image data in ASCII85/ASCIIHex before the real filter. Decode that wrapper; the replacement is always rewritten as plain DCTDecode, so the chain is never reproduced. */
+function unwrapAscii(bytes:Uint8Array,wrappers:string[]){
+ let out=bytes;
+ for(const filter of wrappers){
+  if(filter==='/ASCIIHexDecode'){
+   const digits:number[]=[];
+   for(const byte of out){if(byte===0x3E)break;const nibble=byte>=48&&byte<=57?byte-48:byte>=65&&byte<=70?byte-55:byte>=97&&byte<=102?byte-87:-1;if(nibble>=0)digits.push(nibble);}
+   const next=new Uint8Array(Math.ceil(digits.length/2));
+   for(let i=0;i<digits.length;i+=2)next[i/2]=(digits[i]<<4)|(i+1<digits.length?digits[i+1]:0);
+   out=next;
+  }else if(filter==='/ASCII85Decode'){
+   const decoded:number[]=[];let group:number[]=[];
+   const flush=()=>{if(!group.length)return;const count=group.length;while(group.length<5)group.push(84);let value=0;for(const digit of group)value=value*85+digit;const full=[Math.floor(value/16777216)%256,Math.floor(value/65536)%256,Math.floor(value/256)%256,value%256];decoded.push(...full.slice(0,count-1));group=[];};
+   for(const byte of out){
+    if(byte===0x7A&&!group.length){decoded.push(0,0,0,0);continue;}
+    if(byte===0x7E)break; // '~>' end-of-data marker
+    if(byte<=32)continue;
+    const digit=byte-33;if(digit<0||digit>84)break;
+    group.push(digit);if(group.length===5)flush();
+   }
+   flush();out=new Uint8Array(decoded);
+  }
+ }
+ return out;
 }
 /** Color spaces whose samples the canvas pipeline can decode and re-encode: device RGB/gray, or ICC profiles declaring the same channel counts. */
 function supportedColorSpace(doc:PDFDocument,dict:PDFDict):'rgb'|'gray'|undefined{
@@ -47,12 +80,14 @@ export async function optimizeJPEGImages(doc:PDFDocument,signal?:AbortSignal,opt
  let changed=0;
  for(const [ref,obj] of doc.context.enumerateIndirectObjects()){
   signal?.throwIfAborted();if(!(obj instanceof PDFRawStream))continue;
-  const dict=obj.dict,filter=singleName(doc,dict,'Filter');
-  if(singleName(doc,dict,'Subtype')!=='/Image'||filter!=='/DCTDecode'&&filter!=='/FlateDecode'||dict.has(PDFName.of('SMask'))||dict.has(PDFName.of('Mask'))||dict.has(PDFName.of('Decode'))||dict.has(PDFName.of('ImageMask')))continue;
+  const dict=obj.dict,chain=filterChain(doc,dict),filter=chain?.[chain.length-1],wrappers=chain?.slice(0,-1)??[];
+  if(singleName(doc,dict,'Subtype')!=='/Image'||filter!=='/DCTDecode'&&filter!=='/FlateDecode'||wrappers.some(f=>f!=='/ASCII85Decode'&&f!=='/ASCIIHexDecode')||dict.has(PDFName.of('SMask'))||dict.has(PDFName.of('Mask'))||dict.has(PDFName.of('Decode'))||dict.has(PDFName.of('ImageMask')))continue;
   const space=supportedColorSpace(doc,dict);
   if(dict.has(PDFName.of('ColorSpace'))&&!space)continue;
+  let contents=obj.contents;
   if(filter==='/DCTDecode'){
-   const components=jpegComponents(obj.contents);
+   if(wrappers.length)contents=unwrapAscii(obj.contents,wrappers);
+   const components=jpegComponents(contents);
    if(components!==1&&components!==3)continue;
   }else if(!space)continue;
   const w=dict.lookupMaybe(PDFName.of('Width'),PDFNumber)?.asNumber()??0,h=dict.lookupMaybe(PDFName.of('Height'),PDFNumber)?.asNumber()??0;
@@ -62,7 +97,7 @@ export async function optimizeJPEGImages(doc:PDFDocument,signal?:AbortSignal,opt
    let source:CanvasImageSource;
    if(filter==='/DCTDecode'){
     if(dict.has(PDFName.of('DecodeParms')))continue;
-    decoded=await decodePhoto(new File([obj.contents.slice().buffer as ArrayBuffer],'image.jpg',{type:'image/jpeg'}));
+    decoded=await decodePhoto(new File([contents.slice().buffer as ArrayBuffer],'image.jpg',{type:'image/jpeg'}));
     if(decoded.width!==w||decoded.height!==h)continue;source=decoded.source;
    }else{
     if(dict.lookupMaybe(PDFName.of('BitsPerComponent'),PDFNumber)?.asNumber()!==8)continue;
@@ -78,7 +113,7 @@ export async function optimizeJPEGImages(doc:PDFDocument,signal?:AbortSignal,opt
    ctx.imageSmoothingEnabled=true;ctx.imageSmoothingQuality='high';ctx.drawImage(source,0,0,width,height);
    const blob=await new Promise<Blob|null>(resolve=>canvas!.toBlob(resolve,'image/jpeg',quality));
    signal?.throwIfAborted();if(!blob||blob.type!=='image/jpeg')continue;
-   const bytes=new Uint8Array(await blob.arrayBuffer());if(bytes.length>=obj.contents.length)continue;
+   const bytes=new Uint8Array(await blob.arrayBuffer());if(bytes.length>=contents.length)continue;
    const replacement=dict.clone();replacement.set(PDFName.of('Length'),PDFNumber.of(bytes.length));replacement.set(PDFName.of('Width'),PDFNumber.of(width));replacement.set(PDFName.of('Height'),PDFNumber.of(height));replacement.set(PDFName.of('Filter'),PDFName.of('DCTDecode'));replacement.set(PDFName.of('ColorSpace'),PDFName.of('DeviceRGB'));replacement.set(PDFName.of('BitsPerComponent'),PDFNumber.of(8));replacement.delete(PDFName.of('DecodeParms'));
    doc.context.assign(ref,PDFRawStream.of(replacement,bytes));changed++;
   }catch(error){signal?.throwIfAborted();if(error instanceof Error&&error.name==='AbortError')throw error;}
