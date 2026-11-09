@@ -30,6 +30,6 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
  ]};
  return <div className="tool-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
-  {['cut-collect','fold-lab','attachment-map'].includes(t.id)?<CreativePdfWorkspace mode={t.id as 'cut-collect'|'fold-lab'|'attachment-map'}/>:t.id==='sketch-pdf'?<div className="creative-shell"><SiteHeader/><LabVisualStudio mode="sketch-pdf" mainTool/></div>:t.id==='ocr'?<><SiteHeader/><OCRStudio/><SiteFooter tool="Searchable PDF"/></>:<Studio initialTool={t.id} initialHeading={t.title} initialActionLabel={t.slug==='delete-pdf-pages'?'Delete pages & download':undefined} initialOptions={t.slug==='compress-pdf-to-100kb'?{compressTarget:'100'}:undefined}/>}
+  {['cut-collect','fold-lab','attachment-map'].includes(t.id)?<CreativePdfWorkspace mode={t.id as 'cut-collect'|'fold-lab'|'attachment-map'}/>:t.id==='sketch-pdf'?<div className="creative-shell"><SiteHeader/><LabVisualStudio mode="sketch-pdf" mainTool/></div>:t.id==='ocr'?<><SiteHeader/><OCRStudio/><SiteFooter tool="Searchable PDF"/></>:<Studio initialTool={t.id} initialHeading={t.title} initialActionLabel={t.slug==='delete-pdf-pages'?'Delete pages & download':undefined} initialPageAction={t.slug==='delete-pdf-pages'?'delete':undefined} initialOptions={t.slug==='compress-pdf-to-100kb'?{compressTarget:'100'}:undefined}/>}
  </div>;
 }
