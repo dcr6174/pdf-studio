@@ -99,6 +99,10 @@ export const tools:Tool[] = [
 ["pdf-booklet","PDF booklet maker","Reorder pages into a printable folded booklet.","Pages","copy","Print double-sided, flip on the short edge, then fold. Pages are padded to a multiple of 4."],
 ["extract-pages-by-keyword","Extract pages by keyword","Keep only the pages that contain a word or phrase.","Pages","scissors","Searches selectable text. Scans need OCR first."],
 ["delete-pages-by-keyword","Delete pages by keyword","Remove every page that contains a word or phrase.","Pages","scissors","At least one page must remain. Scans need OCR first."],
+["extract-emails-phones","Extract emails and phone numbers","Pull every email address and phone number out of a PDF.","Convert","text","Reads selectable text and lists each value once, with its page."],
+["pdf-page-sizes","PDF page size report","See the size, orientation and rotation of every page.","Convert","grid","Finds mixed page sizes that print badly."],
+["pdf-text-by-page","Export PDF text by page","Save the text of each PDF page as its own file.","Convert","text","One ZIP with page-01.txt, page-02.txt and so on."],
+["set-pdf-open-view","Set how a PDF opens","Choose the start page, zoom, layout and side panel.","Edit & sign","edit","Writes standard open settings that most readers follow."],
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
 export function accepted(id:string){return id==='images'||id==='scan'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
 export function isMulti(id:string){return ['workflow','merge','organize','interleave','images','scan','compare','zip'].includes(id);}

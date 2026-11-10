@@ -848,7 +848,7 @@
     "lastmod": "2026-10-30"
   },
   "/": {
-    "hash": "fd6745335b84fd84818f864afb6b2017ada40c544415b8e6075cfa3c2436421e",
+    "hash": "c0455b939de9b9986f6dc8f1c4f8d7bf2b7db94f93148315d6d168538df7b028",
     "lastmod": "2026-11-10"
   },
   "/privacy": {
@@ -1247,6 +1247,22 @@
     "hash": "822a7c74d03c6935e9a80178c141168b1dea65257a47a33c3003676e4e27ac63",
     "lastmod": "2026-11-10"
   },
+  "/tools/extract-emails-phones": {
+    "hash": "d14b4180ba7488b552cad9acd5e0626c7781e86b5fffa037a8bf1e54b7f995b2",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/pdf-page-sizes": {
+    "hash": "8caf57b2a07bef36105ae92a3391dd55f90720ff9ff3b861159d7613946d77ed",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/pdf-text-by-page": {
+    "hash": "db7fbd3ab3039d12932a99697ed0be43ad6c65f4dbdde5f27e5b35582d76065a",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/set-pdf-open-view": {
+    "hash": "38e31db17598556e01b36c5cae1f03eaa54fe3591b8e9fdfdff813e16a56712e",
+    "lastmod": "2026-11-10"
+  },
   "/tools/delete-pdf-pages": {
     "hash": "a224656fc648cca5d756d3e5d499538900d4255a2d62fbcb5f20e2825d2a6d81",
     "lastmod": "2026-11-10"
@@ -1268,11 +1284,11 @@
     "lastmod": "2026-11-10"
   },
   "/tools": {
-    "hash": "e566295e7e866be3ea958ca0165c6cb1fff0c8187246297cf25eb3314a613b33",
+    "hash": "e1b9612ac2490047f5caaeec1e1a8c2024948452b31253926c7dedcf8360a815",
     "lastmod": "2026-11-10"
   },
   "/guides": {
-    "hash": "bcd02b52fbb939a4b68eb2e8003f6ecc6b47b89847991156839037d5b2e53de7",
+    "hash": "2be732a9144bb5ba6b963cc6cf279aed5ce985d6fef4b34e10197e561a4e47f0",
     "lastmod": "2026-11-10"
   },
   "/compare/ilovepdf-alternative": {
@@ -1681,6 +1697,22 @@
   },
   "/guides/delete-pages-by-keyword": {
     "hash": "cedba8814df7e8c664d7a0314b50dab5b64652a85620935e690a0c430cac02ad",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/extract-emails-phones": {
+    "hash": "b69cdac0bb0cf3245b4180d0f3023fb39769322b77262fc40e8fad1b0e9a2602",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/pdf-page-sizes": {
+    "hash": "473d49dab9451d66d79e0d956a255523eb51dfabb87c4ed3e6ede9db12e084bd",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/pdf-text-by-page": {
+    "hash": "6d799915a43cc6ef0a32c9ab7dafb032af3caf3fa4f243d6b8d63c776467df05",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/set-pdf-open-view": {
+    "hash": "0a96bf5470fc66b5fddcde28534d3bf5f6b6561def292fca7c3a98b3cc6075e1",
     "lastmod": "2026-11-10"
   },
   "/guides/delete-pdf-pages": {

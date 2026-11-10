@@ -395,3 +395,19 @@ Expected: Complete Extract pages by keyword. Inspect output content, page count,
 Delete pages by keyword
 Input: delete-pages-by-keyword.pdf
 Expected: Complete Delete pages by keyword. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. At least one page must remain. Scans need OCR first.
+
+Extract emails and phone numbers
+Input: extract-emails-phones.pdf
+Expected: Complete Extract emails and phone numbers. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Reads selectable text and lists each value once, with its page.
+
+PDF page size report
+Input: pdf-page-sizes.pdf
+Expected: Complete PDF page size report. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Finds mixed page sizes that print badly.
+
+Export PDF text by page
+Input: pdf-text-by-page.pdf
+Expected: Complete Export PDF text by page. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. One ZIP with page-01.txt, page-02.txt and so on.
+
+Set how a PDF opens
+Input: set-pdf-open-view.pdf
+Expected: Complete Set how a PDF opens. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Writes standard open settings that most readers follow.

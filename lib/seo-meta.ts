@@ -2,6 +2,10 @@
 */
 export type SeoMeta = {title: string; description: string};
 export const toolMeta: Record<string, SeoMeta> = {
+ "extract-emails-phones": {title: "Extract Emails and Phone Numbers from a PDF", description: "List every email address and phone number in a PDF with page numbers, as text or CSV. Free and private, nothing is uploaded."},
+ "pdf-page-sizes": {title: "PDF Page Size Report: A4, Letter and Custom Sizes", description: "Check the size, orientation and rotation of every PDF page in mm, inches or points. Free and private, runs in your browser."},
+ "pdf-text-by-page": {title: "Export PDF Text by Page (ZIP or One File)", description: "Save each page of a PDF as its own text file in a ZIP, or one file with page markers. Free, private, runs in your browser."},
+ "set-pdf-open-view": {title: "Set PDF Open Page, Zoom and Layout", description: "Choose the start page, zoom, page layout, side panel and full screen for a PDF. Free and private, runs in your browser."},
  "extract-pdf-links": {title: "Extract Links from a PDF: Plain List or CSV", description: "Pull every web link out of a PDF with page numbers, as a list or CSV. Free and private, nothing is uploaded."},
  "extract-pdf-bookmarks": {title: "Extract PDF Bookmarks to Text or JSON", description: "Export a PDF bookmark outline as an indented list or JSON. Free, private, runs in your browser."},
  "pdf-word-counter": {title: "PDF Word Counter: Words, Characters, Reading Time", description: "Count words, characters and sentences in a PDF, with reading time and top words. Free, private, in your browser."},
