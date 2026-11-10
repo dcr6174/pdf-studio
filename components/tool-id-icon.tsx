@@ -1,4 +1,4 @@
-import {ArrowUpDown,Archive,BookCopy,Bookmark,BookmarkMinus,BookmarkPlus,Braces,Calculator,Combine,Contrast,Crop,Download,Droplets,Eraser,EyeOff,FileCode,FileInput,FileMinus,FilePlus,FileSearch,FileSignature,FileSpreadsheet,FileText,FileType,FileX,Fingerprint,FlipHorizontal,GitCompare,Hash,Headphones,Highlighter,ImageDown,Info,KeyRound,LayoutGrid,Link2,ListOrdered,Lock,Maximize,Paperclip,Presentation,ScanText,Scissors,Search,Shrink,Stamp,Tags,Unlock,Wrench} from 'lucide-react';
+import {ArrowUpDown,Archive,BookCopy,Bookmark,BookmarkMinus,BookmarkPlus,Braces,Calculator,Combine,Contrast,Crop,Download,Droplets,Eraser,EyeOff,FileCode,FileInput,FileMinus,FilePlus,FileSignature,FileSpreadsheet,FileText,FileType,FileX,Fingerprint,FlipHorizontal,GitCompare,Headphones,Highlighter,ImageDown,Info,KeyRound,LayoutGrid,Link2,ListOrdered,Lock,Maximize,Paperclip,Presentation,ScanText,Scissors,Search,Shrink,Stamp,Tags,Unlock,Wrench} from 'lucide-react';
 import {ToolIcon} from '@/components/tool-icon';
 const rules:[RegExp,typeof FileText][]=[
 [/compress|shrink|reduce/,Shrink],[/merge|combine|join/,Combine],[/split|extract-pages|halve|chapters|burst/,Scissors],
