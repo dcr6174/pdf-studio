@@ -606,5 +606,181 @@
     "additionalInput": null,
     "expected": "Complete Extract PDF attachments. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Finds embedded files in the document attachment list and file-attachment annotations. Nothing is opened or run.",
     "status": "not yet manually verified"
+  },
+  {
+    "tool": "insert-pdf-pages",
+    "name": "Insert PDF pages",
+    "input": "insert-pdf-pages.pdf",
+    "additionalInput": null,
+    "expected": "Complete Insert PDF pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Choose where the pages go and which pages to take from the second file. The original file is not changed.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "overlay-pdf",
+    "name": "Overlay PDF",
+    "input": "overlay-pdf.pdf",
+    "additionalInput": null,
+    "expected": "Complete Overlay PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. The overlay is scaled to fit each page. Use opacity to keep the text underneath readable.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "add-pdf-background",
+    "name": "Add PDF background",
+    "input": "add-pdf-background.pdf",
+    "additionalInput": null,
+    "expected": "Complete Add PDF background. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. The background sits behind the existing content, so text, links and form fields keep working.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "stamp-pdf",
+    "name": "Stamp PDF",
+    "input": "stamp-pdf.pdf",
+    "additionalInput": null,
+    "expected": "Complete Stamp PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Pick a ready stamp or type your own text. Choose colour, size and position.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "add-logo-to-pdf",
+    "name": "Add logo to PDF",
+    "input": "add-logo-to-pdf.pdf",
+    "additionalInput": null,
+    "expected": "Complete Add logo to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. PNG and JPG images are supported. Transparent PNG backgrounds are kept.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "highlight-text-in-pdf",
+    "name": "Highlight text in PDF",
+    "input": "highlight-text-in-pdf.pdf",
+    "additionalInput": null,
+    "expected": "Complete Highlight text in PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Works on PDFs with real text. Scanned pages need OCR first.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "flatten-form-fields",
+    "name": "Flatten form fields",
+    "input": "flatten-form-fields.pdf",
+    "additionalInput": null,
+    "expected": "Complete Flatten form fields. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. After flattening, the values can no longer be edited. Keep the original if you may need to change answers.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "lock-form-fields",
+    "name": "Lock form fields",
+    "input": "lock-form-fields.pdf",
+    "additionalInput": null,
+    "expected": "Complete Lock form fields. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Fields stay in the file but cannot be changed in a normal PDF reader. This is not encryption.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "export-pdf-form-data",
+    "name": "Export PDF form data",
+    "input": "export-pdf-form-data.pdf",
+    "additionalInput": null,
+    "expected": "Complete Export PDF form data. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Each field name and value is listed. Passwords and signatures are not read.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "extract-pdf-links",
+    "name": "Extract PDF links",
+    "input": "extract-pdf-links.pdf",
+    "additionalInput": null,
+    "expected": "Complete Extract PDF links. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Reads real link annotations, not just text that looks like a URL.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "extract-pdf-bookmarks",
+    "name": "Extract PDF bookmarks",
+    "input": "extract-pdf-bookmarks.pdf",
+    "additionalInput": null,
+    "expected": "Complete Extract PDF bookmarks. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Keeps the nesting of chapters and sections.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "pdf-word-counter",
+    "name": "PDF word counter",
+    "input": "pdf-word-counter.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF word counter. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Counts selectable text only. Scans need OCR first.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "pdf-document-info",
+    "name": "PDF document info",
+    "input": "pdf-document-info.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF document info. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Reads the file only. Nothing is changed.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "pdf-to-markdown",
+    "name": "PDF to Markdown",
+    "input": "pdf-to-markdown.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF to Markdown. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Headings are guessed from font size, so check the result.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "pdf-to-json",
+    "name": "PDF to JSON",
+    "input": "pdf-to-json.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF to JSON. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. One entry per page. Scans need OCR first.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "remove-blank-pages",
+    "name": "Remove blank pages",
+    "input": "remove-blank-pages.pdf",
+    "additionalInput": null,
+    "expected": "Complete Remove blank pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Pages are checked by looking at the rendered page. Choose a strictness that suits your scans.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "crop-pdf-to-content",
+    "name": "Crop PDF to content",
+    "input": "crop-pdf-to-content.pdf",
+    "additionalInput": null,
+    "expected": "Complete Crop PDF to content. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Crops each page, or all pages to one shared area. The hidden area is masked, not deleted.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "add-pdf-attachment",
+    "name": "Attach files to PDF",
+    "input": "add-pdf-attachment.pdf",
+    "additionalInput": null,
+    "expected": "Complete Attach files to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Up to 10 files and 20 MB in total. Readers show them in an attachments panel.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "extract-pdf-images",
+    "name": "Extract images from PDF",
+    "input": "extract-pdf-images.pdf",
+    "additionalInput": null,
+    "expected": "Complete Extract images from PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Pulls embedded images only. Pages drawn as vectors have none to extract.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "pdf-booklet",
+    "name": "PDF booklet maker",
+    "input": "pdf-booklet.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF booklet maker. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Print double-sided, flip on the short edge, then fold. Pages are padded to a multiple of 4.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "extract-pages-by-keyword",
+    "name": "Extract pages by keyword",
+    "input": "extract-pages-by-keyword.pdf",
+    "additionalInput": null,
+    "expected": "Complete Extract pages by keyword. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Searches selectable text. Scans need OCR first.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "delete-pages-by-keyword",
+    "name": "Delete pages by keyword",
+    "input": "delete-pages-by-keyword.pdf",
+    "additionalInput": null,
+    "expected": "Complete Delete pages by keyword. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. At least one page must remain. Scans need OCR first.",
+    "status": "not yet manually verified"
   }
 ]

@@ -290,6 +290,110 @@ const curatedTools = [
     "intro": "Read every form field and download the names and values as JSON or CSV.",
     "detail": "Text boxes, checkboxes, dropdowns, radio groups and lists are all read. The file keeps field names as they appear in the PDF."
 }
+  ,{
+    "slug": "extract-pdf-links",
+    "id": "extract-pdf-links",
+    "title": "Extract all links from a PDF",
+    "heading": "List every link in your PDF",
+    "intro": "Get every clickable web address in a PDF as a plain list or a CSV with page numbers.",
+    "detail": "The tool reads the link annotations on each page, so it finds links behind words and buttons as well as printed URLs. Internal page jumps are skipped."
+}
+  ,{
+    "slug": "extract-pdf-bookmarks",
+    "id": "extract-pdf-bookmarks",
+    "title": "Export the bookmarks of a PDF",
+    "heading": "Get the table of contents out of your PDF",
+    "intro": "Save the bookmark outline as an indented text list or as JSON.",
+    "detail": "Nested bookmarks stay nested. This is the same outline you see in the side panel of a PDF reader."
+}
+  ,{
+    "slug": "pdf-word-counter",
+    "id": "pdf-word-counter",
+    "title": "Count the words in a PDF",
+    "heading": "Count words and reading time in a PDF",
+    "intro": "Get word, character and sentence counts, average per page, reading time and the most used words.",
+    "detail": "The count covers text you can select. It also lists words per page and the ten most used words, with common filler words left out."
+}
+  ,{
+    "slug": "pdf-document-info",
+    "id": "pdf-document-info",
+    "title": "View PDF properties and document info",
+    "heading": "See everything about a PDF at a glance",
+    "intro": "Get a text report of title, author, dates, version, page count, page sizes and form fields.",
+    "detail": "This is a read-only report. It lists each distinct page size with a count, so a mixed-size document is easy to spot."
+}
+  ,{
+    "slug": "pdf-to-markdown",
+    "id": "pdf-to-markdown",
+    "title": "Convert a PDF to Markdown",
+    "heading": "Turn PDF text into Markdown",
+    "intro": "Get headings, paragraphs and lists as a clean Markdown file.",
+    "detail": "Larger text becomes headings, bullet and numbered lines become lists, and wrapped lines are joined into paragraphs. Pages are separated by rules."
+}
+  ,{
+    "slug": "pdf-to-json",
+    "id": "pdf-to-json",
+    "title": "Convert a PDF to JSON",
+    "heading": "Export PDF text as JSON",
+    "intro": "Get the file name, page count and the text of every page as JSON.",
+    "detail": "Choose one text block per page or a list of lines. The shape is simple so scripts can read it without extra code."
+}
+  ,{
+    "slug": "remove-blank-pages",
+    "id": "remove-blank-pages",
+    "title": "Remove blank pages from a PDF",
+    "heading": "Delete blank pages from your PDF",
+    "intro": "Each page is rendered and checked for ink. Empty pages are removed and the rest stay in order.",
+    "detail": "Three levels cover clean exports and noisy scans. The report names the removed pages so you can check them."
+}
+  ,{
+    "slug": "crop-pdf-to-content",
+    "id": "crop-pdf-to-content",
+    "title": "Crop a PDF to its content automatically",
+    "heading": "Trim the white margins off your PDF",
+    "intro": "Find the visible content on each page and crop to it, with a little space left around it.",
+    "detail": "Choose the space to keep in millimetres. Use one crop for every page when you want the same page size throughout."
+}
+  ,{
+    "slug": "add-pdf-attachment",
+    "id": "add-pdf-attachment",
+    "title": "Attach files to a PDF",
+    "heading": "Embed files inside your PDF",
+    "intro": "Add spreadsheets, images or any file as attachments that travel with the PDF.",
+    "detail": "Attached files are stored inside the PDF and open from the attachments panel of a reader. The page content is not changed."
+}
+  ,{
+    "slug": "extract-pdf-images",
+    "id": "extract-pdf-images",
+    "title": "Extract images from a PDF",
+    "heading": "Save the images inside your PDF",
+    "intro": "Every embedded picture is saved as a PNG and packed into one ZIP.",
+    "detail": "Tiny icons and decorations can be skipped with a size filter. Each file name includes the page it came from."
+}
+  ,{
+    "slug": "pdf-booklet",
+    "id": "pdf-booklet",
+    "title": "Make a printable booklet from a PDF",
+    "heading": "Arrange your PDF as a folded booklet",
+    "intro": "Pages are placed two to a sheet in saddle-stitch order, ready to print and fold.",
+    "detail": "The order is worked out for you, with blank pages added to fill the last sheet. Choose A4, Letter or a sheet sized to your pages."
+}
+  ,{
+    "slug": "extract-pages-by-keyword",
+    "id": "extract-pages-by-keyword",
+    "title": "Extract PDF pages that contain a keyword",
+    "heading": "Keep only pages that mention a word",
+    "intro": "Search a PDF and save a new file with just the pages where the text appears.",
+    "detail": "Match upper and lower case or ignore it. The report lists which pages were kept."
+}
+  ,{
+    "slug": "delete-pages-by-keyword",
+    "id": "delete-pages-by-keyword",
+    "title": "Delete PDF pages that contain a keyword",
+    "heading": "Remove pages that mention a word",
+    "intro": "Every page with the text is removed and the rest stay in order.",
+    "detail": "Use it to drop pages marked Draft or Confidential. The report lists the deleted pages."
+}
 ] as const;
 
 const curatedById = new Map<string, (typeof curatedTools)[number]>(curatedTools.map(tool => [tool.id, tool]));
