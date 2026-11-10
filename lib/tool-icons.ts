@@ -6,3 +6,10 @@ export const toolIcons:Record<string,typeof FileText>={
  'native-text':TextCursorInput,edit:PenLine,sign:Signature,redact:ShieldCheck,watermark:Droplets,numbers:Hash,bates:ListOrdered,headers:PanelTop,flatten:Layers,form:ClipboardList,metadata:FileText,
  scan:Camera,images:Images,jpg:Image,png:Image,text:FileType,word:FileText,html:Code2,epub:BookOpen,pptx:Presentation,xlsx:Table,csv:Table,create:Plus,markdown:Braces,docx:FileText,sheet:FileSpreadsheet,ebook:BookOpen,grayscale:Brush,invert:SunMoon,ocr:ScanText,audio:Volume2,compare:Columns3,encrypt:LockKeyhole,decrypt:UnlockKeyhole,privacy:Search,clean:Brush,hash:Fingerprint,zip:Archive,repair:Wrench
 };
+import {FilePlus2 as L_FilePlus2,Frame as L_Frame,ListFilter as L_ListFilter,Paperclip as L_Paperclip,Scan as L_Scan,Slice as L_Slice} from 'lucide-react';
+toolIcons["add-blank-pages"]=L_FilePlus2;
+toolIcons["split-by-page-count"]=L_Slice;
+toolIcons["odd-even-pages"]=L_ListFilter;
+toolIcons["add-page-border"]=L_Frame;
+toolIcons["add-pdf-margins"]=L_Scan;
+toolIcons["extract-pdf-attachments"]=L_Paperclip;

@@ -13,6 +13,9 @@ import {OCRStudio} from '@/components/ocr-studio';
 import {HandwritingStudio} from '@/components/handwriting-studio';
 import '@/app/creative/creative.css';
 import {seoPages} from '@/lib/seo-tools';
+import {PdfToolPage} from '@/components/pdf-tool-page';
+import {NEW_TOOL_IDS} from '@/lib/new-tools/ids';
+import {toolGuidance} from '@/lib/tool-guidance';
 
 export function generateStaticParams(){return [...seoPages,...conversionGuides].map(t=>({slug:t.slug}));}
 export async function generateMetadata({params}:{params:Promise<{slug:string}>}):Promise<Metadata>{
@@ -27,9 +30,10 @@ export default async function ToolPage({params}:{params:Promise<{slug:string}>})
  const schema={"@context":"https://schema.org","@graph":[
   {"@type":"BreadcrumbList",itemListElement:[{"@type":"ListItem",position:1,name:'PDF Studio',item:'https://pdf-studio.in/'},{"@type":"ListItem",position:2,name:t.title,item:url}]},
   {"@type":"WebApplication",name:t.title+' | PDF Studio',url,description:t.intro,applicationCategory:'UtilitiesApplication',operatingSystem:'Web browser',browserRequirements:'JavaScript enabled; a modern browser',offers:{"@type":"Offer",price:'0',priceCurrency:'INR'}},
+ ...(NEW_TOOL_IDS.includes(t.id)&&toolGuidance[t.id]?[{"@type":"FAQPage",mainEntity:toolGuidance[t.id].faq.map(([name,text])=>({"@type":"Question",name,acceptedAnswer:{"@type":"Answer",text}}))}]:[]),
  ]};
  return <div className="tool-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
-  {['cut-collect','fold-lab','attachment-map'].includes(t.id)?<CreativePdfWorkspace mode={t.id as 'cut-collect'|'fold-lab'|'attachment-map'}/>:t.id==='sketch-pdf'?<div className="creative-shell"><SiteHeader/><LabVisualStudio mode="sketch-pdf" mainTool/></div>:t.id==='ocr'?<><SiteHeader/><OCRStudio/><SiteFooter tool="Searchable PDF"/></>:<Studio initialTool={t.id} initialHeading={t.title} initialActionLabel={t.slug==='delete-pdf-pages'?'Delete pages & download':undefined} initialPageAction={t.slug==='delete-pdf-pages'?'delete':undefined} initialOptions={t.slug==='compress-pdf-to-100kb'?{compressTarget:'100'}:undefined}/>}
+  {NEW_TOOL_IDS.includes(t.id)?<PdfToolPage id={t.id}/>:['cut-collect','fold-lab','attachment-map'].includes(t.id)?<CreativePdfWorkspace mode={t.id as 'cut-collect'|'fold-lab'|'attachment-map'}/>:t.id==='sketch-pdf'?<div className="creative-shell"><SiteHeader/><LabVisualStudio mode="sketch-pdf" mainTool/></div>:t.id==='ocr'?<><SiteHeader/><OCRStudio/><SiteFooter tool="Searchable PDF"/></>:<Studio initialTool={t.id} initialHeading={t.title} initialActionLabel={t.slug==='delete-pdf-pages'?'Delete pages & download':undefined} initialPageAction={t.slug==='delete-pdf-pages'?'delete':undefined} initialOptions={t.slug==='compress-pdf-to-100kb'?{compressTarget:'100'}:undefined}/>}
  </div>;
 }

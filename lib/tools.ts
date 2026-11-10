@@ -71,6 +71,12 @@ export const tools:Tool[] = [
 ['cut-collect','PDF Cut & Collect','Collect clippings with their source-page references.','Edit & sign','scissors','Clippings export as images in a new PDF; text is not editable.'],
 ['fold-lab','PDF Fold Lab','Make a folded booklet or four cut-out cards per sheet.','Pages','book','Creates an A4 print layout from rendered pages. Test duplex orientation before printing the full pack.'],
 ['attachment-map','PDF Attachment Map','Connect supporting PDFs with a clickable document index.','Pages','layers','Creates a combined reading copy with links to supporting documents and main-document sections. Does not embed separate file attachments.'],
+["add-blank-pages","Add blank pages","Insert blank pages at the start, the end or after chosen pages.","Pages","plus","Blank pages match the neighbouring page size unless you pick A4 or Letter. Existing pages are not changed."],
+["split-by-page-count","Split PDF by page count","Cut a PDF into files of N pages each, or into N equal files, in one ZIP.","Pages","scissors","Output is a ZIP of PDFs. Fillable form fields may need flattening first."],
+["odd-even-pages","Odd & even pages","Keep only the odd pages, only the even pages, or both as two PDFs.","Pages","copy","Pages are copied as they are. Choose reverse order when feeding paper back by hand for double-sided printing."],
+["add-page-border","Add page border","Draw a solid, dashed or double border around your pages.","Edit & sign","crop","The border is drawn on top of the page. Text, links and form fields are untouched."],
+["add-pdf-margins","Add margins to PDF","Add white space around pages, or shrink the content inside the page.","Pages","crop","Make pages bigger keeps everything intact. Keep the page size redraws the pages, so links and form fields on them are dropped."],
+["extract-pdf-attachments","Extract PDF attachments","Save the files embedded inside a PDF into one ZIP.","Privacy","layers","Finds embedded files in the document attachment list and file-attachment annotations. Nothing is opened or run."],
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
 export function accepted(id:string){return id==='images'||id==='scan'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
 export function isMulti(id:string){return ['workflow','merge','organize','interleave','images','scan','compare','zip'].includes(id);}

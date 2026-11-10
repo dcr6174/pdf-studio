@@ -558,5 +558,53 @@
     "additionalInput": null,
     "expected": "Complete PDF Attachment Map. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Creates a combined reading copy with links to supporting documents and main-document sections. Does not embed separate file attachments.",
     "status": "not yet manually verified"
+  },
+  {
+    "tool": "add-blank-pages",
+    "name": "Add blank pages",
+    "input": "add-blank-pages.pdf",
+    "additionalInput": null,
+    "expected": "Complete Add blank pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Blank pages match the neighbouring page size unless you pick A4 or Letter. Existing pages are not changed.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "split-by-page-count",
+    "name": "Split PDF by page count",
+    "input": "split-by-page-count.pdf",
+    "additionalInput": null,
+    "expected": "Complete Split PDF by page count. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Output is a ZIP of PDFs. Fillable form fields may need flattening first.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "odd-even-pages",
+    "name": "Odd & even pages",
+    "input": "odd-even-pages.pdf",
+    "additionalInput": null,
+    "expected": "Complete Odd & even pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Pages are copied as they are. Choose reverse order when feeding paper back by hand for double-sided printing.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "add-page-border",
+    "name": "Add page border",
+    "input": "add-page-border.pdf",
+    "additionalInput": null,
+    "expected": "Complete Add page border. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. The border is drawn on top of the page. Text, links and form fields are untouched.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "add-pdf-margins",
+    "name": "Add margins to PDF",
+    "input": "add-pdf-margins.pdf",
+    "additionalInput": null,
+    "expected": "Complete Add margins to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Make pages bigger keeps everything intact. Keep the page size redraws the pages, so links and form fields on them are dropped.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "extract-pdf-attachments",
+    "name": "Extract PDF attachments",
+    "input": "extract-pdf-attachments.pdf",
+    "additionalInput": null,
+    "expected": "Complete Extract PDF attachments. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Finds embedded files in the document attachment list and file-attachment annotations. Nothing is opened or run.",
+    "status": "not yet manually verified"
   }
 ]
