@@ -30,3 +30,33 @@ export function hexColor(hex:string){const m=/^#?([0-9a-f]{6})$/i.exec(hex);if(!
 export function stem(name:string){return name.replace(/\.[^.]+$/,'');}
 export const MM=72/25.4;
 export const PAGE_SIZES:Record<string,[number,number]>={a4:[595.28,841.89],letter:[612,792],legal:[612,1008],a3:[841.89,1190.55],a5:[419.53,595.28]};
+/** Embed PNG/JPG directly; convert anything else the browser can decode (such as WebP) through a canvas. */
+export async function embedImage(doc:PDFDocument,x:{name:string;type:string;bytes:Uint8Array}){
+ const b=x.bytes,isPng=b[0]===0x89&&b[1]===0x50,isJpg=b[0]===0xff&&b[1]===0xd8;
+ if(isPng)return doc.embedPng(b);
+ if(isJpg)return doc.embedJpg(b);
+ try{
+  const bmp=await createImageBitmap(new Blob([b.slice().buffer as ArrayBuffer],{type:x.type})),c=document.createElement('canvas');
+  c.width=bmp.width;c.height=bmp.height;c.getContext('2d')!.drawImage(bmp,0,0);
+  const png=await new Promise<Blob|null>(r=>c.toBlob(r,'image/png'));if(!png)throw new Error('x');
+  return doc.embedPng(new Uint8Array(await png.arrayBuffer()));
+ }catch{throw new Error('That image could not be read. Use a PNG, JPG or WebP image.');}
+}
+export async function pdfBytesToDoc(bytes:Uint8Array,label='The second PDF'){
+ try{return await PDFDocument.load(bytes,{updateMetadata:false});}
+ catch(e){throw new Error(/encrypt/i.test(e instanceof Error?e.message:'')?`${label} is password protected. Remove its password first.`:`${label} could not be read as a PDF.`);}
+}
+import type {PDFPage} from 'pdf-lib';
+const norm=(a:number)=>((a%360)+360)%360;
+/** Size of a page as people see it (after its /Rotate). */
+export function visualSize(p:PDFPage){const b=p.getCropBox(),rot=norm(p.getRotation().angle);return rot%180?{w:b.height,h:b.width,rot}:{w:b.width,h:b.height,rot};}
+/** Map a point in visual page coordinates (origin bottom-left as seen) to the page's own coordinates. */
+export function visualToPage(p:PDFPage,x:number,y:number):[number,number]{
+ const b=p.getCropBox(),rot=norm(p.getRotation().angle);
+ return rot===0?[b.x+x,b.y+y]:rot===90?[b.x+b.width-y,b.y+x]:rot===180?[b.x+b.width-x,b.y+b.height-y]:[b.x+y,b.y+b.height-x];
+}
+/** Lower-left corner and rotation for a w x h box centred at visual (cx,cy) and turned visAng degrees counter-clockwise. */
+export function boxOrigin(p:PDFPage,cx:number,cy:number,w:number,h:number,visAng=0){
+ const rot=norm(p.getRotation().angle),angle=visAng+rot,t=angle*Math.PI/180,[ux,uy]=visualToPage(p,cx,cy);
+ return {x:ux-(w/2*Math.cos(t)-h/2*Math.sin(t)),y:uy-(w/2*Math.sin(t)+h/2*Math.cos(t)),angle};
+}

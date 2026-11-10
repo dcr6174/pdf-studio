@@ -218,6 +218,78 @@ const curatedTools = [
     "intro": "Some PDFs carry other files inside them, such as spreadsheets, images or invoices in XML. This tool finds them and puts them in a ZIP.",
     "detail": "It reads the document attachment list and file-attachment comments. Files are saved exactly as embedded and are never opened or run in your browser."
 }
+  ,{
+    "slug": "insert-pdf-pages",
+    "id": "insert-pdf-pages",
+    "title": "Insert pages from one PDF into another",
+    "heading": "Insert pages from another PDF into your document",
+    "intro": "Pick a second PDF, choose the position, and its pages land inside your document.",
+    "detail": "You can take every page or only a range such as 2-4. Page sizes are kept as they are, so a Letter page stays Letter inside an A4 file."
+}
+  ,{
+    "slug": "overlay-pdf",
+    "id": "overlay-pdf",
+    "title": "Overlay one PDF on top of another",
+    "heading": "Lay one PDF over another",
+    "intro": "Place the pages of a second PDF over your document, with opacity you control.",
+    "detail": "Use the first overlay page on every page, match pages one to one, or repeat the overlay pages in turn. Sizes are fitted automatically."
+}
+  ,{
+    "slug": "add-pdf-background",
+    "id": "add-pdf-background",
+    "title": "Add a letterhead or background to a PDF",
+    "heading": "Put a letterhead behind your PDF pages",
+    "intro": "Add a second PDF as a background layer under each page.",
+    "detail": "The background goes behind the page content instead of over it. This suits letterheads, watermarked paper and printed templates."
+}
+  ,{
+    "slug": "stamp-pdf",
+    "id": "stamp-pdf",
+    "title": "Stamp a PDF with Draft, Approved or Confidential",
+    "heading": "Add a status stamp to your PDF",
+    "intro": "Mark pages as Draft, Approved, Confidential, Paid or any text you type.",
+    "detail": "The stamp is drawn as clean text with a border, placed where you choose, and can be rotated and made see-through."
+}
+  ,{
+    "slug": "add-logo-to-pdf",
+    "id": "add-logo-to-pdf",
+    "title": "Add a logo or image to a PDF",
+    "heading": "Place a logo on your PDF pages",
+    "intro": "Add a PNG or JPG logo to every page or a list of pages.",
+    "detail": "Pick a corner or the centre, set the width and opacity, and the image is drawn on each page. Rotated pages are handled."
+}
+  ,{
+    "slug": "highlight-text-in-pdf",
+    "id": "highlight-text-in-pdf",
+    "title": "Highlight words in a PDF automatically",
+    "heading": "Find and highlight text in your PDF",
+    "intro": "Type a word or phrase and every match on every page gets a highlight.",
+    "detail": "Matches are found in the text layer and marked with a see-through highlight, so the text underneath stays readable."
+}
+  ,{
+    "slug": "flatten-pdf-form-fields",
+    "id": "flatten-form-fields",
+    "title": "Flatten a fillable PDF form",
+    "heading": "Flatten the form fields in your PDF",
+    "intro": "Bake the answers into the page so the form cannot be changed.",
+    "detail": "Text boxes, checkboxes, dropdowns and radio buttons become part of the page. The file looks the same but is no longer fillable."
+}
+  ,{
+    "slug": "lock-pdf-form-fields",
+    "id": "lock-form-fields",
+    "title": "Lock the fields of a PDF form",
+    "heading": "Make PDF form fields read-only",
+    "intro": "Set every fillable field to read-only so values stay as they are.",
+    "detail": "Unlike flattening, the fields remain in the file and can still be read by software, but readers will not let people type in them."
+}
+  ,{
+    "slug": "export-pdf-form-data",
+    "id": "export-pdf-form-data",
+    "title": "Export PDF form data to JSON or CSV",
+    "heading": "Pull the answers out of a PDF form",
+    "intro": "Read every form field and download the names and values as JSON or CSV.",
+    "detail": "Text boxes, checkboxes, dropdowns, radio groups and lists are all read. The file keeps field names as they appear in the PDF."
+}
 ] as const;
 
 const curatedById = new Map<string, (typeof curatedTools)[number]>(curatedTools.map(tool => [tool.id, tool]));

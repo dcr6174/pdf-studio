@@ -6,4 +6,13 @@ export const NEW_TOOL_IDS:string[]=[
  "add-page-border",
  "add-pdf-margins",
  "extract-pdf-attachments",
+ "insert-pdf-pages",
+ "overlay-pdf",
+ "add-pdf-background",
+ "stamp-pdf",
+ "add-logo-to-pdf",
+ "highlight-text-in-pdf",
+ "flatten-form-fields",
+ "lock-form-fields",
+ "export-pdf-form-data",
 ];

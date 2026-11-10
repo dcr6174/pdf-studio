@@ -2,6 +2,15 @@
 */
 export type SeoMeta = {title: string; description: string};
 export const toolMeta: Record<string, SeoMeta> = {
+ "insert-pdf-pages": {title: "Insert PDF Pages Into Another PDF | Free, Private", description: "Insert all or some pages of one PDF into another at any position. Runs in your browser, files are never uploaded."},
+ "overlay-pdf": {title: "Overlay PDF: Put One PDF on Top of Another", description: "Overlay a PDF on top of another PDF with opacity and page matching. Free and private, all in your browser."},
+ "add-pdf-background": {title: "Add Background or Letterhead to a PDF", description: "Put a letterhead or background PDF behind every page of a document. Free, private, runs in your browser."},
+ "stamp-pdf": {title: "Stamp PDF: Draft, Approved, Confidential", description: "Add a Draft, Approved, Confidential or custom stamp to PDF pages. Free and private, nothing leaves your device."},
+ "add-logo-to-pdf": {title: "Add Logo to PDF: Place an Image on Pages", description: "Place a PNG or JPG logo on PDF pages with size, position and opacity. Free, private, runs in your browser."},
+ "highlight-text-in-pdf": {title: "Highlight Text in PDF: Search and Mark Every Match", description: "Search a PDF and highlight every match of a word or phrase in the colour you choose. Free, private, in your browser."},
+ "flatten-pdf-form-fields": {title: "Flatten PDF Form Fields | Free, Private", description: "Flatten a fillable PDF so form answers become fixed page content. Runs in your browser, nothing uploaded."},
+ "lock-pdf-form-fields": {title: "Lock PDF Form Fields (Read-Only)", description: "Make all fillable PDF form fields read-only in your browser. Free, private, nothing uploaded."},
+ "export-pdf-form-data": {title: "Export PDF Form Data to JSON or CSV", description: "Export the field names and values of a fillable PDF to JSON or CSV. Free and private, runs in your browser."},
  "add-blank-pages": {title: "Add Blank Pages to a PDF: Start, End or Between", description: "Insert blank pages into a PDF at the start, the end, after chosen pages or after every N pages. Free, in your browser. Nothing is uploaded."},
  "split-pdf-by-page-count": {title: "Split PDF by Page Count: Equal Parts in a ZIP", description: "Split a PDF into files of N pages each, or into N equal parts, and download them as a ZIP. Free, in your browser, with no upload."},
  "extract-odd-even-pages": {title: "Extract Odd or Even Pages From a PDF", description: "Save only the odd pages or only the even pages of a PDF, or get both as two files. Reverse the order for manual duplex printing. Free, in your browser."},

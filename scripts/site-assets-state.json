@@ -848,7 +848,7 @@
     "lastmod": "2026-10-30"
   },
   "/": {
-    "hash": "dab82cd440f8bf2cf9a5af01a73cb6dd7e488d5f172c31e5a01214faf7708b47",
+    "hash": "fd6745335b84fd84818f864afb6b2017ada40c544415b8e6075cfa3c2436421e",
     "lastmod": "2026-11-10"
   },
   "/privacy": {
@@ -1159,6 +1159,42 @@
     "hash": "4da7e942393873c665b01dd53d706d2572ca043b8d52c91698b6e0f6837bcfdc",
     "lastmod": "2026-11-10"
   },
+  "/tools/insert-pdf-pages": {
+    "hash": "dbf4e0cde8fa6fe9e700ba0fe477890a2bb3d67e4356f6b2d71e4aff72fa2a46",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/overlay-pdf": {
+    "hash": "a160b4ac98658bc3fb8595a73516966dc1cd076eb515a7ea11626feb06eb1dc6",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/add-pdf-background": {
+    "hash": "6d8c68710670a578b33b0b48edf4c136d12c6787aee38d318ccc42989bb3f6ab",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/stamp-pdf": {
+    "hash": "1da9d002d922e19c976eaf0f4c037446e22e64b5c753bcd143aa9b6cb9f85b52",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/add-logo-to-pdf": {
+    "hash": "95869cceebdc90b62a13d74fc8e4651cd014dada7a010f18ff8b45c505ec51de",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/highlight-text-in-pdf": {
+    "hash": "342a9f15559bf4ee8f77e56a9e33c4f41c531ee7a09807de27ecb725188b5514",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/flatten-pdf-form-fields": {
+    "hash": "c5c8e6a483fb4521a5abb51da5e69be993c37f64f0221fac4aa0098e49aa49ee",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/lock-pdf-form-fields": {
+    "hash": "535bbacb15d300fad5a50c1fd98c4114270d358e57622ce4ebc1c9cff4d96577",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/export-pdf-form-data": {
+    "hash": "e0341bb463556efb739ec891fa327f0ff302efb76a93a8725116271932c104a2",
+    "lastmod": "2026-11-10"
+  },
   "/tools/delete-pdf-pages": {
     "hash": "a224656fc648cca5d756d3e5d499538900d4255a2d62fbcb5f20e2825d2a6d81",
     "lastmod": "2026-11-10"
@@ -1184,7 +1220,7 @@
     "lastmod": "2026-11-10"
   },
   "/guides": {
-    "hash": "70111060be2e869d84cdd800c97d52ffdad143adcd0b12f389c043af526d7c36",
+    "hash": "abb19084d2405d0336a83e682a9b5978ea341114574e538db0c63cf0dac04aa9",
     "lastmod": "2026-11-10"
   },
   "/compare/ilovepdf-alternative": {
@@ -1505,6 +1541,42 @@
   },
   "/guides/extract-pdf-attachments": {
     "hash": "7f76676b226edcf52aa3a8dedc4ff1bad4749e7f135b9bd29872b416604ce19a",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/insert-pdf-pages": {
+    "hash": "b79b6e4fa629574103b855f5d41002aca7749560e0481023bc47e4a672827722",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/overlay-pdf": {
+    "hash": "e3d33e5e3b57e32be5f1869a05c0fdea7da3511b79ba3c9fb6e512d96ba5c413",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/add-pdf-background": {
+    "hash": "153edb4eb1ea3908861f9f817c3ebbdb7bd3b973c73dab832630faa4de3c1389",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/stamp-pdf": {
+    "hash": "cb548fc6bac9ce6ecf1c6cded49c4f5793af8b38fb1d9110b1ac36d8d97d4ba1",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/add-logo-to-pdf": {
+    "hash": "515cfa32676f9a71153aa1b2f0d04589cff4b0880fc66dd6ac0914d1e46c5808",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/highlight-text-in-pdf": {
+    "hash": "a55c52e491c0127fde09f44e416fb16a1903d43a56c0672c62ee325f6e17fc73",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/flatten-pdf-form-fields": {
+    "hash": "daaae0aa2d84e7825eb56846d2e20565eeb6fb95cfa14dc49777127d7c3d8708",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/lock-pdf-form-fields": {
+    "hash": "facc29daf2bb31cdfdd86330c14b782c45e45e7fd011a349ea8ce34426125b52",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/export-pdf-form-data": {
+    "hash": "9b95e745f6742bbe61189abe4e108171836f79e8579e7a92e0fea51240fbf035",
     "lastmod": "2026-11-10"
   },
   "/guides/delete-pdf-pages": {
