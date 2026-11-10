@@ -258,7 +258,7 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
     useEffect(()=>{
       if(initialMetadataRoute.current===undefined){initialMetadataRoute.current=location.pathname+location.hash;return;}
       const page=seoPages.find(t=>'/tools/'+t.slug===location.pathname&&t.id===view)??seoTools.find(t=>t.id===view);
-      const meta=page?(toolMeta[page.slug]??{title:page.title+' — Free Online',description:page.intro}):{title:view==='shelf'?'My files | PDF Studio':'PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up',description:view==='shelf'?'Files you explicitly save on this device.':'Free PDF editor and tools: edit text, merge, compress, sign and scan. No watermark, no sign-up. Designed to process files on your device.'};
+      const meta=page?(toolMeta[page.slug]??{title:page.title+' — Free Online',description:page.intro}):{title:view==='shelf'?'My files | PDF Studio':'PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up',description:view==='shelf'?'Files you explicitly save on this device.':'100+ free PDF tools: edit text, merge, compress, sign and scan. No watermark, no sign-up. Designed to process files on your device.'};
       syncNavigationMetadata({title:page?fullTitle(meta.title):meta.title,description:meta.description,url:'https://pdf-studio.in'+(page?'/tools/'+page.slug:'/'),image:'https://pdf-studio.in/social/'+(page?page.slug:'home')+'.png'});
     },[view]);
     async function saveCurrentDraft(){try{const snapshot=draftContext({files,pages,marks},view,options);await draft('save',snapshot);setSavedDraft(snapshot);toast.success('Draft saved on this device. Save again after further edits.');}catch{toast.error('Could not save the draft. Download your file instead.');}}

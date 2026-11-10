@@ -26,7 +26,7 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: "PDF Studio", statusBarStyle: "default" },
   metadataBase: new URL("https://pdf-studio.in"),
   title: { default: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up", template: "%s | PDF Studio" },
-  description: "Free PDF editor and tools: edit text, merge, compress, sign and scan. No watermark, no sign-up. Designed to process files on your device.",
+  description: "100+ free PDF tools: edit text, merge, compress, sign and scan. No watermark, no sign-up. Designed to process files on your device.",
   alternates: { canonical: "/" },
   openGraph: { type: "website", siteName: "PDF Studio", locale: "en_IN", url: "https://pdf-studio.in", title: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up", description: "Edit, merge, compress, sign and scan PDFs free. No watermark, no sign-up.", images: [{ url: "/social/home.png", width:1200, height:630, alt: "PDF Studio — Free online PDF tools" }] },
   twitter: { card: "summary_large_image", title: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up", description: "Edit, merge, compress, sign and scan PDFs free. No watermark, no sign-up.", images: ["/social/home.png"] },
