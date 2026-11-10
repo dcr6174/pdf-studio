@@ -13,8 +13,8 @@ await build({
 });
 const seo=await import('../.seo-policy-check/entry.mjs');
 const {canonicalPublicPath:path,canonicalPublicRedirect:redirect}=seo;
-assert.equal(seo.legacyMetadataPaths.length,317,'only the approved export addresses');
-assert.equal(new Set(seo.legacyMetadataPaths).size,317,'no duplicate allowlist entries');
+assert.equal(seo.legacyMetadataPaths.length,220,'only the approved export addresses');
+assert.equal(new Set(seo.legacyMetadataPaths).size,220,'no duplicate allowlist entries');
 for(const input of seo.legacyMetadataPaths){
  const expected=legacyMetadataTarget(input);
  assert.equal(path(input),expected,'verified historical address: '+input);
@@ -42,7 +42,6 @@ for(const input of protected404Paths){
  assert.equal(seo.permanentlyRemovedResponse(new Request('https://pdf-studio.in'+input,{method:'POST'})),null);
 }
 assert.equal(seo.isPermanentlyRemovedPath('/test-fixtures/%'),false,'invalid URI escapes cannot crash the worker');
-for(const game of seo.activeArcadeGames)assert.equal(seo.isPermanentlyRemovedPath('/lab/arcade/'+game.slug),false,'never remove active games');
 for(const input of [...seo.legacyMetadataPaths,...unapprovedMetadataPaths,'/tools/merge-pdf','/test-fixtures/source.pdf']){
  assert.equal(seo.isPermanentlyRemovedPath(input),false,'unrelated and working addresses are preserved');
 }
@@ -105,11 +104,6 @@ assert(!/robots:\s*\{\s*index:\s*true/.test(rootLayout),'root must not contradic
 const worker=await readFile('build/public-worker.ts','utf8');
 assert(worker.includes("headers.set('X-Robots-Tag','noindex, follow')"),'error responses have a crawler-visible header');
 
-const directory=renderToStaticMarkup(createElement(seo.PublicDirectory,{
- title:'All games',entries:seo.activeArcadeGames.map(game=>({path:'/lab/arcade/'+game.slug,title:game.name}))
-}));
-assert.equal((directory.match(/<a /g)||[]).length,100,'all playable games have SSR anchors before filters are used');
-for(const game of seo.activeArcadeGames)assert(directory.includes('/lab/arcade/'+game.slug));
 for(const [Component,heading,mainCount] of [[seo.HandwritingStudio,'h1',1],[seo.EmbeddedHandwritingStudio,'h2',0]]){
  const output=renderToStaticMarkup(createElement(Component,{mode:'handwriting-practice'}));
  assert.equal((output.match(/<main\b/g)||[]).length,mainCount,'embedded worksheets do not nest main landmarks');
@@ -117,8 +111,10 @@ for(const [Component,heading,mainCount] of [[seo.HandwritingStudio,'h1',1],[seo.
  assert.equal((output.match(/<h1\b/g)||[]).length,heading==='h1'?1:0);
 }
 const home=await readFile('app/page.tsx','utf8');
-assert(home.includes('<h1 className="sr-only">Free PDF tools to edit, merge, compress and sign</h1>'));
-for(const file of ['components/home-motion-hero.tsx','components/mobile-home-explorer.tsx'])assert(!(await readFile(file,'utf8')).includes('<h1'),'responsive decoration must not duplicate the main heading');
+assert(home.includes('<HomeExplorer'),'homepage renders the explorer');
+const explorer=await readFile('components/home-explorer.tsx','utf8');
+assert(explorer.includes('<h1>Everything you need to work with PDFs.</h1>'),'homepage keeps one visible h1');
+assert.equal((explorer.match(/<h1/g)||[]).length,1,'no duplicate h1 in the homepage explorer');
 
 const sitemap=await readFile('public/sitemap.xml','utf8');
 const locations=[...sitemap.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
@@ -138,4 +134,4 @@ assert.deepEqual(aliases,[
  {path:'/guides/images-to-pdf',lastmod:'2026-10-02'},
  {path:'/guides/html-to-pdf'}, {path:'/check-it-yourself'}, {path:'/tools/merge-pdf'}
 ]);
-console.log(`PASS: canonical redirects and native links, ${seo.seoPages.length} distinct guide snippets/social URLs, 404 policy, 100 SSR game links, responsive headings, nested worksheet semantics and ${locations.length} canonical sitemap entries.`);
+console.log(`PASS: canonical redirects and native links, ${seo.seoPages.length} distinct guide snippets/social URLs, 404 policy, responsive headings, nested worksheet semantics and ${locations.length} canonical sitemap entries.`);

@@ -1,6 +1,5 @@
 import { imageTools } from "./image-tools";
-import { activeArcadeGames } from "./arcade-active";
-export type StudioId = "lab" | "images" | "creative" | "arcade";
+export type StudioId = "lab" | "images" | "creative";
 export const studioLinks = [
   {
     id: "lab",
@@ -19,12 +18,6 @@ export const studioLinks = [
     title: "Creative Studio",
     href: "/lab/creative-studio",
     description: "Make printables, draw, write and learn.",
-  },
-  {
-    id: "arcade",
-    title: "Arcade",
-    href: "/lab/arcade",
-    description: "Play sports, puzzles and quick browser games.",
   },
 ] as const;
 export const creativeGroups = [
@@ -191,7 +184,7 @@ export type LabEntry = {
   title: string;
   description: string;
   studio: Exclude<StudioId, "lab">;
-  kind: "studio" | "tool" | "game";
+  kind: "studio" | "tool";
   keywords?: string;
 };
 const aliases: Record<string, string> = {
@@ -214,11 +207,9 @@ export const labEntries: LabEntry[] = [
       studio: s.id as Exclude<StudioId, "lab">,
       kind: "studio" as const,
       keywords:
-        s.id === "arcade"
-          ? "game games play studio game studio"
-          : s.id === "images"
-            ? "image tools photo tools edit pictures image studio"
-            : "create studio creative tools printables drawing study",
+        s.id === "images"
+          ? "image tools photo tools edit pictures image studio"
+          : "create studio creative tools printables drawing study",
     })),
   ...imageTools.map((t) => ({
     href: "/lab/" + t.slug,
@@ -240,14 +231,6 @@ export const labEntries: LabEntry[] = [
       t.slug.replaceAll("-", " ") +
       " " +
       (aliases[t.slug] ?? ""),
-  })),
-  ...activeArcadeGames.map((g) => ({
-    href: "/lab/arcade/" + g.slug,
-    title: g.name,
-    description: g.description,
-    studio: "arcade" as const,
-    kind: "game" as const,
-    keywords: g.genre + " game play",
   })),
 ];
 export function findLabEntries(
@@ -271,5 +254,5 @@ export const labQuickLinks = [
   "image-size-reducer",
   "daily-mood-canvas",
   "mini-zine-maker",
-  "arcade/boundary-cricket",
+  "whiteboard",
 ].map((slug) => labEntries.find((e) => e.href === "/lab/" + slug)!);

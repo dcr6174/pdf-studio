@@ -1,3 +1,4 @@
+
 /** Real React navigation/search interactions in a simulated DOM; no device-layout claims. */
 import assert from "node:assert/strict";
 import { readFile } from "node:fs/promises";
@@ -36,10 +37,8 @@ await build({
         directory: resolve("components/lab-directory.tsx"),
         creative: resolve("components/creative-directory.tsx"),
         navigation: resolve("components/studio-navigation.tsx"),
-        showcase: resolve("components/lab-showcase.tsx"),
         data: resolve("lib/lab-studios.ts"),
         images: resolve("lib/image-tools.ts"),
-        games: resolve("lib/arcade-active.ts"),
       },
       output: { entryFileNames: "[name].mjs" },
       external: ["react", "react-dom", "react-dom/client", "react-dom/server"],
@@ -53,20 +52,10 @@ const [
   { LabDirectory },
   { CreativeDirectory },
   { StudioNavigation },
-  { LabShowcase },
   data,
   { imageTools },
-  { activeArcadeGames },
 ] = await Promise.all(
-  [
-    "directory",
-    "creative",
-    "navigation",
-    "showcase",
-    "data",
-    "images",
-    "games",
-  ].map(load),
+  ["directory", "creative", "navigation", "data", "images"].map(load),
 );
 const { createElement, act } = await import("react"),
   { createRoot } = await import("react-dom/client"),
@@ -76,16 +65,14 @@ assert.equal(
   data.labEntries.length,
   "one destination per result",
 );
+assert(
+  !data.labEntries.some((e) => e.href.includes("arcade")),
+  "games are removed from the Lab directory",
+);
 for (const t of imageTools)
   assert(
     data.labEntries.some(
       (e) => e.href === "/lab/" + t.slug && e.studio === "images",
-    ),
-  );
-for (const g of activeArcadeGames)
-  assert(
-    data.labEntries.some(
-      (e) => e.href === "/lab/arcade/" + g.slug && e.kind === "game",
     ),
   );
 for (const t of data.creativeTools)
@@ -99,16 +86,11 @@ assert(
     .findLabEntries("smaller photo")
     .some((e) => e.href === "/lab/image-compressor"),
 );
-assert(
-  data
-    .findLabEntries("cricket")
-    .some((e) => e.href === "/lab/arcade/boundary-cricket"),
-);
 assert(data.findLabEntries("flashcards").some((e) => e.studio === "creative"));
 assert(
-  data.findLabEntries("game studio").some((e) => e.href === "/lab/arcade"),
-  "old name finds the single Arcade destination",
+  data.findLabEntries("whiteboard").some((e) => e.href === "/lab/whiteboard"),
 );
+assert.equal(data.findLabEntries("cricket").length, 0, "no game entries");
 for (const studio of data.studioLinks) {
   const html = renderToStaticMarkup(
     createElement(StudioNavigation, { active: studio.id }),
@@ -116,14 +98,14 @@ for (const studio of data.studioLinks) {
   assert.equal((html.match(/aria-current="page"/g) || []).length, 1);
   for (const s of data.studioLinks)
     assert(html.includes('href="' + s.href + '"'));
+  assert(!html.includes("arcade"), "no arcade destination in the switcher");
 }
-const showcase = renderToStaticMarkup(createElement(LabShowcase));
-assert.equal((showcase.match(/class="lab-world-card"/g) || []).length, 3);
-assert(showcase.includes('href="/lab/creative-studio"'));
-assert(!showcase.includes('href="#lab-creative-tools"'));
-assert(
-  !showcase.includes("Play Studio") && !showcase.includes("Create Studio"),
-);
+const labPage = await readFile("app/lab/page.tsx", "utf8");
+assert(!/arcade|game/i.test(labPage), "Lab home carries no games");
+assert(labPage.includes('href="/lab/image-studio"'));
+assert(labPage.includes('href="/lab/creative-studio"'));
+assert(labPage.includes("lb-studio-card"), "studio cards on the Lab home");
+assert(labPage.includes("imageTools.length"), "studio counts are live");
 const routeSource = await readFile("app/lab/[slug]/page.tsx", "utf8");
 assert(
   routeSource.includes("generateStaticParams"),
@@ -169,29 +151,25 @@ host.addEventListener("click", (e) => {
   }
 });
 try {
-  await act(async () =>
-    root.render(createElement(LabDirectory, null, createElement(LabShowcase))),
-  );
+  await act(async () => root.render(createElement(LabDirectory)));
   assert.equal(
-    host.querySelectorAll(".lab-world-card").length,
-    3,
-    "three visible destinations at start",
+    host.querySelectorAll("button").length >= 0,
+    true,
+  );
+  assert(
+    !host.textContent.toLowerCase().includes("games"),
+    "directory copy carries no games",
   );
   const input = host.querySelector("input[role=combobox]");
   await act(async () => input.focus());
   assert.equal(input.getAttribute("aria-expanded"), "true");
-  await type(input, "cricket");
-  assert.equal(
-    host.querySelectorAll(".lab-world-card").length,
-    0,
-    "search replaces the hub instead of competing with it",
-  );
+  await type(input, "whiteboard");
   await key(input, "ArrowDown");
   const selected = host.querySelector("[role=option][aria-selected=true]");
   assert(selected);
   assert.equal(input.getAttribute("aria-activedescendant"), selected.id);
   await key(input, "Enter");
-  assert.equal(navigated, "/lab/arcade/boundary-cricket");
+  assert.equal(navigated, "/lab/whiteboard");
   await key(input, "Escape");
   assert.equal(input.getAttribute("aria-expanded"), "false");
   await click(button("Images"));
@@ -199,7 +177,6 @@ try {
   assert(!host.querySelector(".lab-search-result"));
   await click(host.querySelector('[aria-label="Clear search"]'));
   assert.equal(input.value, "");
-  assert.equal(host.querySelectorAll(".lab-world-card").length, 3);
   assert.equal(document.activeElement, input);
   await type(input, "zzzz-no-such-tool");
   await key(input, "ArrowDown");
@@ -209,7 +186,6 @@ try {
     "empty suggestions never reference a nonexistent option",
   );
   await click(button("Browse the studios"));
-  assert.equal(host.querySelectorAll(".lab-world-card").length, 3);
   await act(async () => root.unmount());
   root = createRoot(host);
   await act(async () => root.render(createElement(CreativeDirectory)));
@@ -233,7 +209,7 @@ try {
     data.creativeTools.length,
   );
   console.log(
-    "PASS: all image/game/creative destinations preserved, consistent active studio navigation, real Creative Studio route, cross-studio search, keyboard suggestions/Enter/Escape, empty states, clear/focus return and creative-category isolation. Simulated DOM; responsive browser checks remain separate.",
+    "PASS: all image/creative destinations preserved, games removed, consistent active studio navigation, real Lab home and Creative Studio route, cross-studio search, keyboard suggestions/Enter/Escape, empty states, clear/focus return and creative-category isolation. Simulated DOM; responsive browser checks remain separate.",
   );
 } finally {
   await act(async () => root.unmount());

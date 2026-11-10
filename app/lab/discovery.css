@@ -174,10 +174,6 @@
   --lab-accent: #8053b5;
   --lab-tint: #f1e9fa;
 }
-.lab-world-card[data-studio="arcade"] {
-  --lab-accent: #ad5831;
-  --lab-tint: #fff0e2;
-}
 .lab-choice-top {
   display: flex;
   align-items: center;
@@ -273,19 +269,6 @@
 .creative-art > svg {
   color: #8053b5;
   transform: rotate(10deg);
-}
-.arcade-art > span {
-  display: grid;
-  place-items: center;
-  width: 56px;
-  height: 56px;
-  border-radius: 14px;
-  background: #fff;
-  font-size: 30px;
-  box-shadow: 0 5px 12px #67412710;
-}
-.arcade-art > span:nth-child(2) {
-  transform: translateY(-9px) rotate(8deg);
 }
 .lab-quick-actions {
   margin-top: 32px;
@@ -546,7 +529,4 @@
 }
 [data-theme="dark"] .lab-world-card[data-studio="creative"] {
   --lab-accent: #d1b4f2;
-}
-[data-theme="dark"] .lab-world-card[data-studio="arcade"] {
-  --lab-accent: #ffc19b;
 }

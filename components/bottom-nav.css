@@ -1,0 +1,16 @@
+/* Mobile bottom navigation (hidden on desktop, where the sidebar leads) */
+.bottom-nav{display:none}
+@media(max-width:720px){
+ .bottom-nav{position:fixed;left:0;right:0;bottom:0;z-index:60;display:grid;grid-template-columns:repeat(4,1fr);background:var(--card);border-top:1px solid var(--border);padding:6px 4px calc(6px + env(safe-area-inset-bottom))}
+ .bottom-nav a,.bottom-nav button{display:flex;flex-direction:column;align-items:center;gap:3px;padding:7px 4px;border:0;background:none;color:var(--muted);text-decoration:none;font-size:.68rem;font-weight:500;border-radius:var(--radius-sm);cursor:pointer}
+ .bottom-nav a:hover,.bottom-nav button:hover{color:var(--foreground)}
+ .bottom-nav a[aria-current],.bottom-nav a:active,.bottom-nav button:active{color:var(--primary)}
+ .bn-clock{position:relative;line-height:0}
+ .bn-clock i{position:absolute;top:-5px;right:-10px;min-width:15px;height:15px;padding:0 3px;border-radius:999px;background:var(--primary);color:#fff;font-size:.6rem;font-style:normal;display:grid;place-items:center;font-weight:700}
+}
+@media(max-width:720px){
+ /* keep the mobile tool action bar above the bottom navigation */
+ .mobile-workspace-action{bottom:64px!important}
+ /* keep page footers clear of the fixed navigation */
+ main{padding-bottom:76px}
+}

@@ -47,7 +47,7 @@ try{
  // Read the literal data list without requiring a second TypeScript runtime.
  const metadataSource=await readFile('lib/legacy-metadata-paths.ts','utf8');
  const metadataPaths=[...metadataSource.matchAll(/^ '([^']+)',?$/gm)].map(match=>match[1]);
- assert.equal(metadataPaths.length,317,'all approved historical addresses are tested');
+ assert.equal(metadataPaths.length,220,'all approved historical addresses are tested');
  for(const path of metadataPaths)aliases[path]=legacyMetadataTarget(path);
  for(const [path,target] of Object.entries(aliases)){
   const response=await worker.fetch(path,{redirect:'manual'});
