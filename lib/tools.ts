@@ -86,6 +86,19 @@ export const tools:Tool[] = [
 ["flatten-form-fields","Flatten form fields","Turn fillable form fields into fixed page content.","Privacy","shield","After flattening, the values can no longer be edited. Keep the original if you may need to change answers."],
 ["lock-form-fields","Lock form fields","Make every form field read-only while keeping the form structure.","Privacy","lock","Fields stay in the file but cannot be changed in a normal PDF reader. This is not encryption."],
 ["export-pdf-form-data","Export PDF form data","Export the answers in a fillable PDF form as JSON or CSV.","Convert","file","Each field name and value is listed. Passwords and signatures are not read."],
+["extract-pdf-links","Extract PDF links","List every web link in a PDF with its page number.","Convert","link","Reads real link annotations, not just text that looks like a URL."],
+["extract-pdf-bookmarks","Extract PDF bookmarks","Export the bookmark outline of a PDF as text or JSON.","Convert","book","Keeps the nesting of chapters and sections."],
+["pdf-word-counter","PDF word counter","Count words, characters and reading time in a PDF.","Convert","text","Counts selectable text only. Scans need OCR first."],
+["pdf-document-info","PDF document info","See pages, page sizes, metadata, version and form fields.","Convert","file","Reads the file only. Nothing is changed."],
+["pdf-to-markdown","PDF to Markdown","Convert PDF text into Markdown with headings and lists.","Convert","text","Headings are guessed from font size, so check the result."],
+["pdf-to-json","PDF to JSON","Export the text of each PDF page as structured JSON.","Convert","grid","One entry per page. Scans need OCR first."],
+["remove-blank-pages","Remove blank pages","Find and delete blank pages automatically.","Pages","file","Pages are checked by looking at the rendered page. Choose a strictness that suits your scans."],
+["crop-pdf-to-content","Crop PDF to content","Trim white space by cropping pages to the visible content.","Pages","crop","Crops each page, or all pages to one shared area. The hidden area is masked, not deleted."],
+["add-pdf-attachment","Attach files to PDF","Embed files inside a PDF as attachments.","Edit & sign","layers","Up to 10 files and 20 MB in total. Readers show them in an attachments panel."],
+["extract-pdf-images","Extract images from PDF","Save the pictures inside a PDF as PNG files in a ZIP.","Convert","image","Pulls embedded images only. Pages drawn as vectors have none to extract."],
+["pdf-booklet","PDF booklet maker","Reorder pages into a printable folded booklet.","Pages","copy","Print double-sided, flip on the short edge, then fold. Pages are padded to a multiple of 4."],
+["extract-pages-by-keyword","Extract pages by keyword","Keep only the pages that contain a word or phrase.","Pages","scissors","Searches selectable text. Scans need OCR first."],
+["delete-pages-by-keyword","Delete pages by keyword","Remove every page that contains a word or phrase.","Pages","scissors","At least one page must remain. Scans need OCR first."],
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
 export function accepted(id:string){return id==='images'||id==='scan'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
 export function isMulti(id:string){return ['workflow','merge','organize','interleave','images','scan','compare','zip'].includes(id);}

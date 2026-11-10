@@ -307,3 +307,91 @@ Expected: Complete Add margins to PDF. Inspect output content, page count, order
 Extract PDF attachments
 Input: extract-pdf-attachments.pdf
 Expected: Complete Extract PDF attachments. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Finds embedded files in the document attachment list and file-attachment annotations. Nothing is opened or run.
+
+Insert PDF pages
+Input: insert-pdf-pages.pdf
+Expected: Complete Insert PDF pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Choose where the pages go and which pages to take from the second file. The original file is not changed.
+
+Overlay PDF
+Input: overlay-pdf.pdf
+Expected: Complete Overlay PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. The overlay is scaled to fit each page. Use opacity to keep the text underneath readable.
+
+Add PDF background
+Input: add-pdf-background.pdf
+Expected: Complete Add PDF background. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. The background sits behind the existing content, so text, links and form fields keep working.
+
+Stamp PDF
+Input: stamp-pdf.pdf
+Expected: Complete Stamp PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Pick a ready stamp or type your own text. Choose colour, size and position.
+
+Add logo to PDF
+Input: add-logo-to-pdf.pdf
+Expected: Complete Add logo to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. PNG and JPG images are supported. Transparent PNG backgrounds are kept.
+
+Highlight text in PDF
+Input: highlight-text-in-pdf.pdf
+Expected: Complete Highlight text in PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Works on PDFs with real text. Scanned pages need OCR first.
+
+Flatten form fields
+Input: flatten-form-fields.pdf
+Expected: Complete Flatten form fields. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. After flattening, the values can no longer be edited. Keep the original if you may need to change answers.
+
+Lock form fields
+Input: lock-form-fields.pdf
+Expected: Complete Lock form fields. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Fields stay in the file but cannot be changed in a normal PDF reader. This is not encryption.
+
+Export PDF form data
+Input: export-pdf-form-data.pdf
+Expected: Complete Export PDF form data. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Each field name and value is listed. Passwords and signatures are not read.
+
+Extract PDF links
+Input: extract-pdf-links.pdf
+Expected: Complete Extract PDF links. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Reads real link annotations, not just text that looks like a URL.
+
+Extract PDF bookmarks
+Input: extract-pdf-bookmarks.pdf
+Expected: Complete Extract PDF bookmarks. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Keeps the nesting of chapters and sections.
+
+PDF word counter
+Input: pdf-word-counter.pdf
+Expected: Complete PDF word counter. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Counts selectable text only. Scans need OCR first.
+
+PDF document info
+Input: pdf-document-info.pdf
+Expected: Complete PDF document info. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Reads the file only. Nothing is changed.
+
+PDF to Markdown
+Input: pdf-to-markdown.pdf
+Expected: Complete PDF to Markdown. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Headings are guessed from font size, so check the result.
+
+PDF to JSON
+Input: pdf-to-json.pdf
+Expected: Complete PDF to JSON. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. One entry per page. Scans need OCR first.
+
+Remove blank pages
+Input: remove-blank-pages.pdf
+Expected: Complete Remove blank pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Pages are checked by looking at the rendered page. Choose a strictness that suits your scans.
+
+Crop PDF to content
+Input: crop-pdf-to-content.pdf
+Expected: Complete Crop PDF to content. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Crops each page, or all pages to one shared area. The hidden area is masked, not deleted.
+
+Attach files to PDF
+Input: add-pdf-attachment.pdf
+Expected: Complete Attach files to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Up to 10 files and 20 MB in total. Readers show them in an attachments panel.
+
+Extract images from PDF
+Input: extract-pdf-images.pdf
+Expected: Complete Extract images from PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Pulls embedded images only. Pages drawn as vectors have none to extract.
+
+PDF booklet maker
+Input: pdf-booklet.pdf
+Expected: Complete PDF booklet maker. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Print double-sided, flip on the short edge, then fold. Pages are padded to a multiple of 4.
+
+Extract pages by keyword
+Input: extract-pages-by-keyword.pdf
+Expected: Complete Extract pages by keyword. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Searches selectable text. Scans need OCR first.
+
+Delete pages by keyword
+Input: delete-pages-by-keyword.pdf
+Expected: Complete Delete pages by keyword. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. At least one page must remain. Scans need OCR first.

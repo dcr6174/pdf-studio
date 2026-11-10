@@ -1195,6 +1195,58 @@
     "hash": "e0341bb463556efb739ec891fa327f0ff302efb76a93a8725116271932c104a2",
     "lastmod": "2026-11-10"
   },
+  "/tools/extract-pdf-links": {
+    "hash": "f874e45326a48469acbcd7fbae5503c5eb45fccb96227d2888085f92343f2592",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/extract-pdf-bookmarks": {
+    "hash": "ae5782760793915f85e06c4336c1b87bba84daf304935ee221f27e39e22500ee",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/pdf-word-counter": {
+    "hash": "6ae316b8c276978e7731a6012d1ad38c689d12afc20a3617f948144197dfd5ae",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/pdf-document-info": {
+    "hash": "b0b793557c229df5002f90f73f0b22509ccf4d25ff47604e4a2ec612747c3d75",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/pdf-to-markdown": {
+    "hash": "d7814211fe7c87d9bba98ac6e9727b49af25af9c1ebeb529997b4f89a66ee5ec",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/pdf-to-json": {
+    "hash": "2e71e4624ac7f484a83f9b3939fc5b910c4b72b4a05781c427c54a32123174bb",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/remove-blank-pages": {
+    "hash": "5019cf8d49389bba040ce2e39afd5a9a2c751c879cac266f8b5c6feeaecc4f8e",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/crop-pdf-to-content": {
+    "hash": "5f676e72127421d41e998172be81856ebc1f7ff075fdfed5d6dde7a9b7fa2d97",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/add-pdf-attachment": {
+    "hash": "1c3d0f6c368317dea898f7bf7e92c850878558440d69f5378b70d887e304fa8a",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/extract-pdf-images": {
+    "hash": "98e89e993a3a7736de15f83b948032b70c94e6f66c211dd09e4fa37bf869deb1",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/pdf-booklet": {
+    "hash": "16509ccaab6f6eff43595bfc37e81acb126d49d170f96c063f459b8d682f506a",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/extract-pages-by-keyword": {
+    "hash": "8fd24f10e474c2d0030bc143e611e50e9bed6fb63f1dd51e858084f88f92d978",
+    "lastmod": "2026-11-10"
+  },
+  "/tools/delete-pages-by-keyword": {
+    "hash": "822a7c74d03c6935e9a80178c141168b1dea65257a47a33c3003676e4e27ac63",
+    "lastmod": "2026-11-10"
+  },
   "/tools/delete-pdf-pages": {
     "hash": "a224656fc648cca5d756d3e5d499538900d4255a2d62fbcb5f20e2825d2a6d81",
     "lastmod": "2026-11-10"
@@ -1220,7 +1272,7 @@
     "lastmod": "2026-11-10"
   },
   "/guides": {
-    "hash": "abb19084d2405d0336a83e682a9b5978ea341114574e538db0c63cf0dac04aa9",
+    "hash": "bcd02b52fbb939a4b68eb2e8003f6ecc6b47b89847991156839037d5b2e53de7",
     "lastmod": "2026-11-10"
   },
   "/compare/ilovepdf-alternative": {
@@ -1577,6 +1629,58 @@
   },
   "/guides/export-pdf-form-data": {
     "hash": "9b95e745f6742bbe61189abe4e108171836f79e8579e7a92e0fea51240fbf035",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/extract-pdf-links": {
+    "hash": "cc22f59fbb8985b9e5e97f688793c122ab09bbb3453daa0ed96125b4f571103f",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/extract-pdf-bookmarks": {
+    "hash": "edcaf8736c4274975610642dc68beb259f19c36cf3a79f4466e2329cc1a6a08e",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/pdf-word-counter": {
+    "hash": "f5e0d24f0ccacabc486c22c76965354aba844f4fd932b5413e51aded9c253809",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/pdf-document-info": {
+    "hash": "9e74e9daa91418c1da844f903a2a5de528db03b5c8c31841283ee720e166dd80",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/pdf-to-markdown": {
+    "hash": "000ffdc7556d9f32f5068b592d12c329351bd5ca9b3bae39a565c78e2014e166",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/pdf-to-json": {
+    "hash": "5a6c64b2b3481e2e9041585d9778fa442b77eeb836ba3fa5c0e5370cf9977ccd",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/remove-blank-pages": {
+    "hash": "afbb0ace274d1b030d3c44f33891232854fabfa34ae6e095193706eea68b405c",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/crop-pdf-to-content": {
+    "hash": "e91ea11a6eafc8b4807c0474b39db71c3b5615dcebb3f0209b876044296589cf",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/add-pdf-attachment": {
+    "hash": "519908130e1df60ebeefdc90dba07d9730ad35f556bb9396a63fd83daa56468a",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/extract-pdf-images": {
+    "hash": "cfeafd8d0a9537b886712d577bb655178ab38bc95c92f6c1f33bed8572522fb1",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/pdf-booklet": {
+    "hash": "33124f61a4de73e3946afef4a1ee6b12af961d9ccaaa28bcaa4fa874ff45947d",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/extract-pages-by-keyword": {
+    "hash": "a54a4e61febef68e02a1b4d5f823fd08192071945fb0110e8fb8c6ade2299a38",
+    "lastmod": "2026-11-10"
+  },
+  "/guides/delete-pages-by-keyword": {
+    "hash": "cedba8814df7e8c664d7a0314b50dab5b64652a85620935e690a0c430cac02ad",
     "lastmod": "2026-11-10"
   },
   "/guides/delete-pdf-pages": {

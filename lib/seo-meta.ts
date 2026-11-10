@@ -2,6 +2,19 @@
 */
 export type SeoMeta = {title: string; description: string};
 export const toolMeta: Record<string, SeoMeta> = {
+ "extract-pdf-links": {title: "Extract Links from a PDF: Plain List or CSV", description: "Pull every web link out of a PDF with page numbers, as a list or CSV. Free and private, nothing is uploaded."},
+ "extract-pdf-bookmarks": {title: "Extract PDF Bookmarks to Text or JSON", description: "Export a PDF bookmark outline as an indented list or JSON. Free, private, runs in your browser."},
+ "pdf-word-counter": {title: "PDF Word Counter: Words, Characters, Reading Time", description: "Count words, characters and sentences in a PDF, with reading time and top words. Free, private, in your browser."},
+ "pdf-document-info": {title: "PDF Document Info: Properties, Page Sizes, Metadata", description: "See the metadata, version, page sizes and form field count of a PDF. Free and private, runs in your browser."},
+ "pdf-to-markdown": {title: "PDF to Markdown Converter | Free, Private", description: "Convert a PDF to Markdown with headings, lists and paragraphs. Runs in your browser, nothing uploaded."},
+ "pdf-to-json": {title: "PDF to JSON: Page Text as Structured Data", description: "Convert PDF text to JSON, one entry per page, as blocks or lines. Free, private, runs in your browser."},
+ "remove-blank-pages": {title: "Remove Blank Pages from a PDF Automatically", description: "Detect and delete blank pages in a PDF. Choose strict, normal or loose. Free and private, in your browser."},
+ "crop-pdf-to-content": {title: "Crop PDF to Content: Remove White Margins", description: "Automatically crop PDF pages to their content and remove white margins. Free, private, runs in your browser."},
+ "add-pdf-attachment": {title: "Attach Files to a PDF | Free, Private", description: "Embed files inside a PDF as attachments in your browser. Nothing is uploaded, and the pages stay unchanged."},
+ "extract-pdf-images": {title: "Extract Images from a PDF as PNG", description: "Extract all embedded images from a PDF as PNG files in a ZIP. Free, private, runs in your browser."},
+ "pdf-booklet": {title: "PDF Booklet Maker: Print and Fold", description: "Turn a PDF into a printable folded booklet with correct page order. Free, private, runs in your browser."},
+ "extract-pages-by-keyword": {title: "Extract Pages Containing a Keyword from a PDF", description: "Keep only the PDF pages that contain a word or phrase. Free, private, runs in your browser."},
+ "delete-pages-by-keyword": {title: "Delete Pages Containing a Keyword in a PDF", description: "Remove all PDF pages that contain a word or phrase. Free, private, nothing uploaded."},
  "insert-pdf-pages": {title: "Insert PDF Pages Into Another PDF | Free, Private", description: "Insert all or some pages of one PDF into another at any position. Runs in your browser, files are never uploaded."},
  "overlay-pdf": {title: "Overlay PDF: Put One PDF on Top of Another", description: "Overlay a PDF on top of another PDF with opacity and page matching. Free and private, all in your browser."},
  "add-pdf-background": {title: "Add Background or Letterhead to a PDF", description: "Put a letterhead or background PDF behind every page of a document. Free, private, runs in your browser."},
