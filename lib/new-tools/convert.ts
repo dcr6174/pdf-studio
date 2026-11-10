@@ -277,4 +277,89 @@ const drop:NewTool={
   return pdfResult(await doc.save(),`Deleted ${hit.length} page${hit.length===1?'':'s'} containing "${term}": ${hit.map(i=>i+1).join(', ')}. ${doc.getPageCount()} remain.`);
  }
 };
-export const convertTools:NewTool[]=[links,bookmarks,words,info,markdown,json,blank,crop,attach,images,booklet,keep,drop];
+
+const contacts:NewTool={
+ id:'extract-emails-phones',action:'Extract contacts',
+ fields:[
+  {key:'what',label:'Find',type:'select',def:'both',options:[['both','Emails and phone numbers'],['emails','Emails only'],['phones','Phone numbers only']]},
+  {key:'format',label:'Format',type:'select',def:'txt',options:[['txt','Plain list'],['csv','CSV (type, value, page)']]},
+ ],
+ async run({bytes,v,progress}){
+  const pages=await allText(bytes,progress),rows:[string,string,number][]=[];
+  pages.forEach((lines,i)=>{
+   const text=lines.map(l=>l.text).join('\n');
+   if(v.what!=='phones')for(const m of text.match(/[A-Z0-9._%+-]+@[A-Z0-9.-]+\.[A-Z]{2,}/gi)??[])rows.push(['email',m,i+1]);
+   if(v.what!=='emails')for(const m of text.match(/(?:\+\d{1,3}[\s.-]?)?(?:\(\d{1,4}\)[\s.-]?)?\d[\d\s.-]{6,}\d/g)??[]){const d=m.replace(/\D/g,'');if(d.length>=8&&d.length<=15&&!/^(19|20)\d{2}[\s.-]\d{2}[\s.-]\d{2}$/.test(m.trim()))rows.push(['phone',m.trim(),i+1]);}
+  });
+  if(!rows.length)throw new Error(pages.every(p=>!p.length)?noText:'No email addresses or phone numbers were found in the selectable text.');
+  const seen=new Set<string>(),uniq=rows.filter(r=>{const k=r[0]+r[1].toLowerCase();if(seen.has(k))return false;seen.add(k);return true;});
+  const rep=`Found ${uniq.length} unique contact detail${uniq.length===1?'':'s'} (${rows.length} mentions).`;
+  if(v.format==='csv')return textResult('type,value,page\n'+uniq.map(([t,x,p])=>`${t},"${x.replace(/"/g,'""')}",${p}`).join('\n')+'\n','csv','text/csv',rep);
+  return textResult(uniq.map(([t,x,p])=>`${x}  (${t}, page ${p})`).join('\n')+'\n','txt','text/plain',rep+'\n'+uniq.slice(0,40).map(([t,x,p])=>`p${p} ${t}: ${x}`).join('\n'));
+ }
+};
+
+const sizes:NewTool={
+ id:'pdf-page-sizes',action:'Report page sizes',
+ fields:[
+  {key:'unit',label:'Unit',type:'select',def:'mm',options:[['mm','Millimetres'],['in','Inches'],['pt','Points']]},
+  {key:'format',label:'Format',type:'select',def:'txt',options:[['txt','Plain report'],['csv','CSV']]},
+ ],
+ async run({bytes,v,progress}){
+  const doc=await openPdf(bytes),n=doc.getPageCount(),k=v.unit==='in'?1/72:v.unit==='pt'?1:25.4/72,d=v.unit==='mm'?1:2;
+  const names:[string,number,number][]=[['A3',841.89,1190.55],['A4',595.28,841.89],['A5',419.53,595.28],['Letter',612,792],['Legal',612,1008],['Tabloid',792,1224]];
+  const rows=doc.getPages().map((p,i)=>{
+   const b=p.getCropBox(),rot=((p.getRotation().angle%360)+360)%360,w=rot%180?b.height:b.width,h=rot%180?b.width:b.height;
+   const hit=names.find(([,a,b2])=>(Math.abs(w-a)<3&&Math.abs(h-b2)<3)||(Math.abs(w-b2)<3&&Math.abs(h-a)<3));
+   progress(Math.round((i+1)/n*100));
+   return {page:i+1,w:(w*k).toFixed(d),h:(h*k).toFixed(d),name:hit?hit[0]:'Custom',orient:w>h+1?'Landscape':w<h-1?'Portrait':'Square',rot};
+  });
+  const groups=new Map<string,number>();rows.forEach(r=>{const key=`${r.w} x ${r.h} ${v.unit} (${r.name}, ${r.orient})`;groups.set(key,(groups.get(key)??0)+1);});
+  const summary=[...groups].map(([a,c])=>`${c} page${c===1?'':'s'}: ${a}`).join('\n');
+  const rep=`${n} page${n===1?'':'s'}, ${groups.size} different size${groups.size===1?'':'s'}.\n`+summary;
+  if(v.format==='csv')return textResult('page,width,height,size,orientation,rotation\n'+rows.map(r=>`${r.page},${r.w},${r.h},${r.name},${r.orient},${r.rot}`).join('\n')+'\n','csv','text/csv',rep);
+  return textResult(rep+'\n\n'+rows.map(r=>`Page ${r.page}: ${r.w} x ${r.h} ${v.unit} - ${r.name}, ${r.orient}${r.rot?`, rotated ${r.rot}`:''}`).join('\n')+'\n','txt','text/plain',rep);
+ }
+};
+
+const textPages:NewTool={
+ id:'pdf-text-by-page',action:'Export text by page',
+ fields:[
+  {key:'mode',label:'Output',type:'select',def:'zip',options:[['zip','One text file per page (ZIP)'],['one','One text file with page markers']]},
+ ],
+ async run({bytes,v,progress}){
+  const pages=await allText(bytes,progress);
+  if(pages.every(p=>!p.length))throw new Error(noText);
+  const texts=pages.map(l=>l.map(x=>x.text).join('\n')),empty=texts.filter(t=>!t.trim()).length;
+  const rep=`${pages.length} page${pages.length===1?'':'s'} exported${empty?`, ${empty} with no selectable text`:''}.`;
+  if(v.mode==='one')return textResult(texts.map((t,i)=>`--- Page ${i+1} ---\n${t}\n`).join('\n'),'txt','text/plain',rep);
+  const zip=new JSZip(),pad=String(pages.length).length;
+  texts.forEach((t,i)=>zip.file(`page-${String(i+1).padStart(pad,'0')}.txt`,t+'\n'));
+  return {blob:await zip.generateAsync({type:'blob'}),ext:'zip',report:rep};
+ }
+};
+
+const openView:NewTool={
+ id:'set-pdf-open-view',action:'Set how the PDF opens',
+ fields:[
+  {key:'page',label:'Open on page',type:'number',def:1,min:1,max:99999,step:1},
+  {key:'zoom',label:'Zoom',type:'select',def:'fit',options:[['fit','Fit whole page'],['width','Fit page width'],['100','100%'],['default','Viewer default']]},
+  {key:'layout',label:'Page layout',type:'select',def:'continuous',options:[['continuous','Continuous scroll'],['single','Single page'],['two','Two pages side by side'],['default','Viewer default']]},
+  {key:'panel',label:'Side panel',type:'select',def:'none',options:[['none','Closed'],['bookmarks','Bookmarks'],['thumbs','Page thumbnails']]},
+  {key:'title',label:'Show the document title in the window bar',type:'checkbox',def:true},
+  {key:'full',label:'Open in full screen',type:'checkbox',def:false},
+ ],
+ async run({bytes,v}){
+  const doc=await openPdf(bytes),n=doc.getPageCount(),pg=inRange(num(v,'page'),1,n,'Page'),ref=doc.getPage(pg-1).ref,ctx=doc.context,cat=doc.catalog;
+  if(v.zoom!=='default')cat.set(PDFName.of('OpenAction'),ctx.obj(v.zoom==='fit'?[ref,PDFName.of('Fit')]:v.zoom==='width'?[ref,PDFName.of('FitH'),null]:[ref,PDFName.of('XYZ'),null,null,1]));
+  else if(pg>1)cat.set(PDFName.of('OpenAction'),ctx.obj([ref,PDFName.of('XYZ'),null,null,null]));
+  const lay={continuous:'OneColumn',single:'SinglePage',two:'TwoColumnLeft'}[String(v.layout)];
+  if(lay)cat.set(PDFName.of('PageLayout'),PDFName.of(lay));else cat.delete(PDFName.of('PageLayout'));
+  cat.set(PDFName.of('PageMode'),PDFName.of(v.full?'FullScreen':v.panel==='bookmarks'?'UseOutlines':v.panel==='thumbs'?'UseThumbs':'UseNone'));
+  cat.set(PDFName.of('ViewerPreferences'),ctx.obj({DisplayDocTitle:!!v.title}));
+  const rep=`Opens on page ${pg} of ${n}${v.zoom==='default'?'':', zoom: '+({fit:'fit page',width:'fit width','100':'100%'} as Record<string,string>)[String(v.zoom)]}${v.full?', full screen':''}.`+(v.title?'\nThe window bar shows the document title. Set one with the PDF metadata tool if it is empty.':'');
+  return pdfResult(await doc.save(),rep);
+ }
+};
+
+export const convertTools:NewTool[]=[contacts,sizes,textPages,openView,links,bookmarks,words,info,markdown,json,blank,crop,attach,images,booklet,keep,drop];
