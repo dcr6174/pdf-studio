@@ -77,6 +77,15 @@ export const tools:Tool[] = [
 ["add-page-border","Add page border","Draw a solid, dashed or double border around your pages.","Edit & sign","crop","The border is drawn on top of the page. Text, links and form fields are untouched."],
 ["add-pdf-margins","Add margins to PDF","Add white space around pages, or shrink the content inside the page.","Pages","crop","Make pages bigger keeps everything intact. Keep the page size redraws the pages, so links and form fields on them are dropped."],
 ["extract-pdf-attachments","Extract PDF attachments","Save the files embedded inside a PDF into one ZIP.","Privacy","layers","Finds embedded files in the document attachment list and file-attachment annotations. Nothing is opened or run."],
+["insert-pdf-pages","Insert PDF pages","Insert pages from a second PDF into your document at any position.","Pages","layers","Choose where the pages go and which pages to take from the second file. The original file is not changed."],
+["overlay-pdf","Overlay PDF","Lay one PDF on top of another, page by page, with adjustable opacity.","Edit & sign","layers","The overlay is scaled to fit each page. Use opacity to keep the text underneath readable."],
+["add-pdf-background","Add PDF background","Place a letterhead or background PDF behind every page of your document.","Edit & sign","layers","The background sits behind the existing content, so text, links and form fields keep working."],
+["stamp-pdf","Stamp PDF","Add a DRAFT, APPROVED, CONFIDENTIAL or custom stamp to chosen pages.","Edit & sign","file","Pick a ready stamp or type your own text. Choose colour, size and position."],
+["add-logo-to-pdf","Add logo to PDF","Place a logo or image on every page, with size, position and opacity.","Edit & sign","image","PNG and JPG images are supported. Transparent PNG backgrounds are kept."],
+["highlight-text-in-pdf","Highlight text in PDF","Find a word or phrase and highlight every match in a colour.","Edit & sign","file","Works on PDFs with real text. Scanned pages need OCR first."],
+["flatten-form-fields","Flatten form fields","Turn fillable form fields into fixed page content.","Privacy","shield","After flattening, the values can no longer be edited. Keep the original if you may need to change answers."],
+["lock-form-fields","Lock form fields","Make every form field read-only while keeping the form structure.","Privacy","lock","Fields stay in the file but cannot be changed in a normal PDF reader. This is not encryption."],
+["export-pdf-form-data","Export PDF form data","Export the answers in a fillable PDF form as JSON or CSV.","Convert","file","Each field name and value is listed. Passwords and signatures are not read."],
 ].map(([id,name,description,group,icon,note])=>({id,name,description,group,icon,note}));
 export function accepted(id:string){return id==='images'||id==='scan'?'.jpg,.jpeg,.png,.webp':id==='docx'?'.docx':id==='sheet'?'.xlsx,.xls,.csv':id==='ebook'?'.epub':['create','markdown','create-form'].includes(id)?'.txt,.md':'.pdf';}
 export function isMulti(id:string){return ['workflow','merge','organize','interleave','images','scan','compare','zip'].includes(id);}
