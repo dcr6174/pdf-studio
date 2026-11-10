@@ -69,3 +69,20 @@
  .hx-category .hx-grid{grid-template-columns:1fr}
 }
 @media(max-width:460px){.hx-grid{grid-template-columns:1fr}}
+.hx-drop{display:flex;flex-direction:column;align-items:center;gap:10px;max-width:640px;margin:0 auto 18px;padding:28px 22px 20px;background:var(--card);border:2px dashed color-mix(in srgb,var(--primary) 45%,var(--border));border-radius:22px;box-shadow:0 14px 34px -22px rgba(81,69,205,.35);transition:border-color .15s,background .15s}
+.hx-drop.is-drag{border-color:var(--primary);background:color-mix(in srgb,var(--primary) 7%,var(--card))}
+.hx-drop.has-file{border-style:solid;border-color:var(--border)}
+.hx-drop>b{font-family:var(--font-display);font-size:1.3rem;letter-spacing:-.01em}
+.hx-drop-icon{display:grid;place-items:center;width:52px;height:52px;border-radius:16px;background:var(--soft,#EEECFB);color:var(--primary);flex:none}
+.hx-drop-sub{color:var(--muted);font-size:.95rem;max-width:46ch}
+.hx-drop-btn{min-height:48px;padding:0 26px;border:0;border-radius:12px;background:var(--primary);color:#fff;font-weight:650;font-size:1rem;cursor:pointer}
+.hx-privacy{display:inline-flex;align-items:center;gap:6px;margin-top:4px;color:var(--muted);font-size:.82rem}
+.hx-privacy svg{color:#0E8A6B}
+.hx-drop-error{color:#B4235A;font-size:.88rem}
+.hx-file{display:flex;align-items:center;gap:12px;width:100%;text-align:left;padding:10px 12px;border:1px solid var(--border);border-radius:14px;background:var(--background,#F6F5FC)}
+.hx-file-name{display:flex;flex-direction:column;min-width:0;flex:1}.hx-file-name b{overflow:hidden;text-overflow:ellipsis;white-space:nowrap}.hx-file-name span{color:var(--muted);font-size:.82rem}
+.hx-file-x{display:grid;place-items:center;width:44px;height:44px;border:0;border-radius:12px;background:transparent;color:var(--muted);cursor:pointer}
+.hx-actions{display:grid;grid-template-columns:repeat(auto-fill,minmax(150px,1fr));gap:8px;width:100%}
+.hx-actions a{display:flex;align-items:center;gap:8px;min-height:48px;padding:0 14px;border:1px solid var(--border);border-radius:12px;background:var(--card);color:var(--foreground);font-weight:600;font-size:.92rem;text-decoration:none;text-align:left}
+.hx-actions a svg{color:var(--primary);flex:none}.hx-actions a:hover{border-color:var(--primary)}
+@media(max-width:560px){.hx-drop{margin-inline:0;padding:22px 16px 16px;border-radius:18px}.hx-actions{grid-template-columns:1fr 1fr}}

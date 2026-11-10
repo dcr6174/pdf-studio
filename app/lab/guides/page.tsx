@@ -1,5 +1,6 @@
 import type { Metadata } from "next";
 import Link from "@/components/browser-link";
+import {SiteHeader,SiteFooter} from "@/components/site-header";
 import { ArrowLeft, ArrowUpRight } from "lucide-react";
 import { imageGuides } from "@/lib/image-guides";
 import { imageTools } from "@/lib/image-tools";
@@ -61,7 +62,7 @@ export default function ImageGuideIndex() {
     },
   };
   return (
-    <main className="image-guide-page ig-index">
+    <><SiteHeader/><main className="image-guide-page ig-index">
       <nav className="ig-topnav" aria-label="Breadcrumb">
         <Link href="/lab">
           <ArrowLeft size={15} />
@@ -93,17 +94,12 @@ export default function ImageGuideIndex() {
         </div>
       </header>
       <ImageGuideDirectory guides={cards} />
-      <footer className="ig-footer">
-        <Link href="/lab">Open Studio Lab</Link>
-        <Link href="/blog">PDF and image articles</Link>
-        <Link href="/privacy">Privacy</Link>
-      </footer>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
           __html: JSON.stringify(schema).replace(/</g, "\\u003c"),
         }}
       />
-    </main>
+    </main><SiteFooter/></>
   );
 }

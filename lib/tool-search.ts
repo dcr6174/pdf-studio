@@ -76,6 +76,41 @@ export const toolKeywords:Record<string,string>={
  repair:'repair, fix, broken, corrupted, damaged, cannot open, rebuild, resave, recover',
 };
 
+Object.assign(toolKeywords,{
+ 'add-blank-pages':'insert blank page, add empty page, blank page between, spacer page, notes page',
+ 'split-by-page-count':'split every n pages, split into parts of, chunks, equal parts, divide pdf into smaller files',
+ 'odd-even-pages':'odd pages, even pages, front and back, duplex scan, odd and even, split odd even',
+ 'add-page-border':'border around pages, frame, outline page, page frame, box around page',
+ 'add-pdf-margins':'add margin, extra white space, binding margin, bigger margins, padding around page',
+ 'extract-pdf-attachments':'download attached files, embedded files out, save attachments, files inside pdf',
+ 'insert-pdf-pages':'insert pages from another pdf, add pages into pdf, put pdf inside pdf, combine at position, merge at page',
+ 'overlay-pdf':'overlay one pdf on another, letterhead, template over pages, put pdf on top, background pdf',
+ 'add-pdf-background':'letterhead, background image, background colour, paper colour, page background, stationery',
+ 'stamp-pdf':'stamp, draft stamp, approved stamp, confidential stamp, paid stamp, received stamp, mark pages',
+ 'add-logo-to-pdf':'add logo, company logo, brand pdf, put logo on pages, image on every page, letterhead logo',
+ 'highlight-text-in-pdf':'highlight words, highlight text, mark words, find and highlight, yellow highlight, search highlight',
+ 'flatten-form-fields':'flatten form, make form read only, bake form fields, lock fillable fields, flatten fillable',
+ 'lock-form-fields':'lock fields, read only form, stop editing form, protect form fields',
+ 'export-pdf-form-data':'export form data, form to csv, form to json, extract form answers, fillable form values',
+ 'extract-pdf-links':'get links, list urls, extract urls, all hyperlinks, link list, find links in pdf',
+ 'extract-pdf-bookmarks':'export bookmarks, table of contents text, outline to text, toc to json, list chapters',
+ 'pdf-word-counter':'word count, count words, how many words, character count, reading time, page count words',
+ 'pdf-document-info':'pdf info, document properties, pdf details, file info, who made this pdf, creator producer, pdf version',
+ 'pdf-to-markdown':'pdf to markdown, pdf to md, markdown, headings to markdown, convert pdf to md',
+ 'pdf-to-json':'pdf to json, json export, structured text, text as json, data export',
+ 'remove-blank-pages':'delete empty pages, remove blank pages, drop blank pages, clean scanned blanks, remove empty sheets',
+ 'crop-pdf-to-content':'crop whitespace, trim margins, remove white borders, auto crop, fit page to content',
+ 'add-pdf-attachment':'attach file to pdf, embed file, add attachment, put file inside pdf, include csv in pdf',
+ 'extract-pdf-images':'extract images, save pictures from pdf, download images in pdf, get photos out of pdf, pdf pictures',
+ 'pdf-booklet':'booklet, print as booklet, saddle stitch, fold booklet, imposition, duplex booklet, brochure print',
+ 'extract-pages-by-keyword':'pages containing word, pages that mention, keep pages with keyword, find pages with text, extract pages by search',
+ 'delete-pages-by-keyword':'delete pages containing word, remove pages with keyword, drop pages that mention, remove pages by text',
+ 'extract-emails-phones':'extract email addresses, get emails from pdf, phone numbers, contact details, email list, collect contacts, find emails',
+ 'pdf-page-sizes':'page size, paper size, check page size, a4 or letter, mixed page sizes, page dimensions, orientation report, how big is my pdf page',
+ 'pdf-text-by-page':'text per page, one text file per page, page by page text, export text each page, split text by page, text to zip',
+ 'set-pdf-open-view':'open on page, initial view, default zoom, open full screen, page layout on open, two page view on open, fit page on open, start page',
+});
+
 const STOP=new Set(['pdf','pdfs','a','an','the','to','my','me','i','how','do','can','for','of','in','on','and','or','from','into','file','files','online','free','document','documents','please','want','need','make','get','under','below','than','less','more','with','without','that','this','it','is','are','be','at','by','as']);
 export const commonToolIds=['merge','compress','edit','split','sign','images'];
 export function browseTools(list:Tool[]=tools){return [...commonToolIds.flatMap(id=>list.filter(t=>t.id===id)),...groups.flatMap(group=>list.filter(t=>t.group===group&&!commonToolIds.includes(t.id)))];}
