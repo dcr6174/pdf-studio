@@ -28,4 +28,8 @@ export const NEW_TOOL_IDS:string[]=[
  "pdf-booklet",
  "extract-pages-by-keyword",
  "delete-pages-by-keyword",
+ "extract-emails-phones",
+ "pdf-page-sizes",
+ "pdf-text-by-page",
+ "set-pdf-open-view",
 ];

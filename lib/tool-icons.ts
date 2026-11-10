@@ -37,3 +37,8 @@ toolIcons["extract-pdf-images"]=L_Images;
 toolIcons["pdf-booklet"]=L_BookOpen;
 toolIcons["extract-pages-by-keyword"]=L_FileSearch;
 toolIcons["delete-pages-by-keyword"]=L_FileX;
+import {AtSign as L_AtSign,FileStack as L_FileStack,MonitorPlay as L_MonitorPlay,Ruler as L_Ruler} from 'lucide-react';
+toolIcons["extract-emails-phones"]=L_AtSign;
+toolIcons["pdf-page-sizes"]=L_Ruler;
+toolIcons["pdf-text-by-page"]=L_FileStack;
+toolIcons["set-pdf-open-view"]=L_MonitorPlay;

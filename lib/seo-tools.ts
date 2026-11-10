@@ -394,6 +394,38 @@ const curatedTools = [
     "intro": "Every page with the text is removed and the rest stay in order.",
     "detail": "Use it to drop pages marked Draft or Confidential. The report lists the deleted pages."
 }
+  ,{
+    "slug": "extract-emails-phones",
+    "id": "extract-emails-phones",
+    "title": "Extract emails and phone numbers from a PDF",
+    "heading": "Get every email and phone number from your PDF",
+    "intro": "List the email addresses and phone numbers in a PDF as a plain list or a CSV with page numbers.",
+    "detail": "The tool reads the selectable text on every page, finds email addresses and phone-like numbers, removes duplicates and tells you the page of the first mention. Scanned pages need OCR first."
+}
+  ,{
+    "slug": "pdf-page-sizes",
+    "id": "pdf-page-sizes",
+    "title": "Check the page sizes in a PDF",
+    "heading": "Report the size of every PDF page",
+    "intro": "Get a per-page list of width, height, paper size name, orientation and rotation.",
+    "detail": "The tool reads the visible page box of each page, applies rotation, and names common sizes such as A4, Letter or Legal. A summary groups pages that share a size so mixed sizes stand out."
+}
+  ,{
+    "slug": "pdf-text-by-page",
+    "id": "pdf-text-by-page",
+    "title": "Export PDF text page by page",
+    "heading": "Save the text of every PDF page separately",
+    "intro": "Export the selectable text of a PDF as one text file per page in a ZIP, or as one file with page markers.",
+    "detail": "The tool reads each page in reading order and writes it to its own file, so you can search, diff or feed single pages elsewhere. Pages with no selectable text are counted in the report."
+}
+  ,{
+    "slug": "set-pdf-open-view",
+    "id": "set-pdf-open-view",
+    "title": "Set how a PDF opens: page, zoom and layout",
+    "heading": "Control how your PDF opens",
+    "intro": "Pick the page it opens on, the zoom, the page layout, the side panel and full screen.",
+    "detail": "The settings are stored in the PDF itself as its open action, page layout, page mode and viewer preferences. Most readers follow them. Some browsers and phone viewers ignore parts of them."
+}
 ] as const;
 
 const curatedById = new Map<string, (typeof curatedTools)[number]>(curatedTools.map(tool => [tool.id, tool]));
