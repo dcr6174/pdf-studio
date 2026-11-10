@@ -62,7 +62,7 @@ export function HomeExplorer({onNavigate}:{onNavigate:(id:string)=>void}){
  return <div className="hx-home">
   <section className="hx-hero">
    <h1>Everything you need to work with PDFs.</h1>
-   <p>Edit, convert, organize and protect your documents with simple, powerful tools that run on your device. No sign-up, no watermark.</p>
+   <p>100+ free PDF tools to edit, convert, organize and protect your documents, all running on your device. No sign-up, no watermark.</p>
    <div className="hx-search">
     <Search size={21} aria-hidden="true"/>
     <label className="sr-only" htmlFor="mobile-home-search">Search PDF tools</label>
