@@ -1,0 +1,18 @@
+/* Content pages (privacy, terms, help, FAQ, about, check it yourself, prove it, contact): one card surface in the studio design system. */
+main.seo-page:has(> h1):not(.tool-instructions){max-width:820px;margin:28px auto 48px;padding:44px clamp(22px,5vw,56px) 48px;background:var(--card);border:1px solid var(--border);border-radius:24px;box-shadow:0 1px 2px rgba(20,16,60,.04),0 12px 32px -18px rgba(81,69,205,.18);line-height:1.7;color:var(--foreground)}
+main.seo-page:has(> h1):not(.tool-instructions)>h1{font-family:var(--font-display,Outfit,Inter,system-ui,sans-serif);font-size:clamp(2rem,5vw,2.8rem);font-weight:750;letter-spacing:-.03em;line-height:1.1;margin:0 0 14px}
+main.seo-page:has(> h1):not(.tool-instructions)>h1+p{display:inline-flex;margin:0 0 20px;padding:4px 12px;border-radius:999px;background:var(--soft,#EEECFB);color:var(--primary);font-size:.82rem;font-weight:600}
+main.seo-page:has(> h1):not(.tool-instructions)>h2{font-family:var(--font-display,Outfit,Inter,system-ui,sans-serif);font-size:1.3rem;font-weight:700;letter-spacing:-.01em;margin:36px 0 8px;padding-top:24px;border-top:1px solid var(--border)}
+main.seo-page:has(> h1):not(.tool-instructions)>h2:first-of-type{margin-top:28px}
+main.seo-page:has(> h1):not(.tool-instructions)>p,main.seo-page:has(> h1):not(.tool-instructions)>ul,main.seo-page:has(> h1):not(.tool-instructions)>ol{color:var(--foreground);margin:0 0 14px;max-width:68ch}
+main.seo-page:has(> h1):not(.tool-instructions) a{color:var(--primary);text-underline-offset:3px}
+main.seo-page:has(> h1):not(.tool-instructions) li{margin:4px 0}
+@media(max-width:720px){main.seo-page:has(> h1):not(.tool-instructions){margin:12px 12px 24px;padding:26px 20px 30px;border-radius:20px}}
+.nf-page{max-width:1200px;margin:0 auto;padding:28px 16px 48px}
+.nf-hero{text-align:center;background:var(--card);border:1px solid var(--border);border-radius:24px;padding:44px 20px;margin-bottom:24px;box-shadow:0 12px 32px -18px rgba(81,69,205,.18)}
+.nf-code{display:inline-block;padding:4px 14px;border-radius:999px;background:var(--soft,#EEECFB);color:var(--primary);font-weight:700;font-size:.85rem}
+.nf-hero h1{font-family:var(--font-display);font-size:clamp(1.8rem,5vw,2.6rem);letter-spacing:-.03em;margin:14px 0 8px}
+.nf-hero p{color:var(--muted);margin:0 0 20px}
+.nf-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
+.nf-actions a{display:inline-flex;align-items:center;min-height:46px;padding:0 20px;border-radius:12px;font-weight:650;text-decoration:none}
+.nf-primary{background:var(--primary);color:#fff}.nf-secondary{background:var(--soft,#EEECFB);color:var(--primary)}

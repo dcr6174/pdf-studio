@@ -18,6 +18,7 @@ import "./responsive-layout.css";
 import "./premium-interactions.css";
 import "./device-layout.css";
 import "./studio-tokens.css";
+import "./content-pages.css";
 
 export const viewport: Viewport = {width:"device-width",initialScale:1,viewportFit:"cover",interactiveWidget:"resizes-content"};
 
