@@ -1,0 +1,562 @@
+[
+  {
+    "tool": "pdf-to-handwriting",
+    "name": "PDF to handwriting",
+    "input": "pdf-to-handwriting.pdf",
+    "additionalInput": null,
+    "expected": "Selectable text should import; images/layout are not preserved. Scan input must explain OCR prerequisite. Sidebar typing must retain the previous preview while updating.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "workflow",
+    "name": "PDF Workflow Automation",
+    "input": "workflow.pdf",
+    "additionalInput": null,
+    "expected": "Run Rotate + Watermark. All intended pages must rotate and contain the configured watermark. Test mobile Run action.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "split-chapters",
+    "name": "Split by chapters",
+    "input": "split-chapters.pdf",
+    "additionalInput": null,
+    "expected": "Expect two chapters (pages 1-3 and 4-6). Insert a blank page after page 1 and repeat; remove it and repeat. Alpha/Delta destinations must still map to the current order.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "blank-check",
+    "name": "Find possible blank pages",
+    "input": "blank-check.pdf",
+    "additionalInput": null,
+    "expected": "Expect candidate page 2 only. Page 3 has faint selectable text; page 4 has faint scanned text. Review candidates, exclude any page, then optionally delete selected pages.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "reader",
+    "name": "PDF Reader",
+    "input": "reader.pdf",
+    "additionalInput": null,
+    "expected": "Check page 1, 30, 100 and 120; continuous scrolling, search, zoom, thumbnails and reading focus. Viewing must not change original bytes.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "webp",
+    "name": "PDF to WebP",
+    "input": "webp.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF to WebP. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Rendered page images, not editable text. Requires browser WebP encoding support.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "remove-bookmarks",
+    "name": "Remove bookmarks",
+    "input": "remove-bookmarks.pdf",
+    "additionalInput": null,
+    "expected": "Alpha/Delta outline must be absent; pages and visible text remain.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "remove-attachments",
+    "name": "Remove embedded files",
+    "input": "remove-attachments.pdf",
+    "additionalInput": null,
+    "expected": "Embedded source.txt and FileAttachment references must be removed. Check page text remains.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "remove-links",
+    "name": "Remove PDF links",
+    "input": "remove-links.pdf",
+    "additionalInput": null,
+    "expected": "Explicit URI and internal Link annotations must disappear. Printed abc.com text must remain; some external readers auto-detect URLs.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "bookmarks",
+    "name": "Add bookmarks",
+    "input": "bookmarks.pdf",
+    "additionalInput": null,
+    "expected": "Complete Add bookmarks. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. One bookmark per line: page number followed by its title. Appends by default; choose Replace to remove the existing outline.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "halve",
+    "name": "Split pages in half",
+    "input": "halve.pdf",
+    "additionalInput": null,
+    "expected": "Complete Split pages in half. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Uses CropBox boundaries; content outside each visible half is hidden, not securely removed. Rotations are retained.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "viewer",
+    "name": "Reading layout preference",
+    "input": "viewer.pdf",
+    "additionalInput": null,
+    "expected": "Switch Single page/Two columns and inspect the main preview. Export and inspect PageLayout in a reader that honors it.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "remove-annotations",
+    "name": "Remove annotations",
+    "input": "remove-annotations.pdf",
+    "additionalInput": null,
+    "expected": "Text notes, highlights, stamps and links must disappear; the Name form widget and its value must remain.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "create-form",
+    "name": "Create fillable form",
+    "input": "create-form.pdf",
+    "additionalInput": null,
+    "expected": "Complete Create fillable form. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Creates English text fields on new A4 pages. This does not add arbitrary field types to an existing PDF.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "merge",
+    "name": "Merge PDFs",
+    "input": "merge.pdf",
+    "additionalInput": "stack-b.pdf",
+    "expected": "Use merge.pdf and stack-b.pdf. Check chosen file order, page count, additive file picker and desktop sorting.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "organize",
+    "name": "Organize pages",
+    "input": "organize.pdf",
+    "additionalInput": null,
+    "expected": "Complete Organize pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "split",
+    "name": "Split PDF",
+    "input": "split.pdf",
+    "additionalInput": null,
+    "expected": "Complete Split PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "split-all",
+    "name": "Split every page",
+    "input": "split-all.pdf",
+    "additionalInput": null,
+    "expected": "Complete Split every page. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "compress",
+    "name": "Compress PDF",
+    "input": "compress.pdf",
+    "additionalInput": null,
+    "expected": "Compare source/output size and verify retained text, links and form widgets in image/repack modes. Raster mode must disclose losses. An unsuccessful target must remain visible.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "rotate",
+    "name": "Rotate PDF",
+    "input": "rotate.pdf",
+    "additionalInput": null,
+    "expected": "Rotate page 2 only, then test 90, 180 and 270 degrees. Page order and other pages must remain unchanged.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "reverse",
+    "name": "Reverse pages",
+    "input": "reverse.pdf",
+    "additionalInput": null,
+    "expected": "Complete Reverse pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "duplicate",
+    "name": "Duplicate pages",
+    "input": "duplicate.pdf",
+    "additionalInput": null,
+    "expected": "Complete Duplicate pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "interleave",
+    "name": "Alternate & Mix PDF",
+    "input": "interleave.pdf",
+    "additionalInput": "stack-b.pdf",
+    "expected": "Use interleave.pdf (A1-A6) and stack-b.pdf (B1-B3). Expect A1 B1 A2 B2 A3 B3 A4 A5 A6.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "nup",
+    "name": "Pages per sheet",
+    "input": "nup.pdf",
+    "additionalInput": null,
+    "expected": "Test 2/4/6/9 pages per sheet. Check incomplete final sheet, output count, margins and scrollability.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "crop",
+    "name": "Crop margins",
+    "input": "crop.pdf",
+    "additionalInput": null,
+    "expected": "Complete Crop margins. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Cropping hides content outside the page boundary; it does not permanently remove it.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "resize",
+    "name": "Resize pages",
+    "input": "resize.pdf",
+    "additionalInput": null,
+    "expected": "Complete Resize pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "flip",
+    "name": "Mirror pages",
+    "input": "flip.pdf",
+    "additionalInput": null,
+    "expected": "Complete Mirror pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "native-text",
+    "name": "Edit existing text",
+    "input": "native-text.pdf",
+    "additionalInput": null,
+    "expected": "Complete Edit existing text. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Edit original text objects, lines and compatible paragraphs. Keep the original font or use an embedded fallback / uploaded TTF or OTF. Nested text is edited when it can be detached safely. OCR reconstruction is a separate, explicit path. Editing invalidates digital signatures.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "edit",
+    "name": "Add text & images",
+    "input": "edit.pdf",
+    "additionalInput": null,
+    "expected": "Complete Add text & images. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Adds new elements and visual whiteout. Use Edit existing text for actual text replacement; use Redact for content removal.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "sign",
+    "name": "Sign PDF",
+    "input": "sign.pdf",
+    "additionalInput": null,
+    "expected": "Complete Sign PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. A visual signature, without a certificate or identity verification.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "redact",
+    "name": "Redact PDF",
+    "input": "redact.pdf",
+    "additionalInput": null,
+    "expected": "Complete Redact PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Export rebuilds all pages as images and removes original text, links, metadata and forms.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "watermark",
+    "name": "Add watermark",
+    "input": "watermark.pdf",
+    "additionalInput": null,
+    "expected": "Complete Add watermark. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "numbers",
+    "name": "Page numbers",
+    "input": "numbers.pdf",
+    "additionalInput": null,
+    "expected": "Complete Page numbers. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "bates",
+    "name": "Bates numbering",
+    "input": "bates.pdf",
+    "additionalInput": null,
+    "expected": "Complete Bates numbering. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "headers",
+    "name": "Headers & footers",
+    "input": "headers.pdf",
+    "additionalInput": null,
+    "expected": "Complete Headers & footers. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "flatten",
+    "name": "Flatten PDF",
+    "input": "flatten.pdf",
+    "additionalInput": null,
+    "expected": "Complete Flatten PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Rebuilds pages as images. Text is no longer selectable; links and forms are removed.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "form",
+    "name": "Fill PDF forms",
+    "input": "form.pdf",
+    "additionalInput": null,
+    "expected": "Fill Name with Test User and confirm logical field value, widget appearance and editability after reopening.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "metadata",
+    "name": "Edit metadata",
+    "input": "metadata.pdf",
+    "additionalInput": null,
+    "expected": "Complete Edit metadata. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "scan",
+    "name": "Scan to PDF",
+    "input": "scan.jpg",
+    "additionalInput": null,
+    "expected": "Complete Scan to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Take a photo can open the camera on supported phones; other browsers show a file picker. Each photo becomes a page. Review manual crop, straightening or four-corner perspective correction before applying. Text is not recognized; run OCR afterwards.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "images",
+    "name": "Images to PDF",
+    "input": "scan.png",
+    "additionalInput": null,
+    "expected": "Complete Images to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. PNG, JPG and WebP images. Browser memory also depends on decoded images, not just file size.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "jpg",
+    "name": "PDF to JPG",
+    "input": "jpg.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF to JPG. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "png",
+    "name": "PDF to PNG",
+    "input": "png.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF to PNG. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "text",
+    "name": "Extract text",
+    "input": "text.pdf",
+    "additionalInput": null,
+    "expected": "Complete Extract text. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "word",
+    "name": "PDF to Word",
+    "input": "word.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF to Word. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Editable text keeps page breaks and basic styles, with automatic scan recognition. Pictures and complex table/column structure are not rebuilt. Page appearance keeps pages as images; their text is not editable.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "html",
+    "name": "PDF to HTML",
+    "input": "html.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF to HTML. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "epub",
+    "name": "PDF to EPUB",
+    "input": "epub.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF to EPUB. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "pptx",
+    "name": "PDF to PowerPoint",
+    "input": "pptx.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF to PowerPoint. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Slides are page images, not editable original text or graphics.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "xlsx",
+    "name": "PDF to spreadsheet",
+    "input": "xlsx.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF to spreadsheet. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Heuristic extraction. Review column alignment; scans need OCR first.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "csv",
+    "name": "PDF to CSV",
+    "input": "csv.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF to CSV. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "create",
+    "name": "Text to PDF",
+    "input": "source.txt",
+    "additionalInput": null,
+    "expected": "Complete Text to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "markdown",
+    "name": "Markdown to PDF",
+    "input": "source.md",
+    "additionalInput": null,
+    "expected": "Complete Markdown to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Basic Markdown formatting; complex tables and embedded images are not supported.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "docx",
+    "name": "Word to PDF",
+    "input": "source.docx",
+    "additionalInput": null,
+    "expected": "Complete Word to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Reflows text; original Word layout, images and styling are not preserved. Legacy .doc is not supported.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "sheet",
+    "name": "Spreadsheet to PDF",
+    "input": "source.xlsx",
+    "additionalInput": null,
+    "expected": "Complete Spreadsheet to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Choose which sheets to include. Text rows are exported; charts, images and original styling are not preserved.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "ebook",
+    "name": "EPUB to PDF",
+    "input": "source.epub",
+    "additionalInput": null,
+    "expected": "Complete EPUB to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Reflows text; ebook styling and illustrations are not preserved.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "grayscale",
+    "name": "Grayscale PDF",
+    "input": "grayscale.pdf",
+    "additionalInput": null,
+    "expected": "Complete Grayscale PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Rebuilds pages as images. Text search, links and forms are lost.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "invert",
+    "name": "Invert colours",
+    "input": "invert.pdf",
+    "additionalInput": null,
+    "expected": "Complete Invert colours. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Rebuilds pages as images. Text search, links and forms are lost.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "ocr",
+    "name": "Searchable PDF (OCR)",
+    "input": "ocr.pdf",
+    "additionalInput": null,
+    "expected": "Scan has no selectable text. Expect searchable Alpha Bravo Charlie Delta after recognition/review/export; inspect visible scan fidelity.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "audio",
+    "name": "Read aloud",
+    "input": "audio.pdf",
+    "additionalInput": null,
+    "expected": "Complete Read aloud. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Uses browser speech synthesis. Voice availability and offline support depend on your device. No audio-file export.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "compare",
+    "name": "Compare PDFs",
+    "input": "compare.pdf",
+    "additionalInput": "compare-revised.pdf",
+    "expected": "Use this fixture and compare-revised.pdf. The revised page has different visible text; check both scrollable previews.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "encrypt",
+    "name": "Protect PDF",
+    "input": "encrypt.pdf",
+    "additionalInput": null,
+    "expected": "Complete Protect PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "decrypt",
+    "name": "Remove password",
+    "input": "encrypted-aes256-r6.pdf",
+    "additionalInput": null,
+    "expected": "Use encrypted-aes256-r6.pdf with password Test1234!. Wrong password must fail; correct output must reopen without a password.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "privacy",
+    "name": "Privacy scanner",
+    "input": "privacy.pdf",
+    "additionalInput": null,
+    "expected": "Complete Privacy scanner. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Pattern matching can miss sensitive data or flag harmless text. Review the document before sharing.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "clean",
+    "name": "Remove metadata",
+    "input": "clean.pdf",
+    "additionalInput": null,
+    "expected": "Complete Remove metadata. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Clears standard title, author, subject, keywords, producer and dates. It is not a complete sanitization of every hidden object.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "hash",
+    "name": "Calculate SHA-256",
+    "input": "hash.pdf",
+    "additionalInput": null,
+    "expected": "Complete Calculate SHA-256. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "zip",
+    "name": "Bundle PDFs",
+    "input": "zip.pdf",
+    "additionalInput": null,
+    "expected": "Complete Bundle PDFs. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. ",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "repair",
+    "name": "Repair readable PDF",
+    "input": "repair.pdf",
+    "additionalInput": null,
+    "expected": "Complete Repair readable PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Can resave PDFs that parse successfully. Severely damaged PDFs may not be recoverable.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "sketch-pdf",
+    "name": "Sketch over PDF",
+    "input": "sketch-pdf.pdf",
+    "additionalInput": null,
+    "expected": "Complete Sketch over PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Adds visual marks while retaining original page contents. Not redaction.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "cut-collect",
+    "name": "PDF Cut & Collect",
+    "input": "cut-collect.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF Cut & Collect. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Clippings export as images in a new PDF; text is not editable.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "fold-lab",
+    "name": "PDF Fold Lab",
+    "input": "fold-lab.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF Fold Lab. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Creates an A4 print layout from rendered pages. Test duplex orientation before printing the full pack.",
+    "status": "not yet manually verified"
+  },
+  {
+    "tool": "attachment-map",
+    "name": "PDF Attachment Map",
+    "input": "attachment-map.pdf",
+    "additionalInput": null,
+    "expected": "Complete PDF Attachment Map. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Creates a combined reading copy with links to supporting documents and main-document sections. Does not embed separate file attachments.",
+    "status": "not yet manually verified"
+  }
+]

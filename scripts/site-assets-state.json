@@ -848,7 +848,7 @@
     "lastmod": "2026-10-30"
   },
   "/": {
-    "hash": "28f7daf1dbfbd66eb926edd498d3e864fd654f64e0631a39f937d91ec481a43d",
+    "hash": "36b23b41d0634a6f5e95842dd9420ffa01d5159edbd6f0c6cb4e306f0595896a",
     "lastmod": "2026-11-10"
   },
   "/privacy": {
@@ -1600,7 +1600,7 @@
     "lastmod": "2026-10-30"
   },
   "/lab": {
-    "hash": "303c50f836acfb1b2f39406df87f93dd828698234a56c8741638b1164d2aec9a",
+    "hash": "45e1bac993c4d225e61ee4a81bd38a37e9ba911bf6c193c8ae788023454b0597",
     "lastmod": "2026-11-10"
   },
   "/lab/image-studio": {
@@ -1608,7 +1608,7 @@
     "lastmod": "2026-11-10"
   },
   "/lab/creative-studio": {
-    "hash": "819974db175ec44f5f71b215ca47342305b938ea1ee033506eedca1a23a592d2",
+    "hash": "30f2779a084662072dfbfc3e7cf0946f49243d8cfdc6b927609810aa44a6aed0",
     "lastmod": "2026-11-10"
   }
 }

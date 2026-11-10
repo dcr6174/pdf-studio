@@ -50,7 +50,7 @@ pages.push(...seoPages.map(page=>({path:'/guides/'+page.slug,content:JSON.string
 pages.push(...['text-to-handwriting','notebook-maker','handwriting-practice'].map(slug=>({path:'/guides/'+slug,content:toolGuideSource})));
 pages.push({path:'/lab/guides',content:(await readFile(new URL('app/lab/guides/page.tsx',root),'utf8'))+(await readFile(new URL('components/image-guide-directory.tsx',root),'utf8'))+JSON.stringify(imageGuides)});
 pages.push(...imageGuides.map(g=>({path:'/lab/guides/'+g.slug,content:JSON.stringify(g)+JSON.stringify(imageTools.filter(t=>g.tools.includes(t.slug)))+''})));
-pages.push({path:'/lab',content:await Promise.all(['app/lab/page.tsx','components/lab-showcase.tsx','components/lab-directory.tsx','app/lab/showcase.css'].map(file=>readFile(new URL(file,root),'utf8'))).then(parts=>parts.join(''))});
+pages.push({path:'/lab',content:await Promise.all(['app/lab/page.tsx','components/lab-directory.tsx','app/lab/lab.css'].map(file=>readFile(new URL(file,root),'utf8'))).then(parts=>parts.join(''))});
 pages.push({path:'/lab/image-studio',content:await Promise.all(['app/lab/image-studio/page.tsx','app/lab/image-studio/image-studio.css','lib/image-tools.ts'].map(file=>readFile(new URL(file,root),'utf8'))).then(parts=>parts.join(''))});
 pages.push({path:'/lab/creative-studio',content:(await readFile(new URL('app/lab/creative-studio/page.tsx',root),'utf8'))+(await readFile(new URL('components/creative-directory.tsx',root),'utf8'))+(await readFile(new URL('lib/lab-studios.ts',root),'utf8'))});
 const entries=pages.map(page=>{const hash=createHash('sha256').update(page.content).digest('hex');state[page.path]={hash,lastmod:old[page.path]?.hash===hash?old[page.path].lastmod:today};return {path:page.path,lastmod:state[page.path].lastmod};});
