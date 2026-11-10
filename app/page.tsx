@@ -203,7 +203,7 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
     const opt = (key: keyof Options, value: string) => setOptions(o => ({ ...o, [key]: value }));
     const navigate=useCallback(function navigate(id:string,record=true,committed=false){
       if(busy||loading||id===view)return;
-      if(NEW_TOOL_IDS.includes(id)){const slug=seoTools.find(t=>t.id===id)?.slug;if(slug){window.location.assign('/tools/'+slug);return;}}
+      if(NEW_TOOL_IDS.includes(id)){const slug=seoTools.find(t=>t.id===id)?.slug;if(slug){window.location.assign(new URL('/tools/'+slug,window.location.origin).href);return;}}
       if(output?.blob.type==='application/pdf'&&id==='organize'){
         const completed=output;setLoading(true);
         void (async()=>{try{const f=await loadFile(new File([completed.blob],completed.name));validatePages(f.pages);const nextPages=Array.from({length:f.pages},(_,index)=>({id:crypto.randomUUID(),fileId:f.id,index,rotation:0}));workspace.replace({files:[f],pages:nextPages,marks:[]},'Merged result opened in Organize');setActivePage(nextPages[0]?.id??'');setOptions({...defaults});setView(id);syncLocation(id);setError('');setUploadIssue(undefined);setRawOutput(undefined);setBatchMode(false);setSelected('');setMode('move');addRecent(id);toast.success('Result opened in Organize. Undo restores the original inputs.');}catch(e){setError(e instanceof Error?e.message:'Could not reopen this output.');}finally{setLoading(false);}})();return;
