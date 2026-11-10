@@ -77,3 +77,4 @@
  .hx-search{padding:4px 16px}
 }
 @media(prefers-reduced-motion:reduce){.hx-hero::before,.hx-hero::after,.hx-pill i{animation:none}.hx-card,.hx-actions a,.merge-document-card,.compression-level{transition:none}}
+@media(max-width:640px){.tools-directory-page .tools-directory section .tool-grid{grid-template-columns:1fr}}
