@@ -848,316 +848,316 @@
     "lastmod": "2026-10-30"
   },
   "/": {
-    "hash": "8819725633dc38714d0d293c013c215d1240f047c94c6fe14360a3e92f6be3b6",
-    "lastmod": "2026-10-30"
+    "hash": "28f7daf1dbfbd66eb926edd498d3e864fd654f64e0631a39f937d91ec481a43d",
+    "lastmod": "2026-11-10"
   },
   "/privacy": {
     "hash": "23b32e3fbe673a26969324cade231d47a937799cc91e6339864eb96c779103fa",
     "lastmod": "2026-10-09"
   },
   "/tools/pdf-to-handwriting": {
-    "hash": "996985f8f9ef5d57d1453f49c9e8709a12c688496f44471c9d7dfd245cd88d40",
-    "lastmod": "2026-10-12"
+    "hash": "c67800958c93f70eba8630cd0d29afc98519baae2d81e4c95e1610897a7bb030",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-workflows": {
-    "hash": "52f9255d9ea4b53f41129c993f31740fa43c216b8eca680ea2a467762ced3860",
-    "lastmod": "2026-10-12"
+    "hash": "401589aec0e82c58946b1cbb33ed6e2a0909db369bef4936a6b725a7e14cc3ea",
+    "lastmod": "2026-11-10"
   },
   "/tools/split-by-chapters": {
-    "hash": "53d248ceecca9f7d23cac01bf6d4e0821aa440fa8f09f5ec012516e73b7afb04",
-    "lastmod": "2026-10-12"
+    "hash": "202def625cce551b8a4b8a3655bfa8a01d8c69593c0fa2459cc3d45d19a7a2e0",
+    "lastmod": "2026-11-10"
   },
   "/tools/find-possible-blank-pages": {
-    "hash": "0f38fa15cc642fb775a530c714c343f8f235f6d31d2937074ec6e920e24ec61c",
-    "lastmod": "2026-10-12"
+    "hash": "484be5ffcfe1674e52a343697ae7635802befb372be1f07b355708d1981694da",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-reader": {
-    "hash": "4aed00f01e4d4eade524ec033a2e9e4cd6f003df7b3a8f3649a8fea134555fd5",
-    "lastmod": "2026-10-12"
+    "hash": "d6ea30afec8858f5030a345f347c6e9f2a773259ddee24fe56d4bc109a26681e",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-to-webp": {
-    "hash": "ef1a6bb751860afeca320d6a71571a6e465eb3592f208070f5d1db9ed85c3fe7",
-    "lastmod": "2026-10-12"
+    "hash": "f4d1fc10eef7dedbfc43e72000e7daadf853830cb4941c669ba5957bfcef2a2f",
+    "lastmod": "2026-11-10"
   },
   "/tools/remove-bookmarks": {
-    "hash": "d6f8233e9d4b13429f66db8e3302d2d2c8caab5cc8c828097736e16d5699bb77",
-    "lastmod": "2026-10-12"
+    "hash": "09f833a490dcc3d3245f1338ddacf6746aac4d3d2409b51353a389e7ee878615",
+    "lastmod": "2026-11-10"
   },
   "/tools/remove-embedded-files": {
-    "hash": "5def588ee30fcc89142986c589a59c114e10f901372f635e1520b34f7d371f1d",
-    "lastmod": "2026-10-12"
+    "hash": "9de05bbb2f2652198c96a8770c4f3e0f593d03082b1b564f8e470b3bf9dcaa58",
+    "lastmod": "2026-11-10"
   },
   "/tools/remove-pdf-links": {
-    "hash": "dc53fa333f44d37d16a59ec7c4ad6476fc4696eda367929aaee8ab543bff49af",
-    "lastmod": "2026-10-12"
+    "hash": "efd5a359ff5649729c2ccee6b3dfbfe4a058804aad75eadbc5b2bbc2d447a10f",
+    "lastmod": "2026-11-10"
   },
   "/tools/add-pdf-bookmarks": {
-    "hash": "50ca4441a5fe0a3508803cf5a01660df75554b76625750873187e342e4da14d9",
-    "lastmod": "2026-10-12"
+    "hash": "ee92201d2313554c70cc6e59d2bf6954a6d497a92509980520250770ba63f0c9",
+    "lastmod": "2026-11-10"
   },
   "/tools/split-pdf-in-half": {
-    "hash": "ebd579e03a657e757650558cea8f6407fa947c96e731abc6027b769920e5bf8c",
-    "lastmod": "2026-10-12"
+    "hash": "822bbbcc5642dd2bb5defcdf2d7a07c48169f21ec874cb1e22b029179b692a30",
+    "lastmod": "2026-11-10"
   },
   "/tools/reader-layout": {
-    "hash": "a1c84092d9f461509a3344c6590f7b2d8eeed0318c0a8d8706bafca4c8b7a991",
-    "lastmod": "2026-10-12"
+    "hash": "0e1bd5ec9d2cf909e1c5b1d3e8360f3edc5f0f34c5527e39744635cb181e8d47",
+    "lastmod": "2026-11-10"
   },
   "/tools/remove-pdf-annotations": {
-    "hash": "ccca173f87644b1e8a82796ad565dcbbb3fa401f1b17674baa0e1c593879f247",
-    "lastmod": "2026-10-12"
+    "hash": "09aee61d5e04f0f2f16d319e48051430051a829eb01f536d193ebf32548c3f1a",
+    "lastmod": "2026-11-10"
   },
   "/tools/create-fillable-pdf": {
-    "hash": "19c07b0b1f4b8394bb4261fc6c97683cecc77409c8b0a18a1de404eafa6d4bdc",
-    "lastmod": "2026-10-12"
+    "hash": "317a3f668e0e7f62cf797c805feaaa9a97866451eeb604dae028970f086462e5",
+    "lastmod": "2026-11-10"
   },
   "/tools/merge-pdf": {
-    "hash": "ad5a2974dcc238e67c5a5bd517d1725ce0742d32589ba2d9b453efaf3fa8f340",
-    "lastmod": "2026-10-12"
+    "hash": "18183333d41dfb1051ddfde2fbadb4dc4977b77ce01bebb41e8d7717b0db7944",
+    "lastmod": "2026-11-10"
   },
   "/tools/organize-pdf": {
-    "hash": "971d7aa0480e4b95a6d4ab4b3ad22f386e8bda175478042a753edc68410583c9",
-    "lastmod": "2026-10-12"
+    "hash": "ef56675b5ac5482f12b97200c365ba9902779426ab4af0af526c918f9fd88f05",
+    "lastmod": "2026-11-10"
   },
   "/tools/split-pdf": {
-    "hash": "4d9de1997ba4a4e11fe581b670c8d5e7f755be6d6dfa2ba0691f78b0affdb765",
-    "lastmod": "2026-10-30"
+    "hash": "533bfd8d8d96ba1ca6a920502d3b3ff6f27a6a9ba9cde9fd69224733acd30eba",
+    "lastmod": "2026-11-10"
   },
   "/tools/split-every-page": {
-    "hash": "9aad4ec336c6e23dab597a232bf17d5fc33c6296a81a91f604aaccab9e8a6b4d",
-    "lastmod": "2026-10-12"
+    "hash": "5aa2760022db10a1ec1b5e02ac64339013b66c873d18116b6cf0d7f99a4b5653",
+    "lastmod": "2026-11-10"
   },
   "/tools/compress-pdf": {
-    "hash": "6907bad966e7f56bca15a2cf49332e2f2e41d31322a17fa56dfa51910c082288",
-    "lastmod": "2026-10-12"
+    "hash": "351c08b36693e3cbbca33e9270660d82a5cb94bec3c0eba724f2c3aabe5bc474",
+    "lastmod": "2026-11-10"
   },
   "/tools/rotate-pdf": {
-    "hash": "bd8586839ee0153d863c324a5b06ed10ab806a9b53970b4c99f62288f201358d",
-    "lastmod": "2026-10-12"
+    "hash": "59c3240470ee48dae845925ad2adc1dfd8e4867bb52692218d4939e5b2349b86",
+    "lastmod": "2026-11-10"
   },
   "/tools/reverse-pages": {
-    "hash": "7e91c03d9d0386f7aa70bdecea561b1b65968867e2ec92c7dcbf77aca5491313",
-    "lastmod": "2026-10-12"
+    "hash": "558cb0dae51b89490b74c76e6e69837b4b5b03d9b5bc6bacc2ccb3d0206261d1",
+    "lastmod": "2026-11-10"
   },
   "/tools/duplicate-pages": {
-    "hash": "89ce405cdc446d65d688c3fdd412dc1208b496970daff5b3c9ec0d638d81cfb9",
-    "lastmod": "2026-10-12"
+    "hash": "4cf13c8a61e550b304cccb59e2e313980d67dd896e424545efde1b9126a90bba",
+    "lastmod": "2026-11-10"
   },
   "/tools/alternate-and-mix": {
-    "hash": "7c2b7d2a852f4804ccc668326f5ea9945486902d008413b07b6884bedfcf092f",
-    "lastmod": "2026-10-12"
+    "hash": "942586f39b40cfbf9ba7dc52c87cbe41b60ed6f2b16f45097f71da1c3e555454",
+    "lastmod": "2026-11-10"
   },
   "/tools/pages-per-sheet": {
-    "hash": "3657f134653b89dffa1f72bade2780e23f4c62e9854540a6bd0460323bdedf45",
-    "lastmod": "2026-10-12"
+    "hash": "ce18096bb9c9526ec1c2ff62779ebe5b19e8c55fb6cea15ca2c39e14928b51c5",
+    "lastmod": "2026-11-10"
   },
   "/tools/crop-margins": {
-    "hash": "d71a7f8800d87765337b445a5a69d25c1ee5661871f1691ff426917b6b6c2ddb",
-    "lastmod": "2026-10-12"
+    "hash": "f495d960dc19192f2bdb95e79a3f2bea73380f0fd15e4b430a0c99730dfeef4e",
+    "lastmod": "2026-11-10"
   },
   "/tools/resize-pages": {
-    "hash": "060b2afe2c7fbf5b50cc5335f145d0565e69bb048c8418956397dab5493c5710",
-    "lastmod": "2026-10-12"
+    "hash": "a8265294363ba30c854413ca9196e92a014b970934163269956b0c371a34d581",
+    "lastmod": "2026-11-10"
   },
   "/tools/mirror-pages": {
-    "hash": "d773ce0df88b209a9b888bf2c6f61edde03cf522afd83ea58b7af42a5e398182",
-    "lastmod": "2026-10-12"
+    "hash": "4834b21b1b43c8947b9177937f0afcc407dbe22f39b21c573cde4932ee71eb07",
+    "lastmod": "2026-11-10"
   },
   "/tools/edit-pdf-text": {
-    "hash": "8a9345c3ee7eadb10ed436d4bf55f16817f9cbdae6dbabf6b64232da92dca4dd",
-    "lastmod": "2026-10-12"
+    "hash": "b9e42e4ce962a6d3d863f534f0483c61d4edc6bef55a28e3c2e5c1856ec67f6f",
+    "lastmod": "2026-11-10"
   },
   "/tools/add-text-and-images": {
-    "hash": "edb5c7dfbd534b239b8eaa5ae25e51381eb73135c27a3942dc83ee0a573027bf",
-    "lastmod": "2026-10-12"
+    "hash": "7c3db90d36a1c414927bb4555dfbb69a5d5219336f36ab2ddb8be45d8001a2d8",
+    "lastmod": "2026-11-10"
   },
   "/tools/sign-pdf": {
-    "hash": "827e83c99eea44be63cbfc648ef0bd5b39c09d4e5f013327cddfbf9a5379848b",
-    "lastmod": "2026-10-12"
+    "hash": "62e74af569a13e5873608787617059d38c82efc3171d7b68992572e57d774322",
+    "lastmod": "2026-11-10"
   },
   "/tools/redact-pdf": {
-    "hash": "589b42da7873f0770347cbad9ff1c161956aa649a331a99a6fc0ed5d7c689146",
-    "lastmod": "2026-10-12"
+    "hash": "55d5d8da765b4a3480a70619b2c3a0c4efead0f5ab318815e99119a9a63031c8",
+    "lastmod": "2026-11-10"
   },
   "/tools/add-watermark": {
-    "hash": "d416dd015e1d05325d92d9deddfcbe9a7b6fd90af929f3abe9f804d61de686fb",
-    "lastmod": "2026-10-12"
+    "hash": "f3edbafdd5e95251f4a7d1160398cb33390f214e3bda4d80bce70a15662fc856",
+    "lastmod": "2026-11-10"
   },
   "/tools/add-page-numbers": {
-    "hash": "43a91b8da7983cabdcf65acbc36af263656a526b83f58d708f9f8112b3bda2b8",
-    "lastmod": "2026-10-12"
+    "hash": "c5d6908614ff182eb23b0b34d2845c9204e9204898a19beac8e3d93cf71534d3",
+    "lastmod": "2026-11-10"
   },
   "/tools/bates-numbering": {
-    "hash": "1d098aa2e7be41f8bf2cc34c8cdd1deb70022b8e7b426837e836892ee028dc62",
-    "lastmod": "2026-10-12"
+    "hash": "212c881d0bc94577f6b739389390956d5ff07c4c2b20c83d22f6fb8b7ffb1a0d",
+    "lastmod": "2026-11-10"
   },
   "/tools/headers-and-footers": {
-    "hash": "407a06abf6cd57bdc40758a1421595ee8373a9c8047f8667e0daf590ea25d2d4",
-    "lastmod": "2026-10-12"
+    "hash": "af7f6e38b778f1865372ad85ee604b9b26ef956dc3871d096e9f02c5d192cfef",
+    "lastmod": "2026-11-10"
   },
   "/tools/flatten-pdf": {
-    "hash": "b1a859b9db3d0516720a60811710e1a46a96c1c0faab1669a0c139c3e42b1690",
-    "lastmod": "2026-10-12"
+    "hash": "c665ffdadd6f7d5c6c07a87b622ebfe38bf61449891c1aa303cf9a294270f134",
+    "lastmod": "2026-11-10"
   },
   "/tools/fill-pdf-forms": {
-    "hash": "5d78fa53e069edd9a8514ac4648a129b1fd68a72cb8a48bc86bde43a196e505c",
-    "lastmod": "2026-10-12"
+    "hash": "7ac878290cee3a343aa41b4848953cdc2d00341178956ade985a28576298431d",
+    "lastmod": "2026-11-10"
   },
   "/tools/edit-metadata": {
-    "hash": "50d4f55089482db50858d43978617e8abe0f2d87a52f0d0432ca7a7a2d116b91",
-    "lastmod": "2026-10-12"
+    "hash": "a37abe261d8d3eeb5e7b3083b5ed0ac918eaa98a5017b1fdd72dd98e8576c90e",
+    "lastmod": "2026-11-10"
   },
   "/tools/scan-to-pdf": {
-    "hash": "b663fce47d33e5650d7ba21952bef2122470c6694bebee46726135bb5083813b",
-    "lastmod": "2026-10-12"
+    "hash": "e53adda9b7b5b049207871243b080471b116cc1b11797845161dd8fbb0496068",
+    "lastmod": "2026-11-10"
   },
   "/tools/images-to-pdf": {
-    "hash": "354a1fe07e91d9afc24db4bcce23bd3df3711c392d40b02335000bcbac50aa34",
-    "lastmod": "2026-10-12"
+    "hash": "93e097bfef8235323e70bc501c259b007d22aad6953863154bf7891b4cbd66b1",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-to-jpg": {
-    "hash": "509bc581aa72fd16127534b43249ef27224146924122206950a4b1109f2e5396",
-    "lastmod": "2026-10-12"
+    "hash": "a8d62c6c109382291e472073e2927bf5d160d9177e98f42d0f86ba24136ea5f1",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-to-png": {
-    "hash": "b047f1129d0de60d9af6c07245fd47227f57295deca8f894ee3a360dd5cf9bb0",
-    "lastmod": "2026-10-12"
+    "hash": "01517f4fa7e05968f8a0965317105811f11401f085af467b44cd110a33f51f4d",
+    "lastmod": "2026-11-10"
   },
   "/tools/extract-text": {
-    "hash": "2e79fedccb83fd42679c0804cef0d1e95223fad7c8a4570e2489cf5b0430030d",
-    "lastmod": "2026-10-12"
+    "hash": "81f0d21447dc4c2ca1db23ec4a2f6af41d8628967d739d8300f20d34ad8c8d30",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-to-word": {
-    "hash": "a6ca5976177e808beb618c7bc50284139240e51211e07b1bddd2f9a18d34756a",
-    "lastmod": "2026-10-12"
+    "hash": "a3bd41f1444fd730672705b35faa20e720eaf58f3a9d826208ecb6516f8ebeab",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-to-html": {
-    "hash": "274a2a771bbe003c280c0e225412dac0b2f650b0aab9494ccb40ef5b20dc5277",
-    "lastmod": "2026-10-12"
+    "hash": "87a916e8298b944eefbdd7e57ee2f6be36eda20df61695a4c4fa3568ad1f87fd",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-to-epub": {
-    "hash": "6d46a9c89c29bbce2217bd06142d65a2d0468902691e656af27b7891f05f0bbb",
-    "lastmod": "2026-10-12"
+    "hash": "2b2dac3e1466fafc57b7d36b2a53fdc325199a50ed664a1272e33b8be3bc6f7c",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-to-powerpoint": {
-    "hash": "36f22ea26d3d347895dc2d4af04d9e790142af01464ad816e447f761e287bc29",
-    "lastmod": "2026-10-12"
+    "hash": "7c7126344fa3b43dc6051c5d29fa28421d931c0820dfff8c2cfdfd954a0312bc",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-to-spreadsheet": {
-    "hash": "cef0f1373470ad4bf0b3bd845965e5ba24be8efbfdeb72390915c1198fcf7193",
-    "lastmod": "2026-10-12"
+    "hash": "0edb02bc50f45fb6cd2fc8a16788a21851df995ca8eec13cf94884d86add11e3",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-to-csv": {
-    "hash": "a358298e1abf82bc35aa503f6b1b7824e4495a10d5a02532c02ad18040063418",
-    "lastmod": "2026-10-12"
+    "hash": "e574cded8a7b29867d7e058cf8c48640cc0844522abd173870872dde736afe0d",
+    "lastmod": "2026-11-10"
   },
   "/tools/create-pdf": {
-    "hash": "93cda5ace9ee428a56952975ed29c25314477ed61e57530ac12ccd900a288b3c",
-    "lastmod": "2026-10-12"
+    "hash": "f508cb6654ea64444270cc91ba4c78e9a7f205406494a50fef7019d79ef2a573",
+    "lastmod": "2026-11-10"
   },
   "/tools/markdown-to-pdf": {
-    "hash": "5c479db9f4050481f4d4672a8263fdffa7ef2e15dafdd8717ee51ebbbd65aa18",
-    "lastmod": "2026-10-12"
+    "hash": "aa3e42ffeb7c683d6fa034b518a1aa881a5e147981f8b54291623958c36348f6",
+    "lastmod": "2026-11-10"
   },
   "/tools/word-to-pdf": {
-    "hash": "d53427e20b9c73911e577a01ec2cc8ff7317b52ec35c986bc061303f734a45f5",
-    "lastmod": "2026-10-12"
+    "hash": "894d3d289c67c6750f089ea6fa2459360ce095775d2e347591e079b0585a76be",
+    "lastmod": "2026-11-10"
   },
   "/tools/spreadsheet-to-pdf": {
-    "hash": "2a7a9455c78dffccf073f431c774de29b0cef387d45bf6f05789c66d0ca3d6d0",
-    "lastmod": "2026-10-12"
+    "hash": "9e1a6354aadb16416f6c76c3c89770657768e2bfe7c8bc71155fedde8844e8a2",
+    "lastmod": "2026-11-10"
   },
   "/tools/epub-to-pdf": {
-    "hash": "84193a832ad1c997e75a07a58a6ed5f6b0ecb9c395bdba5df3d1e12c9f8224ca",
-    "lastmod": "2026-10-12"
+    "hash": "e07c43d5dda814d9f5d2d4fd74f63b166016171b97cb0afb3de550801655c48d",
+    "lastmod": "2026-11-10"
   },
   "/tools/grayscale-pdf": {
-    "hash": "9d1bd419f67c679be7ae4c34c1e04826cf94979c930b6541c002c681f94e8d38",
-    "lastmod": "2026-10-12"
+    "hash": "fb4a9f648d5ddf687fa1c15febf87cb278a8f03d0b512e93c124e9f03b067f71",
+    "lastmod": "2026-11-10"
   },
   "/tools/invert-colours": {
-    "hash": "b26a43f3606ba05e93843768dec01b787a001dce5a5467252f6e747570d6eaaf",
-    "lastmod": "2026-10-12"
+    "hash": "83d13b5e0d3829f7184e7c0c0ad28c40bc492dc9a4847cbc42aa003614653e4b",
+    "lastmod": "2026-11-10"
   },
   "/tools/ocr-pdf": {
-    "hash": "1f3cbe8278559cdbc1d4554b45c468320c3ce136c2daa95bf05e2812213f9692",
-    "lastmod": "2026-10-12"
+    "hash": "0744cb0cbebb09a36e3bee79dc8dc4a8c11554474c653b4487fc0550039ebd34",
+    "lastmod": "2026-11-10"
   },
   "/tools/read-aloud": {
-    "hash": "bd9e4cfb0a8314976a636953d2b53c7dbaf738962d4563face3786b03021d6cd",
-    "lastmod": "2026-10-12"
+    "hash": "7f0c2331d772d500e9fbe149aac23bb68a1202f87055aab5c317ba741acaace6",
+    "lastmod": "2026-11-10"
   },
   "/tools/compare-pdfs": {
-    "hash": "f62f3756ab7da7b66f3eddb8aa08fac20731c317400cca100f3927ab70f0976b",
-    "lastmod": "2026-10-12"
+    "hash": "12b70595ddb9e0d42b71528d9488f3331bd34400a6e2d13d0b3c2ed1bdc445c6",
+    "lastmod": "2026-11-10"
   },
   "/tools/protect-pdf": {
-    "hash": "909dc0ed42ef5bd33f586ae6ceb90e0338eafae90b2bab8ee7d2a0851671c09c",
-    "lastmod": "2026-10-12"
+    "hash": "8608d7718f75273c59de09428aff5d8c5cec2d6ed693d87d9274ded74bd5ca72",
+    "lastmod": "2026-11-10"
   },
   "/tools/unlock-pdf": {
-    "hash": "99376d52d29677096deef6cce66c3057ae8023c27223af31776675955478e69d",
-    "lastmod": "2026-10-12"
+    "hash": "f624d3e358a49e84dc8e5c3371df903218f1d64372f2f448529111a3a569aec7",
+    "lastmod": "2026-11-10"
   },
   "/tools/privacy-scanner": {
-    "hash": "cb17bac3e23c2f13d366a5aafe881968bf17acf42daf2183b96490b0e7cec2b8",
-    "lastmod": "2026-10-12"
+    "hash": "da15775416bf71e29156dd12e273742519a259d89f784134efc8a2bc28d08acf",
+    "lastmod": "2026-11-10"
   },
   "/tools/remove-pdf-metadata": {
-    "hash": "b7981b7ecbec84e618424e07ae449b8dd3947f6c70cbe51046d50db85a6e15da",
-    "lastmod": "2026-10-12"
+    "hash": "f97dbaa14b55eb6dc072d9c644aadc56b2c1fb133f4b6ec4362251d046d3e747",
+    "lastmod": "2026-11-10"
   },
   "/tools/file-fingerprint": {
-    "hash": "704a5761713b0b27a1034f7ba444bfa9e437f935b5f05de350ed8cca087b3629",
-    "lastmod": "2026-10-12"
+    "hash": "a80c89aeb5e2b3adb9865d704b8982ef38dd99f72a6a03bf929473d93f315cbe",
+    "lastmod": "2026-11-10"
   },
   "/tools/bundle-pdfs": {
-    "hash": "2935e527081d108e435a0f0358232149f2d0d5c188f292e011aa448a97ada060",
-    "lastmod": "2026-10-12"
+    "hash": "aa926dbf49d82eaf24b792d8fc35ae5501b5d5e86b5311dd665c112531bac6ba",
+    "lastmod": "2026-11-10"
   },
   "/tools/resave-pdf": {
-    "hash": "e725313ee348b0c0d55aa93e66ff041653e36e80d16ca094f85da541828fdc4a",
-    "lastmod": "2026-10-12"
+    "hash": "1359da4257613cb6538b865ee84cbfdb095929f0b24fa9cd9808f23c504afcf9",
+    "lastmod": "2026-11-10"
   },
   "/tools/sketch-over-pdf": {
-    "hash": "6a2bcbcc796a20c37ef9805c18d14b823f56d8e15de8e7202f458c4d397ac6bd",
-    "lastmod": "2026-10-12"
+    "hash": "a351024ac2ec6e7dd9a8ace0314ec82b7f35a91d128f846662d097585f25bdf1",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-cut-and-collect": {
-    "hash": "50df19c4eeea3af27d5c81dfb7f0cd6c4ec68ebbc75d164cbf5a2eeb01ca061c",
-    "lastmod": "2026-10-12"
+    "hash": "e543750767a0ec9e5fdaaa5a22b09e1922b4a3a05d15d5c88c5189baac696f73",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-fold-lab": {
-    "hash": "fa7495874797ecde058545578ef06790f775fc28fb99aee516cea804c7101d15",
-    "lastmod": "2026-10-12"
+    "hash": "2be7cec096acf0c3f12b799858adf0ecd6e62e8280f99b65208de684efb11136",
+    "lastmod": "2026-11-10"
   },
   "/tools/pdf-attachment-map": {
-    "hash": "fd712374f9fffceb7feec3610a2bfcc034688fd153e8a7fa3d6d66611bb81602",
-    "lastmod": "2026-10-12"
+    "hash": "67f7ef06ab9210071eb556cfab5c0d63084e3fe728b2ba417a7118e3bc33499a",
+    "lastmod": "2026-11-10"
   },
   "/tools/delete-pdf-pages": {
-    "hash": "3733bb8c72723e17564cbc0cd28396a7639c55d68399dbd760c9fcb6ee8b5d06",
-    "lastmod": "2026-10-12"
+    "hash": "644fdb03eb30a12a44f217ff74a78bf5272d7b036e638cc7a62b2b86b46e5fb6",
+    "lastmod": "2026-11-10"
   },
   "/tools/extract-pdf-pages": {
-    "hash": "eaa84f1b7e5749dee33e325af3b2f4b87278bd5d7b67ce95662e2d5fb0492d0c",
-    "lastmod": "2026-10-30"
+    "hash": "4b9b72dcc7873070fe6aa8b9493c27de777ef7dd98c88f618d62cd69c576dc0b",
+    "lastmod": "2026-11-10"
   },
   "/tools/compress-pdf-to-100kb": {
-    "hash": "86b659c23412549cc7fd055eefa06f114c3061b2594354a84203d446e51ddf01",
-    "lastmod": "2026-10-12"
+    "hash": "57addcc4ad7524568e5328e9297de83fe7fc47a310fe7d1cf8dd7b63f39b355a",
+    "lastmod": "2026-11-10"
   },
   "/guides/powerpoint-to-pdf": {
-    "hash": "252bf9c14a20d960a1d20b355fc235180e999bd35739fc2bb48c3a146a1268a3",
-    "lastmod": "2026-10-12"
+    "hash": "c0f7f636b1b3f340835fd9f1a564637e12c09b6454235ec5e1e80bcfe0db3639",
+    "lastmod": "2026-11-10"
   },
   "/guides/html-to-pdf": {
-    "hash": "1a6638433e3d17801c673189a9cb40945962546a4189028061bbe22e44e86eca",
-    "lastmod": "2026-10-12"
+    "hash": "aca6be61279b3328121d4aa92002e8feefe728cd41acb28abd303e5854624028",
+    "lastmod": "2026-11-10"
   },
   "/tools": {
-    "hash": "fc4358a62f02d2ca77f3f606f1192347fb8726ac1cf71f34c8a809a5c756ffaf",
-    "lastmod": "2026-10-30"
+    "hash": "e566295e7e866be3ea958ca0165c6cb1fff0c8187246297cf25eb3314a613b33",
+    "lastmod": "2026-11-10"
   },
   "/guides": {
     "hash": "de8569ac8ff60e0d5de6b7bc1822c71bc33f8de912038c9b9a615d7f77e5387b",
@@ -1599,416 +1599,16 @@
     "hash": "2cbeb63dd6a1ca33668c6d4e235313719924b600242ace417e48da6f7bc4d667",
     "lastmod": "2026-10-30"
   },
-  "/lab/arcade/daily-desk-crossword": {
-    "hash": "b2a527b70ec492f769aac14e6ade58825c5420c8027f0a71b51d034e3b9ab09d",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/buddy-jigsaw": {
-    "hash": "7aeab8e842b7d1e77e7e39175a94f0157932664944ff6dd55692e58aebc5e266",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/letter-trails": {
-    "hash": "3451b4ef3b1877e54f061c9ea56a4b0677d61858708150f71868cd4ef6336f58",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/word-families": {
-    "hash": "a0e9f5ee98720d7ebca9cdf3ed41b44da82f722050ca8382e4058891e76fb421",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/triple-tile-tea": {
-    "hash": "32b29dcb3b624a5701f59028b7a9a5f5aaa6fbbe456146f0ba5ebee8ef81707d",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/hex-escape": {
-    "hash": "ced38b1b7be9d9d91bf947abfda6192fc781bc946b8c25c95e47fbf915266921",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/word-safari": {
-    "hash": "5845b8d70bba39a4a4a48b2fe13e40104a19b902a30aa2bab2be6d87149970d4",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/block-bloom": {
-    "hash": "48e53342877e0eec6bf75c4ebd62bc9e8037478370eb3ccf3a2de2f9afaf1e04",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/number-river": {
-    "hash": "47bec80ae0f3229c35a302a3539fb5f728f2eae7b279a6f6da9f954acfbab623",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/sudoku-studio": {
-    "hash": "6391b3a0bcf8aa83eb29c44bdeab0ed5b56fd8d4cdf4d63d9503bad9c1383a62",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/mahjong-meadow": {
-    "hash": "37696181fefbf25b99b3cc8f6ecb3a26657f1ddcbfea1417f920eca9fda4afc1",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/picture-patchwork": {
-    "hash": "fb3bc18f647497763b787a17d355f568725a6b98e7a8cac985e9d67eca81ef95",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/paw-parks": {
-    "hash": "faaa2c2358e791d720a98bee7f0fcf18449e7aa697decb3b5bba293c6d00682f",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/rooftop-hoops": {
-    "hash": "dd7aff95a5ae75376cb2c24801e713120f2c34fa74e3dd935492f05c962d1866",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/pocket-mini-golf": {
-    "hash": "02f407ecbbdaa03f45aedfeaa266d771a7890383a6e6953bc106923271506093",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/lavender-chess": {
-    "hash": "2208dd9e6236481f11e8541a2c02f61cf27429d40a2686eb5807e921516fe328",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/crown-checkers": {
-    "hash": "6b192be9fc0664f46ea5bd7959154dfe9905f814746a20e99865ffb0bb0ee2ab",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/four-in-orbit": {
-    "hash": "018177e3b25d9236705f8ed598c645de2bc8f76684103ddb1ad092c51cfe5539",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/moon-disc-reversi": {
-    "hash": "ddd91d8c4ecd22c9337c17b7112aec9344570d0962f63a3b457aee0ec94cdeb9",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/dot-district": {
-    "hash": "5102e34380fb612db7e48997afc7087268df80bf569999d4213c09f74228b63e",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/paper-fleet": {
-    "hash": "f60d95bdd743b08ac967a2aa3709bfc1577824a562595bc1a2505e8107580664",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/seed-and-stone": {
-    "hash": "1f608fd3b97b394b44cf41c1f3a62dd52c034d6ed24fab259d5f154a66ea5025",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/peg-garden": {
-    "hash": "e2601e4bc5481dda0a6abdb5b8aa57c3d4e19b27fd1271b329dfb4ae7b9555b0",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/neon-air-hockey": {
-    "hash": "2f793614c156a4635d34d73882de7c823d1620c5ed8481d006a8ec382e84c7a5",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/pixel-picnic": {
-    "hash": "71437e5e5c5c6197f8cbc61887430584b12439f0c4887e81e45c31287d0f116e",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/buddy-ludo": {
-    "hash": "289b0ca7cd0e21bd0c7e9ab757840c88f5111bf811603fc0042e5a0630373206",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/snakes-and-ladders": {
-    "hash": "95d4ca5e1e5e0a61ab77e127f00df3879ce7afcff84b557b27f5ec3c9e6326d4",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/domino-dock": {
-    "hash": "7349581bbcaf1dd947d02415a733142be57704be760b1c99a20eeff49f9af670",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/dice-delight": {
-    "hash": "1fc20e97b9df319341dc99213ca28c9dd460b97250e2a898a1ef3a1c261cdd16",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/pocket-mines": {
-    "hash": "daaced7e9b6caef8c945fd18c0de0069e69b86b6bfd2122b71f94307f9a61fa1",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/rhythm-recall": {
-    "hash": "976a444520affcf61c580f9195b854424943182d94192333f1254e70636a1d0b",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/crate-escape": {
-    "hash": "c7eadd09fecce22e451fca29e5a5e0b504fe3f9b9df118d3dd691eb2c4c73a75",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade": {
-    "hash": "309bea66ad6f7c934ec0936b756e09686157002ee17cc6254f1cec5c5c2265c2",
-    "lastmod": "2026-10-30"
-  },
-  "/lab/arcade/buddy-stack": {
-    "hash": "d4ddfd7289af8240c1986df5e452626952027f4b5d74ef3387b1d237fa8669db",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/paper-toss": {
-    "hash": "95e881d25e4cdc76ec4d404f274307cfb54f578d1b25c2197c70ca7785a18f04",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/merge-2048": {
-    "hash": "97dbc4d534984d058278864e8fed851f569a20eca28892aa0d193db4cb4c53a9",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/bubble-pop": {
-    "hash": "a586a598fb4d1c941b55052db43c4f62370bf90c755cb2793f39672e9d10c926",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/snake-sprint": {
-    "hash": "d9556945866868e9f25366911ee5c95780986fc12390e63e176c6343b0293463",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/memory-match": {
-    "hash": "55cbad5e19a3a23750144d129331ac003804c08da72cd780eb71d2ad2d424229",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/neon-breaker": {
-    "hash": "af9c4fe27c046595da7d8593f57cc38cf93b6f7657cea1026bf0cb2dde954929",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/odd-one": {
-    "hash": "97ae4e713225265b8f46207e2571624abbd2b04dd6f879b8148e1e73294abc48",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/sliding-puzzle": {
-    "hash": "325957ca682cf443048ab2fb7bf865a9a20be4ba86004f49ef5c3b27a66fc9de",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/buddy-runner": {
-    "hash": "920077cd4e6c2297131533ea16aa48e59510a8fc3c8c9f98a951be22caa7be4c",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/balloon-pop-party": {
-    "hash": "a701c9f50a642e0f5aeeaa6302324a719401518c0141a3634ec97c1dc538da15",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/fruit-slice": {
-    "hash": "11303e02ee7eca21e95927f1e4ec5bf6b21df2f1707b247a346d21ec96812d1f",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/catch-the-stars": {
-    "hash": "e751c14d1529e5c491b4e0d5555ea1f281cd2e9394769eb2ae030cd90cc72d63",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/spot-the-difference": {
-    "hash": "a77e95f38842da38f13df5d303362f06aeec6058aecf3c9306c88cd1a77eded6",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/sequence-recall": {
-    "hash": "47b5d54f5175d19611bb2e26af4887f48b03d48329649414c88dee9ffb42cd94",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/find-hidden-object": {
-    "hash": "17f43f10d7a223bbdecb557d5bc5e8524343386cf58ce41173e3ef139ddfdc74",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/anagram-shuffle": {
-    "hash": "5eb848571e1f11bb792555ffa759e276ddb96e36598f0a582490b5c91134e2ed",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/hangman-garden": {
-    "hash": "f12e3f10c91e2abac019292347885e2f53dd41c06b7bdf5d92125a60a6518384",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/word-ladder": {
-    "hash": "2e03a52b857ce24ae5453dc1953a1d73a90ef7588d2bfd153c4c5b89afe0ecfc",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/color-sort": {
-    "hash": "8abb6f6b20245e385ddc844ee900102f089f773e4aa0da28acea0703a83bf13a",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/water-flow": {
-    "hash": "7afab7018b1c54f9b6442cf95be88756053a8f7f882f4bffb55b34167b986f28",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/parking-escape": {
-    "hash": "833064b1759c985745c76fdbc7375e0dcda9261077387e3310cef7060d92d3a7",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/tic-tac-toe-plus": {
-    "hash": "5b776a5bd9e8b86b0c391c3019b0497b19082287690e54c4884714477ef46c3b",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/boundary-cricket": {
-    "hash": "9d2240a0bba2fc74f86d815ece7f0f26ef48f3aca0b9e35003d580134f7e5872",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/volleyball-rally": {
-    "hash": "ac84b6ab2bd9d5eacc12e375d9d108d8a6cf39c8412bfce65572107a0b9e8b52",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/eight-ball-pool": {
-    "hash": "b1cca26706ea976e0f3784f5081f71b6c98f62414c7793e4b31af6ea91fe06fe",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/spiral-drop": {
-    "hash": "fcf066913652a0aef46829aff3fa08ee1937f963fd0170aca7b2280ef60ba8f8",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/hoop-hop": {
-    "hash": "0a9a3a206ff74257515cc6dda280638610e4ab2a76a320bac31b140925b93988",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/highway-dash": {
-    "hash": "b49ba3c876328ca9781429ab9e274f49d916782b011dc8330a43a3138dd3d878",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/metro-sprint": {
-    "hash": "ff69c9fd173d518439fd70faf18f5a854a9aea69f1701935a1879f8e7128df0c",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/jungle-escape": {
-    "hash": "4cbd51bd204080e0f1bebde3560bbb05a712fbff12e5eb7aa1f33c3ce54d1a7e",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/hill-rider": {
-    "hash": "e08a3c8877962c150413e7d0fc184968420685ad6520304d206e2b0362ae46c5",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/drift-loop": {
-    "hash": "a1fab9cd5b1e499cac6344528023e8e38b075601b0a363d5aafd4be0d8371204",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/snow-slalom": {
-    "hash": "1a090d35176a38553306f551c5f591f04c3ee52a02abd0a73257028a5d3184d9",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/river-slalom": {
-    "hash": "e44b556a8812a9c2a273bcf73e6300f819080fd967d4034d2b47cbf20953ef6c",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/rocket-glide": {
-    "hash": "9a293ad381c297f2f9d2324030e6d992d115fd4c92d16381383c8623ada55a0b",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/traffic-cross": {
-    "hash": "b326b2a7d69183ea52bf1648ca0d8fad70fc5a4b4c2c58276fcabee5dc7c56a0",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/pocket-grand-prix": {
-    "hash": "7b84e5125a3ae5ea3c55a7b6e693fa20154083be509ed63261c07951bfdfbcbc",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/bubble-wrap-bliss": {
-    "hash": "2f0aae09dca57452438555860c678a9b6389273a9c8f9defe2501dd7f59fcbd0",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/crystal-clean": {
-    "hash": "36d722febd2fd6b50153352a88a9a4e761c9262c401e0a0b63205ab0881e8a7f",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/paint-by-numbers": {
-    "hash": "5feaf26d7da46addf722a6f317c5063a4a3276593bb71e4a884a9fb48a2aecf7",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/rainbow-ring-stack": {
-    "hash": "d89a6ab40cd5f6a30e7400cbda9e2936037a90bd1214ec0f3dee87fdf4e47b10",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/sand-jars": {
-    "hash": "f3a78e2a85834ca7e5b5ca00b440b1c69ed3f79cb0c4af307b3f68d062a93b2d",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/untangle-lines": {
-    "hash": "49b8fdd0f55354961db3683bfde024fcb12e16205b1ded5547c11c10a5637d15",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/screw-sort": {
-    "hash": "1da68e987c162619d93a84012dce991770e32c2c7566e348825255eeb19cde28",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/tile-polish": {
-    "hash": "64b8ee963c866d71c5e031757a11bd65cf84edd2f57ff344d0f62374c7fc81d8",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/shape-packing": {
-    "hash": "67f08ab94f4949ac9024dbe99e28ec8be263fb01b04b9b6387e5288a0019c8f6",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/cozy-shelf": {
-    "hash": "8b77fd1e0424d861d0d5c319e227d61f1c94ec4dfe990a7873de2ed1c5d1e46a",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/laser-mirror": {
-    "hash": "577807e1d2f07cea42568e9b929acd9e5a725e3fdb0f9caaed326d1e7648cc14",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/lights-out": {
-    "hash": "56dd724c450bf1023e8f9a6d6c6a25027fda5872a511a44619d46f9fe0cf78b4",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/peg-bounce": {
-    "hash": "d983f78db04a088d7db544fbef3011f437c5cb471d2e476812f3471b2c8f4006",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/meteor-shield": {
-    "hash": "88cbfcfeefa2ef2da4373655209a9c61c88ab835f0122255d7b5446736df257d",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/falling-blocks": {
-    "hash": "e249becc4fded77800b69fdb537c8824e24ab1c2292bd041157aef7ccf6f8976",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/balance-bridge": {
-    "hash": "2cd6277655d2afe135f002ac5a1718c2da88097f9fb285ac9eeacf736ae18985",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/one-line-draw": {
-    "hash": "7c55521f02271845220386012b7897c1e197cc378947cbaff1d0aec690d820c8",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/path-connect": {
-    "hash": "6df65dcdbab168d68206a2024b030d5362d25ae72eb693172ee2097af2aaaa46",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/count-and-tap": {
-    "hash": "a34b34a5739b408f9d162da314ef7b0e58527cf9ebf296bb48ef0e65176493ef",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/quick-math": {
-    "hash": "881ad7811fc25fa044dfe56bfba2b45ff7d0dd4d7383e0ed53797b9ab3b1cdb3",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/ring-toss": {
-    "hash": "c593687c59a6de3eb67b1ddc5d8049e3cda2baf562c469851521393fdd353feb",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/balloon-darts": {
-    "hash": "b8afb1121067bdeccef7f2b37f37f1530ce132a3d646cea245ed478f6791106a",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/mini-bowling": {
-    "hash": "d55977589410313e49ae9b20f882a3f6de44941070a660fc6404c8cd2b21652e",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/table-tennis": {
-    "hash": "52ad110701ff4bdcadd54875c4951250096e165463cb219b789827590a95c9f9",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/archery-wind": {
-    "hash": "2b56c447bcf2116f73d27afd3b3ac77156ff056a0b52f9ed023ddab96c235b69",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/ice-curling": {
-    "hash": "68def1c3bee11c6521a02983237530e885cfe7c3f03d044802cb09f8810a598d",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/soccer-penalty": {
-    "hash": "7410d4615226e6772c69aea1d61afb713be64d9751d320b3cca6f8159b572426",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/clock-reflex": {
-    "hash": "205d35f6e5f8b49d37f7ff8353d32683070d0b03f056263d3fbd06b0f9b9173f",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/cookie-decorate": {
-    "hash": "1059cd7199b44edc41370c1bfe19f01656768c2a794cbfed25f4aba136da227c",
-    "lastmod": "2026-10-31"
-  },
-  "/lab/arcade/marble-maze": {
-    "hash": "1cc835d0c95ea3afec7e6ebec39d8a2f96fe73f03cc0991a4f33ea9326b417c3",
-    "lastmod": "2026-10-31"
-  },
   "/lab": {
-    "hash": "21e5d9b8aa6b1416d40a5e8b360418b663af8129f4c53f2b21d20d0ad8a57253",
-    "lastmod": "2026-10-30"
+    "hash": "303c50f836acfb1b2f39406df87f93dd828698234a56c8741638b1164d2aec9a",
+    "lastmod": "2026-11-10"
   },
   "/lab/image-studio": {
-    "hash": "69d027f43ae14fd69b5dbe022db4c582942bceb085ab8d510e8b2a72ee0a2ead",
-    "lastmod": "2026-10-30"
+    "hash": "cfd0c8e3ac943266186dc5a11baca892dc1459db4d061c2583f3b4f286700a35",
+    "lastmod": "2026-11-10"
+  },
+  "/lab/creative-studio": {
+    "hash": "819974db175ec44f5f71b215ca47342305b938ea1ee033506eedca1a23a592d2",
+    "lastmod": "2026-11-10"
   }
 }

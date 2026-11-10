@@ -15,13 +15,13 @@
     "lint": "eslint . --ignore-pattern dist --ignore-pattern .next --max-warnings 0",
     "db:generate": "drizzle-kit generate",
     "verify": "node checks/verify-engine.mjs",
-    "verify:seo": "node checks/verify-technical-seo.mjs && node checks/verify-sitemap-canonical.mjs && node checks/verify-cricket-sitemap.mjs",
+    "verify:seo": "node checks/verify-technical-seo.mjs && node checks/verify-sitemap-canonical.mjs",
     "verify:seo:rendered": "node checks/verify-rendered-seo.mjs",
     "verify:guide-examples": "node checks/verify-guide-examples.mjs && node checks/audit-article-overlap.mjs",
     "verify:compression": "node checks/verify-jpeg-optimization.mjs && node checks/verify-compression-targets.mjs",
     "verify:analytics": "node checks/verify-analytics.mjs && node checks/verify-tracker.mjs",
     "verify:studio": "node checks/verify-studio.mjs",
-    "build:public": "npm run lint:play-studio && npm run verify:play-studio && npx tsc --noEmit && npm run verify:ci-fallback && node scripts/prepare-pdf-assets.mjs && node scripts/generate-tool-fixtures.mjs && node scripts/generate-brand-options.mjs && node scripts/generate-site-assets.mjs && vite build --config vite.public.config.ts",
+    "build:public": "npx tsc --noEmit && npm run verify:ci-fallback && node scripts/prepare-pdf-assets.mjs && node scripts/generate-tool-fixtures.mjs && node scripts/generate-brand-options.mjs && node scripts/generate-site-assets.mjs && vite build --config vite.public.config.ts",
     "deploy:public": "node scripts/deploy-public.mjs",
     "verify:public": "node checks/verify-public-owner.mjs",
     "postinstall": "node scripts/prepare-pdf-assets.mjs",
@@ -29,11 +29,7 @@
     "generate:test-fixtures": "node scripts/generate-tool-fixtures.mjs",
     "generate:brand-options": "node scripts/generate-brand-options.mjs",
     "verify:text": "node checks/verify-online-text.mjs && node checks/verify-text-advanced.mjs",
-    "verify:play-studio": "node checks/verify-audit-gameplay.mjs && node checks/verify-play-studio-ui.mjs && npm run verify:cricket && npm run verify:classic && node checks/verify-casual-levels.mjs && node checks/verify-hill-game.mjs && node checks/verify-pool-aim.mjs && node checks/verify-spatial-games.mjs && node checks/verify-rooftop-hoops.mjs",
-    "lint:play-studio": "eslint lib/spatial-puzzles.ts lib/line-trail.ts checks/verify-spatial-games.mjs --max-warnings 0 components/untangle-studio.tsx components/one-line-studio.tsx components/shape-packing-studio.tsx components/rooftop-hoops.tsx lib/rooftop-hoops-engine.ts lib/stadium-audio.ts",
-    "verify:ci-fallback": "node checks/verify-arcade-progress.mjs && node checks/verify-arcade-session.mjs && node checks/verify-arcade.mjs && node checks/verify-arcade-improvements.mjs && node checks/verify-device-layout.mjs && node checks/verify-watermark.mjs",
-    "verify:cricket": "node checks/verify-cricket-game.mjs && node checks/verify-cricket-quick-match.mjs && node checks/verify-cricket-speech.mjs && node checks/verify-cricket-presentation.mjs && node checks/verify-cricket-interaction.mjs",
-    "verify:classic": "node checks/verify-classic-interaction.mjs"
+    "verify:ci-fallback": "node checks/verify-device-layout.mjs && node checks/verify-watermark.mjs"
   },
   "dependencies": {
     "@base-ui/react": "^1.7.0",

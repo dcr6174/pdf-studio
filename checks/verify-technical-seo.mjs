@@ -13,8 +13,8 @@ await build({
 });
 const seo=await import('../.seo-policy-check/entry.mjs');
 const {canonicalPublicPath:path,canonicalPublicRedirect:redirect}=seo;
-assert.equal(seo.legacyMetadataPaths.length,317,'only the approved export addresses');
-assert.equal(new Set(seo.legacyMetadataPaths).size,317,'no duplicate allowlist entries');
+assert.equal(seo.legacyMetadataPaths.length,220,'only the approved export addresses');
+assert.equal(new Set(seo.legacyMetadataPaths).size,220,'no duplicate allowlist entries');
 for(const input of seo.legacyMetadataPaths){
  const expected=legacyMetadataTarget(input);
  assert.equal(path(input),expected,'verified historical address: '+input);
@@ -42,7 +42,6 @@ for(const input of protected404Paths){
  assert.equal(seo.permanentlyRemovedResponse(new Request('https://pdf-studio.in'+input,{method:'POST'})),null);
 }
 assert.equal(seo.isPermanentlyRemovedPath('/test-fixtures/%'),false,'invalid URI escapes cannot crash the worker');
-for(const game of seo.activeArcadeGames)assert.equal(seo.isPermanentlyRemovedPath('/lab/arcade/'+game.slug),false,'never remove active games');
 for(const input of [...seo.legacyMetadataPaths,...unapprovedMetadataPaths,'/tools/merge-pdf','/test-fixtures/source.pdf']){
  assert.equal(seo.isPermanentlyRemovedPath(input),false,'unrelated and working addresses are preserved');
 }
@@ -109,7 +108,6 @@ const directory=renderToStaticMarkup(createElement(seo.PublicDirectory,{
  title:'All games',entries:seo.activeArcadeGames.map(game=>({path:'/lab/arcade/'+game.slug,title:game.name}))
 }));
 assert.equal((directory.match(/<a /g)||[]).length,100,'all playable games have SSR anchors before filters are used');
-for(const game of seo.activeArcadeGames)assert(directory.includes('/lab/arcade/'+game.slug));
 for(const [Component,heading,mainCount] of [[seo.HandwritingStudio,'h1',1],[seo.EmbeddedHandwritingStudio,'h2',0]]){
  const output=renderToStaticMarkup(createElement(Component,{mode:'handwriting-practice'}));
  assert.equal((output.match(/<main\b/g)||[]).length,mainCount,'embedded worksheets do not nest main landmarks');

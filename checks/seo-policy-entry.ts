@@ -6,7 +6,6 @@ export {pageMeta} from '../lib/page-meta';
 export {seoPages} from '../lib/seo-tools';
 export {toolMeta} from '../lib/seo-meta';
 export {creativeTools} from '../lib/handwriting';
-export {activeArcadeGames} from '../lib/arcade-active';
 export {PublicDirectory} from '../components/public-directory';
 export {metadata as notFoundMetadata} from '../app/not-found';
 export {default as Link} from '../components/browser-link';
