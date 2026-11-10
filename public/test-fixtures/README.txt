@@ -283,3 +283,27 @@ Expected: Complete PDF Fold Lab. Inspect output content, page count, ordering, f
 PDF Attachment Map
 Input: attachment-map.pdf
 Expected: Complete PDF Attachment Map. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Creates a combined reading copy with links to supporting documents and main-document sections. Does not embed separate file attachments.
+
+Add blank pages
+Input: add-blank-pages.pdf
+Expected: Complete Add blank pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Blank pages match the neighbouring page size unless you pick A4 or Letter. Existing pages are not changed.
+
+Split PDF by page count
+Input: split-by-page-count.pdf
+Expected: Complete Split PDF by page count. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Output is a ZIP of PDFs. Fillable form fields may need flattening first.
+
+Odd & even pages
+Input: odd-even-pages.pdf
+Expected: Complete Odd & even pages. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Pages are copied as they are. Choose reverse order when feeding paper back by hand for double-sided printing.
+
+Add page border
+Input: add-page-border.pdf
+Expected: Complete Add page border. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. The border is drawn on top of the page. Text, links and form fields are untouched.
+
+Add margins to PDF
+Input: add-pdf-margins.pdf
+Expected: Complete Add margins to PDF. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Make pages bigger keeps everything intact. Keep the page size redraws the pages, so links and form fields on them are dropped.
+
+Extract PDF attachments
+Input: extract-pdf-attachments.pdf
+Expected: Complete Extract PDF attachments. Inspect output content, page count, ordering, filename and all configured options. Check validation and both desktop/mobile controls. Finds embedded files in the document attachment list and file-attachment annotations. Nothing is opened or run.

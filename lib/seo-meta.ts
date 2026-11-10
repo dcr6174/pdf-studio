@@ -2,6 +2,12 @@
 */
 export type SeoMeta = {title: string; description: string};
 export const toolMeta: Record<string, SeoMeta> = {
+ "add-blank-pages": {title: "Add Blank Pages to a PDF: Start, End or Between", description: "Insert blank pages into a PDF at the start, the end, after chosen pages or after every N pages. Free, in your browser. Nothing is uploaded."},
+ "split-pdf-by-page-count": {title: "Split PDF by Page Count: Equal Parts in a ZIP", description: "Split a PDF into files of N pages each, or into N equal parts, and download them as a ZIP. Free, in your browser, with no upload."},
+ "extract-odd-even-pages": {title: "Extract Odd or Even Pages From a PDF", description: "Save only the odd pages or only the even pages of a PDF, or get both as two files. Reverse the order for manual duplex printing. Free, in your browser."},
+ "add-border-to-pdf": {title: "Add a Border to PDF Pages: Solid, Dashed, Double", description: "Add a coloured border around PDF pages. Choose width, distance from the edge, dashed or double lines and rounded corners. Free, in your browser."},
+ "add-margins-to-pdf": {title: "Add Margins to a PDF: Extra White Space Around Pages", description: "Add top, bottom, left and right margins to a PDF in millimetres, by enlarging pages or shrinking content. Free, in your browser, no upload."},
+ "extract-pdf-attachments": {title: "Extract Attachments From a PDF: Embedded Files to ZIP", description: "Find files embedded inside a PDF, such as spreadsheets, invoices and images, and save them in a ZIP. Free, in your browser. Nothing is uploaded or opened."},
  "merge-pdf": {title: "Merge PDF Files Online Free, No Watermark", description: "Combine several PDFs into one file in your browser. Reorder pages by drag and drop, preview the result, then download. No sign-up, no watermark."},
  "split-pdf": {title: "Split PDF by Page Range: Extract Pages", description: "Enter pages or ranges like 1, 3-5 and save them as a new PDF. Your original file is not changed. Runs in your browser, free."},
  "compress-pdf": {title: "Compress PDF Online Free, Keep Text or Shrink More", 

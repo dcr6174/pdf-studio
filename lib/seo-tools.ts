@@ -170,6 +170,54 @@ const curatedTools = [
     "intro": "Export a copy with standard title, author, subject, keywords, producer and date metadata cleared.",
     "detail": "This is not complete sanitization of every hidden object, attachment or visible personal detail. Inspect the document before sharing."
   }
+  ,{
+    "slug": "add-blank-pages",
+    "id": "add-blank-pages",
+    "title": "Add blank pages to a PDF",
+    "heading": "Insert blank pages anywhere in a PDF",
+    "intro": "Add one or more empty pages at the start, at the end, after pages you list, or after every N pages.",
+    "detail": "Blank pages copy the size of the page next to them, so a mixed-size PDF stays tidy. The rest of the document, including links, bookmarks and form fields, is left as it was."
+}
+  ,{
+    "slug": "split-pdf-by-page-count",
+    "id": "split-by-page-count",
+    "title": "Split PDF by page count",
+    "heading": "Split a long PDF into equal parts",
+    "intro": "Cut a long PDF into files with the same number of pages, or into a chosen number of equal files, and download them in one ZIP.",
+    "detail": "Files are named with their part number and page range, such as part-2-pages-11-20. The last file holds whatever pages remain."
+}
+  ,{
+    "slug": "extract-odd-even-pages",
+    "id": "odd-even-pages",
+    "title": "Extract odd or even pages from a PDF",
+    "heading": "Keep only odd or even pages",
+    "intro": "Pull out pages 1, 3, 5 and so on, or pages 2, 4, 6 and so on, or get both sets as two separate PDFs.",
+    "detail": "The reverse option flips the order of the extracted pages. That is what you need to print the second side of a double-sided job on a printer without duplex."
+}
+  ,{
+    "slug": "add-border-to-pdf",
+    "id": "add-page-border",
+    "title": "Add a border to PDF pages",
+    "heading": "Frame your PDF pages with a border",
+    "intro": "Draw a solid, dashed or double border around every page or only the pages you choose, in any colour and thickness.",
+    "detail": "You set the line width and the distance from the page edge, and you can round the corners. The border sits on top of the page and does not change the original content."
+}
+  ,{
+    "slug": "add-margins-to-pdf",
+    "id": "add-pdf-margins",
+    "title": "Add margins to a PDF",
+    "heading": "Add white space around your PDF pages",
+    "intro": "Give pages more room on any side, either by making each page larger or by shrinking the content so the page size stays the same.",
+    "detail": "Enlarging pages leaves the original content untouched, including links and form fields. Shrinking the content to fit redraws the page, which keeps the layout but drops links and form fields on the pages you chose."
+}
+  ,{
+    "slug": "extract-pdf-attachments",
+    "id": "extract-pdf-attachments",
+    "title": "Extract attachments from a PDF",
+    "heading": "Save the files hidden inside a PDF",
+    "intro": "Some PDFs carry other files inside them, such as spreadsheets, images or invoices in XML. This tool finds them and puts them in a ZIP.",
+    "detail": "It reads the document attachment list and file-attachment comments. Files are saved exactly as embedded and are never opened or run in your browser."
+}
 ] as const;
 
 const curatedById = new Map<string, (typeof curatedTools)[number]>(curatedTools.map(tool => [tool.id, tool]));
