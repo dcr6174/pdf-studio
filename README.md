@@ -2,7 +2,7 @@
 
 <img src="public/brand/pdf-studio-lockup-v5.svg" height="64" alt="PDF Studio — Page Buddy logo" />
 
-[PDF Studio](https://pdf-studio.in/) provides free browser-based PDF tools with no account required and no added watermark. The current catalogue contains **73 PDF tools** (generated from the registry, never hardcoded), with separate Image Studio and creative utilities in Studio Lab. Documents are processed on the visitor’s device.
+[PDF Studio](https://pdf-studio.in/) provides free browser-based PDF tools with no account required and no added watermark. The current catalogue contains **70 PDF tools** (generated from the registry, never hardcoded), with separate Image Studio and creative utilities in Studio Lab. Documents are processed on the visitor’s device.
 
 ## Features
 
