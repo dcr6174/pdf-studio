@@ -1,0 +1,28 @@
+/* All tools directory: premium card grid in the studio design system. */
+.tools-directory{--acc:var(--primary);--acc-bg:var(--soft,#EEECFB)}
+.tools-directory .search{display:flex;align-items:center;gap:10px;background:var(--card);border:1px solid var(--border);border-radius:16px;padding:0 16px;min-height:54px;box-shadow:0 1px 2px rgba(20,16,60,.04)}
+.tools-directory .search:focus-within{border-color:var(--primary);box-shadow:0 0 0 4px rgba(81,69,205,.14)}
+.tools-directory .search input{border:0;outline:0;background:transparent;font-size:1rem;flex:1;min-height:52px}
+.tools-directory .filters{display:flex;gap:8px;flex-wrap:wrap;margin:16px 0 4px}
+.tools-directory .filters button{display:inline-flex;align-items:center;gap:8px;min-height:44px;padding:0 16px;border-radius:999px;border:1px solid var(--border);background:var(--card);color:var(--foreground);font-weight:600;cursor:pointer}
+.tools-directory .filters button span{font-size:.78rem;color:var(--muted);font-weight:600}
+.tools-directory .filters button.selected{background:var(--foreground);border-color:var(--foreground);color:var(--background,#fff)}
+.tools-directory .filters button.selected span{color:inherit;opacity:.75}
+.tools-directory .dir-bar{display:flex;justify-content:flex-end;margin:6px 0 0}
+.tools-directory .dir-sort{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted);font-weight:600}
+.tools-directory .dir-sort select{min-height:40px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--foreground);padding:0 10px;font:inherit}
+.tools-directory [role=status]{color:var(--muted);font-size:.9rem;margin:4px 0 8px}
+.tools-directory section h2{display:flex;align-items:baseline;gap:10px;font-family:var(--font-display);font-size:1.35rem;letter-spacing:-.02em;margin:28px 0 12px}
+.tools-directory section h2 small{font-size:.8rem;color:var(--muted);font-weight:600;font-family:inherit}
+.tools-directory section[data-group=pages]{--acc:#5145CD;--acc-bg:#EEECFB}
+.tools-directory section[data-group=edit]{--acc:#0E8A6B;--acc-bg:#E1F5EE}
+.tools-directory section[data-group=convert]{--acc:#C2570C;--acc-bg:#FDEBDD}
+.tools-directory section[data-group=privacy]{--acc:#B4235A;--acc-bg:#FBE4EE}
+.tools-directory .tool-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(240px,1fr));gap:14px}
+.tools-directory .tool-card{position:relative;display:grid;grid-template-columns:auto 1fr;grid-template-areas:"i t" "i d";column-gap:14px;row-gap:3px;align-items:center;padding:16px;min-height:84px;border:1px solid var(--border);border-top:1px solid var(--border);border-radius:18px;background:var(--card);color:var(--foreground);text-decoration:none;box-shadow:0 1px 2px rgba(20,16,60,.04);transition:border-color .15s,box-shadow .15s,transform .15s}
+.tools-directory .tool-card:hover,.tools-directory .tool-card:focus-visible{border-color:var(--acc);box-shadow:0 10px 24px -14px var(--acc);transform:translateY(-1px)}
+.tools-directory .tool-card .tool-icon{grid-area:i;display:grid;place-items:center;width:46px;height:46px;border-radius:14px;background:var(--acc-bg);color:var(--acc)}
+.tools-directory .tool-card b{grid-area:t;font-size:.98rem;font-weight:680;line-height:1.25;align-self:end}
+.tools-directory .tool-card p{grid-area:d;margin:0;font-size:.82rem;line-height:1.35;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;align-self:start}
+[data-theme=dark] .tools-directory section[data-group]{--acc-bg:rgba(255,255,255,.08)}
+@media(max-width:640px){.tools-directory .tool-grid{grid-template-columns:1fr;gap:10px}.tools-directory .filters{flex-wrap:nowrap;overflow-x:auto;margin-inline:-4px;padding:2px 4px 6px;scrollbar-width:none}.tools-directory .filters button{flex:none}.tools-directory .tool-card{padding:14px;min-height:76px}}
