@@ -1,3 +1,4 @@
+import {SiteBottomNav} from '@/components/site-bottom-nav';
 import {CONTACT_EMAIL} from '@/lib/contact';
 import {themeBootstrapScript} from '@/lib/theme-policy';
 import {startupGuardScript} from '@/lib/startup-guard';
@@ -27,7 +28,7 @@ export const metadata: Metadata = {
   appleWebApp: { capable: true, title: "PDF Studio", statusBarStyle: "default" },
   metadataBase: new URL("https://pdf-studio.in"),
   title: { default: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up", template: "%s | PDF Studio" },
-  description: "Free PDF editor and tools: edit text, merge, compress, sign and scan. No watermark, no sign-up. Designed to process files on your device.",
+  description: "100+ free PDF tools: edit text, merge, compress, sign and scan. No watermark, no sign-up. Designed to process files on your device.",
   alternates: { canonical: "/" },
   openGraph: { type: "website", siteName: "PDF Studio", locale: "en_IN", url: "https://pdf-studio.in", title: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up", description: "Edit, merge, compress, sign and scan PDFs free. No watermark, no sign-up.", images: [{ url: "/social/home.png", width:1200, height:630, alt: "PDF Studio — Free online PDF tools" }] },
   twitter: { card: "summary_large_image", title: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up", description: "Edit, merge, compress, sign and scan PDFs free. No watermark, no sign-up.", images: ["/social/home.png"] },
@@ -42,7 +43,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head><meta name="pdf-studio-release" content="audit-revamp-20261007"/><script dangerouslySetInnerHTML={{__html:themeBootstrapScript}}/><script dangerouslySetInnerHTML={{__html:startupGuardScript}}/><link rel="preload" href="/fonts/Outfit-Bold-subset.woff" as="font" type="font/woff" crossOrigin="anonymous"/></head>
-      <body className="antialiased"><noscript><p style={{margin:0,padding:"12px 16px",background:"#17142E",color:"#fff",font:"15px/1.5 system-ui,sans-serif"}}>PDF Studio needs JavaScript to open and edit files. Please turn it on for this site.</p></noscript><StartupReady/><ResponsiveViewport/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://pdf-studio.in/#website",name:"PDF Studio",url:"https://pdf-studio.in/",description:"Free PDF tools with on-device document processing",inLanguage:"en",publisher:{"@id":"https://pdf-studio.in/#organization"}},{"@type":"Organization","@id":"https://pdf-studio.in/#organization",name:"PDF Studio",url:"https://pdf-studio.in/",logo:"https://pdf-studio.in/brand/pdf-studio-logo-v5.svg",email:CONTACT_EMAIL,contactPoint:{"@type":"ContactPoint",contactType:"customer support",email:CONTACT_EMAIL}}]})}}/>{children}<SiteAd/></body>
+      <body className="antialiased"><noscript><p style={{margin:0,padding:"12px 16px",background:"#17142E",color:"#fff",font:"15px/1.5 system-ui,sans-serif"}}>PDF Studio needs JavaScript to open and edit files. Please turn it on for this site.</p></noscript><StartupReady/><ResponsiveViewport/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://pdf-studio.in/#website",name:"PDF Studio",url:"https://pdf-studio.in/",description:"Free PDF tools with on-device document processing",inLanguage:"en",publisher:{"@id":"https://pdf-studio.in/#organization"}},{"@type":"Organization","@id":"https://pdf-studio.in/#organization",name:"PDF Studio",url:"https://pdf-studio.in/",logo:"https://pdf-studio.in/brand/pdf-studio-logo-v5.svg",email:CONTACT_EMAIL,contactPoint:{"@type":"ContactPoint",contactType:"customer support",email:CONTACT_EMAIL}}]})}}/>{children}<SiteBottomNav/><SiteAd/></body>
     </html>
   );
 }
