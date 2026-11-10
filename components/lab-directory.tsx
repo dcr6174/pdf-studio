@@ -14,7 +14,6 @@ const filters = [
   ["all", "All"],
   ["images", "Images"],
   ["creative", "Creative"],
-  ["arcade", "Games"],
 ] as const;
 export function LabDirectory({ children }: { children?: ReactNode }) {
   const [query, setQuery] = useState(""),
@@ -34,11 +33,7 @@ export function LabDirectory({ children }: { children?: ReactNode }) {
       <div>
         <span>
           {label(e)} ·{" "}
-          {e.kind === "game"
-            ? "Game"
-            : e.kind === "studio"
-              ? "Catalogue"
-              : "Tool"}
+          {e.kind === "studio" ? "Catalogue" : "Tool"}
         </span>
         <h3>{e.title}</h3>
         <p>{e.description}</p>
@@ -47,7 +42,7 @@ export function LabDirectory({ children }: { children?: ReactNode }) {
     </Link>
   );
   return (
-    <section className="lab-discovery" aria-label="Find a tool or game">
+    <section className="lab-discovery" aria-label="Find a Lab tool">
       <div
         className="lab-search-wrap"
         onBlur={(e) => {
@@ -55,7 +50,7 @@ export function LabDirectory({ children }: { children?: ReactNode }) {
         }}
       >
         <label className="lab-search-label" htmlFor={id}>
-          Find a tool or game
+          Find a Lab tool
         </label>
         <div className="lab-search">
           <Search size={21} aria-hidden="true" />
@@ -71,9 +66,9 @@ export function LabDirectory({ children }: { children?: ReactNode }) {
                 ? id + "-" + active
                 : undefined
             }
-            aria-label="Search Lab tools and games"
+            aria-label="Search Lab tools"
             value={query}
-            placeholder="Try crop, flashcards or cricket…"
+            placeholder="Try crop, flashcards or whiteboard…"
             onFocus={() => setOpen(true)}
             onChange={(e) => {
               setQuery(e.target.value);
@@ -131,7 +126,7 @@ export function LabDirectory({ children }: { children?: ReactNode }) {
             <div
               id={id + "-list"}
               role="listbox"
-              aria-label="Suggested tools and games"
+              aria-label="Suggested tools"
             >
               {suggestions.map((e, i) => (
                 <a
@@ -152,7 +147,7 @@ export function LabDirectory({ children }: { children?: ReactNode }) {
               ))}
             </div>
             {!suggestions.length && (
-              <p>No match. Try “photo”, “cards” or “racing”.</p>
+              <p>No match. Try “photo”, “cards” or “timer”.</p>
             )}
             <button type="button" onClick={() => setOpen(false)}>
               Close suggestions
@@ -244,7 +239,7 @@ export function LabDirectory({ children }: { children?: ReactNode }) {
         </>
       )}
       <PublicDirectory
-        title="Browse all Lab tools and games"
+        title="Browse all Lab tools"
         entries={labEntries.map((e) => ({
           path: e.href,
           title: e.title + " — " + label(e),
