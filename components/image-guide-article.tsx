@@ -1,4 +1,5 @@
 import Link from "@/components/browser-link";
+import {SiteHeader,SiteFooter} from "@/components/site-header";
 import {
   ArrowUpRight,
   BookOpen,
@@ -67,7 +68,7 @@ export function ImageGuideArticle({ guide: g }: { guide: ImageGuide }) {
     })),
   };
   return (
-    <main className="image-guide-page">
+    <><SiteHeader/><main className="image-guide-page">
       <nav className="ig-topnav" aria-label="Breadcrumb">
         <Link href="/lab">
           <ArrowLeft size={15} />
@@ -261,11 +262,6 @@ export function ImageGuideArticle({ guide: g }: { guide: ImageGuide }) {
           </section>
         )}
       </article>
-      <footer className="ig-footer">
-        <Link href="/lab/guides">All Image Studio guides</Link>
-        <Link href="/blog">PDF and image articles</Link>
-        <Link href="/privacy">Privacy</Link>
-      </footer>
       <script
         type="application/ld+json"
         dangerouslySetInnerHTML={{
@@ -278,6 +274,6 @@ export function ImageGuideArticle({ guide: g }: { guide: ImageGuide }) {
           __html: JSON.stringify(breadcrumbs).replace(/</g, "\\u003c"),
         }}
       />
-    </main>
+    </main><SiteFooter/></>
   );
 }

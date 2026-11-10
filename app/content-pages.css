@@ -16,3 +16,18 @@ main.seo-page:has(> h1):not(.tool-instructions) li{margin:4px 0}
 .nf-actions{display:flex;gap:10px;justify-content:center;flex-wrap:wrap}
 .nf-actions a{display:inline-flex;align-items:center;min-height:46px;padding:0 20px;border-radius:12px;font-weight:650;text-decoration:none}
 .nf-primary{background:var(--primary);color:#fff}.nf-secondary{background:var(--soft,#EEECFB);color:var(--primary)}
+/* Lab guides: inherit the shared shell tokens */
+.image-guide-page.image-guide-page{--ig-ink:var(--foreground);--ig-muted:var(--muted);--ig-accent:var(--primary);background:transparent;font-family:inherit;min-height:0}
+.image-guide-page.image-guide-page .ig-topnav a{background:var(--card);border:1px solid var(--border);border-radius:999px}
+@media(max-width:720px){.image-guide-page.image-guide-page{padding:0 16px}}
+/* Guides and comparisons: article card with real hierarchy */
+.tool-guide-page>main,main.compare-page{max-width:860px;margin:28px auto 48px;padding:40px clamp(20px,5vw,56px) 44px;background:var(--card);border:1px solid var(--border);border-radius:24px;box-shadow:0 1px 2px rgba(20,16,60,.04),0 12px 32px -18px rgba(81,69,205,.18);line-height:1.7}
+.tool-guide-page>main .tool-instructions{max-width:none;margin:0;padding:0;border:0;background:transparent;box-shadow:none}
+.tool-guide-page>main>header.tool-instructions{padding-bottom:24px;margin-bottom:8px;border-bottom:1px solid var(--border)}
+.tool-guide-page>main h1,main.compare-page h1{font-family:var(--font-display);font-size:clamp(1.9rem,5vw,2.7rem);font-weight:750;letter-spacing:-.03em;line-height:1.12;margin:12px 0 16px}
+.tool-guide-page>main h2,main.compare-page h2{font-family:var(--font-display);font-size:1.35rem;font-weight:700;letter-spacing:-.01em;margin:32px 0 10px}
+.tool-guide-page>main nav[aria-label=Breadcrumb] a,main.compare-page .page-crumbs a{display:inline-flex;align-items:center;min-height:32px;padding:0 12px;border-radius:999px;background:var(--soft,#EEECFB);color:var(--primary);font-size:.82rem;font-weight:600;text-decoration:none}
+main.compare-page .page-crumbs{display:flex;gap:8px;align-items:center;flex-wrap:wrap}
+.tool-guide-page>main .primary{display:inline-flex;align-items:center;min-height:46px;padding:0 20px;border-radius:12px;background:var(--primary);color:#fff;font-weight:650;text-decoration:none}
+.tool-guide-page>main p,main.compare-page p{max-width:68ch}
+@media(max-width:720px){.tool-guide-page>main,main.compare-page{margin:12px 12px 24px;padding:24px 18px 30px;border-radius:20px}}
