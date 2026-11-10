@@ -126,7 +126,7 @@ const highlightText:NewTool={
   const terms=String(v.terms).split('\n').map(s=>s.trim()).filter(Boolean);
   if(!terms.length)throw new Error('Enter at least one word or phrase.');
   if(terms.length>50)throw new Error('Use at most 50 terms.');
-  const doc=await openPdf(bytes),c=hexColor(String(v.color)),color=rgb(c.r,c.g,c.b),reader=await renderer(bytes);let hits=0;const per:Record<string,number>={};
+  const hl=String(v.color||''),doc=await openPdf(bytes),c=hexColor(/^#?[0-9a-f]{6}$/i.test(hl)&&!/^#?0{6}$/.test(hl)?hl:'#ffe14d'),color=rgb(c.r,c.g,c.b),reader=await renderer(bytes);let hits=0;const per:Record<string,number>={};
   const meas=document.createElement('canvas').getContext('2d')!;
   try{
    for(let pn=1;pn<=reader.numPages;pn++){
