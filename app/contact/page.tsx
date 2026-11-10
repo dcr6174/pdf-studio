@@ -2,7 +2,6 @@ import type {Metadata} from 'next';
 import {pageMeta} from '@/lib/page-meta';
 import {SiteFrame} from '@/components/site-frame';
 import Link from '@/components/browser-link';
-import {BuddyHero} from '@/components/buddy-hero';
 import {MessageCircle,Bug,Lightbulb} from 'lucide-react';
 import './contact.css';
 import {CONTACT_EMAIL,mailtoLink} from '@/lib/contact';
@@ -13,7 +12,7 @@ export default function Contact(){
  const schema={'@context':'https://schema.org','@type':'ContactPage',name:'Contact PDF Studio',url:'https://pdf-studio.in/contact',mainEntity:{'@type':'Organization',name:'PDF Studio',url:'https://pdf-studio.in/',email:CONTACT_EMAIL}};
  return <SiteFrame><main className="seo-page contact-page">
   <script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify(schema).replace(/</g,'\\u003c')}}/>
-  <section className="contact-hero"><div><span className="contact-eyebrow">A little help. A better studio.</span><h1>Let’s make PDFs easier.</h1><p>Have a question, spotted a glitch or imagined something useful? We’d love to hear from you.</p><a className="primary" href={'mailto:'+CONTACT_EMAIL}>Say hello</a></div><div className="contact-buddy"><BuddyHero/><span>Meet Buddy. Tap for a smile.</span></div></section><h2>Contact PDF Studio</h2>
+  <section className="contact-hero"><div><span className="contact-eyebrow">A little help. A better studio.</span><h1>Let’s make PDFs easier.</h1><p>Have a question, spotted a glitch or imagined something useful? We’d love to hear from you.</p><a className="primary" href={'mailto:'+CONTACT_EMAIL}>Say hello</a></div></section><h2>Contact PDF Studio</h2>
   <p className="lead">Questions, problems and ideas are welcome. Write to <a target="_blank" rel="noopener noreferrer" href={'mailto:'+CONTACT_EMAIL}>{CONTACT_EMAIL}</a>.</p>
   <div className="contact-cards">
    <a target="_blank" rel="noopener noreferrer" href={mailtoLink('question')}><MessageCircle aria-hidden="true"/><b>Ask a question</b><span>How a tool works, what a limit means, or whether something is supported.</span></a>
