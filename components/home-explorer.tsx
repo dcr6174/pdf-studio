@@ -66,6 +66,7 @@ export function HomeExplorer({onNavigate}:{onNavigate:(id:string)=>void}){
  );
  return <div className="hx-home">
   <section className="hx-hero">
+   <span className="hx-pill"><i aria-hidden="true"/>{PDF_TOOL_COUNT} tools · private by design</span>
    <h1>Everything you need to work with PDFs.</h1>
    <p>100+ free PDF tools to edit, convert, organize and protect your documents, all running on your device. No sign-up, no watermark.</p>
    <div className={'hx-drop'+(drag?' is-drag':'')+(file?' has-file':'')} onDragOver={e=>{e.preventDefault();setDrag(true);}} onDragLeave={()=>setDrag(false)} onDrop={e=>{e.preventDefault();setDrag(false);pick(e.dataTransfer.files);}}>
