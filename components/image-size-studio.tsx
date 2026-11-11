@@ -1,4 +1,5 @@
 "use client";
+import {brandDownloadName} from '@/lib/export-filename';
 import { useEffect, useRef, useState } from "react";
 import {
   Upload,
@@ -260,12 +261,12 @@ export function ImageSizeStudio() {
           <a
             className="iw-primary"
             href={url}
-            download={
+            download={brandDownloadName(
               (file?.name.replace(/\.[^.]+$/, "") ?? "image") +
               (result.met ? "-under-" + limit + "kb" : "-smallest-result") +
               "." +
               (format === "jpeg" ? "jpg" : "png")
-            }
+            )}
           >
             <Download size={17} />
             {result.met ? "Download image" : "Download smallest result"}

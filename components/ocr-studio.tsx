@@ -1,4 +1,5 @@
 'use client';
+import {brandDownloadName} from '@/lib/export-filename';
 import {useEffect,useRef,useState} from 'react';
 import {ArrowLeft,Check,ChevronLeft,ChevronRight,Download,FileText,LoaderCircle,ScanText,ShieldCheck,Upload} from 'lucide-react';
 import Image from '@/components/browser-image';
@@ -26,7 +27,7 @@ export function OCRStudio(){
  }
  async function turn(next:number){if(!file||busy)return;const generation=token.current,controller=new AbortController();cancel.current=controller;setBusy('Opening page');setError('');try{const img=await picture(file,next,file.bytes,controller.signal);if(generation===token.current){setImage(img);setPage(next);}}catch(e){if(generation===token.current)setError(issue(e));}finally{if(generation===token.current){setBusy('');cancel.current=null;}}}
  function restart(){if(busy)return;token.current++;setFile(null);setImage('');setOutput(null);setReview(false);setError('');setNotice('');setProgress(0);}
- function download(){if(!output||!file)return;const url=URL.createObjectURL(output.blob),a=document.createElement('a');a.href=url;a.download=file.name.replace(/\.[^.]+$/,'')+'-searchable.pdf';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);setNotice('Downloaded. Look in your browser’s Downloads for your searchable PDF.');}
+ function download(){if(!output||!file)return;const url=URL.createObjectURL(output.blob),a=document.createElement('a');a.href=url;a.download=brandDownloadName(file.name.replace(/\.[^.]+$/,'')+'-searchable.pdf');a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);setNotice('Downloaded. Look in your browser’s Downloads for your searchable PDF.');}
  const noWords=!!output?.ocrReview?.length&&output.ocrReview.every(p=>p!==null&&p.words.length===0);
  const uncertain=output?.ocrReview?.reduce((n,p)=>n+(p?.words.filter(w=>w.confidence<80).length??0),0)??0;
  return <main className={'ocr-easy '+(file?'ocr-easy-open':'')}><Link className="ocr-back" href="/tools"><ArrowLeft size={17}/>All tools</Link>

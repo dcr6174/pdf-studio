@@ -1,4 +1,5 @@
 'use client';
+import {brandDownloadName} from '@/lib/export-filename';
 import {useEffect,useRef,useState} from 'react';
 import {SiteHeader,SiteFooter} from '@/components/site-header';
 import BrowserImage from '@/components/browser-image';
@@ -6,7 +7,7 @@ import Link from '@/components/browser-link';
 import {funTools,cardLines,randomIndex,shuffleCards,wheelChoices,type FunMode} from '@/lib/fun-lab';
 import './fun-lab.css';
 
-function download(blob:Blob,name:string){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();window.setTimeout(()=>URL.revokeObjectURL(url),30000)}
+function download(blob:Blob,name:string){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=brandDownloadName(name);a.click();window.setTimeout(()=>URL.revokeObjectURL(url),30000)}
 type Photo={id:string;name:string;url:string};
 type Card={id:string;question:string;answer:string};
 export function FunLab({mode}:{mode:FunMode}){

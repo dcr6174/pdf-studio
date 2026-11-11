@@ -1,4 +1,5 @@
 'use client';
+import {brandDownloadName} from '@/lib/export-filename';
 import {useEffect,useRef,useState,type ReactNode} from 'react';
 import {ArrowDown,ArrowUp,BookOpen,Camera,Check,ChevronLeft,ChevronRight,Download,ImagePlus,Layers,LoaderCircle,Plus,RefreshCw,Scissors,Trash2,X} from 'lucide-react';
 import Link from '@/components/browser-link';
@@ -9,7 +10,7 @@ import type {PrintResult} from '@/lib/lab-printables-render';
 import '../app/lab/printables.css';
 
 function Field({label,children}:{label:string;children:ReactNode}){return <label className="printable-field"><span>{label}</span>{children}</label>;}
-function download(blob:Blob,name:string){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=name;a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);}
+function download(blob:Blob,name:string){const url=URL.createObjectURL(blob),a=document.createElement('a');a.href=url;a.download=brandDownloadName(name);a.click();setTimeout(()=>URL.revokeObjectURL(url),1500);}
 function freePictures(pictures:Picture[]){pictures.forEach(p=>{if(p.url.startsWith('blob:'))URL.revokeObjectURL(p.url);});}
 function cancelError(e:unknown){return e instanceof DOMException&&e.name==='AbortError';}
 async function readPhoto(file:File,signal:AbortSignal):Promise<Picture>{
