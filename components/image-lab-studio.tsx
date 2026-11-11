@@ -1,4 +1,5 @@
 "use client";
+import {shelf} from '@/lib/shelf';
 import {brandDownloadName} from '@/lib/export-filename';
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
@@ -282,6 +283,13 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
       return next;
     });
   }
+  useEffect(() => {
+    const id=new URLSearchParams(location.search).get('saved');if(!id)return;
+    let alive=true;void shelf('list').then(rows=>{const file=rows.find(f=>f.id===id);if(alive&&file)choose([new File([file.blob],file.name,{type:file.blob.type})]);else if(alive)setError('This saved image is no longer in this browser. Add it again from your device.');}).catch(()=>setError('Could not open browser storage. Choose the image from your device.'));
+    return()=>{alive=false;};
+    // Saved handoff is read once when this tool opens.
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, []);
   useEffect(() => {
     let canceled = false,
       decoded: HTMLCanvasElement | undefined;
@@ -884,6 +892,7 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
                 : (outputs[0].name.split(".").at(-1)?.toUpperCase() ?? "file")}
             </a>
           )}
+          <button className="iw-secondary" onClick={()=>void (async()=>{try{for(const item of outputs)await shelf('save',{id:crypto.randomUUID(),name:brandDownloadName(item.name),blob:item.blob,date:Date.now()});setNotice('Saved to My files on this device.');}catch{setError('Could not save. Browser storage may be full. Download the image instead.');}})()}>Save to My files</button>
           <button className="iw-reprocess" onClick={() => void run()}>
             <RefreshCw size={13} />
             Process again
