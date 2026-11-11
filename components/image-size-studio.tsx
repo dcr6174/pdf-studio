@@ -1,4 +1,5 @@
 "use client";
+import {shelf} from '@/lib/shelf';
 import {brandDownloadName} from '@/lib/export-filename';
 import { useEffect, useRef, useState } from "react";
 import {
@@ -13,6 +14,7 @@ import { decodeImageOutput } from "@/lib/image-lab";
 import { ImageWorkspace } from "./image-workspace";
 import { ImageViewport } from "./image-viewport";
 export function ImageSizeStudio() {
+  const [saveNotice,setSaveNotice]=useState('');
   const [file, setFile] = useState<File>(),
     [limit, setLimit] = useState("200"),
     [format, setFormat] = useState<"jpeg" | "png">("jpeg"),
@@ -271,6 +273,7 @@ export function ImageSizeStudio() {
             <Download size={17} />
             {result.met ? "Download image" : "Download smallest result"}
           </a>
+          <button className="iw-secondary" onClick={()=>void(async()=>{try{const blob=await fetch(url).then(r=>r.blob());await shelf('save',{id:crypto.randomUUID(),name:brandDownloadName((file?.name.replace(/\.[^.]+$/,'')??'image')+'-resized.'+(format==='jpeg'?'jpg':'png')),blob,date:Date.now()});setSaveNotice('Saved to My files on this device.');}catch{setError('Could not save. Download the image instead.');}})()}>Save to My files</button>{saveNotice&&<p role="status">{saveNotice}</p>}
           <button className="iw-reprocess" onClick={() => void run()}>
             Process again
           </button>
