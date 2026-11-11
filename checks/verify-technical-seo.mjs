@@ -46,6 +46,8 @@ for(const input of [...seo.legacyMetadataPaths,...unapprovedMetadataPaths,'/tool
  assert.equal(seo.isPermanentlyRemovedPath(input),false,'unrelated and working addresses are preserved');
 }
 const cases={
+ '/tools/compress-pdf-to-100kb':'/tools/compress-pdf',
+ '/guides/compress-pdf-to-100kb':'/guides/compress-pdf',
  '/tools/pdf-editor':'/tools/add-text-and-images',
  '/tools/edit-pdf':'/tools/add-text-and-images',
  '/guides/pdf-editor/':'/guides/add-text-and-images',

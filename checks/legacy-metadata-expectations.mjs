@@ -1,5 +1,7 @@
 // Independent expected destinations for aliases present in the GSC export.
 const canonicalAliases={
+ '/tools/compress-pdf-to-100kb':'/tools/compress-pdf',
+ '/guides/compress-pdf-to-100kb':'/guides/compress-pdf',
  '/lab/sketch-pdf':'/tools/sketch-over-pdf',
  '/tools/resize-to-a4':'/tools/resize-pages',
  '/guides/resize-to-a4':'/guides/resize-pages',
