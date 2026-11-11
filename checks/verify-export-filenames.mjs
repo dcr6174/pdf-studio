@@ -13,3 +13,8 @@ assert.equal(brandDownloadName('pdf-studio-whiteboard.excalidraw'),'whiteboard -
 assert.equal(brandDownloadName('../unsafe/report.txt'),'.. unsafe report - pdf-studio.in - Export.txt');
 assert.equal(exportFilename('sign','output.pdf','','Quarterly_Report (final).PDF'),'Quarterly_Report (final) - pdf-studio.in - Signed.pdf');
 console.log('PASS: branding for every catalog tool, action replacement, conversion extensions, unique ZIP entries, custom exports, idempotence and safe filenames.');
+const {imageTools}=load('lib/image-tools.ts');
+let imageCases=0;
+for(const tool of imageTools){for(const ext of ['png','jpg','webp','svg','ico','zip']){const original=`${tool.slug}-result.${ext}`,name=brandDownloadName(original);assert.ok(name.includes(' - pdf-studio.in - '));assert.ok(name.endsWith('.'+ext));assert.equal(brandDownloadName(name),name);imageCases++;}}
+for(const ext of ['pdf','png','jpg','jpeg','webp','svg','ico','zip','txt','csv','json','docx','pptx','xlsx','excalidraw']){for(const tool of tools){const name=exportFilename(tool.id,'source.'+ext,'Page 1','invoice.pdf');assert.ok(name.includes(' - pdf-studio.in - '));assert.ok(name.endsWith('.'+ext));}}
+console.log(`PASS: ${tools.length} catalog actions x 15 output extensions; ${imageTools.length} image tools x 6 output extensions (${imageCases} image cases).`);

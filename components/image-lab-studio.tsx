@@ -1,4 +1,5 @@
 "use client";
+import {brandDownloadName} from '@/lib/export-filename';
 import { useCallback, useEffect, useRef, useState } from "react";
 import {
   Upload,
@@ -730,13 +731,13 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
     try {
       const { default: JSZip } = await import("jszip"),
         archive = new JSZip();
-      outputs.forEach((o) => archive.file(o.name, o.blob));
+      outputs.forEach((o) => archive.file(slug === "favicon-generator" ? o.name : brandDownloadName(o.name), o.blob));
       const blob = await archive.generateAsync({ type: "blob" });
       if (generation.current !== id) return;
       const url = URL.createObjectURL(blob),
         a = document.createElement("a");
       a.href = url;
-      a.download = slug + "-results.zip";
+      a.download = brandDownloadName(slug + "-results.zip");
       a.click();
       setTimeout(() => URL.revokeObjectURL(url), 30000);
       setNotice("Download started · check your browser’s downloads");
@@ -871,7 +872,7 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
             <a
               className="iw-primary"
               href={outputs[0].url}
-              download={outputs[0].name}
+              download={brandDownloadName(outputs[0].name)}
               onClick={() =>
                 setNotice("Download started · check your browser’s downloads")
               }
@@ -940,7 +941,7 @@ export function ImageLabStudio({ mode }: { mode: ImageToolSlug }) {
         <details className="iw-file-downloads">
           <summary>Individual downloads</summary>
           {outputs.map((o) => (
-            <a key={o.url} href={o.url} download={o.name}>
+            <a key={o.url} href={o.url} download={brandDownloadName(o.name)}>
               <Download size={13} />
               <span>
                 {o.name}

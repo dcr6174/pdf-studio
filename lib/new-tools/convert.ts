@@ -1,3 +1,4 @@
+import {brandDownloadName} from '../export-filename';
 import {PDFDocument,PDFName} from 'pdf-lib';
 import JSZip from 'jszip';
 import type {NewTool} from './types';
@@ -215,7 +216,7 @@ const images:NewTool={
       ctx.putImageData(out,0,0);
      }else continue;
      const blob:Blob|null=await new Promise(res=>c.toBlob(res,'image/png'));if(!blob)continue;
-     n++;zip.file(`image-${String(n).padStart(3,'0')}-page-${i}.png`,blob);
+     n++;zip.file(brandDownloadName(`image-${String(n).padStart(3,'0')}-page-${i}.png`),blob);
     }
     progress(Math.round(i/r.numPages*100));
    }
@@ -334,7 +335,7 @@ const textPages:NewTool={
   const rep=`${pages.length} page${pages.length===1?'':'s'} exported${empty?`, ${empty} with no selectable text`:''}.`;
   if(v.mode==='one')return textResult(texts.map((t,i)=>`--- Page ${i+1} ---\n${t}\n`).join('\n'),'txt','text/plain',rep);
   const zip=new JSZip(),pad=String(pages.length).length;
-  texts.forEach((t,i)=>zip.file(`page-${String(i+1).padStart(pad,'0')}.txt`,t+'\n'));
+  texts.forEach((t,i)=>zip.file(brandDownloadName(`page-${String(i+1).padStart(pad,'0')}.txt`),t+'\n'));
   return {blob:await zip.generateAsync({type:'blob'}),ext:'zip',report:rep};
  }
 };
