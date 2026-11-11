@@ -261,8 +261,8 @@ async function plainPDF(text: string, markdown = false) { if(markdown)return (aw
     }
     y += 2;
 } return new Uint8Array(p.output('arraybuffer')); }
-async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number) => void, signal?:AbortSignal, previewContext?:{offset:number;total:number}): Promise<Output> {
-    signal?.throwIfAborted();const reportProgress=progress;progress=(n)=>{signal?.throwIfAborted();reportProgress(n);};
+async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[], marks: Mark[], o: Options, progress: (n: number,detail?:string) => void, signal?:AbortSignal, previewContext?:{offset:number;total:number}): Promise<Output> {
+    signal?.throwIfAborted();const reportProgress=progress;progress=(n,detail)=>{signal?.throwIfAborted();reportProgress(n,detail);};
     let first = files[0];
     const inputIssue=taskInputIssue(id,files.length,o,false,items.length);if(inputIssue)throw new Error(inputIssue);
     if(id==='workflow'){
@@ -711,6 +711,7 @@ export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks
  const output={...rawOutput,name:exportFilename(id,rawOutput.name,'',files[0]?.name??rawOutput.name)};
  if(output.blob.type!=='application/pdf'||id==='encrypt')return output;
  signal?.throwIfAborted();
+ progress(97,'Checking exported PDF');
  const bytes=new Uint8Array(await output.blob.arrayBuffer());
  if(!new TextDecoder().decode(bytes.slice(0,1024)).includes('%PDF-'))throw new Error('Export did not produce a valid PDF. Your original is still in the workspace.');
  const doc=await PDFDocument.load(bytes,{updateMetadata:false});
