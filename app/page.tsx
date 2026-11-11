@@ -1,4 +1,5 @@
 'use client';
+import {ResultPreview} from '@/components/result-preview';
 import {PDFSwipeComparison} from '@/components/pdf-swipe-comparison';
 import {signatureFromName,loadSignatureFont} from '@/lib/signatures';
 import {exportFilename,brandDownloadName} from '@/lib/export-filename';
@@ -139,11 +140,6 @@ function PageCard({ item, file, position, onRotate, onRemove, onMove, select, ac
     select: () => void;
     active: boolean;
 }) { const { attributes, listeners, setNodeRef, transform, transition, isDragging } = useSortable({ id: item.id }); return <article ref={setNodeRef} style={{ transform: CSS.Transform.toString(transform), transition, opacity: isDragging ? .4 : 1 }} className={`page-card ${active ? 'chosen' : ''}`}><button type="button" className="page-drag-handle" {...attributes} {...listeners} aria-label={`Reorder page ${position+1}`}><GripVertical size={16}/></button><button className="page-preview" onClick={select} aria-label={`Select page ${position + 1}`}><Thumb file={file} index={item.index} rotation={item.rotation}/></button><div className="page-caption"><span>Page {position + 1}</span><span>{file.name}</span></div><div className="page-actions"><button aria-label={`Move page ${position + 1} earlier`} onClick={() => onMove(-1)}><ChevronLeft size={15}/></button><button aria-label={`Rotate page ${position + 1}`} onClick={onRotate}><RotateCw size={15}/></button><button aria-label={`Move page ${position + 1} later`} onClick={() => onMove(1)}><ChevronRight size={15}/></button><button aria-label={`Remove page ${position + 1}`} onClick={onRemove}><Trash2 size={15}/></button></div></article>; }
-function ResultPreview({output}:{output:Output}){
- const [file,setFile]=useState<Loaded>(),[message,setMessage]=useState('');
- useEffect(()=>{let alive=true;queueMicrotask(()=>{if(alive){setFile(undefined);setMessage('');}});loadFile(new File([output.blob],output.name)).then(f=>alive&&setFile(f)).catch(()=>alive&&setMessage('This result cannot be previewed. Protected PDFs require a password in your PDF reader.'));return()=>{alive=false;};},[output]);
- return <div className="result-preview">{file&&file.pages>0?Array.from({length:file.pages},(_,i)=><div key={i}><p className="muted">Page {i+1}</p><Thumb file={file} index={i} large/></div>):<p role="status">{message||'Opening the exported file…'}</p>}</div>;
-}
 const LazyOnlineTextEditor=lazy(()=>import('@/components/online-text-editor').then(m=>({default:m.OnlineTextEditor})));
 const LazyOCRReview=lazy(()=>import('@/components/ocr-review').then(m=>({default:m.OCRReview})));
 const LazyTemplateBuilder=lazy(()=>import('@/components/template-builder').then(m=>({default:m.TemplateBuilder})));

@@ -101,7 +101,7 @@ export function HomeExplorer({onNavigate}:{onNavigate:(id:string)=>void}){
    {!shown.length&&<p className="hx-empty">No tools found. Try “merge”, “compress” or “sign”.</p>}
   </section>:<>
    <section className="hx-section" aria-labelledby="hx-popular-title">
-    <div className="hx-section-head"><h2 id="hx-popular-title">Popular tools</h2><p>The everyday six.</p></div>
+    <div className="hx-section-head"><h2 id="hx-popular-title">Popular tools</h2><p>Everyday favourites.</p></div>
     <div className="hx-grid">{popularIds.map(id=>{const t=tools.find(t=>t.id===id);return t?card(t):null;})}</div>
    </section>
 
