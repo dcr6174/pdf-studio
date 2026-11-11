@@ -6,6 +6,6 @@
 .liquid-container .wave-change::after{border-radius:47% 42% 46% 44%;background-color:rgba(255,255,255,.8);transform:translate(-50%,-70%) rotate(0);animation:liquid-rotate 9s linear -4s infinite;z-index:2}
 .liquid-container .wave{position:relative;width:200px;height:200px;background-color:rgb(118,218,255);border-radius:50%}
 @keyframes liquid-rotate{50%{transform:translate(-50%,-73%) rotate(180deg)}100%{transform:translate(-50%,-70%) rotate(360deg)}}
-.liquid-value{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:750;font-size:23px;color:var(--foreground);pointer-events:none}
-.liquid-value b{display:block;padding:2px 8px;border-radius:999px;background:var(--card);color:var(--foreground);font:inherit}
+.liquid-value{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;font-weight:750;font-size:23px;color:#10212a;pointer-events:none}
+.liquid-value b{display:block;padding:0;background:transparent;color:inherit;font:inherit}
 @media(prefers-reduced-motion:reduce){.liquid-container .wave-change{transition:none}.liquid-container .wave-change::before,.liquid-container .wave-change::after{animation:none}}
