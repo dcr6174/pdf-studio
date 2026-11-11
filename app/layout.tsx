@@ -24,6 +24,7 @@ import "./content-pages.css";
 import "./tools-directory.css";
 import "./future.css";
 import "./material-buttons.css";
+import "./file-buttons.css";
 
 export const viewport: Viewport = {width:"device-width",initialScale:1,viewportFit:"cover",interactiveWidget:"resizes-content"};
 
