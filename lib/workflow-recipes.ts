@@ -16,7 +16,7 @@ export function workflowSettings(step:string,value:unknown):WorkflowStepSettings
  if(step==='viewer')return {columns:pick('columns',['1','2'],'1')};
  if(step==='metadata')return {title:text('title'),author:text('author'),subject:text('subject')};
  if(step==='bookmarks')return {text:text('text','',8000)};
- if(step==='blank')return {blankAt:num('blankAt','1',1,2000)};
+ if(step==='blank')return {blankAt:num('blankAt','1',1,5000)};
  if(step==='crop'){const margin=num('margin','20',0,500);return {margin,cropTop:num('cropTop',margin,0,500),cropRight:num('cropRight',margin,0,500),cropBottom:num('cropBottom',margin,0,500),cropLeft:num('cropLeft',margin,0,500)};}
  if(step==='flip')return {flipAxis:pick('flipAxis',['horizontal','vertical'],'horizontal')};
  if(['numbers','bates','headers'].includes(step)){const labelColor=text('labelColor','#333340');if(!/^#[0-9a-f]{6}$/i.test(labelColor))throw new Error('Choose a valid text color.');return {labelColor,labelFont:pick('labelFont',['noto','helvetica','times','courier'],step==='numbers'?'helvetica':'noto'),labelOpacity:num('labelOpacity','100',1,100),headerPosition:pick('headerPosition',['left','center','right'],'left'),footerPosition:pick('footerPosition',['left','center','right'],'left'),text:text('text',step==='bates'?'DOC-':''),footer:text('footer'),start:num('start','1',1,999999999),numberPosition:pick('numberPosition',['top-left','top-center','top-right','middle-left','middle-center','middle-right','bottom-left','bottom-center','bottom-right'],'bottom-center'),numberFormat:pick('numberFormat',['decimal','roman','alpha','page','total'],'decimal'),labelFontSize:num('labelFontSize','11',6,72),labelMargin:num('labelMargin','24',5,200),batesDigits:num('batesDigits','6',1,12),batesSuffix:text('batesSuffix')};}
@@ -39,7 +39,7 @@ export function workflowStepIssue(step:string,s:WorkflowStepSettings,pages:numbe
  if(step==='remove'||step==='reorder'||step==='extract'){
   if(!s.range?.trim())return step==='remove'?'Enter the pages to remove.':step==='extract'?'Enter the pages to keep.':'Enter the complete page order.';
   const order:number[]=[];
-  for(const part of s.range.split(',')){const m=/^\s*(\d+)(?:\s*-\s*(\d+))?\s*$/.exec(part);if(!m)return 'Use page numbers or ranges, such as 1, 3-5.';const a=Number(m[1]),b=Number(m[2]??m[1]);if(a<1||b<a||b>(pages||2000))return `Choose pages within 1-${pages||400}.`;for(let n=a;n<=b;n++)order.push(n);}
+  for(const part of s.range.split(',')){const m=/^\s*(\d+)(?:\s*-\s*(\d+))?\s*$/.exec(part);if(!m)return 'Use page numbers or ranges, such as 1, 3-5.';const a=Number(m[1]),b=Number(m[2]??m[1]);if(a<1||b<a||b>(pages||5000))return `Choose pages within 1-${pages||400}.`;for(let n=a;n<=b;n++)order.push(n);}
   if(pages&&step==='remove'&&new Set(order).size>=pages)return 'Keep at least one page.';
   if(pages&&step==='reorder'&&(new Set(order).size!==pages||order.length!==pages))return 'Include every page exactly once.';
  }
@@ -49,7 +49,7 @@ export function workflowStepIssue(step:string,s:WorkflowStepSettings,pages:numbe
   const rows=(s.text??'').split('\n').map(v=>v.trim()).filter(Boolean);
   if(!rows.length)return 'Enter a page number and bookmark title, one per line.';
   if(rows.length>100)return 'Use at most 100 bookmarks.';
-  if(rows.some(row=>{const m=/^(\d+)\s+(.+)$/.exec(row);return !m||Number(m[1])<1||Number(m[1])>(pages||2000);}))return 'Use a valid page number and title, such as 1 Introduction.';
+  if(rows.some(row=>{const m=/^(\d+)\s+(.+)$/.exec(row);return !m||Number(m[1])<1||Number(m[1])>(pages||5000);}))return 'Use a valid page number and title, such as 1 Introduction.';
  }
  if(step==='metadata'&&![s.title,s.author,s.subject].some(v=>v?.trim()))return 'Enter a title, author or subject.';
  if(step==='blank'&&pages&&Number(s.blankAt??1)>pages+1)return `Insert at a position from 1 to ${pages+1}.`;

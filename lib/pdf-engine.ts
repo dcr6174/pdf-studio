@@ -395,7 +395,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         order = ranges(o.range, order.length).map(i => order[i]);
     if (!order.length)
         throw new Error('Keep at least one page in your document.');
-    if(order.length>2000)throw new Error('This operation would exceed the 2000-page workspace limit. Choose fewer pages.');
+    if(order.length>5000)throw new Error('This operation would exceed the 5000-page workspace limit. Choose fewer pages.');
     const out = id==='form'?await PDFDocument.load(first.bytes,{updateMetadata:false}):await assemble(files, order,signal,['merge','organize','edit','sign','watermark'].includes(id)&&o.flattenForm);
     if(['images','scan'].includes(id)&&o.imagePaper&&o.imagePaper!=='original'){const sheet=resizeSheet({resizeSize:o.imagePaper,resizeOrientation:o.imageOrientation}),margin=Number(o.imageMargin??20);if(!Number.isFinite(margin)||margin<0||margin>100)throw new Error('Choose an image margin between 0 and 100 pt.');const d=await PDFDocument.create();for(const item of order){const f=files.find(f=>f.id===item.fileId);if(!f?.image)throw new Error('Choose images for this conversion.');const image=await d.embedPng(f.image),p=d.addPage(sheet),scale=Math.min((sheet[0]-margin*2)/image.width,(sheet[1]-margin*2)/image.height);p.drawImage(image,{x:(sheet[0]-image.width*scale)/2,y:(sheet[1]-image.height*scale)/2,width:image.width*scale,height:image.height*scale});p.setRotation(degrees(item.rotation));}return result(await d.save(),`${filename}-images.pdf`,undefined,`${d.getPageCount()} image pages on ${o.imagePaper} sheets. Text recognition was not performed.`);}
     if(id==='split-chapters'){
