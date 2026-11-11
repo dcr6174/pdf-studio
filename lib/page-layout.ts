@@ -15,6 +15,6 @@ export function resizePlacement(width:number,height:number,sheet:[number,number]
 export function splitGroups(value:string,count:number):number[][]{
  if(!value.trim())throw new Error('Enter page groups, for example 1-3; 4,6. Each semicolon starts a new PDF.');
  const groups=value.split(';').map(group=>{if(!group.trim())throw new Error('Remove empty page groups.');const result:number[]=[];for(const token of group.split(',')){const match=token.trim().match(/^(\d+)(?:\s*-\s*(\d+))?$/);if(!match)throw new Error('Use page numbers, ranges and semicolons, for example 1-3; 4,6.');const start=Number(match[1]),end=Number(match[2]??match[1]);if(start<1||end<start||end>count)throw new Error(`Choose page groups within pages 1–${count}.`);for(let p=start-1;p<end;p++)if(!result.includes(p))result.push(p);}return result;});
- if(groups.reduce((n,g)=>n+g.length,0)>400)throw new Error('These groups would export more than 400 pages. Choose fewer or smaller groups.');
+ if(groups.reduce((n,g)=>n+g.length,0)>2000)throw new Error('These groups would export more than 2000 pages. Choose fewer or smaller groups.');
  return groups;
 }
