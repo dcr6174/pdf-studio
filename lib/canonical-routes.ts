@@ -4,6 +4,9 @@ const recoverableMetadataPaths = new Set<string>(legacyMetadataPaths);
 
 /** Redirect only duplicate tasks; retain different output modes and guides. */
 export const canonicalToolRoutes:Record<string,string>={
+ 'delete-pdf-pages':'organize-pdf',
+ 'extract-pdf-pages':'split-pdf',
+ 'compress-pdf-to-100kb':'compress-pdf',
  'resize-to-a4':'resize-pages',
  'pdf-editor':'add-text-and-images',
  'edit-pdf':'add-text-and-images',
