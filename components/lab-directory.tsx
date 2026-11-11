@@ -240,7 +240,7 @@ export function LabDirectory({ children }: { children?: ReactNode }) {
       )}
       <PublicDirectory
         title="Browse all Lab tools"
-        entries={labEntries.map((e) => ({
+        entries={labEntries.filter((e) => e.kind === "tool").map((e) => ({
           path: e.href,
           title: e.title + " — " + label(e),
         }))}

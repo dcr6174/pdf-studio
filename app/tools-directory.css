@@ -9,7 +9,7 @@
 .tools-directory .filters button.selected{background:var(--foreground);border-color:var(--foreground);color:var(--background,#fff)}
 .tools-directory .filters button.selected span{color:inherit;opacity:.75}
 .tools-directory .dir-bar{display:flex;justify-content:flex-end;margin:6px 0 0}
-.tools-directory .dir-sort{display:inline-flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted);font-weight:600}
+.tools-directory .dir-sort{white-space:nowrap;flex-shrink:0;width:auto;display:inline-flex;align-items:center;gap:8px;font-size:.85rem;color:var(--muted);font-weight:600}
 .tools-directory .dir-sort select{min-height:40px;border-radius:10px;border:1px solid var(--border);background:var(--card);color:var(--foreground);padding:0 10px;font:inherit}
 .tools-directory [role=status]{color:var(--muted);font-size:.9rem;margin:4px 0 8px}
 .tools-directory section h2{display:flex;align-items:baseline;gap:10px;font-family:var(--font-display);font-size:1.35rem;letter-spacing:-.02em;margin:28px 0 12px}
@@ -26,3 +26,5 @@
 .tools-directory .tool-card p{grid-area:d;margin:0;font-size:.82rem;line-height:1.35;color:var(--muted);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;align-self:start}
 [data-theme=dark] .tools-directory section[data-group]{--acc-bg:rgba(255,255,255,.08)}
 @media(max-width:640px){.tools-directory section .tool-grid{grid-template-columns:1fr;gap:10px}.tools-directory .filters{flex-wrap:nowrap;overflow-x:auto;margin-inline:-4px;padding:2px 4px 6px;scrollbar-width:none}.tools-directory .filters button{flex:none}.tools-directory section .tool-card{padding:14px;min-height:76px;gap:3px 14px}.tools-directory section .tool-card b{font-size:.98rem;overflow-wrap:normal}.tools-directory section .tool-card p{font-size:.82rem}.tools-directory section .tool-card .tool-icon{width:46px;height:46px}}
+
+@media(max-width:640px){.tools-directory section .tool-card{grid-template-areas:"i t" "i d";height:auto;min-height:76px;grid-template-rows:auto auto}.tools-directory section .tool-card .tool-icon{margin:0}.tools-directory section .tool-card b{align-self:center}.tools-directory section .tool-card p{display:block;min-height:0;max-width:100%}}
