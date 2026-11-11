@@ -1,0 +1,17 @@
+/* Material 3 button hierarchy. Existing placement, dimensions and tool layouts stay intact. */
+html body :is(button.primary,a.primary,button.secondary,a.secondary,.np-run,.hx-drop-btn,[data-slot=button]):not(.danger):not([data-variant=destructive]):not([data-variant=link]){
+
+ position:relative;isolation:isolate;overflow:hidden;border-radius:999px!important;
+ box-shadow:none!important;filter:none!important;transform:none!important;
+ transition:background-color 180ms cubic-bezier(.2,0,0,1),border-color 180ms cubic-bezier(.2,0,0,1),border-radius 180ms cubic-bezier(.2,0,0,1)!important;
+ background:linear-gradient(color-mix(in srgb,currentColor var(--md-state,0%),transparent),color-mix(in srgb,currentColor var(--md-state,0%),transparent)),var(--md-container,transparent)!important;
+}
+html body :is(button.primary,a.primary,.np-run,.hx-drop-btn,[data-slot=button][data-variant=default]):not(.danger){--md-container:var(--primary);color:var(--primary-foreground,#fff)!important;border-color:transparent!important}
+html body :is(button.secondary,a.secondary,[data-slot=button][data-variant=outline]):not(.danger){--md-container:transparent;color:var(--foreground)!important;border:1px solid color-mix(in srgb,var(--foreground) 34%,var(--border))!important}
+html body :is(button.secondary.tonal,a.secondary.tonal,[data-slot=button][data-variant=secondary]):not(.danger){--md-container:color-mix(in srgb,var(--primary) 15%,var(--card));color:var(--foreground)!important;border-color:transparent!important}
+@media(hover:hover){html body :is(button.primary,a.primary,button.secondary,a.secondary,.np-run,.hx-drop-btn,[data-slot=button]):not(:disabled):not([aria-disabled=true]):hover{--md-state:8%}}
+html body :is(button.primary,a.primary,button.secondary,a.secondary,.np-run,.hx-drop-btn,[data-slot=button]):focus-visible{--md-state:10%;outline:3px solid var(--primary)!important;outline-offset:3px}
+html body :is(button.primary,a.primary,button.secondary,a.secondary,.np-run,.hx-drop-btn,[data-slot=button]):not(:disabled):not([aria-disabled=true]):active{--md-state:10%;border-radius:12px!important}
+html body :is(button.primary,button.secondary,.np-run,.hx-drop-btn,[data-slot=button]):is(:disabled,[aria-disabled=true]){--md-state:0%;--md-container:color-mix(in srgb,var(--foreground) 12%,transparent);color:color-mix(in srgb,var(--foreground) 38%,transparent)!important;border-color:transparent!important;opacity:1;cursor:not-allowed}
+.md-button-ripple{position:absolute;display:block;border-radius:50%;background:currentColor;pointer-events:none;opacity:0;z-index:0;transform:scale(0);will-change:transform,opacity}
+@media(prefers-reduced-motion:reduce){html body :is(button.primary,a.primary,button.secondary,a.secondary,.np-run,.hx-drop-btn,[data-slot=button]):not(.danger):not([data-variant=destructive]):not([data-variant=link]){transition:none!important}.md-button-ripple{display:none}}

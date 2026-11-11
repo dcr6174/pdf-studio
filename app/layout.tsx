@@ -1,3 +1,4 @@
+import {ButtonFeedback} from '@/components/button-feedback';
 import {SiteBottomNav} from '@/components/site-bottom-nav';
 import {HandoffInjector} from '@/components/handoff-injector';
 import {CONTACT_EMAIL} from '@/lib/contact';
@@ -22,6 +23,7 @@ import "./studio-tokens.css";
 import "./content-pages.css";
 import "./tools-directory.css";
 import "./future.css";
+import "./material-buttons.css";
 
 export const viewport: Viewport = {width:"device-width",initialScale:1,viewportFit:"cover",interactiveWidget:"resizes-content"};
 
@@ -45,7 +47,7 @@ export default function RootLayout({
   return (
     <html lang="en" suppressHydrationWarning>
       <head><meta name="pdf-studio-release" content="audit-revamp-20261007"/><script dangerouslySetInnerHTML={{__html:themeBootstrapScript}}/><script dangerouslySetInnerHTML={{__html:startupGuardScript}}/><link rel="preload" href="/fonts/Outfit-Bold-subset.woff" as="font" type="font/woff" crossOrigin="anonymous"/></head>
-      <body className="antialiased"><noscript><p style={{margin:0,padding:"12px 16px",background:"#17142E",color:"#fff",font:"15px/1.5 system-ui,sans-serif"}}>PDF Studio needs JavaScript to open and edit files. Please turn it on for this site.</p></noscript><StartupReady/><ResponsiveViewport/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://pdf-studio.in/#website",name:"PDF Studio",url:"https://pdf-studio.in/",description:"Free PDF tools with on-device document processing",inLanguage:"en",publisher:{"@id":"https://pdf-studio.in/#organization"}},{"@type":"Organization","@id":"https://pdf-studio.in/#organization",name:"PDF Studio",url:"https://pdf-studio.in/",logo:"https://pdf-studio.in/brand/pdf-studio-logo-v5.svg",email:CONTACT_EMAIL,contactPoint:{"@type":"ContactPoint",contactType:"customer support",email:CONTACT_EMAIL}}]})}}/>{children}<HandoffInjector/><SiteBottomNav/><SiteAd/></body>
+      <body className="antialiased"><noscript><p style={{margin:0,padding:"12px 16px",background:"#17142E",color:"#fff",font:"15px/1.5 system-ui,sans-serif"}}>PDF Studio needs JavaScript to open and edit files. Please turn it on for this site.</p></noscript><StartupReady/><ButtonFeedback/><ResponsiveViewport/><script type="application/ld+json" dangerouslySetInnerHTML={{__html:JSON.stringify({"@context":"https://schema.org","@graph":[{"@type":"WebSite","@id":"https://pdf-studio.in/#website",name:"PDF Studio",url:"https://pdf-studio.in/",description:"Free PDF tools with on-device document processing",inLanguage:"en",publisher:{"@id":"https://pdf-studio.in/#organization"}},{"@type":"Organization","@id":"https://pdf-studio.in/#organization",name:"PDF Studio",url:"https://pdf-studio.in/",logo:"https://pdf-studio.in/brand/pdf-studio-logo-v5.svg",email:CONTACT_EMAIL,contactPoint:{"@type":"ContactPoint",contactType:"customer support",email:CONTACT_EMAIL}}]})}}/>{children}<HandoffInjector/><SiteBottomNav/><SiteAd/></body>
     </html>
   );
 }
