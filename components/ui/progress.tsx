@@ -13,7 +13,8 @@ function Progress({
   ...props
 }: React.ComponentProps<typeof ProgressPrimitive.Root>) {
   const clipId=React.useId();
-  const wave="M-20 8 Q-15 1 -10 8 T10 8 T30 8 T50 8 T70 8 T90 8 T110 8 T130 8";
+  const amount=Math.max(0,Math.min(100,value??35))*2.8;
+  const wave='M -64 10 '+Array.from({length:13},(_,i)=>{const x=-64+i*32;return `C ${x+4} 10 ${x+4} 6 ${x+8} 6 S ${x+20} 14 ${x+24} 14 S ${x+28} 10 ${x+32} 10`;}).join(' ');
   return (
     <ProgressPrimitive.Root
       data-slot="progress"
@@ -24,9 +25,9 @@ function Progress({
       )}
       {...props}
     >
-      <svg viewBox="0 0 100 16" preserveAspectRatio="none" aria-hidden="true" className="progress-wave-svg">
-        <defs><clipPath id={clipId}><rect width={Math.max(0,Math.min(100,value??35))} height="16"/></clipPath></defs>
-        <path d={wave} className="progress-wave-track"/>
+      <svg viewBox="0 0 280 20" preserveAspectRatio="none" aria-hidden="true" className="progress-wave-svg">
+        <defs><clipPath id={clipId}><rect width={amount} height="20"/></clipPath></defs>
+        {amount<272&&<line x1={amount+8} y1="10" x2="278" y2="10" className="progress-wave-track"/>}
         <g clipPath={`url(#${clipId})`}><path d={wave} className="progress-wave-fill"/></g>
       </svg>
       <ProgressPrimitive.Indicator data-slot="progress-indicator" className="sr-only"/>
