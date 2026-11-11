@@ -47,7 +47,6 @@ export function PdfToolPage({id}:{id:string}){
   const f=Array.from(list??[])[0];if(!f)return;
   setError('');
   if(!/\.pdf$/i.test(f.name)&&f.type!=='application/pdf'){setError('Choose a PDF file.');return;}
-  if(f.size>300_000_000){setError('This file is larger than 300 MB. Choose a smaller PDF.');return;}
   setOpening(true);
   try{
    const bytes=new Uint8Array(await f.arrayBuffer()),{PDFDocument}=await import('pdf-lib');

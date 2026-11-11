@@ -18,7 +18,7 @@ const addBlankPages:NewTool={
   if(v.where==='end')spots=[n];else if(v.where==='start')spots=[0];
   else if(v.where==='after'){const list=pageList(String(v.pages),n);if(!String(v.pages).trim())throw new Error('Enter the page numbers to add blanks after.');spots=list.map(i=>i+1);}
   else{const e=inRange(num(v,'every'),1,100,'N');for(let i=e;i<=n;i+=e)spots.push(i);if(!spots.length)throw new Error(`The PDF has only ${n} pages, so no blank page fits after every ${e}.`);}
-  const total=n+spots.length*count;if(total>2000)throw new Error('The result would pass 2,000 pages. Add fewer blank pages.');
+  const total=n+spots.length*count;if(total>5000)throw new Error('The result would pass 5,000 pages. Add fewer blank pages.');
   const dims=doc.getPages().map(p=>{const b=p.getCropBox();return [b.width,b.height] as [number,number];});
   for(const at of [...spots].sort((a,b)=>b-a)){
    for(let c=0;c<count;c++){
