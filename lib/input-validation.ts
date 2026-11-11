@@ -1,4 +1,4 @@
-export const MAX_BYTES=150*1024*1024,MAX_PAGES=400,MAX_BATCH=20;
+export const MAX_BYTES=150*1024*1024,MAX_PAGES=2000,MAX_BATCH=20;
 export function validateSelection(files:{name:string;size:number}[],extensions:string,multiple:boolean,existingBytes=0){
  if(!files.length)throw new Error('Choose at least one file.');
  if(files.some(f=>!extensions.split(',').some(ext=>f.name.toLowerCase().endsWith(ext))))throw new Error(`Choose ${extensions} files for this tool.`);
