@@ -1,7 +1,7 @@
 import {PDFDocument,PDFRawStream,PDFName,PDFNumber,PDFDict,PDFArray,decodePDFRawStream} from 'pdf-lib';
 import {decodePhoto} from './mobile-image';
 import {imageSamples} from './pdf-image-samples';
-export type JPEGOptimization={quality?:number;maxDimension?:number};
+export type JPEGOptimization={quality?:number;maxDimension?:number;onProgress?:(done:number,total:number)=>void};
 /** Resolve a dictionary entry written as a name, an indirect name, or a single-element array of either. */
 function singleName(doc:PDFDocument,dict:PDFDict,key:string){
  const value=dict.get(PDFName.of(key)),entries=value instanceof PDFArray?value.asArray():[value];
@@ -78,8 +78,10 @@ export async function optimizeJPEGImages(doc:PDFDocument,signal?:AbortSignal,opt
  if(!Number.isFinite(quality)||quality<.1||quality>.95)throw new Error('JPEG quality must be between 0.1 and 0.95.');
  if(!Number.isFinite(limit)||limit<1)throw new Error('Image dimension must be positive.');
  let changed=0;
- for(const [ref,obj] of doc.context.enumerateIndirectObjects()){
+ const objects=doc.context.enumerateIndirectObjects();const total=objects.filter(([,obj])=>obj instanceof PDFRawStream&&singleName(doc,obj.dict,'Subtype')==='/Image').length;let seen=0;
+ for(const [ref,obj] of objects){
   signal?.throwIfAborted();if(!(obj instanceof PDFRawStream))continue;
+  if(singleName(doc,obj.dict,'Subtype')==='/Image')options.onProgress?.(++seen,total);
   const dict=obj.dict,chain=filterChain(doc,dict),filter=chain?.[chain.length-1],wrappers=chain?.slice(0,-1)??[];
   if(singleName(doc,dict,'Subtype')!=='/Image'||filter!=='/DCTDecode'&&filter!=='/FlateDecode'||wrappers.some(f=>f!=='/ASCII85Decode'&&f!=='/ASCIIHexDecode')||dict.has(PDFName.of('SMask'))||dict.has(PDFName.of('Mask'))||dict.has(PDFName.of('Decode'))||dict.has(PDFName.of('ImageMask')))continue;
   const space=supportedColorSpace(doc,dict);

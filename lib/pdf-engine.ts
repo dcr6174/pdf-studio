@@ -147,16 +147,27 @@ async function renderPage(bytes: Uint8Array, index: number, scale = 1, password?
 finally {
     if(!shared)await d.destroy();
 } }
+// Share one parser for overlapping thumbnail requests. Opening a full PDF for
+// each visible thumbnail multiplies memory by the number of cards on screen.
+type PreviewReader={promise:ReturnType<typeof renderer>;users:number;timer?:ReturnType<typeof setTimeout>};
+const previewReaders=new WeakMap<Uint8Array,Map<string,PreviewReader>>();
+async function acquirePreviewReader(bytes:Uint8Array,password?:string){
+ let entries=previewReaders.get(bytes);if(!entries){entries=new Map();previewReaders.set(bytes,entries);}
+ const key=password??'';let entry=entries.get(key);
+ if(!entry){entry={promise:renderer(bytes,password),users:0};entries.set(key,entry);}
+ if(entry.timer)clearTimeout(entry.timer);entry.users++;
+ const current=entry;
+ const release=()=>{current.users--;if(current.users===0)current.timer=setTimeout(()=>{if(current.users===0&&entries!.get(key)===current){entries!.delete(key);void current.promise.then(d=>d.destroy()).catch(()=>{});}},1000);};
+ try{return {document:await current.promise,release};}catch(e){release();entries.delete(key);throw e;}
+}
 let activeRenders = 0;
 const renderQueue: (() => void)[] = [];
-export async function render(bytes: Uint8Array, index: number, scale = 1, password?: string, rotation=0, signal?:AbortSignal) { if (activeRenders >= 2)
-    await new Promise<void>(resolve => renderQueue.push(resolve)); activeRenders++; try {
-    return await renderPage(bytes, index, scale, password,rotation,signal);
+export async function render(bytes: Uint8Array, index: number, scale = 1, password?: string, rotation=0, signal?:AbortSignal) {
+ if(activeRenders>=2)await new Promise<void>(resolve=>renderQueue.push(resolve));activeRenders++;
+ let shared:Awaited<ReturnType<typeof acquirePreviewReader>>|undefined;
+ try{signal?.throwIfAborted();shared=await acquirePreviewReader(bytes,password);return await renderPage(bytes,index,scale,password,rotation,signal,shared.document);}
+ finally{shared?.release();activeRenders--;renderQueue.shift()?.();}
 }
-finally {
-    activeRenders--;
-    renderQueue.shift()?.();
-} }
 export async function textPages(bytes: Uint8Array, password?: string) { const d = await renderer(bytes, password); try {
     const result: string[] = [];
     for (let i = 1; i <= d.numPages; i++) {
@@ -396,6 +407,10 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     if (!order.length)
         throw new Error('Keep at least one page in your document.');
     if(order.length>5000)throw new Error('This operation would exceed the 5000-page workspace limit. Choose fewer pages.');
+    if(id==='compress'&&unchanged&&!o.compressTarget?.trim()&&['images','image-small','compact'].includes(o.quality)){
+      const optimized=await compressDocument(first.bytes,o.quality,o.compressJPEG,o.compressMaxDimension,signal,progress);
+      return result(optimized.bytes,`${filename}-compressed.pdf`,undefined,`Optimized ${optimized.images} supported embedded images and ${optimized.streams} lossless streams; removed ${optimized.duplicates} duplicate streams. Selectable text, links, bookmarks and editable forms retained.`,first.size);
+    }
     const out = id==='form'?await PDFDocument.load(first.bytes,{updateMetadata:false}):await assemble(files, order,signal,['merge','organize','edit','sign','watermark'].includes(id)&&o.flattenForm);
     if(['images','scan'].includes(id)&&o.imagePaper&&o.imagePaper!=='original'){const sheet=resizeSheet({resizeSize:o.imagePaper,resizeOrientation:o.imageOrientation}),margin=Number(o.imageMargin??20);if(!Number.isFinite(margin)||margin<0||margin>100)throw new Error('Choose an image margin between 0 and 100 pt.');const d=await PDFDocument.create();for(const item of order){const f=files.find(f=>f.id===item.fileId);if(!f?.image)throw new Error('Choose images for this conversion.');const image=await d.embedPng(f.image),p=d.addPage(sheet),scale=Math.min((sheet[0]-margin*2)/image.width,(sheet[1]-margin*2)/image.height);p.drawImage(image,{x:(sheet[0]-image.width*scale)/2,y:(sheet[1]-image.height*scale)/2,width:image.width*scale,height:image.height*scale});p.setRotation(degrees(item.rotation));}return result(await d.save(),`${filename}-images.pdf`,undefined,`${d.getPageCount()} image pages on ${o.imagePaper} sheets. Text recognition was not performed.`);}
     if(id==='split-chapters'){
@@ -457,7 +472,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
     }
     if(id==='compress'&&['images','image-small','compact'].includes(o.quality)){
         const source=unchanged?first.bytes:await out.save();
-        const {bytes,images:changed,streams,duplicates}=await compressDocument(source,o.quality,o.compressJPEG,o.compressMaxDimension,signal);progress(95);const smaller=bytes.length<source.length;
+        const {bytes,images:changed,streams,duplicates}=await compressDocument(source,o.quality,o.compressJPEG,o.compressMaxDimension,signal,progress);progress(95);const smaller=bytes.length<source.length;
         return result(bytes,`${filename}-compressed.pdf`,undefined,smaller?`Optimized ${changed} supported embedded images and ${streams} lossless streams; removed ${duplicates} duplicate streams. Selectable text, links, bookmarks and editable forms retained.${changed?' Image quality is reduced; check scanned fine print.':''}`:'No smaller result: original source retained. Already optimized documents may not shrink. Masked, indexed, CMYK and other unsupported images stay unchanged.',source.length);
     }
     if(id==='flatten'&&o.flattenMode!=='image'){const count=out.getForm().getFields().length;flattenFormSafely(out);progress(100);return result(await out.save(),`${filename}-flatten.pdf`,undefined,`${count} form fields made read-only. Selectable text and page sizes retained. Other annotations remain; choose image mode to flatten the entire appearance.`,first.size);}
@@ -691,7 +706,7 @@ export function wrapText(text:string,font:{widthOfTextAtSize:(v:string,s:number)
 
 
 /** Do not report success for invalid PDF bytes or complete unexpected blank output. */
-export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks:Mark[],o:Options,progress:(n:number)=>void,signal?:AbortSignal):Promise<Output>{
+export async function processPDF(id:string,files:Loaded[],items:PageItem[],marks:Mark[],o:Options,progress:(n:number,detail?:string)=>void,signal?:AbortSignal):Promise<Output>{
  const rawOutput=await processPDFUnchecked(id,files,items,marks,o,progress,signal);
  const output={...rawOutput,name:exportFilename(id,rawOutput.name,'',files[0]?.name??rawOutput.name)};
  if(output.blob.type!=='application/pdf'||id==='encrypt')return output;
