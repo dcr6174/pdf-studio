@@ -23,7 +23,7 @@ export async function markdownPDF(text:string){
  const fonts=await Promise.all(['/fonts/NotoSans-Regular.ttf','/fonts/editing/NotoSans-Bold.ttf','/fonts/editing/NotoSans-Italic.ttf','/fonts/editing/NotoSans-BoldItalic.ttf'].map(load));
  const fontFor=(run:InlineRun):PDFFont=>fonts[Number(run.bold)+Number(run.italic)*2];
  let page=doc.addPage([595.28,841.89]),x=60,y=780;const right=535,lineHeight=18;
- const nextLine=(height=lineHeight)=>{x=60;y-=height;if(y<60){if(doc.getPageCount()>=2000)throw new Error('This document exceeds 2000 pages. Split it into smaller documents.');page=doc.addPage([595.28,841.89]);y=780;}};
+ const nextLine=(height=lineHeight)=>{x=60;y-=height;if(y<60){if(doc.getPageCount()>=5000)throw new Error('This document exceeds 5000 pages. Split it into smaller documents.');page=doc.addPage([595.28,841.89]);y=780;}};
  for(const raw of text.replace(/\r\n?/g,'\n').split('\n')){
   const heading=/^(#{1,6})\s+/.exec(raw),size=heading?Math.max(12,22-heading[1].length*2):11;
   const content=raw.replace(/^#{1,6}\s+/,'').replace(/^\s*[-*+]\s+/,'• ');
