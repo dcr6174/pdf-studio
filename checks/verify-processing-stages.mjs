@@ -1,0 +1,16 @@
+import assert from 'node:assert/strict';
+import {build} from 'vite';
+import {resolve} from 'node:path';
+import {PDFDocument,StandardFonts} from 'pdf-lib';
+import {readFile} from 'node:fs/promises';
+await build({configFile:false,logLevel:'error',resolve:{alias:{'@':resolve('.')}},build:{ssr:'lib/pdf-engine.ts',outDir:'.stage-check',emptyOutDir:true,rollupOptions:{output:{entryFileNames:'engine.mjs'}}}});
+const {processPDF}=await import('../.stage-check/engine.mjs');
+const doc=await PDFDocument.create(),font=await doc.embedFont(StandardFonts.Helvetica);doc.addPage().drawText('Real stage fixture',{font,x:20,y:100});const bytes=await doc.save(),file={id:'source',name:'source.pdf',bytes,size:bytes.length,pages:1,doc},pages=[{id:'page',fileId:'source',index:0,rotation:0}];
+const records=[];const output=await processPDF('workflow',[file],pages,[],{recipe:'custom',workflowSteps:['rotate','compress','clean'],workflowDisabled:[1],workflowSettings:[{angle:'90'},{},{}],range:'',text:'',title:'',author:'',subject:'',password:'',quality:'balanced',angle:'90',margin:'20',start:'1',columns:'2',fields:{}},(percent,detail)=>records.push({percent,detail}));
+const stages=records.filter(r=>r.detail?.startsWith('Step'));
+assert.match(stages[0].detail,/^Step 1 of 2 · /);const second=stages.findIndex(r=>r.detail.startsWith('Step 2 of 2'));assert(second>0);assert(stages.slice(second).every(r=>r.detail.startsWith('Step 2 of 2')));assert(stages.every(r=>!r.detail.includes('of 3')),'disabled steps are not counted');
+assert(stages.some(r=>r.detail.includes('Checking exported PDF')),'nested export validation keeps its actual stage');
+assert.equal((await PDFDocument.load(new Uint8Array(await output.blob.arrayBuffer()))).getPage(0).getRotation().angle,90);
+assert.equal(records.at(-1).detail,'Checking exported PDF','final wrapper verifies the final PDF');
+const ui=await readFile('components/task-progress.tsx','utf8');assert(!ui.includes('Math.floor'),'UI never infers step from overall percent');
+console.log('PASS: actual enabled workflow stages, ordered starts, nested export detail, final output rotation and final validation; no percent-derived UI step.');

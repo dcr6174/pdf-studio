@@ -350,7 +350,7 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
     } }
     useEffect(()=>{if(error)requestAnimationFrame(()=>document.querySelector('.error-panel')?.scrollIntoView({block:'center',behavior:'smooth'}));},[error]);
     async function run(){
-      if(busy||loading||!ready)return;if(batchMode&&view!=='rotate'){try{validateBatch(files.length);}catch(e){setError((e as Error).message);return;}}const startedAt=performance.now(),controller=new AbortController();cancel.current=controller;let lastProgressPaint=0;const reportProgress=(n:number,detail?:string)=>{const now=performance.now();if(n<97&&now-lastProgressPaint<160)return;lastProgressPaint=now;setProgress(n);if(detail)setProgressDetail(detail);};
+      if(busy||loading||!ready)return;if(batchMode&&view!=='rotate'){try{validateBatch(files.length);}catch(e){setError((e as Error).message);return;}}const startedAt=performance.now(),controller=new AbortController();cancel.current=controller;let lastProgressPaint=0,lastProgressDetail='';const reportProgress=(n:number,detail?:string)=>{const now=performance.now();if(n<97&&detail===lastProgressDetail&&now-lastProgressPaint<160)return;lastProgressPaint=now;lastProgressDetail=detail??lastProgressDetail;setProgress(n);if(detail)setProgressDetail(detail);};
       trackActivity('process_start',view);setBusy(true);setProgress(0);setProgressDetail('');setError('');setUploadIssue(undefined);setRawOutput(undefined);
       try{await paintProgress();controller.signal.throwIfAborted();let r:Output;
         if(deletePagesMode){
@@ -512,7 +512,7 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
         }
     } e.target.value = ''; }}/>
     {dragging && <div className="drag-overlay"><Upload size={44}/><h2>Drop your files here</h2><p>They stay on this device.</p></div>}
-        {busy&&<TaskProgress detail={progressDetail} tool={view} steps={view==='workflow'?(options.workflowSteps??[]).filter((_,index)=>!options.workflowDisabled?.includes(index)):undefined} progress={progress} onStop={()=>{cancel.current?.abort();toast('Stopping at the next safe processing step…');}}/>}
+        {busy&&<TaskProgress detail={progressDetail} tool={view} progress={progress} onStop={()=>{cancel.current?.abort();toast('Stopping at the next safe processing step…');}}/>}
     {loading&&<FileOpening/>}
     {savedDraft&&!busy&&!loading&&view!=='home'&&<div className="draft-banner"><Save size={18}/><span>{savedDraft.tool?`A saved ${tools.find(t=>t.id===savedDraft.tool)?.name??'document'} draft is available on this device.`:'A saved document draft is available on this device.'}</span><button className="secondary" disabled={busy||loading} onClick={()=>void restoreDraft()}>Restore draft</button><button className="secondary" onClick={async()=>{try{await draft('delete');setSavedDraft(undefined);toast('Saved draft deleted');}catch{toast.error('Could not delete the draft.');}}}>Delete saved draft</button></div>}
     

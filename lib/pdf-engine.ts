@@ -6,7 +6,7 @@ import {drawWorkflowWatermark} from './workflow-watermark';
 import {exportFilename} from '@/lib/export-filename';
 import {lineSegments,type ShapePoint} from './shape-geometry';
 import {formattedNumber,labelText} from './task-labels';
-import {workflowOperations,workflowStepIssue} from './workflow-recipes';
+import {workflowChoices,workflowOperations,workflowStepIssue} from './workflow-recipes';
 import {ocrWorkerOptions} from './ocr-worker-options';
 import {taskInputIssue} from './task-readiness';
 import {readFormFields,applyFormValues,flattenVisibleForm,type FormValue} from './pdf-forms';
@@ -272,6 +272,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
       let currentFiles=files,currentPages=items,currentMarks=marks;let output:Output|undefined;const reports:string[]=[],timings:string[]=[];
       for(let i=0;i<steps.length;i++){
         signal?.throwIfAborted();const step=steps[i],started=Date.now();const issue=workflowStepIssue(step.id,step.settings,currentPages.length,currentFiles.length,i);if(issue)throw new Error(`Step ${i+1}: ${issue}`);
+        const stage=`Step ${i+1} of ${steps.length} · ${workflowChoices.find(([id])=>id===step.id)?.[1]??step.id}`;progress(Math.round(i*100/steps.length),stage);
         let target=step.id,stepPages=currentPages,stepFiles=currentFiles;
         if(step.id==='remove'){const removed=new Set(ranges(step.settings.range??'',currentPages.length));stepPages=currentPages.filter((_,n)=>!removed.has(n));target='organize';}
         if(step.id==='extract'){stepPages=[...new Set(ranges(step.settings.range??'',currentPages.length))].map(n=>currentPages[n]);target='organize';}
@@ -280,7 +281,7 @@ async function processPDFUnchecked(id: string, files: Loaded[], items: PageItem[
         if(step.id==='reorder'){stepPages=ranges(step.settings.range??'',currentPages.length).map(n=>currentPages[n]);target='organize';}
         if(step.id==='blank'){const d=await assemble(currentFiles,currentPages,signal,o.flattenForm);const at=Number(step.settings.blankAt??1)-1;d.insertPage(at,[595.28,841.89]);const bytes=await d.save(),file:Loaded={...currentFiles[0],id:crypto.randomUUID(),bytes,size:bytes.length,pages:d.getPageCount(),doc:d};stepFiles=[file];stepPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));target='organize';}
         const stepMarks=currentMarks;
-        try{output=await processPDF(target,stepFiles,stepPages,stepMarks,{...o,range:'',resizeRange:'',quality:'compact',angle:'90',...step.settings,...(step.id==='watermark'?{workflowWatermark:step.settings}:{})},n=>progress(Math.round((i*100+n)/steps.length)),signal);}catch(e){if(signal?.aborted)throw e;throw new Error(`Step ${i+1} (${step.id}) failed: ${e instanceof Error?e.message:'Could not process this step.'} Your original workspace is retained.`);}
+        try{output=await processPDF(target,stepFiles,stepPages,stepMarks,{...o,range:'',resizeRange:'',quality:'compact',angle:'90',...step.settings,...(step.id==='watermark'?{workflowWatermark:step.settings}:{})},(n,detail)=>progress(Math.round((i*100+n)/steps.length),stage+(detail?' · '+detail:'')),signal);}catch(e){if(signal?.aborted)throw e;throw new Error(`Step ${i+1} (${step.id}) failed: ${e instanceof Error?e.message:'Could not process this step.'} Your original workspace is retained.`);}
         timings.push(`Step ${i+1}: ${step.id} - completed in ${((Date.now()-started)/1000).toFixed(1)}s`);if(output.report)reports.push(output.report);
         const bytes=new Uint8Array(await output.blob.arrayBuffer()),doc=await PDFDocument.load(bytes,{updateMetadata:false}),file:Loaded={id:crypto.randomUUID(),name:output.name,bytes,size:bytes.length,pages:doc.getPageCount(),doc};currentFiles=[file];currentPages=Array.from({length:file.pages},(_,index)=>({id:crypto.randomUUID(),fileId:file.id,index,rotation:0}));currentMarks=[];
       }
