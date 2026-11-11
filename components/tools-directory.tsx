@@ -8,8 +8,8 @@ import Link from '@/components/browser-link';
 import {tools,groups} from '@/lib/tools';
 import {seoTools,seoPages} from '@/lib/seo-tools';
 import {searchToolsDetailed} from '@/lib/tool-search';
-// Keyword pages (delete-pdf-pages, extract-pdf-pages, compress-pdf-to-100kb) open real tools
-// with their own slug and preset; list them alongside the main catalogue so they are reachable.
+// Keep the existing Delete/Extract routes while their directory treatment is reviewed.
+// The fixed-size compression alias redirects to the general compressor.
 const extraPages=seoPages.filter(p=>p.slug!=='compress-pdf-to-100kb'&&!seoTools.some(s=>s.slug===p.slug)).map(p=>({slug:p.slug,name:p.title,description:p.intro,group:p.group,icon:tools.find(t=>t.id===p.id)?.icon??'file'}));
 export function ToolsDirectory(){
  const [query,setQuery]=useState(''),[category,setCategory]=useState('All tools'),[sort,setSort]=useState('recommended');
