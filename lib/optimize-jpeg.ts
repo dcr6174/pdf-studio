@@ -1,7 +1,7 @@
 import {PDFDocument,PDFRawStream,PDFName,PDFNumber,PDFDict,PDFArray,decodePDFRawStream} from 'pdf-lib';
 import {decodePhoto} from './mobile-image';
 import {imageSamples} from './pdf-image-samples';
-export type JPEGOptimization={quality?:number;maxDimension?:number;onProgress?:(done:number,total:number)=>void};
+export type JPEGOptimization={quality?:number;maxDimension?:number;onProgress?:(done:number,total:number,page?:number,pages?:number)=>void};
 /** Resolve a dictionary entry written as a name, an indirect name, or a single-element array of either. */
 function singleName(doc:PDFDocument,dict:PDFDict,key:string){
  const value=dict.get(PDFName.of(key)),entries=value instanceof PDFArray?value.asArray():[value];
@@ -78,10 +78,13 @@ export async function optimizeJPEGImages(doc:PDFDocument,signal?:AbortSignal,opt
  if(!Number.isFinite(quality)||quality<.1||quality>.95)throw new Error('JPEG quality must be between 0.1 and 0.95.');
  if(!Number.isFinite(limit)||limit<1)throw new Error('Image dimension must be positive.');
  let changed=0;
- const objects=doc.context.enumerateIndirectObjects();const total=objects.filter(([,obj])=>obj instanceof PDFRawStream&&singleName(doc,obj.dict,'Subtype')==='/Image').length;let seen=0;
+ const pageByImage=new Map<PDFRawStream,number>();
+ const inspect=(resources:PDFDict|undefined,page:number,visited:Set<PDFDict>)=>{if(!resources||visited.has(resources))return;visited.add(resources);const objects=resources.lookupMaybe(PDFName.of('XObject'),PDFDict);if(!objects)return;for(const [,value] of objects.entries()){const stream=doc.context.lookup(value);if(!(stream instanceof PDFRawStream))continue;if(singleName(doc,stream.dict,'Subtype')==='/Image'){if(!pageByImage.has(stream))pageByImage.set(stream,page);}else inspect(stream.dict.lookupMaybe(PDFName.of('Resources'),PDFDict),page,visited);}};
+ doc.getPages().forEach((page,index)=>inspect(page.node.Resources(),index+1,new Set()));
+ const objects=doc.context.enumerateIndirectObjects().sort((a,b)=>(a[1] instanceof PDFRawStream?pageByImage.get(a[1])??Infinity:Infinity)-(b[1] instanceof PDFRawStream?pageByImage.get(b[1])??Infinity:Infinity));const total=objects.filter(([,obj])=>obj instanceof PDFRawStream&&singleName(doc,obj.dict,'Subtype')==='/Image').length;let seen=0;
  for(const [ref,obj] of objects){
   signal?.throwIfAborted();if(!(obj instanceof PDFRawStream))continue;
-  if(singleName(doc,obj.dict,'Subtype')==='/Image')options.onProgress?.(++seen,total);
+  if(singleName(doc,obj.dict,'Subtype')==='/Image')options.onProgress?.(++seen,total,pageByImage.get(obj),doc.getPageCount());
   const dict=obj.dict,chain=filterChain(doc,dict),filter=chain?.[chain.length-1],wrappers=chain?.slice(0,-1)??[];
   if(singleName(doc,dict,'Subtype')!=='/Image'||filter!=='/DCTDecode'&&filter!=='/FlateDecode'||wrappers.some(f=>f!=='/ASCII85Decode'&&f!=='/ASCIIHexDecode')||dict.has(PDFName.of('SMask'))||dict.has(PDFName.of('Mask'))||dict.has(PDFName.of('Decode'))||dict.has(PDFName.of('ImageMask')))continue;
   const space=supportedColorSpace(doc,dict);
