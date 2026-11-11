@@ -353,7 +353,7 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
     } }
     useEffect(()=>{if(error)requestAnimationFrame(()=>document.querySelector('.error-panel')?.scrollIntoView({block:'center',behavior:'smooth'}));},[error]);
     async function run(){
-      if(busy||loading||!ready)return;if(batchMode&&view!=='rotate'){try{validateBatch(files.length);}catch(e){setError((e as Error).message);return;}}const startedAt=performance.now(),controller=new AbortController();cancel.current=controller;
+      if(busy||loading||!ready)return;if(batchMode&&view!=='rotate'){try{validateBatch(files.length);}catch(e){setError((e as Error).message);return;}}const startedAt=performance.now(),controller=new AbortController();cancel.current=controller;let lastProgressPaint=0;const reportProgress=(n:number,detail?:string)=>{const now=performance.now();if(n<97&&now-lastProgressPaint<160)return;lastProgressPaint=now;setProgress(n);if(detail)setProgressDetail(detail);};
       trackActivity('process_start',view);setBusy(true);setProgress(0);setProgressDetail('');setError('');setUploadIssue(undefined);setRawOutput(undefined);
       try{await paintProgress();controller.signal.throwIfAborted();let r:Output;
         if(deletePagesMode){
@@ -361,7 +361,7 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
           if(!chosen.size){setError('Select the pages to delete first: click a page preview or tick its Select page checkbox, then press Delete pages & download. Nothing was exported.');return;}
           const kept=pages.filter(p=>!chosen.has(p.id));
           if(!kept.length){setError('Those are all the pages in this document. Keep at least one page, or clear the workspace to start over. Nothing was exported.');return;}
-          r=await processPDF('organize',files,kept,marks.filter(m=>kept.some(p=>p.id===m.pageId)),processingOptions,(n,detail)=>{setProgress(n);if(detail)setProgressDetail(detail);},controller.signal);
+          r=await processPDF('organize',files,kept,marks.filter(m=>kept.some(p=>p.id===m.pageId)),processingOptions,reportProgress,controller.signal);
           setPageSelection([]);
         }
         else if(batchMode&&view!=='rotate'&&files.length>1){const {default:JSZip}=await import('jszip');const z=new JSZip(),failures:string[]=[],outcomes:string[][]=[];let success=0;
@@ -370,7 +370,7 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
           if(failures.length)z.file(brandDownloadName('failures.txt'),failures.join('\n'));
           z.file(brandDownloadName('results.csv'),batchResultsCSV(outcomes));
           r={blob:await z.generateAsync({type:'blob'}),name:exportFilename(view,'batch.zip','Batch'),report:`${success} of ${files.length} files completed.${failures.length?'\n'+failures.join('\n'):''}`};
-        }else r=await processPDF(view,files,pages,marks,processingOptions,(n,detail)=>{setProgress(n);if(detail)setProgressDetail(detail);},controller.signal);
+        }else r=await processPDF(view,files,pages,marks,processingOptions,reportProgress,controller.signal);
         controller.signal.throwIfAborted();
         if(view==='audio'){if(typeof speechSynthesis==='undefined')throw new Error('Read aloud is not available in this browser.');speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(r.report??''));setProgress(100);trackActivity('process_success',view);return;}
         if(view==='workflow'){try{const history=JSON.parse(localStorage.getItem('pdf-studio-workflow-history')??'[]');localStorage.setItem('pdf-studio-workflow-history',JSON.stringify([...(Array.isArray(history)?history:[]),{name:'Workflow',steps:(options.workflowSteps??[]).join(' → '),time:new Date().toLocaleString(),seconds:Math.round((performance.now()-startedAt)/1000)}].slice(-20)));}catch{/* Download remains available when storage is unavailable. */}}if(r.ocrReview)setOcrDraft(r);else setOutput(r);setProgress(100);trackActivity('process_success',view);
