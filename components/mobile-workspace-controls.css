@@ -55,3 +55,4 @@
  [data-tool=merge] .mobile-workspace-controls button[aria-label="Settings"]{order:3}
  [data-tool=merge].mobile-controls-ready .merge-list-heading{padding-right:64px;min-height:168px;align-items:flex-start}
 }
+.mobile-sheet-action{position:sticky;bottom:0;padding-top:8px;background:var(--card)}.mobile-sheet-action>*{width:100%}
