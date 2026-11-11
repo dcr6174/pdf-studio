@@ -7,10 +7,11 @@ import './mobile-workspace-controls.css';
 import {WorkspaceFloatingControls} from '@/components/workspace-floating-controls';
 
 type FileInfo={id:string;name:string;pages:number};
-export function MobileWorkspaceControls({files,pageCount,addLabel,onAdd,onSort,onClear,settings,settingsAvailable,action,disabled,organize,initialFocusId,addAvailable=true,primaryControls}:{files:FileInfo[];pageCount:number;addLabel:string;onAdd:()=>void;onSort?:(descending:boolean)=>void;onClear:()=>void;settings:ReactNode;settingsAvailable:boolean;action:ReactNode;disabled:boolean;organize?:ReactNode;initialFocusId?:string;addAvailable?:boolean;primaryControls?:ReactNode}) {
+export function MobileWorkspaceControls({files,pageCount,addLabel,onAdd,onSort,onClear,settings,settingsAvailable,action,disabled,organize,initialFocusId,addAvailable=true,primaryControls,autoOpen=false,pinAction=false}:{autoOpen?:boolean;pinAction?:boolean;files:FileInfo[];pageCount:number;addLabel:string;onAdd:()=>void;onSort?:(descending:boolean)=>void;onClear:()=>void;settings:ReactNode;settingsAvailable:boolean;action:ReactNode;disabled:boolean;organize?:ReactNode;initialFocusId?:string;addAvailable?:boolean;primaryControls?:ReactNode}) {
  const anchor=useRef<HTMLSpanElement>(null),[header,setHeader]=useState<HTMLElement|null>(null);
  useEffect(()=>{let active=true;const target=anchor.current?.closest('.studio-shell')?.querySelector<HTMLElement>('.studio-header.studio-shared');if(target)queueMicrotask(()=>{if(active)setHeader(target);});return()=>{active=false;};},[]);
- const [settingsOpen,setSettingsOpen]=useState(false);
+ const [settingsOpen,setSettingsOpen]=useState(false),opened=useRef(false);
+ useEffect(()=>{if(autoOpen&&!opened.current&&files.length>0){opened.current=true;queueMicrotask(()=>setSettingsOpen(true));}},[autoOpen,files.length]);
  const [descending,setDescending]=useState(false);
  const controls=(primaryControls||organize||settingsAvailable||addAvailable||onSort&&files.length>1)?<nav className="mobile-workspace-controls" aria-label="Document controls">
    {primaryControls&&<div className="mobile-toolbar-primary">{primaryControls}</div>}
@@ -25,8 +26,9 @@ export function MobileWorkspaceControls({files,pageCount,addLabel,onAdd,onSort,o
    <DialogTitle>Tool settings</DialogTitle><DialogDescription>Adjust your tool or organize pages below.</DialogDescription>
    <p>{files.length} {files.length===1?'file':'files'} · {pageCount} pages</p>
    <WorkspaceFloatingControls pages={organize} disabled={disabled}/>{settingsAvailable&&settings}
-   <button type="button" className="secondary" disabled={disabled} onClick={()=>{setSettingsOpen(false);onClear();}}>Clear workspace</button>
-   <button type="button" className="primary" onClick={()=>setSettingsOpen(false)}>Done</button>
+   {!pinAction&&<button type="button" className="secondary" disabled={disabled} onClick={()=>{setSettingsOpen(false);onClear();}}>Clear workspace</button>}
+   {pinAction&&action?<div className="mobile-sheet-action" onClick={()=>setSettingsOpen(false)}>{action}</div>:<button type="button" className="primary" onClick={()=>setSettingsOpen(false)}>Done</button>}
+   {pinAction&&<button type="button" className="secondary" onClick={()=>setSettingsOpen(false)}>Close</button>}
   </DialogContent></Dialog>
   {action&&<div className="mobile-workspace-action">{action}</div>}
  </>;
