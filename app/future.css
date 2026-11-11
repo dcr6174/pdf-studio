@@ -78,3 +78,5 @@
 }
 @media(prefers-reduced-motion:reduce){.hx-hero::before,.hx-hero::after,.hx-pill i{animation:none}.hx-card,.hx-actions a,.merge-document-card,.compression-level{transition:none}}
 @media(max-width:640px){.tools-directory-page .tools-directory section .tool-grid{grid-template-columns:1fr !important}}
+.page-grid .page-cell{content-visibility:auto;contain-intrinsic-size:auto 300px}@media(max-width:767px){.page-grid .page-cell{contain-intrinsic-size:auto 280px}}
+.page-grid .lazy-page-cell{min-height:280px;contain:layout style}.page-cell-placeholder{height:280px;border-radius:12px;background:var(--card);border:1px solid var(--border)}
