@@ -1,3 +1,4 @@
+import {brandDownloadName} from '../export-filename';
 import {PDFDocument,PDFName,PDFArray,PDFDict,PDFRef,PDFRawStream,PDFString,PDFHexString,decodePDFRawStream,rgb,degrees} from 'pdf-lib';
 import JSZip from 'jszip';
 import type {NewTool} from './types';
@@ -44,7 +45,7 @@ const splitEveryN:NewTool={
   for(let f=0;f<files;f++){
    const start=f*per,end=Math.min(total,start+per),part=await PDFDocument.create();
    (await part.copyPages(src,Array.from({length:end-start},(_,i)=>start+i))).forEach(p=>part.addPage(p));
-   zip.file(`${stem(name)}-part-${String(f+1).padStart(pad,'0')}-pages-${start+1}-${end}.pdf`,await part.save());
+   zip.file(brandDownloadName(`${stem(name)}-part-${String(f+1).padStart(pad,'0')}-pages-${start+1}-${end}.pdf`),await part.save());
    progress(Math.round((f+1)/files*100));
   }
   return {blob:await zip.generateAsync({type:'blob'}),ext:'zip',report:`Made ${files} PDF files of up to ${per} pages each from ${total} pages, packed in one ZIP.`};
@@ -68,7 +69,7 @@ const oddEven:NewTool={
   };
   if(v.which==='both'){
    const o=await build(0),e=await build(1),zip=new JSZip();
-   zip.file(`${stem(name)}-odd-pages.pdf`,o.bytes);zip.file(`${stem(name)}-even-pages.pdf`,e.bytes);
+   zip.file(brandDownloadName(`${stem(name)}-odd-pages.pdf`),o.bytes);zip.file(brandDownloadName(`${stem(name)}-even-pages.pdf`),e.bytes);
    return {blob:await zip.generateAsync({type:'blob'}),ext:'zip',report:`Odd pages: ${o.count}. Even pages: ${e.count}. Both PDFs are in the ZIP.`};
   }
   const r=await build(v.which==='odd'?0:1);

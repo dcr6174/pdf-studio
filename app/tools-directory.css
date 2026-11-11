@@ -28,3 +28,10 @@
 @media(max-width:640px){.tools-directory section .tool-grid{grid-template-columns:1fr;gap:10px}.tools-directory .filters{flex-wrap:nowrap;overflow-x:auto;margin-inline:-4px;padding:2px 4px 6px;scrollbar-width:none}.tools-directory .filters button{flex:none}.tools-directory section .tool-card{padding:14px;min-height:76px;gap:3px 14px}.tools-directory section .tool-card b{font-size:.98rem;overflow-wrap:normal}.tools-directory section .tool-card p{font-size:.82rem}.tools-directory section .tool-card .tool-icon{width:46px;height:46px}}
 
 @media(max-width:640px){.tools-directory section .tool-card{grid-template-areas:"i t" "i d";height:auto;min-height:76px;grid-template-rows:auto auto}.tools-directory section .tool-card .tool-icon{margin:0}.tools-directory section .tool-card b{align-self:center}.tools-directory section .tool-card p{display:block;min-height:0;max-width:100%}}
+
+/* Theme selection owns every directory accent, not fixed category palettes. */
+html[data-accent] .tools-directory section[data-group]{--acc:var(--primary);--acc-bg:color-mix(in srgb,var(--primary) 14%,var(--card))}
+html[data-accent] .tools-directory .filters button.selected{background:var(--primary);border-color:var(--primary);color:var(--primary-foreground)}
+html[data-accent] .tools-directory .search:focus-within{border-color:var(--primary);box-shadow:0 0 0 4px color-mix(in srgb,var(--primary) 14%,transparent)}
+html[data-accent] .tools-directory section h2{color:var(--primary)}
+html[data-accent] .tools-directory .search>svg{color:var(--primary)}

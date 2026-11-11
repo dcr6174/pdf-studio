@@ -1,4 +1,5 @@
 'use client';
+import {brandDownloadName} from '@/lib/export-filename';
 
 import {useEffect,useRef,useState} from 'react';
 import {ArrowLeft,ArrowRight,Check,Download,FileText,Image as ImageIcon,LoaderCircle,Maximize2,Minimize2,MousePointer2,ShieldCheck,Sparkles,Upload,X} from 'lucide-react';
@@ -32,7 +33,7 @@ export function WatermarkStudio(){
   try{await new Promise(resolve=>setTimeout(resolve,0));copy=await openWatermarkDocument(source.current);if(token!==generation.current)return;copy.remove(selected);const bytes=copy.save();copy.close();copy=null;reopened=await openWatermarkDocument(bytes);if(token!==generation.current)return;const v=reopened.inspect(page,3);edited.current?.close();edited.current=reopened;reopened=null;setOutput(bytes);setView(v);setMode('after');setNotice('Preview ready. Compare Before and After, then download your copy.');}
   catch(e){if(token===generation.current)setError(message(e));}finally{copy?.close();reopened?.close();if(token===generation.current)setBusy('');}
  }
- function download(){if(!output)return;const url=URL.createObjectURL(new Blob([output.slice().buffer],{type:'application/pdf'})),a=document.createElement('a');a.href=url;a.download=name.replace(/\.pdf$/i,'')+'-without-watermark.pdf';a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);setNotice('Your edited copy has been downloaded.');}
+ function download(){if(!output)return;const url=URL.createObjectURL(new Blob([output.slice().buffer],{type:'application/pdf'})),a=document.createElement('a');a.href=url;a.download=brandDownloadName(name.replace(/\.pdf$/i,'')+'-without-watermark.pdf');a.click();setTimeout(()=>URL.revokeObjectURL(url),30000);setNotice('Your edited copy has been downloaded.');}
  function reset(){if(busy)return;generation.current++;original.current?.close();edited.current?.close();original.current=null;edited.current=null;source.current=null;setOriginalObjects([]);setName('');setView(null);setPages(0);setPage(0);setSelected([]);setOutput(null);setMode('original');setError('');setNotice('');}
  const objects=(mode==='original'?view?.objects:originalObjects)??[],filtered=objects.filter(o=>(kind==='all'||o.kind===kind)&&o.label.toLowerCase().includes(query.toLowerCase())),selectedPages=[...new Set(selected.map(s=>s.page))].sort((a,b)=>a-b);
  return <main className={'wm-studio '+(name?'wm-loaded':'')}>
