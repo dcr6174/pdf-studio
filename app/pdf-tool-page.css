@@ -46,3 +46,10 @@
 .np-about ol{list-style:decimal;padding-left:22px;margin:6px 0 12px}
 .np-about li{margin:4px 0}
 .np-about h3{font-weight:650}
+
+/* Shared settings keep help and correction next to the control. */
+.np-fieldset{margin:0;min-width:0;padding:16px;border:1px solid var(--border);border-radius:var(--radius-sm)}
+.np-fieldset>legend{padding:0 6px;font-weight:650;color:var(--foreground);font-size:.95rem}
+.np-field-error{margin:0;color:var(--destructive,#b4233b);font-size:.875rem;line-height:1.5}
+.np-field [aria-invalid=true]{border-color:var(--destructive,#b4233b)!important;outline-color:var(--destructive,#b4233b)}
+.np-fieldset:disabled{opacity:.65}

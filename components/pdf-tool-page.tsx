@@ -11,6 +11,7 @@ import {seoPages} from '@/lib/seo-tools';
 import {toolGuidance} from '@/lib/tool-guidance';
 import {exportFilename} from '@/lib/export-filename';
 import {newTools} from '@/lib/new-tools';
+import {validateToolFields} from '@/lib/new-tools/validation';
 import type {Extra,Values} from '@/lib/new-tools/types';
 import {renderer} from '@/lib/pdf-client';
 import '@/app/pdf-tool-page.css';
@@ -24,6 +25,8 @@ export function PdfToolPage({id}:{id:string}){
  const def=newTools[id],tool=tools.find(t=>t.id===id)!,page=seoPages.find(p=>p.id===id)!,guide=toolGuidance[id];
  const [file,setFile]=useState<Loaded>(),[extra,setExtra]=useState<Extra[]>([]),[thumb,setThumb]=useState(''),[busy,setBusy]=useState(false),[opening,setOpening]=useState(false),[progress,setProgress]=useState(0),[error,setError]=useState(''),[drag,setDrag]=useState(false);
  const [values,setValues]=useState<Values>(()=>Object.fromEntries(def.fields.map(f=>[f.key,f.def])));
+ const [touched,setTouched]=useState<Record<string,boolean>>({}),[extraError,setExtraError]=useState('');
+ const fieldErrors=validateToolFields(def.fields,values);
  const input=useRef<HTMLInputElement>(null),extraInput=useRef<HTMLInputElement>(null);
  const {prepare,visible,screen}=useExportScreen();
  const set=(key:string,value:string|number|boolean)=>setValues(v=>({...v,[key]:value}));
@@ -64,12 +67,13 @@ export function PdfToolPage({id}:{id:string}){
   const files=Array.from(list??[]);if(!files.length)return;setError('');
   const next:Extra[]=[];
   for(const f of files)next.push({name:f.name,type:f.type,bytes:new Uint8Array(await f.arrayBuffer())});
-  setExtra(def.extra?.multiple?[...extra,...next]:next.slice(0,1));
+  setExtraError('');setExtra(def.extra?.multiple?[...extra,...next]:next.slice(0,1));
   if(extraInput.current)extraInput.current.value='';
  }
  async function run(){
   if(!file||busy)return;
-  if(def.extra?.required&&!extra.length){setError(`Add ${def.extra.label.toLowerCase()} first.`);return;}
+  const invalid=Object.keys(fieldErrors);if(invalid.length){setTouched(Object.fromEntries(invalid.map(key=>[key,true])));setError('Check the highlighted settings, then try again.');requestAnimationFrame(()=>document.getElementById('np-'+invalid[0])?.focus());return;}
+  if(def.extra?.required&&!extra.length){setExtraError('Add the required file before continuing.');extraInput.current?.parentElement?.querySelector('button')?.focus();return;}
   setBusy(true);setError('');setProgress(0);
   try{
    const result=await def.run({bytes:file.bytes,name:file.name,pages:file.pages,extra,v:values,progress:setProgress});
@@ -95,26 +99,26 @@ export function PdfToolPage({id}:{id:string}){
       <div className="np-file">
        {thumb?<img src={thumb} alt="First page preview" className="np-thumb"/>:<div className="np-thumb np-thumb-empty" aria-hidden="true"/>}
        <div className="np-file-info"><b title={file.name}>{file.name}</b><span>{file.pages} {file.pages===1?'page':'pages'} · {formatBytes(file.bytes.length)}</span>
-        <button type="button" className="secondary np-clear" disabled={busy} onClick={()=>{setFile(undefined);setThumb('');setExtra([]);setError('');}}><X size={15}/>Choose another file</button></div>
+        <button type="button" className="secondary np-clear" disabled={busy} onClick={()=>{setFile(undefined);setThumb('');setExtra([]);setError('');setTouched({});setExtraError('');}}><X size={15}/>Choose another file</button></div>
       </div>
-      {def.extra&&<div className="np-extra"><input ref={extraInput} type="file" accept={def.extra.accept} multiple={def.extra.multiple} hidden onChange={e=>void addExtra(e.target.files)}/>
+      {def.extra&&<fieldset className="np-extra np-fieldset" disabled={busy}><legend>Additional file{def.extra.multiple?'s':''}</legend><input ref={extraInput} type="file" accept={def.extra.accept} multiple={def.extra.multiple} hidden onChange={e=>void addExtra(e.target.files)}/>
        <label className="np-label">{def.extra.label}{def.extra.required?'':' (optional)'}</label>
        {extra.map((x,i)=><div className="np-extra-row" key={i}><span title={x.name}>{x.name}</span><span>{formatBytes(x.bytes.length)}</span><button type="button" className="icon-button" aria-label={`Remove ${x.name}`} onClick={()=>setExtra(extra.filter((_,n)=>n!==i))}><X size={16}/></button></div>)}
-       {(def.extra.multiple||!extra.length)&&<button type="button" className="secondary" disabled={busy} onClick={()=>extraInput.current?.click()}><Plus size={16}/>{extra.length?'Add another':'Choose file'}</button>}
-       {def.extra.hint&&<small>{def.extra.hint}</small>}
-      </div>}
-      {showSettings&&def.fields.length>0&&<div className="np-settings">{def.fields.filter(f=>!f.when||f.when(values)).map(f=>{
-       const fid=`np-${f.key}`;
+       {(def.extra.multiple||!extra.length)&&<button type="button" className="secondary" aria-describedby={extraError?'np-extra-error':undefined} disabled={busy} onClick={()=>extraInput.current?.click()}><Plus size={16}/>{extra.length?'Add another':'Choose file'}</button>}
+       {def.extra.hint&&<small>{def.extra.hint}</small>}{extraError&&<p id="np-extra-error" className="np-field-error" role="alert">{extraError}</p>}
+      </fieldset>}
+      {showSettings&&def.fields.length>0&&<fieldset className="np-settings np-fieldset" disabled={busy}><legend>Tool settings</legend>{def.fields.filter(f=>!f.when||f.when(values)).map(f=>{
+       const fid=`np-${f.key}`,message=touched[f.key]?fieldErrors[f.key]:undefined,describedBy=[f.help?fid+'-help':'',message?fid+'-error':''].filter(Boolean).join(' ')||undefined;const validation={'aria-invalid':!!message,'aria-describedby':describedBy,onBlur:()=>setTouched(t=>({...t,[f.key]:true}))};
        return <div className={`np-field${f.type==='checkbox'?' np-check':''}`} key={f.key}>
-        {f.type==='checkbox'?<label htmlFor={fid}><input id={fid} type="checkbox" checked={!!values[f.key]} onChange={e=>set(f.key,e.target.checked)}/><span>{f.label}</span></label>
+        {f.type==='checkbox'?<label htmlFor={fid}><input {...validation} id={fid} type="checkbox" checked={!!values[f.key]} onChange={e=>set(f.key,e.target.checked)}/><span>{f.label}</span></label>
         :<><label htmlFor={fid} className="np-label">{f.label}</label>
-         {f.type==='select'?<select id={fid} value={String(values[f.key])} onChange={e=>set(f.key,e.target.value)}>{f.options!.map(([v,l])=><option key={v} value={v}>{l}</option>)}</select>
-         :f.type==='textarea'?<textarea id={fid} rows={5} value={String(values[f.key])} placeholder={f.placeholder} onChange={e=>set(f.key,e.target.value)}/>
-         :f.type==='number'?<input id={fid} type="number" inputMode="decimal" min={f.min} max={f.max} step={f.step??1} value={String(values[f.key])} onChange={e=>set(f.key,e.target.value===''?'':Number(e.target.value))}/>
-         :f.type==='color'?<input id={fid} type="color" value={String(values[f.key])} onChange={e=>set(f.key,e.target.value)}/>
-         :<input id={fid} type="text" value={String(values[f.key])} placeholder={f.placeholder} onChange={e=>set(f.key,e.target.value)}/>}</>}
-        {f.help&&<small>{f.help}</small>}
-       </div>;})}</div>}
+         {f.type==='select'?<select {...validation} id={fid} value={String(values[f.key])} onChange={e=>set(f.key,e.target.value)}>{f.options!.map(([v,l])=><option key={v} value={v}>{l}</option>)}</select>
+         :f.type==='textarea'?<textarea {...validation} id={fid} rows={5} value={String(values[f.key])} placeholder={f.placeholder} onChange={e=>set(f.key,e.target.value)}/>
+         :f.type==='number'?<input {...validation} id={fid} type="number" inputMode="decimal" min={f.min} max={f.max} step={f.step??1} value={String(values[f.key])} onChange={e=>set(f.key,e.target.value===''?'':Number(e.target.value))}/>
+         :f.type==='color'?<input {...validation} id={fid} type="color" value={String(values[f.key])} onChange={e=>set(f.key,e.target.value)}/>
+         :<input {...validation} id={fid} type="text" value={String(values[f.key])} placeholder={f.placeholder} onChange={e=>set(f.key,e.target.value)}/>}</>}
+        {f.help&&<small id={fid+'-help'}>{f.help}</small>}{message&&<p id={fid+'-error'} className="np-field-error" role="alert">{message}</p>}
+       </div>;})}</fieldset>}
       {error&&<p className="native-error np-error" role="alert">{error}</p>}
       <div className="np-actions"><button type="button" className="primary np-run" disabled={busy} onClick={()=>void run()}>{busy?<><Loader2 size={18} className="np-spin"/>Working… {progress>0&&progress<100?progress+'%':''}</>:def.action}</button></div>
      </section>}
