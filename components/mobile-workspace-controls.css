@@ -56,3 +56,4 @@
  [data-tool=merge].mobile-controls-ready .merge-list-heading{padding-right:64px;min-height:168px;align-items:flex-start}
 }
 .mobile-sheet-action{position:sticky;bottom:0;padding-top:8px;background:var(--card)}.mobile-sheet-action>*{width:100%}
+.mobile-workspace-panel.pw-sheet,.mobile-workspace-panel :is(.settings-panel) p[role=status],.mobile-workspace-panel .settings-panel>p{font-size:.85rem;line-height:1.4}
