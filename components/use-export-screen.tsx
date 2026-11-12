@@ -12,10 +12,14 @@ export function useExportScreen(afterDownload?: (output: {blob: Blob; name: stri
         setVisible(false);
         requestAnimationFrame(() => {window.scrollTo({top: 0, behavior: 'instant'}); document.querySelector<HTMLElement>('[data-export-workspace]')?.focus({preventScroll: true});});
     }} onDownload={() => {
+        void (async () => {
+        const {nativeSaveToDownloads} = await import('@/lib/app-bridge');
+        if (await nativeSaveToDownloads(output.blob, output.name)) { afterDownload?.(output); return; }
         const url = URL.createObjectURL(output.blob), anchor = document.createElement('a');
         anchor.href = url; anchor.download = output.name; anchor.hidden = true; document.body.appendChild(anchor); anchor.click(); anchor.remove();
         setTimeout(() => URL.revokeObjectURL(url), 30000);
         afterDownload?.(output);
+        })();
     }}/>;
     return {prepare, visible, screen};
 }
