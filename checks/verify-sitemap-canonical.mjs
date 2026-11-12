@@ -31,14 +31,16 @@ const assembly = source.slice(source.indexOf('const entries=pages.map'));
 assert(assembly.startsWith('const entries=pages.map'));
 const AsyncFunction = Object.getPrototypeOf(async function(){}).constructor;
 let xml;
-await new AsyncFunction('pages','createHash','state','old','today','base','imageTools','canonicalToolRoutes','canonicalSitemapEntries','writeFile','stateURL','root','seoPages','conversionGuides','console',assembly)(
+await new AsyncFunction('pages','createHash','state','old','today','base','imageTools','creativeTools','canonicalToolRoutes','canonicalSitemapEntries','writeFile','stateURL','root','seoPages','conversionGuides','console',assembly)(
  [{path:'/tools/sketch-over-pdf',content:'sketch'}],createHash,{}, {}, '2026-10-12','https://pdf-studio.in',
- [{slug:'image-crop'},{slug:'image-size-reducer'}],aliases,canonicalSitemapEntries,
+ [{slug:'image-crop'},{slug:'image-size-reducer'}],[{slug:'word-cloud'}],aliases,canonicalSitemapEntries,
  async(path,body)=>{if(String(path).endsWith('/sitemap.xml'))xml=body;},'state.json',new URL('../',import.meta.url),[],[],{log(){}}
 );
 const locations=[...xml.matchAll(/<loc>([^<]+)<\/loc>/g)].map(m=>m[1]);
 assert(locations.includes('https://pdf-studio.in/faq'));
 assert(locations.includes('https://pdf-studio.in/lab/image-crop'));
+assert(locations.includes('https://pdf-studio.in/lab/word-cloud'));
+assert(locations.includes('https://pdf-studio.in/lab/image-size-reducer'));
 assert(locations.includes('https://pdf-studio.in/tools/sketch-over-pdf'));
 assert(!locations.includes('https://pdf-studio.in/lab/sketch-pdf'));
 assert.equal(new Set(locations).size,locations.length);
