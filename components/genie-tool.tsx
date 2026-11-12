@@ -1,7 +1,7 @@
 import Link from '@/components/browser-link';
 import {BookOpen,Camera,Sparkles} from 'lucide-react';
 
-const icons={ 'photo-strip':Camera, flashcards:BookOpen, 'decision-wheel':Sparkles };
+const icons={ 'photo-strip':Camera, flashcards:BookOpen };
 
 /** Native disclosure: tap, Enter or Space releases a tool without a timed navigation. */
 export function GenieTool({slug,title,description,index}:{slug:string;title:string;description:string;index:number}){

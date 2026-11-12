@@ -117,32 +117,7 @@ export const creativeTools: {
     description: "Write, practise and shuffle a study deck.",
     group: "Study & focus",
   },
-  {
-    slug: "pomodoro",
-    title: "Focus Timer",
-    description: "Set aside time for focused work and breaks.",
-    group: "Study & focus",
-  },
-  {
-    slug: "decision-wheel",
-    title: "Decision Wheel",
-    description: "Add choices and spin to pick one.",
-    group: "Study & focus",
-  },
-  {
-    slug: "calculator",
-    title: "Everyday Calculator",
-    description: "Calculate with decimals, brackets and keyboard input.",
-    group: "Study & focus",
-  },
-  {
-    slug: "finance-calculator",
-    title: "Finance Calculator",
-    description:
-      "Estimate loan payments, savings growth and compound interest.",
-    group: "Study & focus",
-  },
-  {
+          {
     slug: "flipbook",
     title: "PDF Flipbook",
     description: "Read a PDF as a turning book and export offline HTML.",
@@ -194,7 +169,6 @@ const aliases: Record<string, string> = {
   "image-crop": "trim cut crop",
   "image-background-remover": "erase transparent plain background",
   "png-to-jpg": "jpeg convert",
-  pomodoro: "timer focus break",
   flashcards: "study learn cards",
 };
 export const labEntries: LabEntry[] = [
