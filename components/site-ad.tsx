@@ -5,13 +5,22 @@ import {ADS_ENABLED,AD_CLIENT,AD_SLOT,isAdvertisingPage} from '@/lib/advertising
 import './site-ad.css';
 
 function AdSlot(){
- const host=useRef<HTMLModElement>(null),requested=useRef(false),[filled,setFilled]=useState(false);
+ const section=useRef<HTMLElement>(null),[filled,setFilled]=useState(false);
  useEffect(()=>{
-  const node=host.current;if(!node)return;
+  const root=section.current;if(!root)return;
+  // The ad unit lives outside React's rendered tree: AdSense rewrites the <ins>
+  // as soon as its script lands, and a server/client DOM mismatch here can take
+  // the whole page down during hydration on some browsers.
+  const node=document.createElement('ins');
+  node.className='adsbygoogle';node.style.display='block';
+  node.setAttribute('data-ad-client',AD_CLIENT);node.setAttribute('data-ad-slot',AD_SLOT);
+  node.setAttribute('data-ad-format','auto');node.setAttribute('data-full-width-responsive','true');
+  root.appendChild(node);
+  let requested=false;
   const initialize=()=>{
-   if(requested.current||!node.isConnected||node.getBoundingClientRect().width===0)return;
-   if(node.dataset.adsbygoogleStatus){requested.current=true;return;}
-   requested.current=true;
+   if(requested||!node.isConnected||node.getBoundingClientRect().width===0)return;
+   if(node.dataset.adsbygoogleStatus){requested=true;return;}
+   requested=true;
    if(!document.getElementById('pdf-studio-adsense')){
     const script=document.createElement('script');script.id='pdf-studio-adsense';script.async=true;script.crossOrigin='anonymous';
     script.src='https://pagead2.googlesyndication.com/pagead/js/adsbygoogle.js?client='+AD_CLIENT;
@@ -23,9 +32,9 @@ function AdSlot(){
   const status=new MutationObserver(()=>{if(node.dataset.adStatus==='filled')setFilled(true)});
   status.observe(node,{attributes:true,attributeFilter:['data-ad-status']});
   const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(initialize);observer?.observe(node);initialize();
-  return()=>{observer?.disconnect();status.disconnect();};
+  return()=>{observer?.disconnect();status.disconnect();node.remove();};
  },[]);
- return <section className="site-ad" data-filled={filled||undefined} aria-label="Advertisement"><span className="site-ad-label">Advertisement</span><ins ref={host} className="adsbygoogle" style={{display:'block'}} data-ad-client={AD_CLIENT} data-ad-slot={AD_SLOT} data-ad-format="auto" data-full-width-responsive="true"/></section>;
+ return <section ref={section} className="site-ad" data-filled={filled||undefined} aria-label="Advertisement"><span className="site-ad-label">Advertisement</span></section>;
 }
 export function SiteAd(){
  const pathname=usePathname()||'/';
