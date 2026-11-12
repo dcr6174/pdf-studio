@@ -20,7 +20,9 @@ const {conversionGuides}=await import(asModule(await readFile(new URL('lib/conve
 const {searchGuidance}=await import(asModule(await readFile(new URL('lib/search-guidance.ts',root),'utf8')));
 const articles=await loadArticles();
 const {imageGuides}=await import(asModule(await readFile(new URL('lib/image-guides.ts',root),'utf8')));
-const {imageTools}=await import(asModule(await readFile(new URL('lib/image-tools.ts',root),'utf8')));
+const imageToolsModule=asModule(await readFile(new URL('lib/image-tools.ts',root),'utf8'));
+const {imageTools}=await import(imageToolsModule);
+const {creativeTools}=await import(asModule((await readFile(new URL('lib/lab-studios.ts',root),'utf8')).replace('"./image-tools"',JSON.stringify(imageToolsModule))));
 const {comparisons}=await import(asModule(await readFile(new URL('lib/comparisons.ts',root),'utf8')));
 GlobalFonts.registerFromPath(new URL('public/fonts/NotoSans-Regular.ttf',root).pathname,'Studio Sans');
 const logo=await loadImage(new URL('public/brand/pdf-studio-logo-v5.png',root).pathname);
@@ -54,7 +56,7 @@ pages.push({path:'/lab',content:await Promise.all(['app/lab/page.tsx','component
 pages.push({path:'/lab/image-studio',content:await Promise.all(['app/lab/image-studio/page.tsx','app/lab/image-studio/image-studio.css','lib/image-tools.ts'].map(file=>readFile(new URL(file,root),'utf8'))).then(parts=>parts.join(''))});
 pages.push({path:'/lab/creative-studio',content:(await readFile(new URL('app/lab/creative-studio/page.tsx',root),'utf8'))+(await readFile(new URL('components/creative-directory.tsx',root),'utf8'))+(await readFile(new URL('lib/lab-studios.ts',root),'utf8'))});
 const entries=pages.map(page=>{const hash=createHash('sha256').update(page.content).digest('hex');state[page.path]={hash,lastmod:old[page.path]?.hash===hash?old[page.path].lastmod:today};return {path:page.path,lastmod:state[page.path].lastmod};});
-entries.push(...imageTools.filter(t=>t.slug!=='image-size-reducer').map(t=>({path:'/lab/'+t.slug})));
+entries.push(...[...imageTools,...creativeTools].map(t=>({path:'/lab/'+t.slug})));
 entries.push(...['/about','/contact','/check-it-yourself','/help','/terms','/faq'].map(path=>({path})));
 const urls=canonicalSitemapEntries(entries,canonicalToolRoutes).map(({path,lastmod})=>`<url><loc>${base+path}</loc>${lastmod?`<lastmod>${lastmod}</lastmod>`:''}</url>`);
 await writeFile(stateURL,JSON.stringify(state,null,2)+'\n');

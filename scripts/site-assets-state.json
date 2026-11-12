@@ -848,8 +848,8 @@
     "lastmod": "2026-10-30"
   },
   "/": {
-    "hash": "c0455b939de9b9986f6dc8f1c4f8d7bf2b7db94f93148315d6d168538df7b028",
-    "lastmod": "2026-11-10"
+    "hash": "e9014a213c51867a40293483a9721cc38ac2244ba5b86ff2b50b39a4c89f166f",
+    "lastmod": "2026-11-12"
   },
   "/privacy": {
     "hash": "23b32e3fbe673a26969324cade231d47a937799cc91e6339864eb96c779103fa",
@@ -1271,10 +1271,6 @@
     "hash": "e64525ded559e50a84cb83cafef869536061c4859d58b63de10dd9256155ccec",
     "lastmod": "2026-11-10"
   },
-  "/tools/compress-pdf-to-100kb": {
-    "hash": "ae001fa7cab3a022e98caf638ed20b120476418713cf7fc296936eb08c074325",
-    "lastmod": "2026-11-10"
-  },
   "/guides/powerpoint-to-pdf": {
     "hash": "f694df2636057f4a88bea89151bac5e408a83e5fc0a1451b9f7033d1788c1a89",
     "lastmod": "2026-11-10"
@@ -1284,12 +1280,12 @@
     "lastmod": "2026-11-10"
   },
   "/tools": {
-    "hash": "e1b9612ac2490047f5caaeec1e1a8c2024948452b31253926c7dedcf8360a815",
-    "lastmod": "2026-11-10"
+    "hash": "fc223bf67ab36205b219e9f468db4a9dfe5672d24d0801aad5b047bf9d8fb7c2",
+    "lastmod": "2026-11-12"
   },
   "/guides": {
-    "hash": "2be732a9144bb5ba6b963cc6cf279aed5ce985d6fef4b34e10197e561a4e47f0",
-    "lastmod": "2026-11-10"
+    "hash": "a35fb200d3d49a3f167e1577065cfc94fb4333bf480c05872865e1c3d5d6fecc",
+    "lastmod": "2026-11-12"
   },
   "/compare/ilovepdf-alternative": {
     "hash": "f670425e44fcf70b8d9612f79dcd3e77c600cf9ed91a78a33ce8c0b8af6c5641",
@@ -1723,10 +1719,6 @@
     "hash": "9da8435db4fa57498a41f1f0acc91e621a460ff7ded0f41618f8ae231e46a4fb",
     "lastmod": "2026-10-30"
   },
-  "/guides/compress-pdf-to-100kb": {
-    "hash": "f8b999f6fbcb8339121c3a58196c3a5db35a50d3bb537881645e39db4108af40",
-    "lastmod": "2026-10-30"
-  },
   "/guides/text-to-handwriting": {
     "hash": "43e54b1fd33b5f7c708d91637f305233d04d645459eb10ecc88b7d177436a379",
     "lastmod": "2026-10-30"
@@ -1740,8 +1732,8 @@
     "lastmod": "2026-10-30"
   },
   "/lab/guides": {
-    "hash": "71a5f8861a522b8d2f9a4a8965a951ada659fca177fc3562dfe39b62a874a54d",
-    "lastmod": "2026-10-30"
+    "hash": "c98f2029b6c4ba3b775b4b643014d95125f179c48e212463feb7d906e2b5b768",
+    "lastmod": "2026-11-12"
   },
   "/lab/guides/image-size-reducer": {
     "hash": "6defae37ac753c031add3409b4f258cf3da0710752187d5045504c4ee81c0024",
@@ -1856,15 +1848,15 @@
     "lastmod": "2026-10-30"
   },
   "/lab": {
-    "hash": "45e1bac993c4d225e61ee4a81bd38a37e9ba911bf6c193c8ae788023454b0597",
-    "lastmod": "2026-11-10"
+    "hash": "387b0fe539060f2015c8ffa855841842891b668214b5bbd3fc0de4a4e4516078",
+    "lastmod": "2026-11-12"
   },
   "/lab/image-studio": {
     "hash": "cfd0c8e3ac943266186dc5a11baca892dc1459db4d061c2583f3b4f286700a35",
     "lastmod": "2026-11-10"
   },
   "/lab/creative-studio": {
-    "hash": "30f2779a084662072dfbfc3e7cf0946f49243d8cfdc6b927609810aa44a6aed0",
-    "lastmod": "2026-11-10"
+    "hash": "f022f5083d8e2b7675d9782f7fbef0483ebece9889062927b8f674d5e6fa70b6",
+    "lastmod": "2026-11-12"
   }
 }
