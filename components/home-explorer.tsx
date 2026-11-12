@@ -41,11 +41,13 @@ export function HomeExplorer({onNavigate}:{onNavigate:(id:string)=>void}){
  const [favourites,setFavourites]=useState<string[]>([]);
  const input=useRef<HTMLInputElement>(null),fileInput=useRef<HTMLInputElement>(null);
  const [file,setFile]=useState<File|null>(null),[drag,setDrag]=useState(false),[dropError,setDropError]=useState('');
+ const [toolQuery,setToolQuery]=useState('');
  const pick=(list:FileList|null)=>{const f=list?.[0];if(!f)return;if(!/\.pdf$/i.test(f.name)&&f.type!=='application/pdf'){setDropError('That is not a PDF. Choose a .pdf file.');return;}setDropError('');setFile(f);};
  const sendTo=async(e:React.MouseEvent<HTMLAnchorElement>,t:Tool)=>{if(e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;e.preventDefault();if(file){try{await putHandoff(file);}catch{/* the tool will ask for the file */}}open(t.id);};
  useEffect(()=>{let alive=true;queueMicrotask(()=>{if(alive){setRecent(getRecent());setFavourites(getFavourites());}});return()=>{alive=false;};},[]);
  const searching=query.trim()!=='';
  const found=useMemo(()=>searchToolsDetailed(query),[query]);
+ const toolResults=useMemo(()=>toolQuery.trim()?searchToolsDetailed(toolQuery).tools.filter(t=>!dropActions.includes(t.id)):[],[toolQuery]);
  const shown=searching?found.tools:tools;
  const open=(id:string)=>onNavigate(id);
  const follow=(e:React.MouseEvent<HTMLAnchorElement>,t:Tool)=>{if(e.button!==0||e.ctrlKey||e.metaKey||e.shiftKey||e.altKey)return;e.preventDefault();open(t.id);};
@@ -77,9 +79,11 @@ export function HomeExplorer({onNavigate}:{onNavigate:(id:string)=>void}){
      <span className="hx-drop-sub">or choose one from your device, then pick what to do with it.</span>
      <button type="button" className="hx-drop-btn" onClick={()=>fileInput.current?.click()}>Choose PDF</button>
     </>:<>
-     <div className="hx-file"><span className="hx-drop-icon" aria-hidden="true"><FileText size={22}/></span><span className="hx-file-name"><b title={file.name}>{file.name}</b><span>{file.size>=1048576?(file.size/1048576).toFixed(1)+' MB':Math.max(1,Math.round(file.size/1024))+' KB'}</span></span><button type="button" className="hx-file-x" aria-label="Remove this file" onClick={()=>setFile(null)}><X size={18}/></button></div>
+     <div className="hx-file"><span className="hx-drop-icon" aria-hidden="true"><FileText size={22}/></span><span className="hx-file-name"><b title={file.name}>{file.name}</b><span>{file.size>=1048576?(file.size/1048576).toFixed(1)+' MB':Math.max(1,Math.round(file.size/1024))+' KB'}</span></span><button type="button" className="hx-file-x" aria-label="Remove this file" onClick={()=>{setFile(null);setToolQuery('');}}><X size={18}/></button></div>
      <span className="hx-drop-sub">What would you like to do?</span>
      <div className="hx-actions">{dropActions.map(id=>{const t=tools.find(t=>t.id===id);if(!t)return null;const Icon=toolIcons[t.id]??FileText;return <Link key={id} href={href(t)} onClick={e=>void sendTo(e,t)}><Icon size={18} aria-hidden="true"/>{t.name}</Link>;})}</div>
+     <div className="hx-toolfind"><Search size={16} aria-hidden="true"/><input value={toolQuery} onChange={e=>setToolQuery(e.target.value)} placeholder="Find another tool…" aria-label="Find another tool for this file" onKeyDown={e=>{if(e.key==='Enter'&&toolResults.length){e.preventDefault();const t=toolResults[0];putHandoff(file).catch(()=>{}).finally(()=>open(t.id));}}}/></div>
+     {toolQuery.trim()!==''&&<div className="hx-toolfind-results">{toolResults.slice(0,6).map(t=>{const Icon=toolIcons[t.id]??FileText;return <Link key={t.id} href={href(t)} onClick={e=>void sendTo(e,t)}><Icon size={16} aria-hidden="true"/>{t.name}</Link>;})}{!toolResults.length&&<span className="hx-toolfind-empty">No tools found.</span>}</div>}
     </>}
     <span className="hx-privacy"><ShieldCheck size={15} aria-hidden="true"/>Private by design: your file stays on this device. Nothing is uploaded.</span>
     {dropError&&<span className="hx-drop-error" role="alert">{dropError}</span>}
