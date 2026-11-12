@@ -1,11 +1,11 @@
 'use client';
-import {useEffect,useRef} from 'react';
+import {useEffect,useRef,useState} from 'react';
 import {usePathname} from 'next/navigation';
 import {ADS_ENABLED,AD_CLIENT,AD_SLOT,isAdvertisingPage} from '@/lib/advertising';
 import './site-ad.css';
 
 function AdSlot(){
- const host=useRef<HTMLModElement>(null),requested=useRef(false);
+ const host=useRef<HTMLModElement>(null),requested=useRef(false),[filled,setFilled]=useState(false);
  useEffect(()=>{
   const node=host.current;if(!node)return;
   const initialize=()=>{
@@ -20,10 +20,12 @@ function AdSlot(){
    const adsWindow=window as Window & {adsbygoogle?:{push:(request:Record<string,never>)=>unknown}};
    try{(adsWindow.adsbygoogle=adsWindow.adsbygoogle||([] as Record<string,never>[])).push({});}catch{/* Ad blockers or unavailable inventory must not interrupt PDF tools. */}
   };
+  const status=new MutationObserver(()=>{if(node.dataset.adStatus==='filled')setFilled(true)});
+  status.observe(node,{attributes:true,attributeFilter:['data-ad-status']});
   const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(initialize);observer?.observe(node);initialize();
-  return()=>observer?.disconnect();
+  return()=>{observer?.disconnect();status.disconnect();};
  },[]);
- return <section className="site-ad" aria-label="Advertisement"><span className="site-ad-label">Advertisement</span><ins ref={host} className="adsbygoogle" style={{display:'block'}} data-ad-client={AD_CLIENT} data-ad-slot={AD_SLOT} data-ad-format="auto" data-full-width-responsive="true"/></section>;
+ return <section className="site-ad" data-filled={filled||undefined} aria-label="Advertisement"><span className="site-ad-label">Advertisement</span><ins ref={host} className="adsbygoogle" style={{display:'block'}} data-ad-client={AD_CLIENT} data-ad-slot={AD_SLOT} data-ad-format="auto" data-full-width-responsive="true"/></section>;
 }
 export function SiteAd(){
  const pathname=usePathname()||'/';
