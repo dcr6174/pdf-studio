@@ -8,7 +8,7 @@ import './site-footer.css';
 export function SiteHeader(){return <StudioHeader/>;}
 export function SiteFooter({tool='PDF Studio'}:{tool?:string}){
  return <footer className="site-footer pdf-site-footer"><div className="footer-inner">
-  <div className="footer-intro"><Link href="/" className="footer-brand"><Image unoptimized src="/brand/pdf-studio-logo-v7-motion.svg" alt="" width="28" height="28" loading="lazy"/>PDF Studio</Link></div>
+  <div className="footer-intro"><Link href="/" className="footer-brand"><Image unoptimized src="/brand/pdf-studio-logo-v8-motion.svg" alt="" width="28" height="28" loading="lazy"/>PDF Studio</Link></div>
   <nav className="footer-columns" aria-label="Footer navigation">
    <div className="footer-group"><h2>Tools</h2><Link href="/tools">All tools</Link><Link href="/#shelf">My files</Link><Link href="/lab">Lab</Link></div>
    <div className="footer-group"><h2>Learn</h2><Link href="/guides">Guides</Link><Link href="/blog">Blog</Link><Link href="/check-it-yourself">Privacy check</Link></div>
