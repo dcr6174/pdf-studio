@@ -1,6 +1,6 @@
 # PDF Studio
 
-<img src="public/brand/pdf-studio-lockup-v7.svg" height="64" alt="PDF Studio logo" />
+<img src="public/brand/pdf-studio-lockup-v8.svg" height="64" alt="PDF Studio logo" />
 
 [PDF Studio](https://pdf-studio.in/) provides free browser-based PDF tools with no account required and no added watermark. The current catalogue contains **100+ free PDF tools** (generated from the registry via PDF_TOOL_COUNT, never hardcoded), with separate Image Studio and creative utilities in Studio Lab. Documents are processed on the visitor’s device.
 
