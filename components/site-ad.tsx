@@ -2,11 +2,16 @@
 import {useEffect,useRef,useState} from 'react';
 import {usePathname} from 'next/navigation';
 import {ADS_ENABLED,AD_CLIENT,AD_SLOT,isAdvertisingPage} from '@/lib/advertising';
+import {isNativeApp} from '@/lib/app-bridge';
 import './site-ad.css';
 
 function AdSlot(){
  const section=useRef<HTMLElement>(null),[filled,setFilled]=useState(false);
  useEffect(()=>{
+  // The Android app ships ad-free: ad iframes are the heaviest main-thread
+  // work during scrolling in a WebView, and the app is meant to feel native.
+  // The collapsed empty slot takes no space, so nothing changes visually.
+  if(isNativeApp())return;
   const root=section.current;if(!root)return;
   // The ad unit lives outside React's rendered tree: AdSense rewrites the <ins>
   // as soon as its script lands, and a server/client DOM mismatch here can take
