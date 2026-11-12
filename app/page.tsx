@@ -172,7 +172,7 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
     const batchTools=['workflow','compress','rotate','clean','jpg','png','encrypt','repair','grayscale'];
     const [progressDetail,setProgressDetail]=useState('');
     const [view, setView] = useState(initialTool), [options, setOptions] = useState<Options>(()=>({...defaults,passwordConfirm:'',quality:['jpg','png','webp'].includes(initialTool)?'2':initialTool==='compress'?'images':'balanced',...(initialTool==='workflow'?{recipe:'custom',workflowSteps:[],workflowSettings:[]}:{}),...initialOptions})), [busy, setBusy] = useState(false), [loading, setLoading] = useState(false), [progress, setProgress] = useState(0), [dragging, setDragging] = useState(false), [sizeWarning, setSizeWarning] = useState(''), [error, setError] = useState(''), [uploadIssue,setUploadIssue]=useState<ReturnType<typeof uploadFeedback>>(), [output, setRawOutput] = useState<Output>(), [shelfFiles, setShelfFiles] = useState<ShelfFile[]>([]), [activePage, setActivePage] = useState(''), [mode, setMode] = useState<'erase' | 'move' | 'text' | 'highlight' | 'redact' | 'sketch' | 'line' | 'arrow' | 'rectangle' | 'ellipse'>('move'), [selected, setSelected] = useState(''), [signature, setSignature] = useState(false), [formFields, setFormFields] = useState<Awaited<ReturnType<typeof fields>>>([]);
-    function setOutput(value:Output|undefined){setRawOutput(value?{...value,name:exportFilename(deletePagesMode?'delete-pages':view,value.name,batchMode&&files.length>1?'Batch':'',files[0]?.name??value.name)}:undefined);}
+    function setOutput(value:Output|undefined){setRawOutput(value?{...value,name:exportFilename(exportId,value.name,batchMode&&files.length>1?'Batch':'',files[0]?.name??value.name)}:undefined);}
     useEffect(()=>{draft('get').then(setSavedDraft).catch(()=>{});},[]);
     useEffect(()=>{if(!files.length&&!options.text)return;const warn=(e:BeforeUnloadEvent)=>{e.preventDefault();e.returnValue='';};window.addEventListener('beforeunload',warn);return()=>window.removeEventListener('beforeunload',warn);},[files,options.text]);
     const additive=true;
@@ -202,6 +202,7 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
     useEffect(()=>{queueMicrotask(()=>setWorkspaceView('preview'));},[view]);
     const tool = tools.find(t => t.id === view);
     const deletePagesMode=view==='organize'&&initialTool==='organize'&&initialPageAction==='delete';
+    const exportId=deletePagesMode?'delete-pages':view;
     const sensors = useSensors(useSensor(CardMouseSensor, { activationConstraint: { distance: 8 } }),useSensor(CardTouchSensor,{activationConstraint:{delay:250,tolerance:8}}), useSensor(KeyboardSensor, { coordinateGetter: sortableKeyboardCoordinates }));
     const opt = (key: keyof Options, value: string) => setOptions(o => ({ ...o, [key]: value }));
     const navigate=useCallback(function navigate(id:string,record=true,committed=false){
@@ -362,11 +363,11 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
           setPageSelection([]);
         }
         else if(batchMode&&view!=='rotate'&&files.length>1){const {default:JSZip}=await import('jszip');const z=new JSZip(),failures:string[]=[],outcomes:string[][]=[];let success=0;
-          for(let i=0;i<files.length;i++){controller.signal.throwIfAborted();try{const file=files[i],items=pages.filter(p=>p.fileId===file.id);const one=await processPDF(view,[file],items,marks.filter(m=>items.some(p=>p.id===m.pageId)),options,n=>setProgress(Math.round((i+n/100)/files.length*100)),controller.signal);z.file(exportFilename(view,one.name,`File ${i+1}`),await one.blob.arrayBuffer());outcomes.push([file.name,'completed',exportFilename(view,one.name,`File ${i+1}`),String(one.blob.size),one.report??'']);success++;}catch(e){controller.signal.throwIfAborted();const message=e instanceof Error?e.message:'Processing failed';failures.push(`${files[i].name}: ${message}`);outcomes.push([files[i].name,'failed','','',message]);}}
+          for(let i=0;i<files.length;i++){controller.signal.throwIfAborted();try{const file=files[i],items=pages.filter(p=>p.fileId===file.id);const one=await processPDF(view,[file],items,marks.filter(m=>items.some(p=>p.id===m.pageId)),options,n=>setProgress(Math.round((i+n/100)/files.length*100)),controller.signal);z.file(exportFilename(exportId,one.name,`File ${i+1}`),await one.blob.arrayBuffer());outcomes.push([file.name,'completed',exportFilename(exportId,one.name,`File ${i+1}`),String(one.blob.size),one.report??'']);success++;}catch(e){controller.signal.throwIfAborted();const message=e instanceof Error?e.message:'Processing failed';failures.push(`${files[i].name}: ${message}`);outcomes.push([files[i].name,'failed','','',message]);}}
           if(!success)throw new Error('No files could be processed. Your source files are retained.');
           if(failures.length)z.file(brandDownloadName('failures.txt'),failures.join('\n'));
           z.file(brandDownloadName('results.csv'),batchResultsCSV(outcomes));
-          r={blob:await z.generateAsync({type:'blob'}),name:exportFilename(view,'batch.zip','Batch'),report:`${success} of ${files.length} files completed.${failures.length?'\n'+failures.join('\n'):''}`};
+          r={blob:await z.generateAsync({type:'blob'}),name:exportFilename(exportId,'batch.zip','Batch'),report:`${success} of ${files.length} files completed.${failures.length?'\n'+failures.join('\n'):''}`};
         }else r=await processPDF(view,files,pages,marks,processingOptions,reportProgress,controller.signal);
         controller.signal.throwIfAborted();
         if(view==='audio'){if(typeof speechSynthesis==='undefined')throw new Error('Read aloud is not available in this browser.');speechSynthesis.cancel();speechSynthesis.speak(new SpeechSynthesisUtterance(r.report??''));setProgress(100);trackActivity('process_success',view);return;}
