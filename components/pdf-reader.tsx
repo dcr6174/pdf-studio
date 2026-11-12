@@ -19,15 +19,49 @@ export function PDFReader({files,pages,marks,onDownload,onTool,onAdd}:{onAdd?:()
  const jump=useCallback((n:number)=>{if(!document||!Number.isInteger(n)||n<1||n>document.numPages){setError('This page destination is outside the document.');return;}setPage(n);requestAnimationFrame(()=>{const node=viewport.current,target=node?.querySelector<HTMLElement>(`[data-reader-page="${n}"]`);if(node&&target)node.scrollTop+=target.getBoundingClientRect().top-node.getBoundingClientRect().top;});},[document]);
  useEffect(()=>{let active=true;void Promise.resolve().then(()=>{if(!active)return;setBookmarks([]);if(!key)return;try{const value=JSON.parse(localStorage.getItem(key+'-bookmarks')??'[]');if(Array.isArray(value))setBookmarks(value.filter(n=>Number.isInteger(n)&&n>=1&&n<=(document?.numPages??0)));}catch{}});return()=>{active=false;};},[key,document]);
  function saveBookmarks(next:number[]){try{if(next.length)localStorage.setItem(key+'-bookmarks',JSON.stringify(next));else localStorage.removeItem(key+'-bookmarks');setBookmarks(next);}catch{setError('This browser could not save bookmarks. Reading still works.');}}
- const pinch=useRef<{distance:number;zoom:number}|undefined>(undefined),zoomValue=useRef(zoom),pinchFrame=useRef(0);
+ // Pinch zoom: during the gesture the pages are scaled with a CSS transform
+ // (compositor-only, no re-raster, so it tracks fingers at full frame rate).
+ // The real zoom state - and the crisp canvas re-render - commits on release.
+ const pinch=useRef<{distance:number;zoom:number;fx:number;fy:number;ox:number;oy:number;mx:number;my:number;last:number}|undefined>(undefined),zoomValue=useRef(zoom),pinchFrame=useRef(0),pinchCommit=useRef<{fx:number;fy:number;ox:number;oy:number;ratio:number;mx:number;my:number}|undefined>(undefined);
  useEffect(()=>{zoomValue.current=zoom;},[zoom]);
+ // After a pinch-committed zoom lands, re-anchor the scroll so the gesture's
+ // focal point stays under the fingers, and drop the gesture transform: pages
+ // double-buffer, so the scaled old frames stay visible until their crisp
+ // replacements are ready instead of flashing white.
+ useEffect(()=>{
+  const pending=pinchCommit.current;if(!pending)return;pinchCommit.current=undefined;
+  const scroller=viewport.current,pages=scroller?.querySelector<HTMLElement>('.reader-pages');if(!scroller||!pages)return;
+  pages.style.transform='';pages.style.transformOrigin='';
+  const rect=scroller.getBoundingClientRect();
+  scroller.scrollLeft=rect.left+pending.ox+pending.fx*pending.ratio-pending.mx;
+  scroller.scrollTop=rect.top+pending.oy+pending.fy*pending.ratio-pending.my;
+ },[zoom]);
  const previousFocus=useRef<HTMLElement|null>(null);
  const viewport=useRef<HTMLDivElement>(null),host=useRef<HTMLDivElement>(null);
  const mobile=useMobileToolHeader(host),[mobileOptionsOpen,setMobileOptionsOpen]=useState(false);
  const effectiveLayout=mobile?'continuous':layout;
  useEffect(()=>{let active=true;let opened:PDFDocumentProxy|undefined;const cancel=new AbortController();void(async()=>{try{setDocument(undefined);setOutput(undefined);setOutline([]);setPageLabels([]);setError('');setStatus('Opening document…');const out=files.length===1&&files[0].readerOnly?{blob:new Blob([files[0].bytes.slice().buffer as ArrayBuffer],{type:'application/pdf'})}:await processPDF('organize',files,pages,marks,{range:'',text:'',title:'',author:'',subject:'',password:'',quality:'compact',angle:'0',margin:'0',start:'1',columns:'1',fields:{}},()=>{},cancel.signal);const bytes=new Uint8Array(await out.blob.arrayBuffer());opened=await renderer(bytes,pendingPassword.current);pendingPassword.current=undefined;validatePages(opened.numPages);if(!active){await opened.destroy();return;}setNeedsPassword(false);setError('');setPage(1);setRemember(false);const preferredLayout=await opened.getPageLayout();setLayout(preferredLayout?.startsWith('Two')?'spread':'continuous');setDocument(opened);setOutput(out.blob);const digest=await crypto.subtle.digest('SHA-256',bytes);if(active)setKey('pdf-studio-reading-'+Array.from(new Uint8Array(digest)).map(v=>v.toString(16).padStart(2,'0')).join(''));const [entries,labels]=await Promise.all([loadReaderOutline(opened).catch(()=>[]),opened.getPageLabels().catch(()=>null)]);if(active){setOutline(entries);setPageLabels(labels??[]);setStatus('');}}catch(e){pendingPassword.current=undefined;if(active){setStatus('');if(e instanceof Error&&e.name==='PasswordException'){setNeedsPassword(true);setError('Enter the document password to read this protected PDF. If you already tried, that password was not accepted.');}else setError(e instanceof Error?e.message:'Could not open reader.');}}})();return()=>{active=false;cancel.abort();void opened?.destroy();};},[files,pages,marks,attempt]);
  useEffect(()=>{const element=viewport.current;if(!element)return;const observer=new ResizeObserver(entries=>setViewportWidth(entries[0].contentRect.width));observer.observe(element);return()=>observer.disconnect();},[]);
- useEffect(()=>{const element=viewport.current;if(!element)return;const distance=(touches:TouchList)=>Math.hypot(touches[0].clientX-touches[1].clientX,touches[0].clientY-touches[1].clientY);const start=(e:TouchEvent)=>{if(e.touches.length===2)pinch.current={distance:distance(e.touches),zoom:zoomValue.current};};const move=(e:TouchEvent)=>{if(e.touches.length!==2||!pinch.current||!pinch.current.distance)return;e.preventDefault();const next=Math.max(.5,Math.min(3,pinch.current.zoom*distance(e.touches)/pinch.current.distance));cancelAnimationFrame(pinchFrame.current);pinchFrame.current=requestAnimationFrame(()=>setZoom(next));};const end=()=>{pinch.current=undefined;};element.addEventListener('touchstart',start,{passive:true});element.addEventListener('touchmove',move,{passive:false});element.addEventListener('touchend',end);element.addEventListener('touchcancel',end);return()=>{element.removeEventListener('touchstart',start);element.removeEventListener('touchmove',move);element.removeEventListener('touchend',end);element.removeEventListener('touchcancel',end);cancelAnimationFrame(pinchFrame.current);};},[]);
+ useEffect(()=>{const element=viewport.current;if(!element)return;
+  const midpoint=(touches:TouchList)=>({x:(touches[0].clientX+touches[1].clientX)/2,y:(touches[0].clientY+touches[1].clientY)/2});
+  const distance=(touches:TouchList)=>Math.hypot(touches[0].clientX-touches[1].clientX,touches[0].clientY-touches[1].clientY);
+  const start=(e:TouchEvent)=>{if(e.touches.length!==2)return;
+   const pages=element.querySelector<HTMLElement>('.reader-pages');if(!pages)return;
+   // A leftover gesture transform (cleared on a delay after the last pinch)
+   // would corrupt the focal-point measurement, so drop it before reading.
+   if(pages.style.transform){pages.style.transform='';pages.style.transformOrigin='';}
+   const m=midpoint(e.touches),rect=pages.getBoundingClientRect(),sRect=element.getBoundingClientRect();
+   pinch.current={distance:distance(e.touches),zoom:zoomValue.current,fx:m.x-rect.left,fy:m.y-rect.top,ox:rect.left-sRect.left+element.scrollLeft,oy:rect.top-sRect.top+element.scrollTop,mx:m.x,my:m.y,last:zoomValue.current};};
+  const move=(e:TouchEvent)=>{if(e.touches.length!==2||!pinch.current||!pinch.current.distance)return;e.preventDefault();
+   const next=Math.max(.5,Math.min(3,pinch.current.zoom*distance(e.touches)/pinch.current.distance));pinch.current.last=next;
+   const m=midpoint(e.touches);pinch.current.mx=m.x;pinch.current.my=m.y;
+   const {fx,fy,ox,oy,zoom:base}=pinch.current;
+   cancelAnimationFrame(pinchFrame.current);pinchFrame.current=requestAnimationFrame(()=>{const pages=element.querySelector<HTMLElement>('.reader-pages');if(!pages)return;
+    pages.style.transformOrigin=`${fx}px ${fy}px`;pages.style.transform=`scale(${next/base})`;
+    const rect=element.getBoundingClientRect();element.scrollLeft=rect.left+ox+fx-m.x;element.scrollTop=rect.top+oy+fy-m.y;});};
+  const end=()=>{const gesture=pinch.current;pinch.current=undefined;if(!gesture||gesture.last===gesture.zoom)return;
+   pinchCommit.current={fx:gesture.fx,fy:gesture.fy,ox:gesture.ox,oy:gesture.oy,ratio:gesture.last/gesture.zoom,mx:gesture.mx,my:gesture.my};
+   setZoom(gesture.last);};element.addEventListener('touchstart',start,{passive:true});element.addEventListener('touchmove',move,{passive:false});element.addEventListener('touchend',end);element.addEventListener('touchcancel',end);return()=>{element.removeEventListener('touchstart',start);element.removeEventListener('touchmove',move);element.removeEventListener('touchend',end);element.removeEventListener('touchcancel',end);cancelAnimationFrame(pinchFrame.current);};},[]);
  useEffect(()=>{if(!document||!query.trim())return;let active=true;void(async()=>{const found:{page:number;text:string}[]=[];for(let n=1;n<=document.numPages&&active;n++){const p=await document.getPage(n);const c=await p.getTextContent();const t=c.items.map(i=>'str' in i?i.str:'').join(' ');const at=t.toLocaleLowerCase().indexOf(query.trim().toLocaleLowerCase());if(at>=0)found.push({page:n,text:t.slice(Math.max(0,at-35),at+query.length+65)});}if(active)setMatches(found);})().catch(()=>{if(active)setError('Search could not finish.');});return()=>{active=false;};},[document,query]);
  useEffect(()=>{if(remember&&key){try{localStorage.setItem(key,String(page));}catch{/* Reading works without storage. */}}},[remember,key,page]);
  useEffect(()=>{if(!focus)return;previousFocus.current=window.document.activeElement as HTMLElement;host.current?.focus();return()=>previousFocus.current?.focus();},[focus]);
