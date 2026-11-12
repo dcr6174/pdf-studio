@@ -35,7 +35,7 @@ export async function nativeSaveToDownloads(blob: Blob, name: string): Promise<b
   }
 }
 
-export type PendingOpen = {name: string; data: string} | null;
+export type PendingOpen = {name: string; data: string; dest?: string} | null;
 
 // Returns a PDF the user sent into the app via Open with / share sheet, once.
 export async function nativeTakePendingOpen(): Promise<PendingOpen> {
@@ -44,7 +44,7 @@ export async function nativeTakePendingOpen(): Promise<PendingOpen> {
   if (!plugin?.getPendingOpen) return null;
   try {
     const r = await plugin.getPendingOpen();
-    if (r?.hasFile && typeof r.data === 'string') return {name: r.name || 'document.pdf', data: r.data};
+    if (r?.hasFile && typeof r.data === 'string') return {name: r.name || 'document.pdf', data: r.data, dest: typeof r.dest === 'string' ? r.dest : 'reader'};
   } catch { /* ignore */ }
   return null;
 }
