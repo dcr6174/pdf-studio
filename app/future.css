@@ -5,13 +5,13 @@
 
 /* ---------- Homepage ---------- */
 .hx-home{position:relative;max-width:1120px}
-.hx-hero{position:relative;isolation:isolate;padding:56px 0 36px}
+.hx-hero{position:relative;isolation:isolate;padding:26px 0 28px}
 .hx-hero::before,.hx-hero::after{content:"";position:absolute;z-index:-1;border-radius:50%;pointer-events:none;filter:blur(64px);opacity:.55}
 .hx-hero::before{width:520px;height:420px;left:-6%;top:-40px;background:radial-gradient(closest-side,var(--fx-a),transparent 70%);animation:fx-drift-a 22s ease-in-out infinite alternate}
 .hx-hero::after{width:460px;height:380px;right:-6%;top:60px;background:radial-gradient(closest-side,var(--fx-b),transparent 70%);opacity:.4;animation:fx-drift-b 26s ease-in-out infinite alternate}
 @keyframes fx-drift-a{to{transform:translate3d(60px,30px,0) scale(1.08)}}
 @keyframes fx-drift-b{to{transform:translate3d(-50px,40px,0) scale(1.1)}}
-.hx-pill{display:inline-flex;align-items:center;gap:8px;margin:0 0 18px;padding:7px 14px;border-radius:999px;border:1px solid color-mix(in srgb,var(--fx-a) 35%,var(--border));background:color-mix(in srgb,var(--card) 80%,transparent);color:var(--foreground);font-size:.8rem;font-weight:650;letter-spacing:.01em}
+.hx-pill{display:inline-flex;align-items:center;gap:8px;margin:0 0 14px;padding:7px 14px;border-radius:999px;border:1px solid color-mix(in srgb,var(--fx-a) 35%,var(--border));background:color-mix(in srgb,var(--card) 80%,transparent);color:var(--foreground);font-size:.8rem;font-weight:650;letter-spacing:.01em}
 .hx-pill i{width:8px;height:8px;border-radius:50%;background:#19C37D;box-shadow:0 0 0 0 rgba(25,195,125,.6);animation:fx-pulse 2.4s ease-out infinite}
 @keyframes fx-pulse{70%{box-shadow:0 0 0 8px rgba(25,195,125,0)}100%{box-shadow:0 0 0 0 rgba(25,195,125,0)}}
 .hx-hero h1{font-size:clamp(2.5rem,9.5vw,5.4rem);font-weight:800;letter-spacing:-.045em;line-height:1.02;margin:0 auto 18px;max-width:14ch;text-align:center;background:linear-gradient(120deg,var(--foreground) 10%,var(--fx-a) 55%,var(--fx-b) 100%);-webkit-background-clip:text;background-clip:text;color:transparent;-webkit-text-fill-color:transparent;padding-bottom:.06em}
