@@ -102,10 +102,12 @@ for (const studio of data.studioLinks) {
 }
 const labPage = await readFile("app/lab/page.tsx", "utf8");
 assert(!/arcade|game/i.test(labPage), "Lab home carries no games");
-assert(labPage.includes('href="/lab/image-studio"'));
-assert(labPage.includes('href="/lab/creative-studio"'));
-assert(labPage.includes("lb-studio-card"), "studio cards on the Lab home");
-assert(labPage.includes("imageTools.length"), "studio counts are live");
+const labHome = await readFile("components/lab-home.tsx", "utf8");
+assert(labHome.includes('href="/lab/image-studio"'));
+assert(labHome.includes('href="/lab/creative-studio"'));
+assert(labPage.includes("imageTools"), "image tools feed the Lab grid");
+assert(labPage.includes("creativeTools"), "creative tools feed the Lab grid");
+assert(labHome.includes("Search Lab tools"), "flat searchable Lab grid");
 const routeSource = await readFile("app/lab/[slug]/page.tsx", "utf8");
 assert(
   routeSource.includes("generateStaticParams"),

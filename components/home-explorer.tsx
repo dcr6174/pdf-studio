@@ -11,7 +11,7 @@ import {getFavourites,toggleFavourite} from '@/lib/favourite-tools';
 import {putHandoff} from '@/lib/file-handoff';
 import './home-explorer.css';
 
-const popularIds=['merge','compress','split','edit','sign','word','jpg','rotate'];
+const popularIds=['merge','compress','split','edit','sign','word','jpg','rotate','organize'];
 const dropActions=['compress','split','merge','rotate','sign','word','jpg','organize','numbers','encrypt'];
 const quickIds=['merge','compress','split','word','sign','edit'];
 const categoryMeta:Record<string,{icon:typeof Grid2X2;blurb:string}>={
@@ -119,7 +119,7 @@ export function HomeExplorer({onNavigate}:{onNavigate:(id:string)=>void}){
     </div>
    </section>
 
-   {recent.length>0&&chipRow(recent,'Recent activity',Clock3)}
+   {recent.length>0&&chipRow(recent.slice(0,4),'Recent activity',Clock3)}
    {favourites.length>0&&chipRow(favourites,'Favorites',Star)}
 
    <section className="hx-section hx-why" aria-labelledby="hx-why-title">

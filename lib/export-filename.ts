@@ -1,6 +1,6 @@
 import {tools} from '@/lib/tools';
 const prefix='pdf-studio.in - ';
-const labels:Record<string,string>={merge:'Merged',sign:'Signed',edit:'Edited', 'native-text':'Edited',compress:'Compressed',rotate:'Rotated',split:'Split pages','split-all':'Split pages',encrypt:'Protected',decrypt:'Unlocked',organize:'Organized',workflow:'Workflow',form:'Filled',create:'Created',markdown:'Markdown to PDF',images:'Images to PDF',scan:'Scanned',watermark:'Watermarked',numbers:'Page numbers',clean:'Cleaned',zip:'Documents'};
+const labels:Record<string,string>={merge:'Merged',sign:'Signed',edit:'Edited', 'native-text':'Edited',compress:'Compressed',rotate:'Rotated',split:'Split pages','split-all':'Split pages',encrypt:'Protected',decrypt:'Unlocked',organize:'Organized','delete-pages':'Deleted pages',workflow:'Workflow',form:'Filled',create:'Created',markdown:'Markdown to PDF',images:'Images to PDF',scan:'Scanned',watermark:'Watermarked',numbers:'Page numbers',clean:'Cleaned',zip:'Documents'};
 function clean(value:string){return value.replace(/[<>:"/\\|?*\u0000-\u001f]/g,' ').replace(/\s+/g,' ').trim().replace(/[. ]+$/,'')||'Export';}
 function extension(name:string){return /\.([a-z\d]{1,12})$/i.exec(name)?.[1].toLowerCase()??'pdf';}
 function sourceStem(name:string){return clean(name.replace(/\.[^.]+$/,'').replace(/ - pdf-studio\.in - .*$/i,'').replace(/^pdf-studio\.in - /i,'').replace(/^pdf[-_]studio[-_]?/i,'')).slice(0,120);}

@@ -43,3 +43,15 @@ html[data-accent] .tools-directory .search>svg{color:var(--primary)}
 .tools-directory .directory-category>summary>svg{display:none}
 @media(max-width:640px){.tools-directory .directory-category>summary{min-height:56px;cursor:pointer;border-bottom:1px solid var(--border);margin-top:12px;gap:12px}.tools-directory .directory-category>summary h2{margin:12px 0}.tools-directory .directory-category>summary>svg{display:block;flex:none;color:var(--primary);transition:transform 180ms ease-out}.tools-directory .directory-category[open]>summary>svg{transform:rotate(180deg)}.tools-directory .directory-category[open]>.tool-grid{margin-top:12px}.tools-directory .directory-category>summary:focus-visible{outline:3px solid var(--primary);outline-offset:3px;border-radius:8px}}
 @media(prefers-reduced-motion:reduce){.tools-directory .directory-category>summary>svg{transition:none}}
+
+/* Minimal directory */
+.tools-directory{max-width:860px}
+.tools-directory .dir-bar{display:none}
+.tools-directory .tool-grid{gap:8px}
+.tools-directory .tool-card{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px}
+.tools-directory .tool-card .tool-icon{width:30px;height:30px;flex:none}
+.tools-directory .tool-card .tool-icon svg{width:17px;height:17px}
+.tools-directory .tool-card b{font-size:14px;margin:0}
+.tools-directory .tool-card p{display:none}
+.tools-directory .directory-category>summary{padding:10px 0}
+.tools-directory .directory-category h2{font-size:15px}
