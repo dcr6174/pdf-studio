@@ -45,13 +45,13 @@ html[data-accent] .tools-directory .search>svg{color:var(--primary)}
 @media(prefers-reduced-motion:reduce){.tools-directory .directory-category>summary>svg{transition:none}}
 
 /* Minimal directory */
-.tools-directory{max-width:860px}
-.tools-directory .dir-bar{display:none}
-.tools-directory .tool-grid{gap:8px}
-.tools-directory .tool-card{display:flex;align-items:center;gap:12px;padding:10px 14px;border-radius:12px}
-.tools-directory .tool-card .tool-icon{width:30px;height:30px;flex:none}
-.tools-directory .tool-card .tool-icon svg{width:17px;height:17px}
-.tools-directory .tool-card b{font-size:14px;margin:0}
-.tools-directory .tool-card p{display:none}
-.tools-directory .directory-category>summary{padding:10px 0}
-.tools-directory .directory-category h2{font-size:15px}
+.tools-directory-page .tools-directory{max-width:860px}
+.tools-directory-page .tools-directory .dir-bar{display:none}
+.tools-directory-page .tools-directory .tool-grid{gap:8px;grid-template-columns:repeat(auto-fill,minmax(240px,1fr))}
+.tools-directory-page .tools-directory .tool-card{display:flex;flex-direction:row;align-items:center;gap:12px;padding:10px 14px;border-radius:12px;min-height:0;text-align:left}
+.tools-directory-page .tools-directory .tool-card .tool-icon{width:30px;height:30px;min-width:30px;margin:0}
+.tools-directory-page .tools-directory .tool-card .tool-icon svg{width:17px;height:17px}
+.tools-directory-page .tools-directory .tool-card b{font-size:14px;margin:0}
+.tools-directory-page .tools-directory .tool-card p{display:none}
+.tools-directory-page .tools-directory .directory-category>summary{padding:10px 0}
+.tools-directory-page .tools-directory .directory-category h2{font-size:15px}
