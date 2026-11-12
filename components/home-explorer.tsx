@@ -12,7 +12,7 @@ import {putHandoff} from '@/lib/file-handoff';
 import './home-explorer.css';
 
 const popularIds=['merge','compress','split','edit','sign','word','jpg','rotate','organize'];
-const dropActions=['compress','split','merge','rotate','sign','word','jpg','organize','numbers','encrypt'];
+const dropActions=['compress','split','merge','rotate','sign','edit','word','jpg','organize','numbers','encrypt','ocr'];
 const quickIds=['merge','compress','split','word','sign','edit'];
 const categoryMeta:Record<string,{icon:typeof Grid2X2;blurb:string}>={
  'Pages':{icon:Grid2X2,blurb:'Merge, split, organize and repair'},
