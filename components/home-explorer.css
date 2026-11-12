@@ -93,3 +93,8 @@
 .hx-chip{padding:6px 30px 6px 10px;font-size:13px;min-height:0}
 .hx-chip .hx-card-icon{width:24px;height:24px}
 .hx-chip .hx-card-icon svg{width:15px;height:15px}
+
+/* Popular tools: clean 3x3 on desktop */
+.hx-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
+@media(max-width:720px){.hx-grid-3{grid-template-columns:1fr 1fr}}
+@media(max-width:460px){.hx-grid-3{grid-template-columns:1fr}}
