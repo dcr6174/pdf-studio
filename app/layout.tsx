@@ -37,7 +37,7 @@ export const metadata: Metadata = {
   alternates: { canonical: "/" },
   openGraph: { type: "website", siteName: "PDF Studio", locale: "en_IN", url: "https://pdf-studio.in", title: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up", description: "Edit, merge, compress, sign and scan PDFs free. No watermark, no sign-up.", images: [{ url: "/social/home.png", width:1200, height:630, alt: "PDF Studio — Free online PDF tools" }] },
   twitter: { card: "summary_large_image", title: "PDF Studio: Free PDF Editor & Tools, No Watermark, No Sign-up", description: "Edit, merge, compress, sign and scan PDFs free. No watermark, no sign-up.", images: ["/social/home.png"] },
-  icons: { apple: "/brand/apple-touch-v8.png", icon: [{ url: "/brand/pdf-studio-favicon-v8.svg", type: "image/svg+xml" }, { url: "/favicon.ico", sizes: "48x48" }], shortcut: "/brand/app-192-v8.png" },
+  icons: { apple: "/brand/apple-touch-v9.png", icon: [{ url: "/brand/pdf-studio-favicon-v9.svg", type: "image/svg+xml" }, { url: "/brand/favicon-v9.ico", sizes: "48x48" }], shortcut: "/brand/app-192-v9.png" },
 };
 
 export default function RootLayout({
