@@ -87,7 +87,7 @@ export function HomeExplorer({onNavigate}:{onNavigate:(id:string)=>void}){
    <div className="hx-search">
     <Search size={21} aria-hidden="true"/>
     <label className="sr-only" htmlFor="mobile-home-search">Search PDF tools</label>
-    <input ref={input} id="mobile-home-search" type="search" value={query} placeholder="What would you like to do today?" autoComplete="off"
+    <input ref={input} id="mobile-home-search" type="search" value={query} placeholder="What would you like to do?" autoComplete="off"
      onChange={e=>setQuery(e.target.value)}
      onKeyDown={e=>{if(e.key==='Enter'&&searching&&shown.length){e.preventDefault();open(shown[0].id);}if(e.key==='Escape')setQuery('');}}/>
     {query&&<button type="button" className="hx-clear" onClick={()=>{setQuery('');input.current?.focus();}}>Clear</button>}
@@ -101,7 +101,7 @@ export function HomeExplorer({onNavigate}:{onNavigate:(id:string)=>void}){
    {!shown.length&&<p className="hx-empty">No tools found. Try “merge”, “compress” or “sign”.</p>}
   </section>:<>
    <section className="hx-section" aria-labelledby="hx-popular-title">
-    <div className="hx-section-head"><h2 id="hx-popular-title">Popular tools</h2><p>Everyday favourites.</p></div>
+    <div className="hx-section-head"><h2 id="hx-popular-title">Popular tools <span className="hx-count">{popularIds.length}</span></h2><p>Everyday favourites.</p></div>
     <div className="hx-grid hx-grid-3">{popularIds.map(id=>{const t=tools.find(t=>t.id===id);return t?card(t):null;})}</div>
    </section>
 
