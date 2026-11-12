@@ -1,0 +1,8 @@
+[{
+  "relation": ["delegate_permission/common.handle_all_urls"],
+  "target": {
+    "namespace": "android_app",
+    "package_name": "in.pdfstudio.app",
+    "sha256_cert_fingerprints": ["0D:38:7E:E0:02:13:5D:DE:E2:53:AD:3A:D3:4F:A4:B3:46:79:68:E0:14:2B:04:17:A1:5A:A0:7D:63:D5:D8:79"]
+  }
+}]
