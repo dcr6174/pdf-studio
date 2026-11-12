@@ -56,6 +56,19 @@ const icons: Record<string, typeof Camera> = {
   "remove-watermark": Eraser,
 };
 
+const tiles = [
+  "linear-gradient(135deg,#6366f1,#8b5cf6)",
+  "linear-gradient(135deg,#ec4899,#f43f5e)",
+  "linear-gradient(135deg,#f59e0b,#f97316)",
+  "linear-gradient(135deg,#10b981,#14b8a6)",
+  "linear-gradient(135deg,#0ea5e9,#3b82f6)",
+  "linear-gradient(135deg,#8b5cf6,#d946ef)",
+  "linear-gradient(135deg,#ef4444,#f97316)",
+  "linear-gradient(135deg,#22c55e,#84cc16)",
+  "linear-gradient(135deg,#06b6d4,#0ea5e9)",
+  "linear-gradient(135deg,#a855f7,#6366f1)",
+];
+
 export type LabHomeTool = { slug: string; title: string; description: string };
 
 export function LabHome({ tools }: { tools: LabHomeTool[] }) {
@@ -97,14 +110,16 @@ export function LabHome({ tools }: { tools: LabHomeTool[] }) {
         </div>
         {shown.length ? (
           <div className="lh-grid">
-            {shown.map((t) => {
+            {shown.map((t, i) => {
               const Icon = icons[t.slug] ?? Sparkles;
               return (
                 <Link key={t.slug} className="lh-card" href={"/lab/" + t.slug}>
+                  <span className="lh-tile" style={{ background: tiles[i % tiles.length] }}>
+                    <Icon size={26} aria-hidden="true" />
+                  </span>
                   <b>{t.title}</b>
                   <span className="lh-desc">{t.description}</span>
                   <span className="lh-foot">
-                    <Icon size={20} aria-hidden="true" />
                     <span className="lh-open">
                       Open <ChevronRight size={14} aria-hidden="true" />
                     </span>
