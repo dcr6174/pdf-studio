@@ -29,9 +29,14 @@ function AdSlot(){
    const adsWindow=window as Window & {adsbygoogle?:{push:(request:Record<string,never>)=>unknown}};
    try{(adsWindow.adsbygoogle=adsWindow.adsbygoogle||([] as Record<string,never>[])).push({});}catch{/* Ad blockers or unavailable inventory must not interrupt PDF tools. */}
   };
+  // Defer the AdSense loader until the page has fully loaded and gone idle.
+  // Auto Ads can rewrite body-level DOM; if the script lands while React is
+  // still hydrating on a slow device, that injection fails hydration (#418).
+  const whenIdle=(run:()=>void)=>{const go=()=>{const w=window as Window&{requestIdleCallback?:(cb:()=>void)=>number};if(typeof w.requestIdleCallback==='function')w.requestIdleCallback(run);else setTimeout(run,1200);};if(document.readyState==='complete')go();else window.addEventListener('load',go,{once:true});};
+  const deferred=()=>whenIdle(initialize);
   const status=new MutationObserver(()=>{if(node.dataset.adStatus==='filled')setFilled(true)});
   status.observe(node,{attributes:true,attributeFilter:['data-ad-status']});
-  const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(initialize);observer?.observe(node);initialize();
+  const observer=typeof ResizeObserver==='undefined'?null:new ResizeObserver(deferred);observer?.observe(node);deferred();
   return()=>{observer?.disconnect();status.disconnect();node.remove();};
  },[]);
  return <section ref={section} className="site-ad" data-filled={filled||undefined} aria-label="Advertisement"><span className="site-ad-label">Advertisement</span></section>;
