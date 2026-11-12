@@ -25,7 +25,7 @@ const {imageTools}=await import(imageToolsModule);
 const {creativeTools}=await import(asModule((await readFile(new URL('lib/lab-studios.ts',root),'utf8')).replace('"./image-tools"',JSON.stringify(imageToolsModule))));
 const {comparisons}=await import(asModule(await readFile(new URL('lib/comparisons.ts',root),'utf8')));
 GlobalFonts.registerFromPath(new URL('public/fonts/NotoSans-Regular.ttf',root).pathname,'Studio Sans');
-const logo=await loadImage(new URL('public/brand/pdf-studio-logo-v5.png',root).pathname);
+const logo=await loadImage(new URL('public/brand/pdf-studio-logo-v7.png',root).pathname);
 await mkdir(new URL('public/social/',root),{recursive:true});
 const colors={'Pages':'#5B3DF5','Edit & sign':'#ac482c','Convert':'#116e60','Privacy':'#345caa'};
 for(const page of [{slug:'home',title:'Free PDF tools',intro:'Edit, merge, compress and sign. No account needed.',group:'Pages'},...seoPages,...conversionGuides.map(g=>({...g,group:'Export guide'}))]){
