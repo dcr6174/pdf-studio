@@ -57,6 +57,7 @@ export function HomeExplorer({onNavigate}:{onNavigate:(id:string)=>void}){
   return <Link key={t.id} className={compact?'hx-card hx-chip':'hx-card'} href={href(t)} onClick={e=>follow(e,t)}>
    <span className="hx-card-icon" aria-hidden="true"><Icon size={20}/></span>
    <span className="hx-card-text"><b>{t.name}</b>{!compact&&<span>{t.description}</span>}</span>
+   {compact&&<span className="hx-chip-div" aria-hidden="true"/>}
    <button type="button" className="hx-star" aria-label={favourites.includes(t.id)?`Remove ${t.name} from favourites`:`Save ${t.name} as a favourite`} aria-pressed={favourites.includes(t.id)} onClick={e=>star(e,t.id)}><Star size={16} fill={favourites.includes(t.id)?'currentColor':'none'}/></button>
   </Link>;
  };

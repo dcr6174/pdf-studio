@@ -101,9 +101,13 @@
 /* Smaller recents/favourites rows */
 .hx-row{margin-top:24px}
 .hx-chips{gap:8px}
-.hx-chip{padding:6px 30px 6px 10px;font-size:13px;min-height:0}
+.hx-chip{padding:6px 6px 6px 10px;font-size:13px;min-height:0;align-items:center}
 .hx-chip .hx-card-icon{width:24px;height:24px}
 .hx-chip .hx-card-icon svg{width:15px;height:15px}
+.hx-chip .hx-chip-div{width:1px;height:18px;background:var(--border);flex:none}
+.hx-chip .hx-star{position:static;display:grid;place-items:center;width:28px;height:28px;padding:0;border-radius:8px;background:var(--soft);color:var(--muted);flex:none}
+.hx-chip .hx-star:hover{color:var(--primary)}
+.hx-chip .hx-star[aria-pressed=true]{color:var(--primary);background:var(--blue-soft)}
 
 /* Popular tools: clean 3x3 on desktop */
 .hx-grid-3{grid-template-columns:repeat(3,minmax(0,1fr))}
