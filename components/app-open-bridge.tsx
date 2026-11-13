@@ -7,8 +7,9 @@ import {putHandoff} from '@/lib/file-handoff';
 export function AppOpenBridge(){
  const router=useRouter();
  useEffect(()=>{
+  let stop=false;let handle:{remove:()=>void}|undefined;
+  try{
   if(!isNativeApp())return;
-  let stop=false;
   const open=(pending:{name:string;data:string;dest?:string}|null)=>{
    if(!pending||stop)return;
    try{
@@ -20,9 +21,9 @@ export function AppOpenBridge(){
   };
   void nativeTakePendingOpen().then(open);
   const plugins=(window as unknown as {Capacitor?:{Plugins?:Record<string,{addListener?:(e:string,cb:()=>void)=>Promise<{remove:()=>void}>}>}}).Capacitor?.Plugins;
-  let handle:{remove:()=>void}|undefined;
-  void plugins?.NativeFiles?.addListener?.('openFile',()=>{void nativeTakePendingOpen().then(open);})?.then(h=>{handle=h;});
-  return()=>{stop=true;handle?.remove();};
+  void plugins?.NativeFiles?.addListener?.('openFile',()=>{void nativeTakePendingOpen().then(open);})?.then(h=>{handle=h;},()=>{});
+  }catch{/* the native bridge must never break page rendering */}
+  return()=>{stop=true;try{handle?.remove();}catch{/* ignore */}};
  },[router]);
  return null;
 }
