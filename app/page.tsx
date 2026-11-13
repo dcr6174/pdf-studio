@@ -398,6 +398,8 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
     function textSize(text:string,size:number,mark?:Partial<Mark>,page=geometry){const ctx=document.createElement('canvas').getContext('2d');if(ctx)ctx.font=(mark?.italic?'italic ':'')+(mark?.bold?'bold ':'')+size+'px '+(mark?.fontFamily==='times'?'Times New Roman':mark?.fontFamily==='courier'?'Courier New':'Arial');return fittedTextBox(text,size,page.width,page.height,mark?.x??0,mark?.y??0,ctx?t=>ctx.measureText(t).width:undefined);}
 
     useEffect(()=>{if(view!=='edit')return;const frame=requestAnimationFrame(()=>{setSelected('');setMode('move');});return()=>cancelAnimationFrame(frame);},[view,files]);
+    const requestedEditorMode=useRef<'sketch'|'highlight'|'text'|null|undefined>(undefined);
+    useEffect(()=>{if(view!=='edit'||!files.some(f=>f.doc))return;if(requestedEditorMode.current===undefined){const m=new URLSearchParams(location.search).get('mode');requestedEditorMode.current=m==='sketch'||m==='highlight'||m==='text'?m:null;}const wanted=requestedEditorMode.current;if(!wanted)return;requestedEditorMode.current=null;const frame=requestAnimationFrame(()=>setMode(wanted));return()=>cancelAnimationFrame(frame);},[view,files]);
     const [drawColor,setDrawColor]=useState('#6541e8'),[drawWidth,setDrawWidth]=useState(3),[drawOpacity,setDrawOpacity]=useState(.25);
     const elementSettings=useRef<HTMLElement>(null);
     const [emojiTrayOpen,setEmojiTrayOpen]=useState(false);
