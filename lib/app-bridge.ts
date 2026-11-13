@@ -30,7 +30,8 @@ export async function nativeSaveToDownloads(blob: Blob, name: string): Promise<b
     const data = await blobToBase64(blob);
     await plugin.saveToDownloads({name, data});
     return true;
-  } catch {
+  } catch (e) {
+    console.error('native save failed', e);
     return false;
   }
 }
