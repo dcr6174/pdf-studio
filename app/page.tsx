@@ -35,6 +35,7 @@ import {TaskProgress} from '@/components/task-progress';
 import {paintProgress} from '@/lib/paint-progress';
 import { Checkbox } from '@/components/ui/checkbox';
 import { Toaster, toast } from 'sonner';
+import { isNativeApp, nativeSaveToDownloads } from '@/lib/app-bridge';
 import { DndContext, closestCenter, KeyboardSensor, useSensor, useSensors, DragEndEvent } from '@dnd-kit/core';
 import { SortableContext, useSortable, arrayMove, sortableKeyboardCoordinates, rectSortingStrategy } from '@dnd-kit/sortable';
 import { CSS } from '@dnd-kit/utilities';
@@ -375,7 +376,7 @@ function App({initialTool='home',initialHeading,initialOptions,initialActionLabe
       }catch(e){if(controller.signal.aborted){toast('Processing stopped. Your original document is retained.');}else{trackActivity('process_error',view);const issue=uploadFeedback(e);if(issue.reload){setUploadIssue(issue);setError(issue.message);}else setError(e instanceof Error?e.message:'The operation could not be completed. Your document is retained.');}}
       finally{cancel.current=undefined;setBusy(false);}
     }
-    function download(blob: Blob, name: string) { trackActivity('download', tool?.id ?? null); if (savedUrl.current)
+    function download(blob: Blob, name: string) { trackActivity('download', tool?.id ?? null); if (isNativeApp()) { const saveName = brandDownloadName(name); void nativeSaveToDownloads(blob, saveName).then(ok => { if (ok) toast.success('Saved to Downloads: ' + saveName); else toast.error('Could not save the file. Please try again.'); }); return; } if (savedUrl.current)
         URL.revokeObjectURL(savedUrl.current); const url = URL.createObjectURL(blob); savedUrl.current = url; const a = document.createElement('a'); a.href = url; a.download = brandDownloadName(name); a.hidden=true; document.body.appendChild(a); a.click(); a.remove(); }
     async function save(blob: Blob, name: string) { try {
         await shelf('save', { id: crypto.randomUUID(), name, blob, date: Date.now() });
