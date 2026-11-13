@@ -12,7 +12,7 @@ export function appOpenRoute(dest?:string):string{
   case 'draw':return '/tools/add-text-and-images?mode=sketch';
   case 'highlight':return '/tools/add-text-and-images?mode=highlight';
   case 'text':return '/tools/add-text-and-images?mode=text';
-  default:return '/tools/add-text-and-images';
+  default:return typeof dest==='string'&&/^tool:[a-z0-9-]{1,60}$/.test(dest)?'/tools/'+dest.slice(5):'/tools/add-text-and-images';
  }
 }
 /** Inside the Android app: takes a PDF that arrived via Open with / share sheet (or the native reader's Edit/Tools) and opens it: dest 'tools' stages it on the home tool picker, anything else opens the reader. */
