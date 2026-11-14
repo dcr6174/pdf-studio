@@ -5,6 +5,7 @@ import {publicPageCache} from '../lib/public-page-cache';
 import {purgeAudience} from '../lib/audience';
 import handler from 'vinext/server/fetch-handler';
 import { publicOwnerBoundary } from '../lib/public-owner';
+import {edgeCachedHtml} from '../lib/public-edge-cache';
 
 export default {
   async fetch(request: Request, env: Cloudflare.Env, ctx: ExecutionContext) {
@@ -12,6 +13,7 @@ export default {
     if(removed)return withSecurityHeaders(removed,new URL(request.url).pathname);
     const canonical=canonicalPublicRedirect(request);
     if(canonical)return withSecurityHeaders(Response.redirect(canonical.toString(),308),canonical.pathname);
+    return edgeCachedHtml(request,ctx,async()=>{
     const response=await publicOwnerBoundary(request, env, clean => handler.fetch(clean, env, ctx));
     if(response.status>=400&&response.headers.get('content-type')?.includes('text/html')){
       const headers=new Headers(response.headers);
@@ -19,6 +21,7 @@ export default {
       return withSecurityHeaders(new Response(response.body,{status:response.status,statusText:response.statusText,headers}),new URL(request.url).pathname);
     }
     return withSecurityHeaders(await publicPageCache(request,response),new URL(request.url).pathname);
+    });
   },
   async scheduled(_event: ScheduledEvent, env: Cloudflare.Env) {
     if (!env.DB) return;
