@@ -162,3 +162,5 @@ body :is(.lab-workspace-grid,.creative-pdf-layout,.iw-layout)>*{min-width:0}
  html body .signature-dialog.signature-dialog-small select{font-size:16px}
  html body .signature-dialog.signature-dialog-small .signature-tabs{top:0;margin:0}
 }
+/* Full-height editor shells (existing-text editor, redact, sign) must not render the shared footer: it consumed ~374px of the 100dvh flex column and collapsed the board. */
+main.studio-shell.native-text-workspace>.site-footer,main.studio-shell.edit-canvas-fit.document-loaded>.site-footer{display:none!important}
