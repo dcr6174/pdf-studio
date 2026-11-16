@@ -14,7 +14,7 @@ export function SignaturePicker({onSave,onCancel,style,ink,pen,onStyle,onInk,onP
  
  useEffect(()=>{let active=true;void savedSignatures('list').then(rows=>{if(active)setSaved(rows);}).catch(()=>{});return()=>{active=false;};},[]);
  useEffect(()=>()=>{request.current++;},[]);
- useEffect(()=>{const id=++typedRequest.current;let active=true;void Promise.resolve().then(()=>{if(active)setTyped('');return name.trim()?loadSignatureFont(style):undefined;}).then(()=>{if(active&&id===typedRequest.current){setTyped(name.trim()?signatureFromName(name,style,ink):'');setError('');}}).catch(()=>{if(active)setError('This style could not load. Choose another style or draw your signature.');});return()=>{active=false;};},[name,style,ink]);
+ useEffect(()=>{const id=++typedRequest.current;let active=true;void Promise.resolve().then(()=>{if(active&&!name.trim())setTyped('');return name.trim()?loadSignatureFont(style):undefined;}).then(()=>{if(active&&id===typedRequest.current){setTyped(name.trim()?signatureFromName(name,style,ink):'');setError('');}}).catch(()=>{if(active)setError('This style could not load. Choose another style or draw your signature.');});return()=>{active=false;};},[name,style,ink]);
 
  async function remember(image:string){try{setSaved(await savedSignatures('save',image));setNotice('Signature saved only in this browser.');setError('');}catch(e){setError(e instanceof Error?e.message:'Could not save signature.');}}
  function point(e:React.PointerEvent<HTMLCanvasElement>){const c=e.currentTarget,r=c.getBoundingClientRect();return{x:(e.clientX-r.left)*c.width/r.width,y:(e.clientY-r.top)*c.height/r.height};}

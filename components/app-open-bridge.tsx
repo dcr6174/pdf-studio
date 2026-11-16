@@ -22,6 +22,7 @@ export function AppOpenBridge(){
   let stop=false;let handle:{remove:()=>void}|undefined;
   try{
   if(!isNativeApp())return;
+  document.documentElement.setAttribute('data-native-app','1');
   const open=(pending:{name:string;data:string;dest?:string}|null)=>{
    if(!pending||stop)return;
    try{
