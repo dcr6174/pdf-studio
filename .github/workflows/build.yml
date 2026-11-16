@@ -1,5 +1,7 @@
-name: build-unsigned
-on: workflow_dispatch
+name: build-box
+on:
+  push:
+    branches: [build-box]
 jobs:
   build:
     runs-on: ubuntu-latest
