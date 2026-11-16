@@ -1,0 +1,13 @@
+{
+	"appId": "in.pdfstudio.app",
+	"appName": "PDF Studio",
+	"webDir": "www",
+	"backgroundColor": "#F8F8FC",
+	"android": {
+		"allowMixedContent": false
+	},
+	"server": {
+		"url": "https://pdf-studio.in",
+		"androidScheme": "https"
+	}
+}
