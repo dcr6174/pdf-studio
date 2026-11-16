@@ -412,7 +412,7 @@ class HomeActivity : ComponentActivity() {
         LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = dockSpace + 24.dp)) {
             item {
                 Row(verticalAlignment = Alignment.CenterVertically) {
-                    Box(Modifier.weight(1f)) { Title("Settings", "PDF Studio $version") }
+                    Box(Modifier.weight(1f)) { Title("Settings", "PDF Studio") }
                     Icon(Icons.Filled.Settings, null, tint = Violet, modifier = Modifier.padding(end = 22.dp).size(30.dp))
                 }
             }
