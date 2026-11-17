@@ -64,7 +64,7 @@ object Speaker {
 object NoteHook {
     fun install(ctx: Context) {
         val app = ctx.applicationContext
-        in.pdfstudio.reader.PdfReader.setSelectionNoteListener { text, file, page ->
+        `in`.pdfstudio.reader.PdfReader.setSelectionNoteListener { text, file, page ->
             Notes.add(app, text, if (file.isBlank()) "PDF page $page" else "$file, page $page")
             android.widget.Toast.makeText(app, "Saved to Notes", android.widget.Toast.LENGTH_SHORT).show()
         }
