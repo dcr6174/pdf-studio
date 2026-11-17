@@ -1,6 +1,12 @@
 package in.pdfstudio.app;
 
 import android.content.Intent;
+import android.speech.tts.TextToSpeech;
+import android.view.ActionMode;
+import android.view.Menu;
+import android.view.MenuItem;
+import android.widget.Toast;
+import java.util.Locale;
 import android.database.Cursor;
 import android.net.Uri;
 import android.os.Bundle;
@@ -61,6 +67,69 @@ public class MainActivity extends BridgeActivity {
 
         intake(getIntent());
         installLoadDiagnostics();
+    }
+
+    // Text selection: Android's own floating toolbar (Copy, Select all, Share) plus Read aloud with the phone's
+    // built-in TextToSpeech (offline, no extra library). Added to the toolbar of any WebView selection.
+    private TextToSpeech tts;
+    private boolean ttsReady;
+
+    @Override
+    public void onActionModeStarted(ActionMode mode) {
+        super.onActionModeStarted(mode);
+        try {
+            if (mode == null || mode.getMenu() == null) return;
+            Menu menu = mode.getMenu();
+            MenuItem read = menu.add(Menu.NONE, 0x7a01, 50, "Read aloud");
+            read.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            read.setOnMenuItemClickListener(item -> { readSelection(mode); return true; });
+            MenuItem stop = menu.add(Menu.NONE, 0x7a02, 51, "Stop reading");
+            stop.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            stop.setOnMenuItemClickListener(item -> { if (tts != null) tts.stop(); mode.finish(); return true; });
+        } catch (Throwable ignored) { }
+    }
+
+    private void readSelection(ActionMode mode) {
+        WebView wv = getBridge() == null ? null : getBridge().getWebView();
+        if (wv == null) return;
+        wv.evaluateJavascript("(function(){return window.getSelection().toString();})()", raw -> {
+            String text = raw == null ? "" : raw;
+            if (text.length() >= 2 && text.startsWith("\"")) {
+                try { text = new org.json.JSONArray("[" + text + "]").getString(0); } catch (Throwable e) { text = ""; }
+            }
+            final String say = text.trim();
+            mode.finish();
+            if (say.isEmpty()) return;
+            speak(say);
+        });
+    }
+
+    private void speak(String text) {
+        if (tts != null && ttsReady) { speakNow(text); return; }
+        tts = new TextToSpeech(getApplicationContext(), status -> {
+            if (status == TextToSpeech.SUCCESS) {
+                ttsReady = true;
+                tts.setLanguage(Locale.getDefault());
+                speakNow(text);
+            } else {
+                Toast.makeText(this, "Read aloud is not available on this phone", Toast.LENGTH_SHORT).show();
+            }
+        });
+    }
+
+    private void speakNow(String text) {
+        tts.stop();
+        int max = 3500, n = 0;
+        for (int i = 0; i < text.length(); i += max) {
+            tts.speak(text.substring(i, Math.min(text.length(), i + max)), n == 0 ? TextToSpeech.QUEUE_FLUSH : TextToSpeech.QUEUE_ADD, null, "sel" + n);
+            n++;
+        }
+    }
+
+    @Override
+    public void onDestroy() {
+        if (tts != null) { tts.stop(); tts.shutdown(); }
+        super.onDestroy();
     }
 
     // Shows the real WebView error (code, text, URL) instead of a blank error page, with Retry.
