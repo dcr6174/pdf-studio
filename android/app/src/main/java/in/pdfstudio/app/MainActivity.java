@@ -229,6 +229,8 @@ public class MainActivity extends BridgeActivity {
     private String pendingRoute = null;
 
     private void intake(Intent intent) {
+        // The glass bar stays visible over the Scan page (extra "bar" = position of the highlighted item).
+        DockOverlay.update(this, intent != null && intent.hasExtra("bar") ? intent.getIntExtra("bar", -1) : -1);
         if (intent != null && "in.pdfstudio.app.OPEN_WEB".equals(intent.getAction())) {
             // From the native home: a tool tap (PDF + dest "tool:<slug>") or a plain site route.
             Uri data = intent.getData();
