@@ -34,7 +34,9 @@ function Sheet({view,files,items,options,offset,total,onRotate}:{view:string;fil
   {error?<div role="alert" className="visual-preview-error">{error}<button onClick={()=>setRetry(n=>n+1)}>Retry preview</button></div>:images.length?images.map((src,i)=><Image unoptimized width={612} height={792} key={i} src={src} alt={'PDF preview, page '+(offset+1)+(images.length>1?', part '+(i+1):'')} />):<div className="visual-preview-placeholder"/>}
  </div>;
 }
-export function VisualTaskPreview({view,files,pages,options,currentPageId,onPage,mobile,onRotatePage}:{view:string;files:Loaded[];pages:PageItem[];options:Options;currentPageId:string;onPage:(id:string)=>void;mobile:boolean;onRotatePage?:(id:string)=>void}){
+function parseRange(text:string,max:number){const set=new Set<number>();for(const part of text.split(',')){const m=/^\s*(\d+)\s*(?:-\s*(\d+))?\s*$/.exec(part);if(!m)continue;const a=Number(m[1]),b=m[2]?Number(m[2]):a;for(let i=Math.max(1,Math.min(a,b));i<=Math.min(max,Math.max(a,b));i++)set.add(i);}return set;}
+function formatRange(set:Set<number>){const n=[...set].sort((a,b)=>a-b),out:string[]=[];for(let i=0;i<n.length;){let j=i;while(j+1<n.length&&n[j+1]===n[j]+1)j++;out.push(j>i?n[i]+'-'+n[j]:String(n[i]));i=j+1;}return out.join(', ');}
+export function VisualTaskPreview({view,files,pages,options,currentPageId,onPage,mobile,onRotatePage,tapRange,onTapRange}:{tapRange?:string;onTapRange?:(value:string)=>void;view:string;files:Loaded[];pages:PageItem[];options:Options;currentPageId:string;onPage:(id:string)=>void;mobile:boolean;onRotatePage?:(id:string)=>void}){
  const scroll=useRef<HTMLDivElement>(null);
  const size=['nup','viewer'].includes(view)?Number(options.columns)||2:1;
  const active=Math.max(0,pages.findIndex(p=>p.id===currentPageId));const group=Math.floor(active/size);
@@ -42,7 +44,10 @@ export function VisualTaskPreview({view,files,pages,options,currentPageId,onPage
  const offsets=Array.from({length:Math.ceil(pages.length/size)},(_,i)=>i*size);
  return <section className="visual-main-preview" aria-label="Document preview">
  {!mobile&&<div className="visual-preview-navigation"><button aria-label="Previous preview page" disabled={group===0} onClick={()=>onPage(pages[(group-1)*size].id)}>‹</button><span>{view==='nup'?'Sheet':'Page'} {group+1} of {Math.ceil(pages.length/size)}</span><button aria-label="Next preview page" disabled={(group+1)*size>=pages.length} onClick={()=>onPage(pages[(group+1)*size].id)}>›</button></div>}
- <div ref={scroll} className="visual-preview-scroll" role="region" aria-label="Scrollable document preview" tabIndex={0}>{offsets.map(offset=><Sheet key={view+':'+offset} view={view} files={files} items={pages.slice(offset,offset+size)} options={options} offset={offset} total={pages.length} onRotate={onRotatePage?()=>onRotatePage(pages[offset].id):undefined}/>)}</div>
+ <div ref={scroll} className="visual-preview-scroll" role="region" aria-label="Scrollable document preview" tabIndex={0}>{offsets.map(offset=>{const sheet=<Sheet key={view+':'+offset} view={view} files={files} items={pages.slice(offset,offset+size)} options={options} offset={offset} total={pages.length} onRotate={onRotatePage?()=>onRotatePage(pages[offset].id):undefined}/>;
+  if(!onTapRange)return sheet;
+  const chosen=parseRange(tapRange||'',pages.length),on=chosen.has(offset+1);
+  return <div key={view+':'+offset} role="button" tabIndex={0} aria-pressed={on} aria-label={'Page '+(offset+1)+(on?', selected':', not selected')} className={'split-tap-page'+(on?' is-selected':'')} onClick={()=>{const next=new Set(chosen);if(on)next.delete(offset+1);else next.add(offset+1);onTapRange(formatRange(next));}} onKeyDown={e=>{if(e.key===' '||e.key==='Enter'){e.preventDefault();e.currentTarget.click();}}}>{sheet}{on&&<span className="split-tap-check" aria-hidden="true">✓</span>}</div>;})}</div>
  </section>;
 }
 

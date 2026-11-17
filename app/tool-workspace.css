@@ -168,3 +168,8 @@
  .visual-preview-sheet img{width:100%;max-height:none}
  .visual-preview-sheet{margin-bottom:16px}
 }
+.split-tap-page{position:relative;margin:0 auto 12px;border-radius:14px;cursor:pointer;outline:3px solid transparent;outline-offset:-3px;-webkit-tap-highlight-color:transparent;transition:outline-color .15s,background .15s}
+.split-tap-page .visual-preview-sheet{margin-bottom:0;pointer-events:none}
+.split-tap-page.is-selected{outline-color:#7c3aed;background:#7c3aed14}
+.split-tap-page:focus-visible{outline-color:#7c3aed}
+.split-tap-check{position:absolute;top:10px;right:10px;width:30px;height:30px;border-radius:50%;background:#7c3aed;color:#fff;font-weight:800;display:flex;align-items:center;justify-content:center;box-shadow:0 2px 8px #0004}
