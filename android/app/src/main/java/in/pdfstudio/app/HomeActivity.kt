@@ -76,6 +76,7 @@ class HomeActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        prewarmSite()
         RefreshRate.apply(this)
         recents = RecentStore.load(this)
         tools = ToolCatalog.load(this)
@@ -173,11 +174,23 @@ class HomeActivity : ComponentActivity() {
         }
     }
 
+    // Loads the tools page once in a throw-away WebView so the engine, HTTP cache and service worker are warm
+    // before the user taps a tool. Dropped after 20 s.
+    private fun prewarmSite() {
+        try {
+            val w = android.webkit.WebView(applicationContext)
+            w.settings.javaScriptEnabled = true
+            w.settings.domStorageEnabled = true
+            w.loadUrl("https://pdf-studio.in/tools/")
+            window.decorView.postDelayed({ try { w.stopLoading(); w.destroy() } catch (_: Throwable) {} }, 20000)
+        } catch (_: Throwable) {}
+    }
+
     fun pickPdf() { pendingTool = null; pickLauncher.launch(arrayOf("application/pdf")) }
 
     fun startTool(t: ToolDef) {
-        if (t.needsFile) { pendingTool = t; pickLauncher.launch(arrayOf("application/pdf")) }
-        else startWeb(null, null, null, "/tools/" + t.slug)
+        // The tool's own page opens at once; the file is picked there (same as the site).
+        startWeb(null, null, null, "/tools/" + t.slug)
     }
 
     private fun openTool(t: ToolDef, uri: Uri) {
@@ -193,6 +206,7 @@ class HomeActivity : ComponentActivity() {
         if (dest != null) i.putExtra("dest", dest)
         if (route != null) i.putExtra("route", route)
         startActivity(i)
+        @Suppress("DEPRECATION") overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out)
     }
 
     fun openSite(route: String) = startWeb(null, null, null, route)
@@ -206,11 +220,13 @@ class HomeActivity : ComponentActivity() {
                 Column(Modifier.fillMaxSize().statusBarsPadding()) {
                     TopBar()
                     Box(Modifier.weight(1f)) {
-                        when (tab) {
-                            0 -> LibraryScreen(onSeeAll = { tab = 2 })
-                            1 -> ToolsScreen()
-                            2 -> FilesScreen()
-                            else -> SettingsScreen()
+                        androidx.compose.animation.Crossfade(targetState = tab, animationSpec = androidx.compose.animation.core.tween(180), label = "tab") { t ->
+                            when (t) {
+                                0 -> LibraryScreen(onSeeAll = { tab = 2 })
+                                1 -> ToolsScreen()
+                                2 -> FilesScreen()
+                                else -> SettingsScreen()
+                            }
                         }
                     }
                 }

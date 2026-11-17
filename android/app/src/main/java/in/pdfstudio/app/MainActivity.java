@@ -125,6 +125,12 @@ public class MainActivity extends BridgeActivity {
     }
 
     @Override
+    public void finish() {
+        super.finish();
+        overridePendingTransition(android.R.anim.fade_in, android.R.anim.fade_out);
+    }
+
+    @Override
     protected void onNewIntent(Intent intent) {
         super.onNewIntent(intent);
         intake(intent);
@@ -144,9 +150,10 @@ public class MainActivity extends BridgeActivity {
                 sendToWeb(data, intent.getStringExtra("name"), dest == null ? "reader" : dest);
             } else if (route != null && route.matches("/[a-z0-9/-]{1,80}")) {
                 WebView wv = getBridge() == null ? null : getBridge().getWebView();
-                String cur = wv == null ? null : wv.getUrl();
-                if (cur != null && cur.startsWith("https://pdf-studio.in")) wv.loadUrl("https://pdf-studio.in" + route);
-                else pendingRoute = route;
+                // Open the action page directly (no home page first). pendingRoute stays as a fallback in case
+                // the bridge's own start-up load of the home page lands after this one.
+                pendingRoute = route;
+                if (wv != null) wv.loadUrl("https://pdf-studio.in" + route);
             }
             return;
         }
