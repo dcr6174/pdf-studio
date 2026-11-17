@@ -20,6 +20,22 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
+import dev.chrisbanes.haze.HazeState
+import dev.chrisbanes.haze.HazeStyle
+import dev.chrisbanes.haze.HazeTint
+import dev.chrisbanes.haze.hazeEffect
+import dev.chrisbanes.haze.hazeSource
+import dev.chrisbanes.haze.rememberHazeState
+import androidx.compose.animation.core.spring
+import androidx.compose.animation.core.animateDpAsState
+import androidx.compose.animation.core.animateFloatAsState
+import androidx.compose.foundation.border
+import androidx.compose.foundation.interaction.MutableInteractionSource
+import androidx.compose.foundation.interaction.collectIsPressedAsState
+import androidx.compose.ui.draw.drawWithContent
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.BlendMode
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.lazy.items
@@ -214,12 +230,13 @@ class HomeActivity : ComponentActivity() {
     @Composable
     private fun HomeApp() {
         var tab by rememberSaveable { mutableIntStateOf(0) }
+        val hazeState = rememberHazeState()
         MaterialTheme(colorScheme = darkColorScheme(primary = Violet, background = Bg, surface = Surface1, onSurface = TextMain, onBackground = TextMain)) {
             Box(Modifier.fillMaxSize().background(Bg)) {
                 BackHandler(enabled = tab != 0) { tab = 0 }
                 Column(Modifier.fillMaxSize().statusBarsPadding()) {
                     TopBar()
-                    Box(Modifier.weight(1f)) {
+                    Box(Modifier.weight(1f).hazeSource(hazeState)) {
                         androidx.compose.animation.Crossfade(targetState = tab, animationSpec = androidx.compose.animation.core.tween(180), label = "tab") { t ->
                             when (t) {
                                 0 -> LibraryScreen(onSeeAll = { tab = 2 })
@@ -230,7 +247,7 @@ class HomeActivity : ComponentActivity() {
                         }
                     }
                 }
-                Dock(tab, { tab = it }, Modifier.align(Alignment.BottomCenter))
+                Dock(tab, { tab = it }, hazeState, Modifier.align(Alignment.BottomCenter))
             }
         }
     }
@@ -490,32 +507,61 @@ class HomeActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun Dock(tab: Int, onTab: (Int) -> Unit, modifier: Modifier) {
-        Box(modifier.fillMaxWidth()) {
-            Row(
-                Modifier.fillMaxWidth().background(Color(0xFF0E0F16)).navigationBarsPadding().height(84.dp).padding(horizontal = 8.dp),
-                verticalAlignment = Alignment.CenterVertically
-            ) {
-                DockItem("Library", AppIcons.Description, AppIcons.Description, tab == 0, Modifier.weight(1f)) { onTab(0) }
-                DockItem("Tools", AppIcons.Apps, AppIcons.Apps, tab == 1, Modifier.weight(1f)) { onTab(1) }
-                Spacer(Modifier.width(88.dp))
-                DockItem("Scan", AppIcons.CameraAlt, AppIcons.CameraAlt, false, Modifier.weight(1f)) { openSite("/tools/scan-to-pdf") }
-                DockItem("My files", AppIcons.Folder, AppIcons.Folder, tab == 2, Modifier.weight(1f)) { onTab(2) }
-                DockItem("Settings", Icons.Outlined.Settings, Icons.Filled.Settings, tab == 3, Modifier.weight(1f)) { onTab(3) }
-            }
+    private fun Dock(tab: Int, onTab: (Int) -> Unit, hazeState: HazeState, modifier: Modifier) {
+        val selected = when (tab) { 0, 2 -> 0; 1 -> 1; else -> 3 }
+        val shape = RoundedCornerShape(34.dp)
+        BoxWithConstraints(modifier.fillMaxWidth().navigationBarsPadding().padding(horizontal = 18.dp, vertical = 12.dp)) {
+            val itemW = maxWidth / 4
+            val pillX by animateDpAsState(
+                targetValue = itemW * (if (selected == 3) 3 else selected),
+                animationSpec = spring(dampingRatio = 0.7f, stiffness = 350f), label = "pill"
+            )
             Box(
-                Modifier.align(Alignment.TopCenter).offset(y = (-24).dp).size(60.dp).clip(RoundedCornerShape(22.dp)).background(Violet)
-                    .clickable { pickPdf() },
-                contentAlignment = Alignment.Center
-            ) { Icon(Icons.Filled.Add, "Open a PDF", tint = Bg, modifier = Modifier.size(30.dp)) }
+                Modifier.fillMaxWidth().height(68.dp).shadow(18.dp, shape, ambientColor = Color(0x66000000), spotColor = Color(0x66000000))
+                    .clip(shape)
+                    .hazeEffect(state = hazeState, style = HazeStyle(backgroundColor = Color(0xFF0E0F16), tints = listOf(HazeTint(Color(0x990E0F16))), blurRadius = 28.dp, noiseFactor = 0.04f))
+                    .background(Brush.verticalGradient(listOf(Color(0x22FFFFFF), Color(0x08FFFFFF))))
+                    .border(1.dp, Brush.verticalGradient(listOf(Color(0x44FFFFFF), Color(0x14FFFFFF))), shape)
+            ) {
+                Box(
+                    Modifier.offset(x = pillX).width(itemW).fillMaxHeight().padding(5.dp)
+                        .clip(RoundedCornerShape(28.dp)).background(Brush.linearGradient(listOf(Color(0x558B7CFF), Color(0x33F472B6))))
+                        .border(1.dp, Color(0x338B7CFF), RoundedCornerShape(28.dp))
+                )
+                Row(Modifier.fillMaxSize()) {
+                    DockItem("Library", Ph.FilesBold, Ph.FilesFill, selected == 0, Modifier.weight(1f)) { onTab(0) }
+                    DockItem("Tools", Ph.ToolsBold, Ph.ToolsFill, selected == 1, Modifier.weight(1f)) { onTab(1) }
+                    DockItem("Scan", Ph.ScanBold, Ph.ScanFill, false, Modifier.weight(1f)) { openSite("/tools/scan-to-pdf") }
+                    DockItem("Settings", Ph.SettingsBold, Ph.SettingsFill, selected == 3, Modifier.weight(1f)) { onTab(3) }
+                }
+            }
         }
     }
 
     @Composable
     private fun DockItem(label: String, off: ImageVector, on: ImageVector, selected: Boolean, modifier: Modifier, click: () -> Unit) {
-        Column(modifier.clip(RoundedCornerShape(14.dp)).clickable { click() }.padding(vertical = 8.dp), horizontalAlignment = Alignment.CenterHorizontally) {
-            Icon(if (selected) on else off, label, tint = if (selected) Violet else Color(0xFF8A8FA4), modifier = Modifier.size(24.dp))
-            Text(label, color = if (selected) Violet else Color(0xFF8A8FA4), fontSize = 11.sp, maxLines = 1, modifier = Modifier.padding(top = 4.dp))
+        val src = remember { MutableInteractionSource() }
+        val pressed by src.collectIsPressedAsState()
+        val scale by animateFloatAsState(if (pressed) 0.92f else 1f, spring(dampingRatio = 0.6f, stiffness = 500f), label = "press")
+        val lift by animateDpAsState(if (selected) (-2).dp else 0.dp, spring(dampingRatio = 0.6f, stiffness = 400f), label = "lift")
+        val tilt by animateFloatAsState(if (selected) -6f else 0f, spring(dampingRatio = 0.5f, stiffness = 300f), label = "tilt")
+        Column(
+            modifier.fillMaxHeight().graphicsLayer { scaleX = scale; scaleY = scale }
+                .clickable(interactionSource = src, indication = null) { click() },
+            horizontalAlignment = Alignment.CenterHorizontally, verticalArrangement = Arrangement.Center
+        ) {
+            val iconMod = Modifier.size(28.dp).offset(y = lift).graphicsLayer { rotationZ = tilt }
+            if (selected) {
+                Icon(on, label, tint = Color.White, modifier = iconMod
+                    .graphicsLayer { compositingStrategy = androidx.compose.ui.graphics.CompositingStrategy.Offscreen }
+                    .drawWithContent {
+                        drawContent()
+                        drawRect(Brush.linearGradient(listOf(Color(0xFF8B7CFF), Color(0xFFF472B6))), blendMode = BlendMode.SrcIn)
+                    })
+            } else {
+                Icon(off, label, tint = Color(0xFFA3A8BD), modifier = iconMod)
+            }
+            Text(label, color = if (selected) Color(0xFFB9AEFF) else Color(0xFFA3A8BD), fontSize = 11.sp, fontWeight = FontWeight.Bold, maxLines = 1, modifier = Modifier.padding(top = 3.dp))
         }
     }
 }
