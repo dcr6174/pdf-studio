@@ -33,6 +33,7 @@ public class MainActivity extends BridgeActivity {
     public void onCreate(Bundle savedInstanceState) {
         registerPlugin(NativeFilesPlugin.class);
         super.onCreate(savedInstanceState);
+        NoteHook.INSTANCE.install(this);
         RefreshRate.apply(this);
         boolean night = (getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES;
         int bg = night ? 0xFF0A0B10 : 0xFFF8F8FC;
@@ -83,10 +84,29 @@ public class MainActivity extends BridgeActivity {
             MenuItem read = menu.add(Menu.NONE, 0x7a01, 50, "Read aloud");
             read.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             read.setOnMenuItemClickListener(item -> { readSelection(mode); return true; });
+            MenuItem note = menu.add(Menu.NONE, 0x7a03, 49, "Add to note");
+            note.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
+            note.setOnMenuItemClickListener(item -> { noteSelection(mode); return true; });
             MenuItem stop = menu.add(Menu.NONE, 0x7a02, 51, "Stop reading");
             stop.setShowAsAction(MenuItem.SHOW_AS_ACTION_NEVER);
             stop.setOnMenuItemClickListener(item -> { if (tts != null) tts.stop(); mode.finish(); return true; });
         } catch (Throwable ignored) { }
+    }
+
+    private void noteSelection(ActionMode mode) {
+        WebView wv = getBridge() == null ? null : getBridge().getWebView();
+        if (wv == null) return;
+        String title = wv.getTitle() == null ? "" : wv.getTitle().replace(" | PDF Studio", "").replace(" - PDF Studio", "").trim();
+        wv.evaluateJavascript("(function(){return window.getSelection().toString();})()", raw -> {
+            String text = raw == null ? "" : raw;
+            if (text.length() >= 2 && text.startsWith("\"")) {
+                try { text = new org.json.JSONArray("[" + text + "]").getString(0); } catch (Throwable e) { text = ""; }
+            }
+            mode.finish();
+            if (text.trim().isEmpty()) return;
+            Notes.INSTANCE.add(this, text, title);
+            Toast.makeText(this, "Saved to Notes", Toast.LENGTH_SHORT).show();
+        });
     }
 
     private void readSelection(ActionMode mode) {

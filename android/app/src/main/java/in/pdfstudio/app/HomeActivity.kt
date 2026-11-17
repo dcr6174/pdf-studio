@@ -92,6 +92,7 @@ class HomeActivity : ComponentActivity() {
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
+        NoteHook.install(this)
         prewarmSite()
         RefreshRate.apply(this)
         recents = RecentStore.load(this)
@@ -242,7 +243,8 @@ class HomeActivity : ComponentActivity() {
                                 0 -> LibraryScreen(onSeeAll = { tab = 2 })
                                 1 -> ToolsScreen()
                                 2 -> FilesScreen()
-                                else -> SettingsScreen()
+                                3 -> SettingsScreen(onNotes = { tab = 4 })
+                                else -> NotesScreen()
                             }
                         }
                     }
@@ -435,7 +437,35 @@ class HomeActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun SettingsScreen() {
+    private fun NotesScreen() {
+        val ctx = LocalContext.current
+        var list by remember { mutableStateOf(Notes.load(ctx)) }
+        val fmt = remember { java.text.SimpleDateFormat("d MMM, h:mm a", java.util.Locale.getDefault()) }
+        LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = dockSpace + 24.dp)) {
+            item { Title("Notes", if (list.isEmpty()) "Select text and tap Add to note" else "${list.size} saved") }
+            items(list.size) { i ->
+                val n = list[i]
+                Column(Modifier.padding(horizontal = 22.dp, vertical = 6.dp).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(Surface1).padding(16.dp)) {
+                    Text(n.text, color = TextMain, fontSize = 15.sp)
+                    Text(listOf(n.source, fmt.format(java.util.Date(n.date))).filter { it.isNotBlank() }.joinToString(" \u00b7 "), color = Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 8.dp))
+                    Row(Modifier.padding(top = 8.dp)) {
+                        TextButton(onClick = {
+                            (ctx.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager).setPrimaryClip(android.content.ClipData.newPlainText("note", n.text))
+                            android.widget.Toast.makeText(ctx, "Copied", android.widget.Toast.LENGTH_SHORT).show()
+                        }) { Text("Copy", color = Violet) }
+                        TextButton(onClick = {
+                            ctx.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, n.text), "Share"))
+                        }) { Text("Share", color = Violet) }
+                        TextButton(onClick = { Speaker.speak(ctx, n.text) { android.widget.Toast.makeText(ctx, "Read aloud is not available on this phone", android.widget.Toast.LENGTH_SHORT).show() } }) { Text("Read aloud", color = Violet) }
+                        TextButton(onClick = { Notes.delete(ctx, n.id); list = Notes.load(ctx) }) { Text("Delete", color = Muted) }
+                    }
+                }
+            }
+        }
+    }
+
+    @Composable
+    private fun SettingsScreen(onNotes: () -> Unit) {
         val ctx = LocalContext.current
         var fps by remember { mutableIntStateOf(RefreshRate.desired(ctx)) }
         var licences by remember { mutableStateOf(false) }
@@ -447,6 +477,12 @@ class HomeActivity : ComponentActivity() {
                 Row(verticalAlignment = Alignment.CenterVertically) {
                     Box(Modifier.weight(1f)) { Title("Settings", "PDF Studio") }
                     Icon(Icons.Filled.Settings, null, tint = Violet, modifier = Modifier.padding(end = 22.dp).size(30.dp))
+                }
+            }
+            item {
+                Row(Modifier.padding(horizontal = 22.dp, vertical = 6.dp).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(Surface1).clickable { onNotes() }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Text("Notes", color = TextMain, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
+                    Text("${Notes.load(ctx).size} saved", color = Muted, fontSize = 13.sp)
                 }
             }
             item { SectionLabel("Reader smoothness") }
