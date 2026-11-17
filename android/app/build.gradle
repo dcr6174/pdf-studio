@@ -11,7 +11,7 @@ android {
         applicationId "in.pdfstudio.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 23
+        versionCode 24
         versionName "0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // Phones only: arm64 + armv7. x86 emulator/Chromebook builds are not shipped (keeps the Drive zip under 25 MB).
@@ -49,6 +49,7 @@ dependencies {
     implementation 'io.legere:pdfiumandroid:2.0.1'
     implementation 'org.jetbrains.kotlinx:kotlinx-coroutines-android:1.10.1'
     implementation 'androidx.lifecycle:lifecycle-viewmodel-compose:2.9.0'
+    implementation 'androidx.lifecycle:lifecycle-runtime-compose:2.9.0'
     implementation 'androidx.activity:activity-compose:1.10.1'
     implementation platform('androidx.compose:compose-bom:2025.04.01')
     implementation 'androidx.activity:activity-compose:1.10.1'

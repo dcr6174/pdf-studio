@@ -7,33 +7,63 @@ import org.json.JSONObject
 import java.io.File
 import java.util.Locale
 
-data class Note(val id: Long, val text: String, val source: String, val date: Long)
+data class Snippet(val id: Long, val text: String, val source: String, val date: Long)
+data class Notebook(val id: Long, val title: String, val updated: Long, val snippets: List<Snippet>)
 
-/** Local, offline notes: one small JSON file in the app's private storage. No account, nothing leaves the phone. */
+/** Local, offline notes: a few named notes, each holding saved snippets. One small JSON file in private storage. */
 object Notes {
-    private const val MAX = 500
+    private const val MAX_SNIPPETS = 500
     private fun file(ctx: Context) = File(ctx.filesDir, "notes.json")
 
     @Synchronized
-    fun load(ctx: Context): List<Note> = try {
+    fun load(ctx: Context): List<Notebook> = try {
         val a = JSONArray(file(ctx).takeIf { it.exists() }?.readText() ?: "[]")
-        (0 until a.length()).map { val o = a.getJSONObject(it); Note(o.getLong("id"), o.getString("text"), o.optString("source"), o.getLong("date")) }
+        if (a.length() > 0 && a.getJSONObject(0).has("text")) {
+            // older flat list: keep everything inside one note
+            val sn = (0 until a.length()).map { val o = a.getJSONObject(it); Snippet(o.getLong("id"), o.getString("text"), o.optString("source"), o.getLong("date")) }
+            listOf(Notebook(1, "Saved snippets", sn.firstOrNull()?.date ?: 0L, sn)).also { save(ctx, it) }
+        } else (0 until a.length()).map { i ->
+            val o = a.getJSONObject(i)
+            val sa = o.getJSONArray("snippets")
+            Notebook(o.getLong("id"), o.getString("title"), o.getLong("updated"), (0 until sa.length()).map { k ->
+                val x = sa.getJSONObject(k); Snippet(x.getLong("id"), x.getString("text"), x.optString("source"), x.getLong("date"))
+            })
+        }
     } catch (_: Throwable) { emptyList() }
 
     @Synchronized
-    fun add(ctx: Context, text: String, source: String) {
-        val clean = text.trim()
-        if (clean.isEmpty()) return
-        val list = (listOf(Note(System.currentTimeMillis(), clean, source, System.currentTimeMillis())) + load(ctx)).take(MAX)
-        save(ctx, list)
+    fun create(ctx: Context, title: String): Long {
+        val id = System.currentTimeMillis()
+        save(ctx, listOf(Notebook(id, title.trim().ifEmpty { "Note" }, id, emptyList())) + load(ctx))
+        return id
     }
 
     @Synchronized
-    fun delete(ctx: Context, id: Long) = save(ctx, load(ctx).filter { it.id != id })
+    fun addSnippet(ctx: Context, noteId: Long, text: String, source: String) {
+        val clean = text.trim()
+        if (clean.isEmpty()) return
+        val now = System.currentTimeMillis()
+        save(ctx, load(ctx).map { if (it.id == noteId) it.copy(updated = now, snippets = (listOf(Snippet(now, clean, source, now)) + it.snippets).take(MAX_SNIPPETS)) else it }
+            .sortedByDescending { it.updated })
+    }
 
-    private fun save(ctx: Context, list: List<Note>) {
+    @Synchronized
+    fun rename(ctx: Context, id: Long, title: String) = save(ctx, load(ctx).map { if (it.id == id) it.copy(title = title.trim().ifEmpty { it.title }) else it })
+
+    @Synchronized
+    fun deleteNote(ctx: Context, id: Long) = save(ctx, load(ctx).filter { it.id != id })
+
+    @Synchronized
+    fun deleteSnippet(ctx: Context, noteId: Long, snippetId: Long) =
+        save(ctx, load(ctx).map { if (it.id == noteId) it.copy(snippets = it.snippets.filter { s -> s.id != snippetId }) else it })
+
+    private fun save(ctx: Context, list: List<Notebook>) {
         val a = JSONArray()
-        list.forEach { a.put(JSONObject().put("id", it.id).put("text", it.text).put("source", it.source).put("date", it.date)) }
+        list.forEach { n ->
+            val sa = JSONArray()
+            n.snippets.forEach { sa.put(JSONObject().put("id", it.id).put("text", it.text).put("source", it.source).put("date", it.date)) }
+            a.put(JSONObject().put("id", n.id).put("title", n.title).put("updated", n.updated).put("snippets", sa))
+        }
         file(ctx).writeText(a.toString())
     }
 }
@@ -60,13 +90,20 @@ object Speaker {
     fun stop() { tts?.stop() }
 }
 
-/** Hooks the reader's "Add to note" into the Notes store. Holds only the application context (no Activity leak). */
+/** Opens the "Add to note" sheet. Holds no Activity (starts a transparent one from the application context). */
 object NoteHook {
+    fun add(ctx: Context, text: String, source: String) {
+        ctx.applicationContext.startActivity(
+            android.content.Intent(ctx.applicationContext, AddNoteActivity::class.java)
+                .addFlags(android.content.Intent.FLAG_ACTIVITY_NEW_TASK or android.content.Intent.FLAG_ACTIVITY_MULTIPLE_TASK or android.content.Intent.FLAG_ACTIVITY_NO_ANIMATION)
+                .putExtra("text", text).putExtra("source", source)
+        )
+    }
+
     fun install(ctx: Context) {
         val app = ctx.applicationContext
         `in`.pdfstudio.reader.PdfReader.setSelectionNoteListener { text, file, page ->
-            Notes.add(app, text, if (file.isBlank()) "PDF page $page" else "$file, page $page")
-            android.widget.Toast.makeText(app, "Saved to Notes", android.widget.Toast.LENGTH_SHORT).show()
+            add(app, text, if (file.isBlank()) "PDF page $page" else "$file, page $page")
         }
     }
 }

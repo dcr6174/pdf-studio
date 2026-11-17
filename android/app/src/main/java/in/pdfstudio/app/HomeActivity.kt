@@ -236,7 +236,7 @@ class HomeActivity : ComponentActivity() {
             Box(Modifier.fillMaxSize().background(Bg)) {
                 BackHandler(enabled = tab != 0) { tab = 0 }
                 Column(Modifier.fillMaxSize().statusBarsPadding()) {
-                    TopBar()
+                    TopBar(onNotes = { tab = 4 })
                     Box(Modifier.weight(1f).hazeSource(hazeState)) {
                         androidx.compose.animation.Crossfade(targetState = tab, animationSpec = androidx.compose.animation.core.tween(180), label = "tab") { t ->
                             when (t) {
@@ -255,14 +255,16 @@ class HomeActivity : ComponentActivity() {
     }
 
     @Composable
-    private fun TopBar() {
+    private fun TopBar(onNotes: () -> Unit) {
         Row(Modifier.fillMaxWidth().padding(horizontal = 22.dp, vertical = 14.dp), verticalAlignment = Alignment.CenterVertically) {
             Box(Modifier.size(34.dp).clip(RoundedCornerShape(10.dp)).background(Surface2), contentAlignment = Alignment.Center) {
                 Text("P", color = TextMain, fontWeight = FontWeight.ExtraBold, fontSize = 17.sp)
                 Box(Modifier.align(Alignment.BottomEnd).padding(end = 7.dp, bottom = 7.dp).size(6.dp).clip(CircleShape).background(Violet))
             }
             Spacer(Modifier.width(10.dp))
-            Text("pdf studio", color = TextMain, fontWeight = FontWeight.Bold, fontSize = 18.sp)
+            Text("pdf studio", color = TextMain, fontWeight = FontWeight.Bold, fontSize = 18.sp, modifier = Modifier.weight(1f))
+            Text("Notes", color = Violet, fontWeight = FontWeight.Bold, fontSize = 14.sp,
+                modifier = Modifier.clip(RoundedCornerShape(14.dp)).background(Surface2).clickable { onNotes() }.padding(horizontal = 14.dp, vertical = 8.dp))
         }
     }
 
@@ -439,28 +441,88 @@ class HomeActivity : ComponentActivity() {
     @Composable
     private fun NotesScreen() {
         val ctx = LocalContext.current
-        var list by remember { mutableStateOf(Notes.load(ctx)) }
+        var notes by remember { mutableStateOf(Notes.load(ctx)) }
+        var open by remember { mutableStateOf<Long?>(null) }
+        var dialog by remember { mutableStateOf<String?>(null) } // "new" or "rename"
+        var field by remember { mutableStateOf("") }
+        var confirmDelete by remember { mutableStateOf(false) }
         val fmt = remember { java.text.SimpleDateFormat("d MMM, h:mm a", java.util.Locale.getDefault()) }
+        BackHandler(enabled = open != null) { open = null }
+        // pick up notes added from the reader or a tool page while this screen is shown
+        val owner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+        DisposableEffect(owner) {
+            val obs = androidx.lifecycle.LifecycleEventObserver { _, e -> if (e == androidx.lifecycle.Lifecycle.Event.ON_RESUME) notes = Notes.load(ctx) }
+            owner.lifecycle.addObserver(obs); onDispose { owner.lifecycle.removeObserver(obs) }
+        }
+        val cur = notes.firstOrNull { it.id == open }
+        if (open != null && cur == null) open = null
         LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = dockSpace + 24.dp)) {
-            item { Title("Notes", if (list.isEmpty()) "Select text and tap Add to note" else "${list.size} saved") }
-            items(list.size) { i ->
-                val n = list[i]
-                Column(Modifier.padding(horizontal = 22.dp, vertical = 6.dp).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(Surface1).padding(16.dp)) {
-                    Text(n.text, color = TextMain, fontSize = 15.sp)
-                    Text(listOf(n.source, fmt.format(java.util.Date(n.date))).filter { it.isNotBlank() }.joinToString(" \u00b7 "), color = Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 8.dp))
-                    Row(Modifier.padding(top = 8.dp)) {
-                        TextButton(onClick = {
-                            (ctx.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager).setPrimaryClip(android.content.ClipData.newPlainText("note", n.text))
-                            android.widget.Toast.makeText(ctx, "Copied", android.widget.Toast.LENGTH_SHORT).show()
-                        }) { Text("Copy", color = Violet) }
-                        TextButton(onClick = {
-                            ctx.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, n.text), "Share"))
-                        }) { Text("Share", color = Violet) }
-                        TextButton(onClick = { Speaker.speak(ctx, n.text) { android.widget.Toast.makeText(ctx, "Read aloud is not available on this phone", android.widget.Toast.LENGTH_SHORT).show() } }) { Text("Read aloud", color = Violet) }
-                        TextButton(onClick = { Notes.delete(ctx, n.id); list = Notes.load(ctx) }) { Text("Delete", color = Muted) }
+            if (cur == null) {
+                item {
+                    Row(verticalAlignment = Alignment.CenterVertically) {
+                        Box(Modifier.weight(1f)) { Title("Notes", if (notes.isEmpty()) "Select text and tap Add to note" else "${notes.size} notes") }
+                        TextButton(onClick = { field = ""; dialog = "new" }, modifier = Modifier.padding(end = 14.dp)) { Text("+ New note", color = Violet, fontWeight = FontWeight.Bold) }
+                    }
+                }
+                items(notes.size) { i ->
+                    val n = notes[i]
+                    Column(Modifier.padding(horizontal = 22.dp, vertical = 6.dp).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(Surface1).clickable { open = n.id }.padding(16.dp)) {
+                        Text(n.title, color = TextMain, fontWeight = FontWeight.SemiBold, fontSize = 16.sp)
+                        Text("${n.snippets.size} saved \u00b7 " + fmt.format(java.util.Date(n.updated)), color = Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
+                    }
+                }
+            } else {
+                item {
+                    Row(verticalAlignment = Alignment.CenterVertically, modifier = Modifier.padding(end = 10.dp)) {
+                        TextButton(onClick = { open = null }) { Text("\u2039 Notes", color = Violet) }
+                        Spacer(Modifier.weight(1f))
+                        TextButton(onClick = { field = cur.title; dialog = "rename" }) { Text("Rename", color = Violet) }
+                        TextButton(onClick = { confirmDelete = true }) { Text("Delete note", color = Muted) }
+                    }
+                    Title(cur.title, "${cur.snippets.size} saved")
+                }
+                items(cur.snippets.size) { i ->
+                    val n = cur.snippets[i]
+                    Column(Modifier.padding(horizontal = 22.dp, vertical = 6.dp).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(Surface1).padding(16.dp)) {
+                        Text(n.text, color = TextMain, fontSize = 15.sp)
+                        Text(listOf(n.source, fmt.format(java.util.Date(n.date))).filter { it.isNotBlank() }.joinToString(" \u00b7 "), color = Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 8.dp))
+                        Row(Modifier.padding(top = 8.dp)) {
+                            TextButton(onClick = {
+                                (ctx.getSystemService(Context.CLIPBOARD_SERVICE) as android.content.ClipboardManager).setPrimaryClip(android.content.ClipData.newPlainText("note", n.text))
+                                android.widget.Toast.makeText(ctx, "Copied", android.widget.Toast.LENGTH_SHORT).show()
+                            }) { Text("Copy", color = Violet) }
+                            TextButton(onClick = {
+                                ctx.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, n.text), "Share"))
+                            }) { Text("Share", color = Violet) }
+                            TextButton(onClick = { Speaker.speak(ctx, n.text) { android.widget.Toast.makeText(ctx, "Read aloud is not available on this phone", android.widget.Toast.LENGTH_SHORT).show() } }) { Text("Read aloud", color = Violet) }
+                            TextButton(onClick = { Notes.deleteSnippet(ctx, cur.id, n.id); notes = Notes.load(ctx) }) { Text("Delete", color = Muted) }
+                        }
                     }
                 }
             }
+        }
+        if (dialog != null) {
+            AlertDialog(
+                onDismissRequest = { dialog = null },
+                title = { Text(if (dialog == "new") "New note" else "Rename note") },
+                text = { OutlinedTextField(value = field, onValueChange = { field = it }, singleLine = true, placeholder = { Text("Name") }) },
+                confirmButton = {
+                    TextButton(onClick = {
+                        if (dialog == "new") { open = Notes.create(ctx, field) } else cur?.let { Notes.rename(ctx, it.id, field) }
+                        notes = Notes.load(ctx); dialog = null
+                    }) { Text("Save", color = Violet) }
+                },
+                dismissButton = { TextButton(onClick = { dialog = null }) { Text("Cancel", color = Muted) } }
+            )
+        }
+        if (confirmDelete && cur != null) {
+            AlertDialog(
+                onDismissRequest = { confirmDelete = false },
+                title = { Text("Delete this note?") },
+                text = { Text("It and its ${cur.snippets.size} saved snippets will be removed.") },
+                confirmButton = { TextButton(onClick = { Notes.deleteNote(ctx, cur.id); notes = Notes.load(ctx); open = null; confirmDelete = false }) { Text("Delete", color = Violet) } },
+                dismissButton = { TextButton(onClick = { confirmDelete = false }) { Text("Cancel", color = Muted) } }
+            )
         }
     }
 
@@ -482,7 +544,7 @@ class HomeActivity : ComponentActivity() {
             item {
                 Row(Modifier.padding(horizontal = 22.dp, vertical = 6.dp).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(Surface1).clickable { onNotes() }.padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
                     Text("Notes", color = TextMain, fontWeight = FontWeight.SemiBold, modifier = Modifier.weight(1f))
-                    Text("${Notes.load(ctx).size} saved", color = Muted, fontSize = 13.sp)
+                    Text("${Notes.load(ctx).size} notes", color = Muted, fontSize = 13.sp)
                 }
             }
             item { SectionLabel("Reader smoothness") }

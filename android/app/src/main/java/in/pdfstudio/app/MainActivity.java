@@ -104,8 +104,7 @@ public class MainActivity extends BridgeActivity {
             }
             mode.finish();
             if (text.trim().isEmpty()) return;
-            Notes.INSTANCE.add(this, text, title);
-            Toast.makeText(this, "Saved to Notes", Toast.LENGTH_SHORT).show();
+            NoteHook.INSTANCE.add(this, text, title);
         });
     }
 
