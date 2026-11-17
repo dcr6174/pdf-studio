@@ -11,7 +11,7 @@ android {
         applicationId "in.pdfstudio.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 25
+        versionCode 26
         versionName "0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // Phones only: arm64 + armv7. x86 emulator/Chromebook builds are not shipped (keeps the Drive zip under 25 MB).
