@@ -504,7 +504,9 @@ class HomeActivity : ComponentActivity() {
                             TextButton(onClick = {
                                 ctx.startActivity(Intent.createChooser(Intent(Intent.ACTION_SEND).setType("text/plain").putExtra(Intent.EXTRA_TEXT, n.text), "Share"))
                             }) { Text("Share", color = Violet) }
-                            TextButton(onClick = { Speaker.speak(ctx, n.text) { android.widget.Toast.makeText(ctx, "Read aloud is not available on this phone", android.widget.Toast.LENGTH_SHORT).show() } }) { Text("Read aloud", color = Violet) }
+                            if (Voice.isEnglish(n.text)) {
+                                TextButton(onClick = { (ctx as? android.app.Activity)?.let { Voice.speak(it, n.text) } }) { Text("Read aloud", color = Violet) }
+                            }
                             TextButton(onClick = { Notes.deleteSnippet(ctx, cur.id, n.id); notes = Notes.load(ctx) }) { Text("Delete", color = Muted) }
                         }
                     }
@@ -561,6 +563,7 @@ class HomeActivity : ComponentActivity() {
         var fps by remember { mutableIntStateOf(RefreshRate.desired(ctx)) }
         var licences by remember { mutableStateOf(false) }
         var labs by remember { mutableStateOf(Labs.enabled(ctx)) }
+        var voiceOn by remember { mutableStateOf(Voice.installed(ctx)) }
         var barPos by remember { mutableStateOf(PdfReader.getAnnotationBarPosition(ctx)) }
         val version = remember { try { ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName ?: "" } catch (_: Exception) { "" } }
         LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = dockSpace + 24.dp)) {
@@ -607,6 +610,17 @@ class HomeActivity : ComponentActivity() {
                 }
             }
             item { Text("Off by default. Turns on redaction, signature check and other tools that are still being tested. They can be incomplete.", color = Muted, fontSize = 12.sp, modifier = Modifier.padding(horizontal = 22.dp, vertical = 8.dp)) }
+            item { SectionLabel("Read aloud voice") }
+            item {
+                Row(Modifier.padding(horizontal = 22.dp, vertical = 6.dp).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(Surface1).padding(16.dp), verticalAlignment = Alignment.CenterVertically) {
+                    Column(Modifier.weight(1f)) {
+                        Text("English voice", color = TextMain)
+                        Text(if (voiceOn) "Downloaded (${Voice.installedMb(ctx)} MB)" else "Not downloaded", color = Muted, fontSize = 12.sp, modifier = Modifier.padding(top = 4.dp))
+                    }
+                    if (voiceOn) TextButton(onClick = { Voice.delete(ctx); voiceOn = false }) { Text("Delete", color = Muted) }
+                }
+            }
+            item { Text(if (voiceOn) "Read aloud uses this voice offline." else "The voice downloads once, the first time you tap Read aloud, and works offline after that.", color = Muted, fontSize = 12.sp, modifier = Modifier.padding(horizontal = 22.dp, vertical = 8.dp)) }
             item { SectionLabel("About") }
             item {
                 Column(Modifier.padding(horizontal = 22.dp).fillMaxWidth().clip(RoundedCornerShape(18.dp)).background(Surface1)) {
@@ -620,7 +634,7 @@ class HomeActivity : ComponentActivity() {
         if (licences) AlertDialog(
             onDismissRequest = { licences = false },
             title = { Text("Open source") },
-            text = { Text("PDFium (Apache-2.0 / BSD), PDFium Android bindings (Apache-2.0), Apache PDFBox Android (Apache-2.0), Capacitor (MIT), AndroidX and Jetpack Compose (Apache-2.0), Kotlin (Apache-2.0), Bouncy Castle (MIT), Tesseract (Apache-2.0), Leptonica (BSD-2), libjpeg-turbo (BSD), libpng (libpng licence), Guava (Apache-2.0).") },
+            text = { Text("PDFium (Apache-2.0 / BSD), PDFium Android bindings (Apache-2.0), Apache PDFBox Android (Apache-2.0), Capacitor (MIT), AndroidX and Jetpack Compose (Apache-2.0), Kotlin (Apache-2.0), Bouncy Castle (MIT), Tesseract (Apache-2.0), Leptonica (BSD-2), libjpeg-turbo (BSD), libpng (libpng licence), Guava (Apache-2.0), Haze (Apache-2.0), Phosphor icons (MIT), sherpa-onnx (Apache-2.0), piper-phonemize and espeak-ng data (GPL-3.0), Piper voice joe (CC0).") },
             confirmButton = { TextButton({ licences = false }) { Text("Close", color = Violet) } }
         )
     }

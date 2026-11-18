@@ -42,3 +42,8 @@
 -dontwarn com.gemalto.jp2.**
 -dontwarn org.apache.**
 -dontwarn org.slf4j.**
+
+-keep class com.k2fsa.sherpa.onnx.** { *; }
+-keep class com.github.csukuangfj.piper.** { *; }
+-dontwarn com.k2fsa.sherpa.onnx.**
+-dontwarn com.github.csukuangfj.piper.**
