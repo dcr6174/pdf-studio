@@ -32,6 +32,8 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(NativeFilesPlugin.class);
         super.onCreate(savedInstanceState);
         NoteHook.INSTANCE.install(this);
+        PdfReader.setReadAloudHandler(text -> { Voice.INSTANCE.speak(this, text); return true; });
+        PdfReader.setReadAloudFilter(text -> Voice.INSTANCE.isEnglish(text));
         RefreshRate.apply(this);
         boolean night = (getResources().getConfiguration().uiMode & android.content.res.Configuration.UI_MODE_NIGHT_MASK) == android.content.res.Configuration.UI_MODE_NIGHT_YES;
         int bg = night ? 0xFF0A0B10 : 0xFFF8F8FC;
