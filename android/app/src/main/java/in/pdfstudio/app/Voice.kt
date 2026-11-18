@@ -1,4 +1,4 @@
-package in.pdfstudio.app
+package `in`.pdfstudio.app
 
 import android.app.Activity
 import android.app.AlertDialog
