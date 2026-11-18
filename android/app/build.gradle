@@ -14,8 +14,8 @@ android {
         versionCode 28
         versionName "0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
-        // Phones only: arm64 + armv7. x86 emulator/Chromebook builds are not shipped (keeps the Drive zip under 25 MB).
-        ndk { abiFilters 'arm64-v8a', 'armeabi-v7a' }
+        // arm64 only: the TTS engine's native libs would double the APK on 32-bit, and the test phones are arm64.
+        ndk { abiFilters 'arm64-v8a' }
         aaptOptions {
              // Files and dirs to omit from the packaged assets dir, modified to accommodate modern web apps.
              // Default: https://android.googlesource.com/platform/frameworks/base/+/282e181b58cf72b6ca770dc7ca5f91f135444502/tools/aapt/AaptAssets.cpp#61
@@ -25,6 +25,8 @@ android {
     buildFeatures { compose = true }
     packagingOptions {
         resources { excludes += ['org/bouncycastle/pqc/**', 'META-INF/versions/9/OSGI-INF/MANIFEST.MF'] }
+        // Compress native libs into the APK (extracted at install) so the TTS engine does not quadruple the download.
+        jniLibs { useLegacyPackaging true }
     }
     buildTypes {
         release {
