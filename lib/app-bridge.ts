@@ -1,6 +1,10 @@
 // Bridge between the website and the PDF Studio Android app (Capacitor shell).
 // All functions are safe no-ops in a regular browser.
-type CapWindow = Window & {Capacitor?: {isNativePlatform?: () => boolean; Plugins?: Record<string, any>}};
+type NativeFilesPlugin = {
+  saveToDownloads?: (args: {name: string; data: string}) => Promise<void>;
+  getPendingOpen?: () => Promise<{hasFile?: boolean; name?: string; data?: string; dest?: string}>;
+};
+type CapWindow = Window & {Capacitor?: {isNativePlatform?: () => boolean; Plugins?: {NativeFiles?: NativeFilesPlugin}}};
 
 export function isNativeApp(): boolean {
   if (typeof window === 'undefined') return false;

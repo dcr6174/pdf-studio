@@ -8,6 +8,16 @@ import {useMobileToolHeader} from './use-mobile-tool-header';
 import {Dialog,DialogContent,DialogTitle,DialogDescription} from '@/components/ui/dialog';
 import type {PDFDocumentProxy} from 'pdfjs-dist';
 const ignoreText=()=>{};
+type PinchCommit={fx:number;fy:number;ox:number;oy:number;ratio:number;mx:number;my:number};
+// Re-anchors the scroll after a pinch-committed zoom lands so the gesture's
+// focal point stays under the fingers, and drops the gesture transform.
+function reanchorAfterPinch(scroller:HTMLDivElement|null,pending:PinchCommit){
+ const pages=scroller?.querySelector<HTMLElement>('.reader-pages');if(!scroller||!pages)return;
+ pages.style.transform='';pages.style.transformOrigin='';
+ const rect=scroller.getBoundingClientRect();
+ scroller.scrollLeft=rect.left+pending.ox+pending.fx*pending.ratio-pending.mx;
+ scroller.scrollTop=rect.top+pending.oy+pending.fy*pending.ratio-pending.my;
+}
 import {loadReaderOutline,readerPageLabel,type ReaderOutline} from '@/lib/reader-navigation';
 import {ReaderOutlinePanel} from './reader-outline';
 export function PDFReader({files,pages,marks,onDownload,onTool,onAdd}:{onAdd?:()=>void;files:Loaded[];pages:PageItem[];marks:Mark[];onDownload:(blob:Blob,name:string)=>void;onTool:(id:string)=>void}){
@@ -30,11 +40,7 @@ export function PDFReader({files,pages,marks,onDownload,onTool,onAdd}:{onAdd?:()
  // replacements are ready instead of flashing white.
  useEffect(()=>{
   const pending=pinchCommit.current;if(!pending)return;pinchCommit.current=undefined;
-  const scroller=viewport.current,pages=scroller?.querySelector<HTMLElement>('.reader-pages');if(!scroller||!pages)return;
-  pages.style.transform='';pages.style.transformOrigin='';
-  const rect=scroller.getBoundingClientRect();
-  scroller.scrollLeft=rect.left+pending.ox+pending.fx*pending.ratio-pending.mx;
-  scroller.scrollTop=rect.top+pending.oy+pending.fy*pending.ratio-pending.my;
+  reanchorAfterPinch(viewport.current,pending);
  },[zoom]);
  const previousFocus=useRef<HTMLElement|null>(null);
  const viewport=useRef<HTMLDivElement>(null),host=useRef<HTMLDivElement>(null);
