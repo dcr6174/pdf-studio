@@ -49,6 +49,29 @@ object Voice {
     @Volatile private var playCancelled = false
     @Volatile private var dlCancelled = false
 
+    // Dialogs and toasts must anchor to the activity the user is looking at. The reader is a
+    // separate activity on top of ours; a captured host activity is paused, so its dialogs are
+    // invisible (or throw, which the reader turns into a silent built-in-voice fallback).
+    @Volatile private var current: Activity? = null
+    private var tracking = false
+
+    @Synchronized
+    fun trackActivity(ctx: Context) {
+        if (tracking) return
+        tracking = true
+        (ctx.applicationContext as? android.app.Application)?.registerActivityLifecycleCallbacks(object : android.app.Application.ActivityLifecycleCallbacks {
+            override fun onActivityResumed(a: Activity) { current = a }
+            override fun onActivityPaused(a: Activity) { if (current === a) current = null }
+            override fun onActivityDestroyed(a: Activity) { if (current === a) current = null }
+            override fun onActivityCreated(a: Activity, b: android.os.Bundle?) {}
+            override fun onActivityStarted(a: Activity) {}
+            override fun onActivityStopped(a: Activity) {}
+            override fun onActivitySaveInstanceState(a: Activity, b: android.os.Bundle) {}
+        })
+    }
+
+    private fun foreground(fallback: Activity): Activity = current ?: fallback
+
     private fun dir(ctx: Context) = File(ctx.filesDir, DIR)
 
     fun installed(ctx: Context): Boolean {
@@ -74,17 +97,22 @@ object Voice {
     }
 
     fun speak(activity: Activity, text0: String) {
-        val text = text0.trim()
-        if (text.isEmpty()) return
-        if (!isEnglish(text)) {
-            toast(activity, "Read aloud works on English text only")
-            return
+        trackActivity(activity)
+        try {
+            val text = text0.trim()
+            if (text.isEmpty()) return
+            if (!isEnglish(text)) {
+                toast(activity, "Read aloud works on English text only")
+                return
+            }
+            if (!installed(activity)) {
+                askDownload(foreground(activity), text)
+                return
+            }
+            io.execute { synthAndPlay(activity, text) }
+        } catch (_: Throwable) {
+            toast(activity, "Read aloud could not open. Try again.")
         }
-        if (!installed(activity)) {
-            askDownload(activity, text)
-            return
-        }
-        io.execute { synthAndPlay(activity, text) }
     }
 
     fun stop() {
@@ -277,5 +305,5 @@ object Voice {
         }
     }
 
-    private fun toast(ctx: Context, msg: String) = Toast.makeText(ctx, msg, Toast.LENGTH_SHORT).show()
+    private fun toast(ctx: Context, msg: String) = Toast.makeText(ctx.applicationContext, msg, Toast.LENGTH_SHORT).show()
 }

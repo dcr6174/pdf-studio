@@ -94,6 +94,7 @@ class HomeActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         NoteHook.install(this)
+        Voice.trackActivity(this)
         prewarmSite()
         RefreshRate.apply(this)
         recents = RecentStore.load(this)

@@ -32,6 +32,7 @@ public class MainActivity extends BridgeActivity {
         registerPlugin(NativeFilesPlugin.class);
         super.onCreate(savedInstanceState);
         NoteHook.INSTANCE.install(this);
+        Voice.INSTANCE.trackActivity(this);
         PdfReader.setReadAloudHandler(text -> { Voice.INSTANCE.speak(this, text); return true; });
         PdfReader.setReadAloudFilter(text -> Voice.INSTANCE.isEnglish(text));
         RefreshRate.apply(this);
