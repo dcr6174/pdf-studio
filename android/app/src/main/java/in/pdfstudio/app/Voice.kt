@@ -48,6 +48,7 @@ object Voice {
     @Volatile private var track: AudioTrack? = null
     @Volatile private var playCancelled = false
     @Volatile private var dlCancelled = false
+    @Volatile private var downloading = false
 
     // Dialogs and toasts must anchor to the activity the user is looking at. The reader is a
     // separate activity on top of ours; a captured host activity is paused, so its dialogs are
@@ -98,6 +99,11 @@ object Voice {
 
     fun speak(activity: Activity, text0: String) {
         trackActivity(activity)
+        if (Looper.myLooper() != Looper.getMainLooper()) {
+            // Dialogs must be created on the UI thread; the reader may invoke us from any thread.
+            ui.post { speak(activity, text0) }
+            return
+        }
         try {
             val text = text0.trim()
             if (text.isEmpty()) return
@@ -117,7 +123,12 @@ object Voice {
 
     fun stop() {
         playCancelled = true
-        track?.let { try { it.pause(); it.flush() } catch (_: Throwable) {} }
+        val t = track
+        if (Looper.myLooper() == Looper.getMainLooper()) {
+            t?.let { try { it.pause(); it.flush() } catch (_: Throwable) {} }
+        } else {
+            ui.post { t?.let { try { it.pause(); it.flush() } catch (_: Throwable) {} } }
+        }
     }
 
     // ---- engine ----
@@ -217,6 +228,8 @@ object Voice {
     }
 
     private fun download(activity: Activity, then: () -> Unit) {
+        if (downloading) { toast(activity, "Voice download is already in progress"); return }
+        downloading = true
         val status = TextView(activity)
         status.text = "Starting..."
         val bar = ProgressBar(activity, null, android.R.attr.progressBarStyleHorizontal)
@@ -250,12 +263,15 @@ object Voice {
                 tk.renameTo(File(d, TOKENS))
                 mf.renameTo(File(d, MODEL))
                 ui.post {
+                    downloading = false
                     dlg.dismiss()
                     if (installed(activity)) then() else toast(activity, "Download failed. Try again.")
                 }
             } catch (_: CancellationException) {
+                downloading = false
                 File(d, "$TOKENS.part").delete(); File(d, "$MODEL.part").delete()
             } catch (_: Throwable) {
+                downloading = false
                 File(d, "$TOKENS.part").delete(); File(d, "$MODEL.part").delete()
                 ui.post {
                     dlg.dismiss()

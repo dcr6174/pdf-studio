@@ -11,7 +11,7 @@ android {
         applicationId "in.pdfstudio.app"
         minSdkVersion rootProject.ext.minSdkVersion
         targetSdkVersion rootProject.ext.targetSdkVersion
-        versionCode 30
+        versionCode 31
         versionName "0.1"
         testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         // arm64 only: the TTS engine's native libs would double the APK on 32-bit, and the test phones are arm64.

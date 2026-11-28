@@ -565,6 +565,12 @@ class HomeActivity : ComponentActivity() {
         var licences by remember { mutableStateOf(false) }
         var labs by remember { mutableStateOf(Labs.enabled(ctx)) }
         var voiceOn by remember { mutableStateOf(Voice.installed(ctx)) }
+        // Refresh when the screen comes back (a download may have finished in the reader meanwhile).
+        val lifecycleOwner = androidx.lifecycle.compose.LocalLifecycleOwner.current
+        DisposableEffect(lifecycleOwner) {
+            val obs = androidx.lifecycle.LifecycleEventObserver { _, e -> if (e == androidx.lifecycle.Lifecycle.Event.ON_RESUME) voiceOn = Voice.installed(ctx) }
+            lifecycleOwner.lifecycle.addObserver(obs); onDispose { lifecycleOwner.lifecycle.removeObserver(obs) }
+        }
         var barPos by remember { mutableStateOf(PdfReader.getAnnotationBarPosition(ctx)) }
         val version = remember { try { ctx.packageManager.getPackageInfo(ctx.packageName, 0).versionName ?: "" } catch (_: Exception) { "" } }
         LazyColumn(Modifier.fillMaxSize(), contentPadding = PaddingValues(bottom = dockSpace + 24.dp)) {
